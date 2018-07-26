@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/linear_layout_item_post_comment"
+    android:orientation="vertical"
+    android:layout_marginTop="12dp"
+    android:layout_marginBottom="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/author_text_view_item_post_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:textColor="@color/colorPrimary"/>
+
+        <TextView
+            android:id="@+id/comment_time_text_view_item_post_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:layout_marginEnd="16dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/comment_text_view_item_post_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginEnd="32dp"
+        android:textColor="#000000"/>
+
+    <RelativeLayout
+        android:id="@+id/relative_layout_item_post_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp">
+
+        <ImageView
+            android:id="@+id/plus_button_item_post_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:padding="8dp"
+            android:src="@drawable/ic_arrow_upward_black_12dp"
+            android:layout_centerVertical="true"
+            android:tint="@android:color/tab_indicator_text"
+            android:background="?actionBarItemBackground"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <TextView
+            android:id="@+id/score_text_view_item_post_comment"
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/plus_button_item_post_comment"
+            android:gravity="center"/>
+
+        <ImageView
+            android:id="@+id/minus_button_item_post_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/score_text_view_item_post_comment"
+            android:padding="8dp"
+            android:src="@drawable/ic_arrow_downward_black_12dp"
+            android:tint="@android:color/tab_indicator_text"
+            android:background="?actionBarItemBackground"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <ImageView
+            android:id="@+id/reply_button_item_post_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_reply_black_12dp"
+            android:tint="@android:color/tab_indicator_text"
+            android:background="?actionBarItemBackground"
+            android:clickable="true"
+            android:focusable="true"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

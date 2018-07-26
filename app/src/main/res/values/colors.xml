@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1565C0</color>
+    <color name="colorPrimaryDark">#0D47A1</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="minusButtonColor">#E91E63</color>
+
+    <color name="transparentActionBarColor">#88000000</color>
+</resources>
