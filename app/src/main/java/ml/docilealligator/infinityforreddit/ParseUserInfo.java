@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.text.Html;
 import android.util.Log;
@@ -14,13 +13,11 @@ class ParseUserInfo {
         void onParseUserInfoFail();
     }
 
-    private Context mContext;
     private ParseUserInfoListener mParseUserInfoListener;
 
-    void parseUserInfo(Context context, String response, ParseUserInfoListener parseUserInfoListener) {
+    void parseUserInfo(String response, ParseUserInfoListener parseUserInfoListener) {
         mParseUserInfoListener = parseUserInfoListener;
-        mContext = context;
-        new ParseUserInfo.ParseUserInfoAsyncTask(response).execute();
+        new ParseUserInfoAsyncTask(response).execute();
     }
 
     private class ParseUserInfoAsyncTask extends AsyncTask<Void, Void, Void> {

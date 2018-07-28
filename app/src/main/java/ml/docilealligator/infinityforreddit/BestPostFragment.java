@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
@@ -169,7 +170,11 @@ public class BestPostFragment extends Fragment {
 
         mProgressBar.setVisibility(View.VISIBLE);
 
-        StringRequest bestPostRequest = new StringRequest(Request.Method.GET, RedditUtils.OAUTH_API_BASE_URI + RedditUtils.BEST_POST_SUFFIX, new Response.Listener<String>() {
+        Uri uri = Uri.parse(RedditUtils.OAUTH_API_BASE_URI + RedditUtils.BEST_POST_SUFFIX)
+                .buildUpon().appendQueryParameter(RedditUtils.RAW_JSON_KEY, RedditUtils.RAW_JSON_VALUE)
+                .build();
+
+        StringRequest bestPostRequest = new StringRequest(Request.Method.GET, uri.toString(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if(getActivity() != null) {
@@ -196,7 +201,7 @@ public class BestPostFragment extends Fragment {
                             Log.i("Best post fetch error", "Error parsing data");
                             mProgressBar.setVisibility(View.GONE);
                         }
-                    }).parseBestPost(response, null);
+                    }).parseBestPost(response, new ArrayList<BestPostData>());
                 }
             }
         }, new Response.ErrorListener() {

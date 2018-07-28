@@ -14,9 +14,12 @@ class RedditUtils {
     static final String ACQUIRE_ACCESS_TOKEN_URL = "https://www.reddit.com/api/v1/access_token";
     static final String OAUTH_API_BASE_URI = "https://oauth.reddit.com";
     static final String API_BASE_URI = "https://www.reddit.com";
-    static final String BEST_POST_SUFFIX = "/best?raw_json=1";
+    static final String RAW_JSON_KEY ="raw_json";
+    static final String RAW_JSON_VALUE = "1";
+    static final String BEST_POST_SUFFIX = "/best";
     static final String VOTE_SUFFIX = "/api/vote";
-    static final String USER_INFO_SUFFIX = "/api/v1/me?raw_json=1";
+    static final String USER_INFO_SUFFIX = "/api/v1/me";
+    static final String SUBSCRIBED_SUBREDDITS = "/subreddits/mine/subscriber";
 
     static final String CLIENT_ID_KEY = "client_id";
     static final String CLIENT_ID = "";

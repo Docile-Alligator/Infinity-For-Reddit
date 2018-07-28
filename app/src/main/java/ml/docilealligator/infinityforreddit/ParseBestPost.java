@@ -59,9 +59,6 @@ class ParseBestPost {
         protected Void doInBackground(Void... voids) {
             try {
                 JSONArray allData = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-                if(bestPostData == null) {
-                    bestPostData = new ArrayList<>();
-                }
 
                 lastItem = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
                 for(int i = 0; i < allData.length(); i++) {
@@ -199,106 +196,4 @@ class ParseBestPost {
             }
         }
     }
-
-    /*private void parseData(JSONObject data, String permalink, ArrayList<BestPostData> bestPostData,
-                               String id, String fullName, String subredditName, String formattedPostTime, String title,
-                               int score, int voteType, boolean nsfw, int i) throws JSONException {
-        boolean isVideo = data.getBoolean(JSONUtils.IS_VIDEO_KEY);
-        if(!data.has(JSONUtils.PREVIEW_KEY)) {
-            String url = data.getString(JSONUtils.URL_KEY);
-            if(url.contains(permalink)) {
-                //Text post
-                Log.i("text", Integer.toString(i));
-                int postType = BestPostData.TEXT_TYPE;
-                BestPostData postData = new BestPostData(id, fullName, subredditName, formattedPostTime, title, permalink, score, postType, voteType, nsfw);
-                postData.setSelfText(data.getString(JSONUtils.SELF_TEXT_KEY).trim());
-                bestPostData.add(postData);
-            } else {
-                //No preview link post
-                Log.i("no preview link", Integer.toString(i));
-                int postType = BestPostData.NO_PREVIEW_LINK_TYPE;
-                BestPostData post = new BestPostData(id, fullName, subredditName, formattedPostTime, title, permalink, score, postType, voteType, nsfw);
-                post.setLinkUrl(url);
-                bestPostData.add(post);
-            }
-        } else if (!isVideo) {
-            JSONObject variations = data.getJSONObject(JSONUtils.PREVIEW_KEY).getJSONArray(JSONUtils.IMAGES_KEY).getJSONObject(0);
-            String previewUrl = variations.getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY);
-            if (variations.has(JSONUtils.VARIANTS_KEY)) {
-                if (variations.getJSONObject(JSONUtils.VARIANTS_KEY).has(JSONUtils.MP4_KEY)) {
-                    //Gif video
-                    Log.i("gif video", Integer.toString(i));
-                    int postType = BestPostData.GIF_VIDEO_TYPE;
-                    String videoUrl = variations.getJSONObject(JSONUtils.VARIANTS_KEY).getJSONObject(JSONUtils.MP4_KEY).getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY);
-
-                    BestPostData post = new BestPostData(id, fullName, subredditName, formattedPostTime, title, previewUrl, permalink, score, postType, voteType, nsfw);
-                    post.setVideoUrl(videoUrl);
-                    bestPostData.add(post);
-                } else if (variations.getJSONObject(JSONUtils.VARIANTS_KEY).has(JSONUtils.GIF_KEY)) {
-                    //Gif post
-                    Log.i("gif", Integer.toString(i));
-                    int postType = BestPostData.GIF_TYPE;
-                    String gifUrl = variations.getJSONObject(JSONUtils.VARIANTS_KEY).getJSONObject(JSONUtils.GIF_KEY).getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY);
-
-                    BestPostData post = new BestPostData(id, fullName, subredditName, formattedPostTime, title, previewUrl, permalink, score, postType, voteType, nsfw);
-                    post.setGifUrl(gifUrl);
-                    bestPostData.add(post);
-                } else {
-                    if(data.getJSONObject(JSONUtils.PREVIEW_KEY).has(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY)) {
-                        //Gif link post
-                        Log.i("gif link", Integer.toString(i));
-                        int postType = BestPostData.LINK_TYPE;
-                        String gifUrl = data.getString(JSONUtils.URL_KEY);
-                        BestPostData gifLinkPostData = new BestPostData(id, fullName, subredditName, formattedPostTime, title, previewUrl, permalink, score, postType, voteType, nsfw);
-                        gifLinkPostData.setLinkUrl(gifUrl);
-                        bestPostData.add(gifLinkPostData);
-                    } else {
-                        if(!data.isNull(JSONUtils.MEDIA_KEY)) {
-                            //Video link post
-                            Log.i("video link", Integer.toString(i));
-                            int postType = BestPostData.LINK_TYPE;
-                            String videoUrl = data.getString(JSONUtils.URL_KEY);
-                            BestPostData videoLinkPostData = new BestPostData(id, fullName, subredditName, formattedPostTime, title, previewUrl, permalink, score, postType, voteType, nsfw);
-                            videoLinkPostData.setLinkUrl(videoUrl);
-                            bestPostData.add(videoLinkPostData);
-                        } else {
-                            if(data.getBoolean(JSONUtils.IS_REDDIT_MEDIA_DOMAIN)) {
-                                //Image post
-                                Log.i("image", Integer.toString(i));
-                                int postType = BestPostData.IMAGE_TYPE;
-                                bestPostData.add(new BestPostData(id, fullName, subredditName, formattedPostTime, title, previewUrl, permalink, score, postType, voteType, nsfw));
-                            } else {
-                                //Link post
-                                Log.i("link", Integer.toString(i));
-                                int postType = BestPostData.LINK_TYPE;
-                                String linkUrl = data.getString(JSONUtils.URL_KEY);
-                                BestPostData linkPostData = new BestPostData(id, fullName, subredditName, formattedPostTime, title, previewUrl, permalink, score, postType, voteType, nsfw);
-                                linkPostData.setLinkUrl(linkUrl);
-                                bestPostData.add(linkPostData);
-                            }
-                        }
-                    }
-                }
-            } else {
-                //Image post
-                Toast.makeText(mContext, "Fixed post" + Integer.toString(i), Toast.LENGTH_SHORT).show();
-                Log.i("fixed image", Integer.toString(i));
-                int postType = BestPostData.IMAGE_TYPE;
-                bestPostData.add(new BestPostData(id, fullName, subredditName, formattedPostTime, title, previewUrl, permalink, score, postType, voteType, nsfw));
-            }
-        } else {
-            //Video post
-            Log.i("video", Integer.toString(i));
-            JSONObject redditVideoObject = data.getJSONObject(JSONUtils.MEDIA_KEY).getJSONObject(JSONUtils.REDDIT_VIDEO_KEY);
-            int postType = BestPostData.VIDEO_TYPE;
-            String videoUrl = redditVideoObject.getString(JSONUtils.DASH_URL_KEY);
-
-            String videoPreviewUrl = data.getJSONObject(JSONUtils.PREVIEW_KEY).getJSONArray(JSONUtils.IMAGES_KEY).getJSONObject(0).getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY);
-
-            BestPostData videoPostData = new BestPostData(id, fullName, subredditName, formattedPostTime, title, videoPreviewUrl, permalink, score, postType, voteType, nsfw);
-            videoPostData.setVideoUrl(videoUrl);
-
-            bestPostData.add(videoPostData);
-        }
-    }*/
 }

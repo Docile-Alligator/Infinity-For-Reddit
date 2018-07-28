@@ -15,4 +15,7 @@
 
     <string name="nsfw">NSFW</string>
     <string name="karma_info">Karma: %1$d</string>
+
+    <string name="profile">Profile</string>
+    <string name="subscriptions">Subscriptions</string>
 </resources>

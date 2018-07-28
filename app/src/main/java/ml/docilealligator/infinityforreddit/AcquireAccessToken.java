@@ -50,6 +50,7 @@ class AcquireAccessToken {
                         editor.putString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, newAccessToken);
                         editor.apply();
 
+                        Log.i("access token", newAccessToken);
                         mAcquireAccessTokenListener.onAcquireAccessTokenSuccess();
                     } catch (JSONException e) {
                         e.printStackTrace();

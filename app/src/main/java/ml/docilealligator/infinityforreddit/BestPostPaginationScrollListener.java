@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -92,7 +93,11 @@ class BestPostPaginationScrollListener extends RecyclerView.OnScrollListener {
         loadSuccess = false;
         mPaginationSynchronizer.setLoading(true);
 
-        StringRequest bestPostRequest = new StringRequest(Request.Method.GET, RedditUtils.OAUTH_API_BASE_URI + RedditUtils.BEST_POST_SUFFIX + "&" + RedditUtils.AFTER_KEY + "=" + mLastItem, new Response.Listener<String>() {
+        Uri uri = Uri.parse(RedditUtils.OAUTH_API_BASE_URI + RedditUtils.BEST_POST_SUFFIX)
+                .buildUpon().appendQueryParameter(RedditUtils.AFTER_KEY, mLastItem)
+                .appendQueryParameter(RedditUtils.RAW_JSON_KEY, RedditUtils.RAW_JSON_VALUE).build();
+
+        StringRequest bestPostRequest = new StringRequest(Request.Method.GET,  uri.toString(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);

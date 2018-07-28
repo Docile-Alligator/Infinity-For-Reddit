@@ -6,14 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,10 +21,13 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity {
 
     private String nameState = "NS";
     private String profileImageUrlState = "PIUS";
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity
     private TextView mKarmaTextView;
     private CircleImageView mProfileImageView;
     private ImageView mBannerImageView;
+    private RecyclerView mSubscribedSubredditRecyclerView;
 
     private Fragment mFragment;
     private RequestManager glide;
@@ -45,6 +48,8 @@ public class MainActivity extends AppCompatActivity
     private String mBannerImageUrl;
     private String mKarma;
     private boolean mFetchUserInfoSuccess;
+
+    private ArrayList<SubredditData> mSubredditData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,14 +64,14 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        View header = navigationView.getHeaderView(0);
+        View header = findViewById(R.id.nav_header_main_activity);
         mNameTextView = header.findViewById(R.id.name_text_view_nav_header_main);
         mKarmaTextView = header.findViewById(R.id.karma_text_view_nav_header_main);
         mProfileImageView = header.findViewById(R.id.profile_image_view_nav_header_main);
         mBannerImageView = header.findViewById(R.id.banner_image_view_nav_header_main);
+
+        mSubscribedSubredditRecyclerView = findViewById(R.id.subscribed_subreddit_recycler_view_main_activity);
+        mSubscribedSubredditRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mName = getSharedPreferences(SharedPreferencesUtils.USER_INFO_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.USER_KEY, "");
         mProfileImageUrl = getSharedPreferences(SharedPreferencesUtils.USER_INFO_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.PROFILE_IMAGE_URL_KEY, "");
@@ -102,7 +107,7 @@ public class MainActivity extends AppCompatActivity
             new FetchUserInfo(this, Volley.newRequestQueue(this)).queryUserInfo(new FetchUserInfo.FetchUserInfoListener() {
                 @Override
                 public void onFetchUserInfoSuccess(String response) {
-                    new ParseUserInfo().parseUserInfo(MainActivity.this, response, new ParseUserInfo.ParseUserInfoListener() {
+                    new ParseUserInfo().parseUserInfo(response, new ParseUserInfo.ParseUserInfoListener() {
                         @Override
                         public void onParseUserInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
                             mNameTextView.setText(name);
@@ -142,6 +147,26 @@ public class MainActivity extends AppCompatActivity
                 }
             }, 1);
         }
+        new FetchSubscribedSubreddits(this, Volley.newRequestQueue(this), new ArrayList<SubredditData>())
+                .fetchSubscribedSubreddits(new FetchSubscribedSubreddits.FetchSubscribedSubredditsListener() {
+                    @Override
+                    public void onFetchSubscribedSubredditsSuccess(ArrayList<SubredditData> subredditData) {
+                        Collections.sort(subredditData, new Comparator<SubredditData>() {
+                            @Override
+                            public int compare(SubredditData subredditData, SubredditData t1) {
+                                return subredditData.getName().toLowerCase().compareTo(t1.getName().toLowerCase());
+                            }
+                        });
+                        mSubredditData = subredditData;
+                        mSubscribedSubredditRecyclerView.setAdapter(new SubscribedSubredditRecyclerViewAdapter(
+                                MainActivity.this, mSubredditData));
+                    }
+
+                    @Override
+                    public void onFetchSubscribedSubredditsFail() {
+
+                    }
+                }, 1);
     }
 
     @Override
@@ -152,53 +177,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     @Override

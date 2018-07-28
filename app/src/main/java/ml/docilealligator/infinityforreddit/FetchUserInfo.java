@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
+import android.net.Uri;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -33,11 +34,15 @@ class FetchUserInfo {
         }
 
         mFetchUserInfoListener = fetchUserInfoListener;
-        StringRequest commentRequest = new StringRequest(Request.Method.GET, RedditUtils.OAUTH_API_BASE_URI + RedditUtils.USER_INFO_SUFFIX, new Response.Listener<String>() {
+
+        Uri uri = Uri.parse(RedditUtils.OAUTH_API_BASE_URI + RedditUtils.USER_INFO_SUFFIX)
+                .buildUpon().appendQueryParameter(RedditUtils.RAW_JSON_KEY, RedditUtils.RAW_JSON_VALUE)
+                .build();
+
+        StringRequest commentRequest = new StringRequest(Request.Method.GET, uri.toString(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 mFetchUserInfoListener.onFetchUserInfoSuccess(response);
-
             }
         }, new Response.ErrorListener() {
             @Override
