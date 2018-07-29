@@ -28,10 +28,10 @@ repositories {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:28.0.0-alpha3'
-    implementation 'com.android.support:design:28.0.0-alpha3'
+    implementation 'com.android.support:appcompat-v7:28.0.0-beta01'
+    implementation 'com.android.support:design:28.0.0-beta01'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation 'com.android.support:support-v4:28.0.0-alpha3'
+    implementation 'com.android.support:support-v4:28.0.0-beta01'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -39,10 +39,17 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.google.android.exoplayer:exoplayer:2.7.0'
     implementation 'com.google.android.exoplayer:exoplayer-dash:2.7.0'
-    implementation 'com.android.support:customtabs:28.0.0-alpha3'
+    implementation 'com.android.support:customtabs:28.0.0-beta01'
     implementation 'com.alexvasilkov:gesture-views:2.5.2'
-    implementation 'com.android.support:cardview-v7:28.0.0-alpha3'
+    implementation 'com.android.support:cardview-v7:28.0.0-beta01'
     implementation 'com.github.bumptech.glide:glide:4.6.1'
     implementation 'com.github.pwittchen:swipe-rx2:0.3.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
+    // Room components
+    implementation "android.arch.persistence.room:runtime:$rootProject.roomVersion"
+    annotationProcessor "android.arch.persistence.room:compiler:$rootProject.roomVersion"
+    androidTestImplementation "android.arch.persistence.room:testing:$rootProject.roomVersion"
+    // Lifecycle components
+    implementation "android.arch.lifecycle:extensions:$rootProject.archLifecycleVersion"
+    annotationProcessor "android.arch.lifecycle:compiler:$rootProject.archLifecycleVersion"
 }

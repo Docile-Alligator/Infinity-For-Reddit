@@ -15,12 +15,12 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-class SubscribedSubredditRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class SubscribedUserRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
-    private List<SubscribedSubredditData> mSubscribedSubredditData;
+    private List<SubscribedUserData> mSubscribedUserData;
     private RequestManager glide;
 
-    SubscribedSubredditRecyclerViewAdapter(Context context) {
+    SubscribedUserRecyclerViewAdapter(Context context) {
         mContext = context;
         glide = Glide.with(context);
     }
@@ -28,43 +28,43 @@ class SubscribedSubredditRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new SubredditViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_subscribed_subreddit, viewGroup, false));
+        return new UserViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_subscribed_subreddit, viewGroup, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-        if(!mSubscribedSubredditData.get(i).getIconUrl().equals("")) {
-            glide.load(mSubscribedSubredditData.get(i).getIconUrl()).into(((SubredditViewHolder) viewHolder).iconCircleImageView);
+        if(!mSubscribedUserData.get(i).getIconUrl().equals("")) {
+            glide.load(mSubscribedUserData.get(i).getIconUrl()).into(((UserViewHolder) viewHolder).iconCircleImageView);
         } else {
-            glide.load(R.drawable.subreddit_default_icon).into(((SubredditViewHolder) viewHolder).iconCircleImageView);
+            glide.load(R.drawable.subreddit_default_icon).into(((UserViewHolder) viewHolder).iconCircleImageView);
         }
-        ((SubredditViewHolder) viewHolder).subredditNameTextView.setText(mSubscribedSubredditData.get(i).getName());
+        ((UserViewHolder) viewHolder).subredditNameTextView.setText(mSubscribedUserData.get(i).getName());
     }
 
     @Override
     public int getItemCount() {
-        if(mSubscribedSubredditData != null) {
-            return mSubscribedSubredditData.size();
+        if(mSubscribedUserData != null) {
+            return mSubscribedUserData.size();
         }
         return 0;
     }
 
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
-        glide.clear(((SubredditViewHolder) holder).iconCircleImageView);
+        glide.clear(((UserViewHolder) holder).iconCircleImageView);
     }
 
-    void setSubscribedSubreddits(List<SubscribedSubredditData> subscribedSubreddits){
-        mSubscribedSubredditData = subscribedSubreddits;
+    void setSubscribedUsers(List<SubscribedUserData> subscribedUsers){
+        mSubscribedUserData = subscribedUsers;
         notifyDataSetChanged();
     }
 
 
-    private class SubredditViewHolder extends RecyclerView.ViewHolder {
+    private class UserViewHolder extends RecyclerView.ViewHolder {
         private final CircleImageView iconCircleImageView;
         private final TextView subredditNameTextView;
 
-        public SubredditViewHolder(View itemView) {
+        public UserViewHolder(View itemView) {
             super(itemView);
             iconCircleImageView = itemView.findViewById(R.id.subreddit_icon_circle_image_view_item_subscribed_subreddit);
             subredditNameTextView = itemView.findViewById(R.id.subreddit_name_text_view_item_subscribed_subreddit);

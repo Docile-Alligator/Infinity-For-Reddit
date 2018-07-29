@@ -17,5 +17,6 @@
     <string name="karma_info">Karma: %1$d</string>
 
     <string name="profile">Profile</string>
+    <string name="following">Following</string>
     <string name="subscriptions">Subscriptions</string>
 </resources>

@@ -64,7 +64,7 @@ class AcquireAccessToken {
                 public void onErrorResponse(VolleyError error) {
                     Toast.makeText(mContext, "Error getting the new access token", Toast.LENGTH_SHORT).show();
                     mAcquireAccessTokenListener.onAcquireAccessTokenFail();
-                    Log.i("error get access token", error.getMessage());
+                    Log.i("Error", "getting access token");
                 }
             }) {
                 @Override

@@ -152,7 +152,7 @@ class ParseBestPost {
             videoPostData.setDownloadableGifOrVideo(false);
 
             bestPostData.add(videoPostData);
-        } else {
+        } else if(data.has(JSONUtils.PREVIEW_KEY)){
             JSONObject variations = data.getJSONObject(JSONUtils.PREVIEW_KEY).getJSONArray(JSONUtils.IMAGES_KEY).getJSONObject(0);
             if (variations.has(JSONUtils.VARIANTS_KEY) && variations.getJSONObject(JSONUtils.VARIANTS_KEY).has(JSONUtils.MP4_KEY)) {
                 //Gif video post (MP4)
@@ -193,6 +193,19 @@ class ParseBestPost {
                     BestPostData linkPostData = new BestPostData(id, fullName, subredditName, formattedPostTime, title, previewUrl, url, permalink, score, postType, voteType, nsfw);
                     bestPostData.add(linkPostData);
                 }
+            }
+        } else {
+            if (url.endsWith("jpg") || url.endsWith("png")) {
+                //Image post
+                Log.i("CP no preview image", Integer.toString(i));
+                int postType = BestPostData.IMAGE_TYPE;
+                bestPostData.add(new BestPostData(id, fullName, subredditName, formattedPostTime, title, url, url, permalink, score, postType, voteType, nsfw));
+            } else {
+                //Link post
+                Log.i("CP no preview link", Integer.toString(i));
+                int postType = BestPostData.LINK_TYPE;
+                BestPostData linkPostData = new BestPostData(id, fullName, subredditName, formattedPostTime, title, previewUrl, url, permalink, score, postType, voteType, nsfw);
+                bestPostData.add(linkPostData);
             }
         }
     }

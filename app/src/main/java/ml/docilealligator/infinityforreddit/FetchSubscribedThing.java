@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -14,23 +13,27 @@ import com.android.volley.toolbox.StringRequest;
 import java.util.ArrayList;
 import java.util.Map;
 
-class FetchSubscribedSubreddits {
+class FetchSubscribedThing {
     interface FetchSubscribedSubredditsListener {
-        void onFetchSubscribedSubredditsSuccess(ArrayList<SubredditData> subredditData);
+        void onFetchSubscribedSubredditsSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
+                                                ArrayList<SubscribedUserData> subscribedUserData);
         void onFetchSubscribedSubredditsFail();
     }
 
     private Context context;
     private RequestQueue requestQueue;
     private FetchSubscribedSubredditsListener mFetchSubscribedSubredditsListener;
-    private ArrayList<SubredditData> mSubredditData;
+    private ArrayList<SubscribedSubredditData> mSubscribedSubredditData;
+    private ArrayList<SubscribedUserData> mSubscribedUserData;
 
     private String mLastItem;
 
-    FetchSubscribedSubreddits(Context context, RequestQueue requestQueue, ArrayList<SubredditData> subredditData) {
+    FetchSubscribedThing(Context context, RequestQueue requestQueue, ArrayList<SubscribedSubredditData> subscribedSubredditData,
+                         ArrayList<SubscribedUserData> subscribedUserData) {
         this.context = context;
         this.requestQueue = requestQueue;
-        mSubredditData = subredditData;
+        mSubscribedSubredditData = subscribedSubredditData;
+        mSubscribedUserData = subscribedUserData;
     }
 
     void fetchSubscribedSubreddits(FetchSubscribedSubredditsListener fetchUserInfoListener, final int refreshTime) {
@@ -47,15 +50,20 @@ class FetchSubscribedSubreddits {
         StringRequest commentRequest = new StringRequest(Request.Method.GET, uri.toString(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                new ParseSubscribedSubreddits().parseSubscribedSubreddits(response, mSubredditData,
-                        new ParseSubscribedSubreddits.ParseSubscribedSubredditsListener() {
+                new ParseSubscribedThing().parseSubscribedSubreddits(response, mSubscribedSubredditData,
+                        mSubscribedUserData,
+                        new ParseSubscribedThing.ParseSubscribedSubredditsListener() {
+
                             @Override
-                            public void onParseSubscribedSubredditsSuccess(ArrayList<SubredditData> subredditData, String lastItem) {
-                                mSubredditData = subredditData;
+                            public void onParseSubscribedSubredditsSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
+                                                                           ArrayList<SubscribedUserData> subscribedUserData,
+                                                                           String lastItem) {
+                                mSubscribedSubredditData = subscribedSubredditData;
+                                mSubscribedUserData = subscribedUserData;
                                 mLastItem = lastItem;
-                                Log.i("last item", lastItem);
                                 if(mLastItem.equals("null")) {
-                                    mFetchSubscribedSubredditsListener.onFetchSubscribedSubredditsSuccess(mSubredditData);
+                                    mFetchSubscribedSubredditsListener.onFetchSubscribedSubredditsSuccess(mSubscribedSubredditData,
+                                            mSubscribedUserData);
                                 } else {
                                     fetchSubscribedSubreddits(mFetchSubscribedSubredditsListener, refreshTime);
                                 }

@@ -2,10 +2,14 @@ package ml.docilealligator.infinityforreddit;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,8 +26,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -38,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView mKarmaTextView;
     private CircleImageView mProfileImageView;
     private ImageView mBannerImageView;
-    private RecyclerView mSubscribedSubredditRecyclerView;
 
     private Fragment mFragment;
     private RequestManager glide;
@@ -49,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private String mKarma;
     private boolean mFetchUserInfoSuccess;
 
-    private ArrayList<SubredditData> mSubredditData;
+    private SubscribedSubredditViewModel mSubscribedSubredditViewModel;
+    private SubscribedUserViewModel mSubscribedUserViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +73,15 @@ public class MainActivity extends AppCompatActivity {
         mProfileImageView = header.findViewById(R.id.profile_image_view_nav_header_main);
         mBannerImageView = header.findViewById(R.id.banner_image_view_nav_header_main);
 
-        mSubscribedSubredditRecyclerView = findViewById(R.id.subscribed_subreddit_recycler_view_main_activity);
-        mSubscribedSubredditRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView subscribedSubredditRecyclerView = findViewById(R.id.subscribed_subreddit_recycler_view_main_activity);
+        subscribedSubredditRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        subscribedSubredditRecyclerView.setNestedScrollingEnabled(false);
+        final TextView subscriptionsLabelTextView = findViewById(R.id.subscriptions_label_main_activity);
+
+        RecyclerView subscribedUserRecyclerView = findViewById(R.id.subscribed_user_recycler_view_main_activity);
+        subscribedUserRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        subscribedUserRecyclerView.setNestedScrollingEnabled(false);
+        final TextView followingLabelTextView = findViewById(R.id.following_label_main_activity);
 
         mName = getSharedPreferences(SharedPreferencesUtils.USER_INFO_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.USER_KEY, "");
         mProfileImageUrl = getSharedPreferences(SharedPreferencesUtils.USER_INFO_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.PROFILE_IMAGE_URL_KEY, "");
@@ -147,19 +157,55 @@ public class MainActivity extends AppCompatActivity {
                 }
             }, 1);
         }
-        new FetchSubscribedSubreddits(this, Volley.newRequestQueue(this), new ArrayList<SubredditData>())
-                .fetchSubscribedSubreddits(new FetchSubscribedSubreddits.FetchSubscribedSubredditsListener() {
+
+        final SubscribedSubredditRecyclerViewAdapter subredditadapter = new SubscribedSubredditRecyclerViewAdapter(this);
+        subscribedSubredditRecyclerView.setAdapter(subredditadapter);
+        mSubscribedSubredditViewModel = ViewModelProviders.of(this).get(SubscribedSubredditViewModel.class);
+        mSubscribedSubredditViewModel.getAllSubscribedSubreddits().observe(this, new Observer<List<SubscribedSubredditData>>() {
+            @Override
+            public void onChanged(@Nullable final List<SubscribedSubredditData> subscribedSubredditData) {
+                // Update the cached copy of the words in the adapter.
+                if(subscribedSubredditData == null || subscribedSubredditData.size() == 0) {
+                    subscriptionsLabelTextView.setVisibility(View.GONE);
+                } else {
+                    subscriptionsLabelTextView.setVisibility(View.VISIBLE);
+                }
+
+                subredditadapter.setSubscribedSubreddits(subscribedSubredditData);
+            }
+        });
+
+        final SubscribedUserRecyclerViewAdapter userAdapter = new SubscribedUserRecyclerViewAdapter(this);
+        subscribedUserRecyclerView.setAdapter(userAdapter);
+        mSubscribedUserViewModel = ViewModelProviders.of(this).get(SubscribedUserViewModel.class);
+        mSubscribedUserViewModel.getAllSubscribedUsers().observe(this, new Observer<List<SubscribedUserData>>() {
+            @Override
+            public void onChanged(@Nullable final List<SubscribedUserData> subscribedUserData) {
+                // Update the cached copy of the words in the adapter.
+                if(subscribedUserData == null || subscribedUserData.size() == 0) {
+                    followingLabelTextView.setVisibility(View.GONE);
+                } else {
+                    followingLabelTextView.setVisibility(View.VISIBLE);
+                }
+                userAdapter.setSubscribedUsers(subscribedUserData);
+            }
+        });
+
+        new FetchSubscribedThing(this, Volley.newRequestQueue(this), new ArrayList<SubscribedSubredditData>(),
+                new ArrayList<SubscribedUserData>())
+                .fetchSubscribedSubreddits(new FetchSubscribedThing.FetchSubscribedSubredditsListener() {
                     @Override
-                    public void onFetchSubscribedSubredditsSuccess(ArrayList<SubredditData> subredditData) {
-                        Collections.sort(subredditData, new Comparator<SubredditData>() {
-                            @Override
-                            public int compare(SubredditData subredditData, SubredditData t1) {
-                                return subredditData.getName().toLowerCase().compareTo(t1.getName().toLowerCase());
-                            }
-                        });
-                        mSubredditData = subredditData;
-                        mSubscribedSubredditRecyclerView.setAdapter(new SubscribedSubredditRecyclerViewAdapter(
-                                MainActivity.this, mSubredditData));
+                    public void onFetchSubscribedSubredditsSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
+                                                                   ArrayList<SubscribedUserData> subscribedUserData) {
+                        new InsertSubscribedThingsAsyncTask(
+                                SubscribedSubredditRoomDatabase.getDatabase(MainActivity.this),
+                                SubscribedUserRoomDatabase.getDatabase(MainActivity.this),
+                                subscribedSubredditData,
+                                subscribedUserData).execute();
+
+                        /*new InsertSubscribedUsersAsyncTask(
+                                SubscribedUserRoomDatabase.getDatabase(MainActivity.this),
+                                subscribedUserData).execute();*/
                     }
 
                     @Override
@@ -207,4 +253,52 @@ public class MainActivity extends AppCompatActivity {
             glide.load(mBannerImageUrl).into(mBannerImageView);
         }
     }
+
+    private static class InsertSubscribedThingsAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private final SubscribedSubredditDao mSubredditDao;
+        private final SubscribedUserDao mUserDao;
+        private List<SubscribedSubredditData> subscribedSubredditData;
+        private List<SubscribedUserData> subscribedUserData;
+
+        InsertSubscribedThingsAsyncTask(SubscribedSubredditRoomDatabase subredditDb,
+                                        SubscribedUserRoomDatabase userDb,
+                                        List<SubscribedSubredditData> subscribedSubredditData,
+                                        List<SubscribedUserData> subscribedUserData) {
+            mSubredditDao = subredditDb.subscribedSubredditDao();
+            mUserDao = userDb.subscribedUserDao();
+            this.subscribedSubredditData = subscribedSubredditData;
+            this.subscribedUserData = subscribedUserData;
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            for(SubscribedSubredditData s : subscribedSubredditData) {
+                mSubredditDao.insert(s);
+            }
+            for(SubscribedUserData s : subscribedUserData) {
+                mUserDao.insert(s);
+            }
+            return null;
+        }
+    }
+
+    /*private static class InsertSubscribedUsersAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private final SubscribedUserDao mDao;
+        private List<SubscribedUserData> subscribedUserData;
+
+        InsertSubscribedUsersAsyncTask(SubscribedUserRoomDatabase db, List<SubscribedUserData> subscribedUserData) {
+            mDao = db.subscribedUserDao();
+            this.subscribedUserData = subscribedUserData;
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            for(SubscribedUserData s : subscribedUserData) {
+                mDao.insert(s);
+            }
+            return null;
+        }
+    }*/
 }
