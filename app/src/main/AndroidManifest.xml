@@ -3,8 +3,11 @@
     package="ml.docilealligator.infinityforreddit">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <uses-permission-sdk-23 android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="22" />
 
     <application
@@ -38,6 +41,11 @@
             android:theme="@style/Theme.AppCompat.Transparent" />
         <activity
             android:name=".ViewPostDetailActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".ViewSubredditDetailActivity"
+            android:label="@string/title_activity_view_subreddit_detail"
+            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".MainActivity" />
     </application>
 

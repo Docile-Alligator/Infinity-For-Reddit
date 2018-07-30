@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -33,6 +34,13 @@ class SubscribedSubredditRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
+                mContext.startActivity(intent);
+            }
+        });
         if(!mSubscribedSubredditData.get(i).getIconUrl().equals("")) {
             glide.load(mSubscribedSubredditData.get(i).getIconUrl()).into(((SubredditViewHolder) viewHolder).iconCircleImageView);
         } else {

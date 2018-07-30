@@ -107,6 +107,7 @@
                             android:id="@+id/nsfw_text_view_view_post_detail"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="@string/nsfw"
                             android:layout_alignParentEnd="true"
                             android:layout_marginEnd="16dp"
                             android:layout_marginLeft="16dp"
