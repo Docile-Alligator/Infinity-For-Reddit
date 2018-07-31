@@ -58,6 +58,8 @@ class JSONUtils {
     static final String COMMENT_KARMA_KEY = "comment_karma";
     static final String DISPLAY_NAME = "display_name";
     static final String SUBREDDIT_TYPE_KEY = "subreddit_type";
-
     static final String SUBREDDIT_TYPE_VALUE_USER = "user";
+    static final String SUBSCRIBERS_KEY = "subscribers";
+    static final String PUBLIC_DESCRIPTION = "public_description";
+    static final String ACTIVE_USER_COUNT = "active_user_count";
 }

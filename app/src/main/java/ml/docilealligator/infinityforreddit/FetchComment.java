@@ -25,7 +25,7 @@ class FetchComment {
 
     void queryComment(FetchCommentListener fetchCommentListener) {
         mFetchCommentListener = fetchCommentListener;
-        StringRequest commentRequest = new StringRequest(Request.Method.GET, RedditUtils.getQueryCommentURI(subredditName, article), new Response.Listener<String>() {
+        StringRequest commentRequest = new StringRequest(Request.Method.GET, RedditUtils.getQueryCommentUri(subredditName, article), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 mFetchCommentListener.onFetchCommentSuccess(response);
