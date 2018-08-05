@@ -57,7 +57,7 @@ class SubredditData {
         return description;
     }
 
-    public int getnSubscribers() {
+    public int getNSubscribers() {
         return nSubscribers;
     }
 }

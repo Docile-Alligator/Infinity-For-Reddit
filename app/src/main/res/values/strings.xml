@@ -20,6 +20,8 @@
     <string name="following">Following</string>
     <string name="subscriptions">Subscriptions</string>
     <string name="title_activity_view_subreddit_detail">ViewSubredditDetailActivity</string>
+    <string name="subscribers_number_detail">Subscribers: %1$d</string>
+    <string name="online_subscribers_number_detail">Online: %1$d</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

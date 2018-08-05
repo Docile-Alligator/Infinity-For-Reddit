@@ -29,13 +29,12 @@
 
                 <ImageView
                     android:id="@+id/banner_image_view_view_subreddit_detail_activity"
-                    android:src="@drawable/subreddit_default_icon"
                     android:layout_width="match_parent"
                     android:scaleType="centerCrop"
                     android:layout_height="180dp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:src="@drawable/subreddit_default_icon"
+                    android:id="@+id/icon_circle_image_view_view_subreddit_detail_activity"
                     android:layout_width="72dp"
                     android:layout_height="72dp"
                     android:layout_marginTop="-36dp"
@@ -53,22 +52,46 @@
                     android:background="@android:color/white">
 
                     <TextView
-                        android:id="@+id/name_text_view_view_subreddit_detail_activity"
+                        android:id="@+id/subreddit_name_text_view_view_subreddit_detail_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="36dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
-                        android:textColor="@android:color/black"
-                        android:text="Dummy"/>
+                        android:textSize="18sp"
+                        android:textColor="@color/colorAccent"/>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/subscriber_count_text_view_view_subreddit_detail_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:textColor="@android:color/black" />
+
+                        <TextView
+                            android:id="@+id/online_subscriber_count_text_view_view_subreddit_detail_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_alignParentEnd="true"
+                            android:textColor="@android:color/black" />
+
+                    </RelativeLayout>
 
                     <TextView
-                        android:id="@+id/subscriber_count_text_view_view_subreddit_detail_activity"
+                        android:id="@+id/description_text_view_view_subreddit_detail_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
-                        android:textColor="@android:color/black"
-                        android:text="Subscriber: 10000"/>
+                        android:textColor="@android:color/black" />
 
                 </LinearLayout>
 
@@ -85,14 +108,5 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_view_subreddit_detail" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        app:layout_anchor="@id/app_bar_layout_view_subreddit_detail_activity"
-        app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/baseline_add_white_24" />
 
 </android.support.design.widget.CoordinatorLayout>

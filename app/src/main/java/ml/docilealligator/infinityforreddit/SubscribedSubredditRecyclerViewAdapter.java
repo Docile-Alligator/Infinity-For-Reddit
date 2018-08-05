@@ -33,11 +33,13 @@ class SubscribedSubredditRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, final int i) {
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
+                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME, mSubscribedSubredditData.get(viewHolder.getAdapterPosition()).getName());
+                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_ID, mSubscribedSubredditData.get(viewHolder.getAdapterPosition()).getId());
                 mContext.startActivity(intent);
             }
         });

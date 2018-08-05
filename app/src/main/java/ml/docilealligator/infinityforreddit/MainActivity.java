@@ -202,10 +202,6 @@ public class MainActivity extends AppCompatActivity {
                                 SubscribedUserRoomDatabase.getDatabase(MainActivity.this),
                                 subscribedSubredditData,
                                 subscribedUserData).execute();
-
-                        /*new InsertSubscribedUsersAsyncTask(
-                                SubscribedUserRoomDatabase.getDatabase(MainActivity.this),
-                                subscribedUserData).execute();*/
                     }
 
                     @Override
@@ -282,23 +278,4 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
-
-    /*private static class InsertSubscribedUsersAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        private final SubscribedUserDao mDao;
-        private List<SubscribedUserData> subscribedUserData;
-
-        InsertSubscribedUsersAsyncTask(SubscribedUserRoomDatabase db, List<SubscribedUserData> subscribedUserData) {
-            mDao = db.subscribedUserDao();
-            this.subscribedUserData = subscribedUserData;
-        }
-
-        @Override
-        protected Void doInBackground(final Void... params) {
-            for(SubscribedUserData s : subscribedUserData) {
-                mDao.insert(s);
-            }
-            return null;
-        }
-    }*/
 }

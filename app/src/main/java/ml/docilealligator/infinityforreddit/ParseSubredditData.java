@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 class ParseSubredditData {
     interface ParseSubredditDataListener {
-        void onParseSubredditDataSuccess();
+        void onParseSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers);
         void onParseSubredditDataFail();
     }
 
@@ -23,6 +23,8 @@ class ParseSubredditData {
         private JSONObject jsonResponse;
         private boolean parseFailed;
         private ParseSubredditDataListener parseSubredditDataListener;
+        private SubredditData subredditData;
+        private int mNCurrentOnlineSubscribers;
 
         ParseSubredditDataAsyncTask(String response, ParseSubredditDataListener parseSubredditDataListener){
             this.parseSubredditDataListener = parseSubredditDataListener;
@@ -40,11 +42,14 @@ class ParseSubredditData {
             try {
                 JSONObject data = jsonResponse.getJSONObject(JSONUtils.DATA_KEY);
                 String id = data.getString(JSONUtils.NAME_KEY);
+                String subredditFullName = data.getString(JSONUtils.DISPLAY_NAME_PREFIXED);
                 String description = data.getString(JSONUtils.PUBLIC_DESCRIPTION);
                 String bannerImageUrl = data.getString(JSONUtils.BANNER_IMG_KEY);
                 String iconImageUrl = data.getString(JSONUtils.ICON_IMG_KEY);
                 int nSubscribers = data.getInt(JSONUtils.SUBSCRIBERS_KEY);
                 int nCurrentOnlineSubscribers = data.getInt(JSONUtils.ACTIVE_USER_COUNT);
+                subredditData = new SubredditData(id, subredditFullName, iconImageUrl, bannerImageUrl, description, nSubscribers);
+                mNCurrentOnlineSubscribers = nCurrentOnlineSubscribers;
             } catch (JSONException e) {
                 parseFailed = true;
                 Log.i("parse", "SubredditData error");
@@ -56,7 +61,7 @@ class ParseSubredditData {
         @Override
         protected void onPostExecute(Void aVoid) {
             if(!parseFailed) {
-                parseSubredditDataListener.onParseSubredditDataSuccess();
+                parseSubredditDataListener.onParseSubredditDataSuccess(subredditData, mNCurrentOnlineSubscribers);
             } else {
                 parseSubredditDataListener.onParseSubredditDataFail();
             }
