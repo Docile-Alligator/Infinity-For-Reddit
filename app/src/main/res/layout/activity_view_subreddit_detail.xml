@@ -82,6 +82,7 @@
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="16dp"
                             android:layout_alignParentEnd="true"
+                            android:layout_toStartOf="@id/subscriber_count_text_view_view_subreddit_detail_activity"
                             android:textColor="@android:color/black" />
 
                     </RelativeLayout>
@@ -102,9 +103,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:navigationIcon="?attr/homeAsUpIndicator" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
+
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_view_subreddit_detail" />

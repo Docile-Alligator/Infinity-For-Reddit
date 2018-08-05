@@ -9,6 +9,8 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +36,11 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         String id = getIntent().getExtras().getString(EXTRA_SUBREDDIT_ID);
-        final String subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
+        String subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
+
+        final String title = "r/" + subredditName;
+        setTitle(title);
+
         final CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar_layout_view_subreddit_detail_activity);
         AppBarLayout appBarLayout = findViewById(R.id.app_bar_layout_view_subreddit_detail_activity);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -47,7 +53,8 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
                 if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbarLayout.setTitle(subredditName);
+                    Log.i("asfasdf", "asdfasdf");
+                    collapsingToolbarLayout.setTitle(title);
                     isShow = true;
                 } else if(isShow) {
                     collapsingToolbarLayout.setTitle(" ");//carefull there should a space between double quote otherwise it wont work
@@ -112,6 +119,16 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return false;
     }
 
     private static class InsertSubredditDataAsyncTask extends AsyncTask<Void, Void, Void> {

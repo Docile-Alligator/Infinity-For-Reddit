@@ -26,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private String mBannerImageUrl;
     private String mKarma;
     private boolean mFetchUserInfoSuccess;
+    private boolean mIsInserting;
 
     private SubscribedSubredditViewModel mSubscribedSubredditViewModel;
     private SubscribedUserViewModel mSubscribedUserViewModel;
@@ -66,6 +68,25 @@ public class MainActivity extends AppCompatActivity {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        Calendar now = Calendar.getInstance();
+        Calendar queryAccessTokenTime = Calendar.getInstance();
+        queryAccessTokenTime.setTimeInMillis(getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
+                .getLong(SharedPreferencesUtils.QUERY_ACCESS_TOKEN_TIME_KEY, 0));
+        int interval = getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
+                .getInt(SharedPreferencesUtils.ACCESS_TOKEN_EXPIRE_INTERVAL_KEY, 0);
+        queryAccessTokenTime.add(Calendar.SECOND, interval - 300);
+
+        if(now.after(queryAccessTokenTime)) {
+            new AcquireAccessToken(this).refreshAccessToken(Volley.newRequestQueue(this),
+                    new AcquireAccessToken.AcquireAccessTokenListener() {
+                        @Override
+                        public void onAcquireAccessTokenSuccess() {}
+
+                        @Override
+                        public void onAcquireAccessTokenFail() {}
+                    });
+        }
 
         View header = findViewById(R.id.nav_header_main_activity);
         mNameTextView = header.findViewById(R.id.name_text_view_nav_header_main);
@@ -164,14 +185,15 @@ public class MainActivity extends AppCompatActivity {
         mSubscribedSubredditViewModel.getAllSubscribedSubreddits().observe(this, new Observer<List<SubscribedSubredditData>>() {
             @Override
             public void onChanged(@Nullable final List<SubscribedSubredditData> subscribedSubredditData) {
-                // Update the cached copy of the words in the adapter.
-                if(subscribedSubredditData == null || subscribedSubredditData.size() == 0) {
-                    subscriptionsLabelTextView.setVisibility(View.GONE);
-                } else {
-                    subscriptionsLabelTextView.setVisibility(View.VISIBLE);
-                }
+                if(!mIsInserting) {
+                    if(subscribedSubredditData == null || subscribedSubredditData.size() == 0) {
+                        subscriptionsLabelTextView.setVisibility(View.GONE);
+                    } else {
+                        subscriptionsLabelTextView.setVisibility(View.VISIBLE);
+                    }
 
-                subredditadapter.setSubscribedSubreddits(subscribedSubredditData);
+                    subredditadapter.setSubscribedSubreddits(subscribedSubredditData);
+                }
             }
         });
 
@@ -181,13 +203,14 @@ public class MainActivity extends AppCompatActivity {
         mSubscribedUserViewModel.getAllSubscribedUsers().observe(this, new Observer<List<SubscribedUserData>>() {
             @Override
             public void onChanged(@Nullable final List<SubscribedUserData> subscribedUserData) {
-                // Update the cached copy of the words in the adapter.
-                if(subscribedUserData == null || subscribedUserData.size() == 0) {
-                    followingLabelTextView.setVisibility(View.GONE);
-                } else {
-                    followingLabelTextView.setVisibility(View.VISIBLE);
+                if(!mIsInserting) {
+                    if(subscribedUserData == null || subscribedUserData.size() == 0) {
+                        followingLabelTextView.setVisibility(View.GONE);
+                    } else {
+                        followingLabelTextView.setVisibility(View.VISIBLE);
+                    }
+                    userAdapter.setSubscribedUsers(subscribedUserData);
                 }
-                userAdapter.setSubscribedUsers(subscribedUserData);
             }
         });
 
@@ -197,11 +220,18 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onFetchSubscribedSubredditsSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                                                    ArrayList<SubscribedUserData> subscribedUserData) {
+                        mIsInserting = true;
                         new InsertSubscribedThingsAsyncTask(
                                 SubscribedSubredditRoomDatabase.getDatabase(MainActivity.this),
                                 SubscribedUserRoomDatabase.getDatabase(MainActivity.this),
                                 subscribedSubredditData,
-                                subscribedUserData).execute();
+                                subscribedUserData,
+                                new InsertSubscribedThingsAsyncTask.InsertSubscribedThingListener() {
+                                    @Override
+                                    public void insertSuccess() {
+                                        mIsInserting = false;
+                                    }
+                                }).execute();
                     }
 
                     @Override
@@ -252,19 +282,26 @@ public class MainActivity extends AppCompatActivity {
 
     private static class InsertSubscribedThingsAsyncTask extends AsyncTask<Void, Void, Void> {
 
+        interface InsertSubscribedThingListener {
+            void insertSuccess();
+        }
+
         private final SubscribedSubredditDao mSubredditDao;
         private final SubscribedUserDao mUserDao;
         private List<SubscribedSubredditData> subscribedSubredditData;
         private List<SubscribedUserData> subscribedUserData;
+        private InsertSubscribedThingListener insertSubscribedThingListener;
 
         InsertSubscribedThingsAsyncTask(SubscribedSubredditRoomDatabase subredditDb,
                                         SubscribedUserRoomDatabase userDb,
                                         List<SubscribedSubredditData> subscribedSubredditData,
-                                        List<SubscribedUserData> subscribedUserData) {
+                                        List<SubscribedUserData> subscribedUserData,
+                                        InsertSubscribedThingListener insertSubscribedThingListener) {
             mSubredditDao = subredditDb.subscribedSubredditDao();
             mUserDao = userDb.subscribedUserDao();
             this.subscribedSubredditData = subscribedSubredditData;
             this.subscribedUserData = subscribedUserData;
+            this.insertSubscribedThingListener = insertSubscribedThingListener;
         }
 
         @Override
@@ -276,6 +313,11 @@ public class MainActivity extends AppCompatActivity {
                 mUserDao.insert(s);
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            insertSubscribedThingListener.insertSuccess();
         }
     }
 }

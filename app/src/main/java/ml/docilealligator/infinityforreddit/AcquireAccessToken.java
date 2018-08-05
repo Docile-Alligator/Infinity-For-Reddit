@@ -14,6 +14,7 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,15 +40,16 @@ class AcquireAccessToken {
         if(mContext != null) {
             mAcquireAccessTokenListener = acquireAccessTokenListener;
             final String refreshToken = mContext.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.REFRESH_TOKEN_KEY, "");
+            final SharedPreferences.Editor editor = mContext.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE).edit();
             StringRequest newTokenRequest = new StringRequest(Request.Method.POST, RedditUtils.ACQUIRE_ACCESS_TOKEN_URL, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
                         String newAccessToken = jsonObject.getString(RedditUtils.ACCESS_TOKEN_KEY);
-
-                        SharedPreferences.Editor editor = mContext.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE).edit();
+                        int expireIn = jsonObject.getInt(RedditUtils.EXPIRES_IN_KEY);
                         editor.putString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, newAccessToken);
+                        editor.putInt(SharedPreferencesUtils.ACCESS_TOKEN_EXPIRE_INTERVAL_KEY, expireIn);
                         editor.apply();
 
                         Log.i("access token", newAccessToken);
@@ -81,6 +83,11 @@ class AcquireAccessToken {
                 }
             };
             newTokenRequest.setTag(AcquireAccessToken.class);
+
+            long queryAccessTokenTime = Calendar.getInstance().getTimeInMillis();
+            editor.putLong(SharedPreferencesUtils.QUERY_ACCESS_TOKEN_TIME_KEY, queryAccessTokenTime);
+            editor.apply();
+
             refreshQueue.add(newTokenRequest);
         }
     }

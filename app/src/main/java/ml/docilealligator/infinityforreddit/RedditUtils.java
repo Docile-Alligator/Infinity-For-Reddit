@@ -34,6 +34,7 @@ class RedditUtils {
     static final String SCOPE_KEY = "scope";
     static final String SCOPE = "identity edit flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread";
     static final String ACCESS_TOKEN_KEY = "access_token";
+    static final String EXPIRES_IN_KEY = "expires_in";
 
     static final String AUTHORIZATION_KEY = "Authorization";
     static final String AUTHORIZATION_BASE = "bearer ";
