@@ -9,16 +9,16 @@ import android.support.annotation.NonNull;
 
 public class SubredditViewModel extends AndroidViewModel {
     private SubredditRepository mSubredditRepository;
-    private LiveData<SubredditData> mSubredditData;
+    private LiveData<SubredditData> mSubredditLiveData;
 
-    public SubredditViewModel(Application application, String id) {
+    SubredditViewModel(Application application, String id) {
         super(application);
         mSubredditRepository = new SubredditRepository(application, id);
-        mSubredditData = mSubredditRepository.getSubredditData();
+        mSubredditLiveData = mSubredditRepository.getSubredditLiveData();
     }
 
-    public LiveData<SubredditData> getSubredditData() {
-        return mSubredditData;
+    public LiveData<SubredditData> getSubredditLiveData() {
+        return mSubredditLiveData;
     }
 
     public void insert(SubredditData subredditData) {

@@ -15,5 +15,8 @@ public interface SubredditDao {
     void deleteAllSubreddits();
 
     @Query("SELECT * from subreddits WHERE id = :id")
-    LiveData<SubredditData> getSubreddit(String id);
+    LiveData<SubredditData> getSubredditLiveData(String id);
+
+    @Query("SELECT * from subreddits WHERE name = :namePrefixed")
+    SubredditData getSubredditData(String namePrefixed);
 }

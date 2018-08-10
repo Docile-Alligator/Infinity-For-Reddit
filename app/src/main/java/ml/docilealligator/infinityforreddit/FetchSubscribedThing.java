@@ -16,7 +16,8 @@ import java.util.Map;
 class FetchSubscribedThing {
     interface FetchSubscribedSubredditsListener {
         void onFetchSubscribedSubredditsSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
-                                                ArrayList<SubscribedUserData> subscribedUserData);
+                                                ArrayList<SubscribedUserData> subscribedUserData,
+                                                ArrayList<SubredditData> subredditData);
         void onFetchSubscribedSubredditsFail();
     }
 
@@ -25,15 +26,19 @@ class FetchSubscribedThing {
     private FetchSubscribedSubredditsListener mFetchSubscribedSubredditsListener;
     private ArrayList<SubscribedSubredditData> mSubscribedSubredditData;
     private ArrayList<SubscribedUserData> mSubscribedUserData;
+    private ArrayList<SubredditData> mSubredditData;
 
     private String mLastItem;
 
-    FetchSubscribedThing(Context context, RequestQueue requestQueue, ArrayList<SubscribedSubredditData> subscribedSubredditData,
-                         ArrayList<SubscribedUserData> subscribedUserData) {
+    FetchSubscribedThing(Context context, RequestQueue requestQueue,
+                         ArrayList<SubscribedSubredditData> subscribedSubredditData,
+                         ArrayList<SubscribedUserData> subscribedUserData,
+                         ArrayList<SubredditData> subredditData) {
         this.context = context;
         this.requestQueue = requestQueue;
         mSubscribedSubredditData = subscribedSubredditData;
         mSubscribedUserData = subscribedUserData;
+        mSubredditData = subredditData;
     }
 
     void fetchSubscribedSubreddits(FetchSubscribedSubredditsListener fetchUserInfoListener, final int refreshTime) {
@@ -51,19 +56,20 @@ class FetchSubscribedThing {
             @Override
             public void onResponse(String response) {
                 new ParseSubscribedThing().parseSubscribedSubreddits(response, mSubscribedSubredditData,
-                        mSubscribedUserData,
+                        mSubscribedUserData, mSubredditData,
                         new ParseSubscribedThing.ParseSubscribedSubredditsListener() {
 
                             @Override
                             public void onParseSubscribedSubredditsSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                                                            ArrayList<SubscribedUserData> subscribedUserData,
+                                                                           ArrayList<SubredditData> subredditData,
                                                                            String lastItem) {
                                 mSubscribedSubredditData = subscribedSubredditData;
                                 mSubscribedUserData = subscribedUserData;
                                 mLastItem = lastItem;
                                 if(mLastItem.equals("null")) {
                                     mFetchSubscribedSubredditsListener.onFetchSubscribedSubredditsSuccess(mSubscribedSubredditData,
-                                            mSubscribedUserData);
+                                            mSubscribedUserData, mSubredditData);
                                 } else {
                                     fetchSubscribedSubreddits(mFetchSubscribedSubredditsListener, refreshTime);
                                 }

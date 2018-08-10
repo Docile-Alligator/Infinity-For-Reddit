@@ -6,16 +6,16 @@ import android.os.AsyncTask;
 
 public class SubredditRepository {
     private SubredditDao mSubredditDao;
-    private LiveData<SubredditData> mSubredditData;
+    private LiveData<SubredditData> mSubredditLiveData;
 
     SubredditRepository(Application application, String id) {
         SubredditRoomDatabase db = SubredditRoomDatabase.getDatabase(application);
         mSubredditDao = db.subredditDao();
-        mSubredditData = mSubredditDao.getSubreddit(id);
+        mSubredditLiveData = mSubredditDao.getSubredditLiveData(id);
     }
 
-    LiveData<SubredditData> getSubredditData() {
-        return mSubredditData;
+    LiveData<SubredditData> getSubredditLiveData() {
+        return mSubredditLiveData;
     }
 
     public void insert(SubredditData subredditData) {

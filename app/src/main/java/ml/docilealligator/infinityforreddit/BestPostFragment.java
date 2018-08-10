@@ -1,7 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -157,7 +157,6 @@ public class BestPostFragment extends Fragment {
             }
         };
         mPaginationSynchronizer.setPaginationRequestQueueSynchronizer(paginationRequestQueueSynchronizer);
-
 
         return rootView;
     }

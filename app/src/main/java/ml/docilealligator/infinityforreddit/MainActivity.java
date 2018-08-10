@@ -1,7 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -75,12 +75,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(loginIntent);
         } else {
             if(savedInstanceState == null) {
-                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 mFragment = new BestPostFragment();
                 fragmentTransaction.replace(R.id.frame_layout_content_main, mFragment).commit();
             } else {
-                mFragment = getFragmentManager().getFragment(savedInstanceState, "outStateFragment");
-                getFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
+                mFragment = getSupportFragmentManager().getFragment(savedInstanceState, "outStateFragment");
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
             }
 
             Calendar now = Calendar.getInstance();
@@ -214,17 +214,20 @@ public class MainActivity extends AppCompatActivity {
             });
 
             new FetchSubscribedThing(this, Volley.newRequestQueue(this), new ArrayList<SubscribedSubredditData>(),
-                    new ArrayList<SubscribedUserData>())
+                    new ArrayList<SubscribedUserData>(), new ArrayList<SubredditData>())
                     .fetchSubscribedSubreddits(new FetchSubscribedThing.FetchSubscribedSubredditsListener() {
                         @Override
                         public void onFetchSubscribedSubredditsSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
-                                                                       ArrayList<SubscribedUserData> subscribedUserData) {
+                                                                       ArrayList<SubscribedUserData> subscribedUserData,
+                                                                       ArrayList<SubredditData> subredditData) {
                             mIsInserting = true;
                             new InsertSubscribedThingsAsyncTask(
                                     SubscribedSubredditRoomDatabase.getDatabase(MainActivity.this),
                                     SubscribedUserRoomDatabase.getDatabase(MainActivity.this),
+                                    SubredditRoomDatabase.getDatabase(MainActivity.this),
                                     subscribedSubredditData,
                                     subscribedUserData,
+                                    subredditData,
                                     new InsertSubscribedThingsAsyncTask.InsertSubscribedThingListener() {
                                         @Override
                                         public void insertSuccess() {
@@ -255,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if(mFragment != null) {
-            getFragmentManager().putFragment(outState, "outStateFragment", mFragment);
+            getSupportFragmentManager().putFragment(outState, "outStateFragment", mFragment);
         }
         outState.putString(nameState, mName);
         outState.putString(profileImageUrlState, mProfileImageUrl);
@@ -286,31 +289,40 @@ public class MainActivity extends AppCompatActivity {
             void insertSuccess();
         }
 
-        private final SubscribedSubredditDao mSubredditDao;
+        private final SubscribedSubredditDao mSubscribedSubredditDao;
         private final SubscribedUserDao mUserDao;
+        private final SubredditDao mSubredditDao;
         private List<SubscribedSubredditData> subscribedSubredditData;
         private List<SubscribedUserData> subscribedUserData;
+        private List<SubredditData> subredditData;
         private InsertSubscribedThingListener insertSubscribedThingListener;
 
-        InsertSubscribedThingsAsyncTask(SubscribedSubredditRoomDatabase subredditDb,
+        InsertSubscribedThingsAsyncTask(SubscribedSubredditRoomDatabase subscribedSubredditDb,
                                         SubscribedUserRoomDatabase userDb,
+                                        SubredditRoomDatabase subredditDb,
                                         List<SubscribedSubredditData> subscribedSubredditData,
                                         List<SubscribedUserData> subscribedUserData,
+                                        List<SubredditData> subredditData,
                                         InsertSubscribedThingListener insertSubscribedThingListener) {
-            mSubredditDao = subredditDb.subscribedSubredditDao();
+            mSubscribedSubredditDao = subscribedSubredditDb.subscribedSubredditDao();
             mUserDao = userDb.subscribedUserDao();
+            mSubredditDao = subredditDb.subredditDao();
             this.subscribedSubredditData = subscribedSubredditData;
             this.subscribedUserData = subscribedUserData;
+            this.subredditData = subredditData;
             this.insertSubscribedThingListener = insertSubscribedThingListener;
         }
 
         @Override
         protected Void doInBackground(final Void... params) {
             for(SubscribedSubredditData s : subscribedSubredditData) {
-                mSubredditDao.insert(s);
+                mSubscribedSubredditDao.insert(s);
             }
             for(SubscribedUserData s : subscribedUserData) {
                 mUserDao.insert(s);
+            }
+            for(SubredditData s : subredditData) {
+                mSubredditDao.insert(s);
             }
             return null;
         }

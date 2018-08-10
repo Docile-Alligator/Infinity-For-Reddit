@@ -9,7 +9,6 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -53,7 +52,6 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
                 if (scrollRange + verticalOffset == 0) {
-                    Log.i("asfasdf", "asdfasdf");
                     collapsingToolbarLayout.setTitle(title);
                     isShow = true;
                 } else if(isShow) {
@@ -73,7 +71,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
 
         SubredditViewModel.Factory factory = new SubredditViewModel.Factory(getApplication(), id);
         mSubredditViewModel = ViewModelProviders.of(this, factory).get(SubredditViewModel.class);
-        mSubredditViewModel.getSubredditData().observe(this, new Observer<SubredditData>() {
+        mSubredditViewModel.getSubredditLiveData().observe(this, new Observer<SubredditData>() {
             @Override
             public void onChanged(@Nullable SubredditData subredditData) {
                 if(subredditData != null) {
