@@ -18,6 +18,7 @@ class BestPostData implements Parcelable {
     private String id;
     private String fullName;
     private String subredditName;
+    private String subredditIconUrl;
     private String postTime;
     private String title;
     private String selfText;
@@ -80,6 +81,7 @@ class BestPostData implements Parcelable {
         id = in.readString();
         fullName = in.readString();
         subredditName = in.readString();
+        subredditIconUrl = in.readString();
         postTime = in.readString();
         title = in.readString();
         selfText = in.readString();
@@ -118,6 +120,14 @@ class BestPostData implements Parcelable {
 
     public String getSubredditName() {
         return subredditName;
+    }
+
+    public String getSubredditIconUrl() {
+        return subredditIconUrl;
+    }
+
+    public void setSubredditIconUrl(String subredditIconUrl) {
+        this.subredditIconUrl = subredditIconUrl;
     }
 
     public String getPostTime() {
@@ -214,6 +224,7 @@ class BestPostData implements Parcelable {
         parcel.writeString(id);
         parcel.writeString(fullName);
         parcel.writeString(subredditName);
+        parcel.writeString(subredditIconUrl);
         parcel.writeString(postTime);
         parcel.writeString(title);
         parcel.writeString(selfText);

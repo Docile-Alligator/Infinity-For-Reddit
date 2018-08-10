@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
@@ -99,8 +98,14 @@ class BestPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.View
                 int voteType = mBestPostData.get(position).getVoteType();
                 boolean nsfw = mBestPostData.get(position).getNSFW();
 
-                new LoadSubredditIconAsyncTask(mContext, ((DataViewHolder) holder).subredditImageView,
-                        subredditDao, subredditName).execute();
+                if(mBestPostData.get(position).getSubredditIconUrl() == null) {
+                    new LoadSubredditIconAsyncTask(mContext, ((DataViewHolder) holder).subredditIconCircleImageView,
+                            subredditDao, subredditName, mBestPostData.get(position)).execute();
+                } else if(!mBestPostData.get(position).getSubredditIconUrl().equals("")) {
+                    glide.load(mBestPostData.get(position).getSubredditIconUrl()).into(((DataViewHolder) holder).subredditIconCircleImageView);
+                } else {
+                    glide.load(R.drawable.subreddit_default_icon).into(((DataViewHolder) holder).subredditIconCircleImageView);
+                }
 
                 ((DataViewHolder) holder).cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -460,7 +465,7 @@ class BestPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     class DataViewHolder extends RecyclerView.ViewHolder {
         private CardView cardView;
-        private CircleImageView subredditImageView;
+        private CircleImageView subredditIconCircleImageView;
         private TextView subredditNameTextView;
         private TextView postTimeTextView;
         private TextView titleTextView;
@@ -478,7 +483,7 @@ class BestPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.View
         DataViewHolder(CardView itemView) {
             super(itemView);
             cardView = itemView.findViewById(R.id.card_view_view_post_detail);
-            subredditImageView = itemView.findViewById(R.id.subreddit_icon_circle_image_view_best_post_item);
+            subredditIconCircleImageView = itemView.findViewById(R.id.subreddit_icon_circle_image_view_best_post_item);
             subredditNameTextView = itemView.findViewById(R.id.subreddit_text_view_best_post_item);
             postTimeTextView = itemView.findViewById(R.id.post_time_text_view_best_post_item);
             titleTextView = itemView.findViewById(R.id.title_text_view_best_post_item);
@@ -531,16 +536,17 @@ class BestPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    private static class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {
-        private Context context;
-        private CircleImageView iconImageView;
+    /*private static class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {
+        private final WeakReference<Context> contextWeakReference;
+        private final WeakReference<CircleImageView> circleImageViewWeakReference;
+
         private SubredditDao subredditDao;
         private String subredditName;
         private String iconImageUrl;
 
         LoadSubredditIconAsyncTask(Context context, CircleImageView iconImageView, SubredditDao subredditDao, String subredditName) {
-            this.context = context;
-            this.iconImageView = iconImageView;
+            contextWeakReference = new WeakReference<>(context);
+            circleImageViewWeakReference = new WeakReference<>(iconImageView);
             this.subredditDao = subredditDao;
             this.subredditName = subredditName;
         }
@@ -556,11 +562,16 @@ class BestPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.View
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            if(iconImageUrl != null) {
-                Glide.with(context).load(iconImageUrl).into(iconImageView);
-            } else {
-                Glide.with(context).load(R.drawable.subreddit_default_icon).into(iconImageView);
+            Context context = contextWeakReference.get();
+            CircleImageView circleImageView = circleImageViewWeakReference.get();
+
+            if(context != null && circleImageView != null) {
+                if(iconImageUrl != null) {
+                    Glide.with(context).load(iconImageUrl).into(circleImageView);
+                } else {
+                    Glide.with(context).load(R.drawable.subreddit_default_icon).into(circleImageView);
+                }
             }
         }
-    }
+    }*/
 }

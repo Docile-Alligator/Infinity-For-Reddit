@@ -66,7 +66,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
         mCoordinatorLayout = findViewById(R.id.coordinator_layout_view_post_detail);
 
-        CircleImageView subredditImageView = findViewById(R.id.subreddit_icon_circle_image_view_view_post_detail);
+        CircleImageView subredditIconCircleImageView = findViewById(R.id.subreddit_icon_circle_image_view_view_post_detail);
         TextView postTimeTextView = findViewById(R.id.post_time_text_view_view_post_detail);
         TextView subredditTextView = findViewById(R.id.subreddit_text_view_view_post_detail);
         TextView contentTextView = findViewById(R.id.content_text_view_view_post_detail);
@@ -85,6 +85,16 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         mCommentProgressbar = findViewById(R.id.comment_progress_bar_view_post_detail);
         mCommentCardView = findViewById(R.id.comment_card_view_view_post_detail);
         mRecyclerView = findViewById(R.id.recycler_view_view_post_detail);
+
+        if(mPostData.getSubredditIconUrl() == null) {
+            new LoadSubredditIconAsyncTask(this, subredditIconCircleImageView,
+                    SubredditRoomDatabase.getDatabase(this).subredditDao(), mPostData.getSubredditName(),
+                    mPostData).execute();
+        } else if(!mPostData.getSubredditIconUrl().equals("")) {
+            Glide.with(this).load(mPostData.getSubredditIconUrl()).into(subredditIconCircleImageView);
+        } else {
+            Glide.with(this).load(R.drawable.subreddit_default_icon).into(subredditIconCircleImageView);
+        }
 
         mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
