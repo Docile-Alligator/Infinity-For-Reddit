@@ -141,8 +141,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(ViewPostDetailActivity.this, ViewImageActivity.class);
-                        intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, mPostData.getPreviewUrl());
+                        intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, mPostData.getUrl());
                         intent.putExtra(ViewImageActivity.TITLE_KEY, mPostData.getTitle());
+                        intent.putExtra(ViewImageActivity.SUBREDDIT_KEY, mPostData.getSubredditName());
+                        intent.putExtra(ViewImageActivity.ID_KEY, mPostData.getId());
                         startActivity(intent);
                     }
                 });
