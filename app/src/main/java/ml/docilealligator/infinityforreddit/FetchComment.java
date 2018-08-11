@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.net.Uri;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -25,7 +27,12 @@ class FetchComment {
 
     void queryComment(FetchCommentListener fetchCommentListener) {
         mFetchCommentListener = fetchCommentListener;
-        StringRequest commentRequest = new StringRequest(Request.Method.GET, RedditUtils.getQueryCommentUri(subredditName, article), new Response.Listener<String>() {
+
+        Uri uri = Uri.parse(RedditUtils.getQueryCommentUri(subredditName, article))
+                .buildUpon().appendQueryParameter(RedditUtils.RAW_JSON_KEY, RedditUtils.RAW_JSON_VALUE)
+                .build();
+
+        StringRequest commentRequest = new StringRequest(Request.Method.GET, uri.toString(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 mFetchCommentListener.onFetchCommentSuccess(response);

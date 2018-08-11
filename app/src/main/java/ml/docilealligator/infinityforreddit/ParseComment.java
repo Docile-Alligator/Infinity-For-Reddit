@@ -53,8 +53,13 @@ class ParseComment {
                 int actualCommentLength;
 
                 JSONArray allComments = jsonResponse.getJSONObject(1).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+                if(allComments.length() == 0) {
+                    return null;
+                }
+
                 JSONObject more = allComments.getJSONObject(allComments.length() - 1).getJSONObject(JSONUtils.DATA_KEY);
 
+                //Maybe children contain only comments and no more info
                 if(more.has(JSONUtils.COUNT_KEY)) {
                     moreCommentCount = more.getInt(JSONUtils.COUNT_KEY);
                     actualCommentLength = allComments.length() - 1;
@@ -87,7 +92,6 @@ class ParseComment {
             } catch (JSONException e) {
                 parseFailed = true;
                 Log.i("parse comment error", e.getMessage());
-                mParseCommentListener.onParseCommentFail();
             }
             return null;
         }

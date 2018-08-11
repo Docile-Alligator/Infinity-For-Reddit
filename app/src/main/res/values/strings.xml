@@ -12,6 +12,7 @@
     <string name="load_comment_failed">Error loading comments</string>
     <string name="retry">Retry</string>
     <string name="comments">Comments</string>
+    <string name="no_comments_yet">No comments yet. Write a comment?</string>
 
     <string name="nsfw">NSFW</string>
     <string name="karma_info">Karma: %1$d</string>

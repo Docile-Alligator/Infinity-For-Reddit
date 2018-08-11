@@ -250,6 +250,30 @@
 
             </android.support.v7.widget.CardView>
 
+            <LinearLayout
+                android:id="@+id/no_comment_wrapper_linear_layout_view_post_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:layout_marginBottom="48dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/no_comment_image_view_view_post_detail"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/no_comments_yet"/>
+
+            </LinearLayout>
+
         </LinearLayout>
 
 

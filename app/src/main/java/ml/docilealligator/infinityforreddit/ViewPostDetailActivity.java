@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -47,6 +48,9 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private ProgressBar mCommentProgressbar;
     private CardView mCommentCardView;
     private RecyclerView mRecyclerView;
+
+    private LinearLayout mNoCommentWrapperLinearLayout;
+    private ImageView mNoCommentImageView;
 
     private RequestQueue mVoteThingQueue;
     private RequestQueue mCommentQueue;
@@ -85,6 +89,9 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         mCommentProgressbar = findViewById(R.id.comment_progress_bar_view_post_detail);
         mCommentCardView = findViewById(R.id.comment_card_view_view_post_detail);
         mRecyclerView = findViewById(R.id.recycler_view_view_post_detail);
+
+        mNoCommentWrapperLinearLayout = findViewById(R.id.no_comment_wrapper_linear_layout_view_post_detail);
+        mNoCommentImageView = findViewById(R.id.no_comment_image_view_view_post_detail);
 
         if(mPostData.getSubredditIconUrl() == null) {
             new LoadSubredditIconAsyncTask(this, subredditIconCircleImageView,
@@ -279,6 +286,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
     private void queryComment() {
         mCommentProgressbar.setVisibility(View.VISIBLE);
+        mNoCommentWrapperLinearLayout.setVisibility(View.GONE);
         new FetchComment(mCommentQueue, mPostData.getSubredditName(), mPostData.getId()).queryComment(new FetchComment.FetchCommentListener() {
             @Override
             public void onFetchCommentSuccess(String response) {
@@ -291,6 +299,9 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                             CommentRecyclerViewAdapter adapter = new CommentRecyclerViewAdapter(ViewPostDetailActivity.this, commentData, mVoteThingQueue);
                             mRecyclerView.setAdapter(adapter);
                             mCommentCardView.setVisibility(View.VISIBLE);
+                        } else {
+                            mNoCommentWrapperLinearLayout.setVisibility(View.VISIBLE);
+                            Glide.with(ViewPostDetailActivity.this).load(R.drawable.no_comment_indicator).into(mNoCommentImageView);
                         }
                     }
 
