@@ -32,6 +32,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.alexvasilkov.gestures.GestureController;
+import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.views.GestureImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -69,6 +71,7 @@ public class ViewImageActivity extends AppCompatActivity {
 
     private float totalLengthY = 0.0f;
     private float touchY = -1.0f;
+    private float zoom = 1.0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -256,10 +259,19 @@ public class ViewImageActivity extends AppCompatActivity {
             }
         });
 
-        imageView.getController().getSettings()
-                .setPanEnabled(true)
-                .setRotationEnabled(true)
-                .setRestrictRotation(true);
+        imageView.getController().addOnStateChangeListener(new GestureController.OnStateChangeListener() {
+            @Override
+            public void onStateChanged(State state) {
+                zoom = state.getZoom();
+            }
+
+            @Override
+            public void onStateReset(State oldState, State newState) {
+
+            }
+        });
+
+        imageView.getController().getSettings().setPanEnabled(true);
 
         Glide.with(this).load(mImageUrl).listener(new RequestListener<Drawable>() {
             @Override
@@ -343,7 +355,9 @@ public class ViewImageActivity extends AppCompatActivity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        swipe.dispatchTouchEvent(ev);
+        if(zoom == 1.0) {
+            swipe.dispatchTouchEvent(ev);
+        }
         return super.dispatchTouchEvent(ev);
     }
 
