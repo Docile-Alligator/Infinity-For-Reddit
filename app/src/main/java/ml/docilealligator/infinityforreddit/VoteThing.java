@@ -23,8 +23,12 @@ class VoteThing {
         void onVoteThingFail(int position);
     }
 
+    interface VoteThingWithoutPositionListener {
+        void onVoteThingSuccess();
+        void onVoteThingFail();
+    }
+
     private Context mContext;
-    private VoteThingListener mVoteThingListener;
     private RequestQueue mQueue;
     private RequestQueue mAcquireAccessTokenRequestQueue;
 
@@ -34,17 +38,17 @@ class VoteThing {
         mAcquireAccessTokenRequestQueue = acquireAccessTokenRequestQueue;
     }
 
-    void votePost(VoteThingListener voteThingListener, final String fullName, final String point, final int position, final int refreshTime) {
+    void votePost(final VoteThingListener voteThingListener, final String fullName, final String point, final int position, final int refreshTime) {
         if(mContext != null) {
             if(refreshTime < 0) {
-                mVoteThingListener.onVoteThingFail(position);
+                voteThingListener.onVoteThingFail(position);
                 return;
             }
-            mVoteThingListener = voteThingListener;
+
             StringRequest voteRequest = new StringRequest(Request.Method.POST, RedditUtils.OAUTH_API_BASE_URI + RedditUtils.VOTE_SUFFIX, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
-                    mVoteThingListener.onVoteThingSuccess(position);
+                    voteThingListener.onVoteThingSuccess(position);
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -55,14 +59,65 @@ class VoteThing {
                                 new AcquireAccessToken.AcquireAccessTokenListener() {
                                     @Override
                                     public void onAcquireAccessTokenSuccess() {
-                                        votePost(mVoteThingListener, fullName, point, position, refreshTime - 1);
+                                        votePost(voteThingListener, fullName, point, position, refreshTime - 1);
                                     }
 
                                     @Override
                                     public void onAcquireAccessTokenFail() {}
                                 });
                     } else {
-                        mVoteThingListener.onVoteThingFail(position);
+                        voteThingListener.onVoteThingFail(position);
+                    }
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    HashMap<String, String> params = new HashMap<>();
+                    params.put(RedditUtils.DIR_KEY, point);
+                    params.put(RedditUtils.ID_KEY, fullName);
+                    params.put(RedditUtils.RANK_KEY, RedditUtils.RANK);
+                    return params;
+                }
+
+                @Override
+                public Map<String, String> getHeaders() {
+                    String accessToken = mContext.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
+                    return RedditUtils.getOAuthHeader(accessToken);
+                }
+            };
+            voteRequest.setTag(VoteThing.class);
+            mQueue.add(voteRequest);
+        }
+    }
+
+    void votePost(final VoteThingWithoutPositionListener voteThingWithoutPositionListener, final String fullName, final String point, final int refreshTime) {
+        if(mContext != null) {
+            if(refreshTime < 0) {
+                voteThingWithoutPositionListener.onVoteThingFail();
+                return;
+            }
+            StringRequest voteRequest = new StringRequest(Request.Method.POST, RedditUtils.OAUTH_API_BASE_URI + RedditUtils.VOTE_SUFFIX, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    voteThingWithoutPositionListener.onVoteThingSuccess();
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    if (error instanceof AuthFailureError) {
+                        //Access token expired
+                        new AcquireAccessToken(mContext).refreshAccessToken(mAcquireAccessTokenRequestQueue,
+                                new AcquireAccessToken.AcquireAccessTokenListener() {
+                                    @Override
+                                    public void onAcquireAccessTokenSuccess() {
+                                        votePost(voteThingWithoutPositionListener, fullName, point, refreshTime - 1);
+                                    }
+
+                                    @Override
+                                    public void onAcquireAccessTokenFail() {}
+                                });
+                    } else {
+                        voteThingWithoutPositionListener.onVoteThingFail();
                     }
                 }
             }) {

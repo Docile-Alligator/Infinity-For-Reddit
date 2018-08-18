@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
                 }, 1);
             }
 
-            if(mInsertSuccess) {
+            if(!mInsertSuccess) {
                 new FetchSubscribedThing(this, Volley.newRequestQueue(this), new ArrayList<SubscribedSubredditData>(),
                         new ArrayList<SubscribedUserData>(), new ArrayList<SubredditData>())
                         .fetchSubscribedSubreddits(new FetchSubscribedThing.FetchSubscribedSubredditsListener() {

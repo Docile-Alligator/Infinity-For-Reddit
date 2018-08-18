@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -299,6 +300,8 @@ class BestPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.View
                     @Override
                     public void onClick(View view) {
                         final boolean isDownvotedBefore = ((DataViewHolder) holder).downvoteButton.getColorFilter() != null;
+
+                        final ColorFilter downvoteButtonColorFilter = ((DataViewHolder) holder).downvoteButton.getColorFilter();
                         ((DataViewHolder) holder).downvoteButton.clearColorFilter();
 
                         if (((DataViewHolder) holder).upvoteButton.getColorFilter() == null) {
@@ -325,7 +328,7 @@ class BestPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.View
                                     Toast.makeText(mContext, "Cannot upvote this post", Toast.LENGTH_SHORT).show();
                                     ((DataViewHolder) holder).upvoteButton.clearColorFilter();
                                     ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mBestPostData.get(position).getScore()));
-                                    ((DataViewHolder) holder).downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                                    ((DataViewHolder) holder).downvoteButton.setColorFilter(downvoteButtonColorFilter);
                                 }
                             }, id, RedditUtils.DIR_UPVOTE, ((DataViewHolder) holder).getAdapterPosition(), 1);
                         } else {
@@ -357,6 +360,7 @@ class BestPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.View
                     public void onClick(View view) {
                         final boolean isUpvotedBefore = ((DataViewHolder) holder).upvoteButton.getColorFilter() != null;
 
+                        final ColorFilter upvoteButtonColorFilter = ((DataViewHolder) holder).upvoteButton.getColorFilter();
                         ((DataViewHolder) holder).upvoteButton.clearColorFilter();
                         if (((DataViewHolder) holder).downvoteButton.getColorFilter() == null) {
                             ((DataViewHolder) holder).downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
@@ -382,7 +386,7 @@ class BestPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.View
                                     Toast.makeText(mContext, "Cannot downvote this post", Toast.LENGTH_SHORT).show();
                                     ((DataViewHolder) holder).downvoteButton.clearColorFilter();
                                     ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mBestPostData.get(position).getScore()));
-                                    ((DataViewHolder) holder).upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+                                    ((DataViewHolder) holder).upvoteButton.setColorFilter(upvoteButtonColorFilter);
                                 }
                             }, id, RedditUtils.DIR_DOWNVOTE, holder.getAdapterPosition(), 1);
                         } else {

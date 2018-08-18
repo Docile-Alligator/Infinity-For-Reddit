@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Intent;
+import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
@@ -20,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -52,7 +55,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private LinearLayout mNoCommentWrapperLinearLayout;
     private ImageView mNoCommentImageView;
 
-    private RequestQueue mVoteThingQueue;
+    private RequestQueue mVoteThingRequestQueue;
     private RequestQueue mAcquireAccessTokenRequestQueue;
     private RequestQueue mCommentQueue;
 
@@ -82,9 +85,9 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         ImageView imageView = findViewById(R.id.image_view_view_post_detail);
         ImageView noPreviewLinkImageView = findViewById(R.id.image_view_no_preview_link_view_post_detail);
 
-        ImageView plusButton = findViewById(R.id.plus_button_view_post_detail);
-        TextView scoreTextView = findViewById(R.id.score_text_view_view_post_detail);
-        ImageView minusButton = findViewById(R.id.minus_button_view_post_detail);
+        final ImageView upvoteButton = findViewById(R.id.plus_button_view_post_detail);
+        final TextView scoreTextView = findViewById(R.id.score_text_view_view_post_detail);
+        final ImageView downvoteButton = findViewById(R.id.minus_button_view_post_detail);
         ImageView shareButton = findViewById(R.id.share_button_view_post_detail);
 
         mCommentProgressbar = findViewById(R.id.comment_progress_bar_view_post_detail);
@@ -104,10 +107,21 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             Glide.with(this).load(R.drawable.subreddit_default_icon).into(subredditIconCircleImageView);
         }
 
+        switch (mPostData.getVoteType()) {
+            case 1:
+                //Upvote
+                upvoteButton.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+                break;
+            case -1:
+                //Downvote
+                downvoteButton.setColorFilter(ContextCompat.getColor(this, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                break;
+        }
+
         mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        mVoteThingQueue = Volley.newRequestQueue(this);
+        mVoteThingRequestQueue = Volley.newRequestQueue(this);
         mAcquireAccessTokenRequestQueue = Volley.newRequestQueue(this);
         mCommentQueue = Volley.newRequestQueue(this);
 
@@ -284,6 +298,160 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 }
         }
         queryComment();
+
+        /*final Observable<Integer> observable = Observable.create(
+                new ObservableOnSubscribe<Integer>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+                        emitter.onNext(mPostData.getVoteType());
+                        emitter.onComplete();
+                        Log.i("asdasdf", "adasdfasdf");
+                        Toast.makeText(ViewPostDetailActivity.this, "observable", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        final Observer observer = new Observer() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Object o) {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                Toast.makeText(ViewPostDetailActivity.this, "complete", Toast.LENGTH_SHORT).show();
+            }
+        };*/
+
+        upvoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //observable.subscribe(observer);
+                final boolean isDownvotedBefore = downvoteButton.getColorFilter() != null;
+
+                final ColorFilter downVoteButtonColorFilter = downvoteButton.getColorFilter();
+                downvoteButton.clearColorFilter();
+
+                if (upvoteButton.getColorFilter() == null) {
+                    upvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+                    if(isDownvotedBefore) {
+                        scoreTextView.setText(Integer.toString(mPostData.getScore() + 2));
+                    } else {
+                        scoreTextView.setText(Integer.toString(mPostData.getScore() + 1));
+                    }
+
+                    new VoteThing(ViewPostDetailActivity.this, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingWithoutPositionListener() {
+                        @Override
+                        public void onVoteThingSuccess() {
+                            mPostData.setVoteType(1);
+                            if(isDownvotedBefore) {
+                                mPostData.setScore(mPostData.getScore() + 2);
+                            } else {
+                                mPostData.setScore(mPostData.getScore() + 1);
+                            }
+                        }
+
+                        @Override
+                        public void onVoteThingFail() {
+                            Toast.makeText(ViewPostDetailActivity.this, "Cannot upvote this post", Toast.LENGTH_SHORT).show();
+                            upvoteButton.clearColorFilter();
+                            scoreTextView.setText(Integer.toString(mPostData.getScore()));
+                            downvoteButton.setColorFilter(downVoteButtonColorFilter);
+                        }
+                    }, mPostData.getFullName(), RedditUtils.DIR_UPVOTE, 1);
+                } else {
+                    //Upvoted before
+                    upvoteButton.clearColorFilter();
+                    scoreTextView.setText(Integer.toString(mPostData.getScore() - 1));
+
+                    new VoteThing(ViewPostDetailActivity.this, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingWithoutPositionListener() {
+                        @Override
+                        public void onVoteThingSuccess() {
+                            mPostData.setVoteType(0);
+                            mPostData.setScore(mPostData.getScore() - 1);
+                        }
+
+                        @Override
+                        public void onVoteThingFail() {
+                            Toast.makeText(ViewPostDetailActivity.this, "Cannot unvote this post", Toast.LENGTH_SHORT).show();
+                            scoreTextView.setText(Integer.toString(mPostData.getScore() + 1));
+                            upvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+                            mPostData.setScore(mPostData.getScore() + 1);
+                        }
+                    }, mPostData.getFullName(), RedditUtils.DIR_UNVOTE, 1);
+                }
+            }
+        });
+
+        downvoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //observable.subscribe(observer);
+                final boolean isUpvotedBefore = upvoteButton.getColorFilter() != null;
+
+                final ColorFilter upvoteButtonColorFilter = upvoteButton.getColorFilter();
+                upvoteButton.clearColorFilter();
+
+                if (downvoteButton.getColorFilter() == null) {
+                    downvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                    if (isUpvotedBefore) {
+                        scoreTextView.setText(Integer.toString(mPostData.getScore() - 2));
+                    } else {
+                        scoreTextView.setText(Integer.toString(mPostData.getScore() - 1));
+                    }
+
+                    new VoteThing(ViewPostDetailActivity.this, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingWithoutPositionListener() {
+                        @Override
+                        public void onVoteThingSuccess() {
+                            mPostData.setVoteType(-1);
+                            if(isUpvotedBefore) {
+                                mPostData.setScore(mPostData.getScore() - 2);
+                            } else {
+                                mPostData.setScore(mPostData.getScore() - 1);
+                            }
+                        }
+
+                        @Override
+                        public void onVoteThingFail() {
+                            Toast.makeText(ViewPostDetailActivity.this, "Cannot downvote this post", Toast.LENGTH_SHORT).show();
+                            downvoteButton.clearColorFilter();
+                            scoreTextView.setText(Integer.toString(mPostData.getScore()));
+                            upvoteButton.setColorFilter(upvoteButtonColorFilter);
+                        }
+                    }, mPostData.getFullName(), RedditUtils.DIR_DOWNVOTE, 1);
+                } else {
+                    //Down voted before
+                    downvoteButton.clearColorFilter();
+                    scoreTextView.setText(Integer.toString(mPostData.getScore() + 1));
+
+                    new VoteThing(ViewPostDetailActivity.this, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingWithoutPositionListener() {
+                        @Override
+                        public void onVoteThingSuccess() {
+                            mPostData.setVoteType(0);
+                            mPostData.setScore(mPostData.getScore());
+                        }
+
+                        @Override
+                        public void onVoteThingFail() {
+                            Toast.makeText(ViewPostDetailActivity.this, "Cannot unvote this post", Toast.LENGTH_SHORT).show();
+                            downvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                            scoreTextView.setText(Integer.toString(mPostData.getScore()));
+                            mPostData.setScore(mPostData.getScore());
+                        }
+                    }, mPostData.getFullName(), RedditUtils.DIR_UNVOTE, 1);
+                }
+            }
+        });
     }
 
     private void queryComment() {
@@ -299,7 +467,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                         mMoreCommentCount = moreCommentCount;
                         if(commentData.size() > 0) {
                             CommentRecyclerViewAdapter adapter = new CommentRecyclerViewAdapter(
-                                    ViewPostDetailActivity.this, commentData, mVoteThingQueue, mAcquireAccessTokenRequestQueue);
+                                    ViewPostDetailActivity.this, commentData, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue);
                             mRecyclerView.setAdapter(adapter);
                             mCommentCardView.setVisibility(View.VISIBLE);
                         } else {
