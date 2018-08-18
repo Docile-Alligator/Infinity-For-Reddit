@@ -63,4 +63,5 @@ class JSONUtils {
     static final String PUBLIC_DESCRIPTION = "public_description";
     static final String ACTIVE_USER_COUNT = "active_user_count";
     static final String DISPLAY_NAME_PREFIXED = "display_name_prefixed";
+    static final String LINK_ID = "link_id";
 }

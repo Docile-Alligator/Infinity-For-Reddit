@@ -53,6 +53,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private ImageView mNoCommentImageView;
 
     private RequestQueue mVoteThingQueue;
+    private RequestQueue mAcquireAccessTokenRequestQueue;
     private RequestQueue mCommentQueue;
 
     @Override
@@ -107,6 +108,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mVoteThingQueue = Volley.newRequestQueue(this);
+        mAcquireAccessTokenRequestQueue = Volley.newRequestQueue(this);
         mCommentQueue = Volley.newRequestQueue(this);
 
         subredditTextView.setText(mPostData.getSubredditName());
@@ -296,7 +298,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                         mCommentProgressbar.setVisibility(View.GONE);
                         mMoreCommentCount = moreCommentCount;
                         if(commentData.size() > 0) {
-                            CommentRecyclerViewAdapter adapter = new CommentRecyclerViewAdapter(ViewPostDetailActivity.this, commentData, mVoteThingQueue);
+                            CommentRecyclerViewAdapter adapter = new CommentRecyclerViewAdapter(
+                                    ViewPostDetailActivity.this, commentData, mVoteThingQueue, mAcquireAccessTokenRequestQueue);
                             mRecyclerView.setAdapter(adapter);
                             mCommentCardView.setVisibility(View.VISIBLE);
                         } else {

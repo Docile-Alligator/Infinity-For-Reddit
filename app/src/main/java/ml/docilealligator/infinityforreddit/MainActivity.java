@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -10,6 +8,8 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private String profileImageUrlState = "PIUS";
     private String bannerImageUrlState = "BIUS";
     private String karmaState = "KS";
+    private String fetchUserInfoState = "FUIS";
+    private String insertSubscribedSubredditState = "ISSS";
 
     private TextView mNameTextView;
     private TextView mKarmaTextView;
@@ -52,12 +54,13 @@ public class MainActivity extends AppCompatActivity {
     private String mKarma;
     private boolean mFetchUserInfoSuccess;
     private boolean mIsInserting;
+    private boolean mInsertSuccess;
 
     private SubscribedSubredditViewModel mSubscribedSubredditViewModel;
     private SubscribedUserViewModel mSubscribedUserViewModel;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -95,11 +98,15 @@ public class MainActivity extends AppCompatActivity {
                 new AcquireAccessToken(this).refreshAccessToken(Volley.newRequestQueue(this),
                         new AcquireAccessToken.AcquireAccessTokenListener() {
                             @Override
-                            public void onAcquireAccessTokenSuccess() {}
+                            public void onAcquireAccessTokenSuccess() {
+                                loadUserData(savedInstanceState);
+                            }
 
                             @Override
                             public void onAcquireAccessTokenFail() {}
                         });
+            } else {
+                loadUserData(savedInstanceState);
             }
 
             View header = findViewById(R.id.nav_header_main_activity);
@@ -133,7 +140,46 @@ public class MainActivity extends AppCompatActivity {
                 glide.load(mBannerImageUrl).into(mBannerImageView);
             }
 
-            if(savedInstanceState == null && !mFetchUserInfoSuccess) {
+            final SubscribedSubredditRecyclerViewAdapter subredditadapter = new SubscribedSubredditRecyclerViewAdapter(this);
+            subscribedSubredditRecyclerView.setAdapter(subredditadapter);
+            mSubscribedSubredditViewModel = ViewModelProviders.of(this).get(SubscribedSubredditViewModel.class);
+            mSubscribedSubredditViewModel.getAllSubscribedSubreddits().observe(this, new Observer<List<SubscribedSubredditData>>() {
+                @Override
+                public void onChanged(@Nullable final List<SubscribedSubredditData> subscribedSubredditData) {
+                    if(!mIsInserting) {
+                        if(subscribedSubredditData == null || subscribedSubredditData.size() == 0) {
+                            subscriptionsLabelTextView.setVisibility(View.GONE);
+                        } else {
+                            subscriptionsLabelTextView.setVisibility(View.VISIBLE);
+                        }
+
+                        subredditadapter.setSubscribedSubreddits(subscribedSubredditData);
+                    }
+                }
+            });
+
+            final SubscribedUserRecyclerViewAdapter userAdapter = new SubscribedUserRecyclerViewAdapter(this);
+            subscribedUserRecyclerView.setAdapter(userAdapter);
+            mSubscribedUserViewModel = ViewModelProviders.of(this).get(SubscribedUserViewModel.class);
+            mSubscribedUserViewModel.getAllSubscribedUsers().observe(this, new Observer<List<SubscribedUserData>>() {
+                @Override
+                public void onChanged(@Nullable final List<SubscribedUserData> subscribedUserData) {
+                    if(!mIsInserting) {
+                        if(subscribedUserData == null || subscribedUserData.size() == 0) {
+                            followingLabelTextView.setVisibility(View.GONE);
+                        } else {
+                            followingLabelTextView.setVisibility(View.VISIBLE);
+                        }
+                        userAdapter.setSubscribedUsers(subscribedUserData);
+                    }
+                }
+            });
+        }
+    }
+
+    private void loadUserData(Bundle savedInstanceState) {
+        if(savedInstanceState == null) {
+            if(!mFetchUserInfoSuccess) {
                 new FetchUserInfo(this, Volley.newRequestQueue(this)).queryUserInfo(new FetchUserInfo.FetchUserInfoListener() {
                     @Override
                     public void onFetchUserInfoSuccess(String response) {
@@ -178,69 +224,37 @@ public class MainActivity extends AppCompatActivity {
                 }, 1);
             }
 
-            final SubscribedSubredditRecyclerViewAdapter subredditadapter = new SubscribedSubredditRecyclerViewAdapter(this);
-            subscribedSubredditRecyclerView.setAdapter(subredditadapter);
-            mSubscribedSubredditViewModel = ViewModelProviders.of(this).get(SubscribedSubredditViewModel.class);
-            mSubscribedSubredditViewModel.getAllSubscribedSubreddits().observe(this, new Observer<List<SubscribedSubredditData>>() {
-                @Override
-                public void onChanged(@Nullable final List<SubscribedSubredditData> subscribedSubredditData) {
-                    if(!mIsInserting) {
-                        if(subscribedSubredditData == null || subscribedSubredditData.size() == 0) {
-                            subscriptionsLabelTextView.setVisibility(View.GONE);
-                        } else {
-                            subscriptionsLabelTextView.setVisibility(View.VISIBLE);
-                        }
+            if(mInsertSuccess) {
+                new FetchSubscribedThing(this, Volley.newRequestQueue(this), new ArrayList<SubscribedSubredditData>(),
+                        new ArrayList<SubscribedUserData>(), new ArrayList<SubredditData>())
+                        .fetchSubscribedSubreddits(new FetchSubscribedThing.FetchSubscribedSubredditsListener() {
+                            @Override
+                            public void onFetchSubscribedSubredditsSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
+                                                                           ArrayList<SubscribedUserData> subscribedUserData,
+                                                                           ArrayList<SubredditData> subredditData) {
+                                mIsInserting = true;
+                                new InsertSubscribedThingsAsyncTask(
+                                        SubscribedSubredditRoomDatabase.getDatabase(MainActivity.this),
+                                        SubscribedUserRoomDatabase.getDatabase(MainActivity.this),
+                                        SubredditRoomDatabase.getDatabase(MainActivity.this),
+                                        subscribedSubredditData,
+                                        subscribedUserData,
+                                        subredditData,
+                                        new InsertSubscribedThingsAsyncTask.InsertSubscribedThingListener() {
+                                            @Override
+                                            public void insertSuccess() {
+                                                mIsInserting = false;
+                                                mInsertSuccess = true;
+                                            }
+                                        }).execute();
+                            }
 
-                        subredditadapter.setSubscribedSubreddits(subscribedSubredditData);
-                    }
-                }
-            });
+                            @Override
+                            public void onFetchSubscribedSubredditsFail() {
 
-            final SubscribedUserRecyclerViewAdapter userAdapter = new SubscribedUserRecyclerViewAdapter(this);
-            subscribedUserRecyclerView.setAdapter(userAdapter);
-            mSubscribedUserViewModel = ViewModelProviders.of(this).get(SubscribedUserViewModel.class);
-            mSubscribedUserViewModel.getAllSubscribedUsers().observe(this, new Observer<List<SubscribedUserData>>() {
-                @Override
-                public void onChanged(@Nullable final List<SubscribedUserData> subscribedUserData) {
-                    if(!mIsInserting) {
-                        if(subscribedUserData == null || subscribedUserData.size() == 0) {
-                            followingLabelTextView.setVisibility(View.GONE);
-                        } else {
-                            followingLabelTextView.setVisibility(View.VISIBLE);
-                        }
-                        userAdapter.setSubscribedUsers(subscribedUserData);
-                    }
-                }
-            });
-
-            new FetchSubscribedThing(this, Volley.newRequestQueue(this), new ArrayList<SubscribedSubredditData>(),
-                    new ArrayList<SubscribedUserData>(), new ArrayList<SubredditData>())
-                    .fetchSubscribedSubreddits(new FetchSubscribedThing.FetchSubscribedSubredditsListener() {
-                        @Override
-                        public void onFetchSubscribedSubredditsSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
-                                                                       ArrayList<SubscribedUserData> subscribedUserData,
-                                                                       ArrayList<SubredditData> subredditData) {
-                            mIsInserting = true;
-                            new InsertSubscribedThingsAsyncTask(
-                                    SubscribedSubredditRoomDatabase.getDatabase(MainActivity.this),
-                                    SubscribedUserRoomDatabase.getDatabase(MainActivity.this),
-                                    SubredditRoomDatabase.getDatabase(MainActivity.this),
-                                    subscribedSubredditData,
-                                    subscribedUserData,
-                                    subredditData,
-                                    new InsertSubscribedThingsAsyncTask.InsertSubscribedThingListener() {
-                                        @Override
-                                        public void insertSuccess() {
-                                            mIsInserting = false;
-                                        }
-                                    }).execute();
-                        }
-
-                        @Override
-                        public void onFetchSubscribedSubredditsFail() {
-
-                        }
-                    }, 1);
+                            }
+                        }, 1);
+            }
         }
     }
 
@@ -264,6 +278,8 @@ public class MainActivity extends AppCompatActivity {
         outState.putString(profileImageUrlState, mProfileImageUrl);
         outState.putString(bannerImageUrlState, mBannerImageUrl);
         outState.putString(karmaState, mKarma);
+        outState.putBoolean(fetchUserInfoState, mFetchUserInfoSuccess);
+        outState.putBoolean(insertSubscribedSubredditState, mInsertSuccess);
     }
 
     @Override
@@ -273,6 +289,8 @@ public class MainActivity extends AppCompatActivity {
         mProfileImageUrl = savedInstanceState.getString(profileImageUrlState);
         mBannerImageUrl = savedInstanceState.getString(bannerImageUrlState);
         mKarma = savedInstanceState.getString(karmaState);
+        mFetchUserInfoSuccess = savedInstanceState.getBoolean(fetchUserInfoState);
+        mInsertSuccess = savedInstanceState.getBoolean(insertSubscribedSubredditState);
         mNameTextView.setText(mName);
         mKarmaTextView.setText(mKarma);
         if(!mProfileImageUrl.equals("")) {

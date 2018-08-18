@@ -1,7 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 class CommentData {
-    private String id;
+    private String fullName;
     private String author;
     private String commentTime;
     private String commentContent;
@@ -13,10 +13,10 @@ class CommentData {
     private boolean hasReply;
     private boolean scoreHidden;
 
-    CommentData(String id, String author, String commentTime, String commentContent, int score,
+    CommentData(String fullName, String author, String commentTime, String commentContent, int score,
                 boolean isSubmitter, String permalink, int depth, boolean collapsed, boolean hasReply,
                 boolean scoreHidden) {
-        this.id = id;
+        this.fullName = fullName;
         this.author = author;
         this.commentTime = commentTime;
         this.commentContent = commentContent;
@@ -30,8 +30,8 @@ class CommentData {
     }
 
 
-    public String getId() {
-        return id;
+    public String getFullName() {
+        return fullName;
     }
 
     public String getAuthor() {

@@ -68,7 +68,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/following"
-                        android:layout_margin="16dp"/>
+                        android:layout_margin="16dp"
+                        android:visibility="gone"/>
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/subscribed_user_recycler_view_main_activity"
@@ -80,7 +81,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/subscriptions"
-                        android:layout_margin="16dp"/>
+                        android:layout_margin="16dp"
+                        android:visibility="gone"/>
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/subscribed_subreddit_recycler_view_main_activity"

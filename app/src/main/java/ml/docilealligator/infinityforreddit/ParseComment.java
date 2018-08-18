@@ -69,7 +69,7 @@ class ParseComment {
 
                 for (int i = 0; i < actualCommentLength; i++) {
                     JSONObject data = allComments.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
-                    String id = data.getString(JSONUtils.ID_KEY);
+                    String fullName = data.getString(JSONUtils.LINK_ID);
                     String author = data.getString(JSONUtils.AUTHOR_KEY);
                     boolean isSubmitter = data.getBoolean(JSONUtils.IS_SUBMITTER_KEY);
                     String commentContent = data.getString(JSONUtils.BODY_KEY);
@@ -87,7 +87,7 @@ class ParseComment {
                     boolean collapsed = data.getBoolean(JSONUtils.COLLAPSED_KEY);
                     boolean hasReply = !(data.get(JSONUtils.REPLIES_KEY) instanceof String);
 
-                    newcommentData.add(new CommentData(id, author, formattedSubmitTime, commentContent, score, isSubmitter, permalink, depth, collapsed, hasReply, scoreHidden));
+                    newcommentData.add(new CommentData(fullName, author, formattedSubmitTime, commentContent, score, isSubmitter, permalink, depth, collapsed, hasReply, scoreHidden));
                 }
             } catch (JSONException e) {
                 parseFailed = true;
