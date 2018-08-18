@@ -6,6 +6,7 @@ class CommentData {
     private String commentTime;
     private String commentContent;
     private int score;
+    private int voteType;
     private boolean isSubmitter;
     private String permalink;
     private int depth;
@@ -80,5 +81,13 @@ class CommentData {
 
     public boolean isScoreHidden() {
         return scoreHidden;
+    }
+
+    public int getVoteType() {
+        return voteType;
+    }
+
+    public void setVoteType(int voteType) {
+        this.voteType = voteType;
     }
 }

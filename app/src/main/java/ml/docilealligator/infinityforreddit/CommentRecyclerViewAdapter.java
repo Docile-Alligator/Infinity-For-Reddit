@@ -42,6 +42,18 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ((CommentViewHolder) holder).commentTimeTextView.setText(mCommentData.get(position).getCommentTime());
         ((CommentViewHolder) holder).commentTextView.setText(mCommentData.get(position).getCommentContent());
         ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(mCommentData.get(position).getScore()));
+
+        switch (mCommentData.get(position).getVoteType()) {
+            case 1:
+                ((CommentViewHolder) holder).upvoteButton
+                        .setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+                break;
+            case 2:
+                ((CommentViewHolder) holder).downvoteButton
+                        .setColorFilter(ContextCompat.getColor(mContext, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                break;
+        }
+
         ((CommentViewHolder) holder).upvoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,6 +72,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     new VoteThing(mContext, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
+                            mCommentData.get(position).setVoteType(1);
                             if(isDownvotedBefore) {
                                 mCommentData.get(position).setScore(mCommentData.get(position).getScore() + 2);
                             } else {
@@ -83,6 +96,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     new VoteThing(mContext, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
+                            mCommentData.get(position).setVoteType(0);
                             mCommentData.get(position).setScore(mCommentData.get(position).getScore() - 1);
                         }
 
@@ -117,6 +131,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     new VoteThing(mContext, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
+                            mCommentData.get(position).setVoteType(-1);
                             if(isUpvotedBefore) {
                                 mCommentData.get(position).setScore(mCommentData.get(position).getScore() - 2);
                             } else {
@@ -140,6 +155,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     new VoteThing(mContext, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
+                            mCommentData.get(position).setVoteType(0);
                             mCommentData.get(position).setScore(mCommentData.get(position).getScore());
                         }
 
