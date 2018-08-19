@@ -54,6 +54,7 @@ class JSONUtils {
     static final String SUBREDDIT_KEY = "subreddit";
     static final String BANNER_IMG_KEY = "banner_img";
     static final String ICON_IMG_KEY = "icon_img";
+    static final String COMMUNITY_ICON_KEY = "community_icon";
     static final String LINK_KARMA_KEY = "link_karma";
     static final String COMMENT_KARMA_KEY = "comment_karma";
     static final String DISPLAY_NAME = "display_name";

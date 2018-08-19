@@ -66,6 +66,7 @@ class FetchSubscribedThing {
                                                                            String lastItem) {
                                 mSubscribedSubredditData = subscribedSubredditData;
                                 mSubscribedUserData = subscribedUserData;
+                                mSubredditData = subredditData;
                                 mLastItem = lastItem;
                                 if(mLastItem.equals("null")) {
                                     mFetchSubscribedSubredditsListener.onFetchSubscribedSubredditsSuccess(mSubscribedSubredditData,

@@ -16,16 +16,16 @@ class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {
     private SubredditDao subredditDao;
     private String subredditName;
     private String iconImageUrl;
-    private BestPostData bestPostData;
+    private PostData postData;
 
     LoadSubredditIconAsyncTask(Context context, CircleImageView iconImageView,
                                SubredditDao subredditDao, String subredditName,
-                               BestPostData bestPostData) {
+                               PostData postData) {
         contextWeakReference = new WeakReference<>(context);
         circleImageViewWeakReference = new WeakReference<>(iconImageView);
         this.subredditDao = subredditDao;
         this.subredditName = subredditName;
-        this.bestPostData = bestPostData;
+        this.postData = postData;
     }
 
     @Override
@@ -52,6 +52,6 @@ class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {
             }
         }
 
-        bestPostData.setSubredditIconUrl(iconImageUrl);
+        postData.setSubredditIconUrl(iconImageUrl);
     }
 }

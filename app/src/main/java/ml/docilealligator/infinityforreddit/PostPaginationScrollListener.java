@@ -24,11 +24,11 @@ import java.util.Map;
  * Created by alex on 3/12/18.
  */
 
-class BestPostPaginationScrollListener extends RecyclerView.OnScrollListener {
+class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
     private Context mContext;
     private LinearLayoutManager mLayoutManager;
-    private BestPostRecyclerViewAdapter mAdapter;
-    private ArrayList<BestPostData> mBestPostData;
+    private PostRecyclerViewAdapter mAdapter;
+    private ArrayList<PostData> mPostData;
     private PaginationSynchronizer mPaginationSynchronizer;
     private PaginationRetryNotifier mPaginationRetryNotifier;
     private LastItemSynchronizer mLastItemSynchronizer;
@@ -40,14 +40,14 @@ class BestPostPaginationScrollListener extends RecyclerView.OnScrollListener {
     private RequestQueue mRequestQueue;
     private RequestQueue mAcquireAccessTokenRequestQueue;
 
-    BestPostPaginationScrollListener(Context context, LinearLayoutManager layoutManager, BestPostRecyclerViewAdapter adapter, String lastItem, ArrayList<BestPostData> bestPostData, PaginationSynchronizer paginationSynchronizer,
-                                     RequestQueue acquireAccessTokenRequestQueue, boolean isLoading, boolean loadSuccess) {
+    PostPaginationScrollListener(Context context, LinearLayoutManager layoutManager, PostRecyclerViewAdapter adapter, String lastItem, ArrayList<PostData> postData, PaginationSynchronizer paginationSynchronizer,
+                                 RequestQueue acquireAccessTokenRequestQueue, boolean isLoading, boolean loadSuccess) {
         if(context != null) {
             this.mContext = context;
             this.mLayoutManager = layoutManager;
             this.mAdapter = adapter;
             this.mLastItem = lastItem;
-            this.mBestPostData = bestPostData;
+            this.mPostData = postData;
             this.mPaginationSynchronizer = paginationSynchronizer;
             this.mAcquireAccessTokenRequestQueue = acquireAccessTokenRequestQueue;
             this.isLoading = isLoading;
@@ -103,9 +103,9 @@ class BestPostPaginationScrollListener extends RecyclerView.OnScrollListener {
                 ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("response", response);
                 clipboard.setPrimaryClip(clip);
-                new ParseBestPost(mContext, new ParseBestPost.ParseBestPostListener() {
+                new ParsePost(mContext, new ParsePost.ParsePostListener() {
                     @Override
-                    public void onParseBestPostSuccess(ArrayList<BestPostData> bestPostData, String lastItem) {
+                    public void onParsePostSuccess(ArrayList<PostData> bestPostData, String lastItem) {
                         mAdapter.notifyDataSetChanged();
                         mLastItem = lastItem;
                         mLastItemSynchronizer.lastItemChanged(mLastItem);
@@ -117,12 +117,12 @@ class BestPostPaginationScrollListener extends RecyclerView.OnScrollListener {
                     }
 
                     @Override
-                    public void onParseBestPostFail() {
+                    public void onParsePostFail() {
                         Toast.makeText(mContext, "Error parsing data", Toast.LENGTH_SHORT).show();
                         Log.i("Best post", "Error parsing data");
                         loadFailed();
                     }
-                }).parseBestPost(response, mBestPostData);
+                }).parseBestPost(response, mPostData);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -153,7 +153,7 @@ class BestPostPaginationScrollListener extends RecyclerView.OnScrollListener {
                 return RedditUtils.getOAuthHeader(accessToken);
             }
         };
-        bestPostRequest.setTag(BestPostPaginationScrollListener.class);
+        bestPostRequest.setTag(PostPaginationScrollListener.class);
         mRequestQueue.add(bestPostRequest);
     }
 

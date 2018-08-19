@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -165,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onChanged(@Nullable final List<SubscribedUserData> subscribedUserData) {
                     if(!mIsInserting) {
+                        Log.i("view", "observed");
                         if(subscribedUserData == null || subscribedUserData.size() == 0) {
                             followingLabelTextView.setVisibility(View.GONE);
                         } else {
@@ -219,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onFetchUserInfoFail() {
-
+                        mFetchUserInfoSuccess = false;
                     }
                 }, 1);
             }
@@ -251,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
 
                             @Override
                             public void onFetchSubscribedSubredditsFail() {
-
+                                mInsertSuccess = false;
                             }
                         }, 1);
             }

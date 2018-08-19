@@ -45,7 +45,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private String orientationState = "OS";
 
     private int mMoreCommentCount;
-    private BestPostData mPostData;
+    private PostData mPostData;
 
     private CoordinatorLayout mCoordinatorLayout;
     private ProgressBar mCommentProgressbar;
@@ -144,7 +144,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         });
 
         switch (mPostData.getPostType()) {
-            case BestPostData.IMAGE_TYPE:
+            case PostData.IMAGE_TYPE:
                 typeTextView.setText("IMAGE");
                 relativeLayout.setVisibility(View.VISIBLE);
                 Glide.with(this).load(mPostData.getPreviewUrl()).listener(new RequestListener<Drawable>() {
@@ -172,7 +172,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     }
                 });
                 break;
-            case BestPostData.LINK_TYPE:
+            case PostData.LINK_TYPE:
                 relativeLayout.setVisibility(View.VISIBLE);
                 typeTextView.setText("LINK");
                 String linkPreviewUrl = mPostData.getPreviewUrl();
@@ -201,7 +201,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     }
                 });
                 break;
-            case BestPostData.GIF_VIDEO_TYPE:
+            case PostData.GIF_VIDEO_TYPE:
                 relativeLayout.setVisibility(View.VISIBLE);
                 typeTextView.setText("VIDEO");
                 String gifVideoPreviewUrl = mPostData.getPreviewUrl();
@@ -238,7 +238,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     }
                 });
                 break;
-            case BestPostData.VIDEO_TYPE:
+            case PostData.VIDEO_TYPE:
                 relativeLayout.setVisibility(View.VISIBLE);
                 typeTextView.setText("VIDEO");
                 String videoPreviewUrl = mPostData.getPreviewUrl();
@@ -275,7 +275,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     }
                 });
                 break;
-            case BestPostData.NO_PREVIEW_LINK_TYPE:
+            case PostData.NO_PREVIEW_LINK_TYPE:
                 typeTextView.setText("LINK");
                 noPreviewLinkImageView.setVisibility(View.VISIBLE);
                 noPreviewLinkImageView.setOnClickListener(new View.OnClickListener() {
@@ -290,7 +290,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     }
                 });
                 break;
-            case BestPostData.TEXT_TYPE:
+            case PostData.TEXT_TYPE:
                 typeTextView.setText("TEXT");
                 if(!mPostData.getSelfText().equals("")) {
                     contentTextView.setVisibility(View.VISIBLE);

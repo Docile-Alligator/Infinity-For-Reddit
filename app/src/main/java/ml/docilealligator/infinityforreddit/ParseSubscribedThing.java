@@ -18,17 +18,15 @@ class ParseSubscribedThing {
         void onParseSubscribedSubredditsFail();
     }
 
-    private ParseSubscribedSubredditsListener mParseSubscribedSubredditsListener;
-
     void parseSubscribedSubreddits(String response, ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                    ArrayList<SubscribedUserData> subscribedUserData,
                                    ArrayList<SubredditData> subredditData,
                                    ParseSubscribedSubredditsListener parseSubscribedSubredditsListener) {
-        mParseSubscribedSubredditsListener = parseSubscribedSubredditsListener;
-        new ParseSubscribedSubredditsAsyncTask(response, subscribedSubredditData, subscribedUserData, subredditData).execute();
+        new ParseSubscribedSubredditsAsyncTask(response, subscribedSubredditData, subscribedUserData, subredditData,
+                parseSubscribedSubredditsListener).execute();
     }
 
-    private class ParseSubscribedSubredditsAsyncTask extends AsyncTask<Void, Void, Void> {
+    private static class ParseSubscribedSubredditsAsyncTask extends AsyncTask<Void, Void, Void> {
         private JSONObject jsonResponse;
         private boolean parseFailed;
         private String lastItem;
@@ -38,10 +36,12 @@ class ParseSubscribedThing {
         private ArrayList<SubscribedSubredditData> newSubscribedSubredditData;
         private ArrayList<SubscribedUserData> newSubscribedUserData;
         private ArrayList<SubredditData> newSubredditData;
+        private ParseSubscribedSubredditsListener parseSubscribedSubredditsListener;
 
         ParseSubscribedSubredditsAsyncTask(String response, ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                            ArrayList<SubscribedUserData> subscribedUserData,
-                                           ArrayList<SubredditData> subredditData){
+                                           ArrayList<SubredditData> subredditData,
+                                           ParseSubscribedSubredditsListener parseSubscribedSubredditsListener){
             try {
                 jsonResponse = new JSONObject(response);
                 parseFailed = false;
@@ -51,9 +51,10 @@ class ParseSubscribedThing {
                 newSubscribedSubredditData = new ArrayList<>();
                 newSubscribedUserData = new ArrayList<>();
                 newSubredditData = new ArrayList<>();
+                this.parseSubscribedSubredditsListener = parseSubscribedSubredditsListener;
             } catch (JSONException e) {
                 Log.i("user info json error", e.getMessage());
-                mParseSubscribedSubredditsListener.onParseSubscribedSubredditsFail();
+                parseSubscribedSubredditsListener.onParseSubscribedSubredditsFail();
             }
         }
 
@@ -66,12 +67,15 @@ class ParseSubscribedThing {
                     String name = data.getString(JSONUtils.DISPLAY_NAME);
                     String bannerUrl = data.getString(JSONUtils.BANNER_IMG_KEY);
                     String iconUrl = data.getString(JSONUtils.ICON_IMG_KEY);
-                    String id = children.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.NAME_KEY);
-                    if(iconUrl.equals("null")) {
-                        iconUrl = "";
+                    String id = data.getString(JSONUtils.NAME_KEY);
+                    if(iconUrl.equals("") || iconUrl.equals("null")) {
+                        iconUrl = data.getString(JSONUtils.COMMUNITY_ICON_KEY);
+                        if(iconUrl.equals("null")) {
+                            iconUrl = "";
+                        }
                     }
 
-                    if(children.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.SUBREDDIT_TYPE_KEY)
+                    if(data.getString(JSONUtils.SUBREDDIT_TYPE_KEY)
                             .equals(JSONUtils.SUBREDDIT_TYPE_VALUE_USER)) {
                         //It's a user
                         newSubscribedUserData.add(new SubscribedUserData(id, name.substring(2), iconUrl));
@@ -86,7 +90,7 @@ class ParseSubscribedThing {
                 lastItem = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
             } catch (JSONException e) {
                 parseFailed = true;
-                Log.i("parse comment error", e.getMessage());
+                Log.i("parse subscribed error", e.getMessage());
             }
             return null;
         }
@@ -97,10 +101,10 @@ class ParseSubscribedThing {
                 subscribedSubredditData.addAll(newSubscribedSubredditData);
                 subscribedUserData.addAll(newSubscribedUserData);
                 subredditData.addAll(newSubredditData);
-                mParseSubscribedSubredditsListener.onParseSubscribedSubredditsSuccess(subscribedSubredditData,
+                parseSubscribedSubredditsListener.onParseSubscribedSubredditsSuccess(subscribedSubredditData,
                         subscribedUserData, subredditData, lastItem);
             } else {
-                mParseSubscribedSubredditsListener.onParseSubscribedSubredditsFail();
+                parseSubscribedSubredditsListener.onParseSubscribedSubredditsFail();
             }
         }
     }

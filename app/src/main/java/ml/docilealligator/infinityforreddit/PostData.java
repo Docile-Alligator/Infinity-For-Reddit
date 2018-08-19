@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by alex on 3/1/18.
  */
 
-class BestPostData implements Parcelable {
+class PostData implements Parcelable {
     static final int TEXT_TYPE = 0;
     static final int IMAGE_TYPE = 1;
     static final int LINK_TYPE = 2;
@@ -34,7 +34,7 @@ class BestPostData implements Parcelable {
     private boolean isDashVideo;
     private boolean isDownloadableGifOrVideo;
 
-    BestPostData(String id, String fullName, String subredditName, String postTime, String title, String previewUrl, String permalink, int score, int postType, int voteType, boolean nsfw, boolean isDashVideo) {
+    PostData(String id, String fullName, String subredditName, String postTime, String title, String previewUrl, String permalink, int score, int postType, int voteType, boolean nsfw, boolean isDashVideo) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -49,7 +49,7 @@ class BestPostData implements Parcelable {
         this.isDashVideo = isDashVideo;
     }
 
-    BestPostData(String id, String fullName, String subredditName, String postTime, String title, String previewUrl, String url, String permalink, int score, int postType, int voteType, boolean nsfw) {
+    PostData(String id, String fullName, String subredditName, String postTime, String title, String previewUrl, String url, String permalink, int score, int postType, int voteType, boolean nsfw) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -64,7 +64,7 @@ class BestPostData implements Parcelable {
         this.nsfw = nsfw;
     }
 
-    BestPostData(String id, String fullName, String subredditName, String postTime, String title, String permalink, int score, int postType, int voteType, boolean nsfw) {
+    PostData(String id, String fullName, String subredditName, String postTime, String title, String permalink, int score, int postType, int voteType, boolean nsfw) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -77,7 +77,7 @@ class BestPostData implements Parcelable {
         this.nsfw = nsfw;
     }
 
-    protected BestPostData(Parcel in) {
+    protected PostData(Parcel in) {
         id = in.readString();
         fullName = in.readString();
         subredditName = in.readString();
@@ -98,15 +98,15 @@ class BestPostData implements Parcelable {
         isDownloadableGifOrVideo = in.readByte() != 0;
     }
 
-    public static final Creator<BestPostData> CREATOR = new Creator<BestPostData>() {
+    public static final Creator<PostData> CREATOR = new Creator<PostData>() {
         @Override
-        public BestPostData createFromParcel(Parcel in) {
-            return new BestPostData(in);
+        public PostData createFromParcel(Parcel in) {
+            return new PostData(in);
         }
 
         @Override
-        public BestPostData[] newArray(int size) {
-            return new BestPostData[size];
+        public PostData[] newArray(int size) {
+            return new PostData[size];
         }
     };
 

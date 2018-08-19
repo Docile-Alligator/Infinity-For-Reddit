@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -117,6 +119,10 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
 
             }
         });
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        Fragment mFragment = new BestPostFragment();
+        fragmentTransaction.replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
     }
 
     @Override

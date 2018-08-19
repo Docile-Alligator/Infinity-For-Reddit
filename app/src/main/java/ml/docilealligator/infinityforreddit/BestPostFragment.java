@@ -41,10 +41,10 @@ public class BestPostFragment extends Fragment {
     private RecyclerView mBestPostRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     private ProgressBar mProgressBar;
-    private ArrayList<BestPostData> mBestPostData;
+    private ArrayList<PostData> mPostData;
     private String mLastItem;
     private PaginationSynchronizer mPaginationSynchronizer;
-    private BestPostRecyclerViewAdapter mAdapter;
+    private PostRecyclerViewAdapter mAdapter;
 
     private String bestPostDataParcelableState = "BPDPS";
     private String lastItemState = "LIS";
@@ -64,11 +64,11 @@ public class BestPostFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         if(savedInstanceState != null) {
             if(savedInstanceState.containsKey(bestPostDataParcelableState)) {
-                mBestPostData = savedInstanceState.getParcelableArrayList(bestPostDataParcelableState);
+                mPostData = savedInstanceState.getParcelableArrayList(bestPostDataParcelableState);
                 mLastItem = savedInstanceState.getString(lastItemState);
-                mAdapter = new BestPostRecyclerViewAdapter(getActivity(), mBestPostData, mPaginationSynchronizer, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue);
+                mAdapter = new PostRecyclerViewAdapter(getActivity(), mPostData, mPaginationSynchronizer, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue);
                 mBestPostRecyclerView.setAdapter(mAdapter);
-                mBestPostRecyclerView.addOnScrollListener(new BestPostPaginationScrollListener(getActivity(), mLinearLayoutManager, mAdapter, mLastItem, mBestPostData, mPaginationSynchronizer,
+                mBestPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(getActivity(), mLinearLayoutManager, mAdapter, mLastItem, mPostData, mPaginationSynchronizer,
                         mAcquireAccessTokenRequestQueue, mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess()));
                 mProgressBar.setVisibility(View.GONE);
             } else {
@@ -94,11 +94,11 @@ public class BestPostFragment extends Fragment {
         }
 
         if(mPaginationRequestQueue != null) {
-            mPaginationRequestQueue.cancelAll(BestPostPaginationScrollListener.class);
+            mPaginationRequestQueue.cancelAll(PostPaginationScrollListener.class);
         }
 
-        if(mBestPostData != null) {
-            outState.putParcelableArrayList(bestPostDataParcelableState, mBestPostData);
+        if(mPostData != null) {
+            outState.putParcelableArrayList(bestPostDataParcelableState, mPostData);
             outState.putString(lastItemState, mLastItem);
             outState.putParcelable(paginationSynchronizerState, mPaginationSynchronizer);
         }
@@ -180,27 +180,27 @@ public class BestPostFragment extends Fragment {
                     ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                     ClipData clip = ClipData.newPlainText("response", response);
                     clipboard.setPrimaryClip(clip);
-                    //new ParseBestPostDataAsyncTask(response, accessToken).execute();
-                    new ParseBestPost(getActivity(), new ParseBestPost.ParseBestPostListener() {
+                    //new ParsePostDataAsyncTask(response, accessToken).execute();
+                    new ParsePost(getActivity(), new ParsePost.ParsePostListener() {
                         @Override
-                        public void onParseBestPostSuccess(ArrayList<BestPostData> bestPostData, String lastItem) {
-                            mBestPostData = bestPostData;
+                        public void onParsePostSuccess(ArrayList<PostData> bestPostData, String lastItem) {
+                            mPostData = bestPostData;
                             mLastItem = lastItem;
-                            mAdapter = new BestPostRecyclerViewAdapter(getActivity(), bestPostData, mPaginationSynchronizer, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue);
+                            mAdapter = new PostRecyclerViewAdapter(getActivity(), bestPostData, mPaginationSynchronizer, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue);
 
                             mBestPostRecyclerView.setAdapter(mAdapter);
-                            mBestPostRecyclerView.addOnScrollListener(new BestPostPaginationScrollListener(getActivity(), mLinearLayoutManager, mAdapter, lastItem, bestPostData, mPaginationSynchronizer,
+                            mBestPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(getActivity(), mLinearLayoutManager, mAdapter, lastItem, bestPostData, mPaginationSynchronizer,
                                     mAcquireAccessTokenRequestQueue, mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess()));
                             mProgressBar.setVisibility(View.GONE);
                         }
 
                         @Override
-                        public void onParseBestPostFail() {
+                        public void onParsePostFail() {
                             Toast.makeText(getActivity(), "Error parsing data", Toast.LENGTH_SHORT).show();
                             Log.i("Best post fetch error", "Error parsing data");
                             mProgressBar.setVisibility(View.GONE);
                         }
-                    }).parseBestPost(response, new ArrayList<BestPostData>());
+                    }).parseBestPost(response, new ArrayList<PostData>());
                 }
             }
         }, new Response.ErrorListener() {
