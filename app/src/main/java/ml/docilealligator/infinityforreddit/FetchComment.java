@@ -28,7 +28,7 @@ class FetchComment {
     void queryComment(FetchCommentListener fetchCommentListener) {
         mFetchCommentListener = fetchCommentListener;
 
-        Uri uri = Uri.parse(RedditUtils.getQueryCommentUri(subredditName, article))
+        Uri uri = Uri.parse(RedditUtils.getQueryCommentUrl(subredditName, article))
                 .buildUpon().appendQueryParameter(RedditUtils.RAW_JSON_KEY, RedditUtils.RAW_JSON_VALUE)
                 .build();
 

@@ -70,11 +70,15 @@ class RedditUtils {
         return params;
     }
 
-    static String getQueryCommentUri(String subredditName, String article) {
+    static String getQueryCommentUrl(String subredditName, String article) {
         return API_BASE_URI + "/" + subredditName + "/comments/" + article + ".json";
     }
 
-    static String getQuerySubredditDataUri(String subredditName) {
+    static String getQuerySubredditDataUrl(String subredditName) {
         return API_BASE_URI + "/r/" + subredditName + "/about.json";
+    }
+
+    static String getQuerySubredditPostUrl(String subredditName) {
+        return API_BASE_URI + "/r/" + subredditName + ".json";
     }
 }

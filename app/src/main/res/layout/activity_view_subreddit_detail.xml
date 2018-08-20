@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/coordinator_layout_view_subreddit_detail_activity"
     android:fitsSystemWindows="true"
     tools:context=".ViewSubredditDetailActivity">
 

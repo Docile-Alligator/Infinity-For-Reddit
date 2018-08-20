@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -34,14 +35,18 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
     private LastItemSynchronizer mLastItemSynchronizer;
     private PaginationRequestQueueSynchronizer mPaginationRequestQueueSynchronizer;
 
+    private String mQueryPostUrl;
+    private boolean isBestPost;
     private boolean isLoading;
     private boolean loadSuccess;
     private String mLastItem;
     private RequestQueue mRequestQueue;
     private RequestQueue mAcquireAccessTokenRequestQueue;
 
-    PostPaginationScrollListener(Context context, LinearLayoutManager layoutManager, PostRecyclerViewAdapter adapter, String lastItem, ArrayList<PostData> postData, PaginationSynchronizer paginationSynchronizer,
-                                 RequestQueue acquireAccessTokenRequestQueue, boolean isLoading, boolean loadSuccess) {
+    PostPaginationScrollListener(Context context, LinearLayoutManager layoutManager, PostRecyclerViewAdapter adapter,
+                                 String lastItem, ArrayList<PostData> postData, PaginationSynchronizer paginationSynchronizer,
+                                 RequestQueue acquireAccessTokenRequestQueue, final String queryPostUrl,
+                                 final boolean isBestPost, boolean isLoading, boolean loadSuccess) {
         if(context != null) {
             this.mContext = context;
             this.mLayoutManager = layoutManager;
@@ -50,6 +55,8 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
             this.mPostData = postData;
             this.mPaginationSynchronizer = paginationSynchronizer;
             this.mAcquireAccessTokenRequestQueue = acquireAccessTokenRequestQueue;
+            this.mQueryPostUrl = queryPostUrl;
+            this.isBestPost = isBestPost;
             this.isLoading = isLoading;
             this.loadSuccess = loadSuccess;
 
@@ -58,7 +65,11 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
             mPaginationRetryNotifier = new PaginationRetryNotifier() {
                 @Override
                 public void retry() {
-                    fetchBestPost(1);
+                    if(isBestPost) {
+                        fetchBestPost(queryPostUrl, 1);
+                    } else {
+                        fetchPost(queryPostUrl, 1);
+                    }
                 }
             };
             mPaginationSynchronizer.setPaginationRetryNotifier(mPaginationRetryNotifier);
@@ -69,7 +80,7 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
     }
 
     @Override
-    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
         if(!isLoading && loadSuccess) {
             int visibleItemCount = mLayoutManager.getChildCount();
@@ -77,13 +88,17 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
             int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
 
             if((visibleItemCount + firstVisibleItemPosition >= totalItemCount) && firstVisibleItemPosition >= 0) {
-                fetchBestPost(1);
+                if(isBestPost) {
+                    fetchBestPost(mQueryPostUrl, 1);
+                } else {
+                    fetchPost(mQueryPostUrl, 1);
+                }
             }
         }
     }
 
 
-    private void fetchBestPost(final int refreshTime) {
+    private void fetchBestPost(final String queryPostUrl, final int refreshTime) {
         if(refreshTime < 0) {
             loadFailed();
             return;
@@ -93,9 +108,8 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
         loadSuccess = false;
         mPaginationSynchronizer.setLoading(true);
 
-        Uri uri = Uri.parse(RedditUtils.OAUTH_API_BASE_URI + RedditUtils.BEST_POST_SUFFIX)
-                .buildUpon().appendQueryParameter(RedditUtils.AFTER_KEY, mLastItem)
-                .appendQueryParameter(RedditUtils.RAW_JSON_KEY, RedditUtils.RAW_JSON_VALUE).build();
+        Uri uri = Uri.parse(queryPostUrl)
+                .buildUpon().appendQueryParameter(RedditUtils.AFTER_KEY, mLastItem).build();
 
         StringRequest bestPostRequest = new StringRequest(Request.Method.GET,  uri.toString(), new Response.Listener<String>() {
             @Override
@@ -122,7 +136,7 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
                         Log.i("Best post", "Error parsing data");
                         loadFailed();
                     }
-                }).parseBestPost(response, mPostData);
+                }).parsePost(response, mPostData);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -133,7 +147,7 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
                             new AcquireAccessToken.AcquireAccessTokenListener() {
                                 @Override
                                 public void onAcquireAccessTokenSuccess() {
-                                    fetchBestPost(refreshTime - 1);
+                                    fetchBestPost(queryPostUrl, refreshTime - 1);
                                 }
 
                                 @Override
@@ -153,6 +167,73 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
                 return RedditUtils.getOAuthHeader(accessToken);
             }
         };
+        bestPostRequest.setTag(PostPaginationScrollListener.class);
+        mRequestQueue.add(bestPostRequest);
+    }
+
+    private void fetchPost(final String queryPostUrl, final int refreshTime) {
+        if(refreshTime < 0) {
+            loadFailed();
+            return;
+        }
+
+        isLoading = true;
+        loadSuccess = false;
+        mPaginationSynchronizer.setLoading(true);
+
+        Uri uri = Uri.parse(queryPostUrl)
+                .buildUpon().appendQueryParameter(RedditUtils.AFTER_KEY, mLastItem).build();
+
+        StringRequest bestPostRequest = new StringRequest(Request.Method.GET,  uri.toString(), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("response", response);
+                clipboard.setPrimaryClip(clip);
+                new ParsePost(mContext, new ParsePost.ParsePostListener() {
+                    @Override
+                    public void onParsePostSuccess(ArrayList<PostData> bestPostData, String lastItem) {
+                        mAdapter.notifyDataSetChanged();
+                        mLastItem = lastItem;
+                        mLastItemSynchronizer.lastItemChanged(mLastItem);
+
+                        isLoading = false;
+                        loadSuccess = true;
+                        mPaginationSynchronizer.setLoading(false);
+                        mPaginationSynchronizer.setLoadingState(true);
+                    }
+
+                    @Override
+                    public void onParsePostFail() {
+                        Toast.makeText(mContext, "Error parsing data", Toast.LENGTH_SHORT).show();
+                        Log.i("Best post", "Error parsing data");
+                        loadFailed();
+                    }
+                }).parsePost(response, mPostData);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error instanceof AuthFailureError) {
+                    //Access token expired
+                    new AcquireAccessToken(mContext).refreshAccessToken(mAcquireAccessTokenRequestQueue,
+                            new AcquireAccessToken.AcquireAccessTokenListener() {
+                                @Override
+                                public void onAcquireAccessTokenSuccess() {
+                                    fetchPost(queryPostUrl, refreshTime - 1);
+                                }
+
+                                @Override
+                                public void onAcquireAccessTokenFail() {
+                                }
+                            });
+                } else {
+                    Toast.makeText(mContext, "Error getting best post", Toast.LENGTH_SHORT).show();
+                    Log.i("best post", error.toString());
+                    loadFailed();
+                }
+            }
+        });
         bestPostRequest.setTag(PostPaginationScrollListener.class);
         mRequestQueue.add(bestPostRequest);
     }

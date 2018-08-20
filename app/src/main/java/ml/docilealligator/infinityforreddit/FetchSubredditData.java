@@ -23,7 +23,7 @@ class FetchSubredditData {
 
     void querySubredditData(FetchSubredditDataListener fetchSubredditDataListener) {
         mFetchSubredditDataListener = fetchSubredditDataListener;
-        StringRequest commentRequest = new StringRequest(Request.Method.GET, RedditUtils.getQuerySubredditDataUri(subredditName), new Response.Listener<String>() {
+        StringRequest commentRequest = new StringRequest(Request.Method.GET, RedditUtils.getQuerySubredditDataUrl(subredditName), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 mFetchSubredditDataListener.onFetchSubredditDataSuccess(response);

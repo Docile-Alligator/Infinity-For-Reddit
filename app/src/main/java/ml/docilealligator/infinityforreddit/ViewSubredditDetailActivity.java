@@ -2,13 +2,13 @@ package ml.docilealligator.infinityforreddit;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -26,6 +26,8 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
 
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
     static final String EXTRA_SUBREDDIT_ID = "ESI";
+
+    private Fragment mFragment;
 
     private SubredditViewModel mSubredditViewModel;
 
@@ -120,9 +122,20 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
             }
         });
 
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        Fragment mFragment = new BestPostFragment();
-        fragmentTransaction.replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
+        if(savedInstanceState == null) {
+            mFragment = new PostFragment();
+            Uri uri = Uri.parse(RedditUtils.getQuerySubredditPostUrl(subredditName))
+                    .buildUpon().appendQueryParameter(RedditUtils.RAW_JSON_KEY, RedditUtils.RAW_JSON_VALUE)
+                    .build();
+            Bundle bundle = new Bundle();
+            bundle.putString(PostFragment.QUERY_POST_URL_KEY, uri.toString());
+            bundle.putBoolean(PostFragment.IS_BEST_POST_KEY, false);
+            mFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
+        } else {
+            mFragment = getSupportFragmentManager().getFragment(savedInstanceState, "outStateFragment");
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
+        }
     }
 
     @Override
@@ -133,6 +146,14 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
                 return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(mFragment != null) {
+            getSupportFragmentManager().putFragment(outState, "outStateFragment", mFragment);
+        }
     }
 
     private static class InsertSubredditDataAsyncTask extends AsyncTask<Void, Void, Void> {

@@ -10,6 +10,7 @@
         android:id="@+id/progress_bar_footer_progress_bar_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
         android:layout_gravity="center" />
 
@@ -17,6 +18,7 @@
         android:id="@+id/relative_layout_footer_progress_bar_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"

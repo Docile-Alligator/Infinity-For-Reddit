@@ -5,11 +5,11 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -79,9 +79,15 @@ public class MainActivity extends AppCompatActivity {
             startActivity(loginIntent);
         } else {
             if(savedInstanceState == null) {
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                mFragment = new BestPostFragment();
-                fragmentTransaction.replace(R.id.frame_layout_content_main, mFragment).commit();
+                mFragment = new PostFragment();
+                Uri uri = Uri.parse(RedditUtils.OAUTH_API_BASE_URI + RedditUtils.BEST_POST_SUFFIX)
+                        .buildUpon().appendQueryParameter(RedditUtils.RAW_JSON_KEY, RedditUtils.RAW_JSON_VALUE)
+                        .build();
+                Bundle bundle = new Bundle();
+                bundle.putString(PostFragment.QUERY_POST_URL_KEY, uri.toString());
+                bundle.putBoolean(PostFragment.IS_BEST_POST_KEY, true);
+                mFragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
             } else {
                 mFragment = getSupportFragmentManager().getFragment(savedInstanceState, "outStateFragment");
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();

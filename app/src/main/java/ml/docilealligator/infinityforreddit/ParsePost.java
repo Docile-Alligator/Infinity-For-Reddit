@@ -32,7 +32,7 @@ class ParsePost {
         mParseBetPostListener = parsePostListener;
     }
 
-    void parseBestPost(String response, ArrayList<PostData> postData) {
+    void parsePost(String response, ArrayList<PostData> postData) {
         new ParsePostDataAsyncTask(response, postData).execute();
     }
 
