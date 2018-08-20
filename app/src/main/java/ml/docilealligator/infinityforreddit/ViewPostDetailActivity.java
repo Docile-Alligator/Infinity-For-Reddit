@@ -32,6 +32,8 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
+import org.sufficientlysecure.htmltextview.HtmlTextView;
+
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -77,7 +79,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         CircleImageView subredditIconCircleImageView = findViewById(R.id.subreddit_icon_circle_image_view_view_post_detail);
         TextView postTimeTextView = findViewById(R.id.post_time_text_view_view_post_detail);
         TextView subredditTextView = findViewById(R.id.subreddit_text_view_view_post_detail);
-        TextView contentTextView = findViewById(R.id.content_text_view_view_post_detail);
+        HtmlTextView contentTextView = findViewById(R.id.content_html_text_view_view_post_detail);
         TextView typeTextView = findViewById(R.id.type_text_view_view_post_detail);
         TextView nsfwTextView = findViewById(R.id.nsfw_text_view_view_post_detail);
         RelativeLayout relativeLayout = findViewById(R.id.image_view_wrapper_view_post_detail);
@@ -294,7 +296,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 typeTextView.setText("TEXT");
                 if(!mPostData.getSelfText().equals("")) {
                     contentTextView.setVisibility(View.VISIBLE);
-                    contentTextView.setText(mPostData.getSelfText());
+                    contentTextView.setHtml(mPostData.getSelfText());
                 }
         }
         queryComment();

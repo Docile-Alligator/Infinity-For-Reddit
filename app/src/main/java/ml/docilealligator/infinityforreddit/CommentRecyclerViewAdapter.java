@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 
+import org.sufficientlysecure.htmltextview.HtmlTextView;
+
 import java.util.ArrayList;
 
 class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -40,7 +42,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
         ((CommentViewHolder) holder).authorTextView.setText(mCommentData.get(position).getAuthor());
         ((CommentViewHolder) holder).commentTimeTextView.setText(mCommentData.get(position).getCommentTime());
-        ((CommentViewHolder) holder).commentTextView.setText(mCommentData.get(position).getCommentContent());
+        ((CommentViewHolder) holder).commentHtmlTextView.setHtml(mCommentData.get(position).getCommentContent());
         ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(mCommentData.get(position).getScore()));
 
         switch (mCommentData.get(position).getVoteType()) {
@@ -180,7 +182,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private class CommentViewHolder extends RecyclerView.ViewHolder {
         private TextView authorTextView;
         private TextView commentTimeTextView;
-        private TextView commentTextView;
+        private HtmlTextView commentHtmlTextView;
         private ImageView upvoteButton;
         private ImageView downvoteButton;
         private TextView scoreTextView;
@@ -190,7 +192,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
             authorTextView = itemView.findViewById(R.id.author_text_view_item_post_comment);
             commentTimeTextView = itemView.findViewById(R.id.comment_time_text_view_item_post_comment);
-            commentTextView = itemView.findViewById(R.id.comment_text_view_item_post_comment);
+            commentHtmlTextView = itemView.findViewById(R.id.comment_html_text_view_item_post_comment);
             upvoteButton = itemView.findViewById(R.id.plus_button_item_post_comment);
             downvoteButton = itemView.findViewById(R.id.minus_button_item_post_comment);
             scoreTextView = itemView.findViewById(R.id.score_text_view_item_post_comment);

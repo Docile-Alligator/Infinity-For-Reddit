@@ -46,6 +46,12 @@ class ParseSubredditData {
                 String description = data.getString(JSONUtils.PUBLIC_DESCRIPTION).trim();
                 String bannerImageUrl = data.getString(JSONUtils.BANNER_IMG_KEY);
                 String iconImageUrl = data.getString(JSONUtils.ICON_IMG_KEY);
+                if(iconImageUrl.equals("") || iconImageUrl.equals("null")) {
+                    iconImageUrl = data.getString(JSONUtils.COMMUNITY_ICON_KEY);
+                    if(iconImageUrl.equals("null")) {
+                        iconImageUrl = "";
+                    }
+                }
                 int nSubscribers = data.getInt(JSONUtils.SUBSCRIBERS_KEY);
                 int nCurrentOnlineSubscribers = data.getInt(JSONUtils.ACTIVE_USER_COUNT);
                 subredditData = new SubredditData(id, subredditFullName, iconImageUrl, bannerImageUrl, description, nSubscribers);

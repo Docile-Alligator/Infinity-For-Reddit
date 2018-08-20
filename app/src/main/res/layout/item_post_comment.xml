@@ -32,8 +32,8 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/comment_text_view_item_post_comment"
+    <org.sufficientlysecure.htmltextview.HtmlTextView
+        android:id="@+id/comment_html_text_view_item_post_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
@@ -41,7 +41,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginEnd="32dp"
-        android:textColor="#000000"/>
+        android:textAppearance="@android:style/TextAppearance.Small"/>
 
     <RelativeLayout
         android:id="@+id/relative_layout_item_post_comment"

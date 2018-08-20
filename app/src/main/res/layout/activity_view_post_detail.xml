@@ -74,8 +74,8 @@
                         android:textColor="#000000"
                         android:textSize="18sp" />
 
-                    <TextView
-                        android:id="@+id/content_text_view_view_post_detail"
+                    <org.sufficientlysecure.htmltextview.HtmlTextView
+                        android:id="@+id/content_html_text_view_view_post_detail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
@@ -84,7 +84,7 @@
                         android:layout_marginRight="16dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
-                        android:textSize="16sp"
+                        android:textAppearance="@android:style/TextAppearance.Small"
                         android:visibility="gone" />
 
                     <RelativeLayout

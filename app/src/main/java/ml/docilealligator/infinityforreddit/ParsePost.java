@@ -130,7 +130,12 @@ class ParsePost {
                 Log.i("text", Integer.toString(i));
                 int postType = PostData.TEXT_TYPE;
                 PostData postData = new PostData(id, fullName, subredditName, formattedPostTime, title, permalink, score, postType, voteType, nsfw);
-                postData.setSelfText(data.getString(JSONUtils.SELF_TEXT_KEY).trim());
+                if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
+                    postData.setSelfText("");
+                } else {
+                    postData.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
+                }
+                postData.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
                 bestPostData.add(postData);
             } else {
                 //No preview link post

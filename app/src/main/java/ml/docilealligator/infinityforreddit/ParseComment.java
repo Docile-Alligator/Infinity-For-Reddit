@@ -72,7 +72,7 @@ class ParseComment {
                     String fullName = data.getString(JSONUtils.LINK_ID);
                     String author = data.getString(JSONUtils.AUTHOR_KEY);
                     boolean isSubmitter = data.getBoolean(JSONUtils.IS_SUBMITTER_KEY);
-                    String commentContent = data.getString(JSONUtils.BODY_KEY);
+                    String commentContent = data.getString(JSONUtils.BODY_HTML_KEY);
                     String permalink = data.getString(JSONUtils.PERMALINK_KEY);
                     int score = data.getInt(JSONUtils.SCORE_KEY);
                     long submitTime = data.getLong(JSONUtils.CREATED_UTC_KEY) * 1000;
