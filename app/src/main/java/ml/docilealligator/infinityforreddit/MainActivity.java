@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
     private String mBannerImageUrl;
     private String mKarma;
     private boolean mFetchUserInfoSuccess;
-    private boolean mIsInserting;
     private boolean mInsertSuccess;
 
     private SubscribedSubredditViewModel mSubscribedSubredditViewModel;
@@ -153,15 +152,13 @@ public class MainActivity extends AppCompatActivity {
             mSubscribedSubredditViewModel.getAllSubscribedSubreddits().observe(this, new Observer<List<SubscribedSubredditData>>() {
                 @Override
                 public void onChanged(@Nullable final List<SubscribedSubredditData> subscribedSubredditData) {
-                    if(!mIsInserting) {
-                        if(subscribedSubredditData == null || subscribedSubredditData.size() == 0) {
-                            subscriptionsLabelTextView.setVisibility(View.GONE);
-                        } else {
-                            subscriptionsLabelTextView.setVisibility(View.VISIBLE);
-                        }
-
-                        subredditadapter.setSubscribedSubreddits(subscribedSubredditData);
+                    if (subscribedSubredditData == null || subscribedSubredditData.size() == 0) {
+                        subscriptionsLabelTextView.setVisibility(View.GONE);
+                    } else {
+                        subscriptionsLabelTextView.setVisibility(View.VISIBLE);
                     }
+
+                    subredditadapter.setSubscribedSubreddits(subscribedSubredditData);
                 }
             });
 
@@ -171,15 +168,12 @@ public class MainActivity extends AppCompatActivity {
             mSubscribedUserViewModel.getAllSubscribedUsers().observe(this, new Observer<List<SubscribedUserData>>() {
                 @Override
                 public void onChanged(@Nullable final List<SubscribedUserData> subscribedUserData) {
-                    if(!mIsInserting) {
-                        Log.i("view", "observed");
-                        if(subscribedUserData == null || subscribedUserData.size() == 0) {
-                            followingLabelTextView.setVisibility(View.GONE);
-                        } else {
-                            followingLabelTextView.setVisibility(View.VISIBLE);
-                        }
-                        userAdapter.setSubscribedUsers(subscribedUserData);
+                    if (subscribedUserData == null || subscribedUserData.size() == 0) {
+                        followingLabelTextView.setVisibility(View.GONE);
+                    } else {
+                        followingLabelTextView.setVisibility(View.VISIBLE);
                     }
+                    userAdapter.setSubscribedUsers(subscribedUserData);
                 }
             });
         }
@@ -240,7 +234,6 @@ public class MainActivity extends AppCompatActivity {
                             public void onFetchSubscribedSubredditsSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                                                            ArrayList<SubscribedUserData> subscribedUserData,
                                                                            ArrayList<SubredditData> subredditData) {
-                                mIsInserting = true;
                                 new InsertSubscribedThingsAsyncTask(
                                         SubscribedSubredditRoomDatabase.getDatabase(MainActivity.this),
                                         SubscribedUserRoomDatabase.getDatabase(MainActivity.this),
@@ -251,7 +244,6 @@ public class MainActivity extends AppCompatActivity {
                                         new InsertSubscribedThingsAsyncTask.InsertSubscribedThingListener() {
                                             @Override
                                             public void insertSuccess() {
-                                                mIsInserting = false;
                                                 mInsertSuccess = true;
                                             }
                                         }).execute();

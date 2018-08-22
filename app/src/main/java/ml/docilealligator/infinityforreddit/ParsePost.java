@@ -135,7 +135,6 @@ class ParsePost {
                 } else {
                     postData.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
                 }
-                postData.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
                 bestPostData.add(postData);
             } else {
                 //No preview link post
