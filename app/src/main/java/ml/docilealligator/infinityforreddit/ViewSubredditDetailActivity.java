@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,7 +41,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         String id = getIntent().getExtras().getString(EXTRA_SUBREDDIT_ID);
-        String subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
+        final String subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
 
         final String title = "r/" + subredditName;
         setTitle(title);
@@ -77,22 +79,60 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         mSubredditViewModel = ViewModelProviders.of(this, factory).get(SubredditViewModel.class);
         mSubredditViewModel.getSubredditLiveData().observe(this, new Observer<SubredditData>() {
             @Override
-            public void onChanged(@Nullable SubredditData subredditData) {
+            public void onChanged(@Nullable final SubredditData subredditData) {
                 if(subredditData != null) {
-                    if(!subredditData.getBannerUrl().equals("") && !subredditData.getBannerUrl().equals("null")) {
+                    if(subredditData.getBannerUrl().equals("")) {
+                        iconCircleImageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                //Do nothing as it has no image
+                            }
+                        });
+                    } else {
                         glide.load(subredditData.getBannerUrl()).into(bannerImageView);
+                        bannerImageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(ViewSubredditDetailActivity.this, ViewImageActivity.class);
+                                intent.putExtra(ViewImageActivity.TITLE_KEY, title);
+                                intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, subredditData.getBannerUrl());
+                                intent.putExtra(ViewImageActivity.FILE_NAME_KEY, subredditName + "-banner");
+                                startActivity(intent);
+                            }
+                        });
                     }
 
-                    if(subredditData.getIconUrl().equals("") || subredditData.getIconUrl().equals("null")) {
+                    if(subredditData.getIconUrl().equals("")) {
                         glide.load(getDrawable(R.drawable.subreddit_default_icon)).into(iconCircleImageView);
+                        iconCircleImageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                //Do nothing as it is a default icon
+                            }
+                        });
                     } else {
                         glide.load(subredditData.getIconUrl()).into(iconCircleImageView);
+                        iconCircleImageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(ViewSubredditDetailActivity.this, ViewImageActivity.class);
+                                intent.putExtra(ViewImageActivity.TITLE_KEY, title);
+                                intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, subredditData.getIconUrl());
+                                intent.putExtra(ViewImageActivity.FILE_NAME_KEY, subredditName + "-icon");
+                                startActivity(intent);
+                            }
+                        });
                     }
 
                     subredditNameTextView.setText(subredditData.getName());
                     String nSubscribers = getString(R.string.subscribers_number_detail, subredditData.getNSubscribers());
                     nSubscribersTextView.setText(nSubscribers);
-                    descriptionTextView.setText(subredditData.getDescription());
+                    if(subredditData.getDescription().equals("")) {
+                        descriptionTextView.setVisibility(View.GONE);
+                    } else {
+                        descriptionTextView.setVisibility(View.VISIBLE);
+                        descriptionTextView.setText(subredditData.getDescription());
+                    }
                 }
             }
         });

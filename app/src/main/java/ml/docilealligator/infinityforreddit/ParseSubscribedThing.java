@@ -65,8 +65,20 @@ class ParseSubscribedThing {
                 for(int i = 0; i < children.length(); i++) {
                     JSONObject data = children.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
                     String name = data.getString(JSONUtils.DISPLAY_NAME);
-                    String bannerUrl = data.getString(JSONUtils.BANNER_IMG_KEY);
-                    String iconUrl = data.getString(JSONUtils.ICON_IMG_KEY);
+                    String bannerImageUrl = data.getString(JSONUtils.BANNER_IMG_KEY);
+                    if(bannerImageUrl.equals("") || bannerImageUrl.equals("null")) {
+                        bannerImageUrl= data.getString(JSONUtils.BANNER_IMG_KEY);
+                        if(bannerImageUrl.equals("null")) {
+                            bannerImageUrl = "";
+                        }
+                    }
+                    String iconUrl = data.getString(JSONUtils.COMMUNITY_ICON_KEY);
+                    if(iconUrl.equals("") || iconUrl.equals("null")) {
+                        iconUrl = data.getString(JSONUtils.ICON_IMG_KEY);
+                        if(iconUrl.equals("null")) {
+                            iconUrl = "";
+                        }
+                    }
                     String id = data.getString(JSONUtils.NAME_KEY);
                     if(iconUrl.equals("") || iconUrl.equals("null")) {
                         iconUrl = data.getString(JSONUtils.COMMUNITY_ICON_KEY);
@@ -84,7 +96,7 @@ class ParseSubscribedThing {
                         String description = data.getString(JSONUtils.PUBLIC_DESCRIPTION).trim();
                         int nSubscribers = data.getInt(JSONUtils.SUBSCRIBERS_KEY);
                         newSubscribedSubredditData.add(new SubscribedSubredditData(id, name, iconUrl));
-                        newSubredditData.add(new SubredditData(id, subredditFullName, iconUrl, bannerUrl, description, nSubscribers));
+                        newSubredditData.add(new SubredditData(id, subredditFullName, iconUrl, bannerImageUrl, description, nSubscribers));
                     }
                 }
                 lastItem = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);

@@ -57,8 +57,7 @@ public class ViewImageActivity extends AppCompatActivity {
 
     static final String TITLE_KEY = "TK";
     static final String IMAGE_URL_KEY = "IUK";
-    static final String SUBREDDIT_KEY = "SK";
-    static final String ID_KEY = "IK";
+    static final String FILE_NAME_KEY = "FNK";
 
     private boolean isActionBarHidden = false;
     private boolean isDownloading = false;
@@ -83,11 +82,10 @@ public class ViewImageActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         mImageUrl = intent.getExtras().getString(IMAGE_URL_KEY);
+        mImageFileName = intent.getExtras().getString(FILE_NAME_KEY);
         String title = intent.getExtras().getString(TITLE_KEY);
         final Spannable text = new SpannableString(title);
         setTitle(text);
-
-        mImageFileName = intent.getExtras().getString(SUBREDDIT_KEY).substring(2) + "-" + intent.getExtras().getString(ID_KEY).substring(3);
 
         final RelativeLayout relativeLayout = findViewById(R.id.parent_relative_layout_view_image_activity);
         final GestureImageView imageView = findViewById(R.id.image_view_view_image_activity);

@@ -170,8 +170,8 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 Intent intent = new Intent(mContext, ViewImageActivity.class);
                                 intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, imageUrl);
                                 intent.putExtra(ViewImageActivity.TITLE_KEY, title);
-                                intent.putExtra(ViewImageActivity.SUBREDDIT_KEY, subredditName);
-                                intent.putExtra(ViewImageActivity.ID_KEY, id);
+                                intent.putExtra(ViewImageActivity.FILE_NAME_KEY, subredditName.substring(2)
+                                        + "-" + id.substring(3));
                                 mContext.startActivity(intent);
                             }
                         });

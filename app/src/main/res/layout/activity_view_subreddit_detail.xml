@@ -43,7 +43,8 @@
                     app:civ_border_width="1dp"
                     android:layout_below="@id/banner_image_view_view_subreddit_detail_activity"
                     android:layout_centerHorizontal="true"
-                    android:elevation="1000dp"/>
+                    android:elevation="4dp"
+                    app:civ_circle_background_color="@android:color/white"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -64,7 +65,8 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp">
 
                         <TextView
                             android:id="@+id/subscriber_count_text_view_view_subreddit_detail_activity"
@@ -92,8 +94,11 @@
                         android:id="@+id/description_text_view_view_subreddit_detail_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:textColor="@android:color/black" />
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:textColor="@android:color/black"
+                        android:visibility="gone"/>
 
                 </LinearLayout>
 

@@ -44,17 +44,23 @@ class ParseSubredditData {
                 String id = data.getString(JSONUtils.NAME_KEY);
                 String subredditFullName = data.getString(JSONUtils.DISPLAY_NAME_PREFIXED);
                 String description = data.getString(JSONUtils.PUBLIC_DESCRIPTION).trim();
-                String bannerImageUrl = data.getString(JSONUtils.BANNER_IMG_KEY);
-                String iconImageUrl = data.getString(JSONUtils.ICON_IMG_KEY);
-                if(iconImageUrl.equals("") || iconImageUrl.equals("null")) {
-                    iconImageUrl = data.getString(JSONUtils.COMMUNITY_ICON_KEY);
-                    if(iconImageUrl.equals("null")) {
-                        iconImageUrl = "";
+                String bannerImageUrl = data.getString(JSONUtils.BANNER_BACKGROUND_IMAGE_KEY);
+                if(bannerImageUrl.equals("") || bannerImageUrl.equals("null")) {
+                    bannerImageUrl= data.getString(JSONUtils.BANNER_IMG_KEY);
+                    if(bannerImageUrl.equals("null")) {
+                        bannerImageUrl = "";
+                    }
+                }
+                String iconUrl = data.getString(JSONUtils.COMMUNITY_ICON_KEY);
+                if(iconUrl.equals("") || iconUrl.equals("null")) {
+                    iconUrl = data.getString(JSONUtils.ICON_IMG_KEY);
+                    if(iconUrl.equals("null")) {
+                        iconUrl = "";
                     }
                 }
                 int nSubscribers = data.getInt(JSONUtils.SUBSCRIBERS_KEY);
                 int nCurrentOnlineSubscribers = data.getInt(JSONUtils.ACTIVE_USER_COUNT);
-                subredditData = new SubredditData(id, subredditFullName, iconImageUrl, bannerImageUrl, description, nSubscribers);
+                subredditData = new SubredditData(id, subredditFullName, iconUrl, bannerImageUrl, description, nSubscribers);
                 mNCurrentOnlineSubscribers = nCurrentOnlineSubscribers;
             } catch (JSONException e) {
                 parseFailed = true;

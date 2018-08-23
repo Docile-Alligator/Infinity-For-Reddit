@@ -53,6 +53,7 @@ class JSONUtils {
     static final String SCORE_HIDDEN_KEY = "score_hidden";
     static final String SUBREDDIT_KEY = "subreddit";
     static final String BANNER_IMG_KEY = "banner_img";
+    static final String BANNER_BACKGROUND_IMAGE_KEY = "banner_background_image";
     static final String ICON_IMG_KEY = "icon_img";
     static final String COMMUNITY_ICON_KEY = "community_icon";
     static final String LINK_KARMA_KEY = "link_karma";
