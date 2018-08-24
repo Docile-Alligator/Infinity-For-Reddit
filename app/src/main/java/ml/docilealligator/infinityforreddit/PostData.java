@@ -30,11 +30,15 @@ class PostData implements Parcelable {
     private int score;
     private int postType;
     private int voteType;
+    private int gilded;
     private boolean nsfw;
+    private boolean stickied;
     private boolean isDashVideo;
     private boolean isDownloadableGifOrVideo;
 
-    PostData(String id, String fullName, String subredditName, String postTime, String title, String previewUrl, String permalink, int score, int postType, int voteType, boolean nsfw, boolean isDashVideo) {
+    PostData(String id, String fullName, String subredditName, String postTime, String title,
+             String previewUrl, String permalink, int score, int postType, int voteType, int gilded,
+             boolean nsfw, boolean stickied, boolean isDashVideo) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -45,11 +49,15 @@ class PostData implements Parcelable {
         this.score = score;
         this.postType = postType;
         this.voteType = voteType;
+        this.gilded = gilded;
         this.nsfw = nsfw;
+        this.stickied = stickied;
         this.isDashVideo = isDashVideo;
     }
 
-    PostData(String id, String fullName, String subredditName, String postTime, String title, String previewUrl, String url, String permalink, int score, int postType, int voteType, boolean nsfw) {
+    PostData(String id, String fullName, String subredditName, String postTime, String title,
+             String previewUrl, String url, String permalink, int score, int postType, int voteType,
+             int gilded, boolean nsfw, boolean stickied) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -61,10 +69,14 @@ class PostData implements Parcelable {
         this.score = score;
         this.postType = postType;
         this.voteType = voteType;
+        this.gilded = gilded;
         this.nsfw = nsfw;
+        this.stickied = stickied;
     }
 
-    PostData(String id, String fullName, String subredditName, String postTime, String title, String permalink, int score, int postType, int voteType, boolean nsfw) {
+    PostData(String id, String fullName, String subredditName, String postTime, String title,
+             String permalink, int score, int postType, int voteType, int gilded, boolean nsfw,
+             boolean stickied) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -74,7 +86,9 @@ class PostData implements Parcelable {
         this.score = score;
         this.postType = postType;
         this.voteType = voteType;
+        this.gilded = gilded;
         this.nsfw = nsfw;
+        this.stickied = stickied;
     }
 
     protected PostData(Parcel in) {
@@ -93,7 +107,9 @@ class PostData implements Parcelable {
         score = in.readInt();
         postType = in.readInt();
         voteType = in.readInt();
+        gilded = in.readInt();
         nsfw = in.readByte() != 0;
+        stickied = in.readByte() != 0;
         isDashVideo = in.readByte() != 0;
         isDownloadableGifOrVideo = in.readByte() != 0;
     }
@@ -198,7 +214,11 @@ class PostData implements Parcelable {
         return voteType;
     }
 
-    public boolean getNSFW() {
+    public int getGilded() {
+        return gilded;
+    }
+
+    public boolean isNSFW() {
         return nsfw;
     }
 
@@ -219,6 +239,10 @@ class PostData implements Parcelable {
         return isDownloadableGifOrVideo;
     }
 
+    public boolean isStickied() {
+        return stickied;
+    }
+
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(id);
@@ -236,7 +260,9 @@ class PostData implements Parcelable {
         parcel.writeInt(score);
         parcel.writeInt(postType);
         parcel.writeInt(voteType);
+        parcel.writeInt(gilded);
         parcel.writeByte((byte) (nsfw ? 1 : 0));
+        parcel.writeByte((byte) (stickied ? 1 : 0));
         parcel.writeByte((byte) (isDashVideo ? 1 : 0));
         parcel.writeByte((byte) (isDownloadableGifOrVideo ? 1 : 0));
     }

@@ -34,9 +34,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_toStartOf="@id/stickied_post_image_view_best_post_item"
                 android:layout_toEndOf="@id/subreddit_icon_circle_image_view_best_post_item"
                 android:layout_centerVertical="true"
                 android:textColor="#E91E63"/>
+
+            <ImageView
+                android:id="@+id/stickied_post_image_view_best_post_item"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_toStartOf="@id/post_time_text_view_best_post_item"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:tint="@color/colorPrimary"/>
 
             <TextView
                 android:id="@+id/post_time_text_view_best_post_item"
@@ -60,19 +70,40 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp">
 
             <TextView
                 android:id="@+id/type_text_view_item_best_post"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_corner"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginRight="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_centerVertical="true"
                 android:textColor="@android:color/white"/>
+
+            <ImageView
+                android:id="@+id/gilded_image_view_item_best_post"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_toEndOf="@id/type_text_view_item_best_post"
+                android:layout_centerVertical="true"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/gilded_number_text_view_item_best_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="8dp"
+                android:layout_toEndOf="@id/gilded_image_view_item_best_post"
+                android:layout_toStartOf="@id/nsfw_text_view_item_best_post"
+                android:layout_centerVertical="true"
+                android:visibility="gone"
+                android:textSize="20sp"
+                android:textColor="@color/gold"/>
 
             <TextView
                 android:id="@+id/nsfw_text_view_item_best_post"
@@ -81,11 +112,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/nsfw_rounded_corner"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_centerVertical="true"
                 android:textColor="@android:color/white"
                 android:visibility="gone"/>
 

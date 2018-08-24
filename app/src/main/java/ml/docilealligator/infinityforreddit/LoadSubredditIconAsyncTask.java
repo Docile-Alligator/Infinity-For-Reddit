@@ -1,31 +1,22 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
-import com.bumptech.glide.Glide;
-
-import java.lang.ref.WeakReference;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-
 class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {
-    private final WeakReference<Context> contextWeakReference;
-    private final WeakReference<CircleImageView> circleImageViewWeakReference;
+    interface LoadSubredditIconAsyncTaskListener {
+        void loadIconSuccess(String iconImageUrl);
+    }
 
     private SubredditDao subredditDao;
     private String subredditName;
     private String iconImageUrl;
-    private PostData postData;
+    private LoadSubredditIconAsyncTaskListener loadSubredditIconAsyncTaskListener;
 
-    LoadSubredditIconAsyncTask(Context context, CircleImageView iconImageView,
-                               SubredditDao subredditDao, String subredditName,
-                               PostData postData) {
-        contextWeakReference = new WeakReference<>(context);
-        circleImageViewWeakReference = new WeakReference<>(iconImageView);
+    LoadSubredditIconAsyncTask(SubredditDao subredditDao, String subredditName,
+                               LoadSubredditIconAsyncTaskListener loadSubredditIconAsyncTaskListener) {
         this.subredditDao = subredditDao;
         this.subredditName = subredditName;
-        this.postData = postData;
+        this.loadSubredditIconAsyncTaskListener = loadSubredditIconAsyncTaskListener;
     }
 
     @Override
@@ -41,7 +32,8 @@ class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        Context context = contextWeakReference.get();
+        loadSubredditIconAsyncTaskListener.loadIconSuccess(iconImageUrl);
+        /*Context context = contextWeakReference.get();
         CircleImageView circleImageView = circleImageViewWeakReference.get();
 
         if(context != null && circleImageView != null) {
@@ -52,6 +44,6 @@ class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {
             }
         }
 
-        postData.setSubredditIconUrl(iconImageUrl);
+        postData.setSubredditIconUrl(iconImageUrl);*/
     }
 }

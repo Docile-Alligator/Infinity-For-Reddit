@@ -86,22 +86,36 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof DataViewHolder) {
             if(mPostData.get(position) == null) {
                 Log.i("is null", Integer.toString(position));
             } else {
-                final String id = mPostData.get(position).getFullName();
-                final String subredditName = mPostData.get(position).getSubredditName();
-                final String postTime = mPostData.get(position).getPostTime();
-                final String title = mPostData.get(position).getTitle();
-                final String permalink = mPostData.get(position).getPermalink();
-                int voteType = mPostData.get(position).getVoteType();
-                boolean nsfw = mPostData.get(position).getNSFW();
+                final String id = mPostData.get(holder.getAdapterPosition()).getFullName();
+                final String subredditName = mPostData.get(holder.getAdapterPosition()).getSubredditName();
+                final String postTime = mPostData.get(holder.getAdapterPosition()).getPostTime();
+                final String title = mPostData.get(holder.getAdapterPosition()).getTitle();
+                final String permalink = mPostData.get(holder.getAdapterPosition()).getPermalink();
+                int voteType = mPostData.get(holder.getAdapterPosition()).getVoteType();
+                int gilded = mPostData.get(holder.getAdapterPosition()).getGilded();
+                boolean nsfw = mPostData.get(holder.getAdapterPosition()).isNSFW();
 
-                if(mPostData.get(position).getSubredditIconUrl() == null) {
-                    new LoadSubredditIconAsyncTask(mContext, ((DataViewHolder) holder).subredditIconCircleImageView,
-                            subredditDao, subredditName, mPostData.get(position)).execute();
+                if(mPostData.get(holder.getAdapterPosition()).getSubredditIconUrl() == null) {
+                    new LoadSubredditIconAsyncTask(subredditDao, subredditName,
+                            new LoadSubredditIconAsyncTask.LoadSubredditIconAsyncTaskListener() {
+                                @Override
+                                public void loadIconSuccess(String iconImageUrl) {
+                                    if(!iconImageUrl.equals("")) {
+                                        Glide.with(mContext).load(iconImageUrl)
+                                                .into(((DataViewHolder) holder).subredditIconCircleImageView);
+                                    } else {
+                                        Glide.with(mContext).load(R.drawable.subreddit_default_icon)
+                                                .into(((DataViewHolder) holder).subredditIconCircleImageView);
+                                    }
+
+                                    mPostData.get(holder.getAdapterPosition()).setSubredditIconUrl(iconImageUrl);
+                                }
+                            }).execute();
                 } else if(!mPostData.get(position).getSubredditIconUrl().equals("")) {
                     glide.load(mPostData.get(position).getSubredditIconUrl()).into(((DataViewHolder) holder).subredditIconCircleImageView);
                 } else {
@@ -115,7 +129,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             canStartActivity = false;
                             Intent intent = new Intent(mContext, ViewPostDetailActivity.class);
                             intent.putExtra(ViewPostDetailActivity.EXTRA_TITLE, title);
-                            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, mPostData.get(position));
+                            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, mPostData.get(holder.getAdapterPosition()));
                             mContext.startActivity(intent);
                         }
                     }
@@ -125,6 +139,14 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 ((DataViewHolder) holder).postTimeTextView.setText(postTime);
                 ((DataViewHolder) holder).titleTextView.setText(title);
                 ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(position).getScore()));
+
+                if(gilded > 0) {
+                    ((DataViewHolder) holder).gildedImageView.setVisibility(View.VISIBLE);
+                    glide.load(R.drawable.gold).into(((DataViewHolder) holder).gildedImageView);
+                    ((DataViewHolder) holder).gildedNumberTextView.setVisibility(View.VISIBLE);
+                    String gildedNumber = mContext.getResources().getString(R.string.gilded, gilded);
+                    ((DataViewHolder) holder).gildedNumberTextView.setText(gildedNumber);
+                }
 
                 if(nsfw) {
                     ((DataViewHolder) holder).nsfwTextView.setVisibility(View.VISIBLE);
@@ -145,6 +167,11 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     ((DataViewHolder) holder).relativeLayout.setVisibility(View.VISIBLE);
                     ((DataViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
                     ((DataViewHolder) holder).imageView.setVisibility(View.VISIBLE);
+                }
+
+                if(mPostData.get(position).isStickied()) {
+                    ((DataViewHolder) holder).stickiedPostImageView.setVisibility(View.VISIBLE);
+                    glide.load(R.drawable.thumbtack).into(((DataViewHolder) holder).stickiedPostImageView);
                 }
 
                 switch (mPostData.get(position).getPostType()) {
@@ -229,10 +256,10 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 Intent intent = new Intent(mContext, ViewVideoActivity.class);
                                 intent.setData(gifVideoUri);
                                 intent.putExtra(ViewVideoActivity.TITLE_KEY, title);
-                                intent.putExtra(ViewVideoActivity.IS_DASH_VIDEO_KEY, mPostData.get(position).isDashVideo());
-                                intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, mPostData.get(position).isDownloadableGifOrVideo());
-                                if(mPostData.get(position).isDownloadableGifOrVideo()) {
-                                    intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, mPostData.get(position).getGifOrVideoDownloadUrl());
+                                intent.putExtra(ViewVideoActivity.IS_DASH_VIDEO_KEY, mPostData.get(holder.getAdapterPosition()).isDashVideo());
+                                intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, mPostData.get(holder.getAdapterPosition()).isDownloadableGifOrVideo());
+                                if(mPostData.get(holder.getAdapterPosition()).isDownloadableGifOrVideo()) {
+                                    intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, mPostData.get(holder.getAdapterPosition()).getGifOrVideoDownloadUrl());
                                     intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, subredditName);
                                     intent.putExtra(ViewVideoActivity.ID_KEY, id);
                                 }
@@ -265,10 +292,10 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 Intent intent = new Intent(mContext, ViewVideoActivity.class);
                                 intent.setData(videoUri);
                                 intent.putExtra(ViewVideoActivity.TITLE_KEY, title);
-                                intent.putExtra(ViewVideoActivity.IS_DASH_VIDEO_KEY, mPostData.get(position).isDashVideo());
-                                intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, mPostData.get(position).isDownloadableGifOrVideo());
-                                if(mPostData.get(position).isDownloadableGifOrVideo()) {
-                                    intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, mPostData.get(position).getGifOrVideoDownloadUrl());
+                                intent.putExtra(ViewVideoActivity.IS_DASH_VIDEO_KEY, mPostData.get(holder.getAdapterPosition()).isDashVideo());
+                                intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, mPostData.get(holder.getAdapterPosition()).isDownloadableGifOrVideo());
+                                if(mPostData.get(holder.getAdapterPosition()).isDownloadableGifOrVideo()) {
+                                    intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, mPostData.get(holder.getAdapterPosition()).getGifOrVideoDownloadUrl());
                                     intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, subredditName);
                                     intent.putExtra(ViewVideoActivity.ID_KEY, id);
                                 }
@@ -307,9 +334,9 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         if (((DataViewHolder) holder).upvoteButton.getColorFilter() == null) {
                             ((DataViewHolder) holder).upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
                             if(isDownvotedBefore) {
-                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(position).getScore() + 2));
+                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(holder.getAdapterPosition()).getScore() + 2));
                             } else {
-                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(position).getScore() + 1));
+                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(holder.getAdapterPosition()).getScore() + 1));
                             }
 
                             new VoteThing(mContext, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingListener() {
@@ -334,7 +361,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         } else {
                             //Upvoted before
                             ((DataViewHolder) holder).upvoteButton.clearColorFilter();
-                            ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(position).getScore() - 1));
+                            ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(holder.getAdapterPosition()).getScore() - 1));
 
                             new VoteThing(mContext, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingListener() {
                                 @Override
@@ -365,9 +392,9 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         if (((DataViewHolder) holder).downvoteButton.getColorFilter() == null) {
                             ((DataViewHolder) holder).downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
                             if (isUpvotedBefore) {
-                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(position).getScore() - 2));
+                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(holder.getAdapterPosition()).getScore() - 2));
                             } else {
-                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(position).getScore() - 1));
+                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(holder.getAdapterPosition()).getScore() - 1));
                             }
 
                             new VoteThing(mContext, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingListener() {
@@ -392,7 +419,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         } else {
                             //Down voted before
                             ((DataViewHolder) holder).downvoteButton.clearColorFilter();
-                            ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(position).getScore() + 1));
+                            ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(holder.getAdapterPosition()).getScore() + 1));
 
                             new VoteThing(mContext, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingListener() {
                                 @Override
@@ -471,9 +498,12 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private CardView cardView;
         private CircleImageView subredditIconCircleImageView;
         private TextView subredditNameTextView;
+        private ImageView stickiedPostImageView;
         private TextView postTimeTextView;
         private TextView titleTextView;
         private TextView typeTextView;
+        private ImageView gildedImageView;
+        private TextView gildedNumberTextView;
         private TextView nsfwTextView;
         private RelativeLayout relativeLayout;
         private ProgressBar progressBar;
@@ -489,9 +519,12 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             cardView = itemView.findViewById(R.id.card_view_view_post_detail);
             subredditIconCircleImageView = itemView.findViewById(R.id.subreddit_icon_circle_image_view_best_post_item);
             subredditNameTextView = itemView.findViewById(R.id.subreddit_text_view_best_post_item);
+            stickiedPostImageView = itemView.findViewById(R.id.stickied_post_image_view_best_post_item);
             postTimeTextView = itemView.findViewById(R.id.post_time_text_view_best_post_item);
             titleTextView = itemView.findViewById(R.id.title_text_view_best_post_item);
             typeTextView = itemView.findViewById(R.id.type_text_view_item_best_post);
+            gildedImageView = itemView.findViewById(R.id.gilded_image_view_item_best_post);
+            gildedNumberTextView = itemView.findViewById(R.id.gilded_number_text_view_item_best_post);
             nsfwTextView = itemView.findViewById(R.id.nsfw_text_view_item_best_post);
             relativeLayout = itemView.findViewById(R.id.image_view_wrapper_item_best_post);
             progressBar = itemView.findViewById(R.id.progress_bar_best_post_item);
@@ -522,7 +555,11 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if(holder instanceof DataViewHolder) {
             glide.clear(((DataViewHolder) holder).imageView);
+            glide.clear(((DataViewHolder) holder).subredditIconCircleImageView);
+            ((DataViewHolder) holder).stickiedPostImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).relativeLayout.setVisibility(View.GONE);
+            ((DataViewHolder) holder).gildedNumberTextView.setVisibility(View.GONE);
+            glide.clear(((DataViewHolder) holder).gildedImageView);
             ((DataViewHolder) holder).nsfwTextView.setVisibility(View.GONE);
             ((DataViewHolder) holder).progressBar.setVisibility(View.GONE);
             ((DataViewHolder) holder).imageView.setVisibility(View.GONE);

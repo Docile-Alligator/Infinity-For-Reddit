@@ -188,10 +188,6 @@ public class PostFragment extends Fragment {
 
         mProgressBar.setVisibility(View.VISIBLE);
 
-        /*Uri uri = Uri.parse(RedditUtils.OAUTH_API_BASE_URI + RedditUtils.BEST_POST_SUFFIX)
-                .buildUpon().appendQueryParameter(RedditUtils.RAW_JSON_KEY, RedditUtils.RAW_JSON_VALUE)
-                .build();*/
-
         StringRequest postRequest = new StringRequest(Request.Method.GET, mQueryPostUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

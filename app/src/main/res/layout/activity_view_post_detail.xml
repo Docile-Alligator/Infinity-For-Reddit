@@ -103,6 +103,27 @@
                             android:background="@drawable/rounded_corner"
                             android:textColor="@android:color/white" />
 
+                        <ImageView
+                            android:id="@+id/gilded_image_view_view_post_detail"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_toEndOf="@id/type_text_view_view_post_detail"
+                            android:layout_centerVertical="true"
+                            android:visibility="gone"/>
+
+                        <TextView
+                            android:id="@+id/gilded_number_text_view_view_post_detail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_toEndOf="@id/gilded_image_view_view_post_detail"
+                            android:layout_toStartOf="@id/nsfw_text_view_view_post_detail"
+                            android:layout_centerVertical="true"
+                            android:visibility="gone"
+                            android:textSize="20sp"
+                            android:textColor="@color/gold"/>
+
                         <TextView
                             android:id="@+id/nsfw_text_view_view_post_detail"
                             android:layout_width="wrap_content"

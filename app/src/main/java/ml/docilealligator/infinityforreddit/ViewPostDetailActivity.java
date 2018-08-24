@@ -57,6 +57,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private LinearLayout mNoCommentWrapperLinearLayout;
     private ImageView mNoCommentImageView;
 
+    private LoadSubredditIconAsyncTask mLoadSubredditIconAsyncTask;
+
     private RequestQueue mVoteThingRequestQueue;
     private RequestQueue mAcquireAccessTokenRequestQueue;
     private RequestQueue mCommentQueue;
@@ -76,11 +78,13 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
         mCoordinatorLayout = findViewById(R.id.coordinator_layout_view_post_detail);
 
-        CircleImageView subredditIconCircleImageView = findViewById(R.id.subreddit_icon_circle_image_view_view_post_detail);
+        final CircleImageView subredditIconCircleImageView = findViewById(R.id.subreddit_icon_circle_image_view_view_post_detail);
         TextView postTimeTextView = findViewById(R.id.post_time_text_view_view_post_detail);
         TextView subredditTextView = findViewById(R.id.subreddit_text_view_view_post_detail);
         HtmlTextView contentTextView = findViewById(R.id.content_html_text_view_view_post_detail);
         TextView typeTextView = findViewById(R.id.type_text_view_view_post_detail);
+        ImageView gildedImageView = findViewById(R.id.gilded_image_view_view_post_detail);
+        TextView gildedNumberTextView = findViewById(R.id.gilded_number_text_view_view_post_detail);
         TextView nsfwTextView = findViewById(R.id.nsfw_text_view_view_post_detail);
         RelativeLayout relativeLayout = findViewById(R.id.image_view_wrapper_view_post_detail);
         final ProgressBar progressBar = findViewById(R.id.progress_bar_view_post_detail);
@@ -100,9 +104,23 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         mNoCommentImageView = findViewById(R.id.no_comment_image_view_view_post_detail);
 
         if(mPostData.getSubredditIconUrl() == null) {
-            new LoadSubredditIconAsyncTask(this, subredditIconCircleImageView,
+            mLoadSubredditIconAsyncTask = new LoadSubredditIconAsyncTask(
                     SubredditRoomDatabase.getDatabase(this).subredditDao(), mPostData.getSubredditName(),
-                    mPostData).execute();
+                    new LoadSubredditIconAsyncTask.LoadSubredditIconAsyncTaskListener() {
+                @Override
+                public void loadIconSuccess(String iconImageUrl) {
+                    if(!iconImageUrl.equals("")) {
+                        Glide.with(ViewPostDetailActivity.this).load(iconImageUrl)
+                                .into(subredditIconCircleImageView);
+                    } else {
+                        Glide.with(ViewPostDetailActivity.this).load(R.drawable.subreddit_default_icon)
+                                .into(subredditIconCircleImageView);
+                    }
+
+                    mPostData.setSubredditIconUrl(iconImageUrl);
+                }
+            });
+            mLoadSubredditIconAsyncTask.execute();
         } else if(!mPostData.getSubredditIconUrl().equals("")) {
             Glide.with(this).load(mPostData.getSubredditIconUrl()).into(subredditIconCircleImageView);
         } else {
@@ -129,7 +147,16 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
         subredditTextView.setText(mPostData.getSubredditName());
         postTimeTextView.setText(mPostData.getPostTime());
-        if(mPostData.getNSFW()) {
+
+        if(mPostData.getGilded() > 0) {
+            gildedImageView.setVisibility(View.VISIBLE);
+            Glide.with(this).load(R.drawable.gold).into(gildedImageView);
+            gildedNumberTextView.setVisibility(View.VISIBLE);
+            String gildedNumber = getResources().getString(R.string.gilded, mPostData.getGilded());
+            gildedNumberTextView.setText(gildedNumber);
+        }
+
+        if(mPostData.isNSFW()) {
             nsfwTextView.setVisibility(View.VISIBLE);
         }
         scoreTextView.setText(Integer.toString(mPostData.getScore()));
@@ -177,6 +204,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             case PostData.LINK_TYPE:
                 relativeLayout.setVisibility(View.VISIBLE);
                 typeTextView.setText("LINK");
+                if(!mPostData.getSelfText().equals("")) {
+                    contentTextView.setVisibility(View.VISIBLE);
+                    contentTextView.setHtml(mPostData.getSelfText());
+                }
                 String linkPreviewUrl = mPostData.getPreviewUrl();
                 Glide.with(this).load(linkPreviewUrl).listener(new RequestListener<Drawable>() {
                     @Override
@@ -279,6 +310,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 break;
             case PostData.NO_PREVIEW_LINK_TYPE:
                 typeTextView.setText("LINK");
+                if(!mPostData.getSelfText().equals("")) {
+                    contentTextView.setVisibility(View.VISIBLE);
+                    contentTextView.setHtml(mPostData.getSelfText());
+                }
                 noPreviewLinkImageView.setVisibility(View.VISIBLE);
                 noPreviewLinkImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -533,6 +568,14 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             super.onBackPressed();
         } else {
             finish();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mLoadSubredditIconAsyncTask != null) {
+            mLoadSubredditIconAsyncTask.cancel(true);
         }
     }
 }
