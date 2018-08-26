@@ -92,7 +92,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 Log.i("is null", Integer.toString(position));
             } else {
                 final String id = mPostData.get(holder.getAdapterPosition()).getFullName();
-                final String subredditName = mPostData.get(holder.getAdapterPosition()).getSubredditName();
+                final String subredditName = mPostData.get(holder.getAdapterPosition()).getSubredditNamePrefixed();
                 final String postTime = mPostData.get(holder.getAdapterPosition()).getPostTime();
                 final String title = mPostData.get(holder.getAdapterPosition()).getTitle();
                 final String permalink = mPostData.get(holder.getAdapterPosition()).getPermalink();
@@ -132,6 +132,15 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, mPostData.get(holder.getAdapterPosition()));
                             mContext.startActivity(intent);
                         }
+                    }
+                });
+
+                ((DataViewHolder) holder).subredditIconCircleImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
+                        intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME,
+                                mPostData.get(holder.getAdapterPosition()).getSubredditNamePrefixed().substring(2));
                     }
                 });
 

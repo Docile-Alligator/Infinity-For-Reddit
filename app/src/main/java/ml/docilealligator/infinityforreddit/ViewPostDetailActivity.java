@@ -105,7 +105,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
         if(mPostData.getSubredditIconUrl() == null) {
             mLoadSubredditIconAsyncTask = new LoadSubredditIconAsyncTask(
-                    SubredditRoomDatabase.getDatabase(this).subredditDao(), mPostData.getSubredditName(),
+                    SubredditRoomDatabase.getDatabase(this).subredditDao(), mPostData.getSubredditNamePrefixed(),
                     new LoadSubredditIconAsyncTask.LoadSubredditIconAsyncTaskListener() {
                 @Override
                 public void loadIconSuccess(String iconImageUrl) {
@@ -145,7 +145,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         mAcquireAccessTokenRequestQueue = Volley.newRequestQueue(this);
         mCommentQueue = Volley.newRequestQueue(this);
 
-        subredditTextView.setText(mPostData.getSubredditName());
+        subredditTextView.setText(mPostData.getSubredditNamePrefixed());
         postTimeTextView.setText(mPostData.getPostTime());
 
         if(mPostData.getGilded() > 0) {
@@ -195,7 +195,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                         Intent intent = new Intent(ViewPostDetailActivity.this, ViewImageActivity.class);
                         intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, mPostData.getUrl());
                         intent.putExtra(ViewImageActivity.TITLE_KEY, mPostData.getTitle());
-                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, mPostData.getSubredditName().substring(2)
+                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, mPostData.getSubredditNamePrefixed().substring(2)
                                 + "-" + mPostData.getId().substring(3));
                         startActivity(intent);
                     }
@@ -264,7 +264,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                         intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, mPostData.isDownloadableGifOrVideo());
                         if(mPostData.isDownloadableGifOrVideo()) {
                             intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, mPostData.getGifOrVideoDownloadUrl());
-                            intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, mPostData.getSubredditName());
+                            intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, mPostData.getSubredditNamePrefixed());
                             intent.putExtra(ViewVideoActivity.ID_KEY, mPostData.getId());
                         }
                         startActivity(intent);
@@ -301,7 +301,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                         intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, mPostData.isDownloadableGifOrVideo());
                         if(mPostData.isDownloadableGifOrVideo()) {
                             intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, mPostData.getGifOrVideoDownloadUrl());
-                            intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, mPostData.getSubredditName());
+                            intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, mPostData.getSubredditNamePrefixed());
                             intent.putExtra(ViewVideoActivity.ID_KEY, mPostData.getId());
                         }
                         startActivity(intent);
@@ -494,7 +494,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private void queryComment() {
         mCommentProgressbar.setVisibility(View.VISIBLE);
         mNoCommentWrapperLinearLayout.setVisibility(View.GONE);
-        new FetchComment(mCommentQueue, mPostData.getSubredditName(), mPostData.getId()).queryComment(new FetchComment.FetchCommentListener() {
+        new FetchComment(mCommentQueue, mPostData.getSubredditNamePrefixed(), mPostData.getId()).queryComment(new FetchComment.FetchCommentListener() {
             @Override
             public void onFetchCommentSuccess(String response) {
                 new ParseComment().parseComment(ViewPostDetailActivity.this, response, new ArrayList<CommentData>(), new ParseComment.ParseCommentListener() {

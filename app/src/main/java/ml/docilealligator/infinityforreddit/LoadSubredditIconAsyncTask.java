@@ -33,17 +33,5 @@ class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         loadSubredditIconAsyncTaskListener.loadIconSuccess(iconImageUrl);
-        /*Context context = contextWeakReference.get();
-        CircleImageView circleImageView = circleImageViewWeakReference.get();
-
-        if(context != null && circleImageView != null) {
-            if(!iconImageUrl.equals("")) {
-                Glide.with(context).load(iconImageUrl).into(circleImageView);
-            } else {
-                Glide.with(context).load(R.drawable.subreddit_default_icon).into(circleImageView);
-            }
-        }
-
-        postData.setSubredditIconUrl(iconImageUrl);*/
     }
 }

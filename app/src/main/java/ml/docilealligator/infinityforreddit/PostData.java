@@ -17,7 +17,7 @@ class PostData implements Parcelable {
 
     private String id;
     private String fullName;
-    private String subredditName;
+    private String subredditNamePrefixed;
     private String subredditIconUrl;
     private String postTime;
     private String title;
@@ -36,12 +36,12 @@ class PostData implements Parcelable {
     private boolean isDashVideo;
     private boolean isDownloadableGifOrVideo;
 
-    PostData(String id, String fullName, String subredditName, String postTime, String title,
+    PostData(String id, String fullName, String subredditNamePrefixed, String postTime, String title,
              String previewUrl, String permalink, int score, int postType, int voteType, int gilded,
              boolean nsfw, boolean stickied, boolean isDashVideo) {
         this.id = id;
         this.fullName = fullName;
-        this.subredditName = subredditName;
+        this.subredditNamePrefixed = subredditNamePrefixed;
         this.postTime = postTime;
         this.title = title;
         this.previewUrl = previewUrl;
@@ -55,12 +55,12 @@ class PostData implements Parcelable {
         this.isDashVideo = isDashVideo;
     }
 
-    PostData(String id, String fullName, String subredditName, String postTime, String title,
+    PostData(String id, String fullName, String subredditNamePrefixed, String postTime, String title,
              String previewUrl, String url, String permalink, int score, int postType, int voteType,
              int gilded, boolean nsfw, boolean stickied) {
         this.id = id;
         this.fullName = fullName;
-        this.subredditName = subredditName;
+        this.subredditNamePrefixed = subredditNamePrefixed;
         this.postTime = postTime;
         this.title = title;
         this.previewUrl = previewUrl;
@@ -74,12 +74,12 @@ class PostData implements Parcelable {
         this.stickied = stickied;
     }
 
-    PostData(String id, String fullName, String subredditName, String postTime, String title,
+    PostData(String id, String fullName, String subredditNamePrefixed, String postTime, String title,
              String permalink, int score, int postType, int voteType, int gilded, boolean nsfw,
              boolean stickied) {
         this.id = id;
         this.fullName = fullName;
-        this.subredditName = subredditName;
+        this.subredditNamePrefixed = subredditNamePrefixed;
         this.postTime = postTime;
         this.title = title;
         this.permalink = RedditUtils.API_BASE_URI + permalink;
@@ -94,7 +94,7 @@ class PostData implements Parcelable {
     protected PostData(Parcel in) {
         id = in.readString();
         fullName = in.readString();
-        subredditName = in.readString();
+        subredditNamePrefixed = in.readString();
         subredditIconUrl = in.readString();
         postTime = in.readString();
         title = in.readString();
@@ -134,8 +134,8 @@ class PostData implements Parcelable {
         return fullName;
     }
 
-    public String getSubredditName() {
-        return subredditName;
+    public String getSubredditNamePrefixed() {
+        return subredditNamePrefixed;
     }
 
     public String getSubredditIconUrl() {
@@ -247,7 +247,7 @@ class PostData implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(id);
         parcel.writeString(fullName);
-        parcel.writeString(subredditName);
+        parcel.writeString(subredditNamePrefixed);
         parcel.writeString(subredditIconUrl);
         parcel.writeString(postTime);
         parcel.writeString(title);

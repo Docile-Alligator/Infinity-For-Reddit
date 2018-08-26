@@ -40,7 +40,6 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        String id = getIntent().getExtras().getString(EXTRA_SUBREDDIT_ID);
         final String subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
 
         final String title = "r/" + subredditName;
@@ -75,6 +74,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         final TextView descriptionTextView = findViewById(R.id.description_text_view_view_subreddit_detail_activity);
         final RequestManager glide = Glide.with(ViewSubredditDetailActivity.this);
 
+        String id = getIntent().getExtras().getString(EXTRA_SUBREDDIT_ID);
         SubredditViewModel.Factory factory = new SubredditViewModel.Factory(getApplication(), id);
         mSubredditViewModel = ViewModelProviders.of(this, factory).get(SubredditViewModel.class);
         mSubredditViewModel.getSubredditLiveData().observe(this, new Observer<SubredditData>() {

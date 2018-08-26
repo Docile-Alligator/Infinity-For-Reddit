@@ -65,7 +65,7 @@ class ParsePost {
                     JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
                     String id = data.getString(JSONUtils.ID_KEY);
                     String fullName = data.getString(JSONUtils.NAME_KEY);
-                    String subredditName = data.getString(JSONUtils.SUBREDDIT_NAME_PREFIX_KEY);
+                    String subredditNamePrefixed = data.getString(JSONUtils.SUBREDDIT_NAME_PREFIX_KEY);
                     long postTime = data.getLong(JSONUtils.CREATED_UTC_KEY) * 1000;
                     String title = data.getString(JSONUtils.TITLE_KEY);
                     int score = data.getInt(JSONUtils.SCORE_KEY);
@@ -94,10 +94,10 @@ class ParsePost {
                     if(data.has(JSONUtils.CROSSPOST_PARENT_LIST)) {
                         //Cross post
                         data = data.getJSONArray(JSONUtils.CROSSPOST_PARENT_LIST).getJSONObject(0);
-                        parseData(data, permalink, newPostData, id, fullName, subredditName,
+                        parseData(data, permalink, newPostData, id, fullName, subredditNamePrefixed,
                                 formattedPostTime, title, previewUrl, score, voteType, gilded, nsfw, stickied, i);
                     } else {
-                        parseData(data, permalink, newPostData, id, fullName, subredditName,
+                        parseData(data, permalink, newPostData, id, fullName, subredditNamePrefixed,
                                 formattedPostTime, title, previewUrl, score, voteType, gilded, nsfw, stickied, i);
                     }
                 }
@@ -121,7 +121,7 @@ class ParsePost {
     }
 
     private void parseData(JSONObject data, String permalink, ArrayList<PostData> bestPostData,
-                           String id, String fullName, String subredditName, String formattedPostTime,
+                           String id, String fullName, String subredditNamePrefixed, String formattedPostTime,
                            String title, String previewUrl, int score, int voteType, int gilded,
                            boolean nsfw, boolean stickied, int i) throws JSONException {
         boolean isVideo = data.getBoolean(JSONUtils.IS_VIDEO_KEY);
@@ -132,7 +132,7 @@ class ParsePost {
                 //Text post
                 Log.i("text", Integer.toString(i));
                 int postType = PostData.TEXT_TYPE;
-                PostData postData = new PostData(id, fullName, subredditName, formattedPostTime,
+                PostData postData = new PostData(id, fullName, subredditNamePrefixed, formattedPostTime,
                         title, permalink, score, postType, voteType, gilded, nsfw, stickied);
                 if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
                     postData.setSelfText("");
@@ -144,7 +144,7 @@ class ParsePost {
                 //No preview link post
                 Log.i("no preview link", Integer.toString(i));
                 int postType = PostData.NO_PREVIEW_LINK_TYPE;
-                PostData linkPostData = new PostData(id, fullName, subredditName, formattedPostTime,
+                PostData linkPostData = new PostData(id, fullName, subredditNamePrefixed, formattedPostTime,
                         title, previewUrl, url, permalink, score, postType, voteType, gilded, nsfw, stickied);
                 if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
                     linkPostData.setSelfText("");
@@ -160,7 +160,7 @@ class ParsePost {
             int postType = PostData.VIDEO_TYPE;
             String videoUrl = redditVideoObject.getString(JSONUtils.DASH_URL_KEY);
 
-            PostData videoPostData = new PostData(id, fullName, subredditName, formattedPostTime,
+            PostData videoPostData = new PostData(id, fullName, subredditNamePrefixed, formattedPostTime,
                     title, previewUrl, permalink, score, postType, voteType, gilded, nsfw, stickied, true);
 
             videoPostData.setVideoUrl(videoUrl);
@@ -175,7 +175,7 @@ class ParsePost {
                 int postType = PostData.GIF_VIDEO_TYPE;
                 String videoUrl = variations.getJSONObject(JSONUtils.VARIANTS_KEY).getJSONObject(JSONUtils.MP4_KEY).getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY);
                 String gifDownloadUrl = variations.getJSONObject(JSONUtils.VARIANTS_KEY).getJSONObject(JSONUtils.GIF_KEY).getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY);
-                PostData post = new PostData(id, fullName, subredditName, formattedPostTime, title,
+                PostData post = new PostData(id, fullName, subredditNamePrefixed, formattedPostTime, title,
                         previewUrl, permalink, score, postType, voteType, gilded, nsfw, stickied, false);
 
                 post.setVideoUrl(videoUrl);
@@ -190,7 +190,7 @@ class ParsePost {
                 String videoUrl = data.getJSONObject(JSONUtils.PREVIEW_KEY)
                         .getJSONObject(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY).getString(JSONUtils.DASH_URL_KEY);
 
-                PostData post = new PostData(id, fullName, subredditName, formattedPostTime, title,
+                PostData post = new PostData(id, fullName, subredditNamePrefixed, formattedPostTime, title,
                         previewUrl, permalink, score, postType, voteType, gilded, nsfw, stickied, true);
 
                 post.setVideoUrl(videoUrl);
@@ -202,13 +202,13 @@ class ParsePost {
                     //Image post
                     Log.i("image", Integer.toString(i));
                     int postType = PostData.IMAGE_TYPE;
-                    bestPostData.add(new PostData(id, fullName, subredditName, formattedPostTime,
+                    bestPostData.add(new PostData(id, fullName, subredditNamePrefixed, formattedPostTime,
                             title, url, url, permalink, score, postType, voteType, gilded, nsfw, stickied));
                 } else {
                     //Link post
                     Log.i("link", Integer.toString(i));
                     int postType = PostData.LINK_TYPE;
-                    PostData linkPostData = new PostData(id, fullName, subredditName, formattedPostTime,
+                    PostData linkPostData = new PostData(id, fullName, subredditNamePrefixed, formattedPostTime,
                             title, previewUrl, url, permalink, score, postType, voteType, gilded, nsfw, stickied);
                     if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
                         linkPostData.setSelfText("");
@@ -223,13 +223,13 @@ class ParsePost {
                 //Image post
                 Log.i("CP no preview image", Integer.toString(i));
                 int postType = PostData.IMAGE_TYPE;
-                bestPostData.add(new PostData(id, fullName, subredditName, formattedPostTime, title,
+                bestPostData.add(new PostData(id, fullName, subredditNamePrefixed, formattedPostTime, title,
                         url, url, permalink, score, postType, voteType, gilded, nsfw, stickied));
             } else {
                 //Link post
                 Log.i("CP no preview link", Integer.toString(i));
                 int postType = PostData.LINK_TYPE;
-                PostData linkPostData = new PostData(id, fullName, subredditName, formattedPostTime,
+                PostData linkPostData = new PostData(id, fullName, subredditNamePrefixed, formattedPostTime,
                         title, previewUrl, url, permalink, score, postType, voteType, gilded, nsfw, stickied);
                 bestPostData.add(linkPostData);
             }
