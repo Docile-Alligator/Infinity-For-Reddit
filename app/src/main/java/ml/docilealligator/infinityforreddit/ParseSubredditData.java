@@ -12,11 +12,8 @@ class ParseSubredditData {
         void onParseSubredditDataFail();
     }
 
-    private ParseSubredditDataListener mParseSubredditDataListener;
-
-    void parseComment(String response, ParseSubredditDataListener parseSubredditDataListener) {
-        mParseSubredditDataListener = parseSubredditDataListener;
-        new ParseSubredditDataAsyncTask(response, mParseSubredditDataListener).execute();
+    static void parseComment(String response, ParseSubredditDataListener parseSubredditDataListener) {
+        new ParseSubredditDataAsyncTask(response, parseSubredditDataListener).execute();
     }
 
     private static class ParseSubredditDataAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -42,8 +39,8 @@ class ParseSubredditData {
             try {
                 JSONObject data = jsonResponse.getJSONObject(JSONUtils.DATA_KEY);
                 String id = data.getString(JSONUtils.NAME_KEY);
-                String subredditFullName = data.getString(JSONUtils.DISPLAY_NAME_PREFIXED);
-                String description = data.getString(JSONUtils.PUBLIC_DESCRIPTION).trim();
+                String subredditFullName = data.getString(JSONUtils.DISPLAY_NAME_PREFIXED_KEY);
+                String description = data.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY).trim();
                 String bannerImageUrl = data.getString(JSONUtils.BANNER_BACKGROUND_IMAGE_KEY);
                 if(bannerImageUrl.equals("") || bannerImageUrl.equals("null")) {
                     bannerImageUrl= data.getString(JSONUtils.BANNER_IMG_KEY);
@@ -59,7 +56,7 @@ class ParseSubredditData {
                     }
                 }
                 int nSubscribers = data.getInt(JSONUtils.SUBSCRIBERS_KEY);
-                int nCurrentOnlineSubscribers = data.getInt(JSONUtils.ACTIVE_USER_COUNT);
+                int nCurrentOnlineSubscribers = data.getInt(JSONUtils.ACTIVE_USER_COUNT_KEY);
                 subredditData = new SubredditData(id, subredditFullName, iconUrl, bannerImageUrl, description, nSubscribers);
                 mNCurrentOnlineSubscribers = nCurrentOnlineSubscribers;
             } catch (JSONException e) {

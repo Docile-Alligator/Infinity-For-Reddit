@@ -62,8 +62,8 @@ class JSONUtils {
     static final String SUBREDDIT_TYPE_KEY = "subreddit_type";
     static final String SUBREDDIT_TYPE_VALUE_USER = "user";
     static final String SUBSCRIBERS_KEY = "subscribers";
-    static final String PUBLIC_DESCRIPTION = "public_description";
-    static final String ACTIVE_USER_COUNT = "active_user_count";
-    static final String DISPLAY_NAME_PREFIXED = "display_name_prefixed";
-    static final String LINK_ID = "link_id";
+    static final String PUBLIC_DESCRIPTION_KEY = "public_description";
+    static final String ACTIVE_USER_COUNT_KEY = "active_user_count";
+    static final String DISPLAY_NAME_PREFIXED_KEY = "display_name_prefixed";
+    static final String LINK_ID_KEY = "link_id";
 }

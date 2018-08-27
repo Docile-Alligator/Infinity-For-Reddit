@@ -19,6 +19,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -39,6 +40,7 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
     private boolean isBestPost;
     private boolean isLoading;
     private boolean loadSuccess;
+    private Locale locale;
     private String mLastItem;
     private RequestQueue mRequestQueue;
     private RequestQueue mAcquireAccessTokenRequestQueue;
@@ -46,7 +48,7 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
     PostPaginationScrollListener(Context context, LinearLayoutManager layoutManager, PostRecyclerViewAdapter adapter,
                                  String lastItem, ArrayList<PostData> postData, PaginationSynchronizer paginationSynchronizer,
                                  RequestQueue acquireAccessTokenRequestQueue, final String queryPostUrl,
-                                 final boolean isBestPost, boolean isLoading, boolean loadSuccess) {
+                                 final boolean isBestPost, boolean isLoading, boolean loadSuccess, Locale locale) {
         if(context != null) {
             this.mContext = context;
             this.mLayoutManager = layoutManager;
@@ -59,6 +61,7 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
             this.isBestPost = isBestPost;
             this.isLoading = isLoading;
             this.loadSuccess = loadSuccess;
+            this.locale = locale;
 
             mRequestQueue = Volley.newRequestQueue(mContext);
             mAcquireAccessTokenRequestQueue = Volley.newRequestQueue(mContext);
@@ -117,7 +120,7 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
                 ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("response", response);
                 clipboard.setPrimaryClip(clip);
-                new ParsePost(mContext, new ParsePost.ParsePostListener() {
+                ParsePost.parsePost(response, mPostData, locale, new ParsePost.ParsePostListener() {
                     @Override
                     public void onParsePostSuccess(ArrayList<PostData> bestPostData, String lastItem) {
                         mAdapter.notifyDataSetChanged();
@@ -136,7 +139,7 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
                         Log.i("Best post", "Error parsing data");
                         loadFailed();
                     }
-                }).parsePost(response, mPostData);
+                });
             }
         }, new Response.ErrorListener() {
             @Override
@@ -190,7 +193,7 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
                 ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("response", response);
                 clipboard.setPrimaryClip(clip);
-                new ParsePost(mContext, new ParsePost.ParsePostListener() {
+                ParsePost.parsePost(response, mPostData, locale, new ParsePost.ParsePostListener() {
                     @Override
                     public void onParsePostSuccess(ArrayList<PostData> bestPostData, String lastItem) {
                         mAdapter.notifyDataSetChanged();
@@ -209,7 +212,7 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
                         Log.i("Best post", "Error parsing data");
                         loadFailed();
                     }
-                }).parsePost(response, mPostData);
+                });
             }
         }, new Response.ErrorListener() {
             @Override

@@ -77,7 +77,8 @@ public class PostFragment extends Fragment {
                         getActivity(), mLinearLayoutManager, mAdapter, mLastItem, mPostData,
                         mPaginationSynchronizer, mAcquireAccessTokenRequestQueue,
                         mQueryPostUrl, mIsBestPost,
-                        mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess()));
+                        mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
+                        getResources().getConfiguration().locale));
                 mProgressBar.setVisibility(View.GONE);
             } else {
                 if(mIsBestPost) {
@@ -196,29 +197,31 @@ public class PostFragment extends Fragment {
                     ClipData clip = ClipData.newPlainText("response", response);
                     clipboard.setPrimaryClip(clip);
                     //new ParsePostDataAsyncTask(response, accessToken).execute();
-                    new ParsePost(getActivity(), new ParsePost.ParsePostListener() {
-                        @Override
-                        public void onParsePostSuccess(ArrayList<PostData> postData, String lastItem) {
-                            mPostData = postData;
-                            mLastItem = lastItem;
-                            mAdapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue);
+                    ParsePost.parsePost(response, new ArrayList<PostData>(),
+                            getResources().getConfiguration().locale, new ParsePost.ParsePostListener() {
+                                @Override
+                                public void onParsePostSuccess(ArrayList<PostData> postData, String lastItem) {
+                                    mPostData = postData;
+                                    mLastItem = lastItem;
+                                    mAdapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue);
 
-                            mPostRecyclerView.setAdapter(mAdapter);
-                            mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
-                                    getActivity(), mLinearLayoutManager, mAdapter, lastItem, postData,
-                                    mPaginationSynchronizer, mAcquireAccessTokenRequestQueue,
-                                    mQueryPostUrl, mIsBestPost,
-                                    mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess()));
-                            mProgressBar.setVisibility(View.GONE);
-                        }
+                                    mPostRecyclerView.setAdapter(mAdapter);
+                                    mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
+                                            getActivity(), mLinearLayoutManager, mAdapter, lastItem, postData,
+                                            mPaginationSynchronizer, mAcquireAccessTokenRequestQueue,
+                                            mQueryPostUrl, mIsBestPost,
+                                            mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
+                                            getResources().getConfiguration().locale));
+                                    mProgressBar.setVisibility(View.GONE);
+                                }
 
-                        @Override
-                        public void onParsePostFail() {
-                            Toast.makeText(getActivity(), "Error parsing data", Toast.LENGTH_SHORT).show();
-                            Log.i("Post fetch error", "Error parsing data");
-                            mProgressBar.setVisibility(View.GONE);
-                        }
-                    }).parsePost(response, new ArrayList<PostData>());
+                                @Override
+                                public void onParsePostFail() {
+                                    Toast.makeText(getActivity(), "Error parsing data", Toast.LENGTH_SHORT).show();
+                                    Log.i("Post fetch error", "Error parsing data");
+                                    mProgressBar.setVisibility(View.GONE);
+                                }
+                            });
                 }
             }
         }, new Response.ErrorListener() {
@@ -273,29 +276,31 @@ public class PostFragment extends Fragment {
                     ClipData clip = ClipData.newPlainText("response", response);
                     clipboard.setPrimaryClip(clip);
                     //new ParsePostDataAsyncTask(response, accessToken).execute();
-                    new ParsePost(getActivity(), new ParsePost.ParsePostListener() {
-                        @Override
-                        public void onParsePostSuccess(ArrayList<PostData> postData, String lastItem) {
-                            mPostData = postData;
-                            mLastItem = lastItem;
-                            mAdapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue);
+                    ParsePost.parsePost(response, new ArrayList<PostData>(),
+                            getResources().getConfiguration().locale, new ParsePost.ParsePostListener() {
+                                @Override
+                                public void onParsePostSuccess(ArrayList<PostData> postData, String lastItem) {
+                                    mPostData = postData;
+                                    mLastItem = lastItem;
+                                    mAdapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue);
 
-                            mPostRecyclerView.setAdapter(mAdapter);
-                            mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
-                                    getActivity(), mLinearLayoutManager, mAdapter, lastItem, postData,
-                                    mPaginationSynchronizer, mAcquireAccessTokenRequestQueue,
-                                    mQueryPostUrl, mIsBestPost,
-                                    mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess()));
-                            mProgressBar.setVisibility(View.GONE);
-                        }
+                                    mPostRecyclerView.setAdapter(mAdapter);
+                                    mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
+                                            getActivity(), mLinearLayoutManager, mAdapter, lastItem, postData,
+                                            mPaginationSynchronizer, mAcquireAccessTokenRequestQueue,
+                                            mQueryPostUrl, mIsBestPost,
+                                            mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
+                                            getResources().getConfiguration().locale));
+                                    mProgressBar.setVisibility(View.GONE);
+                                }
 
-                        @Override
-                        public void onParsePostFail() {
-                            Toast.makeText(getActivity(), "Error parsing data", Toast.LENGTH_SHORT).show();
-                            Log.i("Post fetch error", "Error parsing data");
-                            mProgressBar.setVisibility(View.GONE);
-                        }
-                    }).parsePost(response, new ArrayList<PostData>());
+                                @Override
+                                public void onParsePostFail() {
+                                    Toast.makeText(getActivity(), "Error parsing data", Toast.LENGTH_SHORT).show();
+                                    Log.i("Post fetch error", "Error parsing data");
+                                    mProgressBar.setVisibility(View.GONE);
+                                }
+                            });
                 }
             }
         }, new Response.ErrorListener() {

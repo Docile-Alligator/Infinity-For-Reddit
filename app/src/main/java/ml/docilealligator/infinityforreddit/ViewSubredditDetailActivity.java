@@ -140,7 +140,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         new FetchSubredditData(Volley.newRequestQueue(this), subredditName).querySubredditData(new FetchSubredditData.FetchSubredditDataListener() {
             @Override
             public void onFetchSubredditDataSuccess(String response) {
-                new ParseSubredditData().parseComment(response, new ParseSubredditData.ParseSubredditDataListener() {
+                ParseSubredditData.parseComment(response, new ParseSubredditData.ParseSubredditDataListener() {
                     @Override
                     public void onParseSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                         new InsertSubredditDataAsyncTask(SubredditRoomDatabase.getDatabase(ViewSubredditDetailActivity.this), subredditData)

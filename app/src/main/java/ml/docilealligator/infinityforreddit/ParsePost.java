@@ -1,9 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,6 +10,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by alex on 3/21/18.
@@ -24,34 +23,31 @@ class ParsePost {
         void onParsePostFail();
     }
 
-    private Context mContext;
-    private ParsePostListener mParseBetPostListener;
-
-    ParsePost(Context context, ParsePostListener parsePostListener) {
-        mContext = context;
-        mParseBetPostListener = parsePostListener;
+    static void parsePost(String response, ArrayList<PostData> postData, Locale locale,
+                   ParsePostListener parsePostListener) {
+        new ParsePostDataAsyncTask(response, postData, locale, parsePostListener).execute();
     }
 
-    void parsePost(String response, ArrayList<PostData> postData) {
-        new ParsePostDataAsyncTask(response, postData).execute();
-    }
-
-    private class ParsePostDataAsyncTask extends AsyncTask<Void, Void, Void> {
+    private static class ParsePostDataAsyncTask extends AsyncTask<Void, Void, Void> {
         private JSONObject jsonResponse;
         private ArrayList<PostData> postData;
+        private Locale locale;
+        private ParsePostListener parsePostListener;
         private ArrayList<PostData> newPostData;
         private String lastItem;
         private boolean parseFailed;
 
-        ParsePostDataAsyncTask(String response, ArrayList<PostData> postData) {
+        ParsePostDataAsyncTask(String response, ArrayList<PostData> postData, Locale locale,
+                               ParsePostListener parsePostListener) {
             try {
                 jsonResponse = new JSONObject(response);
                 this.postData = postData;
+                this.locale = locale;
+                this.parsePostListener = parsePostListener;
                 newPostData = new ArrayList<>();
                 parseFailed = false;
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(mContext, "Error converting response to JSON", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -82,7 +78,7 @@ class ParsePost {
                     Calendar postTimeCalendar = Calendar.getInstance();
                     postTimeCalendar.setTimeInMillis(postTime);
                     String formattedPostTime = new SimpleDateFormat("MMM d, YYYY, HH:mm",
-                            mContext.getResources().getConfiguration().locale).format(postTimeCalendar.getTime());
+                            locale).format(postTimeCalendar.getTime());
                     String permalink = data.getString(JSONUtils.PERMALINK_KEY);
 
                     String previewUrl = "";
@@ -102,8 +98,7 @@ class ParsePost {
                     }
                 }
             } catch (JSONException e) {
-                Log.e("error", e.getMessage());
-                Log.i("Best post", "Error parsing data");
+                Log.e("best post parse error", e.getMessage());
                 parseFailed = true;
             }
             return null;
@@ -113,14 +108,14 @@ class ParsePost {
         protected void onPostExecute(Void aVoid) {
             if(!parseFailed) {
                 postData.addAll(newPostData);
-                mParseBetPostListener.onParsePostSuccess(postData, lastItem);
+                parsePostListener.onParsePostSuccess(postData, lastItem);
             } else {
-                mParseBetPostListener.onParsePostFail();
+                parsePostListener.onParsePostFail();
             }
         }
     }
 
-    private void parseData(JSONObject data, String permalink, ArrayList<PostData> bestPostData,
+    private static void parseData(JSONObject data, String permalink, ArrayList<PostData> bestPostData,
                            String id, String fullName, String subredditNamePrefixed, String formattedPostTime,
                            String title, String previewUrl, int score, int voteType, int gilded,
                            boolean nsfw, boolean stickied, int i) throws JSONException {

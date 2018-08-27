@@ -1,12 +1,13 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 class FetchComment {
     interface FetchCommentListener {
@@ -14,36 +15,34 @@ class FetchComment {
         void onFetchCommentFail();
     }
 
-    private RequestQueue requestQueue;
-    private String subredditName;
+    private String subredditNamePrefixed;
     private String article;
-    private FetchCommentListener mFetchCommentListener;
 
-    FetchComment(RequestQueue requestQueue, String subredditName, String article) {
-        this.requestQueue = requestQueue;
-        this.subredditName = subredditName;
+    FetchComment(String subredditNamePrefixed, String article) {
+        this.subredditNamePrefixed = subredditNamePrefixed;
         this.article = article;
     }
 
-    void queryComment(FetchCommentListener fetchCommentListener) {
-        mFetchCommentListener = fetchCommentListener;
-
-        Uri uri = Uri.parse(RedditUtils.getQueryCommentUrl(subredditName, article))
-                .buildUpon().appendQueryParameter(RedditUtils.RAW_JSON_KEY, RedditUtils.RAW_JSON_VALUE)
+    void queryComment(final FetchCommentListener fetchCommentListener) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(RedditUtils.API_BASE_URI)
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
 
-        StringRequest commentRequest = new StringRequest(Request.Method.GET, uri.toString(), new Response.Listener<String>() {
+        RedditAPI api = retrofit.create(RedditAPI.class);
+
+        Call<String> comments = api.getComments(subredditNamePrefixed, article);
+        comments.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(String response) {
-                mFetchCommentListener.onFetchCommentSuccess(response);
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                fetchCommentListener.onFetchCommentSuccess(response.body());
             }
-        }, new Response.ErrorListener() {
+
             @Override
-            public void onErrorResponse(VolleyError error) {
-                mFetchCommentListener.onFetchCommentFail();
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.i("call failed", t.getMessage());
+                fetchCommentListener.onFetchCommentFail();
             }
-        }) {};
-        commentRequest.setTag(FetchComment.class);
-        requestQueue.add(commentRequest);
+        });
     }
 }

@@ -13,15 +13,13 @@ class ParseUserInfo {
         void onParseUserInfoFail();
     }
 
-    private ParseUserInfoListener mParseUserInfoListener;
-
-    void parseUserInfo(String response, ParseUserInfoListener parseUserInfoListener) {
-        mParseUserInfoListener = parseUserInfoListener;
-        new ParseUserInfoAsyncTask(response).execute();
+    static void parseUserInfo(String response, ParseUserInfoListener parseUserInfoListener) {
+        new ParseUserInfoAsyncTask(response, parseUserInfoListener).execute();
     }
 
-    private class ParseUserInfoAsyncTask extends AsyncTask<Void, Void, Void> {
+    private static class ParseUserInfoAsyncTask extends AsyncTask<Void, Void, Void> {
         private JSONObject jsonResponse;
+        private ParseUserInfoListener parseUserInfoListener;
         private boolean parseFailed;
 
         private String name;
@@ -29,13 +27,14 @@ class ParseUserInfo {
         private String bannerImageUrl;
         private int karma;
 
-        ParseUserInfoAsyncTask(String response){
+        ParseUserInfoAsyncTask(String response, ParseUserInfoListener parseUserInfoListener){
             try {
                 jsonResponse = new JSONObject(response);
+                this.parseUserInfoListener = parseUserInfoListener;
                 parseFailed = false;
             } catch (JSONException e) {
                 Log.i("user info json error", e.getMessage());
-                mParseUserInfoListener.onParseUserInfoFail();
+                parseUserInfoListener.onParseUserInfoFail();
             }
         }
 
@@ -58,9 +57,9 @@ class ParseUserInfo {
         @Override
         protected void onPostExecute(Void aVoid) {
             if(!parseFailed) {
-                mParseUserInfoListener.onParseUserInfoSuccess(name, profileImageUrl, bannerImageUrl, karma);
+                parseUserInfoListener.onParseUserInfoSuccess(name, profileImageUrl, bannerImageUrl, karma);
             } else {
-                mParseUserInfoListener.onParseUserInfoFail();
+                parseUserInfoListener.onParseUserInfoFail();
             }
         }
     }

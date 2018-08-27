@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -11,6 +10,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 class ParseComment {
     interface ParseCommentListener {
@@ -18,31 +18,30 @@ class ParseComment {
         void onParseCommentFail();
     }
 
-    private Context mContext;
-    private ParseCommentListener mParseCommentListener;
-
-    void parseComment(Context context, String response, ArrayList<CommentData> commentData, ParseCommentListener parseCommentListener) {
-        mParseCommentListener = parseCommentListener;
-        mContext = context;
-        new ParseCommentAsyncTask(response, commentData).execute();
+    static void parseComment(String response, ArrayList<CommentData> commentData, Locale locale, ParseCommentListener parseCommentListener) {
+        new ParseCommentAsyncTask(response, commentData, locale, parseCommentListener).execute();
     }
 
-    private class ParseCommentAsyncTask extends AsyncTask<Void, Void, Void> {
+    private static class ParseCommentAsyncTask extends AsyncTask<Void, Void, Void> {
         private JSONArray jsonResponse;
         private ArrayList<CommentData> commentData;
         private ArrayList<CommentData> newcommentData;
+        private Locale locale;
+        private ParseCommentListener parseCommentListener;
         private boolean parseFailed;
-        int moreCommentCount;
+        private int moreCommentCount;
 
-        ParseCommentAsyncTask(String response, ArrayList<CommentData> commentData){
+        ParseCommentAsyncTask(String response, ArrayList<CommentData> commentData, Locale locale, ParseCommentListener parseCommentListener){
             try {
                 jsonResponse = new JSONArray(response);
                 this.commentData = commentData;
                 newcommentData = new ArrayList<>();
+                this.locale = locale;
+                this.parseCommentListener = parseCommentListener;
                 parseFailed = false;
             } catch (JSONException e) {
                 Log.i("comment json error", e.getMessage());
-                mParseCommentListener.onParseCommentFail();
+                parseCommentListener.onParseCommentFail();
             }
         }
 
@@ -69,7 +68,7 @@ class ParseComment {
 
                 for (int i = 0; i < actualCommentLength; i++) {
                     JSONObject data = allComments.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
-                    String fullName = data.getString(JSONUtils.LINK_ID);
+                    String fullName = data.getString(JSONUtils.LINK_ID_KEY);
                     String author = data.getString(JSONUtils.AUTHOR_KEY);
                     boolean isSubmitter = data.getBoolean(JSONUtils.IS_SUBMITTER_KEY);
                     String commentContent = "";
@@ -84,7 +83,7 @@ class ParseComment {
                     Calendar submitTimeCalendar = Calendar.getInstance();
                     submitTimeCalendar.setTimeInMillis(submitTime);
                     String formattedSubmitTime = new SimpleDateFormat("MMM d, YYYY, HH:mm",
-                            mContext.getResources().getConfiguration().locale).format(submitTimeCalendar.getTime());
+                            locale).format(submitTimeCalendar.getTime());
 
                     int depth = data.getInt(JSONUtils.DEPTH_KEY);
                     boolean collapsed = data.getBoolean(JSONUtils.COLLAPSED_KEY);
@@ -103,9 +102,9 @@ class ParseComment {
         protected void onPostExecute(Void aVoid) {
             if(!parseFailed) {
                 commentData.addAll(newcommentData);
-                mParseCommentListener.onParseCommentSuccess(commentData, moreCommentCount);
+                parseCommentListener.onParseCommentSuccess(commentData, moreCommentCount);
             } else {
-                mParseCommentListener.onParseCommentFail();
+                parseCommentListener.onParseCommentFail();
             }
         }
     }

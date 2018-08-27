@@ -55,7 +55,7 @@ class FetchSubscribedThing {
         StringRequest commentRequest = new StringRequest(Request.Method.GET, uri.toString(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                new ParseSubscribedThing().parseSubscribedSubreddits(response, mSubscribedSubredditData,
+                ParseSubscribedThing.parseSubscribedSubreddits(response, mSubscribedSubredditData,
                         mSubscribedUserData, mSubredditData,
                         new ParseSubscribedThing.ParseSubscribedSubredditsListener() {
 

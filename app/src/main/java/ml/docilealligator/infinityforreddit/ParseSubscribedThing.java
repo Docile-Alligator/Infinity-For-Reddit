@@ -18,7 +18,7 @@ class ParseSubscribedThing {
         void onParseSubscribedSubredditsFail();
     }
 
-    void parseSubscribedSubreddits(String response, ArrayList<SubscribedSubredditData> subscribedSubredditData,
+    static void parseSubscribedSubreddits(String response, ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                    ArrayList<SubscribedUserData> subscribedUserData,
                                    ArrayList<SubredditData> subredditData,
                                    ParseSubscribedSubredditsListener parseSubscribedSubredditsListener) {
@@ -92,8 +92,8 @@ class ParseSubscribedThing {
                         //It's a user
                         newSubscribedUserData.add(new SubscribedUserData(id, name.substring(2), iconUrl));
                     } else {
-                        String subredditFullName = data.getString(JSONUtils.DISPLAY_NAME_PREFIXED);
-                        String description = data.getString(JSONUtils.PUBLIC_DESCRIPTION).trim();
+                        String subredditFullName = data.getString(JSONUtils.DISPLAY_NAME_PREFIXED_KEY);
+                        String description = data.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY).trim();
                         int nSubscribers = data.getInt(JSONUtils.SUBSCRIBERS_KEY);
                         newSubscribedSubredditData.add(new SubscribedSubredditData(id, name, iconUrl));
                         newSubredditData.add(new SubredditData(id, subredditFullName, iconUrl, bannerImageUrl, description, nSubscribers));

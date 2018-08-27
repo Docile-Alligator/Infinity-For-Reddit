@@ -17,7 +17,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -185,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
                 new FetchUserInfo(this, Volley.newRequestQueue(this)).queryUserInfo(new FetchUserInfo.FetchUserInfoListener() {
                     @Override
                     public void onFetchUserInfoSuccess(String response) {
-                        new ParseUserInfo().parseUserInfo(response, new ParseUserInfo.ParseUserInfoListener() {
+                        ParseUserInfo.parseUserInfo(response, new ParseUserInfo.ParseUserInfoListener() {
                             @Override
                             public void onParseUserInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
                                 mNameTextView.setText(name);
