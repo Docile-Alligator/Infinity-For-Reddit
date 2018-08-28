@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
@@ -26,8 +25,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ViewSubredditDetailActivity extends AppCompatActivity {
 
-    static final String EXTRA_SUBREDDIT_NAME = "ESN";
-    static final String EXTRA_SUBREDDIT_ID = "ESI";
+    static final String EXTRA_SUBREDDIT_NAME_KEY = "ESN";
+    static final String EXTRA_SUBREDDIT_ID_KEY = "ESI";
+
+    private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
 
     private Fragment mFragment;
 
@@ -40,7 +41,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final String subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
+        final String subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME_KEY);
 
         final String title = "r/" + subredditName;
         setTitle(title);
@@ -74,7 +75,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         final TextView descriptionTextView = findViewById(R.id.description_text_view_view_subreddit_detail_activity);
         final RequestManager glide = Glide.with(ViewSubredditDetailActivity.this);
 
-        String id = getIntent().getExtras().getString(EXTRA_SUBREDDIT_ID);
+        String id = getIntent().getExtras().getString(EXTRA_SUBREDDIT_ID_KEY);
         SubredditViewModel.Factory factory = new SubredditViewModel.Factory(getApplication(), id);
         mSubredditViewModel = ViewModelProviders.of(this, factory).get(SubredditViewModel.class);
         mSubredditViewModel.getSubredditLiveData().observe(this, new Observer<SubredditData>() {
@@ -137,7 +138,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
             }
         });
 
-        new FetchSubredditData(Volley.newRequestQueue(this), subredditName).querySubredditData(new FetchSubredditData.FetchSubredditDataListener() {
+        FetchSubredditData.fetchSubredditData(subredditName, new FetchSubredditData.FetchSubredditDataListener() {
             @Override
             public void onFetchSubredditDataSuccess(String response) {
                 ParseSubredditData.parseComment(response, new ParseSubredditData.ParseSubredditDataListener() {
@@ -173,7 +174,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
             mFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
         } else {
-            mFragment = getSupportFragmentManager().getFragment(savedInstanceState, "outStateFragment");
+            mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
         }
     }
@@ -192,7 +193,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if(mFragment != null) {
-            getSupportFragmentManager().putFragment(outState, "outStateFragment", mFragment);
+            getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE_KEY, mFragment);
         }
     }
 

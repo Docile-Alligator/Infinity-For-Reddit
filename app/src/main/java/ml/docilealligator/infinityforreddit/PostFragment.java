@@ -71,7 +71,7 @@ public class PostFragment extends Fragment {
             if(savedInstanceState.containsKey(PostDataParcelableState)) {
                 mPostData = savedInstanceState.getParcelableArrayList(PostDataParcelableState);
                 mLastItem = savedInstanceState.getString(lastItemState);
-                mAdapter = new PostRecyclerViewAdapter(getActivity(), mPostData, mPaginationSynchronizer, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue);
+                mAdapter = new PostRecyclerViewAdapter(getActivity(), mPostData, mPaginationSynchronizer, mVoteThingRequestQueue);
                 mPostRecyclerView.setAdapter(mAdapter);
                 mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
                         getActivity(), mLinearLayoutManager, mAdapter, mLastItem, mPostData,
@@ -82,9 +82,9 @@ public class PostFragment extends Fragment {
                 mProgressBar.setVisibility(View.GONE);
             } else {
                 if(mIsBestPost) {
-                    queryBestPost(mQueryPostUrl, 1);
+                    queryBestPost(1);
                 } else {
-                    queryPost(mQueryPostUrl, 1);
+                    fetchPost(mQueryPostUrl, 1);
                 }
             }
         }
@@ -99,7 +99,7 @@ public class PostFragment extends Fragment {
         }
 
         if(mAcquireAccessTokenRequestQueue != null) {
-            mAcquireAccessTokenRequestQueue.cancelAll(AcquireAccessToken.class);
+            mAcquireAccessTokenRequestQueue.cancelAll(RefreshAccessToken.class);
         }
 
         if(mVoteThingRequestQueue != null) {
@@ -156,9 +156,9 @@ public class PostFragment extends Fragment {
         } else {
             mPaginationSynchronizer = new PaginationSynchronizer();
             if(mIsBestPost) {
-                queryBestPost(mQueryPostUrl, 1);
+                queryBestPost(1);
             } else {
-                queryPost(mQueryPostUrl, 1);
+                fetchPost(mQueryPostUrl, 1);
             }
         }
 
@@ -181,7 +181,7 @@ public class PostFragment extends Fragment {
         return rootView;
     }
 
-    private void queryBestPost(final String queryPostUrl, final int refreshTime) {
+    private void queryBestPost(final int refreshTime) {
         if(refreshTime < 0) {
             showErrorSnackbar();
             return;
@@ -203,7 +203,7 @@ public class PostFragment extends Fragment {
                                 public void onParsePostSuccess(ArrayList<PostData> postData, String lastItem) {
                                     mPostData = postData;
                                     mLastItem = lastItem;
-                                    mAdapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue);
+                                    mAdapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer, mVoteThingRequestQueue);
 
                                     mPostRecyclerView.setAdapter(mAdapter);
                                     mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
@@ -230,15 +230,15 @@ public class PostFragment extends Fragment {
                 if (error instanceof AuthFailureError) {
                     // Error indicating that there was an Authentication Failure while performing the request
                     // Access token expired
-                    new AcquireAccessToken(getActivity()).refreshAccessToken(mAcquireAccessTokenRequestQueue,
-                            new AcquireAccessToken.AcquireAccessTokenListener() {
+                    RefreshAccessToken.refreshAccessToken(getActivity(),
+                            new RefreshAccessToken.RefreshAccessTokenListener() {
                                 @Override
-                                public void onAcquireAccessTokenSuccess() {
-                                    queryBestPost(queryPostUrl, refreshTime - 1);
+                                public void onRefreshAccessTokenSuccess() {
+                                    queryBestPost(refreshTime - 1);
                                 }
 
                                 @Override
-                                public void onAcquireAccessTokenFail() {}
+                                public void onRefreshAccessTokenFail() {}
                             });
                 } else {
                     Log.i("Post fetch error", error.toString());
@@ -256,7 +256,7 @@ public class PostFragment extends Fragment {
         mRequestQueue.add(postRequest);
     }
 
-    private void queryPost(final String queryPostUrl, final int refreshTime) {
+    private void fetchPost(final String queryPostUrl, final int refreshTime) {
         if(refreshTime < 0) {
             showErrorSnackbar();
             return;
@@ -282,7 +282,7 @@ public class PostFragment extends Fragment {
                                 public void onParsePostSuccess(ArrayList<PostData> postData, String lastItem) {
                                     mPostData = postData;
                                     mLastItem = lastItem;
-                                    mAdapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue);
+                                    mAdapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer, mVoteThingRequestQueue);
 
                                     mPostRecyclerView.setAdapter(mAdapter);
                                     mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
@@ -309,15 +309,15 @@ public class PostFragment extends Fragment {
                 if (error instanceof AuthFailureError) {
                     // Error indicating that there was an Authentication Failure while performing the request
                     // Access token expired
-                    new AcquireAccessToken(getActivity()).refreshAccessToken(mAcquireAccessTokenRequestQueue,
-                            new AcquireAccessToken.AcquireAccessTokenListener() {
+                    RefreshAccessToken.refreshAccessToken(getActivity(),
+                            new RefreshAccessToken.RefreshAccessTokenListener() {
                                 @Override
-                                public void onAcquireAccessTokenSuccess() {
-                                    queryPost(queryPostUrl, refreshTime - 1);
+                                public void onRefreshAccessTokenSuccess() {
+                                    fetchPost(queryPostUrl, refreshTime - 1);
                                 }
 
                                 @Override
-                                public void onAcquireAccessTokenFail() {}
+                                public void onRefreshAccessTokenFail() {}
                             });
                 } else {
                     Log.i("Post fetch error", error.toString());
@@ -336,9 +336,9 @@ public class PostFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(mIsBestPost) {
-                    queryBestPost(mQueryPostUrl, 1);
+                    queryBestPost(1);
                 } else {
-                    queryPost(mQueryPostUrl, 1);
+                    fetchPost(mQueryPostUrl, 1);
                 }
             }
         });

@@ -12,8 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.ArrayList;
@@ -21,15 +19,10 @@ import java.util.ArrayList;
 class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
     private ArrayList<CommentData> mCommentData;
-    private RequestQueue mVoteThingRequestQueue;
-    private RequestQueue mAcquireAccessTokenRequestQueue;
 
-    CommentRecyclerViewAdapter(Context context, ArrayList<CommentData> commentData,
-                               RequestQueue voteThingRequestQueue, RequestQueue acquireAccessTokenRequestQueue) {
+    CommentRecyclerViewAdapter(Context context, ArrayList<CommentData> commentData) {
         mContext = context;
         mCommentData = commentData;
-        mVoteThingRequestQueue = voteThingRequestQueue;
-        mAcquireAccessTokenRequestQueue = acquireAccessTokenRequestQueue;
     }
 
     @NonNull
@@ -71,7 +64,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(mCommentData.get(position).getScore() + 1));
                     }
 
-                    new VoteThing(mContext, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mContext, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
                             mCommentData.get(position).setVoteType(1);
@@ -95,7 +88,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     ((CommentViewHolder) holder).upvoteButton.clearColorFilter();
                     ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(mCommentData.get(position).getScore() - 1));
 
-                    new VoteThing(mContext, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mContext, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
                             mCommentData.get(position).setVoteType(0);
@@ -130,7 +123,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(mCommentData.get(position).getScore() - 1));
                     }
 
-                    new VoteThing(mContext, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mContext, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
                             mCommentData.get(position).setVoteType(-1);
@@ -154,7 +147,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     ((CommentViewHolder) holder).downvoteButton.clearColorFilter();
                     ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(mCommentData.get(position).getScore() + 1));
 
-                    new VoteThing(mContext, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mContext, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
                             mCommentData.get(position).setVoteType(0);

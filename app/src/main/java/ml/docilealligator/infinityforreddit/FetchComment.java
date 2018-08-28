@@ -15,15 +15,7 @@ class FetchComment {
         void onFetchCommentFail();
     }
 
-    private String subredditNamePrefixed;
-    private String article;
-
-    FetchComment(String subredditNamePrefixed, String article) {
-        this.subredditNamePrefixed = subredditNamePrefixed;
-        this.article = article;
-    }
-
-    void queryComment(final FetchCommentListener fetchCommentListener) {
+    static void queryComment(String subredditNamePrefixed, String article, final FetchCommentListener fetchCommentListener) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RedditUtils.API_BASE_URI)
                 .addConverterFactory(ScalarsConverterFactory.create())

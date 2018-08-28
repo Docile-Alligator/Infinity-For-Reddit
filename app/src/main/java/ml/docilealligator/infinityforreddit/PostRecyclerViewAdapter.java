@@ -44,7 +44,6 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private Context mContext;
     private PaginationSynchronizer mPaginationSynchronizer;
     private RequestQueue mVoteThingRequestQueue;
-    private RequestQueue mAcquireAccessTokenRequestQueue;
     private RequestManager glide;
     private SubredditDao subredditDao;
     private boolean isLoadingMorePostSuccess;
@@ -55,13 +54,12 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
 
     PostRecyclerViewAdapter(Context context, ArrayList<PostData> postData, PaginationSynchronizer paginationSynchronizer,
-                            RequestQueue voteThingRequestQueue, RequestQueue acquireAccessTokenRequestQueue) {
+                            RequestQueue voteThingRequestQueue) {
         if(context != null) {
             mContext = context;
             mPostData = postData;
             mPaginationSynchronizer = paginationSynchronizer;
             mVoteThingRequestQueue = voteThingRequestQueue;
-            mAcquireAccessTokenRequestQueue = acquireAccessTokenRequestQueue;
             isLoadingMorePostSuccess = true;
             canStartActivity = true;
             glide = Glide.with(mContext);
@@ -139,7 +137,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
-                        intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME,
+                        intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
                                 mPostData.get(holder.getAdapterPosition()).getSubredditNamePrefixed().substring(2));
                     }
                 });
@@ -348,7 +346,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(holder.getAdapterPosition()).getScore() + 1));
                             }
 
-                            new VoteThing(mContext, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingListener() {
+                            VoteThing.voteThing(mContext, new VoteThing.VoteThingListener() {
                                 @Override
                                 public void onVoteThingSuccess(int position) {
                                     mPostData.get(position).setVoteType(1);
@@ -372,7 +370,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             ((DataViewHolder) holder).upvoteButton.clearColorFilter();
                             ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(holder.getAdapterPosition()).getScore() - 1));
 
-                            new VoteThing(mContext, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingListener() {
+                            VoteThing.voteThing(mContext, new VoteThing.VoteThingListener() {
                                 @Override
                                 public void onVoteThingSuccess(int position) {
                                     mPostData.get(position).setVoteType(0);
@@ -406,7 +404,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(holder.getAdapterPosition()).getScore() - 1));
                             }
 
-                            new VoteThing(mContext, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingListener() {
+                            VoteThing.voteThing(mContext, new VoteThing.VoteThingListener() {
                                 @Override
                                 public void onVoteThingSuccess(int position) {
                                     mPostData.get(position).setVoteType(-1);
@@ -430,7 +428,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             ((DataViewHolder) holder).downvoteButton.clearColorFilter();
                             ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(holder.getAdapterPosition()).getScore() + 1));
 
-                            new VoteThing(mContext, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingListener() {
+                            VoteThing.voteThing(mContext, new VoteThing.VoteThingListener() {
                                 @Override
                                 public void onVoteThingSuccess(int position) {
                                     mPostData.get(position).setVoteType(0);

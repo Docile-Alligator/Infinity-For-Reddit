@@ -21,7 +21,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
@@ -100,15 +99,15 @@ public class MainActivity extends AppCompatActivity {
             queryAccessTokenTime.add(Calendar.SECOND, interval - 300);
 
             if(now.after(queryAccessTokenTime)) {
-                new AcquireAccessToken(this).refreshAccessToken(Volley.newRequestQueue(this),
-                        new AcquireAccessToken.AcquireAccessTokenListener() {
+                RefreshAccessToken.refreshAccessToken(this,
+                        new RefreshAccessToken.RefreshAccessTokenListener() {
                             @Override
-                            public void onAcquireAccessTokenSuccess() {
+                            public void onRefreshAccessTokenSuccess() {
                                 loadUserData(savedInstanceState);
                             }
 
                             @Override
-                            public void onAcquireAccessTokenFail() {}
+                            public void onRefreshAccessTokenFail() {}
                         });
             } else {
                 loadUserData(savedInstanceState);
@@ -179,19 +178,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadUserData(Bundle savedInstanceState) {
-        if(savedInstanceState == null) {
-            if(!mFetchUserInfoSuccess) {
-                new FetchUserInfo(this, Volley.newRequestQueue(this)).queryUserInfo(new FetchUserInfo.FetchUserInfoListener() {
+        if (savedInstanceState == null) {
+            if (!mFetchUserInfoSuccess) {
+                FetchUserInfo.fetchUserInfo(this, new FetchUserInfo.FetchUserInfoListener() {
                     @Override
                     public void onFetchUserInfoSuccess(String response) {
                         ParseUserInfo.parseUserInfo(response, new ParseUserInfo.ParseUserInfoListener() {
                             @Override
                             public void onParseUserInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
                                 mNameTextView.setText(name);
-                                if(!mProfileImageUrl.equals("")) {
+                                if (!mProfileImageUrl.equals("")) {
                                     glide.load(profileImageUrl).into(mProfileImageView);
                                 }
-                                if(!mBannerImageUrl.equals("")) {
+                                if (!mBannerImageUrl.equals("")) {
                                     glide.load(bannerImageUrl).into(mBannerImageView);
                                 }
 
@@ -225,14 +224,15 @@ public class MainActivity extends AppCompatActivity {
                 }, 1);
             }
 
-            if(!mInsertSuccess) {
-                new FetchSubscribedThing(this, Volley.newRequestQueue(this), new ArrayList<SubscribedSubredditData>(),
-                        new ArrayList<SubscribedUserData>(), new ArrayList<SubredditData>())
-                        .fetchSubscribedSubreddits(new FetchSubscribedThing.FetchSubscribedSubredditsListener() {
+            if (!mInsertSuccess) {
+                FetchSubscribedThing.fetchSubscribedThing(this, null,
+                        new ArrayList<SubscribedSubredditData>(), new ArrayList<SubscribedUserData>(),
+                        new ArrayList<SubredditData>(),
+                        new FetchSubscribedThing.FetchSubscribedThingListener() {
                             @Override
-                            public void onFetchSubscribedSubredditsSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
-                                                                           ArrayList<SubscribedUserData> subscribedUserData,
-                                                                           ArrayList<SubredditData> subredditData) {
+                            public void onFetchSubscribedThingSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
+                                                                      ArrayList<SubscribedUserData> subscribedUserData,
+                                                                      ArrayList<SubredditData> subredditData) {
                                 new InsertSubscribedThingsAsyncTask(
                                         SubscribedSubredditRoomDatabase.getDatabase(MainActivity.this),
                                         SubscribedUserRoomDatabase.getDatabase(MainActivity.this),
@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void onFetchSubscribedSubredditsFail() {
+                            public void onFetchSubscribedThingFail() {
                                 mInsertSuccess = false;
                             }
                         }, 1);

@@ -1,16 +1,13 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
-import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-
-import java.util.Map;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 class FetchUserInfo {
     interface FetchUserInfoListener {
@@ -18,57 +15,41 @@ class FetchUserInfo {
         void onFetchUserInfoFail();
     }
 
-    private Context context;
-    private RequestQueue requestQueue;
-    private FetchUserInfoListener mFetchUserInfoListener;
-
-    FetchUserInfo(Context context, RequestQueue requestQueue) {
-        this.context = context;
-        this.requestQueue = requestQueue;
-    }
-
-    void queryUserInfo(FetchUserInfoListener fetchUserInfoListener, final int refreshTime) {
+    static void fetchUserInfo(final Context context, final FetchUserInfoListener fetchUserInfoListener, final int refreshTime) {
         if(refreshTime < 0) {
-            mFetchUserInfoListener.onFetchUserInfoFail();
+            fetchUserInfoListener.onFetchUserInfoFail();
             return;
         }
 
-        mFetchUserInfoListener = fetchUserInfoListener;
-
-        Uri uri = Uri.parse(RedditUtils.OAUTH_API_BASE_URI + RedditUtils.USER_INFO_SUFFIX)
-                .buildUpon().appendQueryParameter(RedditUtils.RAW_JSON_KEY, RedditUtils.RAW_JSON_VALUE)
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(RedditUtils.OAUTH_API_BASE_URI)
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
 
-        StringRequest commentRequest = new StringRequest(Request.Method.GET, uri.toString(), new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                mFetchUserInfoListener.onFetchUserInfoSuccess(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if(error instanceof AuthFailureError) {
-                    new AcquireAccessToken(context).refreshAccessToken(requestQueue, new AcquireAccessToken.AcquireAccessTokenListener() {
-                        @Override
-                        public void onAcquireAccessTokenSuccess() {
-                            queryUserInfo(mFetchUserInfoListener, refreshTime - 1);
-                        }
+        RedditAPI api = retrofit.create(RedditAPI.class);
 
-                        @Override
-                        public void onAcquireAccessTokenFail() {}
-                    });
-                } else {
-                    mFetchUserInfoListener.onFetchUserInfoFail();
-                }
-            }
-        }) {
+        String accessToken = context.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
+                .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
+        Call<String> userInfo = api.getUserInfo(RedditUtils.getOAuthHeader(accessToken));
+        userInfo.enqueue(new Callback<String>() {
             @Override
-            public Map<String, String> getHeaders() {
-                String accessToken = context.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
-                return RedditUtils.getOAuthHeader(accessToken);
+            public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
+                fetchUserInfoListener.onFetchUserInfoSuccess(response.body());
             }
-        };
-        commentRequest.setTag(FetchComment.class);
-        requestQueue.add(commentRequest);
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.i("call failed", t.getMessage());
+                RefreshAccessToken.refreshAccessToken(context, new RefreshAccessToken.RefreshAccessTokenListener() {
+                    @Override
+                    public void onRefreshAccessTokenSuccess() {
+                        fetchUserInfo(context, fetchUserInfoListener, refreshTime - 1);
+                    }
+
+                    @Override
+                    public void onRefreshAccessTokenFail() {}
+                });
+            }
+        });
     }
 }

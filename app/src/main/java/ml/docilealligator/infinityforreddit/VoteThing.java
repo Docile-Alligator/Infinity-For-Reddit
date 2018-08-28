@@ -1,16 +1,16 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * Created by alex on 3/14/18.
@@ -28,116 +28,96 @@ class VoteThing {
         void onVoteThingFail();
     }
 
-    private Context mContext;
-    private RequestQueue mQueue;
-    private RequestQueue mAcquireAccessTokenRequestQueue;
-
-    VoteThing(Context context, RequestQueue queue, RequestQueue acquireAccessTokenRequestQueue) {
-        mContext = context;
-        mQueue = queue;
-        mAcquireAccessTokenRequestQueue = acquireAccessTokenRequestQueue;
-    }
-
-    void votePost(final VoteThingListener voteThingListener, final String fullName, final String point, final int position, final int refreshTime) {
-        if(mContext != null) {
+    static void voteThing(final Context context, final VoteThingListener voteThingListener, final String fullName, final String point, final int position, final int refreshTime) {
+        if(context != null) {
             if(refreshTime < 0) {
                 voteThingListener.onVoteThingFail(position);
                 return;
             }
 
-            StringRequest voteRequest = new StringRequest(Request.Method.POST, RedditUtils.OAUTH_API_BASE_URI + RedditUtils.VOTE_SUFFIX, new Response.Listener<String>() {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(RedditUtils.OAUTH_API_BASE_URI)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .build();
+
+            RedditAPI api = retrofit.create(RedditAPI.class);
+
+            String accessToken = context.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
+                    .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
+            Map<String, String> params = new HashMap<>();
+            params.put(RedditUtils.DIR_KEY, point);
+            params.put(RedditUtils.ID_KEY, fullName);
+            params.put(RedditUtils.RANK_KEY, RedditUtils.RANK);
+
+            Call<String> voteThingCall = api.voteThing(RedditUtils.getOAuthHeader(accessToken), params);
+            voteThingCall.enqueue(new Callback<String>() {
                 @Override
-                public void onResponse(String response) {
+                public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                     voteThingListener.onVoteThingSuccess(position);
                 }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    if (error instanceof AuthFailureError) {
-                        //Access token expired
-                        new AcquireAccessToken(mContext).refreshAccessToken(mAcquireAccessTokenRequestQueue,
-                                new AcquireAccessToken.AcquireAccessTokenListener() {
-                                    @Override
-                                    public void onAcquireAccessTokenSuccess() {
-                                        votePost(voteThingListener, fullName, point, position, refreshTime - 1);
-                                    }
-
-                                    @Override
-                                    public void onAcquireAccessTokenFail() {}
-                                });
-                    } else {
-                        voteThingListener.onVoteThingFail(position);
-                    }
-                }
-            }) {
-                @Override
-                protected Map<String, String> getParams() {
-                    HashMap<String, String> params = new HashMap<>();
-                    params.put(RedditUtils.DIR_KEY, point);
-                    params.put(RedditUtils.ID_KEY, fullName);
-                    params.put(RedditUtils.RANK_KEY, RedditUtils.RANK);
-                    return params;
-                }
 
                 @Override
-                public Map<String, String> getHeaders() {
-                    String accessToken = mContext.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
-                    return RedditUtils.getOAuthHeader(accessToken);
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    Log.i("call failed", t.getMessage());
+                    RefreshAccessToken.refreshAccessToken(context,
+                            new RefreshAccessToken.RefreshAccessTokenListener() {
+                                @Override
+                                public void onRefreshAccessTokenSuccess() {
+                                    voteThing(context, voteThingListener, fullName, point, position, refreshTime - 1);
+                                }
+
+                                @Override
+                                public void onRefreshAccessTokenFail() {
+                                }
+                            });
                 }
-            };
-            voteRequest.setTag(VoteThing.class);
-            mQueue.add(voteRequest);
+            });
         }
     }
 
-    void votePost(final VoteThingWithoutPositionListener voteThingWithoutPositionListener, final String fullName, final String point, final int refreshTime) {
-        if(mContext != null) {
+    static void voteThing(final Context context, final VoteThingWithoutPositionListener voteThingWithoutPositionListener, final String fullName, final String point, final int refreshTime) {
+        if(context != null) {
             if(refreshTime < 0) {
                 voteThingWithoutPositionListener.onVoteThingFail();
                 return;
             }
-            StringRequest voteRequest = new StringRequest(Request.Method.POST, RedditUtils.OAUTH_API_BASE_URI + RedditUtils.VOTE_SUFFIX, new Response.Listener<String>() {
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(RedditUtils.OAUTH_API_BASE_URI)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .build();
+
+            RedditAPI api = retrofit.create(RedditAPI.class);
+
+            String accessToken = context.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
+                    .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
+            Map<String, String> params = new HashMap<>();
+            params.put(RedditUtils.DIR_KEY, point);
+            params.put(RedditUtils.ID_KEY, fullName);
+            params.put(RedditUtils.RANK_KEY, RedditUtils.RANK);
+
+            Call<String> voteThingCall = api.voteThing(RedditUtils.getOAuthHeader(accessToken), params);
+            voteThingCall.enqueue(new Callback<String>() {
                 @Override
-                public void onResponse(String response) {
+                public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                     voteThingWithoutPositionListener.onVoteThingSuccess();
                 }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    if (error instanceof AuthFailureError) {
-                        //Access token expired
-                        new AcquireAccessToken(mContext).refreshAccessToken(mAcquireAccessTokenRequestQueue,
-                                new AcquireAccessToken.AcquireAccessTokenListener() {
-                                    @Override
-                                    public void onAcquireAccessTokenSuccess() {
-                                        votePost(voteThingWithoutPositionListener, fullName, point, refreshTime - 1);
-                                    }
-
-                                    @Override
-                                    public void onAcquireAccessTokenFail() {}
-                                });
-                    } else {
-                        voteThingWithoutPositionListener.onVoteThingFail();
-                    }
-                }
-            }) {
-                @Override
-                protected Map<String, String> getParams() {
-                    HashMap<String, String> params = new HashMap<>();
-                    params.put(RedditUtils.DIR_KEY, point);
-                    params.put(RedditUtils.ID_KEY, fullName);
-                    params.put(RedditUtils.RANK_KEY, RedditUtils.RANK);
-                    return params;
-                }
 
                 @Override
-                public Map<String, String> getHeaders() {
-                    String accessToken = mContext.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
-                    return RedditUtils.getOAuthHeader(accessToken);
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    Log.i("call failed", t.getMessage());
+                    RefreshAccessToken.refreshAccessToken(context,
+                            new RefreshAccessToken.RefreshAccessTokenListener() {
+                                @Override
+                                public void onRefreshAccessTokenSuccess() {
+                                    voteThing(context, voteThingWithoutPositionListener, fullName, point, refreshTime - 1);
+                                }
+
+                                @Override
+                                public void onRefreshAccessTokenFail() {}
+                            });
                 }
-            };
-            voteRequest.setTag(VoteThing.class);
-            mQueue.add(voteRequest);
+            });
         }
     }
 }

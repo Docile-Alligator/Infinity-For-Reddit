@@ -146,15 +146,15 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof AuthFailureError) {
                     //Access token expired
-                    new AcquireAccessToken(mContext).refreshAccessToken(mAcquireAccessTokenRequestQueue,
-                            new AcquireAccessToken.AcquireAccessTokenListener() {
+                    RefreshAccessToken.refreshAccessToken(mContext,
+                            new RefreshAccessToken.RefreshAccessTokenListener() {
                                 @Override
-                                public void onAcquireAccessTokenSuccess() {
+                                public void onRefreshAccessTokenSuccess() {
                                     fetchBestPost(queryPostUrl, refreshTime - 1);
                                 }
 
                                 @Override
-                                public void onAcquireAccessTokenFail() {
+                                public void onRefreshAccessTokenFail() {
                                 }
                             });
                 } else {
@@ -219,15 +219,15 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof AuthFailureError) {
                     //Access token expired
-                    new AcquireAccessToken(mContext).refreshAccessToken(mAcquireAccessTokenRequestQueue,
-                            new AcquireAccessToken.AcquireAccessTokenListener() {
+                    RefreshAccessToken.refreshAccessToken(mContext,
+                            new RefreshAccessToken.RefreshAccessTokenListener() {
                                 @Override
-                                public void onAcquireAccessTokenSuccess() {
+                                public void onRefreshAccessTokenSuccess() {
                                     fetchPost(queryPostUrl, refreshTime - 1);
                                 }
 
                                 @Override
-                                public void onAcquireAccessTokenFail() {
+                                public void onRefreshAccessTokenFail() {
                                 }
                             });
                 } else {

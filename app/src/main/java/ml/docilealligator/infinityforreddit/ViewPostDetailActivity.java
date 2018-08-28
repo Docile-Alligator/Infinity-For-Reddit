@@ -24,8 +24,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -58,9 +56,6 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private ImageView mNoCommentImageView;
 
     private LoadSubredditIconAsyncTask mLoadSubredditIconAsyncTask;
-
-    private RequestQueue mVoteThingRequestQueue;
-    private RequestQueue mAcquireAccessTokenRequestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,8 +135,6 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        mVoteThingRequestQueue = Volley.newRequestQueue(this);
-        mAcquireAccessTokenRequestQueue = Volley.newRequestQueue(this);
 
         subredditTextView.setText(mPostData.getSubredditNamePrefixed());
         postTimeTextView.setText(mPostData.getPostTime());
@@ -385,7 +378,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                         scoreTextView.setText(Integer.toString(mPostData.getScore() + 1));
                     }
 
-                    new VoteThing(ViewPostDetailActivity.this, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingWithoutPositionListener() {
+                    VoteThing.voteThing(ViewPostDetailActivity.this, new VoteThing.VoteThingWithoutPositionListener() {
                         @Override
                         public void onVoteThingSuccess() {
                             mPostData.setVoteType(1);
@@ -409,7 +402,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     upvoteButton.clearColorFilter();
                     scoreTextView.setText(Integer.toString(mPostData.getScore() - 1));
 
-                    new VoteThing(ViewPostDetailActivity.this, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingWithoutPositionListener() {
+                    VoteThing.voteThing(ViewPostDetailActivity.this, new VoteThing.VoteThingWithoutPositionListener() {
                         @Override
                         public void onVoteThingSuccess() {
                             mPostData.setVoteType(0);
@@ -445,7 +438,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                         scoreTextView.setText(Integer.toString(mPostData.getScore() - 1));
                     }
 
-                    new VoteThing(ViewPostDetailActivity.this, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingWithoutPositionListener() {
+                    VoteThing.voteThing(ViewPostDetailActivity.this, new VoteThing.VoteThingWithoutPositionListener() {
                         @Override
                         public void onVoteThingSuccess() {
                             mPostData.setVoteType(-1);
@@ -469,7 +462,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     downvoteButton.clearColorFilter();
                     scoreTextView.setText(Integer.toString(mPostData.getScore() + 1));
 
-                    new VoteThing(ViewPostDetailActivity.this, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue).votePost(new VoteThing.VoteThingWithoutPositionListener() {
+                    VoteThing.voteThing(ViewPostDetailActivity.this, new VoteThing.VoteThingWithoutPositionListener() {
                         @Override
                         public void onVoteThingSuccess() {
                             mPostData.setVoteType(0);
@@ -492,40 +485,41 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private void queryComment() {
         mCommentProgressbar.setVisibility(View.VISIBLE);
         mNoCommentWrapperLinearLayout.setVisibility(View.GONE);
-        new FetchComment(mPostData.getSubredditNamePrefixed(), mPostData.getId()).queryComment(new FetchComment.FetchCommentListener() {
-            @Override
-            public void onFetchCommentSuccess(String response) {
-                ParseComment.parseComment(response, new ArrayList<CommentData>(),
-                        getResources().getConfiguration().locale, new ParseComment.ParseCommentListener() {
-                            @Override
-                            public void onParseCommentSuccess(ArrayList<CommentData> commentData, int moreCommentCount) {
-                                mCommentProgressbar.setVisibility(View.GONE);
-                                mMoreCommentCount = moreCommentCount;
-                                if (commentData.size() > 0) {
-                                    CommentRecyclerViewAdapter adapter = new CommentRecyclerViewAdapter(
-                                            ViewPostDetailActivity.this, commentData, mVoteThingRequestQueue, mAcquireAccessTokenRequestQueue);
-                                    mRecyclerView.setAdapter(adapter);
-                                    mCommentCardView.setVisibility(View.VISIBLE);
-                                } else {
-                                    mNoCommentWrapperLinearLayout.setVisibility(View.VISIBLE);
-                                    Glide.with(ViewPostDetailActivity.this).load(R.drawable.no_comment_indicator).into(mNoCommentImageView);
-                                }
-                            }
+        FetchComment.queryComment(mPostData.getSubredditNamePrefixed(), mPostData.getId(),
+                new FetchComment.FetchCommentListener() {
+                    @Override
+                    public void onFetchCommentSuccess(String response) {
+                        ParseComment.parseComment(response, new ArrayList<CommentData>(),
+                                getResources().getConfiguration().locale, new ParseComment.ParseCommentListener() {
+                                    @Override
+                                    public void onParseCommentSuccess(ArrayList<CommentData> commentData, int moreCommentCount) {
+                                        mCommentProgressbar.setVisibility(View.GONE);
+                                        mMoreCommentCount = moreCommentCount;
+                                        if (commentData.size() > 0) {
+                                            CommentRecyclerViewAdapter adapter = new CommentRecyclerViewAdapter(
+                                                    ViewPostDetailActivity.this, commentData);
+                                            mRecyclerView.setAdapter(adapter);
+                                            mCommentCardView.setVisibility(View.VISIBLE);
+                                        } else {
+                                            mNoCommentWrapperLinearLayout.setVisibility(View.VISIBLE);
+                                            Glide.with(ViewPostDetailActivity.this).load(R.drawable.no_comment_indicator).into(mNoCommentImageView);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onParseCommentFail() {
+                                        mCommentProgressbar.setVisibility(View.GONE);
+                                        showRetrySnackbar();
+                                    }
+                                });
+                    }
 
                     @Override
-                    public void onParseCommentFail() {
+                    public void onFetchCommentFail() {
                         mCommentProgressbar.setVisibility(View.GONE);
                         showRetrySnackbar();
                     }
                 });
-            }
-
-            @Override
-            public void onFetchCommentFail() {
-                mCommentProgressbar.setVisibility(View.GONE);
-                showRetrySnackbar();
-            }
-        });
     }
 
     private void showRetrySnackbar() {

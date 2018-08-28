@@ -11,15 +11,11 @@ import java.util.Map;
 
 class RedditUtils {
     static final String OAUTH_URL ="https://www.reddit.com/api/v1/authorize.compact";
-    static final String ACQUIRE_ACCESS_TOKEN_URL = "https://www.reddit.com/api/v1/access_token";
     static final String OAUTH_API_BASE_URI = "https://oauth.reddit.com";
     static final String API_BASE_URI = "https://www.reddit.com";
     static final String RAW_JSON_KEY ="raw_json";
     static final String RAW_JSON_VALUE = "1";
     static final String BEST_POST_SUFFIX = "/best";
-    static final String VOTE_SUFFIX = "/api/vote";
-    static final String USER_INFO_SUFFIX = "/api/v1/me";
-    static final String SUBSCRIBED_SUBREDDITS = "/subreddits/mine/subscriber";
 
     static final String CLIENT_ID_KEY = "client_id";
     static final String CLIENT_ID = "";
@@ -68,14 +64,6 @@ class RedditUtils {
         params.put(RedditUtils.AUTHORIZATION_KEY, RedditUtils.AUTHORIZATION_BASE + accessToken);
         params.put(RedditUtils.USER_AGENT_KEY, RedditUtils.USER_AGENT);
         return params;
-    }
-
-    static String getQueryCommentUrl(String subredditName, String article) {
-        return API_BASE_URI + "/" + subredditName + "/comments/" + article + ".json";
-    }
-
-    static String getQuerySubredditDataUrl(String subredditName) {
-        return API_BASE_URI + "/r/" + subredditName + "/about.json";
     }
 
     static String getQuerySubredditPostUrl(String subredditName) {

@@ -1,62 +1,51 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
-import android.net.Uri;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 class FetchSubscribedThing {
-    interface FetchSubscribedSubredditsListener {
-        void onFetchSubscribedSubredditsSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
-                                                ArrayList<SubscribedUserData> subscribedUserData,
-                                                ArrayList<SubredditData> subredditData);
-        void onFetchSubscribedSubredditsFail();
+    interface FetchSubscribedThingListener {
+        void onFetchSubscribedThingSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
+                                           ArrayList<SubscribedUserData> subscribedUserData,
+                                           ArrayList<SubredditData> subredditData);
+        void onFetchSubscribedThingFail();
     }
 
-    private Context context;
-    private RequestQueue requestQueue;
-    private FetchSubscribedSubredditsListener mFetchSubscribedSubredditsListener;
-    private ArrayList<SubscribedSubredditData> mSubscribedSubredditData;
-    private ArrayList<SubscribedUserData> mSubscribedUserData;
-    private ArrayList<SubredditData> mSubredditData;
-
-    private String mLastItem;
-
-    FetchSubscribedThing(Context context, RequestQueue requestQueue,
-                         ArrayList<SubscribedSubredditData> subscribedSubredditData,
-                         ArrayList<SubscribedUserData> subscribedUserData,
-                         ArrayList<SubredditData> subredditData) {
-        this.context = context;
-        this.requestQueue = requestQueue;
-        mSubscribedSubredditData = subscribedSubredditData;
-        mSubscribedUserData = subscribedUserData;
-        mSubredditData = subredditData;
-    }
-
-    void fetchSubscribedSubreddits(FetchSubscribedSubredditsListener fetchUserInfoListener, final int refreshTime) {
+    static void fetchSubscribedThing(final Context context, final String lastItem,
+                                     final ArrayList<SubscribedSubredditData> subscribedSubredditData,
+                                     final ArrayList<SubscribedUserData> subscribedUserData,
+                                     final ArrayList<SubredditData> subredditData,
+                                     final FetchSubscribedThingListener fetchSubscribedThingListener, final int refreshTime) {
         if(refreshTime < 0) {
-            mFetchSubscribedSubredditsListener.onFetchSubscribedSubredditsFail();
+            fetchSubscribedThingListener.onFetchSubscribedThingFail();
             return;
         }
 
-        Uri uri = Uri.parse(RedditUtils.OAUTH_API_BASE_URI + RedditUtils.SUBSCRIBED_SUBREDDITS)
-                .buildUpon().appendQueryParameter(RedditUtils.AFTER_KEY, mLastItem)
-                .appendQueryParameter(RedditUtils.RAW_JSON_KEY, RedditUtils.RAW_JSON_VALUE).build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(RedditUtils.OAUTH_API_BASE_URI)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
 
-        mFetchSubscribedSubredditsListener = fetchUserInfoListener;
-        StringRequest commentRequest = new StringRequest(Request.Method.GET, uri.toString(), new Response.Listener<String>() {
+        RedditAPI api = retrofit.create(RedditAPI.class);
+
+        String accessToken = context.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
+                .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
+
+        Call<String> subredditDataCall = api.getSubscribedThing(lastItem, RedditUtils.getOAuthHeader(accessToken));
+        subredditDataCall.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(String response) {
-                ParseSubscribedThing.parseSubscribedSubreddits(response, mSubscribedSubredditData,
-                        mSubscribedUserData, mSubredditData,
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                ParseSubscribedThing.parseSubscribedSubreddits(response.body(), subscribedSubredditData,
+                        subscribedUserData, subredditData,
                         new ParseSubscribedThing.ParseSubscribedSubredditsListener() {
 
                             @Override
@@ -64,49 +53,37 @@ class FetchSubscribedThing {
                                                                            ArrayList<SubscribedUserData> subscribedUserData,
                                                                            ArrayList<SubredditData> subredditData,
                                                                            String lastItem) {
-                                mSubscribedSubredditData = subscribedSubredditData;
-                                mSubscribedUserData = subscribedUserData;
-                                mSubredditData = subredditData;
-                                mLastItem = lastItem;
-                                if(mLastItem.equals("null")) {
-                                    mFetchSubscribedSubredditsListener.onFetchSubscribedSubredditsSuccess(mSubscribedSubredditData,
-                                            mSubscribedUserData, mSubredditData);
+                                if(lastItem.equals("null")) {
+                                    fetchSubscribedThingListener.onFetchSubscribedThingSuccess(
+                                            subscribedSubredditData, subscribedUserData, subredditData);
                                 } else {
-                                    fetchSubscribedSubreddits(mFetchSubscribedSubredditsListener, refreshTime);
+                                    fetchSubscribedThing(context, lastItem, subscribedSubredditData,
+                                            subscribedUserData, subredditData,
+                                            fetchSubscribedThingListener, refreshTime);
                                 }
                             }
 
                             @Override
                             public void onParseSubscribedSubredditsFail() {
-
+                                fetchSubscribedThingListener.onFetchSubscribedThingFail();
                             }
                         });
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if(error instanceof AuthFailureError) {
-                    new AcquireAccessToken(context).refreshAccessToken(requestQueue, new AcquireAccessToken.AcquireAccessTokenListener() {
-                        @Override
-                        public void onAcquireAccessTokenSuccess() {
-                            fetchSubscribedSubreddits(mFetchSubscribedSubredditsListener, refreshTime - 1);
-                        }
 
-                        @Override
-                        public void onAcquireAccessTokenFail() {}
-                    });
-                } else {
-                    mFetchSubscribedSubredditsListener.onFetchSubscribedSubredditsFail();
-                }
-            }
-        }) {
             @Override
-            public Map<String, String> getHeaders() {
-                String accessToken = context.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
-                return RedditUtils.getOAuthHeader(accessToken);
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.i("call failed", t.getMessage());
+                RefreshAccessToken.refreshAccessToken(context, new RefreshAccessToken.RefreshAccessTokenListener() {
+                    @Override
+                    public void onRefreshAccessTokenSuccess() {
+                        fetchSubscribedThing(context, lastItem, subscribedSubredditData,
+                                subscribedUserData, subredditData, fetchSubscribedThingListener, refreshTime);
+                    }
+
+                    @Override
+                    public void onRefreshAccessTokenFail() {}
+                });
             }
-        };
-        commentRequest.setTag(FetchComment.class);
-        requestQueue.add(commentRequest);
+        });
     }
 }

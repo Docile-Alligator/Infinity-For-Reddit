@@ -1,10 +1,13 @@
 package ml.docilealligator.infinityforreddit;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import android.support.annotation.NonNull;
+import android.util.Log;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 class FetchSubredditData {
     interface FetchSubredditDataListener {
@@ -12,29 +15,26 @@ class FetchSubredditData {
         void onFetchSubredditDataFail();
     }
 
-    private RequestQueue requestQueue;
-    private String subredditName;
-    private FetchSubredditDataListener mFetchSubredditDataListener;
+    static void fetchSubredditData(String subredditName, final FetchSubredditDataListener fetchSubredditDataListener) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(RedditUtils.API_BASE_URI)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
 
-    FetchSubredditData(RequestQueue requestQueue, String subredditName) {
-        this.requestQueue = requestQueue;
-        this.subredditName = subredditName;
-    }
+        RedditAPI api = retrofit.create(RedditAPI.class);
 
-    void querySubredditData(FetchSubredditDataListener fetchSubredditDataListener) {
-        mFetchSubredditDataListener = fetchSubredditDataListener;
-        StringRequest commentRequest = new StringRequest(Request.Method.GET, RedditUtils.getQuerySubredditDataUrl(subredditName), new Response.Listener<String>() {
+        Call<String> subredditData = api.getSubredditData(subredditName);
+        subredditData.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(String response) {
-                mFetchSubredditDataListener.onFetchSubredditDataSuccess(response);
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                fetchSubredditDataListener.onFetchSubredditDataSuccess(response.body());
             }
-        }, new Response.ErrorListener() {
+
             @Override
-            public void onErrorResponse(VolleyError error) {
-                mFetchSubredditDataListener.onFetchSubredditDataFail();
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.i("call failed", t.getMessage());
+                fetchSubredditDataListener.onFetchSubredditDataFail();
             }
-        }) {};
-        commentRequest.setTag(FetchSubredditData.class);
-        requestQueue.add(commentRequest);
+        });
     }
 }

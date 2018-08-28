@@ -38,8 +38,8 @@ class SubscribedSubredditRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
-                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME, mSubscribedSubredditData.get(viewHolder.getAdapterPosition()).getName());
-                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_ID, mSubscribedSubredditData.get(viewHolder.getAdapterPosition()).getId());
+                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, mSubscribedSubredditData.get(viewHolder.getAdapterPosition()).getName());
+                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_ID_KEY, mSubscribedSubredditData.get(viewHolder.getAdapterPosition()).getId());
                 mContext.startActivity(intent);
             }
         });
