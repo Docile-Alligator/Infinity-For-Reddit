@@ -23,7 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
@@ -43,7 +42,6 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private ArrayList<PostData> mPostData;
     private Context mContext;
     private PaginationSynchronizer mPaginationSynchronizer;
-    private RequestQueue mVoteThingRequestQueue;
     private RequestManager glide;
     private SubredditDao subredditDao;
     private boolean isLoadingMorePostSuccess;
@@ -53,13 +51,11 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int VIEW_TYPE_LOADING = 1;
 
 
-    PostRecyclerViewAdapter(Context context, ArrayList<PostData> postData, PaginationSynchronizer paginationSynchronizer,
-                            RequestQueue voteThingRequestQueue) {
+    PostRecyclerViewAdapter(Context context, ArrayList<PostData> postData, PaginationSynchronizer paginationSynchronizer) {
         if(context != null) {
             mContext = context;
             mPostData = postData;
             mPaginationSynchronizer = paginationSynchronizer;
-            mVoteThingRequestQueue = voteThingRequestQueue;
             isLoadingMorePostSuccess = true;
             canStartActivity = true;
             glide = Glide.with(mContext);

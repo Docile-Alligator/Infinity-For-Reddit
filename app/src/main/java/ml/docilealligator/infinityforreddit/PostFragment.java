@@ -4,7 +4,6 @@ package ml.docilealligator.infinityforreddit;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,16 +19,12 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
 import java.util.ArrayList;
-import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 
 /**
@@ -37,7 +32,7 @@ import java.util.Map;
  */
 public class PostFragment extends Fragment {
 
-    static final String QUERY_POST_URL_KEY = "QPUK";
+    static final String SUBREDDIT_NAME_KEY = "SNK";
     static final String IS_BEST_POST_KEY = "IBPK";
 
     private CoordinatorLayout mCoordinatorLayout;
@@ -50,15 +45,10 @@ public class PostFragment extends Fragment {
     private PostRecyclerViewAdapter mAdapter;
 
     private boolean mIsBestPost;
-    private String mQueryPostUrl;
+    private String mSubredditName;
     private String PostDataParcelableState = "BPDPS";
     private String lastItemState = "LIS";
     private String paginationSynchronizerState = "PSS";
-
-    private RequestQueue mRequestQueue;
-    private RequestQueue mPaginationRequestQueue;
-    private RequestQueue mAcquireAccessTokenRequestQueue;
-    private RequestQueue mVoteThingRequestQueue;
 
     public PostFragment() {
         // Required empty public constructor
@@ -71,20 +61,19 @@ public class PostFragment extends Fragment {
             if(savedInstanceState.containsKey(PostDataParcelableState)) {
                 mPostData = savedInstanceState.getParcelableArrayList(PostDataParcelableState);
                 mLastItem = savedInstanceState.getString(lastItemState);
-                mAdapter = new PostRecyclerViewAdapter(getActivity(), mPostData, mPaginationSynchronizer, mVoteThingRequestQueue);
+                mAdapter = new PostRecyclerViewAdapter(getActivity(), mPostData, mPaginationSynchronizer);
                 mPostRecyclerView.setAdapter(mAdapter);
                 mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
                         getActivity(), mLinearLayoutManager, mAdapter, mLastItem, mPostData,
-                        mPaginationSynchronizer, mAcquireAccessTokenRequestQueue,
-                        mQueryPostUrl, mIsBestPost,
+                        mPaginationSynchronizer, mSubredditName, mIsBestPost,
                         mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
                         getResources().getConfiguration().locale));
                 mProgressBar.setVisibility(View.GONE);
             } else {
                 if(mIsBestPost) {
-                    queryBestPost(1);
+                    fetchBestPost(1);
                 } else {
-                    fetchPost(mQueryPostUrl, 1);
+                    fetchPost(mSubredditName, 1);
                 }
             }
         }
@@ -93,22 +82,6 @@ public class PostFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-
-        if(mRequestQueue != null) {
-            mRequestQueue.cancelAll(this);
-        }
-
-        if(mAcquireAccessTokenRequestQueue != null) {
-            mAcquireAccessTokenRequestQueue.cancelAll(RefreshAccessToken.class);
-        }
-
-        if(mVoteThingRequestQueue != null) {
-            mVoteThingRequestQueue.cancelAll(VoteThing.class);
-        }
-
-        if(mPaginationRequestQueue != null) {
-            mPaginationRequestQueue.cancelAll(PostPaginationScrollListener.class);
-        }
 
         if(mPostData != null) {
             outState.putParcelableArrayList(PostDataParcelableState, mPostData);
@@ -144,21 +117,19 @@ public class PostFragment extends Fragment {
             }
         });*/
 
-        mRequestQueue = Volley.newRequestQueue(getActivity());
-        mAcquireAccessTokenRequestQueue = Volley.newRequestQueue(getActivity());
-        mVoteThingRequestQueue = Volley.newRequestQueue(getActivity());
-
         mIsBestPost = getArguments().getBoolean(IS_BEST_POST_KEY);
-        mQueryPostUrl = getArguments().getString(QUERY_POST_URL_KEY);
+        if(!mIsBestPost) {
+            mSubredditName = getArguments().getString(SUBREDDIT_NAME_KEY);
+        }
 
         if(savedInstanceState != null && savedInstanceState.getParcelable(paginationSynchronizerState) != null) {
             mPaginationSynchronizer = savedInstanceState.getParcelable(paginationSynchronizerState);
         } else {
             mPaginationSynchronizer = new PaginationSynchronizer();
             if(mIsBestPost) {
-                queryBestPost(1);
+                fetchBestPost(1);
             } else {
-                fetchPost(mQueryPostUrl, 1);
+                fetchPost(mSubredditName, 1);
             }
         }
 
@@ -170,18 +141,10 @@ public class PostFragment extends Fragment {
         };
         mPaginationSynchronizer.setLastItemSynchronizer(lastItemSynchronizer);
 
-        PaginationRequestQueueSynchronizer paginationRequestQueueSynchronizer = new PaginationRequestQueueSynchronizer() {
-            @Override
-            public void passQueue(RequestQueue q) {
-                mPaginationRequestQueue = q;
-            }
-        };
-        mPaginationSynchronizer.setPaginationRequestQueueSynchronizer(paginationRequestQueueSynchronizer);
-
         return rootView;
     }
 
-    private void queryBestPost(final int refreshTime) {
+    private void fetchBestPost(final int refreshTime) {
         if(refreshTime < 0) {
             showErrorSnackbar();
             return;
@@ -189,71 +152,75 @@ public class PostFragment extends Fragment {
 
         mProgressBar.setVisibility(View.VISIBLE);
 
-        StringRequest postRequest = new StringRequest(Request.Method.GET, mQueryPostUrl, new Response.Listener<String>() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(RedditUtils.OAUTH_API_BASE_URI)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+
+        RedditAPI api = retrofit.create(RedditAPI.class);
+
+        String accessToken = getActivity().getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
+                .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
+        Call<String> bestPost = api.getBestPost(mLastItem, RedditUtils.getOAuthHeader(accessToken));
+        bestPost.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if(getActivity() != null) {
-                    ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("response", response);
-                    clipboard.setPrimaryClip(clip);
-                    //new ParsePostDataAsyncTask(response, accessToken).execute();
-                    ParsePost.parsePost(response, new ArrayList<PostData>(),
-                            getResources().getConfiguration().locale, new ParsePost.ParsePostListener() {
-                                @Override
-                                public void onParsePostSuccess(ArrayList<PostData> postData, String lastItem) {
-                                    mPostData = postData;
-                                    mLastItem = lastItem;
-                                    mAdapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer, mVoteThingRequestQueue);
 
-                                    mPostRecyclerView.setAdapter(mAdapter);
-                                    mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
-                                            getActivity(), mLinearLayoutManager, mAdapter, lastItem, postData,
-                                            mPaginationSynchronizer, mAcquireAccessTokenRequestQueue,
-                                            mQueryPostUrl, mIsBestPost,
-                                            mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
-                                            getResources().getConfiguration().locale));
-                                    mProgressBar.setVisibility(View.GONE);
-                                }
+                    if(response.isSuccessful()) {
+                        ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("response", response.body());
+                        clipboard.setPrimaryClip(clip);
 
-                                @Override
-                                public void onParsePostFail() {
-                                    Toast.makeText(getActivity(), "Error parsing data", Toast.LENGTH_SHORT).show();
-                                    Log.i("Post fetch error", "Error parsing data");
-                                    mProgressBar.setVisibility(View.GONE);
-                                }
-                            });
+                        ParsePost.parsePost(response.body(), new ArrayList<PostData>(),
+                                getResources().getConfiguration().locale, new ParsePost.ParsePostListener() {
+                                    @Override
+                                    public void onParsePostSuccess(ArrayList<PostData> postData, String lastItem) {
+                                        mPostData = postData;
+                                        mLastItem = lastItem;
+                                        mAdapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer);
+
+                                        mPostRecyclerView.setAdapter(mAdapter);
+                                        mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
+                                                getActivity(), mLinearLayoutManager, mAdapter, lastItem, postData,
+                                                mPaginationSynchronizer, mSubredditName, mIsBestPost,
+                                                mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
+                                                getResources().getConfiguration().locale));
+                                        mProgressBar.setVisibility(View.GONE);
+                                    }
+
+                                    @Override
+                                    public void onParsePostFail() {
+                                        Toast.makeText(getActivity(), "Error parsing data", Toast.LENGTH_SHORT).show();
+                                        Log.i("Post fetch error", "Error parsing data");
+                                        mProgressBar.setVisibility(View.GONE);
+                                    }
+                                });
+                    } else if(response.code() == 401) {
+                        // Error indicating that there was an Authentication Failure while performing the request
+                        // Access token expired
+                        RefreshAccessToken.refreshAccessToken(getActivity(),
+                                new RefreshAccessToken.RefreshAccessTokenListener() {
+                                    @Override
+                                    public void onRefreshAccessTokenSuccess() {
+                                        fetchBestPost(refreshTime - 1);
+                                    }
+
+                                    @Override
+                                    public void onRefreshAccessTokenFail() {}
+                                });
+                    } else {
+                        Log.i("Post fetch error", response.message());
+                        showErrorSnackbar();
+                    }
                 }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (error instanceof AuthFailureError) {
-                    // Error indicating that there was an Authentication Failure while performing the request
-                    // Access token expired
-                    RefreshAccessToken.refreshAccessToken(getActivity(),
-                            new RefreshAccessToken.RefreshAccessTokenListener() {
-                                @Override
-                                public void onRefreshAccessTokenSuccess() {
-                                    queryBestPost(refreshTime - 1);
-                                }
 
-                                @Override
-                                public void onRefreshAccessTokenFail() {}
-                            });
-                } else {
-                    Log.i("Post fetch error", error.toString());
-                    showErrorSnackbar();
-                }
-            }
-        }) {
             @Override
-            public Map<String, String> getHeaders() {
-                String accessToken = getActivity().getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
-                return RedditUtils.getOAuthHeader(accessToken);
+            public void onFailure(Call<String> call, Throwable t) {
+                showErrorSnackbar();
             }
-        };
-        postRequest.setTag(PostFragment.class);
-        mRequestQueue.add(postRequest);
+        });
     }
 
     private void fetchPost(final String queryPostUrl, final int refreshTime) {
@@ -264,69 +231,59 @@ public class PostFragment extends Fragment {
 
         mProgressBar.setVisibility(View.VISIBLE);
 
-        Uri uri = Uri.parse(RedditUtils.OAUTH_API_BASE_URI + RedditUtils.BEST_POST_SUFFIX)
-                .buildUpon().appendQueryParameter(RedditUtils.RAW_JSON_KEY, RedditUtils.RAW_JSON_VALUE)
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(RedditUtils.API_BASE_URI)
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
 
-        StringRequest postRequest = new StringRequest(Request.Method.GET, queryPostUrl, new Response.Listener<String>() {
+        RedditAPI api = retrofit.create(RedditAPI.class);
+        Call<String> getPost = api.getPost(mSubredditName, mLastItem);
+        getPost.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(String response) {
+            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if(getActivity() != null) {
-                    ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("response", response);
-                    clipboard.setPrimaryClip(clip);
-                    //new ParsePostDataAsyncTask(response, accessToken).execute();
-                    ParsePost.parsePost(response, new ArrayList<PostData>(),
-                            getResources().getConfiguration().locale, new ParsePost.ParsePostListener() {
-                                @Override
-                                public void onParsePostSuccess(ArrayList<PostData> postData, String lastItem) {
-                                    mPostData = postData;
-                                    mLastItem = lastItem;
-                                    mAdapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer, mVoteThingRequestQueue);
+                    Log.i("response_code", Integer.toString(response.code()));
+                    if(response.isSuccessful()) {
+                        ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("response", response.body());
+                        clipboard.setPrimaryClip(clip);
 
-                                    mPostRecyclerView.setAdapter(mAdapter);
-                                    mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
-                                            getActivity(), mLinearLayoutManager, mAdapter, lastItem, postData,
-                                            mPaginationSynchronizer, mAcquireAccessTokenRequestQueue,
-                                            mQueryPostUrl, mIsBestPost,
-                                            mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
-                                            getResources().getConfiguration().locale));
-                                    mProgressBar.setVisibility(View.GONE);
-                                }
+                        ParsePost.parsePost(response.body(), new ArrayList<PostData>(),
+                                getResources().getConfiguration().locale, new ParsePost.ParsePostListener() {
+                                    @Override
+                                    public void onParsePostSuccess(ArrayList<PostData> postData, String lastItem) {
+                                        mPostData = postData;
+                                        mLastItem = lastItem;
+                                        mAdapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer);
 
-                                @Override
-                                public void onParsePostFail() {
-                                    Toast.makeText(getActivity(), "Error parsing data", Toast.LENGTH_SHORT).show();
-                                    Log.i("Post fetch error", "Error parsing data");
-                                    mProgressBar.setVisibility(View.GONE);
-                                }
-                            });
+                                        mPostRecyclerView.setAdapter(mAdapter);
+                                        mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
+                                                getActivity(), mLinearLayoutManager, mAdapter, lastItem, postData,
+                                                mPaginationSynchronizer, mSubredditName, mIsBestPost,
+                                                mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
+                                                getResources().getConfiguration().locale));
+                                        mProgressBar.setVisibility(View.GONE);
+                                    }
+
+                                    @Override
+                                    public void onParsePostFail() {
+                                        Toast.makeText(getActivity(), "Error parsing data", Toast.LENGTH_SHORT).show();
+                                        Log.i("Post fetch error", "Error parsing data");
+                                        mProgressBar.setVisibility(View.GONE);
+                                    }
+                                });
+                    } else {
+                        Log.i("Post fetch error", response.message());
+                        showErrorSnackbar();
+                    }
                 }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (error instanceof AuthFailureError) {
-                    // Error indicating that there was an Authentication Failure while performing the request
-                    // Access token expired
-                    RefreshAccessToken.refreshAccessToken(getActivity(),
-                            new RefreshAccessToken.RefreshAccessTokenListener() {
-                                @Override
-                                public void onRefreshAccessTokenSuccess() {
-                                    fetchPost(queryPostUrl, refreshTime - 1);
-                                }
 
-                                @Override
-                                public void onRefreshAccessTokenFail() {}
-                            });
-                } else {
-                    Log.i("Post fetch error", error.toString());
-                    showErrorSnackbar();
-                }
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                showErrorSnackbar();
             }
         });
-        postRequest.setTag(PostFragment.class);
-        mRequestQueue.add(postRequest);
     }
 
     private void showErrorSnackbar() {
@@ -336,9 +293,9 @@ public class PostFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(mIsBestPost) {
-                    queryBestPost(1);
+                    fetchBestPost(1);
                 } else {
-                    fetchPost(mQueryPostUrl, 1);
+                    fetchPost(mSubredditName, 1);
                 }
             }
         });

@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -165,11 +164,8 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
 
         if(savedInstanceState == null) {
             mFragment = new PostFragment();
-            Uri uri = Uri.parse(RedditUtils.getQuerySubredditPostUrl(subredditName))
-                    .buildUpon().appendQueryParameter(RedditUtils.RAW_JSON_KEY, RedditUtils.RAW_JSON_VALUE)
-                    .build();
             Bundle bundle = new Bundle();
-            bundle.putString(PostFragment.QUERY_POST_URL_KEY, uri.toString());
+            bundle.putString(PostFragment.SUBREDDIT_NAME_KEY, subredditName);
             bundle.putBoolean(PostFragment.IS_BEST_POST_KEY, false);
             mFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();

@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -31,6 +30,8 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
 
     private String nameState = "NS";
     private String profileImageUrlState = "PIUS";
@@ -77,16 +78,12 @@ public class MainActivity extends AppCompatActivity {
         } else {
             if(savedInstanceState == null) {
                 mFragment = new PostFragment();
-                Uri uri = Uri.parse(RedditUtils.OAUTH_API_BASE_URI + RedditUtils.BEST_POST_SUFFIX)
-                        .buildUpon().appendQueryParameter(RedditUtils.RAW_JSON_KEY, RedditUtils.RAW_JSON_VALUE)
-                        .build();
                 Bundle bundle = new Bundle();
-                bundle.putString(PostFragment.QUERY_POST_URL_KEY, uri.toString());
                 bundle.putBoolean(PostFragment.IS_BEST_POST_KEY, true);
                 mFragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
             } else {
-                mFragment = getSupportFragmentManager().getFragment(savedInstanceState, "outStateFragment");
+                mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
             }
 
@@ -271,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if(mFragment != null) {
-            getSupportFragmentManager().putFragment(outState, "outStateFragment", mFragment);
+            getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE_KEY, mFragment);
         }
         outState.putString(nameState, mName);
         outState.putString(profileImageUrlState, mProfileImageUrl);

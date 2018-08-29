@@ -9,7 +9,6 @@ class PaginationSynchronizer implements Parcelable {
     private PaginationNotifier paginationNotifier;
     private PaginationRetryNotifier paginationRetryNotifier;
     private LastItemSynchronizer lastItemSynchronizer;
-    private PaginationRequestQueueSynchronizer paginationRequestQueueSynchronizer;
 
     PaginationSynchronizer() {
         loadingState = false;
@@ -72,14 +71,6 @@ class PaginationSynchronizer implements Parcelable {
 
     public LastItemSynchronizer getLastItemSynchronizer() {
         return lastItemSynchronizer;
-    }
-
-    public void setPaginationRequestQueueSynchronizer(PaginationRequestQueueSynchronizer paginationRequestQueueSynchronizer) {
-        this.paginationRequestQueueSynchronizer = paginationRequestQueueSynchronizer;
-    }
-
-    public PaginationRequestQueueSynchronizer getPaginationRequestQueueSynchronizer() {
-        return paginationRequestQueueSynchronizer;
     }
 
     @Override

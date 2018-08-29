@@ -13,9 +13,6 @@ class RedditUtils {
     static final String OAUTH_URL ="https://www.reddit.com/api/v1/authorize.compact";
     static final String OAUTH_API_BASE_URI = "https://oauth.reddit.com";
     static final String API_BASE_URI = "https://www.reddit.com";
-    static final String RAW_JSON_KEY ="raw_json";
-    static final String RAW_JSON_VALUE = "1";
-    static final String BEST_POST_SUFFIX = "/best";
 
     static final String CLIENT_ID_KEY = "client_id";
     static final String CLIENT_ID = "";
@@ -48,8 +45,6 @@ class RedditUtils {
     static final String DIR_UNVOTE = "0";
     static final String DIR_DOWNVOTE = "-1";
     static final String RANK = "10";
-
-    static final String AFTER_KEY = "after";
 
     static Map<String, String> getHttpBasicAuthHeader() {
         Map<String, String> params = new HashMap<>();
