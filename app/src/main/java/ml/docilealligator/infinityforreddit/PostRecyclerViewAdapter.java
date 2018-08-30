@@ -24,15 +24,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * Created by alex on 2/25/18.
@@ -171,6 +174,27 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     ((DataViewHolder) holder).relativeLayout.setVisibility(View.VISIBLE);
                     ((DataViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
                     ((DataViewHolder) holder).imageView.setVisibility(View.VISIBLE);
+
+                    String previewUrl = mPostData.get(position).getPreviewUrl();
+                    RequestBuilder imageRequestBuilder = glide.load(previewUrl).listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            ((DataViewHolder) holder).progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+                    });
+
+                    if(mPostData.get(position).isNSFW()) {
+                        imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(25, 3)))
+                                .into(((DataViewHolder) holder).imageView);
+                    } else {
+                        imageRequestBuilder.into(((DataViewHolder) holder).imageView);
+                    }
                 }
 
                 if(mPostData.get(position).isStickied()) {
@@ -181,20 +205,8 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 switch (mPostData.get(position).getPostType()) {
                     case PostData.IMAGE_TYPE:
                         ((DataViewHolder) holder).typeTextView.setText("IMAGE");
-                        final String previewImageUrl = mPostData.get(position).getPreviewUrl();
-                        final String imageUrl = mPostData.get(position).getUrl();
-                        glide.load(previewImageUrl).listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                return false;
-                            }
 
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                ((DataViewHolder) holder).progressBar.setVisibility(View.GONE);
-                                return false;
-                            }
-                        }).into(((DataViewHolder) holder).imageView);
+                        final String imageUrl = mPostData.get(position).getUrl();
                         ((DataViewHolder) holder).imageView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -209,20 +221,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         break;
                     case PostData.LINK_TYPE:
                         ((DataViewHolder) holder).typeTextView.setText("LINK");
-                        String linkPreviewUrl = mPostData.get(position).getPreviewUrl();
-                        glide.load(linkPreviewUrl).listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                return false;
-                            }
 
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                ((DataViewHolder) holder).progressBar.setVisibility(View.GONE);
-                                return false;
-                            }
-                        }).into(((DataViewHolder) holder).imageView);
-                        final String linkUrl = mPostData.get(position).getUrl();
                         ((DataViewHolder) holder).imageView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -231,29 +230,14 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 builder.addDefaultShareMenuItem();
                                 builder.setToolbarColor(mContext.getResources().getColor(R.color.colorPrimary));
                                 CustomTabsIntent customTabsIntent = builder.build();
-                                customTabsIntent.launchUrl(mContext, Uri.parse(linkUrl));
+                                customTabsIntent.launchUrl(mContext, Uri.parse(mPostData.get(position).getUrl()));
                             }
                         });
                         break;
                     case PostData.GIF_VIDEO_TYPE:
                         ((DataViewHolder) holder).typeTextView.setText("GIF");
-                        String gifVideoPreviewUrl = mPostData.get(position).getPreviewUrl();
-                        glide.load(gifVideoPreviewUrl).listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                return false;
-                            }
 
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                ((DataViewHolder) holder).progressBar.setVisibility(View.GONE);
-                                return false;
-                            }
-                        }).into(((DataViewHolder) holder).imageView);
-
-                        String gifVideoUrl = mPostData.get(position).getVideoUrl();
-                        final Uri gifVideoUri = Uri.parse(gifVideoUrl);
-
+                        final Uri gifVideoUri = Uri.parse(mPostData.get(position).getVideoUrl());
                         ((DataViewHolder) holder).imageView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -273,23 +257,8 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         break;
                     case PostData.VIDEO_TYPE:
                         ((DataViewHolder) holder).typeTextView.setText("VIDEO");
-                        String videoPreviewUrl = mPostData.get(position).getPreviewUrl();
-                        glide.load(videoPreviewUrl).listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                return false;
-                            }
 
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                ((DataViewHolder) holder).progressBar.setVisibility(View.GONE);
-                                return false;
-                            }
-                        }).into(((DataViewHolder) holder).imageView);
-
-                        String videoUrl = mPostData.get(position).getVideoUrl();
-                        final Uri videoUri = Uri.parse(videoUrl);
-
+                        final Uri videoUri = Uri.parse(mPostData.get(position).getVideoUrl());
                         ((DataViewHolder) holder).imageView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
