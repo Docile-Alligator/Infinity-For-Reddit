@@ -60,8 +60,4 @@ class RedditUtils {
         params.put(RedditUtils.USER_AGENT_KEY, RedditUtils.USER_AGENT);
         return params;
     }
-
-    static String getQuerySubredditPostUrl(String subredditName) {
-        return API_BASE_URI + "/r/" + subredditName + ".json";
-    }
 }

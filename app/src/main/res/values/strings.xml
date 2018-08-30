@@ -8,6 +8,8 @@
     <string name="action_settings">Settings</string>
     <string name="action_download">Download</string>
 
+    <string name="load_posts_error">Error loading posts.\nTap to retry.</string>
+
     <string name="load_data_failed">Cannot load posts</string>
     <string name="load_comment_failed">Error loading comments</string>
     <string name="retry">Retry</string>

@@ -34,21 +34,28 @@ class FetchUserInfo {
         userInfo.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                fetchUserInfoListener.onFetchUserInfoSuccess(response.body());
+                if(response.isSuccessful()) {
+                    fetchUserInfoListener.onFetchUserInfoSuccess(response.body());
+                } else if(response.code() == 401){
+                    RefreshAccessToken.refreshAccessToken(context, new RefreshAccessToken.RefreshAccessTokenListener() {
+                        @Override
+                        public void onRefreshAccessTokenSuccess() {
+                            fetchUserInfo(context, fetchUserInfoListener, refreshTime - 1);
+                        }
+
+                        @Override
+                        public void onRefreshAccessTokenFail() {}
+                    });
+                } else {
+                    Log.i("call failed", response.message());
+                    fetchUserInfoListener.onFetchUserInfoFail();
+                }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.i("call failed", t.getMessage());
-                RefreshAccessToken.refreshAccessToken(context, new RefreshAccessToken.RefreshAccessTokenListener() {
-                    @Override
-                    public void onRefreshAccessTokenSuccess() {
-                        fetchUserInfo(context, fetchUserInfoListener, refreshTime - 1);
-                    }
-
-                    @Override
-                    public void onRefreshAccessTokenFail() {}
-                });
+                fetchUserInfoListener.onFetchUserInfoFail();
             }
         });
     }

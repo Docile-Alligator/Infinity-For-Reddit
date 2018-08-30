@@ -16,8 +16,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -43,6 +46,8 @@ public class PostFragment extends Fragment {
     private String mLastItem;
     private PaginationSynchronizer mPaginationSynchronizer;
     private PostRecyclerViewAdapter mAdapter;
+    private LinearLayout mFetchPostErrorLinearLayout;
+    private ImageView mFetchPostErrorImageView;
 
     private boolean mIsBestPost;
     private String mSubredditName;
@@ -73,7 +78,7 @@ public class PostFragment extends Fragment {
                 if(mIsBestPost) {
                     fetchBestPost(1);
                 } else {
-                    fetchPost(mSubredditName, 1);
+                    fetchPost();
                 }
             }
         }
@@ -108,6 +113,8 @@ public class PostFragment extends Fragment {
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mPostRecyclerView.setLayoutManager(mLinearLayoutManager);
         mProgressBar = rootView.findViewById(R.id.progress_bar_post_fragment);
+        mFetchPostErrorLinearLayout = rootView.findViewById(R.id.fetch_post_error_linear_layout_post_fragment);
+        mFetchPostErrorImageView = rootView.findViewById(R.id.fetch_post_error_image_view_post_fragment);
         /*FloatingActionButton fab = rootView.findViewById(R.id.fab_post_fragment);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,6 +127,17 @@ public class PostFragment extends Fragment {
         mIsBestPost = getArguments().getBoolean(IS_BEST_POST_KEY);
         if(!mIsBestPost) {
             mSubredditName = getArguments().getString(SUBREDDIT_NAME_KEY);
+        } else {
+            mFetchPostErrorLinearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(mIsBestPost) {
+                        fetchBestPost(1);
+                    } else {
+                        fetchPost();
+                    }
+                }
+            });
         }
 
         if(savedInstanceState != null && savedInstanceState.getParcelable(paginationSynchronizerState) != null) {
@@ -129,7 +147,7 @@ public class PostFragment extends Fragment {
             if(mIsBestPost) {
                 fetchBestPost(1);
             } else {
-                fetchPost(mSubredditName, 1);
+                fetchPost();
             }
         }
 
@@ -146,10 +164,11 @@ public class PostFragment extends Fragment {
 
     private void fetchBestPost(final int refreshTime) {
         if(refreshTime < 0) {
-            showErrorSnackbar();
+            showErrorView();
             return;
         }
 
+        mFetchPostErrorLinearLayout.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -166,7 +185,6 @@ public class PostFragment extends Fragment {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if(getActivity() != null) {
-
                     if(response.isSuccessful()) {
                         ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                         ClipData clip = ClipData.newPlainText("response", response.body());
@@ -191,9 +209,8 @@ public class PostFragment extends Fragment {
 
                                     @Override
                                     public void onParsePostFail() {
-                                        Toast.makeText(getActivity(), "Error parsing data", Toast.LENGTH_SHORT).show();
                                         Log.i("Post fetch error", "Error parsing data");
-                                        mProgressBar.setVisibility(View.GONE);
+                                        showErrorView();
                                     }
                                 });
                     } else if(response.code() == 401) {
@@ -211,24 +228,20 @@ public class PostFragment extends Fragment {
                                 });
                     } else {
                         Log.i("Post fetch error", response.message());
-                        showErrorSnackbar();
+                        showErrorView();
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                showErrorSnackbar();
+                showErrorView();
             }
         });
     }
 
-    private void fetchPost(final String queryPostUrl, final int refreshTime) {
-        if(refreshTime < 0) {
-            showErrorSnackbar();
-            return;
-        }
-
+    private void fetchPost() {
+        mFetchPostErrorLinearLayout.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -242,7 +255,6 @@ public class PostFragment extends Fragment {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if(getActivity() != null) {
-                    Log.i("response_code", Integer.toString(response.code()));
                     if(response.isSuccessful()) {
                         ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                         ClipData clip = ClipData.newPlainText("response", response.body());
@@ -267,38 +279,42 @@ public class PostFragment extends Fragment {
 
                                     @Override
                                     public void onParsePostFail() {
-                                        Toast.makeText(getActivity(), "Error parsing data", Toast.LENGTH_SHORT).show();
                                         Log.i("Post fetch error", "Error parsing data");
-                                        mProgressBar.setVisibility(View.GONE);
+                                        showErrorView();
                                     }
                                 });
                     } else {
                         Log.i("Post fetch error", response.message());
-                        showErrorSnackbar();
+                        showErrorView();
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                showErrorSnackbar();
+                showErrorView();
             }
         });
     }
 
-    private void showErrorSnackbar() {
+    private void showErrorView() {
         mProgressBar.setVisibility(View.GONE);
-        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, "Error getting post", Snackbar.LENGTH_INDEFINITE);
-        snackbar.setAction(R.string.retry, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(mIsBestPost) {
-                    fetchBestPost(1);
-                } else {
-                    fetchPost(mSubredditName, 1);
+        if(mIsBestPost) {
+            mFetchPostErrorLinearLayout.setVisibility(View.VISIBLE);
+            Glide.with(this).load(R.drawable.load_post_error_indicator).into(mFetchPostErrorImageView);
+        } else {
+            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, "Error getting post", Snackbar.LENGTH_INDEFINITE);
+            snackbar.setAction(R.string.retry, new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mIsBestPost) {
+                        fetchBestPost(1);
+                    } else {
+                        fetchPost();
+                    }
                 }
-            }
-        });
-        snackbar.show();
+            });
+            snackbar.show();
+        }
     }
 }

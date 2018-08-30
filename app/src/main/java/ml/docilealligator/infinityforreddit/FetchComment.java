@@ -27,7 +27,12 @@ class FetchComment {
         comments.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                fetchCommentListener.onFetchCommentSuccess(response.body());
+                if(response.isSuccessful()) {
+                    fetchCommentListener.onFetchCommentSuccess(response.body());
+                } else {
+                    Log.i("call failed", response.message());
+                    fetchCommentListener.onFetchCommentFail();
+                }
             }
 
             @Override

@@ -27,7 +27,12 @@ class FetchSubredditData {
         subredditData.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                fetchSubredditDataListener.onFetchSubredditDataSuccess(response.body());
+                if(response.isSuccessful()) {
+                    fetchSubredditDataListener.onFetchSubredditDataSuccess(response.body());
+                } else {
+                    Log.i("call failed", response.message());
+                    fetchSubredditDataListener.onFetchSubredditDataFail();
+                }
             }
 
             @Override

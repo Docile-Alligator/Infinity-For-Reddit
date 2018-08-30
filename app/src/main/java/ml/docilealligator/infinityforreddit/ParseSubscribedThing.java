@@ -65,7 +65,7 @@ class ParseSubscribedThing {
                 for(int i = 0; i < children.length(); i++) {
                     JSONObject data = children.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
                     String name = data.getString(JSONUtils.DISPLAY_NAME);
-                    String bannerImageUrl = data.getString(JSONUtils.BANNER_IMG_KEY);
+                    String bannerImageUrl = data.getString(JSONUtils.BANNER_BACKGROUND_IMAGE_KEY);
                     if(bannerImageUrl.equals("") || bannerImageUrl.equals("null")) {
                         bannerImageUrl= data.getString(JSONUtils.BANNER_IMG_KEY);
                         if(bannerImageUrl.equals("null")) {

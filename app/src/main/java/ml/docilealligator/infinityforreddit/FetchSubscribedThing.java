@@ -44,45 +44,52 @@ class FetchSubscribedThing {
         subredditDataCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                ParseSubscribedThing.parseSubscribedSubreddits(response.body(), subscribedSubredditData,
-                        subscribedUserData, subredditData,
-                        new ParseSubscribedThing.ParseSubscribedSubredditsListener() {
+                if(response.isSuccessful()) {
+                    ParseSubscribedThing.parseSubscribedSubreddits(response.body(), subscribedSubredditData,
+                            subscribedUserData, subredditData,
+                            new ParseSubscribedThing.ParseSubscribedSubredditsListener() {
 
-                            @Override
-                            public void onParseSubscribedSubredditsSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
-                                                                           ArrayList<SubscribedUserData> subscribedUserData,
-                                                                           ArrayList<SubredditData> subredditData,
-                                                                           String lastItem) {
-                                if(lastItem.equals("null")) {
-                                    fetchSubscribedThingListener.onFetchSubscribedThingSuccess(
-                                            subscribedSubredditData, subscribedUserData, subredditData);
-                                } else {
-                                    fetchSubscribedThing(context, lastItem, subscribedSubredditData,
-                                            subscribedUserData, subredditData,
-                                            fetchSubscribedThingListener, refreshTime);
+                                @Override
+                                public void onParseSubscribedSubredditsSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
+                                                                               ArrayList<SubscribedUserData> subscribedUserData,
+                                                                               ArrayList<SubredditData> subredditData,
+                                                                               String lastItem) {
+                                    if(lastItem.equals("null")) {
+                                        fetchSubscribedThingListener.onFetchSubscribedThingSuccess(
+                                                subscribedSubredditData, subscribedUserData, subredditData);
+                                    } else {
+                                        fetchSubscribedThing(context, lastItem, subscribedSubredditData,
+                                                subscribedUserData, subredditData,
+                                                fetchSubscribedThingListener, refreshTime);
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onParseSubscribedSubredditsFail() {
-                                fetchSubscribedThingListener.onFetchSubscribedThingFail();
-                            }
-                        });
+                                @Override
+                                public void onParseSubscribedSubredditsFail() {
+                                    fetchSubscribedThingListener.onFetchSubscribedThingFail();
+                                }
+                            });
+                } else if(response.code() == 401) {
+                    RefreshAccessToken.refreshAccessToken(context, new RefreshAccessToken.RefreshAccessTokenListener() {
+                        @Override
+                        public void onRefreshAccessTokenSuccess() {
+                            fetchSubscribedThing(context, lastItem, subscribedSubredditData,
+                                    subscribedUserData, subredditData, fetchSubscribedThingListener, refreshTime - 1);
+                        }
+
+                        @Override
+                        public void onRefreshAccessTokenFail() {}
+                    });
+                } else {
+                    Log.i("call failed", response.message());
+                    fetchSubscribedThingListener.onFetchSubscribedThingFail();
+                }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.i("call failed", t.getMessage());
-                RefreshAccessToken.refreshAccessToken(context, new RefreshAccessToken.RefreshAccessTokenListener() {
-                    @Override
-                    public void onRefreshAccessTokenSuccess() {
-                        fetchSubscribedThing(context, lastItem, subscribedSubredditData,
-                                subscribedUserData, subredditData, fetchSubscribedThingListener, refreshTime);
-                    }
-
-                    @Override
-                    public void onRefreshAccessTokenFail() {}
-                });
+                fetchSubscribedThingListener.onFetchSubscribedThingFail();
             }
         });
     }
