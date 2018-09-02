@@ -258,7 +258,12 @@
                         android:textColor="#000000"
                         android:textSize="18sp" />
 
-                    <android.support.v7.widget.RecyclerView
+                    <!--<android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler_view_view_post_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />-->
+
+                    <com.multilevelview.MultiLevelRecyclerView
                         android:id="@+id/recycler_view_view_post_detail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />

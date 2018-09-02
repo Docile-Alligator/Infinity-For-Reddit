@@ -15,7 +15,8 @@ class FetchComment {
         void onFetchCommentFail();
     }
 
-    static void queryComment(String subredditNamePrefixed, String article, final FetchCommentListener fetchCommentListener) {
+    static void fetchComment(String subredditNamePrefixed, String article, String comment,
+                             final FetchCommentListener fetchCommentListener) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RedditUtils.API_BASE_URI)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -23,7 +24,7 @@ class FetchComment {
 
         RedditAPI api = retrofit.create(RedditAPI.class);
 
-        Call<String> comments = api.getComments(subredditNamePrefixed, article);
+        Call<String> comments = api.getComments(subredditNamePrefixed, article, comment);
         comments.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

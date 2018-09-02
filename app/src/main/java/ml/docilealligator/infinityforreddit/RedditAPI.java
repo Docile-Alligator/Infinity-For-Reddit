@@ -17,7 +17,8 @@ public interface RedditAPI {
     Call<String> getAccessToken(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
     @GET("{subredditNamePrefixed}/comments/{article}.json?raw_json=1")
-    Call<String> getComments(@Path("subredditNamePrefixed") String subredditNamePrefixed, @Path("article") String article);
+    Call<String> getComments(@Path("subredditNamePrefixed") String subredditNamePrefixed,
+                             @Path("article") String article, @Query("comment") String comment);
 
     @GET("r/{subredditName}/about.json?raw_json=1")
     Call<String> getSubredditData(@Path("subredditName") String subredditName);

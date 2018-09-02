@@ -1,6 +1,9 @@
 package ml.docilealligator.infinityforreddit;
 
-class CommentData {
+import com.multilevelview.models.RecyclerViewItem;
+
+class CommentData extends RecyclerViewItem {
+    private String id;
     private String fullName;
     private String author;
     private String commentTime;
@@ -14,9 +17,11 @@ class CommentData {
     private boolean hasReply;
     private boolean scoreHidden;
 
-    CommentData(String fullName, String author, String commentTime, String commentContent, int score,
-                boolean isSubmitter, String permalink, int depth, boolean collapsed, boolean hasReply,
-                boolean scoreHidden) {
+    CommentData(String id, String fullName, String author, String commentTime, String commentContent,
+                int score, boolean isSubmitter, String permalink, int depth, boolean collapsed,
+                boolean hasReply, boolean scoreHidden) {
+        super(depth);
+        this.id = id;
         this.fullName = fullName;
         this.author = author;
         this.commentTime = commentTime;
@@ -30,6 +35,9 @@ class CommentData {
         this.scoreHidden = scoreHidden;
     }
 
+    public String getId() {
+        return id;
+    }
 
     public String getFullName() {
         return fullName;
@@ -71,7 +79,7 @@ class CommentData {
         return collapsed;
     }
 
-    public boolean isHasReply() {
+    public boolean hasReply() {
         return hasReply;
     }
 

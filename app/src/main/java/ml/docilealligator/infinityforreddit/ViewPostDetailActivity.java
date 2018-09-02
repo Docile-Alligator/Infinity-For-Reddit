@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,10 +30,12 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.multilevelview.MultiLevelRecyclerView;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -53,7 +54,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private CoordinatorLayout mCoordinatorLayout;
     private ProgressBar mCommentProgressbar;
     private CardView mCommentCardView;
-    private RecyclerView mRecyclerView;
+    private MultiLevelRecyclerView mRecyclerView;
 
     private LinearLayout mNoCommentWrapperLinearLayout;
     private ImageView mNoCommentImageView;
@@ -454,19 +455,25 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private void queryComment() {
         mCommentProgressbar.setVisibility(View.VISIBLE);
         mNoCommentWrapperLinearLayout.setVisibility(View.GONE);
-        FetchComment.queryComment(mPostData.getSubredditNamePrefixed(), mPostData.getId(),
-                new FetchComment.FetchCommentListener() {
+        FetchComment.fetchComment(mPostData.getSubredditNamePrefixed(), mPostData.getId(),
+                null, new FetchComment.FetchCommentListener() {
                     @Override
                     public void onFetchCommentSuccess(String response) {
                         ParseComment.parseComment(response, new ArrayList<CommentData>(),
-                                getResources().getConfiguration().locale, new ParseComment.ParseCommentListener() {
+                                getResources().getConfiguration().locale, true, 0,
+                                new ParseComment.ParseCommentListener() {
                                     @Override
-                                    public void onParseCommentSuccess(ArrayList<CommentData> commentData, int moreCommentCount) {
+                                    public void onParseCommentSuccess(List<?> commentData, int moreCommentCount) {
                                         mCommentProgressbar.setVisibility(View.GONE);
                                         mMoreCommentCount = moreCommentCount;
                                         if (commentData.size() > 0) {
-                                            CommentRecyclerViewAdapter adapter = new CommentRecyclerViewAdapter(
-                                                    ViewPostDetailActivity.this, commentData);
+                                            CommentMultiLevelRecyclerViewAdapter adapter = new CommentMultiLevelRecyclerViewAdapter(
+                                                    ViewPostDetailActivity.this, (ArrayList<CommentData>) commentData,
+                                                    mRecyclerView, mPostData.getSubredditNamePrefixed(),
+                                                    mPostData.getId(), getResources().getConfiguration().locale);
+                                            mRecyclerView.removeItemClickListeners();
+                                            mRecyclerView.setToggleItemOnClick(false);
+                                            mRecyclerView.setAccordion(false);
                                             mRecyclerView.setAdapter(adapter);
                                             mCommentCardView.setVisibility(View.VISIBLE);
                                         } else {
