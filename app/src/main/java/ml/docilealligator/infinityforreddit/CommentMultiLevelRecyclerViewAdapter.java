@@ -67,8 +67,8 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
             @Override
             public void onClick(View view) {
                 if(commentItem.hasChildren() && commentItem.getChildren().size() > 0) {
-                    setExpandButton(((CommentViewHolder) holder).expandButton, commentItem.isExpanded());
                     mMultiLevelRecyclerView.toggleItemsGroup(holder.getAdapterPosition());
+                    setExpandButton(((CommentViewHolder) holder).expandButton, commentItem.isExpanded());
                 } else {
                     ((CommentViewHolder) holder).loadMoreCommentsProgressBar.setVisibility(View.VISIBLE);
                     FetchComment.fetchComment(subredditNamePrefixed, article, commentItem.getId(),
@@ -83,6 +83,8 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                                                     ((CommentViewHolder) holder).loadMoreCommentsProgressBar
                                                             .setVisibility(View.GONE);
                                                     mMultiLevelRecyclerView.toggleItemsGroup(holder.getAdapterPosition());
+                                                    ((CommentViewHolder) holder).expandButton
+                                                            .setImageResource(R.drawable.ic_expand_less_black_20dp);
                                                 }
 
                                                 @Override
