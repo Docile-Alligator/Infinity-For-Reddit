@@ -8,10 +8,14 @@ public class SubredditRepository {
     private SubredditDao mSubredditDao;
     private LiveData<SubredditData> mSubredditLiveData;
 
-    SubredditRepository(Application application, String id) {
+    SubredditRepository(Application application, String value, boolean isId) {
         SubredditRoomDatabase db = SubredditRoomDatabase.getDatabase(application);
         mSubredditDao = db.subredditDao();
-        mSubredditLiveData = mSubredditDao.getSubredditLiveData(id);
+        if(isId) {
+            mSubredditLiveData = mSubredditDao.getSubredditLiveDataById(value);
+        } else {
+            mSubredditLiveData = mSubredditDao.getSubredditLiveDataByNamePrefixed(value);
+        }
     }
 
     LiveData<SubredditData> getSubredditLiveData() {

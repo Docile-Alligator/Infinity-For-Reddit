@@ -27,7 +27,6 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
     private PostRecyclerViewAdapter mAdapter;
     private ArrayList<PostData> mPostData;
     private PaginationSynchronizer mPaginationSynchronizer;
-    private PaginationRetryNotifier mPaginationRetryNotifier;
     private LastItemSynchronizer mLastItemSynchronizer;
 
     private String mSubredditName;
@@ -54,17 +53,17 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
             this.loadSuccess = loadSuccess;
             this.locale = locale;
 
-            mPaginationRetryNotifier = new PaginationRetryNotifier() {
+            PaginationRetryNotifier paginationRetryNotifier = new PaginationRetryNotifier() {
                 @Override
                 public void retry() {
-                    if(isBestPost) {
+                    if (isBestPost) {
                         fetchBestPost(1);
                     } else {
                         fetchPost(subredditName, 1);
                     }
                 }
             };
-            mPaginationSynchronizer.setPaginationRetryNotifier(mPaginationRetryNotifier);
+            mPaginationSynchronizer.setPaginationRetryNotifier(paginationRetryNotifier);
             mLastItemSynchronizer = mPaginationSynchronizer.getLastItemSynchronizer();
         }
     }
@@ -117,8 +116,8 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
                     clipboard.setPrimaryClip(clip);
                     ParsePost.parsePost(response.body(), mPostData, locale, new ParsePost.ParsePostListener() {
                         @Override
-                        public void onParsePostSuccess(ArrayList<PostData> bestPostData, String lastItem) {
-                            mAdapter.notifyDataSetChanged();
+                        public void onParsePostSuccess(ArrayList<PostData> postData, String lastItem) {
+                            mAdapter.notifyItemRangeInserted(mPostData.size(), postData.size());
                             mLastItem = lastItem;
                             mLastItemSynchronizer.lastItemChanged(mLastItem);
 
@@ -188,8 +187,8 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
                     clipboard.setPrimaryClip(clip);
                     ParsePost.parsePost(response.body(), mPostData, locale, new ParsePost.ParsePostListener() {
                         @Override
-                        public void onParsePostSuccess(ArrayList<PostData> bestPostData, String lastItem) {
-                            mAdapter.notifyDataSetChanged();
+                        public void onParsePostSuccess(ArrayList<PostData> postData, String lastItem) {
+                            mAdapter.notifyItemRangeInserted(mPostData.size(), postData.size());
                             mLastItem = lastItem;
                             mLastItemSynchronizer.lastItemChanged(mLastItem);
 

@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,7 +26,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ViewSubredditDetailActivity extends AppCompatActivity {
 
     static final String EXTRA_SUBREDDIT_NAME_KEY = "ESN";
-    static final String EXTRA_SUBREDDIT_ID_KEY = "ESI";
+    static final String EXTRA_SUBREDDIT_VALUE_KEY = "ESV";
+    static final String EXTRA_QUERY_BY_ID_KEY = "EQBI";
 
     private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
 
@@ -37,31 +39,48 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_subreddit_detail);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //Get status bar height
+        int statusBarHeight = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+        }
+
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
+        params.topMargin = statusBarHeight;
 
         final String subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME_KEY);
 
         final String title = "r/" + subredditName;
-        setTitle(title);
-
         final CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar_layout_view_subreddit_detail_activity);
-        AppBarLayout appBarLayout = findViewById(R.id.app_bar_layout_view_subreddit_detail_activity);
+        final AppBarLayout appBarLayout = findViewById(R.id.app_bar_layout_view_subreddit_detail_activity);
+
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow = true;
+            int previousVerticalOffset = 0;
             int scrollRange = -1;
 
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
+                /*collapsingToolbarLayout.setExpandedTitleColor(Color.BLACK);
+                collapsingToolbarLayout.setCollapsedTitleTextColor(Color.BLACK);*/
+                if(scrollRange == -1) {
                     scrollRange = appBarLayout.getTotalScrollRange();
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbarLayout.setTitle(title);
-                    isShow = true;
-                } else if(isShow) {
-                    collapsingToolbarLayout.setTitle(" ");//carefull there should a space between double quote otherwise it wont work
-                    isShow = false;
+                } else {
+                    if(verticalOffset < previousVerticalOffset) {
+                        //Scroll down
+                        if(scrollRange - Math.abs(verticalOffset) <= toolbar.getHeight()) {
+                            collapsingToolbarLayout.setTitle(title);
+                        }
+                    } else {
+                        //Scroll up
+                        if(scrollRange - Math.abs(verticalOffset) > toolbar.getHeight()) {
+                            collapsingToolbarLayout.setTitle(" ");//carefull there should a space between double quote otherwise it wont work
+                        }
+                    }
+                    previousVerticalOffset = verticalOffset;
                 }
             }
         });
@@ -74,8 +93,9 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         final TextView descriptionTextView = findViewById(R.id.description_text_view_view_subreddit_detail_activity);
         final RequestManager glide = Glide.with(ViewSubredditDetailActivity.this);
 
-        String id = getIntent().getExtras().getString(EXTRA_SUBREDDIT_ID_KEY);
-        SubredditViewModel.Factory factory = new SubredditViewModel.Factory(getApplication(), id);
+        String value = getIntent().getExtras().getString(EXTRA_SUBREDDIT_VALUE_KEY);
+        boolean queryById = getIntent().getExtras().getBoolean(EXTRA_QUERY_BY_ID_KEY);
+        SubredditViewModel.Factory factory = new SubredditViewModel.Factory(getApplication(), value, queryById);
         mSubredditViewModel = ViewModelProviders.of(this, factory).get(SubredditViewModel.class);
         mSubredditViewModel.getSubredditLiveData().observe(this, new Observer<SubredditData>() {
             @Override

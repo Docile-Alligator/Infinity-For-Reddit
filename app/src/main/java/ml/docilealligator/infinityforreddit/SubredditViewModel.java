@@ -11,9 +11,9 @@ public class SubredditViewModel extends AndroidViewModel {
     private SubredditRepository mSubredditRepository;
     private LiveData<SubredditData> mSubredditLiveData;
 
-    SubredditViewModel(Application application, String id) {
+    SubredditViewModel(Application application, String id, boolean isId) {
         super(application);
-        mSubredditRepository = new SubredditRepository(application, id);
+        mSubredditRepository = new SubredditRepository(application, id, isId);
         mSubredditLiveData = mSubredditRepository.getSubredditLiveData();
     }
 
@@ -30,17 +30,19 @@ public class SubredditViewModel extends AndroidViewModel {
         @NonNull
         private final Application mApplication;
 
-        private final String id;
+        private final String value;
+        private final boolean isId;
 
-        public Factory(@NonNull Application application, String id) {
+        public Factory(@NonNull Application application, String value, boolean isId) {
             mApplication = application;
-            this.id = id;
+            this.value = value;
+            this.isId = isId;
         }
 
         @Override
         public <T extends ViewModel> T create(Class<T> modelClass) {
             //noinspection unchecked
-            return (T) new SubredditViewModel(mApplication, id);
+            return (T) new SubredditViewModel(mApplication, value, isId);
         }
     }
 }

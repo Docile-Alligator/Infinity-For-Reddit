@@ -136,13 +136,36 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 ((DataViewHolder) holder).subredditIconCircleImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
-                        intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
-                                mPostData.get(adapterPosition).getSubredditNamePrefixed().substring(2));
+                        if(canStartActivity) {
+                            canStartActivity = false;
+                            Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
+                                    mPostData.get(adapterPosition).getSubredditNamePrefixed().substring(2));
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_VALUE_KEY,
+                                    mPostData.get(adapterPosition).getSubredditNamePrefixed());
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_QUERY_BY_ID_KEY, false);
+                            mContext.startActivity(intent);
+                        }
                     }
                 });
 
                 ((DataViewHolder) holder).subredditNameTextView.setText(subredditName);
+
+                ((DataViewHolder) holder).subredditNameTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(canStartActivity) {
+                            canStartActivity = false;
+                            Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
+                                    mPostData.get(adapterPosition).getSubredditNamePrefixed().substring(2));
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_VALUE_KEY,
+                                    mPostData.get(adapterPosition).getSubredditNamePrefixed());
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_QUERY_BY_ID_KEY, false);
+                            mContext.startActivity(intent);
+                        }
+                    }
+                });
                 ((DataViewHolder) holder).postTimeTextView.setText(postTime);
                 ((DataViewHolder) holder).titleTextView.setText(title);
                 ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(position).getScore()));

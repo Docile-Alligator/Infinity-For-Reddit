@@ -38,4 +38,7 @@ public interface RedditAPI {
 
     @GET("r/{subredditName}.json?raw_json=1")
     Call<String> getPost(@Path("subredditName") String subredditName, @Query("after") String lastItem);
+
+    @GET("user/{username}/about.json/raw_json=1")
+    Call<String> getUserData(@Path("username") String username);
 }
