@@ -194,17 +194,19 @@ public class PostFragment extends Fragment {
                                 getResources().getConfiguration().locale, new ParsePost.ParsePostListener() {
                                     @Override
                                     public void onParsePostSuccess(ArrayList<PostData> postData, String lastItem) {
-                                        mPostData = postData;
-                                        mLastItem = lastItem;
-                                        mAdapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer);
+                                        if(isAdded() && getActivity() != null) {
+                                            mPostData = postData;
+                                            mLastItem = lastItem;
+                                            mAdapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer);
 
-                                        mPostRecyclerView.setAdapter(mAdapter);
-                                        mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
-                                                getActivity(), mLinearLayoutManager, mAdapter, lastItem, postData,
-                                                mPaginationSynchronizer, mSubredditName, mIsBestPost,
-                                                mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
-                                                getResources().getConfiguration().locale));
-                                        mProgressBar.setVisibility(View.GONE);
+                                            mPostRecyclerView.setAdapter(mAdapter);
+                                            mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
+                                                    getActivity(), mLinearLayoutManager, mAdapter, lastItem, postData,
+                                                    mPaginationSynchronizer, mSubredditName, mIsBestPost,
+                                                    mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
+                                                    getResources().getConfiguration().locale));
+                                            mProgressBar.setVisibility(View.GONE);
+                                        }
                                     }
 
                                     @Override
@@ -264,17 +266,19 @@ public class PostFragment extends Fragment {
                                 getResources().getConfiguration().locale, new ParsePost.ParsePostListener() {
                                     @Override
                                     public void onParsePostSuccess(ArrayList<PostData> postData, String lastItem) {
-                                        mPostData = postData;
-                                        mLastItem = lastItem;
-                                        mAdapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer);
+                                        if(isAdded() && getActivity() != null) {
+                                            mPostData = postData;
+                                            mLastItem = lastItem;
+                                            mAdapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer);
 
-                                        mPostRecyclerView.setAdapter(mAdapter);
-                                        mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
-                                                getActivity(), mLinearLayoutManager, mAdapter, lastItem, postData,
-                                                mPaginationSynchronizer, mSubredditName, mIsBestPost,
-                                                mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
-                                                getResources().getConfiguration().locale));
-                                        mProgressBar.setVisibility(View.GONE);
+                                            mPostRecyclerView.setAdapter(mAdapter);
+                                            mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
+                                                    getActivity(), mLinearLayoutManager, mAdapter, lastItem, postData,
+                                                    mPaginationSynchronizer, mSubredditName, mIsBestPost,
+                                                    mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
+                                                    getResources().getConfiguration().locale));
+                                            mProgressBar.setVisibility(View.GONE);
+                                        }
                                     }
 
                                     @Override
