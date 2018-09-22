@@ -125,6 +125,19 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             Glide.with(this).load(R.drawable.subreddit_default_icon).into(subredditIconCircleImageView);
         }
 
+        subredditIconCircleImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ViewPostDetailActivity.this, ViewSubredditDetailActivity.class);
+                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
+                        mPostData.getSubredditNamePrefixed().substring(2));
+                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_VALUE_KEY,
+                        mPostData.getSubredditNamePrefixed());
+                intent.putExtra(ViewSubredditDetailActivity.EXTRA_QUERY_BY_ID_KEY, false);
+                startActivity(intent);
+            }
+        });
+
         switch (mPostData.getVoteType()) {
             case 1:
                 //Upvote
@@ -167,6 +180,19 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         subredditTextView.setText(mPostData.getSubredditNamePrefixed());
+        subredditTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ViewPostDetailActivity.this, ViewSubredditDetailActivity.class);
+                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
+                        mPostData.getSubredditNamePrefixed().substring(2));
+                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_VALUE_KEY,
+                        mPostData.getSubredditNamePrefixed());
+                intent.putExtra(ViewSubredditDetailActivity.EXTRA_QUERY_BY_ID_KEY, false);
+                startActivity(intent);
+            }
+        });
+
         postTimeTextView.setText(mPostData.getPostTime());
 
         if(mPostData.getGilded() > 0) {
