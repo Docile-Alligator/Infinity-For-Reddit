@@ -117,14 +117,16 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
                     ParsePost.parsePost(response.body(), mPostData, locale, new ParsePost.ParsePostListener() {
                         @Override
                         public void onParsePostSuccess(ArrayList<PostData> postData, String lastItem) {
-                            mAdapter.notifyItemRangeInserted(mPostData.size(), postData.size());
-                            mLastItem = lastItem;
-                            mLastItemSynchronizer.lastItemChanged(mLastItem);
+                            if(mAdapter != null) {
+                                mAdapter.notifyItemRangeInserted(mPostData.size(), postData.size());
+                                mLastItem = lastItem;
+                                mLastItemSynchronizer.lastItemChanged(lastItem);
 
-                            isLoading = false;
-                            loadSuccess = true;
-                            mPaginationSynchronizer.setLoading(false);
-                            mPaginationSynchronizer.setLoadingState(true);
+                                isLoading = false;
+                                loadSuccess = true;
+                                mPaginationSynchronizer.setLoading(false);
+                                mPaginationSynchronizer.setLoadingState(true);
+                            }
                         }
 
                         @Override
@@ -188,14 +190,16 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
                     ParsePost.parsePost(response.body(), mPostData, locale, new ParsePost.ParsePostListener() {
                         @Override
                         public void onParsePostSuccess(ArrayList<PostData> postData, String lastItem) {
-                            mAdapter.notifyItemRangeInserted(mPostData.size(), postData.size());
-                            mLastItem = lastItem;
-                            mLastItemSynchronizer.lastItemChanged(mLastItem);
+                            if(mAdapter != null) {
+                                mAdapter.notifyItemRangeInserted(mPostData.size(), postData.size());
+                                mLastItem = lastItem;
+                                mLastItemSynchronizer.lastItemChanged(lastItem);
 
-                            isLoading = false;
-                            loadSuccess = true;
-                            mPaginationSynchronizer.setLoading(false);
-                            mPaginationSynchronizer.setLoadingState(true);
+                                isLoading = false;
+                                loadSuccess = true;
+                                mPaginationSynchronizer.setLoading(false);
+                                mPaginationSynchronizer.setLoadingState(true);
+                            }
                         }
 
                         @Override

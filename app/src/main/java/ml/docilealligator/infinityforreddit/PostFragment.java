@@ -6,7 +6,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -33,61 +32,36 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PostFragment extends Fragment {
+public class PostFragment extends Fragment implements FragmentCommunicator {
 
     static final String SUBREDDIT_NAME_KEY = "SNK";
     static final String IS_BEST_POST_KEY = "IBPK";
+
+    private static final String PostDataParcelableState = "BPDPS";
+    private static final String lastItemState = "LIS";
+    private static final String paginationSynchronizerState = "PSS";
 
     private CoordinatorLayout mCoordinatorLayout;
     private RecyclerView mPostRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     private ProgressBar mProgressBar;
-    private ArrayList<PostData> mPostData;
-    private String mLastItem;
-    private PaginationSynchronizer mPaginationSynchronizer;
-    private PostRecyclerViewAdapter mAdapter;
     private LinearLayout mFetchPostErrorLinearLayout;
     private ImageView mFetchPostErrorImageView;
 
+    private ArrayList<PostData> mPostData;
+    private String mLastItem;
+    private PaginationSynchronizer mPaginationSynchronizer;
+
     private boolean mIsBestPost;
     private String mSubredditName;
-    private String PostDataParcelableState = "BPDPS";
-    private String lastItemState = "LIS";
-    private String paginationSynchronizerState = "PSS";
 
     public PostFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if(savedInstanceState != null) {
-            if(savedInstanceState.containsKey(PostDataParcelableState)) {
-                mPostData = savedInstanceState.getParcelableArrayList(PostDataParcelableState);
-                mLastItem = savedInstanceState.getString(lastItemState);
-                mAdapter = new PostRecyclerViewAdapter(getActivity(), mPostData, mPaginationSynchronizer);
-                mPostRecyclerView.setAdapter(mAdapter);
-                mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
-                        getActivity(), mLinearLayoutManager, mAdapter, mLastItem, mPostData,
-                        mPaginationSynchronizer, mSubredditName, mIsBestPost,
-                        mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
-                        getResources().getConfiguration().locale));
-                mProgressBar.setVisibility(View.GONE);
-            } else {
-                if(mIsBestPost) {
-                    fetchBestPost(1);
-                } else {
-                    fetchPost();
-                }
-            }
-        }
-    }
-
-    @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-
         if(mPostData != null) {
             outState.putParcelableArrayList(PostDataParcelableState, mPostData);
             outState.putString(lastItemState, mLastItem);
@@ -98,13 +72,13 @@ public class PostFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(mAdapter != null) {
-            mAdapter.setCanStartActivity(true);
+        if(mPostRecyclerView.getAdapter() != null) {
+            ((PostRecyclerViewAdapter) mPostRecyclerView.getAdapter()).setCanStartActivity(true);
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_post, container, false);
@@ -140,24 +114,31 @@ public class PostFragment extends Fragment {
             });
         }
 
-        if(savedInstanceState != null && savedInstanceState.getParcelable(paginationSynchronizerState) != null) {
+        if(savedInstanceState != null && savedInstanceState.containsKey(PostDataParcelableState)) {
+            mPostData = savedInstanceState.getParcelableArrayList(PostDataParcelableState);
+            mLastItem = savedInstanceState.getString(lastItemState);
             mPaginationSynchronizer = savedInstanceState.getParcelable(paginationSynchronizerState);
+            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(getActivity(), mPostData, mPaginationSynchronizer);
+            mPostRecyclerView.setAdapter(adapter);
+            mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
+                    getActivity(), mLinearLayoutManager, adapter, mLastItem, mPostData,
+                    mPaginationSynchronizer, mSubredditName, mIsBestPost,
+                    mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
+                    getResources().getConfiguration().locale));
+            mProgressBar.setVisibility(View.GONE);
         } else {
-            mPaginationSynchronizer = new PaginationSynchronizer();
+            mPaginationSynchronizer = new PaginationSynchronizer(new LastItemSynchronizer() {
+                @Override
+                public void lastItemChanged(String lastItem) {
+                    mLastItem = lastItem;
+                }
+            });
             if(mIsBestPost) {
                 fetchBestPost(1);
             } else {
                 fetchPost();
             }
         }
-
-        LastItemSynchronizer lastItemSynchronizer = new LastItemSynchronizer() {
-            @Override
-            public void lastItemChanged(String lastItem) {
-                mLastItem = lastItem;
-            }
-        };
-        mPaginationSynchronizer.setLastItemSynchronizer(lastItemSynchronizer);
 
         return rootView;
     }
@@ -197,11 +178,11 @@ public class PostFragment extends Fragment {
                                         if(isAdded() && getActivity() != null) {
                                             mPostData = postData;
                                             mLastItem = lastItem;
-                                            mAdapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer);
+                                            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer);
 
-                                            mPostRecyclerView.setAdapter(mAdapter);
+                                            mPostRecyclerView.setAdapter(adapter);
                                             mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
-                                                    getActivity(), mLinearLayoutManager, mAdapter, lastItem, postData,
+                                                    getActivity(), mLinearLayoutManager, adapter, lastItem, postData,
                                                     mPaginationSynchronizer, mSubredditName, mIsBestPost,
                                                     mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
                                                     getResources().getConfiguration().locale));
@@ -269,11 +250,11 @@ public class PostFragment extends Fragment {
                                         if(isAdded() && getActivity() != null) {
                                             mPostData = postData;
                                             mLastItem = lastItem;
-                                            mAdapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer);
+                                            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer);
 
-                                            mPostRecyclerView.setAdapter(mAdapter);
+                                            mPostRecyclerView.setAdapter(adapter);
                                             mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
-                                                    getActivity(), mLinearLayoutManager, mAdapter, lastItem, postData,
+                                                    getActivity(), mLinearLayoutManager, adapter, lastItem, postData,
                                                     mPaginationSynchronizer, mSubredditName, mIsBestPost,
                                                     mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
                                                     getResources().getConfiguration().locale));
@@ -304,8 +285,10 @@ public class PostFragment extends Fragment {
     private void showErrorView() {
         mProgressBar.setVisibility(View.GONE);
         if(mIsBestPost) {
-            mFetchPostErrorLinearLayout.setVisibility(View.VISIBLE);
-            Glide.with(this).load(R.drawable.load_post_error_indicator).into(mFetchPostErrorImageView);
+            if(getActivity() != null && isAdded()) {
+                mFetchPostErrorLinearLayout.setVisibility(View.VISIBLE);
+                Glide.with(this).load(R.drawable.load_post_error_indicator).into(mFetchPostErrorImageView);
+            }
         } else {
             Snackbar snackbar = Snackbar.make(mCoordinatorLayout, "Error getting post", Snackbar.LENGTH_INDEFINITE);
             snackbar.setAction(R.string.retry, new View.OnClickListener() {
@@ -319,6 +302,31 @@ public class PostFragment extends Fragment {
                 }
             });
             snackbar.show();
+        }
+    }
+
+    @Override
+    public void refresh() {
+        mLastItem = null;
+        mPaginationSynchronizer = new PaginationSynchronizer(new LastItemSynchronizer() {
+            @Override
+            public void lastItemChanged(String lastItem) {
+                mLastItem = lastItem;
+            }
+        });
+        mPostRecyclerView.clearOnScrollListeners();
+        mPostRecyclerView.getRecycledViewPool().clear();
+        if(mPostData != null) {
+            mPostData.clear();
+        }
+        mPostData = null;
+        if(mPostRecyclerView.getAdapter() != null) {
+            (mPostRecyclerView.getAdapter()).notifyDataSetChanged();
+        }
+        if(mIsBestPost) {
+            fetchBestPost(1);
+        } else {
+            fetchPost();
         }
     }
 }

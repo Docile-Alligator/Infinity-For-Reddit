@@ -83,10 +83,10 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof DataViewHolder) {
-            if(mPostData.get(position) == null) {
-                Log.i("is null", Integer.toString(position));
+            if(mPostData.get(holder.getAdapterPosition()) == null) {
+                Log.i("is null", Integer.toString(holder.getAdapterPosition()));
             } else {
                 final int adapterPosition = holder.getAdapterPosition();
                 final String id = mPostData.get(adapterPosition).getFullName();
@@ -103,15 +103,17 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             new LoadSubredditIconAsyncTask.LoadSubredditIconAsyncTaskListener() {
                                 @Override
                                 public void loadIconSuccess(String iconImageUrl) {
-                                    if(!iconImageUrl.equals("")) {
-                                        Glide.with(mContext).load(iconImageUrl)
-                                                .into(((DataViewHolder) holder).subredditIconCircleImageView);
-                                    } else {
-                                        Glide.with(mContext).load(R.drawable.subreddit_default_icon)
-                                                .into(((DataViewHolder) holder).subredditIconCircleImageView);
-                                    }
+                                    if(mContext != null && !mPostData.isEmpty()) {
+                                        if(!iconImageUrl.equals("")) {
+                                            Glide.with(mContext).load(iconImageUrl)
+                                                    .into(((DataViewHolder) holder).subredditIconCircleImageView);
+                                        } else {
+                                            Glide.with(mContext).load(R.drawable.subreddit_default_icon)
+                                                    .into(((DataViewHolder) holder).subredditIconCircleImageView);
+                                        }
 
-                                    mPostData.get(adapterPosition).setSubredditIconUrl(iconImageUrl);
+                                        mPostData.get(adapterPosition).setSubredditIconUrl(iconImageUrl);
+                                    }
                                 }
                             }).execute();
                 } else if(!mPostData.get(position).getSubredditIconUrl().equals("")) {
@@ -253,7 +255,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 builder.addDefaultShareMenuItem();
                                 builder.setToolbarColor(mContext.getResources().getColor(R.color.colorPrimary));
                                 CustomTabsIntent customTabsIntent = builder.build();
-                                customTabsIntent.launchUrl(mContext, Uri.parse(mPostData.get(position).getUrl()));
+                                customTabsIntent.launchUrl(mContext, Uri.parse(mPostData.get(holder.getAdapterPosition()).getUrl()));
                             }
                         });
                         break;
@@ -482,6 +484,9 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemCount() {
+        if(mPostData == null || mPostData.isEmpty()) {
+            return 0;
+        }
         return mPostData.size() + 1;
     }
 

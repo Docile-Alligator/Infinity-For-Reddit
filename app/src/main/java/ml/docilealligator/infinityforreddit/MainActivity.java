@@ -16,6 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -54,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
     private String mKarma;
     private boolean mFetchUserInfoSuccess;
     private boolean mInsertSuccess;
+
+    private FragmentCommunicator mFragmentCommunicator;
 
     private SubscribedSubredditViewModel mSubscribedSubredditViewModel;
     private SubscribedUserViewModel mSubscribedUserViewModel;
@@ -252,6 +256,24 @@ public class MainActivity extends AppCompatActivity {
                         }, 1);
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_refresh_main_activity:
+                if(mFragment instanceof FragmentCommunicator) {
+                    ((FragmentCommunicator) mFragment).refresh();
+                }
+                return true;
+        }
+        return false;
     }
 
     @Override

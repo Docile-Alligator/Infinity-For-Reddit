@@ -10,9 +10,10 @@ class PaginationSynchronizer implements Parcelable {
     private PaginationRetryNotifier paginationRetryNotifier;
     private LastItemSynchronizer lastItemSynchronizer;
 
-    PaginationSynchronizer() {
+    PaginationSynchronizer(LastItemSynchronizer lastItemSynchronizer) {
         loadingState = false;
         loadSuccess = true;
+        this. lastItemSynchronizer = lastItemSynchronizer;
     }
 
     protected PaginationSynchronizer(Parcel in) {
