@@ -52,6 +52,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private PostData mPostData;
 
     private CoordinatorLayout mCoordinatorLayout;
+    private ProgressBar mLoadImageProgressBar;
+    private ImageView mImageView;
+    private RelativeLayout mLoadWrapper;
+    private TextView mLoadImageErrorTextView;
     private ProgressBar mCommentProgressbar;
     private CardView mCommentCardView;
     private MultiLevelRecyclerView mRecyclerView;
@@ -85,8 +89,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         TextView gildedNumberTextView = findViewById(R.id.gilded_number_text_view_view_post_detail);
         TextView nsfwTextView = findViewById(R.id.nsfw_text_view_view_post_detail);
         RelativeLayout relativeLayout = findViewById(R.id.image_view_wrapper_view_post_detail);
-        final ProgressBar progressBar = findViewById(R.id.progress_bar_view_post_detail);
-        ImageView imageView = findViewById(R.id.image_view_view_post_detail);
+        mLoadWrapper = findViewById(R.id.load_wrapper_view_post_detail);
+        mLoadImageProgressBar = findViewById(R.id.progress_bar_view_post_detail);
+        mLoadImageErrorTextView = findViewById(R.id.load_image_error_text_view_view_post_detail);
+        mImageView = findViewById(R.id.image_view_view_post_detail);
         ImageView noPreviewLinkImageView = findViewById(R.id.image_view_no_preview_link_view_post_detail);
 
         final ImageView upvoteButton = findViewById(R.id.plus_button_view_post_detail);
@@ -151,12 +157,12 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
         if(mPostData.getPostType() != PostData.TEXT_TYPE && mPostData.getPostType() != PostData.NO_PREVIEW_LINK_TYPE) {
             relativeLayout.setVisibility(View.VISIBLE);
-            imageView.setVisibility(View.VISIBLE);
-
-            RequestBuilder imageRequestBuilder = Glide.with(this).load(mPostData.getPreviewUrl()).listener(new RequestListener<Drawable>() {
+            mImageView.setVisibility(View.VISIBLE);
+            loadImage();
+            /*RequestBuilder imageRequestBuilder = Glide.with(this).load(mPostData.getPreviewUrl()).listener(new RequestListener<Drawable>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                    //Need to be implemented
+                    progressBar.setVisibility(View.GONE);
                     return false;
                 }
 
@@ -169,10 +175,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
             if(mPostData.isNSFW()) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 3)))
-                        .into(imageView);
+                        .into(mImageView);
             } else {
-                imageRequestBuilder.into(imageView);
-            }
+                imageRequestBuilder.into(mImageView);
+            }*/
         }
 
         mRecyclerView.setNestedScrollingEnabled(false);
@@ -222,7 +228,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         switch (mPostData.getPostType()) {
             case PostData.IMAGE_TYPE:
                 typeTextView.setText("IMAGE");
-                imageView.setOnClickListener(new View.OnClickListener() {
+                mImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(ViewPostDetailActivity.this, ViewImageActivity.class);
@@ -241,7 +247,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     contentTextView.setHtml(mPostData.getSelfText());
                 }
 
-                imageView.setOnClickListener(new View.OnClickListener() {
+                mImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
@@ -257,7 +263,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 typeTextView.setText("VIDEO");
 
                 final Uri gifVideoUri = Uri.parse(mPostData.getVideoUrl());
-                imageView.setOnClickListener(new View.OnClickListener() {
+                mImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(ViewPostDetailActivity.this, ViewVideoActivity.class);
@@ -278,7 +284,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 typeTextView.setText("VIDEO");
 
                 final Uri videoUri = Uri.parse(mPostData.getVideoUrl());
-                imageView.setOnClickListener(new View.OnClickListener() {
+                mImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(ViewPostDetailActivity.this, ViewVideoActivity.class);
@@ -522,6 +528,38 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                         showRetrySnackbar();
                     }
                 });
+    }
+
+    private void loadImage() {
+        RequestBuilder imageRequestBuilder = Glide.with(this).load(mPostData.getPreviewUrl()).listener(new RequestListener<Drawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                mLoadImageProgressBar.setVisibility(View.GONE);
+                mLoadImageErrorTextView.setVisibility(View.VISIBLE);
+                mLoadImageErrorTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mLoadImageProgressBar.setVisibility(View.VISIBLE);
+                        mLoadImageErrorTextView.setVisibility(View.GONE);
+                        loadImage();
+                    }
+                });
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                mLoadWrapper.setVisibility(View.GONE);
+                return false;
+            }
+        });
+
+        if(mPostData.isNSFW()) {
+            imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 3)))
+                    .into(mImageView);
+        } else {
+            imageRequestBuilder.into(mImageView);
+        }
     }
 
     private void showRetrySnackbar() {

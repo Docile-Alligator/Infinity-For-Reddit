@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -74,8 +73,8 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if(viewType == VIEW_TYPE_DATA) {
-            CardView cardView = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
-            return new DataViewHolder(cardView);
+            LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
+            return new DataViewHolder(linearLayout);
         } else {
             LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_progress_bar, parent, false);
             return new LoadingViewHolder(linearLayout);
@@ -122,7 +121,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     glide.load(R.drawable.subreddit_default_icon).into(((DataViewHolder) holder).subredditIconCircleImageView);
                 }
 
-                ((DataViewHolder) holder).cardView.setOnClickListener(new View.OnClickListener() {
+                ((DataViewHolder) holder).linearLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if(canStartActivity) {
@@ -199,27 +198,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     ((DataViewHolder) holder).relativeLayout.setVisibility(View.VISIBLE);
                     ((DataViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
                     ((DataViewHolder) holder).imageView.setVisibility(View.VISIBLE);
-
-                    String previewUrl = mPostData.get(position).getPreviewUrl();
-                    RequestBuilder imageRequestBuilder = glide.load(previewUrl).listener(new RequestListener<Drawable>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            ((DataViewHolder) holder).progressBar.setVisibility(View.GONE);
-                            return false;
-                        }
-                    });
-
-                    if(mPostData.get(position).isNSFW()) {
-                        imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(25, 3)))
-                                .into(((DataViewHolder) holder).imageView);
-                    } else {
-                        imageRequestBuilder.into(((DataViewHolder) holder).imageView);
-                    }
+                    loadImage(holder, mPostData.get(holder.getAdapterPosition()));
                 }
 
                 if(mPostData.get(position).isStickied()) {
@@ -482,6 +461,38 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
+    private void loadImage(final RecyclerView.ViewHolder holder, final PostData postData) {
+        RequestBuilder imageRequestBuilder = glide.load(postData.getPreviewUrl()).listener(new RequestListener<Drawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                ((DataViewHolder) holder).progressBar.setVisibility(View.GONE);
+                ((DataViewHolder) holder).errorLinearLayout.setVisibility(View.VISIBLE);
+                ((DataViewHolder)holder).errorLinearLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        ((DataViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
+                        ((DataViewHolder) holder).errorLinearLayout.setVisibility(View.GONE);
+                        loadImage(holder, postData);
+                    }
+                });
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                ((DataViewHolder) holder).errorLinearLayout.setVisibility(View.GONE);
+                ((DataViewHolder) holder).progressBar.setVisibility(View.GONE);
+                return false;
+            }
+        });
+
+        if(postData.isNSFW()) {
+            imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(25, 3)))
+                    .into(((DataViewHolder) holder).imageView);
+        } else {
+            imageRequestBuilder.into(((DataViewHolder) holder).imageView);
+        }
+    }
     @Override
     public int getItemCount() {
         if(mPostData == null || mPostData.isEmpty()) {
@@ -496,7 +507,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     class DataViewHolder extends RecyclerView.ViewHolder {
-        private CardView cardView;
+        private LinearLayout linearLayout;
         private CircleImageView subredditIconCircleImageView;
         private TextView subredditNameTextView;
         private ImageView stickiedPostImageView;
@@ -509,15 +520,16 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private RelativeLayout relativeLayout;
         private ProgressBar progressBar;
         private ImageView imageView;
+        private LinearLayout errorLinearLayout;
         private ImageView noPreviewLinkImageView;
         private ImageView upvoteButton;
         private TextView scoreTextView;
         private ImageView downvoteButton;
         private ImageView shareButton;
 
-        DataViewHolder(CardView itemView) {
+        DataViewHolder(LinearLayout itemView) {
             super(itemView);
-            cardView = itemView.findViewById(R.id.card_view_view_post_detail);
+            linearLayout = itemView.findViewById(R.id.linear_layout_view_post_detail);
             subredditIconCircleImageView = itemView.findViewById(R.id.subreddit_icon_circle_image_view_best_post_item);
             subredditNameTextView = itemView.findViewById(R.id.subreddit_text_view_best_post_item);
             stickiedPostImageView = itemView.findViewById(R.id.stickied_post_image_view_best_post_item);
@@ -530,6 +542,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             relativeLayout = itemView.findViewById(R.id.image_view_wrapper_item_best_post);
             progressBar = itemView.findViewById(R.id.progress_bar_best_post_item);
             imageView = itemView.findViewById(R.id.image_view_best_post_item);
+            errorLinearLayout = itemView.findViewById(R.id.load_image_error_linear_layout_best_post_item);
             noPreviewLinkImageView = itemView.findViewById(R.id.image_view_no_preview_link_best_post_item);
 
             upvoteButton = itemView.findViewById(R.id.plus_button_item_best_post);
@@ -564,6 +577,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((DataViewHolder) holder).nsfwTextView.setVisibility(View.GONE);
             ((DataViewHolder) holder).progressBar.setVisibility(View.GONE);
             ((DataViewHolder) holder).imageView.setVisibility(View.GONE);
+            ((DataViewHolder) holder).errorLinearLayout.setVisibility(View.GONE);
             ((DataViewHolder) holder).noPreviewLinkImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).upvoteButton.clearColorFilter();
             ((DataViewHolder) holder).downvoteButton.clearColorFilter();

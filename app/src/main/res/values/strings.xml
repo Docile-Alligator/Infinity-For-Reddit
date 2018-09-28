@@ -9,6 +9,7 @@
     <string name="action_download">Download</string>
     <string name="action_refresh">Refresh</string>
 
+    <string name="tap_to_retry">Error loading image. Tap to retry.</string>
     <string name="load_posts_error">Error loading posts.\nTap to retry.</string>
 
     <string name="load_data_failed">Cannot load posts</string>
