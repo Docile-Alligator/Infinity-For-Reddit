@@ -27,7 +27,6 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
     private PostRecyclerViewAdapter mAdapter;
     private ArrayList<PostData> mPostData;
     private PaginationSynchronizer mPaginationSynchronizer;
-    private LastItemSynchronizer mLastItemSynchronizer;
 
     private String mSubredditName;
     private boolean isBestPost;
@@ -64,7 +63,7 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
                 }
             };
             mPaginationSynchronizer.setPaginationRetryNotifier(paginationRetryNotifier);
-            mLastItemSynchronizer = mPaginationSynchronizer.getLastItemSynchronizer();
+            //mLastItemSynchronizer = mPaginationSynchronizer.getLastItemSynchronizer();
         }
     }
 
@@ -95,7 +94,7 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
 
         isLoading = true;
         loadSuccess = false;
-        mPaginationSynchronizer.setLoading(true);
+        mPaginationSynchronizer.setLoadingState(true);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RedditUtils.OAUTH_API_BASE_URI)
@@ -120,12 +119,12 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
                             if(mAdapter != null) {
                                 mAdapter.notifyItemRangeInserted(mPostData.size(), postData.size());
                                 mLastItem = lastItem;
-                                mLastItemSynchronizer.lastItemChanged(lastItem);
+                                mPaginationSynchronizer.getLastItemSynchronizer().lastItemChanged(lastItem);
 
                                 isLoading = false;
                                 loadSuccess = true;
-                                mPaginationSynchronizer.setLoading(false);
-                                mPaginationSynchronizer.setLoadingState(true);
+                                mPaginationSynchronizer.setLoadingState(false);
+                                mPaginationSynchronizer.loadSuccess(true);
                             }
                         }
 
@@ -171,7 +170,7 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
 
         isLoading = true;
         loadSuccess = false;
-        mPaginationSynchronizer.setLoading(true);
+        mPaginationSynchronizer.setLoadingState(true);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RedditUtils.API_BASE_URI)
@@ -193,12 +192,12 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
                             if(mAdapter != null) {
                                 mAdapter.notifyItemRangeInserted(mPostData.size(), postData.size());
                                 mLastItem = lastItem;
-                                mLastItemSynchronizer.lastItemChanged(lastItem);
+                                mPaginationSynchronizer.getLastItemSynchronizer().lastItemChanged(lastItem);
 
                                 isLoading = false;
                                 loadSuccess = true;
-                                mPaginationSynchronizer.setLoading(false);
-                                mPaginationSynchronizer.setLoadingState(true);
+                                mPaginationSynchronizer.setLoadingState(false);
+                                mPaginationSynchronizer.loadSuccess(true);
                             }
                         }
 
@@ -227,7 +226,7 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
     private void loadFailed() {
         isLoading = false;
         loadSuccess = false;
-        mPaginationSynchronizer.setLoading(false);
         mPaginationSynchronizer.setLoadingState(false);
+        mPaginationSynchronizer.loadSuccess(false);
     }
 }

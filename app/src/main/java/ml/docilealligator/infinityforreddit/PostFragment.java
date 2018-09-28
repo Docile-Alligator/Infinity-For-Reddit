@@ -37,9 +37,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     static final String SUBREDDIT_NAME_KEY = "SNK";
     static final String IS_BEST_POST_KEY = "IBPK";
 
-    private static final String PostDataParcelableState = "BPDPS";
-    private static final String lastItemState = "LIS";
-    private static final String paginationSynchronizerState = "PSS";
+    private static final String POST_DATA_PARCELABLE_STATE = "PDPS";
+    private static final String LAST_ITEM_STATE = "LIS";
+    private static final String LOADING_STATE_STATE = "LSS";
+    private static final String LOAD_SUCCESS_STATE = "LOSS";
 
     private CoordinatorLayout mCoordinatorLayout;
     private RecyclerView mPostRecyclerView;
@@ -63,9 +64,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         if(mPostData != null) {
-            outState.putParcelableArrayList(PostDataParcelableState, mPostData);
-            outState.putString(lastItemState, mLastItem);
-            outState.putParcelable(paginationSynchronizerState, mPaginationSynchronizer);
+            outState.putParcelableArrayList(POST_DATA_PARCELABLE_STATE, mPostData);
+            outState.putString(LAST_ITEM_STATE, mLastItem);
+            outState.putBoolean(LOADING_STATE_STATE, mPaginationSynchronizer.isLoading());
+            outState.putBoolean(LOAD_SUCCESS_STATE, mPaginationSynchronizer.isLoadSuccess());
         }
     }
 
@@ -114,10 +116,17 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             });
         }
 
-        if(savedInstanceState != null && savedInstanceState.containsKey(PostDataParcelableState)) {
-            mPostData = savedInstanceState.getParcelableArrayList(PostDataParcelableState);
-            mLastItem = savedInstanceState.getString(lastItemState);
-            mPaginationSynchronizer = savedInstanceState.getParcelable(paginationSynchronizerState);
+        if(savedInstanceState != null && savedInstanceState.containsKey(POST_DATA_PARCELABLE_STATE)) {
+            mPostData = savedInstanceState.getParcelableArrayList(POST_DATA_PARCELABLE_STATE);
+            mLastItem = savedInstanceState.getString(LAST_ITEM_STATE);
+            mPaginationSynchronizer = new PaginationSynchronizer(new LastItemSynchronizer() {
+                @Override
+                public void lastItemChanged(String lastItem) {
+                    mLastItem = lastItem;
+                }
+            });
+            mPaginationSynchronizer.setLoadSuccess(savedInstanceState.getBoolean(LOAD_SUCCESS_STATE));
+            mPaginationSynchronizer.setLoadingState(savedInstanceState.getBoolean(LOADING_STATE_STATE));
             PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(getActivity(), mPostData, mPaginationSynchronizer);
             mPostRecyclerView.setAdapter(adapter);
             mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(

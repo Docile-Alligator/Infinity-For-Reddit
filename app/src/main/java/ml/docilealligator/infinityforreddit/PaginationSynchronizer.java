@@ -1,9 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-class PaginationSynchronizer implements Parcelable {
+class PaginationSynchronizer {
     private boolean loadingState;
     private boolean loadSuccess;
     private PaginationNotifier paginationNotifier;
@@ -16,24 +13,7 @@ class PaginationSynchronizer implements Parcelable {
         this. lastItemSynchronizer = lastItemSynchronizer;
     }
 
-    protected PaginationSynchronizer(Parcel in) {
-        loadingState = in.readByte() != 0;
-        loadSuccess = in.readByte() != 0;
-    }
-
-    public static final Creator<PaginationSynchronizer> CREATOR = new Creator<PaginationSynchronizer>() {
-        @Override
-        public PaginationSynchronizer createFromParcel(Parcel in) {
-            return new PaginationSynchronizer(in);
-        }
-
-        @Override
-        public PaginationSynchronizer[] newArray(int size) {
-            return new PaginationSynchronizer[size];
-        }
-    };
-
-    public void setLoading(boolean isLoading) {
+    public void setLoadingState(boolean isLoading) {
         this.loadingState = isLoading;
     }
 
@@ -41,13 +21,17 @@ class PaginationSynchronizer implements Parcelable {
         return loadingState;
     }
 
-    public void setLoadingState(boolean state) {
+    public void loadSuccess(boolean state) {
         loadSuccess = state;
         if(loadSuccess) {
             paginationNotifier.LoadMorePostSuccess();
         } else {
             paginationNotifier.LoadMorePostFail();
         }
+    }
+
+    public void setLoadSuccess(boolean loadSuccess) {
+        this.loadSuccess = loadSuccess;
     }
 
     public boolean isLoadSuccess() {
@@ -66,23 +50,8 @@ class PaginationSynchronizer implements Parcelable {
         return paginationRetryNotifier;
     }
 
-    public void setLastItemSynchronizer(LastItemSynchronizer lastItemSynchronizer) {
-        this.lastItemSynchronizer = lastItemSynchronizer;
-    }
-
     public LastItemSynchronizer getLastItemSynchronizer() {
         return lastItemSynchronizer;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeByte((byte) (loadingState ? 1 : 0));
-        parcel.writeByte((byte) (loadSuccess ? 1 : 0));
     }
 }
 
