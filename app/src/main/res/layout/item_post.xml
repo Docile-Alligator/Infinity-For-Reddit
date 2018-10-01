@@ -39,7 +39,6 @@
             android:layout_toStartOf="@id/stickied_post_image_view_best_post_item"
             android:layout_toEndOf="@id/subreddit_icon_circle_image_view_best_post_item"
             android:layout_centerVertical="true"
-            android:gravity="center_vertical"
             android:textColor="#E91E63"/>
 
         <ImageView
@@ -192,9 +191,10 @@
         <TextView
             android:id="@+id/score_text_view_item_best_post"
             android:layout_width="64dp"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_height="match_parent"
             android:layout_toEndOf="@id/plus_button_item_best_post"
+            android:layout_alignBottom="@id/plus_button_item_best_post"
+            android:layout_alignParentTop="true"
             android:gravity="center"/>
 
         <ImageView
