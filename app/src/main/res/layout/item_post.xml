@@ -11,6 +11,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="#FFFFFF"
     android:id="@+id/linear_layout_view_post_detail">
 
     <RelativeLayout
@@ -18,9 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp">
 
@@ -34,11 +33,13 @@
         <TextView
             android:id="@+id/subreddit_text_view_best_post_item"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
             android:layout_toStartOf="@id/stickied_post_image_view_best_post_item"
             android:layout_toEndOf="@id/subreddit_icon_circle_image_view_best_post_item"
             android:layout_centerVertical="true"
+            android:gravity="center_vertical"
             android:textColor="#E91E63"/>
 
         <ImageView
@@ -48,14 +49,16 @@
             android:layout_toStartOf="@id/post_time_text_view_best_post_item"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:tint="@color/colorPrimary"/>
+            android:tint="@color/colorPrimary"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/post_time_text_view_best_post_item"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"/>
 
     </RelativeLayout>
 
@@ -82,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_corner"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:layout_centerVertical="true"
             android:textColor="@android:color/white"/>
 
@@ -92,6 +95,7 @@
             android:layout_height="24dp"
             android:layout_toEndOf="@id/type_text_view_item_best_post"
             android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
             android:visibility="gone"/>
 
         <TextView
@@ -224,6 +228,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#E0E0E0"/>
+        android:background="#F0F0F0"/>
 
 </LinearLayout>

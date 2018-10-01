@@ -24,10 +24,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -59,6 +61,10 @@ public class ViewImageActivity extends AppCompatActivity {
     static final String IMAGE_URL_KEY = "IUK";
     static final String FILE_NAME_KEY = "FNK";
 
+    private ProgressBar mProgressBar;
+    private GestureImageView mImageView;
+    private LinearLayout mLoadErrorLinearLayout;
+
     private boolean isActionBarHidden = false;
     private boolean isDownloading = false;
 
@@ -71,6 +77,8 @@ public class ViewImageActivity extends AppCompatActivity {
     private float totalLengthY = 0.0f;
     private float touchY = -1.0f;
     private float zoom = 1.0f;
+
+    private boolean isSwiping = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +96,20 @@ public class ViewImageActivity extends AppCompatActivity {
         setTitle(text);
 
         final RelativeLayout relativeLayout = findViewById(R.id.parent_relative_layout_view_image_activity);
-        final GestureImageView imageView = findViewById(R.id.image_view_view_image_activity);
-        final ProgressBar progressBar = findViewById(R.id.progress_bar_view_image_activity);
+        mImageView = findViewById(R.id.image_view_view_image_activity);
+        mProgressBar = findViewById(R.id.progress_bar_view_image_activity);
+        mLoadErrorLinearLayout = findViewById(R.id.load_image_error_linear_layout_view_image_activity);
+
+        mLoadErrorLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!isSwiping) {
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    mLoadErrorLinearLayout.setVisibility(View.GONE);
+                    loadImage();
+                }
+            }
+        });
 
         final float pxHeight = getResources().getDisplayMetrics().heightPixels;
 
@@ -134,10 +154,13 @@ public class ViewImageActivity extends AppCompatActivity {
             }
         });
 
+        loadImage();
+
         swipe = new Swipe();
         swipe.setListener(new SimpleSwipeListener() {
             @Override
             public void onSwipingUp(final MotionEvent event) {
+                isSwiping = true;
                 float nowY = event.getY();
                 float offset;
                 if (touchY == -1.0f) {
@@ -147,21 +170,22 @@ public class ViewImageActivity extends AppCompatActivity {
                 }
                 totalLengthY += offset;
                 touchY = nowY;
-                imageView.animate()
+                mImageView.animate()
                         .y(totalLengthY)
                         .setDuration(0)
                         .start();
+                mLoadErrorLinearLayout.animate()
+                        .y(totalLengthY)
+                        .setDuration(0)
+                        .start();
+                Log.i("total length", Float.toString(totalLengthY));
             }
 
             @Override
             public boolean onSwipedUp(final MotionEvent event) {
-                imageView.animate()
-                        .y(0)
-                        .setDuration(300)
-                        .start();
-
+                Log.i("total length", Float.toString(totalLengthY));
                 if (totalLengthY < -pxHeight / 8) {
-                    imageView.animate()
+                    mImageView.animate()
                             .y(-pxHeight)
                             .setDuration(300)
                             .setListener(new Animator.AnimatorListener() {
@@ -186,8 +210,17 @@ public class ViewImageActivity extends AppCompatActivity {
                                 }
                             })
                             .start();
+                    mLoadErrorLinearLayout.animate()
+                            .y(-pxHeight)
+                            .setDuration(300)
+                            .start();
                 } else {
-                    imageView.animate()
+                    isSwiping = false;
+                    mImageView.animate()
+                            .y(0)
+                            .setDuration(300)
+                            .start();
+                    mLoadErrorLinearLayout.animate()
                             .y(0)
                             .setDuration(300)
                             .start();
@@ -200,6 +233,7 @@ public class ViewImageActivity extends AppCompatActivity {
 
             @Override
             public void onSwipingDown(final MotionEvent event) {
+                isSwiping = true;
                 float nowY = event.getY();
                 float offset;
                 if (touchY == -1.0f) {
@@ -209,7 +243,11 @@ public class ViewImageActivity extends AppCompatActivity {
                 }
                 totalLengthY += offset;
                 touchY = nowY;
-                imageView.animate()
+                mImageView.animate()
+                        .y(totalLengthY)
+                        .setDuration(0)
+                        .start();
+                mLoadErrorLinearLayout.animate()
                         .y(totalLengthY)
                         .setDuration(0)
                         .start();
@@ -218,7 +256,7 @@ public class ViewImageActivity extends AppCompatActivity {
             @Override
             public boolean onSwipedDown(final MotionEvent event) {
                 if (totalLengthY > pxHeight / 8) {
-                    imageView.animate()
+                    mImageView.animate()
                             .y(pxHeight)
                             .setDuration(300)
                             .setListener(new Animator.AnimatorListener() {
@@ -243,8 +281,17 @@ public class ViewImageActivity extends AppCompatActivity {
                                 }
                             })
                             .start();
+                    mLoadErrorLinearLayout.animate()
+                            .y(pxHeight)
+                            .setDuration(300)
+                            .start();
                 } else {
-                    imageView.animate()
+                    isSwiping = false;
+                    mImageView.animate()
+                            .y(0)
+                            .setDuration(300)
+                            .start();
+                    mLoadErrorLinearLayout.animate()
                             .y(0)
                             .setDuration(300)
                             .start();
@@ -257,7 +304,7 @@ public class ViewImageActivity extends AppCompatActivity {
             }
         });
 
-        imageView.getController().addOnStateChangeListener(new GestureController.OnStateChangeListener() {
+        mImageView.getController().addOnStateChangeListener(new GestureController.OnStateChangeListener() {
             @Override
             public void onStateChanged(State state) {
                 zoom = state.getZoom();
@@ -269,22 +316,9 @@ public class ViewImageActivity extends AppCompatActivity {
             }
         });
 
-        imageView.getController().getSettings().setPanEnabled(true);
+        mImageView.getController().getSettings().setPanEnabled(true);
 
-        Glide.with(this).load(mImageUrl).listener(new RequestListener<Drawable>() {
-            @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                return false;
-            }
-
-            @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                progressBar.setVisibility(View.GONE);
-                return false;
-            }
-        }).apply(new RequestOptions().fitCenter()).into(imageView);
-
-        imageView.setOnClickListener(new View.OnClickListener() {
+        mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (isActionBarHidden) {
@@ -305,6 +339,23 @@ public class ViewImageActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void loadImage() {
+        Glide.with(this).load(mImageUrl).listener(new RequestListener<Drawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                mProgressBar.setVisibility(View.GONE);
+                mLoadErrorLinearLayout.setVisibility(View.VISIBLE);
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                mProgressBar.setVisibility(View.GONE);
+                return false;
+            }
+        }).apply(new RequestOptions().fitCenter()).into(mImageView);
     }
 
     @Override
