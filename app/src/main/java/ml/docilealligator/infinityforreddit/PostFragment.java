@@ -127,7 +127,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             });
             mPaginationSynchronizer.setLoadSuccess(savedInstanceState.getBoolean(LOAD_SUCCESS_STATE));
             mPaginationSynchronizer.setLoadingState(savedInstanceState.getBoolean(LOADING_STATE_STATE));
-            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(getActivity(), mPostData, mPaginationSynchronizer);
+            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(getActivity(), mPostData, mPaginationSynchronizer, mIsBestPost);
             mPostRecyclerView.setAdapter(adapter);
             mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
                     getActivity(), mLinearLayoutManager, adapter, mLastItem, mPostData,
@@ -187,7 +187,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                                         if(isAdded() && getActivity() != null) {
                                             mPostData = postData;
                                             mLastItem = lastItem;
-                                            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer);
+                                            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer, mIsBestPost);
 
                                             mPostRecyclerView.setAdapter(adapter);
                                             mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
@@ -259,7 +259,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                                         if(isAdded() && getActivity() != null) {
                                             mPostData = postData;
                                             mLastItem = lastItem;
-                                            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer);
+                                            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer, mIsBestPost);
 
                                             mPostRecyclerView.setAdapter(adapter);
                                             mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(

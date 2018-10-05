@@ -33,12 +33,14 @@ class PostData implements Parcelable {
     private int gilded;
     private boolean nsfw;
     private boolean stickied;
+    private boolean isCrosspost;
     private boolean isDashVideo;
     private boolean isDownloadableGifOrVideo;
+    private PostData crosspostParentPostData;
 
     PostData(String id, String fullName, String subredditNamePrefixed, String postTime, String title,
              String previewUrl, String permalink, int score, int postType, int voteType, int gilded,
-             boolean nsfw, boolean stickied, boolean isDashVideo) {
+             boolean nsfw, boolean stickied, boolean isCrosspost, boolean isDashVideo) {
         this.id = id;
         this.fullName = fullName;
         this.subredditNamePrefixed = subredditNamePrefixed;
@@ -52,12 +54,13 @@ class PostData implements Parcelable {
         this.gilded = gilded;
         this.nsfw = nsfw;
         this.stickied = stickied;
+        this.isCrosspost = isCrosspost;
         this.isDashVideo = isDashVideo;
     }
 
     PostData(String id, String fullName, String subredditNamePrefixed, String postTime, String title,
              String previewUrl, String url, String permalink, int score, int postType, int voteType,
-             int gilded, boolean nsfw, boolean stickied) {
+             int gilded, boolean nsfw, boolean stickied, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditNamePrefixed = subredditNamePrefixed;
@@ -72,11 +75,12 @@ class PostData implements Parcelable {
         this.gilded = gilded;
         this.nsfw = nsfw;
         this.stickied = stickied;
+        this.isCrosspost = isCrosspost;
     }
 
     PostData(String id, String fullName, String subredditNamePrefixed, String postTime, String title,
              String permalink, int score, int postType, int voteType, int gilded, boolean nsfw,
-             boolean stickied) {
+             boolean stickied, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditNamePrefixed = subredditNamePrefixed;
@@ -89,6 +93,7 @@ class PostData implements Parcelable {
         this.gilded = gilded;
         this.nsfw = nsfw;
         this.stickied = stickied;
+        this.isCrosspost= isCrosspost;
     }
 
     protected PostData(Parcel in) {
@@ -110,6 +115,7 @@ class PostData implements Parcelable {
         gilded = in.readInt();
         nsfw = in.readByte() != 0;
         stickied = in.readByte() != 0;
+        isCrosspost = in.readByte() != 0;
         isDashVideo = in.readByte() != 0;
         isDownloadableGifOrVideo = in.readByte() != 0;
     }
@@ -243,6 +249,10 @@ class PostData implements Parcelable {
         return stickied;
     }
 
+    public boolean isCrosspost() {
+        return isCrosspost;
+    }
+
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(id);
@@ -263,6 +273,7 @@ class PostData implements Parcelable {
         parcel.writeInt(gilded);
         parcel.writeByte((byte) (nsfw ? 1 : 0));
         parcel.writeByte((byte) (stickied ? 1 : 0));
+        parcel.writeByte((byte) (isCrosspost ? 1 : 0));
         parcel.writeByte((byte) (isDashVideo ? 1 : 0));
         parcel.writeByte((byte) (isDownloadableGifOrVideo ? 1 : 0));
     }

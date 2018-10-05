@@ -87,6 +87,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         TextView typeTextView = findViewById(R.id.type_text_view_view_post_detail);
         ImageView gildedImageView = findViewById(R.id.gilded_image_view_view_post_detail);
         TextView gildedNumberTextView = findViewById(R.id.gilded_number_text_view_view_post_detail);
+        ImageView crosspostImageView = findViewById(R.id.crosspost_image_view_view_post_detail);
         TextView nsfwTextView = findViewById(R.id.nsfw_text_view_view_post_detail);
         RelativeLayout relativeLayout = findViewById(R.id.image_view_wrapper_view_post_detail);
         mLoadWrapper = findViewById(R.id.load_wrapper_view_post_detail);
@@ -181,6 +182,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             }*/
         }
 
+        if(mPostData.isCrosspost()) {
+            crosspostImageView.setVisibility(View.VISIBLE);
+        }
+
         mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
@@ -242,7 +247,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 break;
             case PostData.LINK_TYPE:
                 typeTextView.setText("LINK");
-                if(!mPostData.getSelfText().equals("")) {
+                if(mPostData.getSelfText() != null && !mPostData.getSelfText().equals("")) {
                     contentTextView.setVisibility(View.VISIBLE);
                     contentTextView.setHtml(mPostData.getSelfText());
                 }
@@ -260,7 +265,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 });
                 break;
             case PostData.GIF_VIDEO_TYPE:
-                typeTextView.setText("VIDEO");
+                typeTextView.setText("GIF");
 
                 final Uri gifVideoUri = Uri.parse(mPostData.getVideoUrl());
                 mImageView.setOnClickListener(new View.OnClickListener() {

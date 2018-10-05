@@ -33,14 +33,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
-
-    private String nameState = "NS";
-    private String profileImageUrlState = "PIUS";
-    private String bannerImageUrlState = "BIUS";
-    private String karmaState = "KS";
-    private String fetchUserInfoState = "FUIS";
-    private String insertSubscribedSubredditState = "ISSS";
+    private static final String FRAGMENT_OUT_STATE = "FOS";
+    private static final String NAME_STATE = "NS";
+    private static final String PROFILE_IMAGE_URL_STATE = "PIUS";
+    private static final String BANNER_IMAGE_URL_STATE = "BIUS";
+    private static final String KARMA_STATE = "KS";
+    private static final String FETCH_USER_INFO_STATE = "FUIS";
+    private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";
 
     private TextView mNameTextView;
     private TextView mKarmaTextView;
@@ -87,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 mFragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
             } else {
-                mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
+                mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
             }
 
@@ -290,25 +289,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if(mFragment != null) {
-            getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE_KEY, mFragment);
+            getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE, mFragment);
         }
-        outState.putString(nameState, mName);
-        outState.putString(profileImageUrlState, mProfileImageUrl);
-        outState.putString(bannerImageUrlState, mBannerImageUrl);
-        outState.putString(karmaState, mKarma);
-        outState.putBoolean(fetchUserInfoState, mFetchUserInfoSuccess);
-        outState.putBoolean(insertSubscribedSubredditState, mInsertSuccess);
+        outState.putString(NAME_STATE, mName);
+        outState.putString(PROFILE_IMAGE_URL_STATE, mProfileImageUrl);
+        outState.putString(BANNER_IMAGE_URL_STATE, mBannerImageUrl);
+        outState.putString(KARMA_STATE, mKarma);
+        outState.putBoolean(FETCH_USER_INFO_STATE, mFetchUserInfoSuccess);
+        outState.putBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE, mInsertSuccess);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        mName = savedInstanceState.getString(nameState);
-        mProfileImageUrl = savedInstanceState.getString(profileImageUrlState);
-        mBannerImageUrl = savedInstanceState.getString(bannerImageUrlState);
-        mKarma = savedInstanceState.getString(karmaState);
-        mFetchUserInfoSuccess = savedInstanceState.getBoolean(fetchUserInfoState);
-        mInsertSuccess = savedInstanceState.getBoolean(insertSubscribedSubredditState);
+        mName = savedInstanceState.getString(NAME_STATE);
+        mProfileImageUrl = savedInstanceState.getString(PROFILE_IMAGE_URL_STATE);
+        mBannerImageUrl = savedInstanceState.getString(BANNER_IMAGE_URL_STATE);
+        mKarma = savedInstanceState.getString(KARMA_STATE);
+        mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
+        mInsertSuccess = savedInstanceState.getBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE);
         mNameTextView.setText(mName);
         mKarmaTextView.setText(mKarma);
         if(!mProfileImageUrl.equals("")) {

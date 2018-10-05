@@ -98,7 +98,7 @@
                             android:id="@+id/type_text_view_view_post_detail"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="16dp"
+                            android:layout_marginEnd="8dp"
                             android:layout_centerVertical="true"
                             android:background="@drawable/rounded_corner"
                             android:textColor="@android:color/white" />
@@ -118,11 +118,23 @@
                             android:layout_marginStart="4dp"
                             android:layout_marginEnd="8dp"
                             android:layout_toEndOf="@id/gilded_image_view_view_post_detail"
-                            android:layout_toStartOf="@id/nsfw_text_view_view_post_detail"
                             android:layout_centerVertical="true"
                             android:visibility="gone"
                             android:textSize="20sp"
                             android:textColor="@color/gold"/>
+
+                        <ImageView
+                            android:id="@+id/crosspost_image_view_view_post_detail"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_toStartOf="@id/nsfw_text_view_item_best_post"
+                            android:layout_toEndOf="@id/gilded_number_text_view_view_post_detail"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/crosspost"
+                            android:tint="@color/colorAccent"
+                            android:visibility="gone"/>
 
                         <TextView
                             android:id="@+id/nsfw_text_view_view_post_detail"

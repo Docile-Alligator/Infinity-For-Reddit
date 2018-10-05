@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,20 +47,20 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private PaginationSynchronizer mPaginationSynchronizer;
     private RequestManager glide;
     private SubredditDao subredditDao;
-    private boolean isLoadingMorePostSuccess;
-    private boolean canStartActivity;
+    private boolean isLoadingMorePostSuccess = true;
+    private boolean canStartActivity = true;
+    private boolean hasMultipleSubreddits;
 
     private static final int VIEW_TYPE_DATA = 0;
     private static final int VIEW_TYPE_LOADING = 1;
 
 
-    PostRecyclerViewAdapter(Context context, ArrayList<PostData> postData, PaginationSynchronizer paginationSynchronizer) {
+    PostRecyclerViewAdapter(Context context, ArrayList<PostData> postData, PaginationSynchronizer paginationSynchronizer, boolean hasMultipleSubreddits) {
         if(context != null) {
             mContext = context;
             mPostData = postData;
             mPaginationSynchronizer = paginationSynchronizer;
-            isLoadingMorePostSuccess = true;
-            canStartActivity = true;
+            this.hasMultipleSubreddits = hasMultipleSubreddits;
             glide = Glide.with(mContext);
             subredditDao = SubredditRoomDatabase.getDatabase(mContext).subredditDao();
         }
@@ -73,8 +74,8 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if(viewType == VIEW_TYPE_DATA) {
-            LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
-            return new DataViewHolder(linearLayout);
+            CardView cardView = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
+            return new DataViewHolder(cardView);
         } else {
             LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_progress_bar, parent, false);
             return new LoadingViewHolder(linearLayout);
@@ -121,7 +122,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     glide.load(R.drawable.subreddit_default_icon).into(((DataViewHolder) holder).subredditIconCircleImageView);
                 }
 
-                ((DataViewHolder) holder).linearLayout.setOnClickListener(new View.OnClickListener() {
+                ((DataViewHolder) holder).cardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if(canStartActivity) {
@@ -201,9 +202,13 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     loadImage(holder, mPostData.get(holder.getAdapterPosition()));
                 }
 
-                if(mPostData.get(position).isStickied()) {
+                if(!hasMultipleSubreddits && mPostData.get(position).isStickied()) {
                     ((DataViewHolder) holder).stickiedPostImageView.setVisibility(View.VISIBLE);
                     glide.load(R.drawable.thumbtack).into(((DataViewHolder) holder).stickiedPostImageView);
+                }
+
+                if(mPostData.get(holder.getAdapterPosition()).isCrosspost()) {
+                    ((DataViewHolder) holder).crosspostImageView.setVisibility(View.VISIBLE);
                 }
 
                 switch (mPostData.get(position).getPostType()) {
@@ -334,7 +339,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                     ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(position).getScore()));
                                     ((DataViewHolder) holder).downvoteButton.setColorFilter(downvoteButtonColorFilter);
                                 }
-                            }, id, RedditUtils.DIR_UPVOTE, ((DataViewHolder) holder).getAdapterPosition(), 1);
+                            }, id, RedditUtils.DIR_UPVOTE, holder.getAdapterPosition(), 1);
                         } else {
                             //Upvoted before
                             ((DataViewHolder) holder).upvoteButton.clearColorFilter();
@@ -354,7 +359,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                     ((DataViewHolder) holder).upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
                                     mPostData.get(position).setScore(mPostData.get(position).getScore() + 1);
                                 }
-                            }, id, RedditUtils.DIR_UNVOTE, ((DataViewHolder) holder).getAdapterPosition(), 1);
+                            }, id, RedditUtils.DIR_UNVOTE, holder.getAdapterPosition(), 1);
                         }
                     }
                 });
@@ -507,7 +512,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     class DataViewHolder extends RecyclerView.ViewHolder {
-        private LinearLayout linearLayout;
+        private CardView cardView;
         private CircleImageView subredditIconCircleImageView;
         private TextView subredditNameTextView;
         private ImageView stickiedPostImageView;
@@ -516,6 +521,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private TextView typeTextView;
         private ImageView gildedImageView;
         private TextView gildedNumberTextView;
+        private ImageView crosspostImageView;
         private TextView nsfwTextView;
         private RelativeLayout relativeLayout;
         private ProgressBar progressBar;
@@ -527,9 +533,9 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private ImageView downvoteButton;
         private ImageView shareButton;
 
-        DataViewHolder(LinearLayout itemView) {
+        DataViewHolder(View itemView) {
             super(itemView);
-            linearLayout = itemView.findViewById(R.id.linear_layout_view_post_detail);
+            cardView = itemView.findViewById(R.id.card_view_view_post_detail);
             subredditIconCircleImageView = itemView.findViewById(R.id.subreddit_icon_circle_image_view_best_post_item);
             subredditNameTextView = itemView.findViewById(R.id.subreddit_text_view_best_post_item);
             stickiedPostImageView = itemView.findViewById(R.id.stickied_post_image_view_best_post_item);
@@ -538,6 +544,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             typeTextView = itemView.findViewById(R.id.type_text_view_item_best_post);
             gildedImageView = itemView.findViewById(R.id.gilded_image_view_item_best_post);
             gildedNumberTextView = itemView.findViewById(R.id.gilded_number_text_view_item_best_post);
+            crosspostImageView = itemView.findViewById(R.id.crosspost_image_view_item_best_post);
             nsfwTextView = itemView.findViewById(R.id.nsfw_text_view_item_best_post);
             relativeLayout = itemView.findViewById(R.id.image_view_wrapper_item_best_post);
             progressBar = itemView.findViewById(R.id.progress_bar_best_post_item);
@@ -572,8 +579,9 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             glide.clear(((DataViewHolder) holder).subredditIconCircleImageView);
             ((DataViewHolder) holder).stickiedPostImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).relativeLayout.setVisibility(View.GONE);
+            ((DataViewHolder) holder).gildedImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).gildedNumberTextView.setVisibility(View.GONE);
-            glide.clear(((DataViewHolder) holder).gildedImageView);
+            ((DataViewHolder) holder).crosspostImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).nsfwTextView.setVisibility(View.GONE);
             ((DataViewHolder) holder).progressBar.setVisibility(View.GONE);
             ((DataViewHolder) holder).imageView.setVisibility(View.GONE);
