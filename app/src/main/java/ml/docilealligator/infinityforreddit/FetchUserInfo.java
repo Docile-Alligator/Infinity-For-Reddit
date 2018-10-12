@@ -7,24 +7,19 @@ import android.util.Log;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 class FetchUserInfo {
+
     interface FetchUserInfoListener {
         void onFetchUserInfoSuccess(String response);
         void onFetchUserInfoFail();
     }
 
-    static void fetchUserInfo(final Context context, final FetchUserInfoListener fetchUserInfoListener, final int refreshTime) {
+    static void fetchUserInfo(final Retrofit retrofit, final Context context, final FetchUserInfoListener fetchUserInfoListener, final int refreshTime) {
         if(refreshTime < 0) {
             fetchUserInfoListener.onFetchUserInfoFail();
             return;
         }
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RedditUtils.OAUTH_API_BASE_URI)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
 
         RedditAPI api = retrofit.create(RedditAPI.class);
 
@@ -40,7 +35,7 @@ class FetchUserInfo {
                     RefreshAccessToken.refreshAccessToken(context, new RefreshAccessToken.RefreshAccessTokenListener() {
                         @Override
                         public void onRefreshAccessTokenSuccess() {
-                            fetchUserInfo(context, fetchUserInfoListener, refreshTime - 1);
+                            fetchUserInfo(retrofit, context, fetchUserInfoListener, refreshTime - 1);
                         }
 
                         @Override

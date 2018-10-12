@@ -24,7 +24,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -178,12 +177,10 @@ public class ViewImageActivity extends AppCompatActivity {
                         .y(totalLengthY)
                         .setDuration(0)
                         .start();
-                Log.i("total length", Float.toString(totalLengthY));
             }
 
             @Override
             public boolean onSwipedUp(final MotionEvent event) {
-                Log.i("total length", Float.toString(totalLengthY));
                 if (totalLengthY < -pxHeight / 8) {
                     mImageView.animate()
                             .y(-pxHeight)

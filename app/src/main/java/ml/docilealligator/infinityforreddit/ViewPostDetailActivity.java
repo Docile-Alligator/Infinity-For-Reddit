@@ -37,8 +37,12 @@ import org.sufficientlysecure.htmltextview.HtmlTextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
+import retrofit2.Retrofit;
 
 public class ViewPostDetailActivity extends AppCompatActivity {
 
@@ -65,10 +69,21 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
     private LoadSubredditIconAsyncTask mLoadSubredditIconAsyncTask;
 
+    @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_post_detail);
+
+        ((Infinity) getApplication()).getmNetworkComponent().inject(this);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         orientation = getResources().getConfiguration().orientation;
@@ -160,26 +175,6 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             relativeLayout.setVisibility(View.VISIBLE);
             mImageView.setVisibility(View.VISIBLE);
             loadImage();
-            /*RequestBuilder imageRequestBuilder = Glide.with(this).load(mPostData.getPreviewUrl()).listener(new RequestListener<Drawable>() {
-                @Override
-                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                    progressBar.setVisibility(View.GONE);
-                    return false;
-                }
-
-                @Override
-                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                    progressBar.setVisibility(View.GONE);
-                    return false;
-                }
-            });
-
-            if(mPostData.isNSFW()) {
-                imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 3)))
-                        .into(mImageView);
-            } else {
-                imageRequestBuilder.into(mImageView);
-            }*/
         }
 
         if(mPostData.isCrosspost()) {
@@ -385,7 +380,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                         scoreTextView.setText(Integer.toString(mPostData.getScore() + 1));
                     }
 
-                    VoteThing.voteThing(ViewPostDetailActivity.this, new VoteThing.VoteThingWithoutPositionListener() {
+                    VoteThing.voteThing(ViewPostDetailActivity.this, mOauthRetrofit, new VoteThing.VoteThingWithoutPositionListener() {
                         @Override
                         public void onVoteThingSuccess() {
                             mPostData.setVoteType(1);
@@ -409,7 +404,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     upvoteButton.clearColorFilter();
                     scoreTextView.setText(Integer.toString(mPostData.getScore() - 1));
 
-                    VoteThing.voteThing(ViewPostDetailActivity.this, new VoteThing.VoteThingWithoutPositionListener() {
+                    VoteThing.voteThing(ViewPostDetailActivity.this, mOauthRetrofit, new VoteThing.VoteThingWithoutPositionListener() {
                         @Override
                         public void onVoteThingSuccess() {
                             mPostData.setVoteType(0);
@@ -445,7 +440,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                         scoreTextView.setText(Integer.toString(mPostData.getScore() - 1));
                     }
 
-                    VoteThing.voteThing(ViewPostDetailActivity.this, new VoteThing.VoteThingWithoutPositionListener() {
+                    VoteThing.voteThing(ViewPostDetailActivity.this, mOauthRetrofit, new VoteThing.VoteThingWithoutPositionListener() {
                         @Override
                         public void onVoteThingSuccess() {
                             mPostData.setVoteType(-1);
@@ -469,7 +464,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     downvoteButton.clearColorFilter();
                     scoreTextView.setText(Integer.toString(mPostData.getScore() + 1));
 
-                    VoteThing.voteThing(ViewPostDetailActivity.this, new VoteThing.VoteThingWithoutPositionListener() {
+                    VoteThing.voteThing(ViewPostDetailActivity.this, mOauthRetrofit, new VoteThing.VoteThingWithoutPositionListener() {
                         @Override
                         public void onVoteThingSuccess() {
                             mPostData.setVoteType(0);
@@ -492,7 +487,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private void queryComment() {
         mCommentProgressbar.setVisibility(View.VISIBLE);
         mNoCommentWrapperLinearLayout.setVisibility(View.GONE);
-        FetchComment.fetchComment(mPostData.getSubredditNamePrefixed(), mPostData.getId(),
+        FetchComment.fetchComment(mRetrofit, mPostData.getSubredditNamePrefixed(), mPostData.getId(),
                 null, new FetchComment.FetchCommentListener() {
                     @Override
                     public void onFetchCommentSuccess(String response) {
@@ -505,7 +500,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                                         mMoreCommentCount = moreCommentCount;
                                         if (commentData.size() > 0) {
                                             CommentMultiLevelRecyclerViewAdapter adapter = new CommentMultiLevelRecyclerViewAdapter(
-                                                    ViewPostDetailActivity.this, (ArrayList<CommentData>) commentData,
+                                                    ViewPostDetailActivity.this, mRetrofit, mOauthRetrofit,
+                                                    (ArrayList<CommentData>) commentData,
                                                     mRecyclerView, mPostData.getSubredditNamePrefixed(),
                                                     mPostData.getId(), getResources().getConfiguration().locale);
                                             mRecyclerView.removeItemClickListeners();

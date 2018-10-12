@@ -36,6 +36,7 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
+import retrofit2.Retrofit;
 
 /**
  * Created by alex on 2/25/18.
@@ -44,6 +45,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<PostData> mPostData;
     private Context mContext;
+    private Retrofit mOauthRetrofit;
     private PaginationSynchronizer mPaginationSynchronizer;
     private RequestManager glide;
     private SubredditDao subredditDao;
@@ -55,9 +57,10 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int VIEW_TYPE_LOADING = 1;
 
 
-    PostRecyclerViewAdapter(Context context, ArrayList<PostData> postData, PaginationSynchronizer paginationSynchronizer, boolean hasMultipleSubreddits) {
+    PostRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, ArrayList<PostData> postData, PaginationSynchronizer paginationSynchronizer, boolean hasMultipleSubreddits) {
         if(context != null) {
             mContext = context;
+            mOauthRetrofit = oauthRetrofit;
             mPostData = postData;
             mPaginationSynchronizer = paginationSynchronizer;
             this.hasMultipleSubreddits = hasMultipleSubreddits;
@@ -321,7 +324,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(adapterPosition).getScore() + 1));
                             }
 
-                            VoteThing.voteThing(mContext, new VoteThing.VoteThingListener() {
+                            VoteThing.voteThing(mContext, mOauthRetrofit, new VoteThing.VoteThingListener() {
                                 @Override
                                 public void onVoteThingSuccess(int position) {
                                     mPostData.get(position).setVoteType(1);
@@ -345,7 +348,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             ((DataViewHolder) holder).upvoteButton.clearColorFilter();
                             ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(adapterPosition).getScore() - 1));
 
-                            VoteThing.voteThing(mContext, new VoteThing.VoteThingListener() {
+                            VoteThing.voteThing(mContext, mOauthRetrofit, new VoteThing.VoteThingListener() {
                                 @Override
                                 public void onVoteThingSuccess(int position) {
                                     mPostData.get(position).setVoteType(0);
@@ -379,7 +382,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(adapterPosition).getScore() - 1));
                             }
 
-                            VoteThing.voteThing(mContext, new VoteThing.VoteThingListener() {
+                            VoteThing.voteThing(mContext, mOauthRetrofit, new VoteThing.VoteThingListener() {
                                 @Override
                                 public void onVoteThingSuccess(int position) {
                                     mPostData.get(position).setVoteType(-1);
@@ -403,7 +406,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             ((DataViewHolder) holder).downvoteButton.clearColorFilter();
                             ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(adapterPosition).getScore() + 1));
 
-                            VoteThing.voteThing(mContext, new VoteThing.VoteThingListener() {
+                            VoteThing.voteThing(mContext, mOauthRetrofit, new VoteThing.VoteThingListener() {
                                 @Override
                                 public void onVoteThingSuccess(int position) {
                                     mPostData.get(position).setVoteType(0);

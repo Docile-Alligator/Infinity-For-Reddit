@@ -15,7 +15,6 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * Created by alex on 3/12/18.
@@ -23,6 +22,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
     private Context mContext;
+    private Retrofit mRetrofit;
     private LinearLayoutManager mLayoutManager;
     private PostRecyclerViewAdapter mAdapter;
     private ArrayList<PostData> mPostData;
@@ -35,12 +35,13 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
     private Locale locale;
     private String mLastItem;
 
-    PostPaginationScrollListener(Context context, LinearLayoutManager layoutManager, PostRecyclerViewAdapter adapter,
+    PostPaginationScrollListener(Context context, Retrofit retrofit, LinearLayoutManager layoutManager, PostRecyclerViewAdapter adapter,
                                  String lastItem, ArrayList<PostData> postData, PaginationSynchronizer paginationSynchronizer,
                                  final String subredditName, final boolean isBestPost, boolean isLoading,
                                  boolean loadSuccess, Locale locale) {
         if(context != null) {
             this.mContext = context;
+            this.mRetrofit = retrofit;
             this.mLayoutManager = layoutManager;
             this.mAdapter = adapter;
             this.mLastItem = lastItem;
@@ -91,17 +92,17 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
             loadFailed();
             return;
         }
-
+        Log.i("fetch best post pag", "start");
         isLoading = true;
         loadSuccess = false;
         mPaginationSynchronizer.setLoadingState(true);
 
-        Retrofit retrofit = new Retrofit.Builder()
+        /*Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RedditUtils.OAUTH_API_BASE_URI)
                 .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
+                .build();*/
 
-        RedditAPI api = retrofit.create(RedditAPI.class);
+        RedditAPI api = mRetrofit.create(RedditAPI.class);
 
         String accessToken = mContext.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
                 .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
@@ -172,12 +173,12 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
         loadSuccess = false;
         mPaginationSynchronizer.setLoadingState(true);
 
-        Retrofit retrofit = new Retrofit.Builder()
+        /*Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RedditUtils.API_BASE_URI)
                 .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
+                .build();*/
 
-        RedditAPI api = retrofit.create(RedditAPI.class);
+        RedditAPI api = mRetrofit.create(RedditAPI.class);
         Call<String> getPost = api.getPost(subredditName, mLastItem);
         getPost.enqueue(new Callback<String>() {
             @Override

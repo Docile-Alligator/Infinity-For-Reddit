@@ -7,7 +7,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 class FetchComment {
     interface FetchCommentListener {
@@ -15,13 +14,8 @@ class FetchComment {
         void onFetchCommentFail();
     }
 
-    static void fetchComment(String subredditNamePrefixed, String article, String comment,
+    static void fetchComment(Retrofit retrofit, String subredditNamePrefixed, String article, String comment,
                              final FetchCommentListener fetchCommentListener) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RedditUtils.API_BASE_URI)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-
         RedditAPI api = retrofit.create(RedditAPI.class);
 
         Call<String> comments = api.getComments(subredditNamePrefixed, article, comment);

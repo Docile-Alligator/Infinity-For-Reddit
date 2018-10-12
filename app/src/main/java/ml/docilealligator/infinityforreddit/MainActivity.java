@@ -29,7 +29,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,10 +65,17 @@ public class MainActivity extends AppCompatActivity {
     private SubscribedSubredditViewModel mSubscribedSubredditViewModel;
     private SubscribedUserViewModel mSubscribedUserViewModel;
 
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ((Infinity) getApplication()).getmNetworkComponent().inject(this);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -180,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
     private void loadUserData(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             if (!mFetchUserInfoSuccess) {
-                FetchUserInfo.fetchUserInfo(this, new FetchUserInfo.FetchUserInfoListener() {
+                FetchUserInfo.fetchUserInfo(mOauthRetrofit, this, new FetchUserInfo.FetchUserInfoListener() {
                     @Override
                     public void onFetchUserInfoSuccess(String response) {
                         ParseUserInfo.parseUserInfo(response, new ParseUserInfo.ParseUserInfoListener() {
@@ -225,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (!mInsertSuccess) {
-                FetchSubscribedThing.fetchSubscribedThing(this, null,
+                FetchSubscribedThing.fetchSubscribedThing(this, mOauthRetrofit, null,
                         new ArrayList<SubscribedSubredditData>(), new ArrayList<SubscribedUserData>(),
                         new ArrayList<SubredditData>(),
                         new FetchSubscribedThing.FetchSubscribedThingListener() {

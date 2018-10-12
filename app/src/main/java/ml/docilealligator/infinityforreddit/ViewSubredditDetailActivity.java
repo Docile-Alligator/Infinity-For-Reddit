@@ -22,7 +22,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Retrofit;
 
 public class ViewSubredditDetailActivity extends AppCompatActivity {
 
@@ -36,10 +40,17 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
 
     private SubredditViewModel mSubredditViewModel;
 
+    @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_subreddit_detail);
+
+        ((Infinity) getApplication()).getmNetworkComponent().inject(this);
+
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -65,8 +76,6 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
 
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                /*collapsingToolbarLayout.setExpandedTitleColor(Color.BLACK);
-                collapsingToolbarLayout.setCollapsedTitleTextColor(Color.BLACK);*/
                 if(scrollRange == -1) {
                     scrollRange = appBarLayout.getTotalScrollRange();
                 } else {
@@ -158,7 +167,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
             }
         });
 
-        FetchSubredditData.fetchSubredditData(subredditName, new FetchSubredditData.FetchSubredditDataListener() {
+        FetchSubredditData.fetchSubredditData(mRetrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
             @Override
             public void onFetchSubredditDataSuccess(String response) {
                 ParseSubredditData.parseComment(response, new ParseSubredditData.ParseSubredditDataListener() {

@@ -10,7 +10,6 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * Created by alex on 3/14/18.
@@ -28,17 +27,14 @@ class VoteThing {
         void onVoteThingFail();
     }
 
-    static void voteThing(final Context context, final VoteThingListener voteThingListener, final String fullName, final String point, final int position, final int refreshTime) {
+    static void voteThing(final Context context, final Retrofit retrofit,
+                          final VoteThingListener voteThingListener, final String fullName,
+                          final String point, final int position, final int refreshTime) {
         if(context != null) {
             if(refreshTime < 0) {
                 voteThingListener.onVoteThingFail(position);
                 return;
             }
-
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(RedditUtils.OAUTH_API_BASE_URI)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .build();
 
             RedditAPI api = retrofit.create(RedditAPI.class);
 
@@ -63,7 +59,7 @@ class VoteThing {
                             new RefreshAccessToken.RefreshAccessTokenListener() {
                                 @Override
                                 public void onRefreshAccessTokenSuccess() {
-                                    voteThing(context, voteThingListener, fullName, point, position, refreshTime - 1);
+                                    voteThing(context, retrofit, voteThingListener, fullName, point, position, refreshTime - 1);
                                 }
 
                                 @Override
@@ -75,17 +71,14 @@ class VoteThing {
         }
     }
 
-    static void voteThing(final Context context, final VoteThingWithoutPositionListener voteThingWithoutPositionListener, final String fullName, final String point, final int refreshTime) {
+    static void voteThing(final Context context, final Retrofit retrofit,
+                          final VoteThingWithoutPositionListener voteThingWithoutPositionListener,
+                          final String fullName, final String point, final int refreshTime) {
         if(context != null) {
             if(refreshTime < 0) {
                 voteThingWithoutPositionListener.onVoteThingFail();
                 return;
             }
-
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(RedditUtils.OAUTH_API_BASE_URI)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .build();
 
             RedditAPI api = retrofit.create(RedditAPI.class);
 
@@ -110,7 +103,7 @@ class VoteThing {
                             new RefreshAccessToken.RefreshAccessTokenListener() {
                                 @Override
                                 public void onRefreshAccessTokenSuccess() {
-                                    voteThing(context, voteThingWithoutPositionListener, fullName, point, refreshTime - 1);
+                                    voteThing(context, retrofit, voteThingWithoutPositionListener, fullName, point, refreshTime - 1);
                                 }
 
                                 @Override

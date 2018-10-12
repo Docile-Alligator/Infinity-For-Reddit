@@ -10,7 +10,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 class FetchSubscribedThing {
     interface FetchSubscribedThingListener {
@@ -20,7 +19,7 @@ class FetchSubscribedThing {
         void onFetchSubscribedThingFail();
     }
 
-    static void fetchSubscribedThing(final Context context, final String lastItem,
+    static void fetchSubscribedThing(final Context context, final Retrofit retrofit, final String lastItem,
                                      final ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                      final ArrayList<SubscribedUserData> subscribedUserData,
                                      final ArrayList<SubredditData> subredditData,
@@ -29,11 +28,6 @@ class FetchSubscribedThing {
             fetchSubscribedThingListener.onFetchSubscribedThingFail();
             return;
         }
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RedditUtils.OAUTH_API_BASE_URI)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
 
         RedditAPI api = retrofit.create(RedditAPI.class);
 
@@ -58,7 +52,7 @@ class FetchSubscribedThing {
                                         fetchSubscribedThingListener.onFetchSubscribedThingSuccess(
                                                 subscribedSubredditData, subscribedUserData, subredditData);
                                     } else {
-                                        fetchSubscribedThing(context, lastItem, subscribedSubredditData,
+                                        fetchSubscribedThing(context, retrofit, lastItem, subscribedSubredditData,
                                                 subscribedUserData, subredditData,
                                                 fetchSubscribedThingListener, refreshTime);
                                     }
@@ -73,7 +67,7 @@ class FetchSubscribedThing {
                     RefreshAccessToken.refreshAccessToken(context, new RefreshAccessToken.RefreshAccessTokenListener() {
                         @Override
                         public void onRefreshAccessTokenSuccess() {
-                            fetchSubscribedThing(context, lastItem, subscribedSubredditData,
+                            fetchSubscribedThing(context, retrofit, lastItem, subscribedSubredditData,
                                     subscribedUserData, subredditData, fetchSubscribedThingListener, refreshTime - 1);
                         }
 

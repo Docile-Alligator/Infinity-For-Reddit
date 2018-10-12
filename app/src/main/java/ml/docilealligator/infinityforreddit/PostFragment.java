@@ -23,10 +23,12 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 
 /**
@@ -56,6 +58,15 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private boolean mIsBestPost;
     private String mSubredditName;
 
+    @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
+
+    @Inject
     public PostFragment() {
         // Required empty public constructor
     }
@@ -84,6 +95,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_post, container, false);
+
+        ((Infinity) getActivity().getApplication()).getmNetworkComponent().inject(this);
+
         mCoordinatorLayout = rootView.findViewById(R.id.coordinator_layout_post_fragment);
         mPostRecyclerView = rootView.findViewById(R.id.recycler_view_post_fragment);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
@@ -127,14 +141,24 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             });
             mPaginationSynchronizer.setLoadSuccess(savedInstanceState.getBoolean(LOAD_SUCCESS_STATE));
             mPaginationSynchronizer.setLoadingState(savedInstanceState.getBoolean(LOADING_STATE_STATE));
-            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(getActivity(), mPostData, mPaginationSynchronizer, mIsBestPost);
+            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(getActivity(), mOauthRetrofit,
+                    mPostData, mPaginationSynchronizer, mIsBestPost);
             mPostRecyclerView.setAdapter(adapter);
-            mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
-                    getActivity(), mLinearLayoutManager, adapter, mLastItem, mPostData,
-                    mPaginationSynchronizer, mSubredditName, mIsBestPost,
-                    mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
-                    getResources().getConfiguration().locale));
-            mProgressBar.setVisibility(View.GONE);
+            if(mIsBestPost) {
+                mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
+                        getActivity(), mOauthRetrofit, mLinearLayoutManager, adapter, mLastItem, mPostData,
+                        mPaginationSynchronizer, mSubredditName, mIsBestPost,
+                        mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
+                        getResources().getConfiguration().locale));
+                mProgressBar.setVisibility(View.GONE);
+            } else {
+                mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
+                        getActivity(), mRetrofit, mLinearLayoutManager, adapter, mLastItem, mPostData,
+                        mPaginationSynchronizer, mSubredditName, mIsBestPost,
+                        mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
+                        getResources().getConfiguration().locale));
+                mProgressBar.setVisibility(View.GONE);
+            }
         } else {
             mPaginationSynchronizer = new PaginationSynchronizer(new LastItemSynchronizer() {
                 @Override
@@ -157,16 +181,16 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             showErrorView();
             return;
         }
-
+        Log.i("fetch best post", "start" + refreshTime);
         mFetchPostErrorLinearLayout.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
 
-        Retrofit retrofit = new Retrofit.Builder()
+        /*Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RedditUtils.OAUTH_API_BASE_URI)
                 .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
+                .build();*/
 
-        RedditAPI api = retrofit.create(RedditAPI.class);
+        RedditAPI api = mOauthRetrofit.create(RedditAPI.class);
 
         String accessToken = getActivity().getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
                 .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
@@ -176,6 +200,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if(getActivity() != null) {
                     if(response.isSuccessful()) {
+                        Log.i("response", "success");
                         ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                         ClipData clip = ClipData.newPlainText("response", response.body());
                         clipboard.setPrimaryClip(clip);
@@ -187,11 +212,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                                         if(isAdded() && getActivity() != null) {
                                             mPostData = postData;
                                             mLastItem = lastItem;
-                                            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer, mIsBestPost);
+                                            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(getActivity(), mOauthRetrofit, postData, mPaginationSynchronizer, mIsBestPost);
 
                                             mPostRecyclerView.setAdapter(adapter);
                                             mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
-                                                    getActivity(), mLinearLayoutManager, adapter, lastItem, postData,
+                                                    getActivity(), mOauthRetrofit, mLinearLayoutManager, adapter, lastItem, postData,
                                                     mPaginationSynchronizer, mSubredditName, mIsBestPost,
                                                     mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
                                                     getResources().getConfiguration().locale));
@@ -236,12 +261,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         mFetchPostErrorLinearLayout.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
 
-        Retrofit retrofit = new Retrofit.Builder()
+        /*Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RedditUtils.API_BASE_URI)
                 .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
+                .build();*/
 
-        RedditAPI api = retrofit.create(RedditAPI.class);
+        RedditAPI api = mRetrofit.create(RedditAPI.class);
         Call<String> getPost = api.getPost(mSubredditName, mLastItem);
         getPost.enqueue(new Callback<String>() {
             @Override
@@ -259,11 +284,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                                         if(isAdded() && getActivity() != null) {
                                             mPostData = postData;
                                             mLastItem = lastItem;
-                                            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(getActivity(), postData, mPaginationSynchronizer, mIsBestPost);
+                                            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(getActivity(), mRetrofit, postData, mPaginationSynchronizer, mIsBestPost);
 
                                             mPostRecyclerView.setAdapter(adapter);
                                             mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
-                                                    getActivity(), mLinearLayoutManager, adapter, lastItem, postData,
+                                                    getActivity(), mRetrofit, mLinearLayoutManager, adapter, lastItem, postData,
                                                     mPaginationSynchronizer, mSubredditName, mIsBestPost,
                                                     mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
                                                     getResources().getConfiguration().locale));

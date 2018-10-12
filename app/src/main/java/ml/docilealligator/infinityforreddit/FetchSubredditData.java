@@ -7,7 +7,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 class FetchSubredditData {
     interface FetchSubredditDataListener {
@@ -15,12 +14,7 @@ class FetchSubredditData {
         void onFetchSubredditDataFail();
     }
 
-    static void fetchSubredditData(String subredditName, final FetchSubredditDataListener fetchSubredditDataListener) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RedditUtils.API_BASE_URI)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-
+    static void fetchSubredditData(Retrofit retrofit, String subredditName, final FetchSubredditDataListener fetchSubredditDataListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
         Call<String> subredditData = api.getSubredditData(subredditName);

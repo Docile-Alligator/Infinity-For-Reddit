@@ -23,19 +23,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import retrofit2.Retrofit;
+
 class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
     private Context mContext;
+    private Retrofit mRetrofit;
+    private Retrofit mOauthRetrofit;
     private ArrayList<CommentData> mCommentData;
     private MultiLevelRecyclerView mMultiLevelRecyclerView;
     private String subredditNamePrefixed;
     private String article;
     private Locale locale;
 
-    CommentMultiLevelRecyclerViewAdapter(Context context, ArrayList<CommentData> commentData,
+    CommentMultiLevelRecyclerViewAdapter(Context context, Retrofit retrofit, Retrofit oauthRetrofit, ArrayList<CommentData> commentData,
                                          MultiLevelRecyclerView multiLevelRecyclerView,
                                          String subredditNamePrefixed, String article, Locale locale) {
         super(commentData);
         mContext = context;
+        mRetrofit = retrofit;
+        mOauthRetrofit = oauthRetrofit;
         mCommentData = commentData;
         mMultiLevelRecyclerView = multiLevelRecyclerView;
         this.subredditNamePrefixed = subredditNamePrefixed;
@@ -71,7 +77,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                     setExpandButton(((CommentViewHolder) holder).expandButton, commentItem.isExpanded());
                 } else {
                     ((CommentViewHolder) holder).loadMoreCommentsProgressBar.setVisibility(View.VISIBLE);
-                    FetchComment.fetchComment(subredditNamePrefixed, article, commentItem.getId(),
+                    FetchComment.fetchComment(mRetrofit, subredditNamePrefixed, article, commentItem.getId(),
                             new FetchComment.FetchCommentListener() {
                                 @Override
                                 public void onFetchCommentSuccess(String response) {
@@ -130,7 +136,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                         ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() + 1));
                     }
 
-                    VoteThing.voteThing(mContext, new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mContext, mOauthRetrofit, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
                             commentItem.setVoteType(1);
@@ -154,7 +160,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                     ((CommentViewHolder) holder).upvoteButton.clearColorFilter();
                     ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() - 1));
 
-                    VoteThing.voteThing(mContext, new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mContext, mOauthRetrofit, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
                             commentItem.setVoteType(0);
@@ -189,7 +195,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                         ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() - 1));
                     }
 
-                    VoteThing.voteThing(mContext, new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mContext, mOauthRetrofit, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
                             commentItem.setVoteType(-1);
@@ -213,7 +219,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                     ((CommentViewHolder) holder).downvoteButton.clearColorFilter();
                     ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() + 1));
 
-                    VoteThing.voteThing(mContext, new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mContext, mOauthRetrofit, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
                             commentItem.setVoteType(0);

@@ -52,12 +52,11 @@ class RefreshAccessToken {
                         String newAccessToken = jsonObject.getString(RedditUtils.ACCESS_TOKEN_KEY);
                         int expireIn = jsonObject.getInt(RedditUtils.EXPIRES_IN_KEY);
 
+                        long queryAccessTokenTime = Calendar.getInstance().getTimeInMillis();
+
                         SharedPreferences.Editor editor = context.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE).edit();
                         editor.putString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, newAccessToken);
                         editor.putInt(SharedPreferencesUtils.ACCESS_TOKEN_EXPIRE_INTERVAL_KEY, expireIn);
-                        editor.apply();
-
-                        long queryAccessTokenTime = Calendar.getInstance().getTimeInMillis();
                         editor.putLong(SharedPreferencesUtils.QUERY_ACCESS_TOKEN_TIME_KEY, queryAccessTokenTime);
                         editor.apply();
 
