@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -46,6 +47,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private ArrayList<PostData> mPostData;
     private Context mContext;
     private Retrofit mOauthRetrofit;
+    private SharedPreferences mSharedPreferences;
     private PaginationSynchronizer mPaginationSynchronizer;
     private RequestManager glide;
     private SubredditDao subredditDao;
@@ -57,10 +59,11 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int VIEW_TYPE_LOADING = 1;
 
 
-    PostRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, ArrayList<PostData> postData, PaginationSynchronizer paginationSynchronizer, boolean hasMultipleSubreddits) {
+    PostRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, SharedPreferences sharedPreferences, ArrayList<PostData> postData, PaginationSynchronizer paginationSynchronizer, boolean hasMultipleSubreddits) {
         if(context != null) {
             mContext = context;
             mOauthRetrofit = oauthRetrofit;
+            mSharedPreferences = sharedPreferences;
             mPostData = postData;
             mPaginationSynchronizer = paginationSynchronizer;
             this.hasMultipleSubreddits = hasMultipleSubreddits;
@@ -91,17 +94,16 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             if(mPostData.get(holder.getAdapterPosition()) == null) {
                 Log.i("is null", Integer.toString(holder.getAdapterPosition()));
             } else {
-                final int adapterPosition = holder.getAdapterPosition();
-                final String id = mPostData.get(adapterPosition).getFullName();
-                final String subredditName = mPostData.get(adapterPosition).getSubredditNamePrefixed();
-                final String postTime = mPostData.get(adapterPosition).getPostTime();
-                final String title = mPostData.get(adapterPosition).getTitle();
-                final String permalink = mPostData.get(adapterPosition).getPermalink();
-                int voteType = mPostData.get(adapterPosition).getVoteType();
-                int gilded = mPostData.get(adapterPosition).getGilded();
-                boolean nsfw = mPostData.get(adapterPosition).isNSFW();
+                final String id = mPostData.get(holder.getAdapterPosition()).getFullName();
+                final String subredditName = mPostData.get(holder.getAdapterPosition()).getSubredditNamePrefixed();
+                final String postTime = mPostData.get(holder.getAdapterPosition()).getPostTime();
+                final String title = mPostData.get(holder.getAdapterPosition()).getTitle();
+                final String permalink = mPostData.get(holder.getAdapterPosition()).getPermalink();
+                int voteType = mPostData.get(holder.getAdapterPosition()).getVoteType();
+                int gilded = mPostData.get(holder.getAdapterPosition()).getGilded();
+                boolean nsfw = mPostData.get(holder.getAdapterPosition()).isNSFW();
 
-                if(mPostData.get(adapterPosition).getSubredditIconUrl() == null) {
+                if(mPostData.get(holder.getAdapterPosition()).getSubredditIconUrl() == null) {
                     new LoadSubredditIconAsyncTask(subredditDao, subredditName,
                             new LoadSubredditIconAsyncTask.LoadSubredditIconAsyncTaskListener() {
                                 @Override
@@ -115,7 +117,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                                     .into(((DataViewHolder) holder).subredditIconCircleImageView);
                                         }
 
-                                        mPostData.get(adapterPosition).setSubredditIconUrl(iconImageUrl);
+                                        mPostData.get(holder.getAdapterPosition()).setSubredditIconUrl(iconImageUrl);
                                     }
                                 }
                             }).execute();
@@ -132,7 +134,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             canStartActivity = false;
                             Intent intent = new Intent(mContext, ViewPostDetailActivity.class);
                             intent.putExtra(ViewPostDetailActivity.EXTRA_TITLE, title);
-                            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, mPostData.get(adapterPosition));
+                            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, mPostData.get(holder.getAdapterPosition()));
                             mContext.startActivity(intent);
                         }
                     }
@@ -145,9 +147,9 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             canStartActivity = false;
                             Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
                             intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
-                                    mPostData.get(adapterPosition).getSubredditNamePrefixed().substring(2));
+                                    mPostData.get(holder.getAdapterPosition()).getSubredditNamePrefixed().substring(2));
                             intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_VALUE_KEY,
-                                    mPostData.get(adapterPosition).getSubredditNamePrefixed());
+                                    mPostData.get(holder.getAdapterPosition()).getSubredditNamePrefixed());
                             intent.putExtra(ViewSubredditDetailActivity.EXTRA_QUERY_BY_ID_KEY, false);
                             mContext.startActivity(intent);
                         }
@@ -163,9 +165,9 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             canStartActivity = false;
                             Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
                             intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
-                                    mPostData.get(adapterPosition).getSubredditNamePrefixed().substring(2));
+                                    mPostData.get(holder.getAdapterPosition()).getSubredditNamePrefixed().substring(2));
                             intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_VALUE_KEY,
-                                    mPostData.get(adapterPosition).getSubredditNamePrefixed());
+                                    mPostData.get(holder.getAdapterPosition()).getSubredditNamePrefixed());
                             intent.putExtra(ViewSubredditDetailActivity.EXTRA_QUERY_BY_ID_KEY, false);
                             mContext.startActivity(intent);
                         }
@@ -256,10 +258,10 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 Intent intent = new Intent(mContext, ViewVideoActivity.class);
                                 intent.setData(gifVideoUri);
                                 intent.putExtra(ViewVideoActivity.TITLE_KEY, title);
-                                intent.putExtra(ViewVideoActivity.IS_DASH_VIDEO_KEY, mPostData.get(adapterPosition).isDashVideo());
-                                intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, mPostData.get(adapterPosition).isDownloadableGifOrVideo());
-                                if(mPostData.get(adapterPosition).isDownloadableGifOrVideo()) {
-                                    intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, mPostData.get(adapterPosition).getGifOrVideoDownloadUrl());
+                                intent.putExtra(ViewVideoActivity.IS_DASH_VIDEO_KEY, mPostData.get(holder.getAdapterPosition()).isDashVideo());
+                                intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, mPostData.get(holder.getAdapterPosition()).isDownloadableGifOrVideo());
+                                if(mPostData.get(holder.getAdapterPosition()).isDownloadableGifOrVideo()) {
+                                    intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, mPostData.get(holder.getAdapterPosition()).getGifOrVideoDownloadUrl());
                                     intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, subredditName);
                                     intent.putExtra(ViewVideoActivity.ID_KEY, id);
                                 }
@@ -277,10 +279,10 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 Intent intent = new Intent(mContext, ViewVideoActivity.class);
                                 intent.setData(videoUri);
                                 intent.putExtra(ViewVideoActivity.TITLE_KEY, title);
-                                intent.putExtra(ViewVideoActivity.IS_DASH_VIDEO_KEY, mPostData.get(adapterPosition).isDashVideo());
-                                intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, mPostData.get(adapterPosition).isDownloadableGifOrVideo());
-                                if(mPostData.get(adapterPosition).isDownloadableGifOrVideo()) {
-                                    intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, mPostData.get(adapterPosition).getGifOrVideoDownloadUrl());
+                                intent.putExtra(ViewVideoActivity.IS_DASH_VIDEO_KEY, mPostData.get(holder.getAdapterPosition()).isDashVideo());
+                                intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, mPostData.get(holder.getAdapterPosition()).isDownloadableGifOrVideo());
+                                if(mPostData.get(holder.getAdapterPosition()).isDownloadableGifOrVideo()) {
+                                    intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, mPostData.get(holder.getAdapterPosition()).getGifOrVideoDownloadUrl());
                                     intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, subredditName);
                                     intent.putExtra(ViewVideoActivity.ID_KEY, id);
                                 }
@@ -319,12 +321,12 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         if (((DataViewHolder) holder).upvoteButton.getColorFilter() == null) {
                             ((DataViewHolder) holder).upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
                             if(isDownvotedBefore) {
-                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(adapterPosition).getScore() + 2));
+                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(holder.getAdapterPosition()).getScore() + 2));
                             } else {
-                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(adapterPosition).getScore() + 1));
+                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(holder.getAdapterPosition()).getScore() + 1));
                             }
 
-                            VoteThing.voteThing(mContext, mOauthRetrofit, new VoteThing.VoteThingListener() {
+                            VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
                                 @Override
                                 public void onVoteThingSuccess(int position) {
                                     mPostData.get(position).setVoteType(1);
@@ -342,13 +344,13 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                     ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(position).getScore()));
                                     ((DataViewHolder) holder).downvoteButton.setColorFilter(downvoteButtonColorFilter);
                                 }
-                            }, id, RedditUtils.DIR_UPVOTE, holder.getAdapterPosition(), 1);
+                            }, id, RedditUtils.DIR_UPVOTE, holder.getAdapterPosition());
                         } else {
                             //Upvoted before
                             ((DataViewHolder) holder).upvoteButton.clearColorFilter();
-                            ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(adapterPosition).getScore() - 1));
+                            ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(holder.getAdapterPosition()).getScore() - 1));
 
-                            VoteThing.voteThing(mContext, mOauthRetrofit, new VoteThing.VoteThingListener() {
+                            VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
                                 @Override
                                 public void onVoteThingSuccess(int position) {
                                     mPostData.get(position).setVoteType(0);
@@ -362,7 +364,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                     ((DataViewHolder) holder).upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
                                     mPostData.get(position).setScore(mPostData.get(position).getScore() + 1);
                                 }
-                            }, id, RedditUtils.DIR_UNVOTE, holder.getAdapterPosition(), 1);
+                            }, id, RedditUtils.DIR_UNVOTE, holder.getAdapterPosition());
                         }
                     }
                 });
@@ -377,12 +379,12 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         if (((DataViewHolder) holder).downvoteButton.getColorFilter() == null) {
                             ((DataViewHolder) holder).downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
                             if (isUpvotedBefore) {
-                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(adapterPosition).getScore() - 2));
+                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(holder.getAdapterPosition()).getScore() - 2));
                             } else {
-                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(adapterPosition).getScore() - 1));
+                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(holder.getAdapterPosition()).getScore() - 1));
                             }
 
-                            VoteThing.voteThing(mContext, mOauthRetrofit, new VoteThing.VoteThingListener() {
+                            VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
                                 @Override
                                 public void onVoteThingSuccess(int position) {
                                     mPostData.get(position).setVoteType(-1);
@@ -400,13 +402,13 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                     ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(position).getScore()));
                                     ((DataViewHolder) holder).upvoteButton.setColorFilter(upvoteButtonColorFilter);
                                 }
-                            }, id, RedditUtils.DIR_DOWNVOTE, adapterPosition, 1);
+                            }, id, RedditUtils.DIR_DOWNVOTE, holder.getAdapterPosition());
                         } else {
                             //Down voted before
                             ((DataViewHolder) holder).downvoteButton.clearColorFilter();
-                            ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(adapterPosition).getScore() + 1));
+                            ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(holder.getAdapterPosition()).getScore() + 1));
 
-                            VoteThing.voteThing(mContext, mOauthRetrofit, new VoteThing.VoteThingListener() {
+                            VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
                                 @Override
                                 public void onVoteThingSuccess(int position) {
                                     mPostData.get(position).setVoteType(0);
@@ -420,7 +422,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                     ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(mPostData.get(position).getScore()));
                                     mPostData.get(position).setScore(mPostData.get(position).getScore());
                                 }
-                            }, id, RedditUtils.DIR_UNVOTE, adapterPosition, 1);
+                            }, id, RedditUtils.DIR_UNVOTE, holder.getAdapterPosition());
                         }
                     }
                 });

@@ -1,6 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -19,20 +19,15 @@ class FetchSubscribedThing {
         void onFetchSubscribedThingFail();
     }
 
-    static void fetchSubscribedThing(final Context context, final Retrofit retrofit, final String lastItem,
+    static void fetchSubscribedThing(final Retrofit retrofit, final SharedPreferences sharedPreferences,
+                                     final String lastItem,
                                      final ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                      final ArrayList<SubscribedUserData> subscribedUserData,
                                      final ArrayList<SubredditData> subredditData,
-                                     final FetchSubscribedThingListener fetchSubscribedThingListener, final int refreshTime) {
-        if(refreshTime < 0) {
-            fetchSubscribedThingListener.onFetchSubscribedThingFail();
-            return;
-        }
-
+                                     final FetchSubscribedThingListener fetchSubscribedThingListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
-        String accessToken = context.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
-                .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
+        String accessToken = sharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
         Call<String> subredditDataCall = api.getSubscribedThing(lastItem, RedditUtils.getOAuthHeader(accessToken));
         subredditDataCall.enqueue(new Callback<String>() {
@@ -52,9 +47,9 @@ class FetchSubscribedThing {
                                         fetchSubscribedThingListener.onFetchSubscribedThingSuccess(
                                                 subscribedSubredditData, subscribedUserData, subredditData);
                                     } else {
-                                        fetchSubscribedThing(context, retrofit, lastItem, subscribedSubredditData,
+                                        fetchSubscribedThing(retrofit, sharedPreferences, lastItem, subscribedSubredditData,
                                                 subscribedUserData, subredditData,
-                                                fetchSubscribedThingListener, refreshTime);
+                                                fetchSubscribedThingListener);
                                     }
                                 }
 
@@ -63,17 +58,6 @@ class FetchSubscribedThing {
                                     fetchSubscribedThingListener.onFetchSubscribedThingFail();
                                 }
                             });
-                } else if(response.code() == 401) {
-                    RefreshAccessToken.refreshAccessToken(context, new RefreshAccessToken.RefreshAccessTokenListener() {
-                        @Override
-                        public void onRefreshAccessTokenSuccess() {
-                            fetchSubscribedThing(context, retrofit, lastItem, subscribedSubredditData,
-                                    subscribedUserData, subredditData, fetchSubscribedThingListener, refreshTime - 1);
-                        }
-
-                        @Override
-                        public void onRefreshAccessTokenFail() {}
-                    });
                 } else {
                     Log.i("call failed", response.message());
                     fetchSubscribedThingListener.onFetchSubscribedThingFail();

@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -69,13 +70,14 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
     private LoadSubredditIconAsyncTask mLoadSubredditIconAsyncTask;
 
-    @Inject
-    @Named("no_oauth")
+    @Inject @Named("no_oauth")
     Retrofit mRetrofit;
 
-    @Inject
-    @Named("oauth")
+    @Inject @Named("oauth")
     Retrofit mOauthRetrofit;
+
+    @Inject @Named("auth_info")
+    SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -380,7 +382,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                         scoreTextView.setText(Integer.toString(mPostData.getScore() + 1));
                     }
 
-                    VoteThing.voteThing(ViewPostDetailActivity.this, mOauthRetrofit, new VoteThing.VoteThingWithoutPositionListener() {
+                    VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingWithoutPositionListener() {
                         @Override
                         public void onVoteThingSuccess() {
                             mPostData.setVoteType(1);
@@ -398,13 +400,13 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                             scoreTextView.setText(Integer.toString(mPostData.getScore()));
                             downvoteButton.setColorFilter(downVoteButtonColorFilter);
                         }
-                    }, mPostData.getFullName(), RedditUtils.DIR_UPVOTE, 1);
+                    }, mPostData.getFullName(), RedditUtils.DIR_UPVOTE);
                 } else {
                     //Upvoted before
                     upvoteButton.clearColorFilter();
                     scoreTextView.setText(Integer.toString(mPostData.getScore() - 1));
 
-                    VoteThing.voteThing(ViewPostDetailActivity.this, mOauthRetrofit, new VoteThing.VoteThingWithoutPositionListener() {
+                    VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingWithoutPositionListener() {
                         @Override
                         public void onVoteThingSuccess() {
                             mPostData.setVoteType(0);
@@ -418,7 +420,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                             upvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
                             mPostData.setScore(mPostData.getScore() + 1);
                         }
-                    }, mPostData.getFullName(), RedditUtils.DIR_UNVOTE, 1);
+                    }, mPostData.getFullName(), RedditUtils.DIR_UNVOTE);
                 }
             }
         });
@@ -440,7 +442,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                         scoreTextView.setText(Integer.toString(mPostData.getScore() - 1));
                     }
 
-                    VoteThing.voteThing(ViewPostDetailActivity.this, mOauthRetrofit, new VoteThing.VoteThingWithoutPositionListener() {
+                    VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingWithoutPositionListener() {
                         @Override
                         public void onVoteThingSuccess() {
                             mPostData.setVoteType(-1);
@@ -458,13 +460,13 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                             scoreTextView.setText(Integer.toString(mPostData.getScore()));
                             upvoteButton.setColorFilter(upvoteButtonColorFilter);
                         }
-                    }, mPostData.getFullName(), RedditUtils.DIR_DOWNVOTE, 1);
+                    }, mPostData.getFullName(), RedditUtils.DIR_DOWNVOTE);
                 } else {
                     //Down voted before
                     downvoteButton.clearColorFilter();
                     scoreTextView.setText(Integer.toString(mPostData.getScore() + 1));
 
-                    VoteThing.voteThing(ViewPostDetailActivity.this, mOauthRetrofit, new VoteThing.VoteThingWithoutPositionListener() {
+                    VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingWithoutPositionListener() {
                         @Override
                         public void onVoteThingSuccess() {
                             mPostData.setVoteType(0);
@@ -478,7 +480,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                             scoreTextView.setText(Integer.toString(mPostData.getScore()));
                             mPostData.setScore(mPostData.getScore());
                         }
-                    }, mPostData.getFullName(), RedditUtils.DIR_UNVOTE, 1);
+                    }, mPostData.getFullName(), RedditUtils.DIR_UNVOTE);
                 }
             }
         });
@@ -501,7 +503,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                                         if (commentData.size() > 0) {
                                             CommentMultiLevelRecyclerViewAdapter adapter = new CommentMultiLevelRecyclerViewAdapter(
                                                     ViewPostDetailActivity.this, mRetrofit, mOauthRetrofit,
-                                                    (ArrayList<CommentData>) commentData,
+                                                    mSharedPreferences, (ArrayList<CommentData>) commentData,
                                                     mRecyclerView, mPostData.getSubredditNamePrefixed(),
                                                     mPostData.getId(), getResources().getConfiguration().locale);
                                             mRecyclerView.removeItemClickListeners();

@@ -4,6 +4,7 @@ package ml.docilealligator.infinityforreddit;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -58,15 +59,15 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private boolean mIsBestPost;
     private String mSubredditName;
 
-    @Inject
-    @Named("no_oauth")
+    @Inject @Named("no_oauth")
     Retrofit mRetrofit;
 
-    @Inject
-    @Named("oauth")
+    @Inject @Named("oauth")
     Retrofit mOauthRetrofit;
 
-    @Inject
+    @Inject @Named("auth_info")
+    SharedPreferences mSharedPreferences;
+
     public PostFragment() {
         // Required empty public constructor
     }
@@ -122,7 +123,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 @Override
                 public void onClick(View view) {
                     if(mIsBestPost) {
-                        fetchBestPost(1);
+                        fetchBestPost();
                     } else {
                         fetchPost();
                     }
@@ -142,7 +143,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mPaginationSynchronizer.setLoadSuccess(savedInstanceState.getBoolean(LOAD_SUCCESS_STATE));
             mPaginationSynchronizer.setLoadingState(savedInstanceState.getBoolean(LOADING_STATE_STATE));
             PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(getActivity(), mOauthRetrofit,
-                    mPostData, mPaginationSynchronizer, mIsBestPost);
+                    mSharedPreferences, mPostData, mPaginationSynchronizer, mIsBestPost);
             mPostRecyclerView.setAdapter(adapter);
             if(mIsBestPost) {
                 mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
@@ -167,7 +168,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 }
             });
             if(mIsBestPost) {
-                fetchBestPost(1);
+                fetchBestPost();
             } else {
                 fetchPost();
             }
@@ -176,12 +177,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         return rootView;
     }
 
-    private void fetchBestPost(final int refreshTime) {
-        if(refreshTime < 0) {
-            showErrorView();
-            return;
-        }
-        Log.i("fetch best post", "start" + refreshTime);
+    private void fetchBestPost() {
         mFetchPostErrorLinearLayout.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
 
@@ -212,7 +208,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                                         if(isAdded() && getActivity() != null) {
                                             mPostData = postData;
                                             mLastItem = lastItem;
-                                            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(getActivity(), mOauthRetrofit, postData, mPaginationSynchronizer, mIsBestPost);
+                                            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(
+                                                    getActivity(), mOauthRetrofit, mSharedPreferences,
+                                                    postData, mPaginationSynchronizer, mIsBestPost);
 
                                             mPostRecyclerView.setAdapter(adapter);
                                             mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
@@ -229,19 +227,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                                         Log.i("Post fetch error", "Error parsing data");
                                         showErrorView();
                                     }
-                                });
-                    } else if(response.code() == 401) {
-                        // Error indicating that there was an Authentication Failure while performing the request
-                        // Access token expired
-                        RefreshAccessToken.refreshAccessToken(getActivity(),
-                                new RefreshAccessToken.RefreshAccessTokenListener() {
-                                    @Override
-                                    public void onRefreshAccessTokenSuccess() {
-                                        fetchBestPost(refreshTime - 1);
-                                    }
-
-                                    @Override
-                                    public void onRefreshAccessTokenFail() {}
                                 });
                     } else {
                         Log.i("Post fetch error", response.message());
@@ -284,7 +269,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                                         if(isAdded() && getActivity() != null) {
                                             mPostData = postData;
                                             mLastItem = lastItem;
-                                            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(getActivity(), mRetrofit, postData, mPaginationSynchronizer, mIsBestPost);
+                                            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(
+                                                    getActivity(), mRetrofit, mSharedPreferences,
+                                                    postData, mPaginationSynchronizer, mIsBestPost);
 
                                             mPostRecyclerView.setAdapter(adapter);
                                             mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
@@ -329,7 +316,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 @Override
                 public void onClick(View view) {
                     if (mIsBestPost) {
-                        fetchBestPost(1);
+                        fetchBestPost();
                     } else {
                         fetchPost();
                     }
@@ -358,7 +345,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             (mPostRecyclerView.getAdapter()).notifyDataSetChanged();
         }
         if(mIsBestPost) {
-            fetchBestPost(1);
+            fetchBestPost();
         } else {
             fetchPost();
         }

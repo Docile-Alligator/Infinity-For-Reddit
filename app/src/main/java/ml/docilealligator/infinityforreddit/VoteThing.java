@@ -1,6 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -27,19 +27,12 @@ class VoteThing {
         void onVoteThingFail();
     }
 
-    static void voteThing(final Context context, final Retrofit retrofit,
+    static void voteThing(final Retrofit retrofit, SharedPreferences authInfoSharedPreferences,
                           final VoteThingListener voteThingListener, final String fullName,
-                          final String point, final int position, final int refreshTime) {
-        if(context != null) {
-            if(refreshTime < 0) {
-                voteThingListener.onVoteThingFail(position);
-                return;
-            }
-
+                          final String point, final int position) {
             RedditAPI api = retrofit.create(RedditAPI.class);
 
-            String accessToken = context.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
-                    .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
+            String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
             Map<String, String> params = new HashMap<>();
             params.put(RedditUtils.DIR_KEY, point);
             params.put(RedditUtils.ID_KEY, fullName);
@@ -55,35 +48,17 @@ class VoteThing {
                 @Override
                 public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                     Log.i("call failed", t.getMessage());
-                    RefreshAccessToken.refreshAccessToken(context,
-                            new RefreshAccessToken.RefreshAccessTokenListener() {
-                                @Override
-                                public void onRefreshAccessTokenSuccess() {
-                                    voteThing(context, retrofit, voteThingListener, fullName, point, position, refreshTime - 1);
-                                }
-
-                                @Override
-                                public void onRefreshAccessTokenFail() {
-                                }
-                            });
+                    voteThingListener.onVoteThingFail(position);
                 }
             });
-        }
     }
 
-    static void voteThing(final Context context, final Retrofit retrofit,
+    static void voteThing(final Retrofit retrofit, SharedPreferences authInfoSharedPreferences,
                           final VoteThingWithoutPositionListener voteThingWithoutPositionListener,
-                          final String fullName, final String point, final int refreshTime) {
-        if(context != null) {
-            if(refreshTime < 0) {
-                voteThingWithoutPositionListener.onVoteThingFail();
-                return;
-            }
-
+                          final String fullName, final String point) {
             RedditAPI api = retrofit.create(RedditAPI.class);
 
-            String accessToken = context.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
-                    .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
+            String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
             Map<String, String> params = new HashMap<>();
             params.put(RedditUtils.DIR_KEY, point);
             params.put(RedditUtils.ID_KEY, fullName);
@@ -99,18 +74,8 @@ class VoteThing {
                 @Override
                 public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                     Log.i("call failed", t.getMessage());
-                    RefreshAccessToken.refreshAccessToken(context,
-                            new RefreshAccessToken.RefreshAccessTokenListener() {
-                                @Override
-                                public void onRefreshAccessTokenSuccess() {
-                                    voteThing(context, retrofit, voteThingWithoutPositionListener, fullName, point, refreshTime - 1);
-                                }
-
-                                @Override
-                                public void onRefreshAccessTokenFail() {}
-                            });
+                    voteThingWithoutPositionListener.onVoteThingFail();
                 }
             });
-        }
     }
 }

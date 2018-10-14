@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.ColorFilter;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -29,19 +30,22 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
     private Context mContext;
     private Retrofit mRetrofit;
     private Retrofit mOauthRetrofit;
+    private SharedPreferences mSharedPreferences;
     private ArrayList<CommentData> mCommentData;
     private MultiLevelRecyclerView mMultiLevelRecyclerView;
     private String subredditNamePrefixed;
     private String article;
     private Locale locale;
 
-    CommentMultiLevelRecyclerViewAdapter(Context context, Retrofit retrofit, Retrofit oauthRetrofit, ArrayList<CommentData> commentData,
+    CommentMultiLevelRecyclerViewAdapter(Context context, Retrofit retrofit, Retrofit oauthRetrofit,
+                                         SharedPreferences sharedPreferences, ArrayList<CommentData> commentData,
                                          MultiLevelRecyclerView multiLevelRecyclerView,
                                          String subredditNamePrefixed, String article, Locale locale) {
         super(commentData);
         mContext = context;
         mRetrofit = retrofit;
         mOauthRetrofit = oauthRetrofit;
+        mSharedPreferences = sharedPreferences;
         mCommentData = commentData;
         mMultiLevelRecyclerView = multiLevelRecyclerView;
         this.subredditNamePrefixed = subredditNamePrefixed;
@@ -136,7 +140,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                         ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() + 1));
                     }
 
-                    VoteThing.voteThing(mContext, mOauthRetrofit, new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mOauthRetrofit,mSharedPreferences,  new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
                             commentItem.setVoteType(1);
@@ -154,13 +158,13 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                             ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore()));
                             ((CommentViewHolder) holder).downvoteButton.setColorFilter(minusButtonColorFilter);
                         }
-                    }, commentItem.getFullName(), RedditUtils.DIR_UPVOTE, ((CommentViewHolder) holder).getAdapterPosition(), 1);
+                    }, commentItem.getFullName(), RedditUtils.DIR_UPVOTE, ((CommentViewHolder) holder).getAdapterPosition());
                 } else {
                     //Upvoted before
                     ((CommentViewHolder) holder).upvoteButton.clearColorFilter();
                     ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() - 1));
 
-                    VoteThing.voteThing(mContext, mOauthRetrofit, new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
                             commentItem.setVoteType(0);
@@ -174,7 +178,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                             ((CommentViewHolder) holder).upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
                             commentItem.setScore(commentItem.getScore() + 1);
                         }
-                    }, commentItem.getFullName(), RedditUtils.DIR_UNVOTE, ((CommentViewHolder) holder).getAdapterPosition(), 1);
+                    }, commentItem.getFullName(), RedditUtils.DIR_UNVOTE, ((CommentViewHolder) holder).getAdapterPosition());
                 }
             }
         });
@@ -195,7 +199,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                         ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() - 1));
                     }
 
-                    VoteThing.voteThing(mContext, mOauthRetrofit, new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
                             commentItem.setVoteType(-1);
@@ -213,13 +217,13 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                             ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore()));
                             ((CommentViewHolder) holder).upvoteButton.setColorFilter(upvoteButtonColorFilter);
                         }
-                    }, commentItem.getFullName(), RedditUtils.DIR_DOWNVOTE, holder.getAdapterPosition(), 1);
+                    }, commentItem.getFullName(), RedditUtils.DIR_DOWNVOTE, holder.getAdapterPosition());
                 } else {
                     //Down voted before
                     ((CommentViewHolder) holder).downvoteButton.clearColorFilter();
                     ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() + 1));
 
-                    VoteThing.voteThing(mContext, mOauthRetrofit, new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
                             commentItem.setVoteType(0);
@@ -233,7 +237,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                             ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore()));
                             commentItem.setScore(commentItem.getScore());
                         }
-                    }, commentItem.getFullName(), RedditUtils.DIR_UNVOTE, holder.getAdapterPosition(), 1);
+                    }, commentItem.getFullName(), RedditUtils.DIR_UNVOTE, holder.getAdapterPosition());
                 }
             }
         });

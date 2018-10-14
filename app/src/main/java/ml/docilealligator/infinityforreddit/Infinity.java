@@ -9,7 +9,9 @@ public class Infinity extends Application {
     public void onCreate() {
         super.onCreate();
 
-        mNetworkComponent = DaggerNetworkComponent.create();
+        mNetworkComponent = DaggerNetworkComponent.builder()
+                .networkModule(new NetworkModule(this))
+                .build();
     }
 
     public NetworkComponent getmNetworkComponent() {

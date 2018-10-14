@@ -57,7 +57,7 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
                 @Override
                 public void retry() {
                     if (isBestPost) {
-                        fetchBestPost(1);
+                        fetchBestPost();
                     } else {
                         fetchPost(subredditName, 1);
                     }
@@ -78,7 +78,7 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
 
             if((visibleItemCount + firstVisibleItemPosition >= totalItemCount) && firstVisibleItemPosition >= 0) {
                 if(isBestPost) {
-                    fetchBestPost(1);
+                    fetchBestPost();
                 } else {
                     fetchPost(mSubredditName, 1);
                 }
@@ -87,12 +87,7 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
     }
 
 
-    private void fetchBestPost(final int refreshTime) {
-        if(refreshTime < 0) {
-            loadFailed();
-            return;
-        }
-        Log.i("fetch best post pag", "start");
+    private void fetchBestPost() {
         isLoading = true;
         loadSuccess = false;
         mPaginationSynchronizer.setLoadingState(true);
@@ -136,19 +131,6 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
                             loadFailed();
                         }
                     });
-                } else if(response.code() == 401) {
-                    //Access token expired
-                    RefreshAccessToken.refreshAccessToken(mContext,
-                            new RefreshAccessToken.RefreshAccessTokenListener() {
-                                @Override
-                                public void onRefreshAccessTokenSuccess() {
-                                    fetchBestPost(refreshTime - 1);
-                                }
-
-                                @Override
-                                public void onRefreshAccessTokenFail() {
-                                }
-                            });
                 } else {
                     Toast.makeText(mContext, "Error getting best post", Toast.LENGTH_SHORT).show();
                     Log.i("best post", response.message());

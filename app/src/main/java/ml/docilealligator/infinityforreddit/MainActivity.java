@@ -26,7 +26,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -65,8 +64,13 @@ public class MainActivity extends AppCompatActivity {
     private SubscribedSubredditViewModel mSubscribedSubredditViewModel;
     private SubscribedUserViewModel mSubscribedUserViewModel;
 
-    @Inject
-    @Named("oauth")
+    @Inject @Named("user_info")
+    SharedPreferences mUserInfoSharedPreferences;
+
+    @Inject @Named("auth_info")
+    SharedPreferences mAuthInfoSharedPreferences;
+
+    @Inject @Named("oauth")
     Retrofit mOauthRetrofit;
 
     @Override
@@ -101,28 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
             }
 
-            Calendar now = Calendar.getInstance();
-            Calendar queryAccessTokenTime = Calendar.getInstance();
-            queryAccessTokenTime.setTimeInMillis(getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
-                    .getLong(SharedPreferencesUtils.QUERY_ACCESS_TOKEN_TIME_KEY, 0));
-            int interval = getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
-                    .getInt(SharedPreferencesUtils.ACCESS_TOKEN_EXPIRE_INTERVAL_KEY, 0);
-            queryAccessTokenTime.add(Calendar.SECOND, interval - 300);
-
-            if(now.after(queryAccessTokenTime)) {
-                RefreshAccessToken.refreshAccessToken(this,
-                        new RefreshAccessToken.RefreshAccessTokenListener() {
-                            @Override
-                            public void onRefreshAccessTokenSuccess() {
-                                loadUserData(savedInstanceState);
-                            }
-
-                            @Override
-                            public void onRefreshAccessTokenFail() {}
-                        });
-            } else {
-                loadUserData(savedInstanceState);
-            }
+            loadUserData(savedInstanceState);
 
             View header = findViewById(R.id.nav_header_main_activity);
             mNameTextView = header.findViewById(R.id.name_text_view_nav_header_main);
@@ -191,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
     private void loadUserData(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             if (!mFetchUserInfoSuccess) {
-                FetchUserInfo.fetchUserInfo(mOauthRetrofit, this, new FetchUserInfo.FetchUserInfoListener() {
+                FetchUserInfo.fetchUserInfo(mOauthRetrofit, mAuthInfoSharedPreferences, new FetchUserInfo.FetchUserInfoListener() {
                     @Override
                     public void onFetchUserInfoSuccess(String response) {
                         ParseUserInfo.parseUserInfo(response, new ParseUserInfo.ParseUserInfoListener() {
@@ -212,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 mKarmaTextView.setText(mKarma);
 
-                                SharedPreferences.Editor editor = getSharedPreferences(SharedPreferencesUtils.USER_INFO_FILE_KEY, Context.MODE_PRIVATE).edit();
+                                SharedPreferences.Editor editor = mUserInfoSharedPreferences.edit();
                                 editor.putString(SharedPreferencesUtils.USER_KEY, name);
                                 editor.putString(SharedPreferencesUtils.PROFILE_IMAGE_URL_KEY, profileImageUrl);
                                 editor.putString(SharedPreferencesUtils.BANNER_IMAGE_URL_KEY, bannerImageUrl);
@@ -232,11 +215,11 @@ public class MainActivity extends AppCompatActivity {
                     public void onFetchUserInfoFail() {
                         mFetchUserInfoSuccess = false;
                     }
-                }, 1);
+                });
             }
 
             if (!mInsertSuccess) {
-                FetchSubscribedThing.fetchSubscribedThing(this, mOauthRetrofit, null,
+                FetchSubscribedThing.fetchSubscribedThing(mOauthRetrofit, mAuthInfoSharedPreferences, null,
                         new ArrayList<SubscribedSubredditData>(), new ArrayList<SubscribedUserData>(),
                         new ArrayList<SubredditData>(),
                         new FetchSubscribedThing.FetchSubscribedThingListener() {
@@ -263,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onFetchSubscribedThingFail() {
                                 mInsertSuccess = false;
                             }
-                        }, 1);
+                        });
             }
         }
     }
