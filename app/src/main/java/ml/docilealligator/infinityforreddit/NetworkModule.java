@@ -42,9 +42,9 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    OkHttpClient provideOkHttpClient(@Named("auth_info") SharedPreferences sharedPreferences) {
+    OkHttpClient provideOkHttpClient(@Named("no_oauth") Retrofit retrofit, @Named("auth_info") SharedPreferences sharedPreferences) {
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
-        okHttpClientBuilder.authenticator(new AccessTokenAuthenticator(sharedPreferences));
+        okHttpClientBuilder.authenticator(new AccessTokenAuthenticator(retrofit, sharedPreferences));
         return okHttpClientBuilder.build();
     }
 

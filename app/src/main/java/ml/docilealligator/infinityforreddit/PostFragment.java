@@ -181,11 +181,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         mFetchPostErrorLinearLayout.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
 
-        /*Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RedditUtils.OAUTH_API_BASE_URI)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();*/
-
         RedditAPI api = mOauthRetrofit.create(RedditAPI.class);
 
         String accessToken = getActivity().getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
@@ -245,11 +240,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private void fetchPost() {
         mFetchPostErrorLinearLayout.setVisibility(View.GONE);
         mProgressBar.setVisibility(View.VISIBLE);
-
-        /*Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RedditUtils.API_BASE_URI)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();*/
 
         RedditAPI api = mRetrofit.create(RedditAPI.class);
         Call<String> getPost = api.getPost(mSubredditName, mLastItem);

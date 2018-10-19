@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Retrofit;
 
 class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
@@ -255,30 +257,21 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
         expandButton.setImageResource(isExpanded ? R.drawable.ic_expand_less_black_20dp : R.drawable.ic_expand_more_black_20dp);
     }
 
-    private class CommentViewHolder extends RecyclerView.ViewHolder {
-        private TextView authorTextView;
-        private TextView commentTimeTextView;
-        private HtmlTextView commentHtmlTextView;
-        private ImageView upvoteButton;
-        private ImageView downvoteButton;
-        private TextView scoreTextView;
-        private ImageView expandButton;
-        private ProgressBar loadMoreCommentsProgressBar;
-        private ImageView replyButton;
-        private View verticalBlock;
+    class CommentViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.author_text_view_item_post_comment) TextView authorTextView;
+        @BindView(R.id.comment_time_text_view_item_post_comment) TextView commentTimeTextView;
+        @BindView(R.id.comment_html_text_view_item_post_comment) HtmlTextView commentHtmlTextView;
+        @BindView(R.id.plus_button_item_post_comment) ImageView upvoteButton;
+        @BindView(R.id.score_text_view_item_post_comment) TextView scoreTextView;
+        @BindView(R.id.minus_button_item_post_comment) ImageView downvoteButton;
+        @BindView(R.id.expand_button_item_post_comment) ImageView expandButton;
+        @BindView(R.id.load_more_comments_progress_bar) ProgressBar loadMoreCommentsProgressBar;
+        @BindView(R.id.reply_button_item_post_comment) ImageView replyButton;
+        @BindView(R.id.vertical_block_item_post_comment) View verticalBlock;
 
-        public CommentViewHolder(View itemView) {
+        CommentViewHolder(View itemView) {
             super(itemView);
-            authorTextView = itemView.findViewById(R.id.author_text_view_item_post_comment);
-            commentTimeTextView = itemView.findViewById(R.id.comment_time_text_view_item_post_comment);
-            commentHtmlTextView = itemView.findViewById(R.id.comment_html_text_view_item_post_comment);
-            upvoteButton = itemView.findViewById(R.id.plus_button_item_post_comment);
-            downvoteButton = itemView.findViewById(R.id.minus_button_item_post_comment);
-            scoreTextView = itemView.findViewById(R.id.score_text_view_item_post_comment);
-            loadMoreCommentsProgressBar = itemView.findViewById(R.id.load_more_comments_progress_bar);
-            expandButton = itemView.findViewById(R.id.expand_button_item_post_comment);
-            replyButton = itemView.findViewById(R.id.reply_button_item_post_comment);
-            verticalBlock = itemView.findViewById(R.id.vertical_block_item_post_comment);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

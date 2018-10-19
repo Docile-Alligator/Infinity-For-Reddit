@@ -92,11 +92,6 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
         loadSuccess = false;
         mPaginationSynchronizer.setLoadingState(true);
 
-        /*Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RedditUtils.OAUTH_API_BASE_URI)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();*/
-
         RedditAPI api = mRetrofit.create(RedditAPI.class);
 
         String accessToken = mContext.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
@@ -154,11 +149,6 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
         isLoading = true;
         loadSuccess = false;
         mPaginationSynchronizer.setLoadingState(true);
-
-        /*Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RedditUtils.API_BASE_URI)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();*/
 
         RedditAPI api = mRetrofit.create(RedditAPI.class);
         Call<String> getPost = api.getPost(subredditName, mLastItem);
