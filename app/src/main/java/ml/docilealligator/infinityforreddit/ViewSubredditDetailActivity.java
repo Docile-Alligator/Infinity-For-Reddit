@@ -25,6 +25,8 @@ import com.bumptech.glide.RequestManager;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Retrofit;
 
@@ -36,6 +38,14 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
 
     private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
 
+    @BindView(R.id.banner_image_view_view_subreddit_detail_activity) ImageView bannerImageView;
+    @BindView(R.id.icon_circle_image_view_view_subreddit_detail_activity) CircleImageView iconCircleImageView;
+    @BindView(R.id.subreddit_name_text_view_view_subreddit_detail_activity) TextView subredditNameTextView;
+    @BindView(R.id.subscriber_count_text_view_view_subreddit_detail_activity) TextView nSubscribersTextView;
+    @BindView(R.id.online_subscriber_count_text_view_view_subreddit_detail_activity) TextView nOnlineSubscribersTextView;
+    @BindView(R.id.description_text_view_view_subreddit_detail_activity) TextView descriptionTextView;
+
+    private RequestManager glide;
     private Fragment mFragment;
 
     private SubredditViewModel mSubredditViewModel;
@@ -48,6 +58,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_subreddit_detail);
+        ButterKnife.bind(this);
 
         ((Infinity) getApplication()).getmNetworkComponent().inject(this);
 
@@ -95,13 +106,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
             }
         });
 
-        final ImageView bannerImageView = findViewById(R.id.banner_image_view_view_subreddit_detail_activity);
-        final CircleImageView iconCircleImageView = findViewById(R.id.icon_circle_image_view_view_subreddit_detail_activity);
-        final TextView subredditNameTextView = findViewById(R.id.subreddit_name_text_view_view_subreddit_detail_activity);
-        final TextView nSubscribersTextView = findViewById(R.id.subscriber_count_text_view_view_subreddit_detail_activity);
-        final TextView nOnlineSubscribersTextView = findViewById(R.id.online_subscriber_count_text_view_view_subreddit_detail_activity);
-        final TextView descriptionTextView = findViewById(R.id.description_text_view_view_subreddit_detail_activity);
-        final RequestManager glide = Glide.with(ViewSubredditDetailActivity.this);
+        glide = Glide.with(ViewSubredditDetailActivity.this);
 
         String value = getIntent().getExtras().getString(EXTRA_SUBREDDIT_VALUE_KEY);
         boolean queryById = getIntent().getExtras().getBoolean(EXTRA_QUERY_BY_ID_KEY);

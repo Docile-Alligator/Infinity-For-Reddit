@@ -52,6 +52,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ViewImageActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
@@ -60,9 +63,10 @@ public class ViewImageActivity extends AppCompatActivity {
     static final String IMAGE_URL_KEY = "IUK";
     static final String FILE_NAME_KEY = "FNK";
 
-    private ProgressBar mProgressBar;
-    private GestureImageView mImageView;
-    private LinearLayout mLoadErrorLinearLayout;
+    @BindView(R.id.parent_relative_layout_view_image_activity) RelativeLayout mRelativeLayout;
+    @BindView(R.id.progress_bar_view_image_activity) ProgressBar mProgressBar;
+    @BindView(R.id.image_view_view_image_activity) GestureImageView mImageView;
+    @BindView(R.id.load_image_error_linear_layout_view_image_activity) LinearLayout mLoadErrorLinearLayout;
 
     private boolean isActionBarHidden = false;
     private boolean isDownloading = false;
@@ -83,6 +87,8 @@ public class ViewImageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_image);
+        ButterKnife.bind(this);
+
         final ActionBar actionBar = getSupportActionBar();
         final Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setHomeAsUpIndicator(upArrow);
@@ -94,10 +100,10 @@ public class ViewImageActivity extends AppCompatActivity {
         final Spannable text = new SpannableString(title);
         setTitle(text);
 
-        final RelativeLayout relativeLayout = findViewById(R.id.parent_relative_layout_view_image_activity);
+        /*final RelativeLayout mRelativeLayout = findViewById(R.id.parent_relative_layout_view_image_activity);
         mImageView = findViewById(R.id.image_view_view_image_activity);
         mProgressBar = findViewById(R.id.progress_bar_view_image_activity);
-        mLoadErrorLinearLayout = findViewById(R.id.load_image_error_linear_layout_view_image_activity);
+        mLoadErrorLinearLayout = findViewById(R.id.load_image_error_linear_layout_view_image_activity);*/
 
         mLoadErrorLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +134,7 @@ public class ViewImageActivity extends AppCompatActivity {
         activityColorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                relativeLayout.setBackgroundColor((int) valueAnimator.getAnimatedValue());
+                mRelativeLayout.setBackgroundColor((int) valueAnimator.getAnimatedValue());
             }
         });
 

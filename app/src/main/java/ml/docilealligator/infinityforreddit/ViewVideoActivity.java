@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -52,6 +53,9 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ViewVideoActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
@@ -62,6 +66,9 @@ public class ViewVideoActivity extends AppCompatActivity {
     static final String DOWNLOAD_URL_KEY = "DUK";
     static final String SUBREDDIT_KEY = "SK";
     static final String ID_KEY = "IK";
+
+    @BindView(R.id.relative_layout_view_video_activity) RelativeLayout relativeLayout;
+    @BindView(R.id.player_view_view_video_activity) PlayerView videoPlayerView;
 
     private Uri mVideoUri;
     private SimpleExoPlayer player;
@@ -81,6 +88,8 @@ public class ViewVideoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_video);
+        ButterKnife.bind(this);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         final ActionBar actionBar = getSupportActionBar();
         final Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
@@ -105,9 +114,6 @@ public class ViewVideoActivity extends AppCompatActivity {
                     + "-" + intent.getExtras().getString(ID_KEY).substring(3) + ".gif";
             mDownloadUrl = intent.getExtras().getString(DOWNLOAD_URL_KEY);
         }
-
-        final RelativeLayout relativeLayout = findViewById(R.id.relative_layout_view_video_activity);
-        final PlayerView videoPlayerView = findViewById(R.id.player_view_view_video_activity);
 
         final float pxHeight = getResources().getDisplayMetrics().heightPixels;
 

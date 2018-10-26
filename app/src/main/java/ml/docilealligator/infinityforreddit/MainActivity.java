@@ -31,6 +31,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Retrofit;
 
@@ -43,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
     private static final String KARMA_STATE = "KS";
     private static final String FETCH_USER_INFO_STATE = "FUIS";
     private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";
+
+    @BindView(R.id.subscribed_subreddit_recycler_view_main_activity) RecyclerView subscribedSubredditRecyclerView;
+    @BindView(R.id.subscriptions_label_main_activity) TextView subscriptionsLabelTextView;
+    @BindView(R.id.subscribed_user_recycler_view_main_activity) RecyclerView subscribedUserRecyclerView;
+    @BindView(R.id.following_label_main_activity) TextView followingLabelTextView;
 
     private TextView mNameTextView;
     private TextView mKarmaTextView;
@@ -77,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         ((Infinity) getApplication()).getmNetworkComponent().inject(this);
 
@@ -113,15 +121,11 @@ public class MainActivity extends AppCompatActivity {
             mProfileImageView = header.findViewById(R.id.profile_image_view_nav_header_main);
             mBannerImageView = header.findViewById(R.id.banner_image_view_nav_header_main);
 
-            RecyclerView subscribedSubredditRecyclerView = findViewById(R.id.subscribed_subreddit_recycler_view_main_activity);
             subscribedSubredditRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             subscribedSubredditRecyclerView.setNestedScrollingEnabled(false);
-            final TextView subscriptionsLabelTextView = findViewById(R.id.subscriptions_label_main_activity);
 
-            RecyclerView subscribedUserRecyclerView = findViewById(R.id.subscribed_user_recycler_view_main_activity);
             subscribedUserRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             subscribedUserRecyclerView.setNestedScrollingEnabled(false);
-            final TextView followingLabelTextView = findViewById(R.id.following_label_main_activity);
 
             mName = getSharedPreferences(SharedPreferencesUtils.USER_INFO_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.USER_KEY, "");
             mProfileImageUrl = getSharedPreferences(SharedPreferencesUtils.USER_INFO_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.PROFILE_IMAGE_URL_KEY, "");
