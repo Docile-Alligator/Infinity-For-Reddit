@@ -20,10 +20,16 @@ class SubscribedSubredditRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     private Context mContext;
     private List<SubscribedSubredditData> mSubscribedSubredditData;
     private RequestManager glide;
+    private OnItemClickListener mOnItemClickListener;
 
-    SubscribedSubredditRecyclerViewAdapter(Context context) {
-        mContext = context;
-        glide = Glide.with(context);
+    interface OnItemClickListener {
+        void onClick();
+    }
+
+    SubscribedSubredditRecyclerViewAdapter(Context context, OnItemClickListener onItemClickListener) {
+        mContext = context.getApplicationContext();
+        glide = Glide.with(context.getApplicationContext());
+        mOnItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -38,6 +44,7 @@ class SubscribedSubredditRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             @Override
             public void onClick(View view) {
                 if(viewHolder.getAdapterPosition() >= 0) {
+                    mOnItemClickListener.onClick();
                     Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
                     intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, mSubscribedSubredditData.get(viewHolder.getAdapterPosition()).getName());
                     intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_VALUE_KEY, mSubscribedSubredditData.get(viewHolder.getAdapterPosition()).getId());

@@ -36,7 +36,6 @@ class PostData implements Parcelable {
     private boolean isCrosspost;
     private boolean isDashVideo;
     private boolean isDownloadableGifOrVideo;
-    private PostData crosspostParentPostData;
 
     PostData(String id, String fullName, String subredditNamePrefixed, String postTime, String title,
              String previewUrl, String permalink, int score, int postType, int voteType, int gilded,

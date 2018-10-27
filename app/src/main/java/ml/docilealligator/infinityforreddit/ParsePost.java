@@ -200,17 +200,31 @@ class ParsePost {
                     bestPostData.add(new PostData(id, fullName, subredditNamePrefixed, formattedPostTime,
                             title, url, url, permalink, score, postType, voteType, gilded, nsfw, stickied, isCrosspost));
                 } else {
-                    //Link post
-                    Log.i("link", Integer.toString(i));
-                    int postType = PostData.LINK_TYPE;
-                    PostData linkPostData = new PostData(id, fullName, subredditNamePrefixed, formattedPostTime,
-                            title, previewUrl, url, permalink, score, postType, voteType, gilded, nsfw, stickied, isCrosspost);
-                    if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
-                        linkPostData.setSelfText("");
+                    if (url.contains(permalink)) {
+                        //Text post but with a preview
+                        Log.i("text with image", Integer.toString(i));
+                        int postType = PostData.TEXT_TYPE;
+                        PostData textWithImagePostData = new PostData(id, fullName, subredditNamePrefixed, formattedPostTime,
+                                title, permalink, score, postType, voteType, gilded, nsfw, stickied, isCrosspost);
+                        if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
+                            textWithImagePostData.setSelfText("");
+                        } else {
+                            textWithImagePostData.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
+                        }
+                        bestPostData.add(textWithImagePostData);
                     } else {
-                        linkPostData.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
+                        //Link post
+                        Log.i("link", Integer.toString(i));
+                        int postType = PostData.LINK_TYPE;
+                        PostData linkPostData = new PostData(id, fullName, subredditNamePrefixed, formattedPostTime,
+                                title, previewUrl, url, permalink, score, postType, voteType, gilded, nsfw, stickied, isCrosspost);
+                        if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
+                            linkPostData.setSelfText("");
+                        } else {
+                            linkPostData.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
+                        }
+                        bestPostData.add(linkPostData);
                     }
-                    bestPostData.add(linkPostData);
                 }
             }
         } else {

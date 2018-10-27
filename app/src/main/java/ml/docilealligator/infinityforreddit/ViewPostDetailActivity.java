@@ -205,6 +205,12 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         if(mPostData.isNSFW()) {
             mNSFWTextView.setVisibility(View.VISIBLE);
         }
+
+        if(!mPostData.getSelfText().equals("")) {
+            mContentTextView.setVisibility(View.VISIBLE);
+            mContentTextView.setHtml(mPostData.getSelfText());
+        }
+
         mScoreTextView.setText(Integer.toString(mPostData.getScore()));
 
         mShareButton.setOnClickListener(new View.OnClickListener() {
@@ -235,10 +241,6 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 break;
             case PostData.LINK_TYPE:
                 mTypeTextView.setText("LINK");
-                if(mPostData.getSelfText() != null && !mPostData.getSelfText().equals("")) {
-                    mContentTextView.setVisibility(View.VISIBLE);
-                    mContentTextView.setHtml(mPostData.getSelfText());
-                }
 
                 mImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -296,10 +298,6 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 break;
             case PostData.NO_PREVIEW_LINK_TYPE:
                 mTypeTextView.setText("LINK");
-                if(!mPostData.getSelfText().equals("")) {
-                    mContentTextView.setVisibility(View.VISIBLE);
-                    mContentTextView.setHtml(mPostData.getSelfText());
-                }
                 mNoPreviewLinkImageView.setVisibility(View.VISIBLE);
                 mNoPreviewLinkImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -315,10 +313,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 break;
             case PostData.TEXT_TYPE:
                 mTypeTextView.setText("TEXT");
-                if(!mPostData.getSelfText().equals("")) {
-                    mContentTextView.setVisibility(View.VISIBLE);
-                    mContentTextView.setHtml(mPostData.getSelfText());
-                }
+                break;
         }
         queryComment();
 

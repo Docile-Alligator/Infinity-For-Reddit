@@ -16,13 +16,17 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 class SubscribedUserRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Context mContext;
     private List<SubscribedUserData> mSubscribedUserData;
     private RequestManager glide;
+    private OnItemClickListener mOnItemClickListener;
 
-    SubscribedUserRecyclerViewAdapter(Context context) {
-        mContext = context;
-        glide = Glide.with(context);
+    interface OnItemClickListener {
+        void onClick();
+    }
+
+    SubscribedUserRecyclerViewAdapter(Context context, OnItemClickListener onItemClickListener) {
+        glide = Glide.with(context.getApplicationContext());
+        mOnItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -33,6 +37,14 @@ class SubscribedUserRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Need to be implemented
+
+                mOnItemClickListener.onClick();
+            }
+        });
         if(!mSubscribedUserData.get(i).getIconUrl().equals("")) {
             glide.load(mSubscribedUserData.get(i).getIconUrl()).into(((UserViewHolder) viewHolder).iconCircleImageView);
         } else {

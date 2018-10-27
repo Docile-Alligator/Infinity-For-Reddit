@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -142,8 +142,15 @@ public class MainActivity extends AppCompatActivity {
                 glide.load(mBannerImageUrl).into(mBannerImageView);
             }
 
-            final SubscribedSubredditRecyclerViewAdapter subredditadapter = new SubscribedSubredditRecyclerViewAdapter(this);
+            final SubscribedSubredditRecyclerViewAdapter subredditadapter = new SubscribedSubredditRecyclerViewAdapter(this,
+                    new SubscribedSubredditRecyclerViewAdapter.OnItemClickListener() {
+                        @Override
+                        public void onClick() {
+                            drawer.closeDrawers();
+                        }
+                    });
             subscribedSubredditRecyclerView.setAdapter(subredditadapter);
+
             mSubscribedSubredditViewModel = ViewModelProviders.of(this).get(SubscribedSubredditViewModel.class);
             mSubscribedSubredditViewModel.getAllSubscribedSubreddits().observe(this, new Observer<List<SubscribedSubredditData>>() {
                 @Override
@@ -158,7 +165,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            final SubscribedUserRecyclerViewAdapter userAdapter = new SubscribedUserRecyclerViewAdapter(this);
+            final SubscribedUserRecyclerViewAdapter userAdapter = new SubscribedUserRecyclerViewAdapter(this,
+                    new SubscribedUserRecyclerViewAdapter.OnItemClickListener() {
+                        @Override
+                        public void onClick() {
+                            drawer.closeDrawers();
+                        }
+                    });
             subscribedUserRecyclerView.setAdapter(userAdapter);
             mSubscribedUserViewModel = ViewModelProviders.of(this).get(SubscribedUserViewModel.class);
             mSubscribedUserViewModel.getAllSubscribedUsers().observe(this, new Observer<List<SubscribedUserData>>() {

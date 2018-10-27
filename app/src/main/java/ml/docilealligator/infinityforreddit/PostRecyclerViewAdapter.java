@@ -69,8 +69,8 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             mPostData = postData;
             mPaginationSynchronizer = paginationSynchronizer;
             this.hasMultipleSubreddits = hasMultipleSubreddits;
-            glide = Glide.with(mContext);
-            subredditDao = SubredditRoomDatabase.getDatabase(mContext).subredditDao();
+            glide = Glide.with(mContext.getApplicationContext());
+            subredditDao = SubredditRoomDatabase.getDatabase(mContext.getApplicationContext()).subredditDao();
         }
     }
 
@@ -308,8 +308,9 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             }
                         });
                         break;
-                    default:
+                    case PostData.TEXT_TYPE:
                         ((DataViewHolder) holder).typeTextView.setText("TEXT");
+                        break;
                 }
 
                 ((DataViewHolder) holder).upvoteButton.setOnClickListener(new View.OnClickListener() {
