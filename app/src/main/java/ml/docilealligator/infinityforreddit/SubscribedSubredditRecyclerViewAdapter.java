@@ -27,7 +27,7 @@ class SubscribedSubredditRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     }
 
     SubscribedSubredditRecyclerViewAdapter(Context context, OnItemClickListener onItemClickListener) {
-        mContext = context.getApplicationContext();
+        mContext = context;
         glide = Glide.with(context.getApplicationContext());
         mOnItemClickListener = onItemClickListener;
     }

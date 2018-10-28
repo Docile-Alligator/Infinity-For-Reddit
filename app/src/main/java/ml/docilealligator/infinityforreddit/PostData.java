@@ -31,11 +31,14 @@ class PostData implements Parcelable {
     private int postType;
     private int voteType;
     private int gilded;
+    private int previewWidth;
+    private int previewHeight;
     private boolean nsfw;
     private boolean stickied;
     private boolean isCrosspost;
     private boolean isDashVideo;
     private boolean isDownloadableGifOrVideo;
+    private PostData crosspostParentPostData;
 
     PostData(String id, String fullName, String subredditNamePrefixed, String postTime, String title,
              String previewUrl, String permalink, int score, int postType, int voteType, int gilded,
@@ -112,6 +115,8 @@ class PostData implements Parcelable {
         postType = in.readInt();
         voteType = in.readInt();
         gilded = in.readInt();
+        previewWidth = in.readInt();
+        previewHeight = in.readInt();
         nsfw = in.readByte() != 0;
         stickied = in.readByte() != 0;
         isCrosspost = in.readByte() != 0;
@@ -223,6 +228,22 @@ class PostData implements Parcelable {
         return gilded;
     }
 
+    void setPreviewWidth(int previewWidth) {
+        this.previewWidth = previewWidth;
+    }
+
+    int getPreviewWidth() {
+        return previewWidth;
+    }
+
+    void setPreviewHeight(int previewHeight) {
+        this.previewHeight = previewHeight;
+    }
+
+    int getPreviewHeight() {
+        return previewHeight;
+    }
+
     public boolean isNSFW() {
         return nsfw;
     }
@@ -270,6 +291,8 @@ class PostData implements Parcelable {
         parcel.writeInt(postType);
         parcel.writeInt(voteType);
         parcel.writeInt(gilded);
+        parcel.writeInt(previewWidth);
+        parcel.writeInt(previewHeight);
         parcel.writeByte((byte) (nsfw ? 1 : 0));
         parcel.writeByte((byte) (stickied ? 1 : 0));
         parcel.writeByte((byte) (isCrosspost ? 1 : 0));

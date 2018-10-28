@@ -32,6 +32,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.santalu.aspectratioimageview.AspectRatioImageView;
 
 import java.util.ArrayList;
 
@@ -206,6 +207,8 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     ((DataViewHolder) holder).relativeLayout.setVisibility(View.VISIBLE);
                     ((DataViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
                     ((DataViewHolder) holder).imageView.setVisibility(View.VISIBLE);
+                    ((DataViewHolder) holder).imageView
+                            .setRatio((float) mPostData.get(position).getPreviewHeight() / mPostData.get(position).getPreviewWidth());
                     loadImage(holder, mPostData.get(holder.getAdapterPosition()));
                 }
 
@@ -533,7 +536,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         @BindView(R.id.nsfw_text_view_item_best_post) TextView nsfwTextView;
         @BindView(R.id.image_view_wrapper_item_best_post) RelativeLayout relativeLayout;
         @BindView(R.id.progress_bar_best_post_item) ProgressBar progressBar;
-        @BindView(R.id.image_view_best_post_item) ImageView imageView;
+        @BindView(R.id.image_view_best_post_item) AspectRatioImageView imageView;
         @BindView(R.id.load_image_error_linear_layout_best_post_item) LinearLayout errorLinearLayout;
         @BindView(R.id.image_view_no_preview_link_best_post_item) ImageView noPreviewLinkImageView;
         @BindView(R.id.plus_button_item_best_post) ImageView upvoteButton;

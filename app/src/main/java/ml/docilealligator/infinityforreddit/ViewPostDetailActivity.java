@@ -32,6 +32,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.multilevelview.MultiLevelRecyclerView;
+import com.santalu.aspectratioimageview.AspectRatioImageView;
 
 import org.sufficientlysecure.htmltextview.HtmlTextView;
 
@@ -73,7 +74,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     @BindView(R.id.load_wrapper_view_post_detail) RelativeLayout mLoadWrapper;
     @BindView(R.id.progress_bar_view_post_detail) ProgressBar mLoadImageProgressBar;
     @BindView(R.id.load_image_error_text_view_view_post_detail) TextView mLoadImageErrorTextView;
-    @BindView(R.id.image_view_view_post_detail) ImageView mImageView;
+    @BindView(R.id.image_view_view_post_detail) AspectRatioImageView mImageView;
     @BindView(R.id.image_view_no_preview_link_view_post_detail) ImageView mNoPreviewLinkImageView;
 
     @BindView(R.id.plus_button_view_post_detail) ImageView mUpvoteButton;
@@ -167,6 +168,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         if(mPostData.getPostType() != PostData.TEXT_TYPE && mPostData.getPostType() != PostData.NO_PREVIEW_LINK_TYPE) {
             mRelativeLayout.setVisibility(View.VISIBLE);
             mImageView.setVisibility(View.VISIBLE);
+            mImageView.setRatio((float) mPostData.getPreviewHeight() / (float) mPostData.getPreviewWidth());
             loadImage();
         }
 
@@ -205,12 +207,6 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         if(mPostData.isNSFW()) {
             mNSFWTextView.setVisibility(View.VISIBLE);
         }
-
-        if(!mPostData.getSelfText().equals("")) {
-            mContentTextView.setVisibility(View.VISIBLE);
-            mContentTextView.setHtml(mPostData.getSelfText());
-        }
-
         mScoreTextView.setText(Integer.toString(mPostData.getScore()));
 
         mShareButton.setOnClickListener(new View.OnClickListener() {
@@ -298,6 +294,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 break;
             case PostData.NO_PREVIEW_LINK_TYPE:
                 mTypeTextView.setText("LINK");
+                if(!mPostData.getSelfText().equals("")) {
+                    mContentTextView.setVisibility(View.VISIBLE);
+                    mContentTextView.setHtml(mPostData.getSelfText());
+                }
                 mNoPreviewLinkImageView.setVisibility(View.VISIBLE);
                 mNoPreviewLinkImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -313,6 +313,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 break;
             case PostData.TEXT_TYPE:
                 mTypeTextView.setText("TEXT");
+                if(!mPostData.getSelfText().equals("")) {
+                    mContentTextView.setVisibility(View.VISIBLE);
+                    mContentTextView.setHtml(mPostData.getSelfText());
+                }
                 break;
         }
         queryComment();
@@ -520,7 +524,9 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     }
 
     private void loadImage() {
-        RequestBuilder imageRequestBuilder = Glide.with(this).load(mPostData.getPreviewUrl()).listener(new RequestListener<Drawable>() {
+        RequestBuilder imageRequestBuilder = Glide.with(this).load(mPostData.getPreviewUrl())
+                .apply(new RequestOptions().override(mPostData.getPreviewWidth(), mPostData.getPreviewHeight()))
+                .listener(new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 mLoadImageProgressBar.setVisibility(View.GONE);

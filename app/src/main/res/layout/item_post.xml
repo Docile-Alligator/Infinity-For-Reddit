@@ -83,6 +83,7 @@
                 android:background="@drawable/rounded_corner"
                 android:layout_marginEnd="8dp"
                 android:layout_centerVertical="true"
+                android:textSize="12sp"
                 android:textColor="@android:color/white"/>
 
             <ImageView
@@ -136,7 +137,7 @@
         <RelativeLayout
             android:id="@+id/image_view_wrapper_item_best_post"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:visibility="gone">
 
@@ -146,11 +147,11 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true" />
 
-            <ImageView
+            <com.santalu.aspectratioimageview.AspectRatioImageView
                 android:id="@+id/image_view_best_post_item"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
+                android:layout_height="wrap_content"
+                android:scaleType="fitStart" />
 
             <LinearLayout
                 android:id="@+id/load_image_error_linear_layout_best_post_item"
