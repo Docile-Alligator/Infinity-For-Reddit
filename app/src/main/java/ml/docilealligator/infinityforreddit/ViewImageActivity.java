@@ -100,11 +100,6 @@ public class ViewImageActivity extends AppCompatActivity {
         final Spannable text = new SpannableString(title);
         setTitle(text);
 
-        /*final RelativeLayout mRelativeLayout = findViewById(R.id.parent_relative_layout_view_image_activity);
-        mImageView = findViewById(R.id.image_view_view_image_activity);
-        mProgressBar = findViewById(R.id.progress_bar_view_image_activity);
-        mLoadErrorLinearLayout = findViewById(R.id.load_image_error_linear_layout_view_image_activity);*/
-
         mLoadErrorLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -270,9 +270,9 @@ class ParsePost {
                         url, url, permalink, score, postType, voteType,
                         gilded, nsfw, stickied, isCrosspost));
             } else {
-                //Link post
+                //CP No Preview Link post
                 Log.i("CP no preview link", Integer.toString(i));
-                int postType = PostData.LINK_TYPE;
+                int postType = PostData.NO_PREVIEW_LINK_TYPE;
                 PostData linkPostData = new PostData(id, fullName, subredditNamePrefixed, formattedPostTime,
                         title, previewUrl, url, permalink, score, postType,
                         voteType, gilded, nsfw, stickied, isCrosspost);

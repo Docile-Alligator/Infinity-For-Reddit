@@ -191,7 +191,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if(getActivity() != null) {
                     if(response.isSuccessful()) {
-                        Log.i("response", "success");
                         ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                         ClipData clip = ClipData.newPlainText("response", response.body());
                         clipboard.setPrimaryClip(clip);

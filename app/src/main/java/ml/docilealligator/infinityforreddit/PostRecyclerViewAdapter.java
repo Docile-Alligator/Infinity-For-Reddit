@@ -482,12 +482,12 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 ((DataViewHolder) holder).progressBar.setVisibility(View.GONE);
-                ((DataViewHolder) holder).errorLinearLayout.setVisibility(View.VISIBLE);
-                ((DataViewHolder)holder).errorLinearLayout.setOnClickListener(new View.OnClickListener() {
+                ((DataViewHolder) holder).errorRelativeLayout.setVisibility(View.VISIBLE);
+                ((DataViewHolder)holder).errorRelativeLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         ((DataViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
-                        ((DataViewHolder) holder).errorLinearLayout.setVisibility(View.GONE);
+                        ((DataViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
                         loadImage(holder, postData);
                     }
                 });
@@ -496,7 +496,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             @Override
             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                ((DataViewHolder) holder).errorLinearLayout.setVisibility(View.GONE);
+                ((DataViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
                 ((DataViewHolder) holder).progressBar.setVisibility(View.GONE);
                 return false;
             }
@@ -537,7 +537,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         @BindView(R.id.image_view_wrapper_item_best_post) RelativeLayout relativeLayout;
         @BindView(R.id.progress_bar_best_post_item) ProgressBar progressBar;
         @BindView(R.id.image_view_best_post_item) AspectRatioImageView imageView;
-        @BindView(R.id.load_image_error_linear_layout_best_post_item) LinearLayout errorLinearLayout;
+        @BindView(R.id.load_image_error_relative_layout_best_post_item) RelativeLayout errorRelativeLayout;
         @BindView(R.id.image_view_no_preview_link_best_post_item) ImageView noPreviewLinkImageView;
         @BindView(R.id.plus_button_item_best_post) ImageView upvoteButton;
         @BindView(R.id.score_text_view_item_best_post) TextView scoreTextView;
@@ -574,7 +574,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ((DataViewHolder) holder).nsfwTextView.setVisibility(View.GONE);
             ((DataViewHolder) holder).progressBar.setVisibility(View.GONE);
             ((DataViewHolder) holder).imageView.setVisibility(View.GONE);
-            ((DataViewHolder) holder).errorLinearLayout.setVisibility(View.GONE);
+            ((DataViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
             ((DataViewHolder) holder).noPreviewLinkImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).upvoteButton.clearColorFilter();
             ((DataViewHolder) holder).downvoteButton.clearColorFilter();

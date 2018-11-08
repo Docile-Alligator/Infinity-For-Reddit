@@ -151,12 +151,14 @@
                 android:id="@+id/image_view_best_post_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
                 android:scaleType="fitStart" />
 
-            <LinearLayout
-                android:id="@+id/load_image_error_linear_layout_best_post_item"
+            <RelativeLayout
+                android:id="@+id/load_image_error_relative_layout_best_post_item"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_centerInParent="true"
                 android:visibility="gone">
 
                 <TextView
@@ -167,7 +169,7 @@
                     android:gravity="center"
                     android:text="@string/tap_to_retry" />
 
-            </LinearLayout>
+            </RelativeLayout>
 
         </RelativeLayout>
 
