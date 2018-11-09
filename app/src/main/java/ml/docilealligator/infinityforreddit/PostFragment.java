@@ -1,12 +1,13 @@
 package ml.docilealligator.infinityforreddit;
 
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -52,12 +53,16 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private LinearLayout mFetchPostErrorLinearLayout;
     private ImageView mFetchPostErrorImageView;
 
-    private ArrayList<PostData> mPostData;
+    private ArrayList<Post> mPostData;
     private String mLastItem;
     private PaginationSynchronizer mPaginationSynchronizer;
 
     private boolean mIsBestPost;
     private String mSubredditName;
+
+    private PostRecyclerViewAdapter mAdapter;
+
+    private PostViewModel mPostViewModel;
 
     @Inject @Named("no_oauth")
     Retrofit mRetrofit;
@@ -75,12 +80,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(mPostData != null) {
-            outState.putParcelableArrayList(POST_DATA_PARCELABLE_STATE, mPostData);
-            outState.putString(LAST_ITEM_STATE, mLastItem);
-            outState.putBoolean(LOADING_STATE_STATE, mPaginationSynchronizer.isLoading());
-            outState.putBoolean(LOAD_SUCCESS_STATE, mPaginationSynchronizer.isLoadSuccess());
-        }
+        outState.putString(LAST_ITEM_STATE, mLastItem);
+        outState.putBoolean(LOADING_STATE_STATE, mPaginationSynchronizer.isLoading());
+        outState.putBoolean(LOAD_SUCCESS_STATE, mPaginationSynchronizer.isLoadingMorePostsSuccess());
     }
 
     @Override
@@ -131,42 +133,57 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             });
         }
 
-        if(savedInstanceState != null && savedInstanceState.containsKey(POST_DATA_PARCELABLE_STATE)) {
-            mPostData = savedInstanceState.getParcelableArrayList(POST_DATA_PARCELABLE_STATE);
-            mLastItem = savedInstanceState.getString(LAST_ITEM_STATE);
-            mPaginationSynchronizer = new PaginationSynchronizer(new LastItemSynchronizer() {
-                @Override
-                public void lastItemChanged(String lastItem) {
-                    mLastItem = lastItem;
+        mPaginationSynchronizer = new PaginationSynchronizer();
+        mPaginationSynchronizer.addLastItemSynchronizer(new LastItemSynchronizer() {
+            @Override
+            public void lastItemChanged(String lastItem) {
+                mLastItem = lastItem;
+            }
+        });
+
+        mPostViewModel = ViewModelProviders.of(this).get(PostViewModel.class);
+        mPostViewModel.getPosts().observe(this, new Observer<ArrayList<Post>>() {
+            @Override
+            public void onChanged(@Nullable ArrayList<Post> posts) {
+                mAdapter.changeDataSet(posts);
+                if(posts == null) {
+                    Log.i("datachange", Integer.toString(0));
+                } else {
+                    Log.i("datachange", Integer.toString(posts.size()));
                 }
-            });
+            }
+        });
+
+        if(mIsBestPost) {
+            mAdapter = new PostRecyclerViewAdapter(getActivity(), mOauthRetrofit,
+                    mSharedPreferences, mPaginationSynchronizer, mIsBestPost);
+
+            mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
+                    getActivity(), mOauthRetrofit, mPostViewModel, mLinearLayoutManager,
+                    mLastItem, mPaginationSynchronizer, mSubredditName, mIsBestPost,
+                    mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadingMorePostsSuccess(),
+                    getResources().getConfiguration().locale));
+        } else {
+            mAdapter = new PostRecyclerViewAdapter(getActivity(), mRetrofit,
+                    mSharedPreferences, mPaginationSynchronizer, mIsBestPost);
+
+            mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
+                    getActivity(), mRetrofit, mPostViewModel, mLinearLayoutManager,
+                    mLastItem, mPaginationSynchronizer, mSubredditName, mIsBestPost,
+                    mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadingMorePostsSuccess(),
+                    getResources().getConfiguration().locale));
+        }
+        mPostRecyclerView.setAdapter(mAdapter);
+
+        if(savedInstanceState != null && savedInstanceState.containsKey(LAST_ITEM_STATE)) {
+            mLastItem = savedInstanceState.getString(LAST_ITEM_STATE);
+
+            mPaginationSynchronizer.notifyLastItemChanged(mLastItem);
             mPaginationSynchronizer.setLoadSuccess(savedInstanceState.getBoolean(LOAD_SUCCESS_STATE));
             mPaginationSynchronizer.setLoadingState(savedInstanceState.getBoolean(LOADING_STATE_STATE));
-            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(getActivity(), mOauthRetrofit,
-                    mSharedPreferences, mPostData, mPaginationSynchronizer, mIsBestPost);
-            mPostRecyclerView.setAdapter(adapter);
-            if(mIsBestPost) {
-                mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
-                        getActivity(), mOauthRetrofit, mLinearLayoutManager, adapter, mLastItem, mPostData,
-                        mPaginationSynchronizer, mSubredditName, mIsBestPost,
-                        mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
-                        getResources().getConfiguration().locale));
-                mProgressBar.setVisibility(View.GONE);
-            } else {
-                mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
-                        getActivity(), mRetrofit, mLinearLayoutManager, adapter, mLastItem, mPostData,
-                        mPaginationSynchronizer, mSubredditName, mIsBestPost,
-                        mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
-                        getResources().getConfiguration().locale));
-                mProgressBar.setVisibility(View.GONE);
-            }
+
+            mProgressBar.setVisibility(View.GONE);
         } else {
-            mPaginationSynchronizer = new PaginationSynchronizer(new LastItemSynchronizer() {
-                @Override
-                public void lastItemChanged(String lastItem) {
-                    mLastItem = lastItem;
-                }
-            });
             if(mIsBestPost) {
                 fetchBestPost();
             } else {
@@ -191,27 +208,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if(getActivity() != null) {
                     if(response.isSuccessful()) {
-                        ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("response", response.body());
-                        clipboard.setPrimaryClip(clip);
-
-                        ParsePost.parsePost(response.body(), new ArrayList<PostData>(),
-                                getResources().getConfiguration().locale, new ParsePost.ParsePostListener() {
+                        ParsePost.parsePost(response.body(), getResources().getConfiguration().locale,
+                                new ParsePost.ParsePostListener() {
                                     @Override
-                                    public void onParsePostSuccess(ArrayList<PostData> postData, String lastItem) {
+                                    public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
                                         if(isAdded() && getActivity() != null) {
-                                            mPostData = postData;
                                             mLastItem = lastItem;
-                                            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(
-                                                    getActivity(), mOauthRetrofit, mSharedPreferences,
-                                                    postData, mPaginationSynchronizer, mIsBestPost);
-
-                                            mPostRecyclerView.setAdapter(adapter);
-                                            mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
-                                                    getActivity(), mOauthRetrofit, mLinearLayoutManager, adapter, lastItem, postData,
-                                                    mPaginationSynchronizer, mSubredditName, mIsBestPost,
-                                                    mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
-                                                    getResources().getConfiguration().locale));
+                                            mPaginationSynchronizer.notifyLastItemChanged(lastItem);
+                                            mPostViewModel.setPosts(newPosts);
                                             mProgressBar.setVisibility(View.GONE);
                                         }
                                     }
@@ -247,27 +251,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if(getActivity() != null) {
                     if(response.isSuccessful()) {
-                        ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("response", response.body());
-                        clipboard.setPrimaryClip(clip);
-
-                        ParsePost.parsePost(response.body(), new ArrayList<PostData>(),
-                                getResources().getConfiguration().locale, new ParsePost.ParsePostListener() {
+                        ParsePost.parsePost(response.body(), getResources().getConfiguration().locale,
+                                new ParsePost.ParsePostListener() {
                                     @Override
-                                    public void onParsePostSuccess(ArrayList<PostData> postData, String lastItem) {
+                                    public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
                                         if(isAdded() && getActivity() != null) {
-                                            mPostData = postData;
                                             mLastItem = lastItem;
-                                            PostRecyclerViewAdapter adapter = new PostRecyclerViewAdapter(
-                                                    getActivity(), mRetrofit, mSharedPreferences,
-                                                    postData, mPaginationSynchronizer, mIsBestPost);
-
-                                            mPostRecyclerView.setAdapter(adapter);
-                                            mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
-                                                    getActivity(), mRetrofit, mLinearLayoutManager, adapter, lastItem, postData,
-                                                    mPaginationSynchronizer, mSubredditName, mIsBestPost,
-                                                    mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadSuccess(),
-                                                    getResources().getConfiguration().locale));
+                                            mPaginationSynchronizer.notifyLastItemChanged(lastItem);
+                                            mPostViewModel.setPosts(newPosts);
                                             mProgressBar.setVisibility(View.GONE);
                                         }
                                     }
@@ -318,24 +309,26 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Override
     public void refresh() {
         mLastItem = null;
-        mPaginationSynchronizer = new PaginationSynchronizer(new LastItemSynchronizer() {
-            @Override
-            public void lastItemChanged(String lastItem) {
-                mLastItem = lastItem;
-            }
-        });
         mPostRecyclerView.clearOnScrollListeners();
         mPostRecyclerView.getRecycledViewPool().clear();
-        if(mPostData != null) {
-            mPostData.clear();
-        }
-        mPostData = null;
-        if(mPostRecyclerView.getAdapter() != null) {
-            (mPostRecyclerView.getAdapter()).notifyDataSetChanged();
-        }
+
+        mPostViewModel.setPosts(null);
+
         if(mIsBestPost) {
+            mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
+                    getActivity(), mOauthRetrofit, mPostViewModel, mLinearLayoutManager,
+                    mLastItem, mPaginationSynchronizer, mSubredditName, mIsBestPost,
+                    mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadingMorePostsSuccess(),
+                    getResources().getConfiguration().locale));
+
             fetchBestPost();
         } else {
+            mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
+                    getActivity(), mRetrofit, mPostViewModel, mLinearLayoutManager,
+                    mLastItem, mPaginationSynchronizer, mSubredditName, mIsBestPost,
+                    mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadingMorePostsSuccess(),
+                    getResources().getConfiguration().locale));
+
             fetchPost();
         }
     }

@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,9 +21,8 @@ import retrofit2.Retrofit;
 class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
     private Context mContext;
     private Retrofit mRetrofit;
+    private PostViewModel mPostViewModel;
     private LinearLayoutManager mLayoutManager;
-    private PostRecyclerViewAdapter mAdapter;
-    private ArrayList<PostData> mPostData;
     private PaginationSynchronizer mPaginationSynchronizer;
 
     private String mSubredditName;
@@ -35,19 +32,18 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
     private Locale locale;
     private String mLastItem;
 
-    PostPaginationScrollListener(Context context, Retrofit retrofit, LinearLayoutManager layoutManager, PostRecyclerViewAdapter adapter,
-                                 String lastItem, ArrayList<PostData> postData, PaginationSynchronizer paginationSynchronizer,
-                                 final String subredditName, final boolean isBestPost, boolean isLoading,
-                                 boolean loadSuccess, Locale locale) {
+    PostPaginationScrollListener(Context context, Retrofit retrofit, PostViewModel postViewModel,
+                                 LinearLayoutManager layoutManager, String lastItem,
+                                 PaginationSynchronizer paginationSynchronizer, final String subredditName,
+                                 final boolean isBestPost, boolean isLoading, boolean loadSuccess, Locale locale) {
         if(context != null) {
-            this.mContext = context;
-            this.mRetrofit = retrofit;
-            this.mLayoutManager = layoutManager;
-            this.mAdapter = adapter;
-            this.mLastItem = lastItem;
-            this.mPostData = postData;
-            this.mPaginationSynchronizer = paginationSynchronizer;
-            this.mSubredditName = subredditName;
+            mContext = context;
+            mRetrofit = retrofit;
+            mPostViewModel = postViewModel;
+            mLayoutManager = layoutManager;
+            mLastItem = lastItem;
+            mPaginationSynchronizer = paginationSynchronizer;
+            mSubredditName = subredditName;
             this.isBestPost = isBestPost;
             this.isLoading = isLoading;
             this.loadSuccess = loadSuccess;
@@ -59,12 +55,17 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
                     if (isBestPost) {
                         fetchBestPost();
                     } else {
-                        fetchPost(subredditName, 1);
+                        fetchPost(subredditName);
                     }
                 }
             };
             mPaginationSynchronizer.setPaginationRetryNotifier(paginationRetryNotifier);
-            //mLastItemSynchronizer = mPaginationSynchronizer.getLastItemSynchronizer();
+            mPaginationSynchronizer.addLastItemSynchronizer(new LastItemSynchronizer() {
+                @Override
+                public void lastItemChanged(String lastItem) {
+                    mLastItem = lastItem;
+                }
+            });
         }
     }
 
@@ -80,7 +81,7 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
                 if(isBestPost) {
                     fetchBestPost();
                 } else {
-                    fetchPost(mSubredditName, 1);
+                    fetchPost(mSubredditName);
                 }
             }
         }
@@ -101,16 +102,16 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("response", response.body());
-                    clipboard.setPrimaryClip(clip);
-                    ParsePost.parsePost(response.body(), mPostData, locale, new ParsePost.ParsePostListener() {
+                    ParsePost.parsePost(response.body(), locale, new ParsePost.ParsePostListener() {
                         @Override
-                        public void onParsePostSuccess(ArrayList<PostData> postData, String lastItem) {
-                            if(mAdapter != null) {
-                                mAdapter.notifyItemRangeInserted(mPostData.size(), postData.size());
+                        public void onParsePostSuccess(ArrayList<Post> newPostData, String lastItem) {
+                            if(mPostViewModel != null) {
+                                ArrayList<Post> posts = mPostViewModel.getPosts().getValue();
+                                posts.addAll(newPostData);
+                                mPostViewModel.setPosts(posts);
+
                                 mLastItem = lastItem;
-                                mPaginationSynchronizer.getLastItemSynchronizer().lastItemChanged(lastItem);
+                                mPaginationSynchronizer.notifyLastItemChanged(lastItem);
 
                                 isLoading = false;
                                 loadSuccess = true;
@@ -140,12 +141,7 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
         });
     }
 
-    private void fetchPost(final String subredditName, final int refreshTime) {
-        if(refreshTime < 0) {
-            loadFailed();
-            return;
-        }
-
+    private void fetchPost(final String subredditName) {
         isLoading = true;
         loadSuccess = false;
         mPaginationSynchronizer.setLoadingState(true);
@@ -156,16 +152,16 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData clip = ClipData.newPlainText("response", response.body());
-                    clipboard.setPrimaryClip(clip);
-                    ParsePost.parsePost(response.body(), mPostData, locale, new ParsePost.ParsePostListener() {
+                    ParsePost.parsePost(response.body(), locale, new ParsePost.ParsePostListener() {
                         @Override
-                        public void onParsePostSuccess(ArrayList<PostData> postData, String lastItem) {
-                            if(mAdapter != null) {
-                                mAdapter.notifyItemRangeInserted(mPostData.size(), postData.size());
+                        public void onParsePostSuccess(ArrayList<Post> newPostData, String lastItem) {
+                            if(mPostViewModel != null) {
+                                ArrayList<Post> posts = mPostViewModel.getPosts().getValue();
+                                posts.addAll(newPostData);
+                                mPostViewModel.setPosts(posts);
+
                                 mLastItem = lastItem;
-                                mPaginationSynchronizer.getLastItemSynchronizer().lastItemChanged(lastItem);
+                                mPaginationSynchronizer.notifyLastItemChanged(lastItem);
 
                                 isLoading = false;
                                 loadSuccess = true;

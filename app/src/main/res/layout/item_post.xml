@@ -45,6 +45,7 @@
                 android:layout_toStartOf="@id/post_time_text_view_best_post_item"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_centerVertical="true"
                 android:tint="@color/colorPrimary"
                 android:visibility="gone"/>
 

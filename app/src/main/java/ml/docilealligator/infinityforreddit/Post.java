@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by alex on 3/1/18.
  */
 
-class PostData implements Parcelable {
+class Post implements Parcelable {
     static final int TEXT_TYPE = 0;
     static final int IMAGE_TYPE = 1;
     static final int LINK_TYPE = 2;
@@ -38,11 +38,11 @@ class PostData implements Parcelable {
     private boolean isCrosspost;
     private boolean isDashVideo;
     private boolean isDownloadableGifOrVideo;
-    private PostData crosspostParentPostData;
+    private Post crosspostParentPost;
 
-    PostData(String id, String fullName, String subredditNamePrefixed, String postTime, String title,
-             String previewUrl, String permalink, int score, int postType, int voteType, int gilded,
-             boolean nsfw, boolean stickied, boolean isCrosspost, boolean isDashVideo) {
+    Post(String id, String fullName, String subredditNamePrefixed, String postTime, String title,
+         String previewUrl, String permalink, int score, int postType, int voteType, int gilded,
+         boolean nsfw, boolean stickied, boolean isCrosspost, boolean isDashVideo) {
         this.id = id;
         this.fullName = fullName;
         this.subredditNamePrefixed = subredditNamePrefixed;
@@ -60,9 +60,9 @@ class PostData implements Parcelable {
         this.isDashVideo = isDashVideo;
     }
 
-    PostData(String id, String fullName, String subredditNamePrefixed, String postTime, String title,
-             String previewUrl, String url, String permalink, int score, int postType, int voteType,
-             int gilded, boolean nsfw, boolean stickied, boolean isCrosspost) {
+    Post(String id, String fullName, String subredditNamePrefixed, String postTime, String title,
+         String previewUrl, String url, String permalink, int score, int postType, int voteType,
+         int gilded, boolean nsfw, boolean stickied, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditNamePrefixed = subredditNamePrefixed;
@@ -80,9 +80,9 @@ class PostData implements Parcelable {
         this.isCrosspost = isCrosspost;
     }
 
-    PostData(String id, String fullName, String subredditNamePrefixed, String postTime, String title,
-             String permalink, int score, int postType, int voteType, int gilded, boolean nsfw,
-             boolean stickied, boolean isCrosspost) {
+    Post(String id, String fullName, String subredditNamePrefixed, String postTime, String title,
+         String permalink, int score, int postType, int voteType, int gilded, boolean nsfw,
+         boolean stickied, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditNamePrefixed = subredditNamePrefixed;
@@ -98,7 +98,7 @@ class PostData implements Parcelable {
         this.isCrosspost= isCrosspost;
     }
 
-    protected PostData(Parcel in) {
+    protected Post(Parcel in) {
         id = in.readString();
         fullName = in.readString();
         subredditNamePrefixed = in.readString();
@@ -124,15 +124,15 @@ class PostData implements Parcelable {
         isDownloadableGifOrVideo = in.readByte() != 0;
     }
 
-    public static final Creator<PostData> CREATOR = new Creator<PostData>() {
+    public static final Creator<Post> CREATOR = new Creator<Post>() {
         @Override
-        public PostData createFromParcel(Parcel in) {
-            return new PostData(in);
+        public Post createFromParcel(Parcel in) {
+            return new Post(in);
         }
 
         @Override
-        public PostData[] newArray(int size) {
-            return new PostData[size];
+        public Post[] newArray(int size) {
+            return new Post[size];
         }
     };
 

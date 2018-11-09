@@ -1,19 +1,21 @@
 package ml.docilealligator.infinityforreddit;
 
+import java.util.ArrayList;
+
 class PaginationSynchronizer {
     private boolean loadingState;
     private boolean loadSuccess;
     private PaginationNotifier paginationNotifier;
     private PaginationRetryNotifier paginationRetryNotifier;
-    private LastItemSynchronizer lastItemSynchronizer;
+    private ArrayList<LastItemSynchronizer> lastItemSynchronizers;
 
-    PaginationSynchronizer(LastItemSynchronizer lastItemSynchronizer) {
+    PaginationSynchronizer() {
+        lastItemSynchronizers = new ArrayList<>();
         loadingState = false;
         loadSuccess = true;
-        this. lastItemSynchronizer = lastItemSynchronizer;
     }
 
-    public void setLoadingState(boolean isLoading) {
+    void setLoadingState(boolean isLoading) {
         this.loadingState = isLoading;
     }
 
@@ -21,7 +23,7 @@ class PaginationSynchronizer {
         return loadingState;
     }
 
-    public void loadSuccess(boolean state) {
+    void loadSuccess(boolean state) {
         loadSuccess = state;
         if(loadSuccess) {
             paginationNotifier.LoadMorePostSuccess();
@@ -30,28 +32,34 @@ class PaginationSynchronizer {
         }
     }
 
-    public void setLoadSuccess(boolean loadSuccess) {
+    void setLoadSuccess(boolean loadSuccess) {
         this.loadSuccess = loadSuccess;
     }
 
-    public boolean isLoadSuccess() {
+    boolean isLoadingMorePostsSuccess() {
         return loadSuccess;
     }
 
-    public void setPaginationNotifier(PaginationNotifier paginationNotifier) {
+    void setPaginationNotifier(PaginationNotifier paginationNotifier) {
         this.paginationNotifier = paginationNotifier;
     }
 
-    public void setPaginationRetryNotifier(PaginationRetryNotifier paginationRetryNotifier) {
+    void setPaginationRetryNotifier(PaginationRetryNotifier paginationRetryNotifier) {
         this.paginationRetryNotifier = paginationRetryNotifier;
     }
 
-    public PaginationRetryNotifier getPaginationRetryNotifier() {
+    PaginationRetryNotifier getPaginationRetryNotifier() {
         return paginationRetryNotifier;
     }
 
-    public LastItemSynchronizer getLastItemSynchronizer() {
-        return lastItemSynchronizer;
+    void addLastItemSynchronizer(LastItemSynchronizer lastItemSynchronizer) {
+        lastItemSynchronizers.add(lastItemSynchronizer);
+    }
+
+    void notifyLastItemChanged(String lastItem) {
+        for(LastItemSynchronizer l : lastItemSynchronizers) {
+            l.lastItemChanged(lastItem);
+        }
     }
 }
 

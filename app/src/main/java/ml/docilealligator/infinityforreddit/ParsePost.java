@@ -19,32 +19,29 @@ import java.util.Locale;
 class ParsePost {
 
     interface ParsePostListener {
-        void onParsePostSuccess(ArrayList<PostData> postData, String lastItem);
+        void onParsePostSuccess(ArrayList<Post> newPostData, String lastItem);
         void onParsePostFail();
     }
 
-    static void parsePost(String response, ArrayList<PostData> postData, Locale locale,
-                   ParsePostListener parsePostListener) {
-        new ParsePostDataAsyncTask(response, postData, locale, parsePostListener).execute();
+    static void parsePost(String response, Locale locale, ParsePostListener parsePostListener) {
+        new ParsePostDataAsyncTask(response, locale, parsePostListener).execute();
     }
 
     private static class ParsePostDataAsyncTask extends AsyncTask<Void, Void, Void> {
         private JSONObject jsonResponse;
-        private ArrayList<PostData> postData;
         private Locale locale;
         private ParsePostListener parsePostListener;
-        private ArrayList<PostData> newPostData;
+        private ArrayList<Post> newPosts;
         private String lastItem;
         private boolean parseFailed;
 
-        ParsePostDataAsyncTask(String response, ArrayList<PostData> postData, Locale locale,
+        ParsePostDataAsyncTask(String response, Locale locale,
                                ParsePostListener parsePostListener) {
             try {
                 jsonResponse = new JSONObject(response);
-                this.postData = postData;
                 this.locale = locale;
                 this.parsePostListener = parsePostListener;
-                newPostData = new ArrayList<>();
+                newPosts = new ArrayList<>();
                 parseFailed = false;
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -85,6 +82,7 @@ class ParsePost {
                     int previewWidth = -1;
                     int previewHeight = -1;
                     if(data.has(JSONUtils.PREVIEW_KEY)) {
+                        Log.i("haspreview", Integer.toString(i));
                         previewUrl = data.getJSONObject(JSONUtils.PREVIEW_KEY).getJSONArray(JSONUtils.IMAGES_KEY).getJSONObject(0)
                                 .getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY);
                         previewWidth = data.getJSONObject(JSONUtils.PREVIEW_KEY).getJSONArray(JSONUtils.IMAGES_KEY).getJSONObject(0)
@@ -96,11 +94,11 @@ class ParsePost {
                     if(data.has(JSONUtils.CROSSPOST_PARENT_LIST)) {
                         //Cross post
                         data = data.getJSONArray(JSONUtils.CROSSPOST_PARENT_LIST).getJSONObject(0);
-                        parseData(data, permalink, newPostData, id, fullName, subredditNamePrefixed,
+                        parseData(data, permalink, newPosts, id, fullName, subredditNamePrefixed,
                                 formattedPostTime, title, previewUrl, previewWidth, previewHeight,
                                 score, voteType, gilded, nsfw, stickied, true, i);
                     } else {
-                        parseData(data, permalink, newPostData, id, fullName, subredditNamePrefixed,
+                        parseData(data, permalink, newPosts, id, fullName, subredditNamePrefixed,
                                 formattedPostTime, title, previewUrl, previewWidth, previewHeight,
                                 score, voteType, gilded, nsfw, stickied, false, i);
                     }
@@ -115,15 +113,14 @@ class ParsePost {
         @Override
         protected void onPostExecute(Void aVoid) {
             if(!parseFailed) {
-                postData.addAll(newPostData);
-                parsePostListener.onParsePostSuccess(postData, lastItem);
+                parsePostListener.onParsePostSuccess(newPosts, lastItem);
             } else {
                 parsePostListener.onParsePostFail();
             }
         }
     }
 
-    private static void parseData(JSONObject data, String permalink, ArrayList<PostData> bestPostData,
+    private static void parseData(JSONObject data, String permalink, ArrayList<Post> bestPostData,
                            String id, String fullName, String subredditNamePrefixed, String formattedPostTime,
                            String title, String previewUrl, int previewWidth, int previewHeight ,int score, int voteType, int gilded,
                            boolean nsfw, boolean stickied, boolean isCrosspost, int i) throws JSONException {
@@ -134,55 +131,55 @@ class ParsePost {
             if(url.contains(permalink)) {
                 //Text post
                 Log.i("text", Integer.toString(i));
-                int postType = PostData.TEXT_TYPE;
-                PostData postData = new PostData(id, fullName, subredditNamePrefixed, formattedPostTime,
+                int postType = Post.TEXT_TYPE;
+                Post post = new Post(id, fullName, subredditNamePrefixed, formattedPostTime,
                         title, permalink, score, postType, voteType, gilded, nsfw, stickied, isCrosspost);
                 if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
-                    postData.setSelfText("");
+                    post.setSelfText("");
                 } else {
-                    postData.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
+                    post.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
                 }
-                bestPostData.add(postData);
+                bestPostData.add(post);
             } else {
                 //No preview link post
                 Log.i("no preview link", Integer.toString(i));
-                int postType = PostData.NO_PREVIEW_LINK_TYPE;
-                PostData linkPostData = new PostData(id, fullName, subredditNamePrefixed, formattedPostTime,
+                int postType = Post.NO_PREVIEW_LINK_TYPE;
+                Post linkPost = new Post(id, fullName, subredditNamePrefixed, formattedPostTime,
                         title, previewUrl, url, permalink, score, postType,
                         voteType, gilded, nsfw, stickied, isCrosspost);
                 if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
-                    linkPostData.setSelfText("");
+                    linkPost.setSelfText("");
                 } else {
-                    linkPostData.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
+                    linkPost.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
                 }
-                bestPostData.add(linkPostData);
+                bestPostData.add(linkPost);
             }
         } else if(isVideo) {
             //Video post
             Log.i("video", Integer.toString(i));
             JSONObject redditVideoObject = data.getJSONObject(JSONUtils.MEDIA_KEY).getJSONObject(JSONUtils.REDDIT_VIDEO_KEY);
-            int postType = PostData.VIDEO_TYPE;
+            int postType = Post.VIDEO_TYPE;
             String videoUrl = redditVideoObject.getString(JSONUtils.DASH_URL_KEY);
 
-            PostData videoPostData = new PostData(id, fullName, subredditNamePrefixed, formattedPostTime,
+            Post videoPost = new Post(id, fullName, subredditNamePrefixed, formattedPostTime,
                     title, previewUrl, permalink, score, postType, voteType,
                     gilded, nsfw, stickied, isCrosspost, true);
 
-            videoPostData.setPreviewWidth(previewWidth);
-            videoPostData.setPreviewHeight(previewHeight);
-            videoPostData.setVideoUrl(videoUrl);
-            videoPostData.setDownloadableGifOrVideo(false);
+            videoPost.setPreviewWidth(previewWidth);
+            videoPost.setPreviewHeight(previewHeight);
+            videoPost.setVideoUrl(videoUrl);
+            videoPost.setDownloadableGifOrVideo(false);
 
-            bestPostData.add(videoPostData);
+            bestPostData.add(videoPost);
         } else if(data.has(JSONUtils.PREVIEW_KEY)){
             JSONObject variations = data.getJSONObject(JSONUtils.PREVIEW_KEY).getJSONArray(JSONUtils.IMAGES_KEY).getJSONObject(0);
             if (variations.has(JSONUtils.VARIANTS_KEY) && variations.getJSONObject(JSONUtils.VARIANTS_KEY).has(JSONUtils.MP4_KEY)) {
                 //Gif video post (MP4)
                 Log.i("gif video mp4", Integer.toString(i));
-                int postType = PostData.GIF_VIDEO_TYPE;
+                int postType = Post.GIF_VIDEO_TYPE;
                 String videoUrl = variations.getJSONObject(JSONUtils.VARIANTS_KEY).getJSONObject(JSONUtils.MP4_KEY).getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY);
                 String gifDownloadUrl = variations.getJSONObject(JSONUtils.VARIANTS_KEY).getJSONObject(JSONUtils.GIF_KEY).getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY);
-                PostData post = new PostData(id, fullName, subredditNamePrefixed, formattedPostTime, title,
+                Post post = new Post(id, fullName, subredditNamePrefixed, formattedPostTime, title,
                         previewUrl, permalink, score, postType, voteType,
                         gilded, nsfw, stickied, isCrosspost, false);
 
@@ -196,11 +193,11 @@ class ParsePost {
             } else if(data.getJSONObject(JSONUtils.PREVIEW_KEY).has(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY)) {
                 //Gif video post (Dash)
                 Log.i("gif video dash", Integer.toString(i));
-                int postType = PostData.GIF_VIDEO_TYPE;
+                int postType = Post.GIF_VIDEO_TYPE;
                 String videoUrl = data.getJSONObject(JSONUtils.PREVIEW_KEY)
                         .getJSONObject(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY).getString(JSONUtils.DASH_URL_KEY);
 
-                PostData post = new PostData(id, fullName, subredditNamePrefixed, formattedPostTime, title,
+                Post post = new Post(id, fullName, subredditNamePrefixed, formattedPostTime, title,
                         previewUrl, permalink, score, postType, voteType,
                         gilded, nsfw, stickied, isCrosspost, true);
 
@@ -214,69 +211,71 @@ class ParsePost {
                 if (url.endsWith("jpg") || url.endsWith("png")) {
                     //Image post
                     Log.i("image", Integer.toString(i));
-                    int postType = PostData.IMAGE_TYPE;
+                    int postType = Post.IMAGE_TYPE;
 
-                    PostData imagePostData = new PostData(id, fullName, subredditNamePrefixed, formattedPostTime,
+                    Post imagePost = new Post(id, fullName, subredditNamePrefixed, formattedPostTime,
                             title, url, url, permalink, score, postType,
                             voteType, gilded, nsfw, stickied, isCrosspost);
 
-                    imagePostData.setPreviewWidth(previewWidth);
-                    imagePostData.setPreviewHeight(previewHeight);
+                    imagePost.setPreviewWidth(previewWidth);
+                    imagePost.setPreviewHeight(previewHeight);
 
-                    bestPostData.add(imagePostData);
+                    bestPostData.add(imagePost);
                 } else {
                     if (url.contains(permalink)) {
                         //Text post but with a preview
                         Log.i("text with image", Integer.toString(i));
-                        int postType = PostData.TEXT_TYPE;
-                        PostData textWithImagePostData = new PostData(id, fullName, subredditNamePrefixed, formattedPostTime,
+                        int postType = Post.TEXT_TYPE;
+                        Post textWithImagePost = new Post(id, fullName, subredditNamePrefixed, formattedPostTime,
                                 title, permalink, score, postType, voteType, gilded, nsfw, stickied, isCrosspost);
 
-                        textWithImagePostData.setPreviewWidth(previewWidth);
-                        textWithImagePostData.setPreviewHeight(previewHeight);
+                        textWithImagePost.setPreviewWidth(previewWidth);
+                        textWithImagePost.setPreviewHeight(previewHeight);
 
                         if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
-                            textWithImagePostData.setSelfText("");
+                            textWithImagePost.setSelfText("");
                         } else {
-                            textWithImagePostData.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
+                            textWithImagePost.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
                         }
-                        bestPostData.add(textWithImagePostData);
+                        bestPostData.add(textWithImagePost);
                     } else {
                         //Link post
                         Log.i("link", Integer.toString(i));
-                        int postType = PostData.LINK_TYPE;
-                        PostData linkPostData = new PostData(id, fullName, subredditNamePrefixed, formattedPostTime,
+                        int postType = Post.LINK_TYPE;
+                        Post linkPost = new Post(id, fullName, subredditNamePrefixed, formattedPostTime,
                                 title, previewUrl, url, permalink, score,
                                 postType, voteType, gilded, nsfw, stickied, isCrosspost);
                         if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
-                            linkPostData.setSelfText("");
+                            linkPost.setSelfText("");
                         } else {
-                            linkPostData.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
+                            linkPost.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
                         }
 
-                        linkPostData.setPreviewWidth(previewWidth);
-                        linkPostData.setPreviewHeight(previewHeight);
+                        linkPost.setPreviewWidth(previewWidth);
+                        linkPost.setPreviewHeight(previewHeight);
 
-                        bestPostData.add(linkPostData);
+                        bestPostData.add(linkPost);
                     }
                 }
             }
         } else {
             if (url.endsWith("jpg") || url.endsWith("png")) {
                 //Image post
-                Log.i("CP no preview image", Integer.toString(i));
-                int postType = PostData.IMAGE_TYPE;
-                bestPostData.add(new PostData(id, fullName, subredditNamePrefixed, formattedPostTime, title,
-                        url, url, permalink, score, postType, voteType,
-                        gilded, nsfw, stickied, isCrosspost));
+                Log.i("CP image", Integer.toString(i));
+                int postType = Post.IMAGE_TYPE;
+                Post linkPost = new Post(id, fullName, subredditNamePrefixed, formattedPostTime,
+                        title, previewUrl, url, permalink, score, postType,
+                        voteType, gilded, nsfw, stickied, isCrosspost);
+                linkPost.setPreviewWidth(previewWidth);
+                linkPost.setPreviewHeight(previewHeight);
+                bestPostData.add(linkPost);
             } else {
                 //CP No Preview Link post
                 Log.i("CP no preview link", Integer.toString(i));
-                int postType = PostData.NO_PREVIEW_LINK_TYPE;
-                PostData linkPostData = new PostData(id, fullName, subredditNamePrefixed, formattedPostTime,
-                        title, previewUrl, url, permalink, score, postType,
-                        voteType, gilded, nsfw, stickied, isCrosspost);
-                bestPostData.add(linkPostData);
+                int postType = Post.NO_PREVIEW_LINK_TYPE;
+                bestPostData.add(new Post(id, fullName, subredditNamePrefixed, formattedPostTime, title,
+                        url, url, permalink, score, postType, voteType,
+                        gilded, nsfw, stickied, isCrosspost));
             }
         }
     }

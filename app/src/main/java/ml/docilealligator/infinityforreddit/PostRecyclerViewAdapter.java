@@ -47,7 +47,7 @@ import retrofit2.Retrofit;
  */
 
 class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private ArrayList<PostData> mPostData;
+    private ArrayList<Post> mPostData;
     private Context mContext;
     private Retrofit mOauthRetrofit;
     private SharedPreferences mSharedPreferences;
@@ -62,12 +62,12 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int VIEW_TYPE_LOADING = 1;
 
 
-    PostRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, SharedPreferences sharedPreferences, ArrayList<PostData> postData, PaginationSynchronizer paginationSynchronizer, boolean hasMultipleSubreddits) {
+    PostRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, SharedPreferences sharedPreferences, PaginationSynchronizer paginationSynchronizer, boolean hasMultipleSubreddits) {
         if(context != null) {
             mContext = context;
             mOauthRetrofit = oauthRetrofit;
             mSharedPreferences = sharedPreferences;
-            mPostData = postData;
+            mPostData = new ArrayList<>();
             mPaginationSynchronizer = paginationSynchronizer;
             this.hasMultipleSubreddits = hasMultipleSubreddits;
             glide = Glide.with(mContext.getApplicationContext());
@@ -113,14 +113,16 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 public void loadIconSuccess(String iconImageUrl) {
                                     if(mContext != null && !mPostData.isEmpty()) {
                                         if(!iconImageUrl.equals("")) {
-                                            Glide.with(mContext).load(iconImageUrl)
+                                            glide.load(iconImageUrl)
                                                     .into(((DataViewHolder) holder).subredditIconCircleImageView);
                                         } else {
-                                            Glide.with(mContext).load(R.drawable.subreddit_default_icon)
+                                            glide.load(R.drawable.subreddit_default_icon)
                                                     .into(((DataViewHolder) holder).subredditIconCircleImageView);
                                         }
 
-                                        mPostData.get(holder.getAdapterPosition()).setSubredditIconUrl(iconImageUrl);
+                                        if(holder.getAdapterPosition() >= 0) {
+                                            mPostData.get(holder.getAdapterPosition()).setSubredditIconUrl(iconImageUrl);
+                                        }
                                     }
                                 }
                             }).execute();
@@ -203,7 +205,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         break;
                 }
 
-                if(mPostData.get(position).getPostType() != PostData.TEXT_TYPE && mPostData.get(position).getPostType() != PostData.NO_PREVIEW_LINK_TYPE) {
+                if(mPostData.get(position).getPostType() != Post.TEXT_TYPE && mPostData.get(position).getPostType() != Post.NO_PREVIEW_LINK_TYPE) {
                     ((DataViewHolder) holder).relativeLayout.setVisibility(View.VISIBLE);
                     ((DataViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
                     ((DataViewHolder) holder).imageView.setVisibility(View.VISIBLE);
@@ -222,7 +224,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 }
 
                 switch (mPostData.get(position).getPostType()) {
-                    case PostData.IMAGE_TYPE:
+                    case Post.IMAGE_TYPE:
                         ((DataViewHolder) holder).typeTextView.setText("IMAGE");
 
                         final String imageUrl = mPostData.get(position).getUrl();
@@ -238,7 +240,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             }
                         });
                         break;
-                    case PostData.LINK_TYPE:
+                    case Post.LINK_TYPE:
                         ((DataViewHolder) holder).typeTextView.setText("LINK");
 
                         ((DataViewHolder) holder).imageView.setOnClickListener(new View.OnClickListener() {
@@ -253,7 +255,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             }
                         });
                         break;
-                    case PostData.GIF_VIDEO_TYPE:
+                    case Post.GIF_VIDEO_TYPE:
                         ((DataViewHolder) holder).typeTextView.setText("GIF");
 
                         final Uri gifVideoUri = Uri.parse(mPostData.get(position).getVideoUrl());
@@ -274,7 +276,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             }
                         });
                         break;
-                    case PostData.VIDEO_TYPE:
+                    case Post.VIDEO_TYPE:
                         ((DataViewHolder) holder).typeTextView.setText("VIDEO");
 
                         final Uri videoUri = Uri.parse(mPostData.get(position).getVideoUrl());
@@ -295,7 +297,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             }
                         });
                         break;
-                    case PostData.NO_PREVIEW_LINK_TYPE:
+                    case Post.NO_PREVIEW_LINK_TYPE:
                         ((DataViewHolder) holder).typeTextView.setText("LINK");
                         final String noPreviewLinkUrl = mPostData.get(position).getUrl();
                         ((DataViewHolder) holder).noPreviewLinkImageView.setVisibility(View.VISIBLE);
@@ -311,7 +313,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                             }
                         });
                         break;
-                    case PostData.TEXT_TYPE:
+                    case Post.TEXT_TYPE:
                         ((DataViewHolder) holder).typeTextView.setText("TEXT");
                         break;
                 }
@@ -470,15 +472,15 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             mPaginationSynchronizer.setPaginationNotifier(mPaginationNotifier);
 
-            if(!mPaginationSynchronizer.isLoadSuccess()) {
+            if(!mPaginationSynchronizer.isLoadingMorePostsSuccess()) {
                 ((LoadingViewHolder) holder).progressBar.setVisibility(View.GONE);
                 ((LoadingViewHolder) holder).relativeLayout.setVisibility(View.VISIBLE);
             }
         }
     }
 
-    private void loadImage(final RecyclerView.ViewHolder holder, final PostData postData) {
-        RequestBuilder imageRequestBuilder = glide.load(postData.getPreviewUrl()).listener(new RequestListener<Drawable>() {
+    private void loadImage(final RecyclerView.ViewHolder holder, final Post post) {
+        RequestBuilder imageRequestBuilder = glide.load(post.getPreviewUrl()).listener(new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 ((DataViewHolder) holder).progressBar.setVisibility(View.GONE);
@@ -488,7 +490,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     public void onClick(View view) {
                         ((DataViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
                         ((DataViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
-                        loadImage(holder, postData);
+                        loadImage(holder, post);
                     }
                 });
                 return false;
@@ -502,7 +504,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             }
         });
 
-        if(postData.isNSFW()) {
+        if(post.isNSFW()) {
             imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(25, 3)))
                     .into(((DataViewHolder) holder).imageView);
         } else {
@@ -520,6 +522,11 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public int getItemViewType(int position) {
         return (position >= mPostData.size() ? VIEW_TYPE_LOADING : VIEW_TYPE_DATA);
+    }
+
+    void changeDataSet(ArrayList<Post> posts) {
+        mPostData = posts;
+        notifyDataSetChanged();
     }
 
     class DataViewHolder extends RecyclerView.ViewHolder {
