@@ -550,7 +550,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         });
 
         if(mPost.isNSFW()) {
-            imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 3)))
+            imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 2)))
                     .into(mImageView);
         } else {
             imageRequestBuilder.into(mImageView);

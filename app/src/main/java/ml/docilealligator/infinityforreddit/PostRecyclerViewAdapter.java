@@ -61,6 +61,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int VIEW_TYPE_DATA = 0;
     private static final int VIEW_TYPE_LOADING = 1;
 
+    private int dataSize;
 
     PostRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, SharedPreferences sharedPreferences, PaginationSynchronizer paginationSynchronizer, boolean hasMultipleSubreddits) {
         if(context != null) {
@@ -505,7 +506,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         });
 
         if(post.isNSFW()) {
-            imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(25, 3)))
+            imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 2)))
                     .into(((DataViewHolder) holder).imageView);
         } else {
             imageRequestBuilder.into(((DataViewHolder) holder).imageView);
@@ -526,7 +527,12 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     void changeDataSet(ArrayList<Post> posts) {
         mPostData = posts;
-        notifyDataSetChanged();
+        if(dataSize == 0 || posts.size() <= dataSize) {
+            notifyDataSetChanged();
+        } else {
+            notifyItemRangeInserted(dataSize, posts.size() - dataSize);
+        }
+        dataSize = posts.size();
     }
 
     class DataViewHolder extends RecyclerView.ViewHolder {

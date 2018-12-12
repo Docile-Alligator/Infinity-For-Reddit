@@ -41,10 +41,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     static final String SUBREDDIT_NAME_KEY = "SNK";
     static final String IS_BEST_POST_KEY = "IBPK";
 
-    private static final String POST_DATA_PARCELABLE_STATE = "PDPS";
     private static final String LAST_ITEM_STATE = "LIS";
     private static final String LOADING_STATE_STATE = "LSS";
     private static final String LOAD_SUCCESS_STATE = "LOSS";
+    private static final String IS_REFRESH_STATE = "IRS";
 
     private CoordinatorLayout mCoordinatorLayout;
     private RecyclerView mPostRecyclerView;
@@ -53,7 +53,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private LinearLayout mFetchPostErrorLinearLayout;
     private ImageView mFetchPostErrorImageView;
 
-    private ArrayList<Post> mPostData;
     private String mLastItem;
     private PaginationSynchronizer mPaginationSynchronizer;
 
@@ -145,11 +144,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         mPostViewModel.getPosts().observe(this, new Observer<ArrayList<Post>>() {
             @Override
             public void onChanged(@Nullable ArrayList<Post> posts) {
-                mAdapter.changeDataSet(posts);
                 if(posts == null) {
                     Log.i("datachange", Integer.toString(0));
                 } else {
                     Log.i("datachange", Integer.toString(posts.size()));
+                    mAdapter.changeDataSet(posts);
                 }
             }
         });

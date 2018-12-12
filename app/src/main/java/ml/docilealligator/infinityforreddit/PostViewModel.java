@@ -6,7 +6,7 @@ import android.arch.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 
-class PostViewModel extends ViewModel {
+public class PostViewModel extends ViewModel {
     private MutableLiveData<ArrayList<Post>> posts = new MutableLiveData<>();
 
     LiveData<ArrayList<Post>> getPosts() {
@@ -18,5 +18,13 @@ class PostViewModel extends ViewModel {
 
     void setPosts(ArrayList<Post> posts) {
         this.posts.postValue(posts);
+    }
+
+    void addPosts(ArrayList<Post> newPosts) {
+        ArrayList<Post> posts = this.posts.getValue();
+        if(posts != null) {
+            posts.addAll(newPosts);
+            this.posts.postValue(posts);
+        }
     }
 }

@@ -104,11 +104,9 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
                 if(response.isSuccessful()) {
                     ParsePost.parsePost(response.body(), locale, new ParsePost.ParsePostListener() {
                         @Override
-                        public void onParsePostSuccess(ArrayList<Post> newPostData, String lastItem) {
+                        public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
                             if(mPostViewModel != null) {
-                                ArrayList<Post> posts = mPostViewModel.getPosts().getValue();
-                                posts.addAll(newPostData);
-                                mPostViewModel.setPosts(posts);
+                                mPostViewModel.addPosts(newPosts);
 
                                 mLastItem = lastItem;
                                 mPaginationSynchronizer.notifyLastItemChanged(lastItem);
@@ -154,11 +152,9 @@ class PostPaginationScrollListener extends RecyclerView.OnScrollListener {
                 if(response.isSuccessful()) {
                     ParsePost.parsePost(response.body(), locale, new ParsePost.ParsePostListener() {
                         @Override
-                        public void onParsePostSuccess(ArrayList<Post> newPostData, String lastItem) {
+                        public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
                             if(mPostViewModel != null) {
-                                ArrayList<Post> posts = mPostViewModel.getPosts().getValue();
-                                posts.addAll(newPostData);
-                                mPostViewModel.setPosts(posts);
+                                mPostViewModel.addPosts(newPosts);
 
                                 mLastItem = lastItem;
                                 mPaginationSynchronizer.notifyLastItemChanged(lastItem);
