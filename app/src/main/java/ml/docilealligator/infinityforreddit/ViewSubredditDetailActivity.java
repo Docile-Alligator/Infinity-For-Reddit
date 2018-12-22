@@ -3,6 +3,8 @@ package ml.docilealligator.infinityforreddit;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,13 +23,19 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
+import com.felipecsl.gifimageview.library.GifImageView;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import retrofit2.Retrofit;
 
 public class ViewSubredditDetailActivity extends AppCompatActivity {
@@ -39,7 +47,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
     private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
 
     @BindView(R.id.banner_image_view_view_subreddit_detail_activity) ImageView bannerImageView;
-    @BindView(R.id.icon_circle_image_view_view_subreddit_detail_activity) CircleImageView iconCircleImageView;
+    @BindView(R.id.icon_gif_image_view_view_subreddit_detail_activity) GifImageView iconGifImageView;
     @BindView(R.id.subreddit_name_text_view_view_subreddit_detail_activity) TextView subredditNameTextView;
     @BindView(R.id.subscriber_count_text_view_view_subreddit_detail_activity) TextView nSubscribersTextView;
     @BindView(R.id.online_subscriber_count_text_view_view_subreddit_detail_activity) TextView nOnlineSubscribersTextView;
@@ -117,7 +125,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
             public void onChanged(@Nullable final SubredditData subredditData) {
                 if(subredditData != null) {
                     if(subredditData.getBannerUrl().equals("")) {
-                        iconCircleImageView.setOnClickListener(new View.OnClickListener() {
+                        iconGifImageView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 //Do nothing as it has no image
@@ -138,16 +146,37 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
                     }
 
                     if(subredditData.getIconUrl().equals("")) {
-                        glide.load(getDrawable(R.drawable.subreddit_default_icon)).into(iconCircleImageView);
-                        iconCircleImageView.setOnClickListener(new View.OnClickListener() {
+                        glide.load(getDrawable(R.drawable.subreddit_default_icon))
+                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0)))
+                                .into(iconGifImageView);
+                        iconGifImageView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 //Do nothing as it is a default icon
                             }
                         });
                     } else {
-                        glide.load(subredditData.getIconUrl()).into(iconCircleImageView);
-                        iconCircleImageView.setOnClickListener(new View.OnClickListener() {
+                        glide.load(subredditData.getIconUrl())
+                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0)))
+                                .error(glide.load(R.drawable.subreddit_default_icon))
+                                .listener(new RequestListener<Drawable>() {
+                                    @Override
+                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                        if(resource instanceof Animatable) {
+                                            //This is a gif
+                                            ((Animatable) resource).start();
+                                            iconGifImageView.startAnimation();
+                                        }
+                                        return false;
+                                    }
+                                })
+                                .into(iconGifImageView);
+                        iconGifImageView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 Intent intent = new Intent(ViewSubredditDetailActivity.this, ViewImageActivity.class);

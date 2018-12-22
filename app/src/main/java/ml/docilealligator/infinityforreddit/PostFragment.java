@@ -61,7 +61,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     private PostRecyclerViewAdapter mAdapter;
 
-    private PostViewModel mPostViewModel;
+    PostViewModel mPostViewModel;
 
     @Inject @Named("no_oauth")
     Retrofit mRetrofit;

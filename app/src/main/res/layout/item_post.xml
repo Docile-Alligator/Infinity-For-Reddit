@@ -20,8 +20,8 @@
             android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/subreddit_icon_circle_image_view_best_post_item"
+            <CustomView.AspectRatioGifImageView
+                android:id="@+id/subreddit_icon_gif_image_view_best_post_item"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentStart="true"
@@ -34,7 +34,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="8dp"
                 android:layout_toStartOf="@id/stickied_post_image_view_best_post_item"
-                android:layout_toEndOf="@id/subreddit_icon_circle_image_view_best_post_item"
+                android:layout_toEndOf="@id/subreddit_icon_gif_image_view_best_post_item"
                 android:layout_centerVertical="true"
                 android:textColor="#E91E63"/>
 
@@ -148,7 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true" />
 
-            <com.santalu.aspectratioimageview.AspectRatioImageView
+            <CustomView.AspectRatioGifImageView
                 android:id="@+id/image_view_best_post_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

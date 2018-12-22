@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.ColorFilter;
+import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -32,14 +33,14 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.santalu.aspectratioimageview.AspectRatioImageView;
 
 import java.util.ArrayList;
 
+import CustomView.AspectRatioGifImageView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import retrofit2.Retrofit;
 
 /**
@@ -115,10 +116,29 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                     if(mContext != null && !mPostData.isEmpty()) {
                                         if(!iconImageUrl.equals("")) {
                                             glide.load(iconImageUrl)
-                                                    .into(((DataViewHolder) holder).subredditIconCircleImageView);
+                                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                                    .error(glide.load(R.drawable.subreddit_default_icon))
+                                                    .listener(new RequestListener<Drawable>() {
+                                                        @Override
+                                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                                            return false;
+                                                        }
+
+                                                        @Override
+                                                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                                            if(resource instanceof Animatable) {
+                                                                //This is a gif
+                                                                //((Animatable) resource).start();
+                                                                ((DataViewHolder) holder).subredditIconGifImageView.startAnimation();
+                                                            }
+                                                            return false;
+                                                        }
+                                                    })
+                                                    .into(((DataViewHolder) holder).subredditIconGifImageView);
                                         } else {
                                             glide.load(R.drawable.subreddit_default_icon)
-                                                    .into(((DataViewHolder) holder).subredditIconCircleImageView);
+                                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                                    .into(((DataViewHolder) holder).subredditIconGifImageView);
                                         }
 
                                         if(holder.getAdapterPosition() >= 0) {
@@ -128,9 +148,30 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                 }
                             }).execute();
                 } else if(!mPostData.get(position).getSubredditIconUrl().equals("")) {
-                    glide.load(mPostData.get(position).getSubredditIconUrl()).into(((DataViewHolder) holder).subredditIconCircleImageView);
+                    glide.load(mPostData.get(position).getSubredditIconUrl())
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                            .error(glide.load(R.drawable.subreddit_default_icon))
+                            .listener(new RequestListener<Drawable>() {
+                                @Override
+                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                    if(resource instanceof Animatable) {
+                                        //This is a gif
+                                        //((Animatable) resource).start();
+                                        ((DataViewHolder) holder).subredditIconGifImageView.startAnimation();
+                                    }
+                                    return false;
+                                }
+                            })
+                            .into(((DataViewHolder) holder).subredditIconGifImageView);
                 } else {
-                    glide.load(R.drawable.subreddit_default_icon).into(((DataViewHolder) holder).subredditIconCircleImageView);
+                    glide.load(R.drawable.subreddit_default_icon)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                            .into(((DataViewHolder) holder).subredditIconGifImageView);
                 }
 
                 ((DataViewHolder) holder).cardView.setOnClickListener(new View.OnClickListener() {
@@ -146,7 +187,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     }
                 });
 
-                ((DataViewHolder) holder).subredditIconCircleImageView.setOnClickListener(new View.OnClickListener() {
+                ((DataViewHolder) holder).subredditIconGifImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         if(canStartActivity) {
@@ -537,7 +578,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     class DataViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.card_view_view_post_detail) CardView cardView;
-        @BindView(R.id.subreddit_icon_circle_image_view_best_post_item) CircleImageView subredditIconCircleImageView;
+        @BindView(R.id.subreddit_icon_gif_image_view_best_post_item) AspectRatioGifImageView subredditIconGifImageView;
         @BindView(R.id.subreddit_text_view_best_post_item) TextView subredditNameTextView;
         @BindView(R.id.stickied_post_image_view_best_post_item) ImageView stickiedPostImageView;
         @BindView(R.id.post_time_text_view_best_post_item) TextView postTimeTextView;
@@ -549,7 +590,7 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         @BindView(R.id.nsfw_text_view_item_best_post) TextView nsfwTextView;
         @BindView(R.id.image_view_wrapper_item_best_post) RelativeLayout relativeLayout;
         @BindView(R.id.progress_bar_best_post_item) ProgressBar progressBar;
-        @BindView(R.id.image_view_best_post_item) AspectRatioImageView imageView;
+        @BindView(R.id.image_view_best_post_item) AspectRatioGifImageView imageView;
         @BindView(R.id.load_image_error_relative_layout_best_post_item) RelativeLayout errorRelativeLayout;
         @BindView(R.id.image_view_no_preview_link_best_post_item) ImageView noPreviewLinkImageView;
         @BindView(R.id.plus_button_item_best_post) ImageView upvoteButton;
@@ -577,8 +618,14 @@ class PostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if(holder instanceof DataViewHolder) {
+            if(((DataViewHolder) holder).imageView.isAnimating()) {
+                ((DataViewHolder) holder).imageView.stopAnimation();
+            }
+            if(((DataViewHolder) holder).subredditIconGifImageView.isAnimating()) {
+                ((DataViewHolder) holder).subredditIconGifImageView.stopAnimation();
+            }
             glide.clear(((DataViewHolder) holder).imageView);
-            glide.clear(((DataViewHolder) holder).subredditIconCircleImageView);
+            glide.clear(((DataViewHolder) holder).subredditIconGifImageView);
             ((DataViewHolder) holder).stickiedPostImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).relativeLayout.setVisibility(View.GONE);
             ((DataViewHolder) holder).gildedImageView.setVisibility(View.GONE);

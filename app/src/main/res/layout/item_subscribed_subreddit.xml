@@ -7,8 +7,8 @@
     android:focusable="true"
     android:background="?attr/selectableItemBackground">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/subreddit_icon_circle_image_view_item_subscribed_subreddit"
+    <com.felipecsl.gifimageview.library.GifImageView
+        android:id="@+id/subreddit_icon_gif_image_view_item_subscribed_subreddit"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_gravity="center_vertical"

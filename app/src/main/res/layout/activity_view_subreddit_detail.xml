@@ -31,8 +31,8 @@
                     android:scaleType="centerCrop"
                     android:layout_height="180dp" />
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/icon_circle_image_view_view_subreddit_detail_activity"
+                <com.felipecsl.gifimageview.library.GifImageView
+                    android:id="@+id/icon_gif_image_view_view_subreddit_detail_activity"
                     android:layout_width="72dp"
                     android:layout_height="72dp"
                     android:layout_marginTop="-36dp"
