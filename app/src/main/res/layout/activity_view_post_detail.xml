@@ -258,13 +258,15 @@
 
             </android.support.v7.widget.CardView>
 
-            <ProgressBar
+            <com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar
                 android:id="@+id/comment_progress_bar_view_post_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="16dp"
-                android:visibility="gone"/>
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:mlpb_progress_stoke_width="3dp"
+                app:mlpb_progress_color="@color/colorAccent"
+                android:layout_gravity="center_horizontal"/>
 
             <android.support.v7.widget.CardView
                 android:id="@+id/comment_card_view_view_post_detail"

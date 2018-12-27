@@ -1,10 +1,10 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Transformations;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.paging.LivePagedListBuilder;
-import android.arch.paging.PageKeyedDataSource;
 import android.arch.paging.PagedList;
 import android.support.annotation.NonNull;
 
@@ -15,18 +15,19 @@ import retrofit2.Retrofit;
 
 public class PostViewModel extends ViewModel {
     private Executor executor;
-    LiveData<NetworkState> networkState;
-    LiveData<PagedList<Post>> posts;
-    LiveData<PageKeyedDataSource<String, Post>> liveDataSource;
+    private LiveData<NetworkState> networkState;
+    private LiveData<NetworkState> initialLoadingState;
+    private LiveData<PagedList<Post>> posts;
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, boolean isBestPost) {
         //executor = Executors.newFixedThreadPool(5);
 
         PostDataSourceFactory postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, isBestPost);
-        /*networkState = Transformations.switchMap(postDataSourceFactory.getMutableLiveData(),
-                (Function<PostDataSource, LiveData<NetworkState>>) PostDataSource::getNetworkState);*/
-        liveDataSource = postDataSourceFactory.getMutableLiveData();
 
+        initialLoadingState = Transformations.switchMap(postDataSourceFactory.getMutableLiveData(),
+                dataSource -> dataSource.getInitialLoading());
+        networkState = Transformations.switchMap(postDataSourceFactory.getMutableLiveData(),
+                dataSource -> dataSource.getNetworkState());
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
                         .setEnablePlaceholders(false)
@@ -40,9 +41,11 @@ public class PostViewModel extends ViewModel {
         //executor = Executors.newFixedThreadPool(5);
 
         PostDataSourceFactory postDataSourceFactory = new PostDataSourceFactory(retrofit, locale, isBestPost, subredditName);
-        /*networkState = Transformations.switchMap(postDataSourceFactory.getMutableLiveData(),
-                (Function<PostDataSource, LiveData<NetworkState>>) PostDataSource::getNetworkState);*/
-        liveDataSource = postDataSourceFactory.getMutableLiveData();
+
+        initialLoadingState = Transformations.switchMap(postDataSourceFactory.getMutableLiveData(),
+                dataSource -> dataSource.getInitialLoading());
+        networkState = Transformations.switchMap(postDataSourceFactory.getMutableLiveData(),
+                dataSource -> dataSource.getNetworkState());
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -57,9 +60,13 @@ public class PostViewModel extends ViewModel {
         return posts;
     }
 
-    /*public LiveData<NetworkState> getNetworkState() {
+    LiveData<NetworkState> getNetworkState() {
         return networkState;
-    }*/
+    }
+
+    public LiveData<NetworkState> getInitialLoadingState() {
+        return initialLoadingState;
+    }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
         private Retrofit retrofit;

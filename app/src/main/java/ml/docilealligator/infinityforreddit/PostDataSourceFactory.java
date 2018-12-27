@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.paging.DataSource;
-import android.arch.paging.PageKeyedDataSource;
 
 import java.util.Locale;
 
@@ -15,7 +14,7 @@ class PostDataSourceFactory extends DataSource.Factory {
     private boolean isBestPost;
     private String subredditName;
 
-    private MutableLiveData<PageKeyedDataSource<String, Post>> mutableLiveData;
+    private MutableLiveData<PostDataSource> mutableLiveData;
 
     PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, boolean isBestPost) {
         this.retrofit = retrofit;
@@ -45,7 +44,7 @@ class PostDataSourceFactory extends DataSource.Factory {
         return postDataSource;
     }
 
-    public MutableLiveData<PageKeyedDataSource<String, Post>> getMutableLiveData() {
+    public MutableLiveData<PostDataSource> getMutableLiveData() {
         return mutableLiveData;
     }
 }

@@ -41,11 +41,11 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         initialLoading = new MutableLiveData();
     }
 
-    public MutableLiveData getNetworkState() {
+    MutableLiveData getNetworkState() {
         return networkState;
     }
 
-    public MutableLiveData getInitialLoading() {
+    MutableLiveData getInitialLoading() {
         return initialLoading;
     }
 

@@ -6,13 +6,15 @@
     android:id="@+id/coordinator_layout_post_fragment"
     tools:context="ml.docilealligator.infinityforreddit.PostFragment">
 
-    <ProgressBar
+    <com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar
         android:id="@+id/progress_bar_post_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:layout_gravity="center" />
+        app:mlpb_progress_stoke_width="3dp"
+        app:mlpb_progress_color="@color/colorAccent"
+        android:layout_gravity="center_horizontal"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_post_fragment"

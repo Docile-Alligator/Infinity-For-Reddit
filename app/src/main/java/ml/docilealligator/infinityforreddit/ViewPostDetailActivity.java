@@ -31,6 +31,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 import com.multilevelview.MultiLevelRecyclerView;
 import com.santalu.aspectratioimageview.AspectRatioImageView;
 
@@ -83,7 +84,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     @BindView(R.id.minus_button_view_post_detail) ImageView mDownvoteButton;
     @BindView(R.id.share_button_view_post_detail) ImageView mShareButton;
 
-    @BindView(R.id.comment_progress_bar_view_post_detail) ProgressBar mCommentProgressbar;
+    @BindView(R.id.comment_progress_bar_view_post_detail) CircleProgressBar mCommentProgressbar;
     @BindView(R.id.comment_card_view_view_post_detail) CardView mCommentCardView;
     @BindView(R.id.recycler_view_view_post_detail) MultiLevelRecyclerView mRecyclerView;
 

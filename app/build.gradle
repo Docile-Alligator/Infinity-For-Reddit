@@ -71,4 +71,5 @@ dependencies {
     implementation 'com.github.santalu:aspect-ratio-imageview:1.0.6'
     implementation 'com.felipecsl:gifimageview:2.2.0'
     implementation "android.arch.paging:runtime:1.0.1"
+    implementation "com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE"
 }

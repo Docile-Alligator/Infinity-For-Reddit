@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
+
+import com.bumptech.glide.Glide;
+import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -31,15 +34,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     static final String SUBREDDIT_NAME_KEY = "SNK";
     static final String IS_BEST_POST_KEY = "IBPK";
 
-    private static final String LAST_ITEM_STATE = "LIS";
-    private static final String LOADING_STATE_STATE = "LSS";
-    private static final String LOAD_SUCCESS_STATE = "LOSS";
-    private static final String IS_REFRESH_STATE = "IRS";
-
     private CoordinatorLayout mCoordinatorLayout;
     private RecyclerView mPostRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
-    private ProgressBar mProgressBar;
+    private CircleProgressBar mProgressBar;
     private LinearLayout mFetchPostErrorLinearLayout;
     private ImageView mFetchPostErrorImageView;
 
@@ -134,6 +132,15 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
         mPostViewModel = ViewModelProviders.of(this, factory).get(PostViewModel.class);
         mPostViewModel.getPosts().observe(this, posts -> mAdapter.submitList(posts));
+        mPostViewModel.getInitialLoadingState().observe(this, networkState -> {
+            if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
+                mProgressBar.setVisibility(View.GONE);
+            } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
+                showErrorView();
+            } else {
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+        });
 
         return rootView;
     }
@@ -143,7 +150,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     }
 
-    /*
     private void showErrorView() {
         mProgressBar.setVisibility(View.GONE);
         if(mIsBestPost) {
@@ -156,14 +162,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             snackbar.setAction(R.string.retry, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mIsBestPost) {
+                    /*if (mIsBestPost) {
                         fetchBestPost();
                     } else {
                         fetchPost();
-                    }
+                    }*/
                 }
             });
             snackbar.show();
         }
-    }*/
+    }
 }
