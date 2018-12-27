@@ -13,6 +13,7 @@ class PostDataSourceFactory extends DataSource.Factory {
     private String accessToken;
     private Locale locale;
     private boolean isBestPost;
+    private String subredditName;
 
     private MutableLiveData<PageKeyedDataSource<String, Post>> mutableLiveData;
 
@@ -24,9 +25,22 @@ class PostDataSourceFactory extends DataSource.Factory {
         mutableLiveData = new MutableLiveData<>();
     }
 
+    PostDataSourceFactory(Retrofit retrofit, Locale locale, boolean isBestPost, String subredditName) {
+        this.retrofit = retrofit;
+        this.locale = locale;
+        this.isBestPost = isBestPost;
+        mutableLiveData = new MutableLiveData<>();
+        this.subredditName = subredditName;
+    }
+
     @Override
     public DataSource create() {
-        PostDataSource postDataSource = new PostDataSource(retrofit, accessToken, locale, isBestPost);
+        PostDataSource postDataSource;
+        if(isBestPost) {
+            postDataSource = new PostDataSource(retrofit, accessToken, locale, isBestPost);
+        } else {
+            postDataSource = new PostDataSource(retrofit, locale, isBestPost, subredditName);
+        }
         mutableLiveData.postValue(postDataSource);
         return postDataSource;
     }

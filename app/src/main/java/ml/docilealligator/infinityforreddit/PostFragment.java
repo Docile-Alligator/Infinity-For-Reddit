@@ -124,8 +124,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         String accessToken = getActivity().getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
                 .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
-        PostViewModel.Factory factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                getResources().getConfiguration().locale, mIsBestPost);
+        PostViewModel.Factory factory;
+        if(mIsBestPost) {
+            factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
+                    getResources().getConfiguration().locale, mIsBestPost);
+        } else {
+            factory = new PostViewModel.Factory(mRetrofit,
+                    getResources().getConfiguration().locale, mIsBestPost, mSubredditName);
+        }
         mPostViewModel = ViewModelProviders.of(this, factory).get(PostViewModel.class);
         mPostViewModel.getPosts().observe(this, posts -> mAdapter.submitList(posts));
 

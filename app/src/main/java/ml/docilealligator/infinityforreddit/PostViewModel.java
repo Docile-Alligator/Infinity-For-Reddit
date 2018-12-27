@@ -36,6 +36,23 @@ public class PostViewModel extends ViewModel {
         posts = (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
     }
 
+    public PostViewModel(Retrofit retrofit, Locale locale, boolean isBestPost, String subredditName) {
+        //executor = Executors.newFixedThreadPool(5);
+
+        PostDataSourceFactory postDataSourceFactory = new PostDataSourceFactory(retrofit, locale, isBestPost, subredditName);
+        /*networkState = Transformations.switchMap(postDataSourceFactory.getMutableLiveData(),
+                (Function<PostDataSource, LiveData<NetworkState>>) PostDataSource::getNetworkState);*/
+        liveDataSource = postDataSourceFactory.getMutableLiveData();
+
+        PagedList.Config pagedListConfig =
+                (new PagedList.Config.Builder())
+                        .setEnablePlaceholders(false)
+                        .setPageSize(25)
+                        .build();
+
+        posts = (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
+    }
+
     LiveData<PagedList<Post>> getPosts() {
         return posts;
     }
@@ -49,6 +66,7 @@ public class PostViewModel extends ViewModel {
         private String accessToken;
         private Locale locale;
         private boolean isBestPost;
+        private String subredditName;
 
         public Factory(Retrofit retrofit, String accessToken, Locale locale, boolean isBestPost) {
             this.retrofit = retrofit;
@@ -57,10 +75,21 @@ public class PostViewModel extends ViewModel {
             this.isBestPost = isBestPost;
         }
 
+        public Factory(Retrofit retrofit, Locale locale, boolean isBestPost, String subredditName) {
+            this.retrofit = retrofit;
+            this.locale = locale;
+            this.isBestPost = isBestPost;
+            this.subredditName = subredditName;
+        }
+
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new PostViewModel(retrofit, accessToken, locale, isBestPost);
+            if(isBestPost) {
+                return (T) new PostViewModel(retrofit, accessToken, locale, isBestPost);
+            } else {
+                return (T) new PostViewModel(retrofit, locale, isBestPost, subredditName);
+            }
         }
     }
 }

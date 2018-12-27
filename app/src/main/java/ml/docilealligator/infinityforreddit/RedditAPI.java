@@ -36,7 +36,7 @@ public interface RedditAPI {
     @GET("best?raw_json=1")
     Call<String> getBestPost(@Query("after") String lastItem, @HeaderMap Map<String, String> headers);
 
-    @GET("r/{subredditName}.json?raw_json=1")
+    @GET("r/{subredditName}.json?raw_json=1&limit=25")
     Call<String> getPost(@Path("subredditName") String subredditName, @Query("after") String lastItem);
 
     @GET("user/{username}/about.json/raw_json=1")
