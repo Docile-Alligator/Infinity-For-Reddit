@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package SubredditDatabase;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -6,7 +6,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 @Entity(tableName = "subreddits")
-class SubredditData {
+public class SubredditData {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "id")
@@ -27,7 +27,7 @@ class SubredditData {
     @ColumnInfo(name = "subscribers_count")
     private int nSubscribers;
 
-    SubredditData(@NonNull String id, String name, String iconUrl, String bannerUrl, String description, int nSubscribers) {
+    public SubredditData(@NonNull String id, String name, String iconUrl, String bannerUrl, String description, int nSubscribers) {
         this.id = id;
         this.name = name;
         this.iconUrl = iconUrl;

@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package SubscribedUserDatabase;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;

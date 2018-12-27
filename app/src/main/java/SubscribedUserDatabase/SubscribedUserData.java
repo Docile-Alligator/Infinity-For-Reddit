@@ -1,13 +1,12 @@
-package ml.docilealligator.infinityforreddit;
+package SubscribedUserDatabase;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-@Entity(tableName = "subscribed_subreddits")
-class SubscribedSubredditData {
-
+@Entity(tableName = "subscribed_users")
+public class SubscribedUserData {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "id")
@@ -17,7 +16,7 @@ class SubscribedSubredditData {
     @ColumnInfo(name = "icon")
     private String iconUrl;
 
-    SubscribedSubredditData(@NonNull String id, String name, String iconUrl) {
+    public SubscribedUserData(@NonNull String id, String name, String iconUrl) {
         this.id = id;
         this.name = name;
         this.iconUrl = iconUrl;

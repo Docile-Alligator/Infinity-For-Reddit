@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package SubredditDatabase;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;

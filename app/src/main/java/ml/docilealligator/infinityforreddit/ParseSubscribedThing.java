@@ -9,6 +9,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import SubredditDatabase.SubredditData;
+import SubscribedSubredditDatabase.SubscribedSubredditData;
+import SubscribedUserDatabase.SubscribedUserData;
+
 class ParseSubscribedThing {
     interface ParseSubscribedSubredditsListener {
         void onParseSubscribedSubredditsSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,

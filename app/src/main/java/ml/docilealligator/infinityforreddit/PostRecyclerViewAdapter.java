@@ -39,6 +39,8 @@ import com.bumptech.glide.request.target.Target;
 import java.util.List;
 
 import CustomView.AspectRatioGifImageView;
+import SubredditDatabase.SubredditDao;
+import SubredditDatabase.SubredditRoomDatabase;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.BlurTransformation;

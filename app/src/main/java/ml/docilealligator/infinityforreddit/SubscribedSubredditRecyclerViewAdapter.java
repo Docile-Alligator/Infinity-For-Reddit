@@ -23,6 +23,7 @@ import com.felipecsl.gifimageview.library.GifImageView;
 
 import java.util.List;
 
+import SubscribedSubredditDatabase.SubscribedSubredditData;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 class SubscribedSubredditRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

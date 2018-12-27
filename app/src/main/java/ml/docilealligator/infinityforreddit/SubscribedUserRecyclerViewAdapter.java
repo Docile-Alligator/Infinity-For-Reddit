@@ -22,14 +22,15 @@ import com.felipecsl.gifimageview.library.GifImageView;
 
 import java.util.List;
 
+import SubscribedUserDatabase.SubscribedUserData;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
-class SubscribedUserRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SubscribedUserRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<SubscribedUserData> mSubscribedUserData;
     private RequestManager glide;
     private OnItemClickListener mOnItemClickListener;
 
-    interface OnItemClickListener {
+    public interface OnItemClickListener {
         void onClick();
     }
 

@@ -6,6 +6,9 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
+import SubredditDatabase.SubredditData;
+import SubscribedSubredditDatabase.SubscribedSubredditData;
+import SubscribedUserDatabase.SubscribedUserData;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

@@ -33,6 +33,10 @@ import com.felipecsl.gifimageview.library.GifImageView;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import SubredditDatabase.SubredditDao;
+import SubredditDatabase.SubredditData;
+import SubredditDatabase.SubredditRoomDatabase;
+import SubredditDatabase.SubredditViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;

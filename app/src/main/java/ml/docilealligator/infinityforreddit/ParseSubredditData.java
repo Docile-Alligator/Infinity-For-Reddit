@@ -6,6 +6,8 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import SubredditDatabase.SubredditData;
+
 class ParseSubredditData {
     interface ParseSubredditDataListener {
         void onParseSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers);

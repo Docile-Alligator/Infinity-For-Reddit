@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package SubredditDatabase;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;

@@ -42,6 +42,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import SubredditDatabase.SubredditRoomDatabase;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;

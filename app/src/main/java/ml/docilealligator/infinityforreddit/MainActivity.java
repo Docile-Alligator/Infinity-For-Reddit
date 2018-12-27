@@ -31,6 +31,17 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import SubredditDatabase.SubredditDao;
+import SubredditDatabase.SubredditData;
+import SubredditDatabase.SubredditRoomDatabase;
+import SubscribedSubredditDatabase.SubscribedSubredditDao;
+import SubscribedSubredditDatabase.SubscribedSubredditData;
+import SubscribedSubredditDatabase.SubscribedSubredditRoomDatabase;
+import SubscribedSubredditDatabase.SubscribedSubredditViewModel;
+import SubscribedUserDatabase.SubscribedUserDao;
+import SubscribedUserDatabase.SubscribedUserData;
+import SubscribedUserDatabase.SubscribedUserRoomDatabase;
+import SubscribedUserDatabase.SubscribedUserViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;

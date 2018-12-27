@@ -2,6 +2,8 @@ package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
 
+import SubredditDatabase.SubredditDao;
+
 class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {
     interface LoadSubredditIconAsyncTaskListener {
         void loadIconSuccess(String iconImageUrl);
