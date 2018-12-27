@@ -16,6 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
 repositories {
@@ -66,4 +70,5 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.github.santalu:aspect-ratio-imageview:1.0.6'
     implementation 'com.felipecsl:gifimageview:2.2.0'
+    implementation "android.arch.paging:runtime:1.0.1"
 }

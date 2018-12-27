@@ -321,40 +321,6 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         }
         queryComment();
 
-        /*final Observable<Integer> observable = Observable.create(
-                new ObservableOnSubscribe<Integer>() {
-                    @Override
-                    public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
-                        emitter.onNext(mPost.getVoteType());
-                        emitter.onComplete();
-                        Log.i("asdasdf", "adasdfasdf");
-                        Toast.makeText(ViewPostDetailActivity.this, "observable", Toast.LENGTH_SHORT).show();
-                    }
-                }
-        );
-
-        final Observer observer = new Observer() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(Object o) {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-                Toast.makeText(ViewPostDetailActivity.this, "complete", Toast.LENGTH_SHORT).show();
-            }
-        };*/
-
         mUpvoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

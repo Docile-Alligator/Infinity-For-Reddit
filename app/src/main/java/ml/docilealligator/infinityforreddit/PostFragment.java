@@ -1,19 +1,15 @@
 package ml.docilealligator.infinityforreddit;
 
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,15 +17,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import com.bumptech.glide.Glide;
-
-import java.util.ArrayList;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Retrofit;
 
 
@@ -53,9 +43,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private LinearLayout mFetchPostErrorLinearLayout;
     private ImageView mFetchPostErrorImageView;
 
-    private String mLastItem;
-    private PaginationSynchronizer mPaginationSynchronizer;
-
     private boolean mIsBestPost;
     private String mSubredditName;
 
@@ -74,14 +61,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     public PostFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(LAST_ITEM_STATE, mLastItem);
-        outState.putBoolean(LOADING_STATE_STATE, mPaginationSynchronizer.isLoading());
-        outState.putBoolean(LOAD_SUCCESS_STATE, mPaginationSynchronizer.isLoadingMorePostsSuccess());
     }
 
     @Override
@@ -117,10 +96,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         });*/
 
         mIsBestPost = getArguments().getBoolean(IS_BEST_POST_KEY);
+
         if(!mIsBestPost) {
             mSubredditName = getArguments().getString(SUBREDDIT_NAME_KEY);
         } else {
-            mFetchPostErrorLinearLayout.setOnClickListener(new View.OnClickListener() {
+            /*mFetchPostErrorLinearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if(mIsBestPost) {
@@ -129,159 +109,35 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                         fetchPost();
                     }
                 }
-            });
+            });*/
         }
-
-        mPaginationSynchronizer = new PaginationSynchronizer();
-        mPaginationSynchronizer.addLastItemSynchronizer(new LastItemSynchronizer() {
-            @Override
-            public void lastItemChanged(String lastItem) {
-                mLastItem = lastItem;
-            }
-        });
-
-        mPostViewModel = ViewModelProviders.of(this).get(PostViewModel.class);
-        mPostViewModel.getPosts().observe(this, new Observer<ArrayList<Post>>() {
-            @Override
-            public void onChanged(@Nullable ArrayList<Post> posts) {
-                if(posts == null) {
-                    Log.i("datachange", Integer.toString(0));
-                } else {
-                    Log.i("datachange", Integer.toString(posts.size()));
-                    mAdapter.changeDataSet(posts);
-                }
-            }
-        });
 
         if(mIsBestPost) {
             mAdapter = new PostRecyclerViewAdapter(getActivity(), mOauthRetrofit,
-                    mSharedPreferences, mPaginationSynchronizer, mIsBestPost);
-
-            mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
-                    getActivity(), mOauthRetrofit, mPostViewModel, mLinearLayoutManager,
-                    mLastItem, mPaginationSynchronizer, mSubredditName, mIsBestPost,
-                    mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadingMorePostsSuccess(),
-                    getResources().getConfiguration().locale));
+                    mSharedPreferences, mIsBestPost);
         } else {
             mAdapter = new PostRecyclerViewAdapter(getActivity(), mRetrofit,
-                    mSharedPreferences, mPaginationSynchronizer, mIsBestPost);
-
-            mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
-                    getActivity(), mRetrofit, mPostViewModel, mLinearLayoutManager,
-                    mLastItem, mPaginationSynchronizer, mSubredditName, mIsBestPost,
-                    mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadingMorePostsSuccess(),
-                    getResources().getConfiguration().locale));
+                    mSharedPreferences, mIsBestPost);
         }
         mPostRecyclerView.setAdapter(mAdapter);
 
-        if(savedInstanceState != null && savedInstanceState.containsKey(LAST_ITEM_STATE)) {
-            mLastItem = savedInstanceState.getString(LAST_ITEM_STATE);
+        String accessToken = getActivity().getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
+                .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
-            mPaginationSynchronizer.notifyLastItemChanged(mLastItem);
-            mPaginationSynchronizer.setLoadSuccess(savedInstanceState.getBoolean(LOAD_SUCCESS_STATE));
-            mPaginationSynchronizer.setLoadingState(savedInstanceState.getBoolean(LOADING_STATE_STATE));
-
-            mProgressBar.setVisibility(View.GONE);
-        } else {
-            if(mIsBestPost) {
-                fetchBestPost();
-            } else {
-                fetchPost();
-            }
-        }
+        PostViewModel.Factory factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
+                getResources().getConfiguration().locale, mIsBestPost);
+        mPostViewModel = ViewModelProviders.of(this, factory).get(PostViewModel.class);
+        mPostViewModel.getPosts().observe(this, posts -> mAdapter.submitList(posts));
 
         return rootView;
     }
 
-    private void fetchBestPost() {
-        mFetchPostErrorLinearLayout.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
+    @Override
+    public void refresh() {
 
-        RedditAPI api = mOauthRetrofit.create(RedditAPI.class);
-
-        String accessToken = getActivity().getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
-                .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
-        Call<String> bestPost = api.getBestPost(mLastItem, RedditUtils.getOAuthHeader(accessToken));
-        bestPost.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
-                if(getActivity() != null) {
-                    if(response.isSuccessful()) {
-                        ParsePost.parsePost(response.body(), getResources().getConfiguration().locale,
-                                new ParsePost.ParsePostListener() {
-                                    @Override
-                                    public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
-                                        if(isAdded() && getActivity() != null) {
-                                            mLastItem = lastItem;
-                                            mPaginationSynchronizer.notifyLastItemChanged(lastItem);
-                                            mPostViewModel.setPosts(newPosts);
-                                            mProgressBar.setVisibility(View.GONE);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onParsePostFail() {
-                                        Log.i("Post fetch error", "Error parsing data");
-                                        showErrorView();
-                                    }
-                                });
-                    } else {
-                        Log.i("Post fetch error", response.message());
-                        showErrorView();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                showErrorView();
-            }
-        });
     }
 
-    private void fetchPost() {
-        mFetchPostErrorLinearLayout.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
-
-        RedditAPI api = mRetrofit.create(RedditAPI.class);
-        Call<String> getPost = api.getPost(mSubredditName, mLastItem);
-        getPost.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
-                if(getActivity() != null) {
-                    if(response.isSuccessful()) {
-                        ParsePost.parsePost(response.body(), getResources().getConfiguration().locale,
-                                new ParsePost.ParsePostListener() {
-                                    @Override
-                                    public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
-                                        if(isAdded() && getActivity() != null) {
-                                            mLastItem = lastItem;
-                                            mPaginationSynchronizer.notifyLastItemChanged(lastItem);
-                                            mPostViewModel.setPosts(newPosts);
-                                            mProgressBar.setVisibility(View.GONE);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onParsePostFail() {
-                                        Log.i("Post fetch error", "Error parsing data");
-                                        showErrorView();
-                                    }
-                                });
-                    } else {
-                        Log.i("Post fetch error", response.message());
-                        showErrorView();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                showErrorView();
-            }
-        });
-    }
-
+    /*
     private void showErrorView() {
         mProgressBar.setVisibility(View.GONE);
         if(mIsBestPost) {
@@ -303,32 +159,5 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             });
             snackbar.show();
         }
-    }
-
-    @Override
-    public void refresh() {
-        mLastItem = null;
-        mPostRecyclerView.clearOnScrollListeners();
-        mPostRecyclerView.getRecycledViewPool().clear();
-
-        mPostViewModel.setPosts(null);
-
-        if(mIsBestPost) {
-            mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
-                    getActivity(), mOauthRetrofit, mPostViewModel, mLinearLayoutManager,
-                    mLastItem, mPaginationSynchronizer, mSubredditName, mIsBestPost,
-                    mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadingMorePostsSuccess(),
-                    getResources().getConfiguration().locale));
-
-            fetchBestPost();
-        } else {
-            mPostRecyclerView.addOnScrollListener(new PostPaginationScrollListener(
-                    getActivity(), mRetrofit, mPostViewModel, mLinearLayoutManager,
-                    mLastItem, mPaginationSynchronizer, mSubredditName, mIsBestPost,
-                    mPaginationSynchronizer.isLoading(), mPaginationSynchronizer.isLoadingMorePostsSuccess(),
-                    getResources().getConfiguration().locale));
-
-            fetchPost();
-        }
-    }
+    }*/
 }

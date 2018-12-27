@@ -1,30 +1,66 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.paging.LivePagedListBuilder;
+import android.arch.paging.PageKeyedDataSource;
+import android.arch.paging.PagedList;
+import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
+import java.util.Locale;
+import java.util.concurrent.Executor;
+
+import retrofit2.Retrofit;
 
 public class PostViewModel extends ViewModel {
-    private MutableLiveData<ArrayList<Post>> posts = new MutableLiveData<>();
+    private Executor executor;
+    LiveData<NetworkState> networkState;
+    LiveData<PagedList<Post>> posts;
+    LiveData<PageKeyedDataSource<String, Post>> liveDataSource;
 
-    LiveData<ArrayList<Post>> getPosts() {
-        if(posts == null) {
-            setPosts(new ArrayList<Post>());
-        }
+    public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, boolean isBestPost) {
+        //executor = Executors.newFixedThreadPool(5);
+
+        PostDataSourceFactory postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, isBestPost);
+        /*networkState = Transformations.switchMap(postDataSourceFactory.getMutableLiveData(),
+                (Function<PostDataSource, LiveData<NetworkState>>) PostDataSource::getNetworkState);*/
+        liveDataSource = postDataSourceFactory.getMutableLiveData();
+
+        PagedList.Config pagedListConfig =
+                (new PagedList.Config.Builder())
+                        .setEnablePlaceholders(false)
+                        .setPageSize(25)
+                        .build();
+
+        posts = (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
+    }
+
+    LiveData<PagedList<Post>> getPosts() {
         return posts;
     }
 
-    void setPosts(ArrayList<Post> posts) {
-        this.posts.postValue(posts);
-    }
+    /*public LiveData<NetworkState> getNetworkState() {
+        return networkState;
+    }*/
 
-    void addPosts(ArrayList<Post> newPosts) {
-        ArrayList<Post> posts = this.posts.getValue();
-        if(posts != null) {
-            posts.addAll(newPosts);
-            this.posts.postValue(posts);
+    public static class Factory extends ViewModelProvider.NewInstanceFactory {
+        private Retrofit retrofit;
+        private String accessToken;
+        private Locale locale;
+        private boolean isBestPost;
+
+        public Factory(Retrofit retrofit, String accessToken, Locale locale, boolean isBestPost) {
+            this.retrofit = retrofit;
+            this.accessToken = accessToken;
+            this.locale = locale;
+            this.isBestPost = isBestPost;
+        }
+
+        @NonNull
+        @Override
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+            return (T) new PostViewModel(retrofit, accessToken, locale, isBestPost);
         }
     }
 }
