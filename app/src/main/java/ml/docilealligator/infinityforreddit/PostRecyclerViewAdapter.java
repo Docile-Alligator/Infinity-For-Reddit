@@ -21,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -35,8 +34,6 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-
-import java.util.List;
 
 import CustomView.AspectRatioGifImageView;
 import SubredditDatabase.SubredditDao;
@@ -57,16 +54,22 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     private SharedPreferences mSharedPreferences;
     private RequestManager glide;
     private SubredditDao subredditDao;
-    private boolean isLoadingMorePostSuccess = true;
     private boolean canStartActivity = true;
     private boolean hasMultipleSubreddits;
 
     private static final int VIEW_TYPE_DATA = 0;
-    private static final int VIEW_TYPE_LOADING = 1;
+    private static final int VIEW_TYPE_ERROR = 1;
+    private static final int VIEW_TYPE_LOADING = 2;
 
     private NetworkState networkState;
+    private RetryLoadingMoreCallback retryLoadingMoreCallback;
 
-    PostRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, SharedPreferences sharedPreferences, boolean hasMultipleSubreddits) {
+    interface RetryLoadingMoreCallback {
+        void retryLoadingMore();
+    }
+
+    PostRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, SharedPreferences sharedPreferences, boolean hasMultipleSubreddits,
+                            RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         if(context != null) {
             mContext = context;
@@ -75,6 +78,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
             this.hasMultipleSubreddits = hasMultipleSubreddits;
             glide = Glide.with(mContext.getApplicationContext());
             subredditDao = SubredditRoomDatabase.getDatabase(mContext.getApplicationContext()).subredditDao();
+            this.retryLoadingMoreCallback = retryLoadingMoreCallback;
         }
     }
 
@@ -100,15 +104,13 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
         if(viewType == VIEW_TYPE_DATA) {
             CardView cardView = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
             return new DataViewHolder(cardView);
+        } else if(viewType == VIEW_TYPE_ERROR) {
+            RelativeLayout relativeLayout = (RelativeLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_error, parent, false);
+            return new ErrorViewHolder(relativeLayout);
         } else {
-            LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_progress_bar, parent, false);
-            return new LoadingViewHolder(linearLayout);
+            RelativeLayout relativeLayout = (RelativeLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_loading, parent, false);
+            return new LoadingViewHolder(relativeLayout);
         }
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List<Object> payloads) {
-        onBindViewHolder(holder, position);
     }
 
     @Override
@@ -129,40 +131,37 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
 
                 if(post.getSubredditIconUrl() == null) {
                     new LoadSubredditIconAsyncTask(subredditDao, subredditName,
-                            new LoadSubredditIconAsyncTask.LoadSubredditIconAsyncTaskListener() {
-                                @Override
-                                public void loadIconSuccess(String iconImageUrl) {
-                                    if(mContext != null && getItemCount() > 0) {
-                                        if(!iconImageUrl.equals("")) {
-                                            glide.load(iconImageUrl)
-                                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                                    .error(glide.load(R.drawable.subreddit_default_icon))
-                                                    .listener(new RequestListener<Drawable>() {
-                                                        @Override
-                                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                                            return false;
-                                                        }
+                            iconImageUrl -> {
+                                if(mContext != null && getItemCount() > 0) {
+                                    if(!iconImageUrl.equals("")) {
+                                        glide.load(iconImageUrl)
+                                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                                .error(glide.load(R.drawable.subreddit_default_icon))
+                                                .listener(new RequestListener<Drawable>() {
+                                                    @Override
+                                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                                        return false;
+                                                    }
 
-                                                        @Override
-                                                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                                            if(resource instanceof Animatable) {
-                                                                //This is a gif
-                                                                //((Animatable) resource).start();
-                                                                ((DataViewHolder) holder).subredditIconGifImageView.startAnimation();
-                                                            }
-                                                            return false;
+                                                    @Override
+                                                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                                        if(resource instanceof Animatable) {
+                                                            //This is a gif
+                                                            //((Animatable) resource).start();
+                                                            ((DataViewHolder) holder).subredditIconGifImageView.startAnimation();
                                                         }
-                                                    })
-                                                    .into(((DataViewHolder) holder).subredditIconGifImageView);
-                                        } else {
-                                            glide.load(R.drawable.subreddit_default_icon)
-                                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                                    .into(((DataViewHolder) holder).subredditIconGifImageView);
-                                        }
+                                                        return false;
+                                                    }
+                                                })
+                                                .into(((DataViewHolder) holder).subredditIconGifImageView);
+                                    } else {
+                                        glide.load(R.drawable.subreddit_default_icon)
+                                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                                .into(((DataViewHolder) holder).subredditIconGifImageView);
+                                    }
 
-                                        if(holder.getAdapterPosition() >= 0) {
-                                            post.setSubredditIconUrl(iconImageUrl);
-                                        }
+                                    if(holder.getAdapterPosition() >= 0) {
+                                        post.setSubredditIconUrl(iconImageUrl);
                                     }
                                 }
                             }).execute();
@@ -341,21 +340,18 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         ((DataViewHolder) holder).typeTextView.setText("VIDEO");
 
                         final Uri videoUri = Uri.parse(post.getVideoUrl());
-                        ((DataViewHolder) holder).imageView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent intent = new Intent(mContext, ViewVideoActivity.class);
-                                intent.setData(videoUri);
-                                intent.putExtra(ViewVideoActivity.TITLE_KEY, title);
-                                intent.putExtra(ViewVideoActivity.IS_DASH_VIDEO_KEY, post.isDashVideo());
-                                intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, post.isDownloadableGifOrVideo());
-                                if(post.isDownloadableGifOrVideo()) {
-                                    intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, post.getGifOrVideoDownloadUrl());
-                                    intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, subredditName);
-                                    intent.putExtra(ViewVideoActivity.ID_KEY, id);
-                                }
-                                mContext.startActivity(intent);
+                        ((DataViewHolder) holder).imageView.setOnClickListener(view -> {
+                            Intent intent = new Intent(mContext, ViewVideoActivity.class);
+                            intent.setData(videoUri);
+                            intent.putExtra(ViewVideoActivity.TITLE_KEY, title);
+                            intent.putExtra(ViewVideoActivity.IS_DASH_VIDEO_KEY, post.isDashVideo());
+                            intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, post.isDownloadableGifOrVideo());
+                            if(post.isDownloadableGifOrVideo()) {
+                                intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, post.getGifOrVideoDownloadUrl());
+                                intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, subredditName);
+                                intent.putExtra(ViewVideoActivity.ID_KEY, id);
                             }
+                            mContext.startActivity(intent);
                         });
                         break;
                     case Post.NO_PREVIEW_LINK_TYPE:
@@ -507,36 +503,6 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                     }
                 });
             }
-        } else if(holder instanceof LoadingViewHolder) {
-            ((LoadingViewHolder) holder).retryButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //mPaginationSynchronizer.getPaginationRetryNotifier().retry();
-                    ((LoadingViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
-                    ((LoadingViewHolder) holder).relativeLayout.setVisibility(View.GONE);
-                }
-            });
-
-            PaginationNotifier mPaginationNotifier = new PaginationNotifier() {
-                @Override
-                public void LoadMorePostSuccess() {
-                    isLoadingMorePostSuccess = true;
-                }
-
-                @Override
-                public void LoadMorePostFail() {
-                    ((LoadingViewHolder) holder).progressBar.setVisibility(View.GONE);
-                    ((LoadingViewHolder) holder).relativeLayout.setVisibility(View.VISIBLE);
-                    isLoadingMorePostSuccess = false;
-                }
-            };
-
-            /*mPaginationSynchronizer.setPaginationNotifier(mPaginationNotifier);
-
-            if(!mPaginationSynchronizer.isLoadingMorePostsSuccess()) {
-                ((LoadingViewHolder) holder).progressBar.setVisibility(View.GONE);
-                ((LoadingViewHolder) holder).relativeLayout.setVisibility(View.VISIBLE);
-            }*/
         }
     }
 
@@ -575,25 +541,42 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
 
     @Override
     public int getItemViewType(int position) {
-        return (position >= getItemCount() ? VIEW_TYPE_LOADING : VIEW_TYPE_DATA);
+        // Reached at the end
+        if (hasExtraRow() && position == getItemCount() - 1) {
+            if (networkState.getStatus() == NetworkState.Status.LOADING) {
+                return VIEW_TYPE_LOADING;
+            } else {
+                return VIEW_TYPE_ERROR;
+            }
+        } else {
+            return VIEW_TYPE_DATA;
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        if(hasExtraRow()) {
+            return super.getItemCount() + 1;
+        }
+        return super.getItemCount();
     }
 
     private boolean hasExtraRow() {
-        return networkState != null && networkState != NetworkState.LOADED;
+        return networkState != null && networkState.getStatus() != NetworkState.Status.SUCCESS;
     }
 
-    public void setNetworkState(NetworkState newNetworkState) {
+    void setNetworkState(NetworkState newNetworkState) {
         NetworkState previousState = this.networkState;
         boolean previousExtraRow = hasExtraRow();
         this.networkState = newNetworkState;
         boolean newExtraRow = hasExtraRow();
         if (previousExtraRow != newExtraRow) {
             if (previousExtraRow) {
-                notifyItemRemoved(getItemCount());
+                notifyItemRemoved(super.getItemCount());
             } else {
-                notifyItemInserted(getItemCount());
+                notifyItemInserted(super.getItemCount());
             }
-        } else if (newExtraRow && previousState != newNetworkState) {
+        } else if (newExtraRow && !previousState.equals(newNetworkState)) {
             notifyItemChanged(getItemCount() - 1);
         }
     }
@@ -626,12 +609,21 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
         }
     }
 
-    class LoadingViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.progress_bar_footer_progress_bar_item) ProgressBar progressBar;
+    class ErrorViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.relative_layout_footer_progress_bar_item) RelativeLayout relativeLayout;
         @BindView(R.id.retry_button_footer_progress_bar_item) Button retryButton;
 
-        LoadingViewHolder(View itemView) {
+        ErrorViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            retryButton.setOnClickListener(view -> retryLoadingMoreCallback.retryLoadingMore());
+        }
+    }
+
+    class LoadingViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.progress_bar_footer_progress_bar_item) ProgressBar progressBar;
+
+        LoadingViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
@@ -660,14 +652,6 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
             ((DataViewHolder) holder).noPreviewLinkImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).upvoteButton.clearColorFilter();
             ((DataViewHolder) holder).downvoteButton.clearColorFilter();
-        } else if(holder instanceof LoadingViewHolder) {
-            if(isLoadingMorePostSuccess) {
-                ((LoadingViewHolder) holder).relativeLayout.setVisibility(View.GONE);
-                ((LoadingViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
-            } else {
-                ((LoadingViewHolder) holder).relativeLayout.setVisibility(View.VISIBLE);
-                ((LoadingViewHolder) holder).progressBar.setVisibility(View.GONE);
-            }
         }
     }
 }

@@ -19,16 +19,21 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
     private boolean isBestPost;
     private String subredditName;
 
-    private MutableLiveData networkState;
-    private MutableLiveData initialLoading;
+    private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
+    private MutableLiveData<NetworkState> initialLoadStateLiveData;
+
+    private LoadInitialParams<String> initialParams;
+    private LoadInitialCallback<String, Post> initialCallback;
+    private LoadParams<String> params;
+    private LoadCallback<String, Post> callback;
 
     PostDataSource(Retrofit retrofit, String accessToken, Locale locale, boolean isBestPost) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
         this.isBestPost = isBestPost;
-        networkState = new MutableLiveData();
-        initialLoading = new MutableLiveData();
+        paginationNetworkStateLiveData = new MutableLiveData();
+        initialLoadStateLiveData = new MutableLiveData();
 
     }
 
@@ -37,22 +42,24 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         this.locale = locale;
         this.isBestPost = isBestPost;
         this.subredditName = subredditName;
-        networkState = new MutableLiveData();
-        initialLoading = new MutableLiveData();
+        paginationNetworkStateLiveData = new MutableLiveData();
+        initialLoadStateLiveData = new MutableLiveData();
     }
 
-    MutableLiveData getNetworkState() {
-        return networkState;
+    MutableLiveData getPaginationNetworkStateLiveData() {
+        return paginationNetworkStateLiveData;
     }
 
-    MutableLiveData getInitialLoading() {
-        return initialLoading;
+    MutableLiveData getInitialLoadStateLiveData() {
+        return initialLoadStateLiveData;
     }
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull final LoadInitialCallback<String, Post> callback) {
-        initialLoading.postValue(NetworkState.LOADING);
-        networkState.postValue(NetworkState.LOADING);
+        initialParams = params;
+        initialCallback = callback;
+
+        initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
         if(isBestPost) {
             RedditAPI api = retrofit.create(RedditAPI.class);
@@ -67,26 +74,25 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                                     @Override
                                     public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
                                         callback.onResult(newPosts, null, lastItem);
-                                        initialLoading.postValue(NetworkState.LOADED);
-                                        networkState.postValue(NetworkState.LOADED);
+                                        initialLoadStateLiveData.postValue(NetworkState.LOADED);
                                     }
 
                                     @Override
                                     public void onParsePostFail() {
                                         Log.i("Post fetch error", "Error parsing data");
+                                        initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                                     }
                                 });
                     } else {
                         Log.i("Post fetch error", response.message());
-                        initialLoading.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
-                        networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
+                        initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                     }
                 }
 
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
                     String errorMessage = t == null ? "unknown error" : t.getMessage();
-                    networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
+                    initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
                 }
             });
         } else {
@@ -101,26 +107,25 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                                         @Override
                                         public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
                                             callback.onResult(newPosts, null, lastItem);
-                                            initialLoading.postValue(NetworkState.LOADED);
-                                            networkState.postValue(NetworkState.LOADED);
+                                            initialLoadStateLiveData.postValue(NetworkState.LOADED);
                                         }
 
                                         @Override
                                         public void onParsePostFail() {
                                             Log.i("Post fetch error", "Error parsing data");
+                                            initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                                         }
                                     });
                         } else {
                             Log.i("Post fetch error", response.message());
-                            initialLoading.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
-                            networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
+                            initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                         }
                 }
 
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
                     String errorMessage = t == null ? "unknown error" : t.getMessage();
-                    networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
+                    initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
                 }
             });
         }
@@ -133,7 +138,10 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
     @Override
     public void loadAfter(@NonNull LoadParams<String> params, @NonNull final LoadCallback<String, Post> callback) {
-        networkState.postValue(NetworkState.LOADING);
+        this.params = params;
+        this.callback = callback;
+
+        paginationNetworkStateLiveData.postValue(NetworkState.LOADING);
 
         if(isBestPost) {
             RedditAPI api = retrofit.create(RedditAPI.class);
@@ -147,24 +155,25 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                             @Override
                             public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
                                 callback.onResult(newPosts, lastItem);
-                                networkState.postValue(NetworkState.LOADED);
+                                paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                             }
 
                             @Override
                             public void onParsePostFail() {
                                 Log.i("Best post", "Error parsing data");
+                                paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                             }
                         });
                     } else {
                         Log.i("best post", response.message());
-                        networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
+                        paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                     }
                 }
 
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
                     String errorMessage = t == null ? "unknown error" : t.getMessage();
-                    networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
+                    paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
                 }
             });
         } else {
@@ -178,26 +187,35 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                             @Override
                             public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
                                 callback.onResult(newPosts, lastItem);
-                                networkState.postValue(NetworkState.LOADED);
+                                paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                             }
 
                             @Override
                             public void onParsePostFail() {
                                 Log.i("Best post", "Error parsing data");
+                                paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                             }
                         });
                     } else {
-                        Log.i("best post", response.message());
-                        networkState.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
+                        Log.i("Best post", response.message());
+                        paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                     }
                 }
 
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
                     String errorMessage = t == null ? "unknown error" : t.getMessage();
-                    networkState.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
+                    paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
                 }
             });
         }
+    }
+
+    void retry() {
+        loadInitial(initialParams, initialCallback);
+    }
+
+    void retryLoadingMore() {
+        loadAfter(params, callback);
     }
 }

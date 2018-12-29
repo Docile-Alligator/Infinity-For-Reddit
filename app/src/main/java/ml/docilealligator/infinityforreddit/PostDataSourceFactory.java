@@ -11,40 +11,48 @@ class PostDataSourceFactory extends DataSource.Factory {
     private Retrofit retrofit;
     private String accessToken;
     private Locale locale;
-    private boolean isBestPost;
     private String subredditName;
 
-    private MutableLiveData<PostDataSource> mutableLiveData;
+    private PostDataSource postDataSource;
+    private MutableLiveData<PostDataSource> postDataSourceLiveData;
 
     PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, boolean isBestPost) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
-        this.isBestPost = isBestPost;
-        mutableLiveData = new MutableLiveData<>();
-    }
+        postDataSourceLiveData = new MutableLiveData<>();
 
-    PostDataSourceFactory(Retrofit retrofit, Locale locale, boolean isBestPost, String subredditName) {
-        this.retrofit = retrofit;
-        this.locale = locale;
-        this.isBestPost = isBestPost;
-        mutableLiveData = new MutableLiveData<>();
-        this.subredditName = subredditName;
-    }
-
-    @Override
-    public DataSource create() {
-        PostDataSource postDataSource;
         if(isBestPost) {
             postDataSource = new PostDataSource(retrofit, accessToken, locale, isBestPost);
         } else {
             postDataSource = new PostDataSource(retrofit, locale, isBestPost, subredditName);
         }
-        mutableLiveData.postValue(postDataSource);
+    }
+
+    PostDataSourceFactory(Retrofit retrofit, Locale locale, boolean isBestPost, String subredditName) {
+        this.retrofit = retrofit;
+        this.locale = locale;
+        this.subredditName = subredditName;
+        postDataSourceLiveData = new MutableLiveData<>();
+
+        if(isBestPost) {
+            postDataSource = new PostDataSource(retrofit, accessToken, locale, isBestPost);
+        } else {
+            postDataSource = new PostDataSource(retrofit, locale, isBestPost, subredditName);
+        }
+    }
+
+    @Override
+    public DataSource create() {
+        postDataSourceLiveData.postValue(postDataSource);
         return postDataSource;
     }
 
-    public MutableLiveData<PostDataSource> getMutableLiveData() {
-        return mutableLiveData;
+    public MutableLiveData<PostDataSource> getPostDataSourceLiveData() {
+        return postDataSourceLiveData;
+    }
+
+    PostDataSource getPostDataSource() {
+        return postDataSource;
     }
 }

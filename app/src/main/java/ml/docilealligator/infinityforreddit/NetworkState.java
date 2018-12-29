@@ -2,7 +2,7 @@ package ml.docilealligator.infinityforreddit;
 
 class NetworkState {
     public enum Status{
-        RUNNING,
+        LOADING,
         SUCCESS,
         FAILED
     }
@@ -21,7 +21,7 @@ class NetworkState {
 
     static {
         LOADED=new NetworkState(Status.SUCCESS,"Success");
-        LOADING=new NetworkState(Status.RUNNING,"Running");
+        LOADING=new NetworkState(Status.LOADING,"Loading");
     }
 
     public Status getStatus() {

@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,24 +99,15 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if(!mIsBestPost) {
             mSubredditName = getArguments().getString(SUBREDDIT_NAME_KEY);
         } else {
-            /*mFetchPostErrorLinearLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(mIsBestPost) {
-                        fetchBestPost();
-                    } else {
-                        fetchPost();
-                    }
-                }
-            });*/
+            mFetchPostErrorLinearLayout.setOnClickListener(view -> mPostViewModel.retry());
         }
 
         if(mIsBestPost) {
             mAdapter = new PostRecyclerViewAdapter(getActivity(), mOauthRetrofit,
-                    mSharedPreferences, mIsBestPost);
+                    mSharedPreferences, mIsBestPost, () -> mPostViewModel.retryLoadingMore());
         } else {
             mAdapter = new PostRecyclerViewAdapter(getActivity(), mRetrofit,
-                    mSharedPreferences, mIsBestPost);
+                    mSharedPreferences, mIsBestPost, () -> mPostViewModel.retryLoadingMore());
         }
         mPostRecyclerView.setAdapter(mAdapter);
 
@@ -132,14 +124,21 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
         mPostViewModel = ViewModelProviders.of(this, factory).get(PostViewModel.class);
         mPostViewModel.getPosts().observe(this, posts -> mAdapter.submitList(posts));
+
         mPostViewModel.getInitialLoadingState().observe(this, networkState -> {
             if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
                 mProgressBar.setVisibility(View.GONE);
             } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
                 showErrorView();
             } else {
+                mFetchPostErrorLinearLayout.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.VISIBLE);
             }
+        });
+
+        mPostViewModel.getPaginationNetworkState().observe(this, networkState -> {
+            Log.i("networkstate", networkState.getStatus().toString());
+            mAdapter.setNetworkState(networkState);
         });
 
         return rootView;
@@ -159,16 +158,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
         } else {
             Snackbar snackbar = Snackbar.make(mCoordinatorLayout, "Error getting post", Snackbar.LENGTH_INDEFINITE);
-            snackbar.setAction(R.string.retry, new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    /*if (mIsBestPost) {
-                        fetchBestPost();
-                    } else {
-                        fetchPost();
-                    }*/
-                }
-            });
+            snackbar.setAction(R.string.retry, view -> mPostViewModel.retry());
             snackbar.show();
         }
     }
