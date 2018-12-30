@@ -12,6 +12,7 @@ class PostDataSourceFactory extends DataSource.Factory {
     private String accessToken;
     private Locale locale;
     private String subredditName;
+    private boolean isBestPost;
 
     private PostDataSource postDataSource;
     private MutableLiveData<PostDataSource> postDataSourceLiveData;
@@ -21,12 +22,7 @@ class PostDataSourceFactory extends DataSource.Factory {
         this.accessToken = accessToken;
         this.locale = locale;
         postDataSourceLiveData = new MutableLiveData<>();
-
-        if(isBestPost) {
-            postDataSource = new PostDataSource(retrofit, accessToken, locale, isBestPost);
-        } else {
-            postDataSource = new PostDataSource(retrofit, locale, isBestPost, subredditName);
-        }
+        this.isBestPost = isBestPost;
     }
 
     PostDataSourceFactory(Retrofit retrofit, Locale locale, boolean isBestPost, String subredditName) {
@@ -34,16 +30,17 @@ class PostDataSourceFactory extends DataSource.Factory {
         this.locale = locale;
         this.subredditName = subredditName;
         postDataSourceLiveData = new MutableLiveData<>();
+        this.isBestPost = isBestPost;
+    }
 
+    @Override
+    public DataSource create() {
         if(isBestPost) {
             postDataSource = new PostDataSource(retrofit, accessToken, locale, isBestPost);
         } else {
             postDataSource = new PostDataSource(retrofit, locale, isBestPost, subredditName);
         }
-    }
 
-    @Override
-    public DataSource create() {
         postDataSourceLiveData.postValue(postDataSource);
         return postDataSource;
     }

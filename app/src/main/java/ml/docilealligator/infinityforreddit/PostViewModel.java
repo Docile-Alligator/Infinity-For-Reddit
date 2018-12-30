@@ -13,13 +13,13 @@ import java.util.Locale;
 import retrofit2.Retrofit;
 
 public class PostViewModel extends ViewModel {
-    private PostDataSource postDataSource;
+    private PostDataSourceFactory postDataSourceFactory;
     private LiveData<NetworkState> paginationNetworkState;
     private LiveData<NetworkState> initialLoadingState;
     private LiveData<PagedList<Post>> posts;
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, boolean isBestPost) {
-        PostDataSourceFactory postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, isBestPost);
+        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, isBestPost);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 dataSource -> dataSource.getInitialLoadStateLiveData());
@@ -32,11 +32,10 @@ public class PostViewModel extends ViewModel {
                         .build();
 
         posts = (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
-        postDataSource = postDataSourceFactory.getPostDataSource();
     }
 
     public PostViewModel(Retrofit retrofit, Locale locale, boolean isBestPost, String subredditName) {
-        PostDataSourceFactory postDataSourceFactory = new PostDataSourceFactory(retrofit, locale, isBestPost, subredditName);
+        postDataSourceFactory = new PostDataSourceFactory(retrofit, locale, isBestPost, subredditName);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 dataSource -> dataSource.getInitialLoadStateLiveData());
@@ -50,7 +49,6 @@ public class PostViewModel extends ViewModel {
                         .build();
 
         posts = (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
-        postDataSource = postDataSourceFactory.getPostDataSource();
     }
 
     LiveData<PagedList<Post>> getPosts() {
@@ -61,16 +59,20 @@ public class PostViewModel extends ViewModel {
         return paginationNetworkState;
     }
 
-    public LiveData<NetworkState> getInitialLoadingState() {
+    LiveData<NetworkState> getInitialLoadingState() {
         return initialLoadingState;
     }
 
+    void refresh() {
+        postDataSourceFactory.getPostDataSource().invalidate();
+    }
+
     void retry() {
-        postDataSource.retry();
+        postDataSourceFactory.getPostDataSource().retry();
     }
 
     void retryLoadingMore() {
-        postDataSource.retryLoadingMore();
+        postDataSourceFactory.getPostDataSource().retryLoadingMore();
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
