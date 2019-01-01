@@ -20,6 +20,6 @@ public interface SubredditDao {
     @Query("SELECT * from subreddits WHERE name = :namePrefixed")
     LiveData<SubredditData> getSubredditLiveDataByNamePrefixed(String namePrefixed);
 
-    @Query("SELECT * from subreddits WHERE name = :namePrefixed")
+    @Query("SELECT * from subreddits WHERE name = :namePrefixed LIMIT 1")
     SubredditData getSubredditData(String namePrefixed);
 }

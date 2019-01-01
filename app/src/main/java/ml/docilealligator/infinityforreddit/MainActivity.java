@@ -202,12 +202,12 @@ public class MainActivity extends AppCompatActivity {
     private void loadUserData(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             if (!mFetchUserInfoSuccess) {
-                FetchUserInfo.fetchUserInfo(mOauthRetrofit, mAuthInfoSharedPreferences, new FetchUserInfo.FetchUserInfoListener() {
+                FetchMyInfo.fetchMyInfo(mOauthRetrofit, mAuthInfoSharedPreferences, new FetchMyInfo.FetchUserMyListener() {
                     @Override
-                    public void onFetchUserInfoSuccess(String response) {
-                        ParseUserInfo.parseUserInfo(response, new ParseUserInfo.ParseUserInfoListener() {
+                    public void onFetchMyInfoSuccess(String response) {
+                        ParseMyInfo.parseMyInfo(response, new ParseMyInfo.ParseMyInfoListener() {
                             @Override
-                            public void onParseUserInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
+                            public void onParseMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
                                 mNameTextView.setText(name);
                                 if (!mProfileImageUrl.equals("")) {
                                     glide.load(profileImageUrl).into(mProfileImageView);
@@ -233,14 +233,14 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void onParseUserInfoFail() {
+                            public void onParseMyInfoFail() {
                                 mFetchUserInfoSuccess = false;
                             }
                         });
                     }
 
                     @Override
-                    public void onFetchUserInfoFail() {
+                    public void onFetchMyInfoFail() {
                         mFetchUserInfoSuccess = false;
                     }
                 });

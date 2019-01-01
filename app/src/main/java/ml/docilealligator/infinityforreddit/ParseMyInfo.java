@@ -7,19 +7,19 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-class ParseUserInfo {
-    interface ParseUserInfoListener {
-        void onParseUserInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma);
-        void onParseUserInfoFail();
+class ParseMyInfo {
+    interface ParseMyInfoListener {
+        void onParseMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma);
+        void onParseMyInfoFail();
     }
 
-    static void parseUserInfo(String response, ParseUserInfoListener parseUserInfoListener) {
-        new ParseUserInfoAsyncTask(response, parseUserInfoListener).execute();
+    static void parseMyInfo(String response, ParseMyInfoListener parseMyInfoListener) {
+        new ParseMyInfoAsyncTask(response, parseMyInfoListener).execute();
     }
 
-    private static class ParseUserInfoAsyncTask extends AsyncTask<Void, Void, Void> {
+    private static class ParseMyInfoAsyncTask extends AsyncTask<Void, Void, Void> {
         private JSONObject jsonResponse;
-        private ParseUserInfoListener parseUserInfoListener;
+        private ParseMyInfoListener parseMyInfoListener;
         private boolean parseFailed;
 
         private String name;
@@ -27,14 +27,14 @@ class ParseUserInfo {
         private String bannerImageUrl;
         private int karma;
 
-        ParseUserInfoAsyncTask(String response, ParseUserInfoListener parseUserInfoListener){
+        ParseMyInfoAsyncTask(String response, ParseMyInfoListener parseMyInfoListener){
             try {
                 jsonResponse = new JSONObject(response);
-                this.parseUserInfoListener = parseUserInfoListener;
+                this.parseMyInfoListener = parseMyInfoListener;
                 parseFailed = false;
             } catch (JSONException e) {
                 Log.i("user info json error", e.getMessage());
-                parseUserInfoListener.onParseUserInfoFail();
+                parseMyInfoListener.onParseMyInfoFail();
             }
         }
 
@@ -43,7 +43,9 @@ class ParseUserInfo {
             try {
                 name = jsonResponse.getString(JSONUtils.NAME_KEY);
                 profileImageUrl = Html.fromHtml(jsonResponse.getString(JSONUtils.ICON_IMG_KEY)).toString();
-                bannerImageUrl = Html.fromHtml(jsonResponse.getJSONObject(JSONUtils.SUBREDDIT_KEY).getString(JSONUtils.BANNER_IMG_KEY)).toString();
+                if(!jsonResponse.isNull(JSONUtils.SUBREDDIT_KEY)) {
+                    bannerImageUrl = Html.fromHtml(jsonResponse.getJSONObject(JSONUtils.SUBREDDIT_KEY).getString(JSONUtils.BANNER_IMG_KEY)).toString();
+                }
                 int linkKarma = jsonResponse.getInt(JSONUtils.LINK_KARMA_KEY);
                 int commentKarma = jsonResponse.getInt(JSONUtils.COMMENT_KARMA_KEY);
                 karma = linkKarma + commentKarma;
@@ -57,9 +59,9 @@ class ParseUserInfo {
         @Override
         protected void onPostExecute(Void aVoid) {
             if(!parseFailed) {
-                parseUserInfoListener.onParseUserInfoSuccess(name, profileImageUrl, bannerImageUrl, karma);
+                parseMyInfoListener.onParseMyInfoSuccess(name, profileImageUrl, bannerImageUrl, karma);
             } else {
-                parseUserInfoListener.onParseUserInfoFail();
+                parseMyInfoListener.onParseMyInfoFail();
             }
         }
     }

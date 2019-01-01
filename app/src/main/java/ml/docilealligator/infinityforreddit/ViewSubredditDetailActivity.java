@@ -273,7 +273,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
 
     private static class InsertSubredditDataAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        private final SubredditDao mSubredditDao;
+        private SubredditDao mSubredditDao;
         private SubredditData subredditData;
 
         InsertSubredditDataAsyncTask(SubredditRoomDatabase subredditDb, SubredditData subredditData) {

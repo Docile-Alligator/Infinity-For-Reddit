@@ -4,14 +4,14 @@ package ml.docilealligator.infinityforreddit;
  * Created by alex on 2/25/18.
  */
 
-class JSONUtils {
-    static final String DATA_KEY = "data";
+public class JSONUtils {
+    public static final String DATA_KEY = "data";
     static final String AFTER_KEY = "after";
     static final String MODHASH_KEY = "modhash";
     static final String CHILDREN_KEY = "children";
     static final String COUNT_KEY = "count";
     static final String TITLE_KEY = "title";
-    static final String NAME_KEY = "name";
+    public static final String NAME_KEY = "name";
     static final String SUBREDDIT_NAME_PREFIX_KEY = "subreddit_name_prefixed";
     static final String SELFTEXT_HTML_KEY = "selftext_html";
     static final String AUTHOR_KEY = "author";
@@ -51,13 +51,13 @@ class JSONUtils {
     static final String DEPTH_KEY = "depth";
     static final String ID_KEY = "id";
     static final String SCORE_HIDDEN_KEY = "score_hidden";
-    static final String SUBREDDIT_KEY = "subreddit";
-    static final String BANNER_IMG_KEY = "banner_img";
+    public static final String SUBREDDIT_KEY = "subreddit";
+    public static final String BANNER_IMG_KEY = "banner_img";
     static final String BANNER_BACKGROUND_IMAGE_KEY = "banner_background_image";
-    static final String ICON_IMG_KEY = "icon_img";
+    public static final String ICON_IMG_KEY = "icon_img";
     static final String COMMUNITY_ICON_KEY = "community_icon";
-    static final String LINK_KARMA_KEY = "link_karma";
-    static final String COMMENT_KARMA_KEY = "comment_karma";
+    public static final String LINK_KARMA_KEY = "link_karma";
+    public static final String COMMENT_KARMA_KEY = "comment_karma";
     static final String DISPLAY_NAME = "display_name";
     static final String SUBREDDIT_TYPE_KEY = "subreddit_type";
     static final String SUBREDDIT_TYPE_VALUE_USER = "user";
@@ -66,4 +66,6 @@ class JSONUtils {
     static final String ACTIVE_USER_COUNT_KEY = "active_user_count";
     static final String DISPLAY_NAME_PREFIXED_KEY = "display_name_prefixed";
     static final String LINK_ID_KEY = "link_id";
+    public static final String IS_GOLD_KEY = "is_gold";
+    public static final String IS_FRIEND_KEY = "is_friend";
 }

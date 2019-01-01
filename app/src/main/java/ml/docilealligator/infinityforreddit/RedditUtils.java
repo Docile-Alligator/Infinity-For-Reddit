@@ -9,7 +9,7 @@ import java.util.Map;
  * Created by alex on 2/23/18.
  */
 
-class RedditUtils {
+public class RedditUtils {
     static final String OAUTH_URL ="https://www.reddit.com/api/v1/authorize.compact";
     static final String OAUTH_API_BASE_URI = "https://oauth.reddit.com";
     static final String API_BASE_URI = "https://www.reddit.com";
@@ -53,7 +53,7 @@ class RedditUtils {
         return params;
     }
 
-    static Map<String, String> getOAuthHeader(String accessToken) {
+    public static Map<String, String> getOAuthHeader(String accessToken) {
         Map<String, String> params = new HashMap<>();
         params.put(RedditUtils.AUTHORIZATION_KEY, RedditUtils.AUTHORIZATION_BASE + accessToken);
         params.put(RedditUtils.USER_AGENT_KEY, RedditUtils.USER_AGENT);

@@ -38,6 +38,8 @@ import com.bumptech.glide.request.target.Target;
 import CustomView.AspectRatioGifImageView;
 import SubredditDatabase.SubredditDao;
 import SubredditDatabase.SubredditRoomDatabase;
+import User.UserDao;
+import User.UserRoomDatabase;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -54,6 +56,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     private SharedPreferences mSharedPreferences;
     private RequestManager glide;
     private SubredditDao subredditDao;
+    private UserDao userDao;
     private boolean canStartActivity = true;
     private boolean hasMultipleSubreddits;
 
@@ -78,6 +81,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
             this.hasMultipleSubreddits = hasMultipleSubreddits;
             glide = Glide.with(mContext.getApplicationContext());
             subredditDao = SubredditRoomDatabase.getDatabase(mContext.getApplicationContext()).subredditDao();
+            userDao = UserRoomDatabase.getDatabase(mContext.getApplicationContext()).userDao();
             this.retryLoadingMoreCallback = retryLoadingMoreCallback;
         }
     }
@@ -122,6 +126,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
             } else {
                 final String id = post.getFullName();
                 final String subredditName = post.getSubredditNamePrefixed();
+                String author = "u/" + post.getAuthor();
                 final String postTime = post.getPostTime();
                 final String title = post.getTitle();
                 final String permalink = post.getPermalink();
@@ -129,115 +134,193 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                 int gilded = post.getGilded();
                 boolean nsfw = post.isNSFW();
 
-                if(post.getSubredditIconUrl() == null) {
-                    new LoadSubredditIconAsyncTask(subredditDao, subredditName,
-                            iconImageUrl -> {
-                                if(mContext != null && getItemCount() > 0) {
-                                    if(!iconImageUrl.equals("")) {
-                                        glide.load(iconImageUrl)
-                                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                                .error(glide.load(R.drawable.subreddit_default_icon))
-                                                .listener(new RequestListener<Drawable>() {
-                                                    @Override
-                                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                                        return false;
-                                                    }
+                ((DataViewHolder) holder).cardView.setOnClickListener(view -> {
+                    if(canStartActivity) {
+                        canStartActivity = false;
 
-                                                    @Override
-                                                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                                        if(resource instanceof Animatable) {
-                                                            //This is a gif
-                                                            //((Animatable) resource).start();
-                                                            ((DataViewHolder) holder).subredditIconGifImageView.startAnimation();
+                        Intent intent = new Intent(mContext, ViewPostDetailActivity.class);
+                        intent.putExtra(ViewPostDetailActivity.EXTRA_TITLE, title);
+                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
+                        mContext.startActivity(intent);
+                    }
+                });
+
+                if(hasMultipleSubreddits) {
+                    if(post.getSubredditIconUrl() == null) {
+                        new LoadSubredditIconAsyncTask(subredditDao, subredditName,
+                                iconImageUrl -> {
+                                    if(mContext != null && getItemCount() > 0) {
+                                        if(!iconImageUrl.equals("")) {
+                                            glide.load(iconImageUrl)
+                                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                                    .error(glide.load(R.drawable.subreddit_default_icon))
+                                                    .listener(new RequestListener<Drawable>() {
+                                                        @Override
+                                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                                            return false;
                                                         }
-                                                        return false;
-                                                    }
-                                                })
-                                                .into(((DataViewHolder) holder).subredditIconGifImageView);
-                                    } else {
-                                        glide.load(R.drawable.subreddit_default_icon)
-                                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                                .into(((DataViewHolder) holder).subredditIconGifImageView);
+
+                                                        @Override
+                                                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                                            if(resource instanceof Animatable) {
+                                                                //This is a gif
+                                                                //((Animatable) resource).start();
+                                                                ((DataViewHolder) holder).subredditIconGifImageView.startAnimation();
+                                                            }
+                                                            return false;
+                                                        }
+                                                    })
+                                                    .into(((DataViewHolder) holder).subredditIconGifImageView);
+                                        } else {
+                                            glide.load(R.drawable.subreddit_default_icon)
+                                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                                    .into(((DataViewHolder) holder).subredditIconGifImageView);
+                                        }
+
+                                        if(holder.getAdapterPosition() >= 0) {
+                                            post.setSubredditIconUrl(iconImageUrl);
+                                        }
+                                    }
+                                }).execute();
+                    } else if(!post.getSubredditIconUrl().equals("")) {
+                        glide.load(post.getSubredditIconUrl())
+                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                .error(glide.load(R.drawable.subreddit_default_icon))
+                                .listener(new RequestListener<Drawable>() {
+                                    @Override
+                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                        return false;
                                     }
 
-                                    if(holder.getAdapterPosition() >= 0) {
-                                        post.setSubredditIconUrl(iconImageUrl);
+                                    @Override
+                                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                        if(resource instanceof Animatable) {
+                                            //This is a gif
+                                            //((Animatable) resource).start();
+                                            ((DataViewHolder) holder).subredditIconGifImageView.startAnimation();
+                                        }
+                                        return false;
                                     }
-                                }
-                            }).execute();
-                } else if(!post.getSubredditIconUrl().equals("")) {
-                    glide.load(post.getSubredditIconUrl())
-                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                            .error(glide.load(R.drawable.subreddit_default_icon))
-                            .listener(new RequestListener<Drawable>() {
-                                @Override
-                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                    return false;
-                                }
+                                })
+                                .into(((DataViewHolder) holder).subredditIconGifImageView);
+                    } else {
+                        glide.load(R.drawable.subreddit_default_icon)
+                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                .into(((DataViewHolder) holder).subredditIconGifImageView);
+                    }
 
-                                @Override
-                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                    if(resource instanceof Animatable) {
-                                        //This is a gif
-                                        //((Animatable) resource).start();
-                                        ((DataViewHolder) holder).subredditIconGifImageView.startAnimation();
-                                    }
-                                    return false;
-                                }
-                            })
-                            .into(((DataViewHolder) holder).subredditIconGifImageView);
+                    ((DataViewHolder) holder).subredditIconGifImageView.setOnClickListener(view -> {
+                        if(canStartActivity) {
+                            canStartActivity = false;
+                            Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
+                                    post.getSubredditNamePrefixed().substring(2));
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_VALUE_KEY,
+                                    post.getSubredditNamePrefixed());
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_QUERY_BY_ID_KEY, false);
+                            mContext.startActivity(intent);
+                        }
+                    });
+
+                    ((DataViewHolder) holder).subredditNameTextView.setText(subredditName);
+
+                    ((DataViewHolder) holder).subredditNameTextView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if(canStartActivity) {
+                                canStartActivity = false;
+                                Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
+                                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
+                                        post.getSubredditNamePrefixed().substring(2));
+                                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_VALUE_KEY,
+                                        post.getSubredditNamePrefixed());
+                                intent.putExtra(ViewSubredditDetailActivity.EXTRA_QUERY_BY_ID_KEY, false);
+                                mContext.startActivity(intent);
+                            }
+                        }
+                    });
                 } else {
-                    glide.load(R.drawable.subreddit_default_icon)
-                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                            .into(((DataViewHolder) holder).subredditIconGifImageView);
+                    if(post.getAuthorIconUrl() == null) {
+                        new LoadUserDataAsyncTask(userDao, post.getAuthor(), mOauthRetrofit, iconImageUrl -> {
+                            if(mContext != null && getItemCount() > 0) {
+                                if(!iconImageUrl.equals("")) {
+                                    glide.load(iconImageUrl)
+                                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                            .error(glide.load(R.drawable.subreddit_default_icon))
+                                            .listener(new RequestListener<Drawable>() {
+                                                @Override
+                                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                                    return false;
+                                                }
+
+                                                @Override
+                                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                                    if(resource instanceof Animatable) {
+                                                        //This is a gif
+                                                        //((Animatable) resource).start();
+                                                        ((DataViewHolder) holder).subredditIconGifImageView.startAnimation();
+                                                    }
+                                                    return false;
+                                                }
+                                            })
+                                            .into(((DataViewHolder) holder).subredditIconGifImageView);
+                                } else {
+                                    glide.load(R.drawable.subreddit_default_icon)
+                                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                            .into(((DataViewHolder) holder).subredditIconGifImageView);
+                                }
+
+                                if(holder.getAdapterPosition() >= 0) {
+                                    post.setAuthorIconUrl(iconImageUrl);
+                                }
+                            }
+                        }).execute();
+                    } else if(!post.getAuthorIconUrl().equals("")) {
+                        glide.load(post.getAuthorIconUrl())
+                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                .error(glide.load(R.drawable.subreddit_default_icon))
+                                .listener(new RequestListener<Drawable>() {
+                                    @Override
+                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                        return false;
+                                    }
+
+                                    @Override
+                                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                        if(resource instanceof Animatable) {
+                                            //This is a gif
+                                            //((Animatable) resource).start();
+                                            ((DataViewHolder) holder).subredditIconGifImageView.startAnimation();
+                                        }
+                                        return false;
+                                    }
+                                })
+                                .into(((DataViewHolder) holder).subredditIconGifImageView);
+                    } else {
+                        glide.load(R.drawable.subreddit_default_icon)
+                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                .into(((DataViewHolder) holder).subredditIconGifImageView);
+                    }
+
+                    ((DataViewHolder) holder).subredditIconGifImageView.setOnClickListener(view -> {
+                        if(canStartActivity) {
+                            canStartActivity = false;
+                            Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
+                            mContext.startActivity(intent);
+                        }
+                    });
+
+                    ((DataViewHolder) holder).subredditNameTextView.setText(author);
+
+                    ((DataViewHolder) holder).subredditNameTextView.setOnClickListener(view -> {
+                        if(canStartActivity) {
+                            canStartActivity = false;
+                            Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
+                            mContext.startActivity(intent);
+                        }
+                    });
                 }
 
-                ((DataViewHolder) holder).cardView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if(canStartActivity) {
-                            canStartActivity = false;
-                            Intent intent = new Intent(mContext, ViewPostDetailActivity.class);
-                            intent.putExtra(ViewPostDetailActivity.EXTRA_TITLE, title);
-                            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
-                            mContext.startActivity(intent);
-                        }
-                    }
-                });
-
-                ((DataViewHolder) holder).subredditIconGifImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if(canStartActivity) {
-                            canStartActivity = false;
-                            Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
-                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
-                                    post.getSubredditNamePrefixed().substring(2));
-                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_VALUE_KEY,
-                                    post.getSubredditNamePrefixed());
-                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_QUERY_BY_ID_KEY, false);
-                            mContext.startActivity(intent);
-                        }
-                    }
-                });
-
-                ((DataViewHolder) holder).subredditNameTextView.setText(subredditName);
-
-                ((DataViewHolder) holder).subredditNameTextView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if(canStartActivity) {
-                            canStartActivity = false;
-                            Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
-                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
-                                    post.getSubredditNamePrefixed().substring(2));
-                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_VALUE_KEY,
-                                    post.getSubredditNamePrefixed());
-                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_QUERY_BY_ID_KEY, false);
-                            mContext.startActivity(intent);
-                        }
-                    }
-                });
                 ((DataViewHolder) holder).postTimeTextView.setText(postTime);
                 ((DataViewHolder) holder).titleTextView.setText(title);
                 ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore()));

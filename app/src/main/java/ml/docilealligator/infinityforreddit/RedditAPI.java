@@ -27,7 +27,7 @@ public interface RedditAPI {
     Call<String> getSubscribedThing(@Query("after") String lastItem, @HeaderMap Map<String, String> headers);
 
     @GET("api/v1/me?raw_json=1")
-    Call<String> getUserInfo(@HeaderMap Map<String, String> headers);
+    Call<String> getMyInfo(@HeaderMap Map<String, String> headers);
 
     @FormUrlEncoded
     @POST("api/vote")
@@ -39,6 +39,6 @@ public interface RedditAPI {
     @GET("r/{subredditName}.json?raw_json=1&limit=25")
     Call<String> getPost(@Path("subredditName") String subredditName, @Query("after") String lastItem);
 
-    @GET("user/{username}/about.json/raw_json=1")
+    @GET("user/{username}/about.json?raw_json=1")
     Call<String> getUserData(@Path("username") String username);
 }

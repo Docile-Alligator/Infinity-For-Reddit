@@ -19,6 +19,8 @@ class Post implements Parcelable {
     private String fullName;
     private String subredditNamePrefixed;
     private String subredditIconUrl;
+    private String author;
+    private String authorIconUrl;
     private String postTime;
     private String title;
     private String selfText;
@@ -40,12 +42,13 @@ class Post implements Parcelable {
     private boolean isDownloadableGifOrVideo;
     private Post crosspostParentPost;
 
-    Post(String id, String fullName, String subredditNamePrefixed, String postTime, String title,
-         String previewUrl, String permalink, int score, int postType, int voteType, int gilded,
-         boolean nsfw, boolean stickied, boolean isCrosspost, boolean isDashVideo) {
+    Post(String id, String fullName, String subredditNamePrefixed, String author, String postTime,
+         String title, String previewUrl, String permalink, int score, int postType, int voteType,
+         int gilded, boolean nsfw, boolean stickied, boolean isCrosspost, boolean isDashVideo) {
         this.id = id;
         this.fullName = fullName;
         this.subredditNamePrefixed = subredditNamePrefixed;
+        this.author = author;
         this.postTime = postTime;
         this.title = title;
         this.previewUrl = previewUrl;
@@ -60,12 +63,13 @@ class Post implements Parcelable {
         this.isDashVideo = isDashVideo;
     }
 
-    Post(String id, String fullName, String subredditNamePrefixed, String postTime, String title,
-         String previewUrl, String url, String permalink, int score, int postType, int voteType,
-         int gilded, boolean nsfw, boolean stickied, boolean isCrosspost) {
+    Post(String id, String fullName, String subredditNamePrefixed, String author, String postTime,
+         String title, String previewUrl, String url, String permalink, int score, int postType,
+         int voteType, int gilded, boolean nsfw, boolean stickied, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditNamePrefixed = subredditNamePrefixed;
+        this.author = author;
         this.postTime = postTime;
         this.title = title;
         this.previewUrl = previewUrl;
@@ -80,12 +84,13 @@ class Post implements Parcelable {
         this.isCrosspost = isCrosspost;
     }
 
-    Post(String id, String fullName, String subredditNamePrefixed, String postTime, String title,
-         String permalink, int score, int postType, int voteType, int gilded, boolean nsfw,
+    Post(String id, String fullName, String subredditNamePrefixed, String author, String postTime,
+         String title, String permalink, int score, int postType, int voteType, int gilded, boolean nsfw,
          boolean stickied, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditNamePrefixed = subredditNamePrefixed;
+        this.author = author;
         this.postTime = postTime;
         this.title = title;
         this.permalink = RedditUtils.API_BASE_URI + permalink;
@@ -103,6 +108,8 @@ class Post implements Parcelable {
         fullName = in.readString();
         subredditNamePrefixed = in.readString();
         subredditIconUrl = in.readString();
+        author = in.readString();
+        authorIconUrl = in.readString();
         postTime = in.readString();
         title = in.readString();
         selfText = in.readString();
@@ -154,6 +161,18 @@ class Post implements Parcelable {
 
     public void setSubredditIconUrl(String subredditIconUrl) {
         this.subredditIconUrl = subredditIconUrl;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getAuthorIconUrl() {
+        return authorIconUrl;
+    }
+
+    public void setAuthorIconUrl(String authorIconUrl) {
+        this.authorIconUrl = authorIconUrl;
     }
 
     public String getPostTime() {
@@ -279,6 +298,8 @@ class Post implements Parcelable {
         parcel.writeString(fullName);
         parcel.writeString(subredditNamePrefixed);
         parcel.writeString(subredditIconUrl);
+        parcel.writeString(author);
+        parcel.writeString(authorIconUrl);
         parcel.writeString(postTime);
         parcel.writeString(title);
         parcel.writeString(selfText);
