@@ -17,7 +17,7 @@
             android:orientation="vertical"
             android:descendantFocusability="blocksDescendants">
 
-            <android.support.v7.widget.CardView
+            <android.support.design.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -30,12 +30,7 @@
                         android:id="@+id/relative_layout_view_post_detail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp">
+                        android:layout_margin="16dp">
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/subreddit_icon_circle_image_view_view_post_detail"
@@ -79,7 +74,6 @@
                         android:id="@+id/content_html_text_view_view_post_detail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
@@ -91,36 +85,35 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp">
 
-                        <TextView
+                        <android.support.design.chip.Chip
                             android:id="@+id/type_text_view_view_post_detail"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
-                            android:layout_centerVertical="true"
                             android:textSize="12sp"
-                            android:background="@drawable/rounded_corner"
-                            android:textColor="@android:color/white" />
+                            android:textColor="@android:color/white"
+                            app:chipBackgroundColor="@color/colorPrimaryDark"/>
 
                         <ImageView
                             android:id="@+id/gilded_image_view_view_post_detail"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
+                            android:layout_marginTop="8dp"
                             android:layout_toEndOf="@id/type_text_view_view_post_detail"
-                            android:layout_centerVertical="true"
                             android:visibility="gone"/>
 
                         <TextView
                             android:id="@+id/gilded_number_text_view_view_post_detail"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
                             android:layout_marginStart="4dp"
                             android:layout_marginEnd="8dp"
                             android:layout_toEndOf="@id/gilded_image_view_view_post_detail"
-                            android:layout_centerVertical="true"
                             android:visibility="gone"
                             android:textSize="20sp"
                             android:textColor="@color/gold"/>
@@ -129,25 +122,26 @@
                             android:id="@+id/crosspost_image_view_view_post_detail"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
+                            android:layout_marginTop="8dp"
                             android:layout_marginStart="8dp"
                             android:layout_marginEnd="8dp"
                             android:layout_toStartOf="@id/nsfw_text_view_item_best_post"
                             android:layout_toEndOf="@id/gilded_number_text_view_view_post_detail"
-                            android:layout_centerVertical="true"
                             android:src="@drawable/crosspost"
                             android:tint="@color/colorAccent"
                             android:visibility="gone"/>
 
-                        <TextView
+                        <android.support.design.chip.Chip
                             android:id="@+id/nsfw_text_view_view_post_detail"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/nsfw"
                             android:layout_alignParentEnd="true"
+                            android:layout_marginTop="8dp"
                             android:layout_marginStart="8dp"
-                            android:background="@drawable/nsfw_rounded_corner"
                             android:textColor="@android:color/white"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            app:chipBackgroundColor="@color/colorAccent"/>
 
                     </RelativeLayout>
 
@@ -249,14 +243,14 @@
                             android:clickable="true"
                             android:focusable="true"
                             android:padding="16dp"
-                            android:src="@drawable/ic_share_black_24dp"
+                            android:src="@drawable/ic_outline_share_24px"
                             android:tint="@android:color/tab_indicator_text" />
 
                     </RelativeLayout>
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </android.support.design.card.MaterialCardView>
 
             <com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar
                 android:id="@+id/comment_progress_bar_view_post_detail"
@@ -291,11 +285,6 @@
                         android:text="@string/comments"
                         android:textColor="#000000"
                         android:textSize="18sp" />
-
-                    <!--<android.support.v7.widget.RecyclerView
-                        android:id="@+id/recycler_view_view_post_detail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />-->
 
                     <com.multilevelview.MultiLevelRecyclerView
                         android:id="@+id/recycler_view_view_post_detail"

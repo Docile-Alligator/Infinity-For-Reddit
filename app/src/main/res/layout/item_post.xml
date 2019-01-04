@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
-    android:id="@+id/card_view_view_post_detail">
+    android:id="@+id/card_view_view_post_detail"
+    app:cardCornerRadius="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="#FFFFFF">
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="16dp">
+            android:layout_margin="16dp">
 
             <CustomView.AspectRatioGifImageView
                 android:id="@+id/subreddit_icon_gif_image_view_best_post_item"
@@ -73,37 +71,35 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp">
 
-            <TextView
+            <android.support.design.chip.Chip
                 android:id="@+id/type_text_view_item_best_post"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_corner"
-                android:layout_marginEnd="8dp"
-                android:layout_centerVertical="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 android:textSize="12sp"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/white"
+                app:chipBackgroundColor="@color/colorPrimaryDark"/>
 
             <ImageView
                 android:id="@+id/gilded_image_view_item_best_post"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_toEndOf="@id/type_text_view_item_best_post"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/gilded_number_text_view_item_best_post"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="8dp"
                 android:layout_toEndOf="@id/gilded_image_view_item_best_post"
-                android:layout_centerVertical="true"
                 android:visibility="gone"
                 android:textSize="20sp"
                 android:textColor="@color/gold"/>
@@ -112,26 +108,27 @@
                 android:id="@+id/crosspost_image_view_item_best_post"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_toStartOf="@id/nsfw_text_view_item_best_post"
                 android:layout_toEndOf="@id/gilded_number_text_view_item_best_post"
-                android:layout_centerVertical="true"
                 android:src="@drawable/crosspost"
                 android:tint="@color/colorAccent"
                 android:visibility="gone"/>
 
-            <TextView
+            <android.support.design.chip.Chip
                 android:id="@+id/nsfw_text_view_item_best_post"
                 android:text="@string/nsfw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/nsfw_rounded_corner"
                 android:layout_alignParentEnd="true"
+                android:layout_marginTop="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_centerVertical="true"
+                android:textSize="12sp"
                 android:textColor="@android:color/white"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                app:chipBackgroundColor="@color/colorAccent"/>
 
         </RelativeLayout>
 
@@ -230,7 +227,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:padding="16dp"
-                android:src="@drawable/ic_share_black_24dp"
+                android:src="@drawable/ic_outline_share_24px"
                 android:tint="@android:color/tab_indicator_text"
                 android:background="?actionBarItemBackground"
                 android:clickable="true"
@@ -240,4 +237,4 @@
 
     </LinearLayout>
 
-</android.support.v7.widget.CardView>
+</android.support.design.card.MaterialCardView>

@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.design.card.MaterialCardView;
+import android.support.design.chip.Chip;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.CardView;
@@ -334,7 +336,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                 }
 
                 if(nsfw) {
-                    ((DataViewHolder) holder).nsfwTextView.setVisibility(View.VISIBLE);
+                    ((DataViewHolder) holder).nsfwChip.setVisibility(View.VISIBLE);
                 }
 
                 switch (voteType) {
@@ -368,7 +370,8 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
 
                 switch (post.getPostType()) {
                     case Post.IMAGE_TYPE:
-                        ((DataViewHolder) holder).typeTextView.setText("IMAGE");
+                        ((DataViewHolder) holder).typeChip.setVisibility(View.VISIBLE);
+                        ((DataViewHolder) holder).typeChip.setText("IMAGE");
 
                         final String imageUrl = post.getUrl();
                         ((DataViewHolder) holder).imageView.setOnClickListener(new View.OnClickListener() {
@@ -384,7 +387,8 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         });
                         break;
                     case Post.LINK_TYPE:
-                        ((DataViewHolder) holder).typeTextView.setText("LINK");
+                        ((DataViewHolder) holder).typeChip.setVisibility(View.VISIBLE);
+                        ((DataViewHolder) holder).typeChip.setText("LINK");
 
                         ((DataViewHolder) holder).imageView.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -399,7 +403,8 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         });
                         break;
                     case Post.GIF_VIDEO_TYPE:
-                        ((DataViewHolder) holder).typeTextView.setText("GIF");
+                        ((DataViewHolder) holder).typeChip.setVisibility(View.VISIBLE);
+                        ((DataViewHolder) holder).typeChip.setText("GIF");
 
                         final Uri gifVideoUri = Uri.parse(post.getVideoUrl());
                         ((DataViewHolder) holder).imageView.setOnClickListener(new View.OnClickListener() {
@@ -420,7 +425,8 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         });
                         break;
                     case Post.VIDEO_TYPE:
-                        ((DataViewHolder) holder).typeTextView.setText("VIDEO");
+                        ((DataViewHolder) holder).typeChip.setVisibility(View.VISIBLE);
+                        ((DataViewHolder) holder).typeChip.setText("VIDEO");
 
                         final Uri videoUri = Uri.parse(post.getVideoUrl());
                         ((DataViewHolder) holder).imageView.setOnClickListener(view -> {
@@ -438,7 +444,8 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         });
                         break;
                     case Post.NO_PREVIEW_LINK_TYPE:
-                        ((DataViewHolder) holder).typeTextView.setText("LINK");
+                        ((DataViewHolder) holder).typeChip.setVisibility(View.VISIBLE);
+                        ((DataViewHolder) holder).typeChip.setText("LINK");
                         final String noPreviewLinkUrl = post.getUrl();
                         ((DataViewHolder) holder).noPreviewLinkImageView.setVisibility(View.VISIBLE);
                         ((DataViewHolder) holder).noPreviewLinkImageView.setOnClickListener(new View.OnClickListener() {
@@ -454,7 +461,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         });
                         break;
                     case Post.TEXT_TYPE:
-                        ((DataViewHolder) holder).typeTextView.setText("TEXT");
+                        ((DataViewHolder) holder).typeChip.setVisibility(View.GONE);
                         break;
                 }
 
@@ -665,17 +672,17 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     }
 
     class DataViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.card_view_view_post_detail) CardView cardView;
+        @BindView(R.id.card_view_view_post_detail) MaterialCardView cardView;
         @BindView(R.id.subreddit_icon_gif_image_view_best_post_item) AspectRatioGifImageView subredditIconGifImageView;
         @BindView(R.id.subreddit_text_view_best_post_item) TextView subredditNameTextView;
         @BindView(R.id.stickied_post_image_view_best_post_item) ImageView stickiedPostImageView;
         @BindView(R.id.post_time_text_view_best_post_item) TextView postTimeTextView;
         @BindView(R.id.title_text_view_best_post_item) TextView titleTextView;
-        @BindView(R.id.type_text_view_item_best_post) TextView typeTextView;
+        @BindView(R.id.type_text_view_item_best_post) Chip typeChip;
         @BindView(R.id.gilded_image_view_item_best_post) ImageView gildedImageView;
         @BindView(R.id.gilded_number_text_view_item_best_post) TextView gildedNumberTextView;
         @BindView(R.id.crosspost_image_view_item_best_post) ImageView crosspostImageView;
-        @BindView(R.id.nsfw_text_view_item_best_post) TextView nsfwTextView;
+        @BindView(R.id.nsfw_text_view_item_best_post) Chip nsfwChip;
         @BindView(R.id.image_view_wrapper_item_best_post) RelativeLayout relativeLayout;
         @BindView(R.id.progress_bar_best_post_item) ProgressBar progressBar;
         @BindView(R.id.image_view_best_post_item) AspectRatioGifImageView imageView;
@@ -689,6 +696,12 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
         DataViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            scoreTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Do nothing in order to prevent clicking this to start ViewPostDetailActivity
+                }
+            });
         }
     }
 
@@ -728,7 +741,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
             ((DataViewHolder) holder).gildedImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).gildedNumberTextView.setVisibility(View.GONE);
             ((DataViewHolder) holder).crosspostImageView.setVisibility(View.GONE);
-            ((DataViewHolder) holder).nsfwTextView.setVisibility(View.GONE);
+            ((DataViewHolder) holder).nsfwChip.setVisibility(View.GONE);
             ((DataViewHolder) holder).progressBar.setVisibility(View.GONE);
             ((DataViewHolder) holder).imageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);

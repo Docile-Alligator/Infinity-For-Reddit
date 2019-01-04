@@ -47,7 +47,7 @@
                             android:layout_height="24dp"
                             android:layout_marginEnd="32dp"
                             android:layout_gravity="center_vertical"
-                            android:src="@drawable/ic_account_circle_grey_24dp"/>
+                            android:src="@drawable/ic_outline_account_circle_24px"/>
 
                         <TextView
                             android:layout_width="wrap_content"

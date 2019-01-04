@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.customtabs.CustomTabsIntent;
+import android.support.design.chip.Chip;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -66,11 +67,11 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     @BindView(R.id.post_time_text_view_view_post_detail) TextView mPostTimeTextView;
     @BindView(R.id.subreddit_text_view_view_post_detail) TextView mSubredditTextView;
     @BindView(R.id.content_html_text_view_view_post_detail) HtmlTextView mContentTextView;
-    @BindView(R.id.type_text_view_view_post_detail) TextView mTypeTextView;
+    @BindView(R.id.type_text_view_view_post_detail) Chip mTypeChip;
     @BindView(R.id.gilded_image_view_view_post_detail) ImageView mGildedImageView;
     @BindView(R.id.gilded_number_text_view_view_post_detail) TextView mGildedNumberTextView;
     @BindView(R.id.crosspost_image_view_view_post_detail) ImageView mCrosspostImageView;
-    @BindView(R.id.nsfw_text_view_view_post_detail) TextView mNSFWTextView;
+    @BindView(R.id.nsfw_text_view_view_post_detail) Chip mNSFWChip;
     @BindView(R.id.image_view_wrapper_view_post_detail) RelativeLayout mRelativeLayout;
 
     @BindView(R.id.load_wrapper_view_post_detail) RelativeLayout mLoadWrapper;
@@ -207,7 +208,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         }
 
         if(mPost.isNSFW()) {
-            mNSFWTextView.setVisibility(View.VISIBLE);
+            mNSFWChip.setVisibility(View.VISIBLE);
         }
         mScoreTextView.setText(Integer.toString(mPost.getScore()));
 
@@ -224,7 +225,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
         switch (mPost.getPostType()) {
             case Post.IMAGE_TYPE:
-                mTypeTextView.setText("IMAGE");
+                mTypeChip.setText("IMAGE");
                 mImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -238,7 +239,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 });
                 break;
             case Post.LINK_TYPE:
-                mTypeTextView.setText("LINK");
+                mTypeChip.setText("LINK");
 
                 mImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -253,7 +254,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 });
                 break;
             case Post.GIF_VIDEO_TYPE:
-                mTypeTextView.setText("GIF");
+                mTypeChip.setText("GIF");
 
                 final Uri gifVideoUri = Uri.parse(mPost.getVideoUrl());
                 mImageView.setOnClickListener(new View.OnClickListener() {
@@ -274,7 +275,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 });
                 break;
             case Post.VIDEO_TYPE:
-                mTypeTextView.setText("VIDEO");
+                mTypeChip.setText("VIDEO");
 
                 final Uri videoUri = Uri.parse(mPost.getVideoUrl());
                 mImageView.setOnClickListener(new View.OnClickListener() {
@@ -295,7 +296,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 });
                 break;
             case Post.NO_PREVIEW_LINK_TYPE:
-                mTypeTextView.setText("LINK");
+                mTypeChip.setText("LINK");
                 if(!mPost.getSelfText().equals("")) {
                     mContentTextView.setVisibility(View.VISIBLE);
                     mContentTextView.setHtml(mPost.getSelfText());
@@ -314,7 +315,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 });
                 break;
             case Post.TEXT_TYPE:
-                mTypeTextView.setText("TEXT");
+                mTypeChip.setVisibility(View.GONE);
                 if(!mPost.getSelfText().equals("")) {
                     mContentTextView.setVisibility(View.VISIBLE);
                     mContentTextView.setHtml(mPost.getSelfText());
