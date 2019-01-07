@@ -41,4 +41,8 @@ public interface RedditAPI {
 
     @GET("user/{username}/about.json?raw_json=1")
     Call<String> getUserData(@Path("username") String username);
+
+    @FormUrlEncoded
+    @POST("api/subscribe")
+    Call<String> subredditSubscription(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }

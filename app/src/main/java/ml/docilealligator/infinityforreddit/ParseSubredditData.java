@@ -14,7 +14,7 @@ class ParseSubredditData {
         void onParseSubredditDataFail();
     }
 
-    static void parseComment(String response, ParseSubredditDataListener parseSubredditDataListener) {
+    static void parseSubredditData(String response, ParseSubredditDataListener parseSubredditDataListener) {
         new ParseSubredditDataAsyncTask(response, parseSubredditDataListener).execute();
     }
 
@@ -41,7 +41,7 @@ class ParseSubredditData {
             try {
                 JSONObject data = jsonResponse.getJSONObject(JSONUtils.DATA_KEY);
                 String id = data.getString(JSONUtils.NAME_KEY);
-                String subredditFullName = data.getString(JSONUtils.DISPLAY_NAME_PREFIXED_KEY);
+                String subredditFullName = data.getString(JSONUtils.DISPLAY_NAME);
                 String description = data.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY).trim();
                 String bannerImageUrl = data.getString(JSONUtils.BANNER_BACKGROUND_IMAGE_KEY);
                 if(bannerImageUrl.equals("") || bannerImageUrl.equals("null")) {

@@ -118,4 +118,11 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+
+    <string name="subscribe">Subscribe</string>
+    <string name="unsubscribe">Unsubscribe</string>
+    <string name="subscribed">Subscribed</string>"
+    <string name="subscribe_failed">Subscribe Failed</string>
+    <string name="unsubscribed">Unsubscribed</string>"
+    <string name="unsubscribe_failed">Unsubscribe Failed</string>
 </resources>

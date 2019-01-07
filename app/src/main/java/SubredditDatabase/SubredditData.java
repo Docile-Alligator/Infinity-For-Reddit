@@ -2,23 +2,13 @@ package SubredditDatabase;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import SubscribedSubredditDatabase.SubscribedSubredditData;
+
 @Entity(tableName = "subreddits")
-public class SubredditData {
-    @PrimaryKey
-    @NonNull
-    @ColumnInfo(name = "id")
-    private String id;
-
-    @ColumnInfo(name = "name")
-    private String name;
-
-    @ColumnInfo(name = "icon_url")
-    private String iconUrl;
-
-    @ColumnInfo(name = "banner_url")
+public class SubredditData extends SubscribedSubredditData {
+    @ColumnInfo(name = "banner")
     private String bannerUrl;
 
     @ColumnInfo(name = "description")
@@ -28,25 +18,10 @@ public class SubredditData {
     private int nSubscribers;
 
     public SubredditData(@NonNull String id, String name, String iconUrl, String bannerUrl, String description, int nSubscribers) {
-        this.id = id;
-        this.name = name;
-        this.iconUrl = iconUrl;
+        super(id, name, iconUrl);
         this.bannerUrl = bannerUrl;
         this.description = description;
         this.nSubscribers = nSubscribers;
-    }
-
-    @NonNull
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getIconUrl() {
-        return iconUrl;
     }
 
     public String getBannerUrl() {

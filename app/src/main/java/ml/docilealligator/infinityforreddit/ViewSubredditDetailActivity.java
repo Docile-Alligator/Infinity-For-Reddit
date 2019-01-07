@@ -1,15 +1,18 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.chip.Chip;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -37,6 +40,9 @@ import SubredditDatabase.SubredditDao;
 import SubredditDatabase.SubredditData;
 import SubredditDatabase.SubredditRoomDatabase;
 import SubredditDatabase.SubredditViewModel;
+import SubscribedSubredditDatabase.SubscribedSubredditDao;
+import SubscribedSubredditDatabase.SubscribedSubredditData;
+import SubscribedSubredditDatabase.SubscribedSubredditRoomDatabase;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -45,26 +51,37 @@ import retrofit2.Retrofit;
 public class ViewSubredditDetailActivity extends AppCompatActivity {
 
     static final String EXTRA_SUBREDDIT_NAME_KEY = "ESN";
-    static final String EXTRA_SUBREDDIT_VALUE_KEY = "ESV";
-    static final String EXTRA_QUERY_BY_ID_KEY = "EQBI";
 
     private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
 
+    @BindView(R.id.coordinator_layout_view_subreddit_detail_activity) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.banner_image_view_view_subreddit_detail_activity) ImageView bannerImageView;
     @BindView(R.id.icon_gif_image_view_view_subreddit_detail_activity) GifImageView iconGifImageView;
+    @BindView(R.id.subscribe_subreddit_chip_view_subreddit_detail_activity) Chip subscribeSubredditChip;
     @BindView(R.id.subreddit_name_text_view_view_subreddit_detail_activity) TextView subredditNameTextView;
     @BindView(R.id.subscriber_count_text_view_view_subreddit_detail_activity) TextView nSubscribersTextView;
     @BindView(R.id.online_subscriber_count_text_view_view_subreddit_detail_activity) TextView nOnlineSubscribersTextView;
     @BindView(R.id.description_text_view_view_subreddit_detail_activity) TextView descriptionTextView;
 
+    private boolean subscriptionReady = false;
+
     private RequestManager glide;
     private Fragment mFragment;
 
+    private SubscribedSubredditDao subscribedSubredditDao;
     private SubredditViewModel mSubredditViewModel;
 
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
+
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
+
+    @Inject
+    @Named("auth_info")
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,97 +135,140 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
             }
         });
 
+        subscribedSubredditDao = SubscribedSubredditRoomDatabase.getDatabase(this).subscribedSubredditDao();
         glide = Glide.with(ViewSubredditDetailActivity.this);
 
-        String value = getIntent().getExtras().getString(EXTRA_SUBREDDIT_VALUE_KEY);
-        boolean queryById = getIntent().getExtras().getBoolean(EXTRA_QUERY_BY_ID_KEY);
-        SubredditViewModel.Factory factory = new SubredditViewModel.Factory(getApplication(), value, queryById);
+        SubredditViewModel.Factory factory = new SubredditViewModel.Factory(getApplication(), subredditName);
         mSubredditViewModel = ViewModelProviders.of(this, factory).get(SubredditViewModel.class);
-        mSubredditViewModel.getSubredditLiveData().observe(this, new Observer<SubredditData>() {
-            @Override
-            public void onChanged(@Nullable final SubredditData subredditData) {
-                if(subredditData != null) {
-                    if(subredditData.getBannerUrl().equals("")) {
-                        iconGifImageView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                //Do nothing as it has no image
-                            }
-                        });
-                    } else {
-                        glide.load(subredditData.getBannerUrl()).into(bannerImageView);
-                        bannerImageView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent intent = new Intent(ViewSubredditDetailActivity.this, ViewImageActivity.class);
-                                intent.putExtra(ViewImageActivity.TITLE_KEY, title);
-                                intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, subredditData.getBannerUrl());
-                                intent.putExtra(ViewImageActivity.FILE_NAME_KEY, subredditName + "-banner");
-                                startActivity(intent);
-                            }
-                        });
-                    }
+        mSubredditViewModel.getSubredditLiveData().observe(this, subredditData -> {
+            if(subredditData != null) {
+                if(subredditData.getBannerUrl().equals("")) {
+                    iconGifImageView.setOnClickListener(view -> {
+                        //Do nothing as it has no image
+                    });
+                } else {
+                    glide.load(subredditData.getBannerUrl()).into(bannerImageView);
+                    bannerImageView.setOnClickListener(view -> {
+                        Intent intent = new Intent(ViewSubredditDetailActivity.this, ViewImageActivity.class);
+                        intent.putExtra(ViewImageActivity.TITLE_KEY, title);
+                        intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, subredditData.getBannerUrl());
+                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, subredditName + "-banner");
+                        startActivity(intent);
+                    });
+                }
 
-                    if(subredditData.getIconUrl().equals("")) {
-                        glide.load(getDrawable(R.drawable.subreddit_default_icon))
-                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0)))
-                                .into(iconGifImageView);
-                        iconGifImageView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                //Do nothing as it is a default icon
-                            }
-                        });
-                    } else {
-                        glide.load(subredditData.getIconUrl())
-                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0)))
-                                .error(glide.load(R.drawable.subreddit_default_icon))
-                                .listener(new RequestListener<Drawable>() {
-                                    @Override
-                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                        return false;
+                if(subredditData.getIconUrl().equals("")) {
+                    glide.load(getDrawable(R.drawable.subreddit_default_icon))
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0)))
+                            .into(iconGifImageView);
+                    iconGifImageView.setOnClickListener(view -> {
+                        //Do nothing as it is a default icon
+                    });
+                } else {
+                    glide.load(subredditData.getIconUrl())
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0)))
+                            .error(glide.load(R.drawable.subreddit_default_icon))
+                            .listener(new RequestListener<Drawable>() {
+                                @Override
+                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                    if(resource instanceof Animatable) {
+                                        //This is a gif
+                                        ((Animatable) resource).start();
+                                        iconGifImageView.startAnimation();
                                     }
+                                    return false;
+                                }
+                            })
+                            .into(iconGifImageView);
+                    iconGifImageView.setOnClickListener(view -> {
+                        Intent intent = new Intent(ViewSubredditDetailActivity.this, ViewImageActivity.class);
+                        intent.putExtra(ViewImageActivity.TITLE_KEY, title);
+                        intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, subredditData.getIconUrl());
+                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, subredditName + "-icon");
+                        startActivity(intent);
+                    });
+                }
 
-                                    @Override
-                                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                        if(resource instanceof Animatable) {
-                                            //This is a gif
-                                            ((Animatable) resource).start();
-                                            iconGifImageView.startAnimation();
-                                        }
-                                        return false;
-                                    }
-                                })
-                                .into(iconGifImageView);
-                        iconGifImageView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent intent = new Intent(ViewSubredditDetailActivity.this, ViewImageActivity.class);
-                                intent.putExtra(ViewImageActivity.TITLE_KEY, title);
-                                intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, subredditData.getIconUrl());
-                                intent.putExtra(ViewImageActivity.FILE_NAME_KEY, subredditName + "-icon");
-                                startActivity(intent);
-                            }
-                        });
-                    }
-
-                    subredditNameTextView.setText(subredditData.getName());
-                    String nSubscribers = getString(R.string.subscribers_number_detail, subredditData.getNSubscribers());
-                    nSubscribersTextView.setText(nSubscribers);
-                    if(subredditData.getDescription().equals("")) {
-                        descriptionTextView.setVisibility(View.GONE);
-                    } else {
-                        descriptionTextView.setVisibility(View.VISIBLE);
-                        descriptionTextView.setText(subredditData.getDescription());
-                    }
+                String subredditFullName = "r/" + subredditData.getName();
+                subredditNameTextView.setText(subredditFullName);
+                String nSubscribers = getString(R.string.subscribers_number_detail, subredditData.getNSubscribers());
+                nSubscribersTextView.setText(nSubscribers);
+                if(subredditData.getDescription().equals("")) {
+                    descriptionTextView.setVisibility(View.GONE);
+                } else {
+                    descriptionTextView.setVisibility(View.VISIBLE);
+                    descriptionTextView.setText(subredditData.getDescription());
                 }
             }
         });
 
+        subscribeSubredditChip.setOnClickListener(view -> {
+            if(subscriptionReady) {
+                subscriptionReady = false;
+                if(subscribeSubredditChip.getText().equals(getResources().getString(R.string.subscribe))) {
+                    SubredditSubscription.subscribeToSubreddit(mOauthRetrofit, mRetrofit, sharedPreferences,
+                            subredditName, subscribedSubredditDao, new SubredditSubscription.SubredditSubscriptionListener() {
+                                @Override
+                                public void onSubredditSubscriptionSuccess() {
+                                    subscribeSubredditChip.setText(R.string.unsubscribe);
+                                    subscribeSubredditChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+                                    makeSnackbar(R.string.subscribed);
+                                    subscriptionReady = true;
+                                }
+
+                                @Override
+                                public void onSubredditSubscriptionFail() {
+                                    makeSnackbar(R.string.subscribe_failed);
+                                    subscriptionReady = true;
+                                }
+                            });
+                } else {
+                    SubredditSubscription.unsubscribeToSubreddit(mOauthRetrofit, sharedPreferences,
+                            subredditName, subscribedSubredditDao, new SubredditSubscription.SubredditSubscriptionListener() {
+                                @Override
+                                public void onSubredditSubscriptionSuccess() {
+                                    subscribeSubredditChip.setText(R.string.subscribe);
+                                    subscribeSubredditChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorPrimaryDark));
+                                    makeSnackbar(R.string.unsubscribed);
+                                    subscriptionReady = true;
+                                }
+
+                                @Override
+                                public void onSubredditSubscriptionFail() {
+                                    makeSnackbar(R.string.unsubscribe_failed);
+                                    subscriptionReady = true;
+                                }
+                            });
+                }
+            }
+        });
+
+        new CheckIsSubscribedToSubredditAsyncTask(subscribedSubredditDao, subredditName,
+                new CheckIsSubscribedToSubredditAsyncTask.CheckIsSubscribedToSubredditListener() {
+            @Override
+            public void isSubscribed() {
+                subscribeSubredditChip.setText(R.string.unsubscribe);
+                subscribeSubredditChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+                subscriptionReady = true;
+            }
+
+            @Override
+            public void isNotSubscribed() {
+                subscribeSubredditChip.setText(R.string.subscribe);
+                subscribeSubredditChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorPrimaryDark));
+                subscriptionReady = true;
+            }
+        }).execute();
+
         FetchSubredditData.fetchSubredditData(mRetrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
             @Override
             public void onFetchSubredditDataSuccess(String response) {
-                ParseSubredditData.parseComment(response, new ParseSubredditData.ParseSubredditDataListener() {
+                ParseSubredditData.parseSubredditData(response, new ParseSubredditData.ParseSubredditDataListener() {
                     @Override
                     public void onParseSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                         new InsertSubredditDataAsyncTask(SubredditRoomDatabase.getDatabase(ViewSubredditDetailActivity.this), subredditData)
@@ -271,6 +331,10 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         }
     }
 
+    private void makeSnackbar(int resId) {
+        Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).show();
+    }
+
     private static class InsertSubredditDataAsyncTask extends AsyncTask<Void, Void, Void> {
 
         private SubredditDao mSubredditDao;
@@ -285,6 +349,42 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         protected Void doInBackground(final Void... params) {
             mSubredditDao.insert(subredditData);
             return null;
+        }
+    }
+
+    private static class CheckIsSubscribedToSubredditAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private SubscribedSubredditDao subscribedSubredditDao;
+        private String subredditName;
+        private SubscribedSubredditData subscribedSubredditData;
+        private CheckIsSubscribedToSubredditListener checkIsSubscribedToSubredditListener;
+
+        interface CheckIsSubscribedToSubredditListener {
+            void isSubscribed();
+            void isNotSubscribed();
+        }
+
+        CheckIsSubscribedToSubredditAsyncTask(SubscribedSubredditDao subscribedSubredditDao, String subredditName,
+                                              CheckIsSubscribedToSubredditListener checkIsSubscribedToSubredditListener) {
+            this.subscribedSubredditDao = subscribedSubredditDao;
+            this.subredditName =subredditName;
+            this.checkIsSubscribedToSubredditListener = checkIsSubscribedToSubredditListener;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            subscribedSubredditData = subscribedSubredditDao.getSubscribedSubreddit(subredditName);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(subscribedSubredditData != null) {
+                checkIsSubscribedToSubredditListener.isSubscribed();
+            } else {
+                checkIsSubscribedToSubredditListener.isNotSubscribed();
+            }
         }
     }
 }

@@ -14,11 +14,8 @@ public interface SubredditDao {
     @Query("DELETE FROM subreddits")
     void deleteAllSubreddits();
 
-    @Query("SELECT * from subreddits WHERE id = :id")
-    LiveData<SubredditData> getSubredditLiveDataById(String id);
-
     @Query("SELECT * from subreddits WHERE name = :namePrefixed")
-    LiveData<SubredditData> getSubredditLiveDataByNamePrefixed(String namePrefixed);
+    LiveData<SubredditData> getSubredditLiveDataByName(String namePrefixed);
 
     @Query("SELECT * from subreddits WHERE name = :namePrefixed LIMIT 1")
     SubredditData getSubredditData(String namePrefixed);

@@ -45,6 +45,9 @@ public class RedditUtils {
     static final String DIR_DOWNVOTE = "-1";
     static final String RANK = "10";
 
+    static final String ACTION_KEY = "action";
+    static final String SR_NAME_KEY = "sr_name";
+
     static Map<String, String> getHttpBasicAuthHeader() {
         Map<String, String> params = new HashMap<>();
         String credentials = String.format("%s:%s", RedditUtils.CLIENT_ID, "");

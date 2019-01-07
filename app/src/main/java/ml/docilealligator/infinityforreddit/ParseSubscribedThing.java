@@ -96,7 +96,7 @@ class ParseSubscribedThing {
                         //It's a user
                         newSubscribedUserData.add(new SubscribedUserData(id, name.substring(2), iconUrl));
                     } else {
-                        String subredditFullName = data.getString(JSONUtils.DISPLAY_NAME_PREFIXED_KEY);
+                        String subredditFullName = data.getString(JSONUtils.DISPLAY_NAME);
                         String description = data.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY).trim();
                         int nSubscribers = data.getInt(JSONUtils.SUBSCRIBERS_KEY);
                         newSubscribedSubredditData.add(new SubscribedSubredditData(id, name, iconUrl));

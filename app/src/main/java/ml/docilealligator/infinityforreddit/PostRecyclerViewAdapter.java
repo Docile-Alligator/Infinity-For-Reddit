@@ -127,7 +127,8 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                 Log.i("is null", Integer.toString(holder.getAdapterPosition()));
             } else {
                 final String id = post.getFullName();
-                final String subredditName = post.getSubredditNamePrefixed();
+                final String subredditNamePrefixed = post.getSubredditNamePrefixed();
+                String subredditName = subredditNamePrefixed.substring(2);
                 String author = "u/" + post.getAuthor();
                 final String postTime = post.getPostTime();
                 final String title = post.getTitle();
@@ -217,28 +218,19 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                             Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
                             intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
                                     post.getSubredditNamePrefixed().substring(2));
-                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_VALUE_KEY,
-                                    post.getSubredditNamePrefixed());
-                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_QUERY_BY_ID_KEY, false);
                             mContext.startActivity(intent);
                         }
                     });
 
-                    ((DataViewHolder) holder).subredditNameTextView.setText(subredditName);
+                    ((DataViewHolder) holder).subredditNameTextView.setText(subredditNamePrefixed);
 
-                    ((DataViewHolder) holder).subredditNameTextView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if(canStartActivity) {
-                                canStartActivity = false;
-                                Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
-                                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
-                                        post.getSubredditNamePrefixed().substring(2));
-                                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_VALUE_KEY,
-                                        post.getSubredditNamePrefixed());
-                                intent.putExtra(ViewSubredditDetailActivity.EXTRA_QUERY_BY_ID_KEY, false);
-                                mContext.startActivity(intent);
-                            }
+                    ((DataViewHolder) holder).subredditNameTextView.setOnClickListener(view -> {
+                        if(canStartActivity) {
+                            canStartActivity = false;
+                            Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
+                                    post.getSubredditNamePrefixed().substring(2));
+                            mContext.startActivity(intent);
                         }
                     });
                 } else {
@@ -374,32 +366,26 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         ((DataViewHolder) holder).typeChip.setText("IMAGE");
 
                         final String imageUrl = post.getUrl();
-                        ((DataViewHolder) holder).imageView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent intent = new Intent(mContext, ViewImageActivity.class);
-                                intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, imageUrl);
-                                intent.putExtra(ViewImageActivity.TITLE_KEY, title);
-                                intent.putExtra(ViewImageActivity.FILE_NAME_KEY, subredditName.substring(2)
-                                        + "-" + id.substring(3));
-                                mContext.startActivity(intent);
-                            }
+                        ((DataViewHolder) holder).imageView.setOnClickListener(view -> {
+                            Intent intent = new Intent(mContext, ViewImageActivity.class);
+                            intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, imageUrl);
+                            intent.putExtra(ViewImageActivity.TITLE_KEY, title);
+                            intent.putExtra(ViewImageActivity.FILE_NAME_KEY, subredditNamePrefixed.substring(2)
+                                    + "-" + id.substring(3));
+                            mContext.startActivity(intent);
                         });
                         break;
                     case Post.LINK_TYPE:
                         ((DataViewHolder) holder).typeChip.setVisibility(View.VISIBLE);
                         ((DataViewHolder) holder).typeChip.setText("LINK");
 
-                        ((DataViewHolder) holder).imageView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                                // add share action to menu list
-                                builder.addDefaultShareMenuItem();
-                                builder.setToolbarColor(mContext.getResources().getColor(R.color.colorPrimary));
-                                CustomTabsIntent customTabsIntent = builder.build();
-                                customTabsIntent.launchUrl(mContext, Uri.parse(post.getUrl()));
-                            }
+                        ((DataViewHolder) holder).imageView.setOnClickListener(view -> {
+                            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                            // add share action to menu list
+                            builder.addDefaultShareMenuItem();
+                            builder.setToolbarColor(mContext.getResources().getColor(R.color.colorPrimary));
+                            CustomTabsIntent customTabsIntent = builder.build();
+                            customTabsIntent.launchUrl(mContext, Uri.parse(post.getUrl()));
                         });
                         break;
                     case Post.GIF_VIDEO_TYPE:
@@ -407,21 +393,18 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         ((DataViewHolder) holder).typeChip.setText("GIF");
 
                         final Uri gifVideoUri = Uri.parse(post.getVideoUrl());
-                        ((DataViewHolder) holder).imageView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent intent = new Intent(mContext, ViewVideoActivity.class);
-                                intent.setData(gifVideoUri);
-                                intent.putExtra(ViewVideoActivity.TITLE_KEY, title);
-                                intent.putExtra(ViewVideoActivity.IS_DASH_VIDEO_KEY, post.isDashVideo());
-                                intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, post.isDownloadableGifOrVideo());
-                                if(post.isDownloadableGifOrVideo()) {
-                                    intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, post.getGifOrVideoDownloadUrl());
-                                    intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, subredditName);
-                                    intent.putExtra(ViewVideoActivity.ID_KEY, id);
-                                }
-                                mContext.startActivity(intent);
+                        ((DataViewHolder) holder).imageView.setOnClickListener(view -> {
+                            Intent intent = new Intent(mContext, ViewVideoActivity.class);
+                            intent.setData(gifVideoUri);
+                            intent.putExtra(ViewVideoActivity.TITLE_KEY, title);
+                            intent.putExtra(ViewVideoActivity.IS_DASH_VIDEO_KEY, post.isDashVideo());
+                            intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, post.isDownloadableGifOrVideo());
+                            if(post.isDownloadableGifOrVideo()) {
+                                intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, post.getGifOrVideoDownloadUrl());
+                                intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, subredditNamePrefixed);
+                                intent.putExtra(ViewVideoActivity.ID_KEY, id);
                             }
+                            mContext.startActivity(intent);
                         });
                         break;
                     case Post.VIDEO_TYPE:
@@ -437,7 +420,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                             intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, post.isDownloadableGifOrVideo());
                             if(post.isDownloadableGifOrVideo()) {
                                 intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, post.getGifOrVideoDownloadUrl());
-                                intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, subredditName);
+                                intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, subredditNamePrefixed);
                                 intent.putExtra(ViewVideoActivity.ID_KEY, id);
                             }
                             mContext.startActivity(intent);
@@ -448,16 +431,13 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         ((DataViewHolder) holder).typeChip.setText("LINK");
                         final String noPreviewLinkUrl = post.getUrl();
                         ((DataViewHolder) holder).noPreviewLinkImageView.setVisibility(View.VISIBLE);
-                        ((DataViewHolder) holder).noPreviewLinkImageView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                                // add share action to menu list
-                                builder.addDefaultShareMenuItem();
-                                builder.setToolbarColor(mContext.getResources().getColor(R.color.colorPrimary));
-                                CustomTabsIntent customTabsIntent = builder.build();
-                                customTabsIntent.launchUrl(mContext, Uri.parse(noPreviewLinkUrl));
-                            }
+                        ((DataViewHolder) holder).noPreviewLinkImageView.setOnClickListener(view -> {
+                            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                            // add share action to menu list
+                            builder.addDefaultShareMenuItem();
+                            builder.setToolbarColor(mContext.getResources().getColor(R.color.colorPrimary));
+                            CustomTabsIntent customTabsIntent = builder.build();
+                            customTabsIntent.launchUrl(mContext, Uri.parse(noPreviewLinkUrl));
                         });
                         break;
                     case Post.TEXT_TYPE:
@@ -465,132 +445,123 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         break;
                 }
 
-                ((DataViewHolder) holder).upvoteButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        final boolean isDownvotedBefore = ((DataViewHolder) holder).downvoteButton.getColorFilter() != null;
+                ((DataViewHolder) holder).upvoteButton.setOnClickListener(view -> {
+                    final boolean isDownvotedBefore = ((DataViewHolder) holder).downvoteButton.getColorFilter() != null;
 
-                        final ColorFilter downvoteButtonColorFilter = ((DataViewHolder) holder).downvoteButton.getColorFilter();
-                        ((DataViewHolder) holder).downvoteButton.clearColorFilter();
+                    final ColorFilter downvoteButtonColorFilter = ((DataViewHolder) holder).downvoteButton.getColorFilter();
+                    ((DataViewHolder) holder).downvoteButton.clearColorFilter();
 
-                        if (((DataViewHolder) holder).upvoteButton.getColorFilter() == null) {
-                            ((DataViewHolder) holder).upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
-                            if(isDownvotedBefore) {
-                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + 2));
-                            } else {
-                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + 1));
-                            }
-
-                            VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
-                                @Override
-                                public void onVoteThingSuccess(int position) {
-                                    post.setVoteType(1);
-                                    if(isDownvotedBefore) {
-                                        post.setScore(post.getScore() + 2);
-                                    } else {
-                                        post.setScore(post.getScore() + 1);
-                                    }
-                                }
-
-                                @Override
-                                public void onVoteThingFail(int position) {
-                                    Toast.makeText(mContext, "Cannot upvote this post", Toast.LENGTH_SHORT).show();
-                                    ((DataViewHolder) holder).upvoteButton.clearColorFilter();
-                                    ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore()));
-                                    ((DataViewHolder) holder).downvoteButton.setColorFilter(downvoteButtonColorFilter);
-                                }
-                            }, id, RedditUtils.DIR_UPVOTE, holder.getAdapterPosition());
+                    if (((DataViewHolder) holder).upvoteButton.getColorFilter() == null) {
+                        ((DataViewHolder) holder).upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+                        if(isDownvotedBefore) {
+                            ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + 2));
                         } else {
-                            //Upvoted before
-                            ((DataViewHolder) holder).upvoteButton.clearColorFilter();
-                            ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() - 1));
+                            ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + 1));
+                        }
 
-                            VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
-                                @Override
-                                public void onVoteThingSuccess(int position) {
-                                    post.setVoteType(0);
-                                    post.setScore(post.getScore() - 1);
-                                }
-
-                                @Override
-                                public void onVoteThingFail(int position) {
-                                    Toast.makeText(mContext, "Cannot unvote this post", Toast.LENGTH_SHORT).show();
-                                    ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + 1));
-                                    ((DataViewHolder) holder).upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+                        VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
+                            @Override
+                            public void onVoteThingSuccess(int position1) {
+                                post.setVoteType(1);
+                                if(isDownvotedBefore) {
+                                    post.setScore(post.getScore() + 2);
+                                } else {
                                     post.setScore(post.getScore() + 1);
                                 }
-                            }, id, RedditUtils.DIR_UNVOTE, holder.getAdapterPosition());
-                        }
-                    }
-                });
-
-                ((DataViewHolder) holder).downvoteButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        final boolean isUpvotedBefore = ((DataViewHolder) holder).upvoteButton.getColorFilter() != null;
-
-                        final ColorFilter upvoteButtonColorFilter = ((DataViewHolder) holder).upvoteButton.getColorFilter();
-                        ((DataViewHolder) holder).upvoteButton.clearColorFilter();
-                        if (((DataViewHolder) holder).downvoteButton.getColorFilter() == null) {
-                            ((DataViewHolder) holder).downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
-                            if (isUpvotedBefore) {
-                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() - 2));
-                            } else {
-                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() - 1));
                             }
 
-                            VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
-                                @Override
-                                public void onVoteThingSuccess(int position) {
-                                    post.setVoteType(-1);
-                                    if(isUpvotedBefore) {
-                                        post.setScore(post.getScore() - 2);
-                                    } else {
-                                        post.setScore(post.getScore() - 1);
-                                    }
-                                }
+                            @Override
+                            public void onVoteThingFail(int position1) {
+                                Toast.makeText(mContext, "Cannot upvote this post", Toast.LENGTH_SHORT).show();
+                                ((DataViewHolder) holder).upvoteButton.clearColorFilter();
+                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore()));
+                                ((DataViewHolder) holder).downvoteButton.setColorFilter(downvoteButtonColorFilter);
+                            }
+                        }, id, RedditUtils.DIR_UPVOTE, holder.getAdapterPosition());
+                    } else {
+                        //Upvoted before
+                        ((DataViewHolder) holder).upvoteButton.clearColorFilter();
+                        ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() - 1));
 
-                                @Override
-                                public void onVoteThingFail(int position) {
-                                    Toast.makeText(mContext, "Cannot downvote this post", Toast.LENGTH_SHORT).show();
-                                    ((DataViewHolder) holder).downvoteButton.clearColorFilter();
-                                    ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore()));
-                                    ((DataViewHolder) holder).upvoteButton.setColorFilter(upvoteButtonColorFilter);
-                                }
-                            }, id, RedditUtils.DIR_DOWNVOTE, holder.getAdapterPosition());
-                        } else {
-                            //Down voted before
-                            ((DataViewHolder) holder).downvoteButton.clearColorFilter();
-                            ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + 1));
+                        VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
+                            @Override
+                            public void onVoteThingSuccess(int position1) {
+                                post.setVoteType(0);
+                                post.setScore(post.getScore() - 1);
+                            }
 
-                            VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
-                                @Override
-                                public void onVoteThingSuccess(int position) {
-                                    post.setVoteType(0);
-                                    post.setScore(post.getScore());
-                                }
-
-                                @Override
-                                public void onVoteThingFail(int position) {
-                                    Toast.makeText(mContext, "Cannot unvote this post", Toast.LENGTH_SHORT).show();
-                                    ((DataViewHolder) holder).downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
-                                    ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore()));
-                                    post.setScore(post.getScore());
-                                }
-                            }, id, RedditUtils.DIR_UNVOTE, holder.getAdapterPosition());
-                        }
+                            @Override
+                            public void onVoteThingFail(int position1) {
+                                Toast.makeText(mContext, "Cannot unvote this post", Toast.LENGTH_SHORT).show();
+                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + 1));
+                                ((DataViewHolder) holder).upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+                                post.setScore(post.getScore() + 1);
+                            }
+                        }, id, RedditUtils.DIR_UNVOTE, holder.getAdapterPosition());
                     }
                 });
 
-                ((DataViewHolder) holder).shareButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(Intent.ACTION_SEND);
-                        intent.setType("text/plain");
-                        String extraText = title + "\n" + permalink;
-                        intent.putExtra(Intent.EXTRA_TEXT, extraText);
-                        mContext.startActivity(Intent.createChooser(intent, "Share"));
+                ((DataViewHolder) holder).downvoteButton.setOnClickListener(view -> {
+                    final boolean isUpvotedBefore = ((DataViewHolder) holder).upvoteButton.getColorFilter() != null;
+
+                    final ColorFilter upvoteButtonColorFilter = ((DataViewHolder) holder).upvoteButton.getColorFilter();
+                    ((DataViewHolder) holder).upvoteButton.clearColorFilter();
+                    if (((DataViewHolder) holder).downvoteButton.getColorFilter() == null) {
+                        ((DataViewHolder) holder).downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                        if (isUpvotedBefore) {
+                            ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() - 2));
+                        } else {
+                            ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() - 1));
+                        }
+
+                        VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
+                            @Override
+                            public void onVoteThingSuccess(int position12) {
+                                post.setVoteType(-1);
+                                if(isUpvotedBefore) {
+                                    post.setScore(post.getScore() - 2);
+                                } else {
+                                    post.setScore(post.getScore() - 1);
+                                }
+                            }
+
+                            @Override
+                            public void onVoteThingFail(int position12) {
+                                Toast.makeText(mContext, "Cannot downvote this post", Toast.LENGTH_SHORT).show();
+                                ((DataViewHolder) holder).downvoteButton.clearColorFilter();
+                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore()));
+                                ((DataViewHolder) holder).upvoteButton.setColorFilter(upvoteButtonColorFilter);
+                            }
+                        }, id, RedditUtils.DIR_DOWNVOTE, holder.getAdapterPosition());
+                    } else {
+                        //Down voted before
+                        ((DataViewHolder) holder).downvoteButton.clearColorFilter();
+                        ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + 1));
+
+                        VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
+                            @Override
+                            public void onVoteThingSuccess(int position12) {
+                                post.setVoteType(0);
+                                post.setScore(post.getScore());
+                            }
+
+                            @Override
+                            public void onVoteThingFail(int position12) {
+                                Toast.makeText(mContext, "Cannot unvote this post", Toast.LENGTH_SHORT).show();
+                                ((DataViewHolder) holder).downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore()));
+                                post.setScore(post.getScore());
+                            }
+                        }, id, RedditUtils.DIR_UNVOTE, holder.getAdapterPosition());
                     }
+                });
+
+                ((DataViewHolder) holder).shareButton.setOnClickListener(view -> {
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    String extraText = title + "\n" + permalink;
+                    intent.putExtra(Intent.EXTRA_TEXT, extraText);
+                    mContext.startActivity(Intent.createChooser(intent, "Share"));
                 });
             }
         }
@@ -602,13 +573,10 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 ((DataViewHolder) holder).progressBar.setVisibility(View.GONE);
                 ((DataViewHolder) holder).errorRelativeLayout.setVisibility(View.VISIBLE);
-                ((DataViewHolder)holder).errorRelativeLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        ((DataViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
-                        ((DataViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
-                        loadImage(holder, post);
-                    }
+                ((DataViewHolder)holder).errorRelativeLayout.setOnClickListener(view -> {
+                    ((DataViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
+                    ((DataViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
+                    loadImage(holder, post);
                 });
                 return false;
             }

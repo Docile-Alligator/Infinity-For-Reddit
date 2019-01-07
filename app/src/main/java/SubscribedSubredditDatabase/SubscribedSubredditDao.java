@@ -18,4 +18,10 @@ public interface SubscribedSubredditDao {
 
     @Query("SELECT * from subscribed_subreddits ORDER BY name COLLATE NOCASE ASC")
     LiveData<List<SubscribedSubredditData>> getAllSubscribedSubreddits();
+
+    @Query("SELECT * from subscribed_subreddits WHERE name = :subredditName LIMIT 1")
+    SubscribedSubredditData getSubscribedSubreddit(String subredditName);
+
+    @Query("DELETE FROM subscribed_subreddits WHERE name = :subredditName")
+    void deleteSubscribedSubreddit(String subredditName);
 }
