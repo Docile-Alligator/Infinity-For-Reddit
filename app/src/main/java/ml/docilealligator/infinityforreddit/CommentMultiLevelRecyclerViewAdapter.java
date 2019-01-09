@@ -18,8 +18,6 @@ import com.multilevelview.MultiLevelAdapter;
 import com.multilevelview.MultiLevelRecyclerView;
 import com.multilevelview.models.RecyclerViewItem;
 
-import org.sufficientlysecure.htmltextview.HtmlTextView;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -27,6 +25,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Retrofit;
+import ru.noties.markwon.view.MarkwonView;
 
 class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
     private Context mContext;
@@ -67,7 +66,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
 
         ((CommentViewHolder) holder).authorTextView.setText(commentItem.getAuthor());
         ((CommentViewHolder) holder).commentTimeTextView.setText(commentItem.getCommentTime());
-        ((CommentViewHolder) holder).commentHtmlTextView.setHtml(commentItem.getCommentContent());
+        ((CommentViewHolder) holder).commentMarkdownView.setMarkdown(commentItem.getCommentContent());
         ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore()));
 
         ((CommentViewHolder) holder).verticalBlock.getLayoutParams().width = commentItem.getDepth() * 16;
@@ -260,7 +259,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
     class CommentViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.author_text_view_item_post_comment) TextView authorTextView;
         @BindView(R.id.comment_time_text_view_item_post_comment) TextView commentTimeTextView;
-        @BindView(R.id.comment_html_text_view_item_post_comment) HtmlTextView commentHtmlTextView;
+        @BindView(R.id.comment_markdown_view_item_post_comment) MarkwonView commentMarkdownView;
         @BindView(R.id.plus_button_item_post_comment) ImageView upvoteButton;
         @BindView(R.id.score_text_view_item_post_comment) TextView scoreTextView;
         @BindView(R.id.minus_button_item_post_comment) ImageView downvoteButton;

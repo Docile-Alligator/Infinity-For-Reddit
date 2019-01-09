@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,8 +37,6 @@ import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 import com.multilevelview.MultiLevelRecyclerView;
 import com.santalu.aspectratioimageview.AspectRatioImageView;
 
-import org.sufficientlysecure.htmltextview.HtmlTextView;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +49,7 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import retrofit2.Retrofit;
+import ru.noties.markwon.view.MarkwonView;
 
 public class ViewPostDetailActivity extends AppCompatActivity {
 
@@ -66,7 +66,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     @BindView(R.id.subreddit_icon_circle_image_view_view_post_detail) CircleImageView mSubredditIconCircleImageView;
     @BindView(R.id.post_time_text_view_view_post_detail) TextView mPostTimeTextView;
     @BindView(R.id.subreddit_text_view_view_post_detail) TextView mSubredditTextView;
-    @BindView(R.id.content_html_text_view_view_post_detail) HtmlTextView mContentTextView;
+    @BindView(R.id.content_markdown_view_view_post_detail) MarkwonView mContentMarkdownView;
     @BindView(R.id.type_text_view_view_post_detail) Chip mTypeChip;
     @BindView(R.id.gilded_image_view_view_post_detail) ImageView mGildedImageView;
     @BindView(R.id.gilded_number_text_view_view_post_detail) TextView mGildedNumberTextView;
@@ -151,11 +151,11 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         switch (mPost.getVoteType()) {
             case 1:
                 //Upvote
-                mUpvoteButton.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+                mUpvoteButton.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
                 break;
             case -1:
                 //Downvote
-                mDownvoteButton.setColorFilter(ContextCompat.getColor(this, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                mDownvoteButton.setColorFilter(ContextCompat.getColor(this, R.color.minusButtonColor), PorterDuff.Mode.SRC_IN);
                 break;
         }
 
@@ -268,8 +268,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             case Post.NO_PREVIEW_LINK_TYPE:
                 mTypeChip.setText("LINK");
                 if(!mPost.getSelfText().equals("")) {
-                    mContentTextView.setVisibility(View.VISIBLE);
-                    mContentTextView.setHtml(mPost.getSelfText());
+                    mContentMarkdownView.setVisibility(View.VISIBLE);
+                    mContentMarkdownView.setMarkdown(mPost.getSelfText());
                 }
                 mNoPreviewLinkImageView.setVisibility(View.VISIBLE);
                 mNoPreviewLinkImageView.setOnClickListener(view -> {
@@ -284,8 +284,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             case Post.TEXT_TYPE:
                 mTypeChip.setVisibility(View.GONE);
                 if(!mPost.getSelfText().equals("")) {
-                    mContentTextView.setVisibility(View.VISIBLE);
-                    mContentTextView.setHtml(mPost.getSelfText());
+                    mContentMarkdownView.setVisibility(View.VISIBLE);
+                    mContentMarkdownView.setMarkdown(mPost.getSelfText());
                 }
                 break;
         }
@@ -298,7 +298,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             mDownvoteButton.clearColorFilter();
 
             if (mUpvoteButton.getColorFilter() == null) {
-                mUpvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+                mUpvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
                 if(isDownvotedBefore) {
                     mScoreTextView.setText(Integer.toString(mPost.getScore() + 2));
                 } else {
@@ -340,7 +340,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     public void onVoteThingFail() {
                         Toast.makeText(ViewPostDetailActivity.this, "Cannot unvote this post", Toast.LENGTH_SHORT).show();
                         mScoreTextView.setText(Integer.toString(mPost.getScore() + 1));
-                        mUpvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+                        mUpvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
                         mPost.setScore(mPost.getScore() + 1);
                     }
                 }, mPost.getFullName(), RedditUtils.DIR_UNVOTE);
@@ -354,7 +354,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             mUpvoteButton.clearColorFilter();
 
             if (mDownvoteButton.getColorFilter() == null) {
-                mDownvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                mDownvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.minusButtonColor), PorterDuff.Mode.SRC_IN);
                 if (isUpvotedBefore) {
                     mScoreTextView.setText(Integer.toString(mPost.getScore() - 2));
                 } else {
@@ -395,7 +395,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     @Override
                     public void onVoteThingFail() {
                         Toast.makeText(ViewPostDetailActivity.this, "Cannot unvote this post", Toast.LENGTH_SHORT).show();
-                        mDownvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                        mDownvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.minusButtonColor), PorterDuff.Mode.SRC_IN);
                         mScoreTextView.setText(Integer.toString(mPost.getScore()));
                         mPost.setScore(mPost.getScore());
                     }

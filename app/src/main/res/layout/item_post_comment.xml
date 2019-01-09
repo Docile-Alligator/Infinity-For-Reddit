@@ -40,15 +40,14 @@
 
         </LinearLayout>
 
-        <org.sufficientlysecure.htmltextview.HtmlTextView
-            android:id="@+id/comment_html_text_view_item_post_comment"
+        <ru.noties.markwon.view.MarkwonView
+            android:id="@+id/comment_markdown_view_item_post_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginBottom="8dp"
-            android:textAppearance="@android:style/TextAppearance.Small"/>
+            android:layout_marginBottom="8dp"/>
 
         <RelativeLayout
             android:id="@+id/relative_layout_item_post_comment"

@@ -59,7 +59,6 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:$rootProject.archLifecycleVersion"
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
-    implementation 'org.sufficientlysecure:html-textview:3.6'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.4.0'
     implementation 'jp.wasabeef:glide-transformations:4.0.0'
@@ -72,4 +71,7 @@ dependencies {
     implementation 'com.felipecsl:gifimageview:2.2.0'
     implementation "android.arch.paging:runtime:1.0.1"
     implementation "com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE"
+    implementation "ru.noties:markwon:2.0.1"
+    implementation "ru.noties:markwon-syntax-highlight:2.0.1"
+    implementation "ru.noties:markwon-view:2.0.1"
 }

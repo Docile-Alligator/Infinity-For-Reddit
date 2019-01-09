@@ -125,4 +125,6 @@
     <string name="subscribe_failed">Subscribe Failed</string>
     <string name="unsubscribed">Unsubscribed</string>"
     <string name="unsubscribe_failed">Unsubscribe Failed</string>
+
+    <string name="content_description_banner_imageview">Subreddit Banner Image</string>
 </resources>

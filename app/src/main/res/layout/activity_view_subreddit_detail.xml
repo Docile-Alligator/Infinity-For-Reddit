@@ -29,7 +29,8 @@
                     android:id="@+id/banner_image_view_view_subreddit_detail_activity"
                     android:layout_width="match_parent"
                     android:scaleType="centerCrop"
-                    android:layout_height="180dp" />
+                    android:layout_height="180dp"
+                    android:contentDescription="@string/content_description_banner_imageview" />
 
                 <com.felipecsl.gifimageview.library.GifImageView
                     android:id="@+id/icon_gif_image_view_view_subreddit_detail_activity"
@@ -58,6 +59,7 @@
                         android:id="@+id/subreddit_name_text_view_view_subreddit_detail_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
                         android:textSize="18sp"
                         android:textColor="@color/colorAccent"
@@ -70,17 +72,6 @@
                         android:textColor="@android:color/white"
                         android:layout_gravity="center_horizontal"/>
 
-                    <!--<RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="48dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp">
-
-
-
-                    </RelativeLayout>-->
-
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -91,6 +82,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@android:color/black"
+                            android:layout_alignParentStart="true"
+                            android:layout_toStartOf="@id/online_subscriber_count_text_view_view_subreddit_detail_activity"
                             android:layout_marginBottom="16dp"/>
 
                         <TextView
@@ -98,7 +91,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
-                            android:layout_toStartOf="@id/subscriber_count_text_view_view_subreddit_detail_activity"
                             android:textColor="@android:color/black" />
 
                     </RelativeLayout>
