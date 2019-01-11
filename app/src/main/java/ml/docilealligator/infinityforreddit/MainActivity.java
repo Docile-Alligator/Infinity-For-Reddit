@@ -1,13 +1,11 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -166,33 +164,27 @@ public class MainActivity extends AppCompatActivity {
             subscribedSubredditRecyclerView.setAdapter(subredditadapter);
 
             mSubscribedSubredditViewModel = ViewModelProviders.of(this).get(SubscribedSubredditViewModel.class);
-            mSubscribedSubredditViewModel.getAllSubscribedSubreddits().observe(this, new Observer<List<SubscribedSubredditData>>() {
-                @Override
-                public void onChanged(@Nullable final List<SubscribedSubredditData> subscribedSubredditData) {
-                    if (subscribedSubredditData == null || subscribedSubredditData.size() == 0) {
-                        subscriptionsLabelTextView.setVisibility(View.GONE);
-                    } else {
-                        subscriptionsLabelTextView.setVisibility(View.VISIBLE);
-                    }
-
-                    subredditadapter.setSubscribedSubreddits(subscribedSubredditData);
+            mSubscribedSubredditViewModel.getAllSubscribedSubreddits().observe(this, subscribedSubredditData -> {
+                if (subscribedSubredditData == null || subscribedSubredditData.size() == 0) {
+                    subscriptionsLabelTextView.setVisibility(View.GONE);
+                } else {
+                    subscriptionsLabelTextView.setVisibility(View.VISIBLE);
                 }
+
+                subredditadapter.setSubscribedSubreddits(subscribedSubredditData);
             });
 
             final SubscribedUserRecyclerViewAdapter userAdapter =
                     new SubscribedUserRecyclerViewAdapter(this, drawer::closeDrawers);
             subscribedUserRecyclerView.setAdapter(userAdapter);
             mSubscribedUserViewModel = ViewModelProviders.of(this).get(SubscribedUserViewModel.class);
-            mSubscribedUserViewModel.getAllSubscribedUsers().observe(this, new Observer<List<SubscribedUserData>>() {
-                @Override
-                public void onChanged(@Nullable final List<SubscribedUserData> subscribedUserData) {
-                    if (subscribedUserData == null || subscribedUserData.size() == 0) {
-                        followingLabelTextView.setVisibility(View.GONE);
-                    } else {
-                        followingLabelTextView.setVisibility(View.VISIBLE);
-                    }
-                    userAdapter.setSubscribedUsers(subscribedUserData);
+            mSubscribedUserViewModel.getAllSubscribedUsers().observe(this, subscribedUserData -> {
+                if (subscribedUserData == null || subscribedUserData.size() == 0) {
+                    followingLabelTextView.setVisibility(View.GONE);
+                } else {
+                    followingLabelTextView.setVisibility(View.VISIBLE);
                 }
+                userAdapter.setSubscribedUsers(subscribedUserData);
             });
         }
     }

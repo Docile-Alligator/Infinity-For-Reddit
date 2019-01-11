@@ -43,8 +43,12 @@ public class ParseUserData {
                 String userName = jsonResponse.getString(JSONUtils.NAME_KEY);
                 String iconImageUrl = jsonResponse.getString(JSONUtils.ICON_IMG_KEY);
                 String bannerImageUrl = "";
+                boolean canBeFollowed;
                 if(jsonResponse.has(JSONUtils.SUBREDDIT_KEY) && !jsonResponse.isNull(JSONUtils.SUBREDDIT_KEY)) {
                     bannerImageUrl = jsonResponse.getJSONObject(JSONUtils.SUBREDDIT_KEY).getString(JSONUtils.BANNER_IMG_KEY);
+                    canBeFollowed = true;
+                } else {
+                    canBeFollowed = false;
                 }
                 int linkKarma = jsonResponse.getInt(JSONUtils.LINK_KARMA_KEY);
                 int commentKarma = jsonResponse.getInt(JSONUtils.COMMENT_KARMA_KEY);
@@ -52,7 +56,7 @@ public class ParseUserData {
                 boolean isGold = jsonResponse.getBoolean(JSONUtils.IS_GOLD_KEY);
                 boolean isFriend = jsonResponse.getBoolean(JSONUtils.IS_FRIEND_KEY);
 
-                userData = new UserData(userName, iconImageUrl, bannerImageUrl, karma, isGold, isFriend);
+                userData = new UserData(userName, iconImageUrl, bannerImageUrl, karma, isGold, isFriend, canBeFollowed);
             } catch (JSONException e) {
                 parseFailed = true;
                 Log.i("parse user data error", e.getMessage());

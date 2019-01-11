@@ -16,6 +16,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -98,6 +99,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
 
         String userName = getIntent().getExtras().getString(EXTRA_USER_NAME_KEY);
         String title = "u/" + userName;
+        userNameTextView.setText(title);
 
         CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar_layout_view_user_detail_activity);
         AppBarLayout appBarLayout = findViewById(R.id.app_bar_layout_view_user_detail_activity);
@@ -127,65 +129,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             }
         });
 
-        subscribeUserChip.setOnClickListener(view -> {
-            if(subscriptionReady) {
-                subscriptionReady = false;
-                if(subscribeUserChip.getText().equals(getResources().getString(R.string.follow))) {
-                    UserFollowing.followUser(mOauthRetrofit, mRetrofit, sharedPreferences,
-                            userName, subscribedUserDao, new UserFollowing.UserFollowingListener() {
-                                @Override
-                                public void onUserFollowingSuccess() {
-                                    subscribeUserChip.setText(R.string.unfollow);
-                                    subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
-                                    makeSnackbar(R.string.followed);
-                                    subscriptionReady = true;
-                                }
-
-                                @Override
-                                public void onUserFollowingFail() {
-                                    makeSnackbar(R.string.follow_failed);
-                                    subscriptionReady = true;
-                                }
-                            });
-                } else {
-                    UserFollowing.unfollowUser(mOauthRetrofit, mRetrofit, sharedPreferences,
-                            userName, subscribedUserDao, new UserFollowing.UserFollowingListener() {
-                                @Override
-                                public void onUserFollowingSuccess() {
-                                    subscribeUserChip.setText(R.string.follow);
-                                    subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorPrimaryDark));
-                                    makeSnackbar(R.string.unfollowed);
-                                    subscriptionReady = true;
-                                }
-
-                                @Override
-                                public void onUserFollowingFail() {
-                                    makeSnackbar(R.string.unfollow_failed);
-                                    subscriptionReady = true;
-                                }
-                            });
-                }
-            }
-        });
-
         subscribedUserDao = SubscribedUserRoomDatabase.getDatabase(this).subscribedUserDao();
-
-        new CheckIsFollowingUserAsyncTask(subscribedUserDao, userName, new CheckIsFollowingUserAsyncTask.CheckIsFollowingUserListener() {
-            @Override
-            public void isSubscribed() {
-                subscribeUserChip.setText(R.string.unfollow);
-                subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
-                subscriptionReady = true;
-            }
-
-            @Override
-            public void isNotSubscribed() {
-                subscribeUserChip.setText(R.string.follow);
-                subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorPrimaryDark));
-                subscriptionReady = true;
-            }
-        }).execute();
-
         glide = Glide.with(this);
 
         userViewModel = ViewModelProviders.of(this, new UserViewModel.Factory(getApplication(), userName))
@@ -242,6 +186,68 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                         intent.putExtra(ViewImageActivity.FILE_NAME_KEY, userName + "-icon");
                         startActivity(intent);
                     });
+                }
+
+                if(userData.isCanBeFollowed()) {
+                    subscribeUserChip.setVisibility(View.VISIBLE);
+                    subscribeUserChip.setOnClickListener(view -> {
+                        if(subscriptionReady) {
+                            subscriptionReady = false;
+                            if(subscribeUserChip.getText().equals(getResources().getString(R.string.follow))) {
+                                UserFollowing.followUser(mOauthRetrofit, mRetrofit, sharedPreferences,
+                                        userName, subscribedUserDao, new UserFollowing.UserFollowingListener() {
+                                            @Override
+                                            public void onUserFollowingSuccess() {
+                                                subscribeUserChip.setText(R.string.unfollow);
+                                                subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+                                                makeSnackbar(R.string.followed);
+                                                subscriptionReady = true;
+                                            }
+
+                                            @Override
+                                            public void onUserFollowingFail() {
+                                                makeSnackbar(R.string.follow_failed);
+                                                subscriptionReady = true;
+                                            }
+                                        });
+                            } else {
+                                UserFollowing.unfollowUser(mOauthRetrofit, mRetrofit, sharedPreferences,
+                                        userName, subscribedUserDao, new UserFollowing.UserFollowingListener() {
+                                            @Override
+                                            public void onUserFollowingSuccess() {
+                                                subscribeUserChip.setText(R.string.follow);
+                                                subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorPrimaryDark));
+                                                makeSnackbar(R.string.unfollowed);
+                                                subscriptionReady = true;
+                                            }
+
+                                            @Override
+                                            public void onUserFollowingFail() {
+                                                makeSnackbar(R.string.unfollow_failed);
+                                                subscriptionReady = true;
+                                            }
+                                        });
+                            }
+                        }
+                    });
+
+                    new CheckIsFollowingUserAsyncTask(subscribedUserDao, userName, new CheckIsFollowingUserAsyncTask.CheckIsFollowingUserListener() {
+                        @Override
+                        public void isSubscribed() {
+                            subscribeUserChip.setText(R.string.unfollow);
+                            subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+                            subscriptionReady = true;
+                        }
+
+                        @Override
+                        public void isNotSubscribed() {
+                            subscribeUserChip.setText(R.string.follow);
+                            subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorPrimaryDark));
+                            subscriptionReady = true;
+                        }
+                    }).execute();
+                } else {
+                    subscribeUserChip.setVisibility(View.GONE);
                 }
 
                 String userFullName = "u/" + userData.getName();

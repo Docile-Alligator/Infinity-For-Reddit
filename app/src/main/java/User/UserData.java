@@ -16,13 +16,16 @@ public class UserData extends SubscribedUserData {
     private boolean isGold;
     @ColumnInfo(name = "is_friend")
     private boolean isFriend;
+    @ColumnInfo(name = "can_be_followed")
+    private boolean canBeFollowed;
 
-    public UserData(@NonNull String name, String iconUrl, String banner, int karma, boolean isGold, boolean isFriend) {
+    public UserData(@NonNull String name, String iconUrl, String banner, int karma, boolean isGold, boolean isFriend, boolean canBeFollowed) {
         super(name, iconUrl);
         this.banner = banner;
         this.karma = karma;
         this.isGold = isGold;
         this.isFriend = isFriend;
+        this.canBeFollowed = canBeFollowed;
     }
 
     public String getBanner() {
@@ -39,5 +42,9 @@ public class UserData extends SubscribedUserData {
 
     public boolean isFriend() {
         return isFriend;
+    }
+
+    public boolean isCanBeFollowed() {
+        return canBeFollowed;
     }
 }

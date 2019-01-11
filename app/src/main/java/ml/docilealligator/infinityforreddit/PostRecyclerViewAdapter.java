@@ -666,11 +666,8 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
         DataViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            scoreTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //Do nothing in order to prevent clicking this to start ViewPostDetailActivity
-                }
+            scoreTextView.setOnClickListener(view -> {
+                //Do nothing in order to prevent clicking this to start ViewPostDetailActivity
             });
         }
     }

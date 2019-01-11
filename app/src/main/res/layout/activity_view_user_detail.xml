@@ -68,6 +68,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
                         android:textColor="@android:color/black"
                         android:layout_gravity="center_horizontal"/>
 
@@ -75,10 +76,10 @@
                         android:id="@+id/subscribe_user_chip_view_user_detail_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
                         android:textColor="@android:color/white"
-                        android:layout_gravity="center_horizontal"/>
+                        android:layout_gravity="center_horizontal"
+                        android:visibility="gone"/>
 
                 </LinearLayout>
 

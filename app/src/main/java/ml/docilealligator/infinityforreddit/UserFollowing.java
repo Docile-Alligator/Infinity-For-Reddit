@@ -70,7 +70,7 @@ class UserFollowing {
                     }
                     userFollowingListener.onUserFollowingSuccess();
                 } else {
-                    Log.i("call failed", response.message());
+                    Log.i("call failed", Integer.toString(response.code()));
                     userFollowingListener.onUserFollowingFail();
                 }
             }
