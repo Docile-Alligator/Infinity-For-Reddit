@@ -35,6 +35,7 @@
                         layout="@layout/nav_header_main" />
 
                     <LinearLayout
+                        android:id="@+id/profile_linear_layout_main_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="16dp"

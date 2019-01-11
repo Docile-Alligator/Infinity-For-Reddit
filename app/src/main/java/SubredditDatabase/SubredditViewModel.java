@@ -11,7 +11,7 @@ public class SubredditViewModel extends AndroidViewModel {
     private SubredditRepository mSubredditRepository;
     private LiveData<SubredditData> mSubredditLiveData;
 
-    SubredditViewModel(Application application, String id) {
+    public SubredditViewModel(Application application, String id) {
         super(application);
         mSubredditRepository = new SubredditRepository(application, id);
         mSubredditLiveData = mSubredditRepository.getSubredditLiveData();

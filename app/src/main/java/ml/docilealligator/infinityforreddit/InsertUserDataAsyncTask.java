@@ -2,27 +2,27 @@ package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
 
-import User.User;
+import User.UserData;
 import User.UserDao;
 
 public class InsertUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
     private UserDao userDao;
-    private User user;
+    private UserData userData;
     private InsertUserDataCallback insertUserDataCallback;
 
     public interface InsertUserDataCallback {
         void insertSuccess();
     }
 
-    public InsertUserDataAsyncTask(UserDao userDao, User user, InsertUserDataCallback insertUserDataCallback) {
+    public InsertUserDataAsyncTask(UserDao userDao, UserData userData, InsertUserDataCallback insertUserDataCallback) {
         this.userDao = userDao;
-        this.user = user;
+        this.userData = userData;
         this.insertUserDataCallback = insertUserDataCallback;
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
-        userDao.insert(user);
+        userDao.insert(userData);
         return null;
     }
 

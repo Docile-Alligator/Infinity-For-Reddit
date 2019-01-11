@@ -20,14 +20,14 @@ public class SubredditRepository {
     }
 
     public void insert(SubredditData subredditData) {
-        new SubredditRepository.insertAsyncTask(mSubredditDao).execute(subredditData);
+        new InsertAsyncTask(mSubredditDao).execute(subredditData);
     }
 
-    private static class insertAsyncTask extends AsyncTask<SubredditData, Void, Void> {
+    private static class InsertAsyncTask extends AsyncTask<SubredditData, Void, Void> {
 
         private SubredditDao mAsyncTaskDao;
 
-        insertAsyncTask(SubredditDao dao) {
+        InsertAsyncTask(SubredditDao dao) {
             mAsyncTaskDao = dao;
         }
 

@@ -26,6 +26,8 @@
     <string name="subscriptions">Subscriptions</string>
     <string name="subscribers_number_detail">Subscribers: %1$d</string>
     <string name="online_subscribers_number_detail">Online: %1$d</string>
+    <string name="cannot_fetch_subreddit_info">Cannot fetch subreddit info</string>
+    <string name="cannot_fetch_user_info">Cannot fetch user info</string>
 
     <string name="gilded">x%1$d</string>
     <string name="title_activity_view_user_detail">ViewUserDetailActivity</string>
@@ -49,15 +51,15 @@
         "and use of imagery guide visual treatments. These elements do far more than please the "
         "eye. They create hierarchy, meaning, and focus. Deliberate color choices, edge to edge "
         "imagery, large scale typography, and intentional white space create a bold and graphic "
-        "interface that immerse the user in the experience.\n"
-        "An emphasis on user actions makes core functionality immediately apparent and provides "
-        "waypoints for the user.\n\n"
+        "interface that immerse the userData in the experience.\n"
+        "An emphasis on userData actions makes core functionality immediately apparent and provides "
+        "waypoints for the userData.\n\n"
 
         "Motion provides meaning.\n\n"
 
-        "Motion respects and reinforces the user as the prime mover. Primary user actions are "
+        "Motion respects and reinforces the userData as the prime mover. Primary userData actions are "
         "inflection points that initiate motion, transforming the whole design.\n"
-        "All action takes place in a single environment. Objects are presented to the user without "
+        "All action takes place in a single environment. Objects are presented to the userData without "
         "breaking the continuity of experience even as they transform and reorganize.\n"
         "Motion is meaningful and appropriate, serving to focus attention and maintain continuity. "
         "Feedback is subtle yet clear. Transitions are efﬁcient yet coherent.\n\n"
@@ -96,7 +98,7 @@
         "Responsive elevation and dynamic elevation offsets.\n\n"
 
         "Some component types have responsive elevation, meaning they change elevation in response "
-        "to user input (e.g., normal, focused, and pressed) or system events. These elevation "
+        "to userData input (e.g., normal, focused, and pressed) or system events. These elevation "
         "changes are consistently implemented using dynamic elevation offsets.\n"
         "Dynamic elevation offsets are the goal elevation that a component moves towards, relative "
         "to the component’s resting state. They ensure that elevation changes are consistent "
@@ -113,10 +115,10 @@
         "whether on a per component basis or using the entire app layout.\n"
         "On a component level, components can move or be removed before they cause interference. "
         "For example, a floating action button (FAB) can disappear or move off screen before a "
-        "user picks up a card, or it can move if a snackbar appears.\n"
+        "userData picks up a card, or it can move if a snackbar appears.\n"
         "On the layout level, design your app layout to minimize opportunities for interference. "
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
-        "when a user tries to pick up one of cards.\n\n"
+        "when a userData tries to pick up one of cards.\n\n"
     </string>
 
     <string name="subscribe">Subscribe</string>
@@ -125,6 +127,13 @@
     <string name="subscribe_failed">Subscribe Failed</string>
     <string name="unsubscribed">Unsubscribed</string>"
     <string name="unsubscribe_failed">Unsubscribe Failed</string>
+
+    <string name="follow">Follow</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="followed">Followed</string>
+    <string name="follow_failed">Following Failed</string>
+    <string name="unfollowed">Unfollowed</string>
+    <string name="unfollow_failed">Unfollowing Failed</string>
 
     <string name="content_description_banner_imageview">Subreddit Banner Image</string>
 </resources>

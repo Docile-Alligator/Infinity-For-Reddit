@@ -50,8 +50,8 @@
             android:theme="@style/AppTheme.NoActionBarWithTranslucentStatusBar" />
         <activity
             android:name=".ViewUserDetailActivity"
-            android:label="@string/title_activity_view_user_detail"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBarWithTranslucentStatusBar" />
     </application>
 
 </manifest>

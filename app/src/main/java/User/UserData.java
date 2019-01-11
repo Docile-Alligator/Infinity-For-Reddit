@@ -2,17 +2,12 @@ package User;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import SubscribedUserDatabase.SubscribedUserData;
+
 @Entity(tableName = "users")
-public class User {
-    @PrimaryKey
-    @NonNull
-    @ColumnInfo(name = "user_name")
-    private String userName;
-    @ColumnInfo(name = "icon")
-    private String icon;
+public class UserData extends SubscribedUserData {
     @ColumnInfo(name = "banner")
     private String banner;
     @ColumnInfo(name = "karma")
@@ -22,22 +17,12 @@ public class User {
     @ColumnInfo(name = "is_friend")
     private boolean isFriend;
 
-    User(@NonNull String userName, String icon, String banner, int karma, boolean isGold, boolean isFriend) {
-        this.userName = userName;
-        this.icon = icon;
+    public UserData(@NonNull String name, String iconUrl, String banner, int karma, boolean isGold, boolean isFriend) {
+        super(name, iconUrl);
         this.banner = banner;
         this.karma = karma;
         this.isGold = isGold;
         this.isFriend = isFriend;
-    }
-
-    @NonNull
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getIcon() {
-        return icon;
     }
 
     public String getBanner() {

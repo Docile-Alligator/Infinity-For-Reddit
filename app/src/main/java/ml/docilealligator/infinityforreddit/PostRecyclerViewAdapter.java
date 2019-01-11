@@ -300,6 +300,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         if(canStartActivity) {
                             canStartActivity = false;
                             Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
+                            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, post.getAuthor());
                             mContext.startActivity(intent);
                         }
                     });
@@ -310,6 +311,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         if(canStartActivity) {
                             canStartActivity = false;
                             Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
+                            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, post.getAuthor());
                             mContext.startActivity(intent);
                         }
                     });

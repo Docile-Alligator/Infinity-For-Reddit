@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
@@ -27,6 +28,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 public class SubscribedUserRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<SubscribedUserData> mSubscribedUserData;
+    private Context mContext;
     private RequestManager glide;
     private OnItemClickListener mOnItemClickListener;
 
@@ -35,6 +37,7 @@ public class SubscribedUserRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     }
 
     SubscribedUserRecyclerViewAdapter(Context context, OnItemClickListener onItemClickListener) {
+        mContext = context;
         glide = Glide.with(context.getApplicationContext());
         mOnItemClickListener = onItemClickListener;
     }
@@ -47,13 +50,11 @@ public class SubscribedUserRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, int i) {
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Need to be implemented
-
-                mOnItemClickListener.onClick();
-            }
+        viewHolder.itemView.setOnClickListener(view -> {
+            Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
+            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mSubscribedUserData.get(viewHolder.getAdapterPosition()).getName());
+            mContext.startActivity(intent);
+            mOnItemClickListener.onClick();
         });
         if(!mSubscribedUserData.get(i).getIconUrl().equals("")) {
             glide.load(mSubscribedUserData.get(i).getIconUrl())

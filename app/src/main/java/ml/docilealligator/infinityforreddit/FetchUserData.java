@@ -1,16 +1,16 @@
-package User;
+package ml.docilealligator.infinityforreddit;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import ml.docilealligator.infinityforreddit.RedditAPI;
+import User.UserData;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 
 public class FetchUserData {
     public interface FetchUserDataListener {
-        void onFetchUserDataSuccess(User user);
+        void onFetchUserDataSuccess(UserData userData);
         void onFetchUserDataFail();
     }
 
@@ -23,10 +23,10 @@ public class FetchUserData {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParseUserData.parseMyInfo(response.body(), new ParseUserData.ParseUserDataListener() {
+                    ParseUserData.parseUserData(response.body(), new ParseUserData.ParseUserDataListener() {
                         @Override
-                        public void onParseUserDataSuccess(User user) {
-                            fetchUserDataListener.onFetchUserDataSuccess(user);
+                        public void onParseUserDataSuccess(UserData userData) {
+                            fetchUserDataListener.onFetchUserDataSuccess(userData);
                         }
 
                         @Override

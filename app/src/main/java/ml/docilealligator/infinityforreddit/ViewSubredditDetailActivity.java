@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -104,11 +103,11 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
         params.topMargin = statusBarHeight;
 
-        final String subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME_KEY);
+        String subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME_KEY);
 
-        final String title = "r/" + subredditName;
-        final CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar_layout_view_subreddit_detail_activity);
-        final AppBarLayout appBarLayout = findViewById(R.id.app_bar_layout_view_subreddit_detail_activity);
+        String title = "r/" + subredditName;
+        CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar_layout_view_subreddit_detail_activity);
+        AppBarLayout appBarLayout = findViewById(R.id.app_bar_layout_view_subreddit_detail_activity);
 
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             int previousVerticalOffset = 0;
@@ -136,10 +135,10 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         });
 
         subscribedSubredditDao = SubscribedSubredditRoomDatabase.getDatabase(this).subscribedSubredditDao();
-        glide = Glide.with(ViewSubredditDetailActivity.this);
+        glide = Glide.with(this);
 
-        SubredditViewModel.Factory factory = new SubredditViewModel.Factory(getApplication(), subredditName);
-        mSubredditViewModel = ViewModelProviders.of(this, factory).get(SubredditViewModel.class);
+        mSubredditViewModel = ViewModelProviders.of(this, new SubredditViewModel.Factory(getApplication(), subredditName))
+                .get(SubredditViewModel.class);
         mSubredditViewModel.getSubredditLiveData().observe(this, subredditData -> {
             if(subredditData != null) {
                 if(subredditData.getBannerUrl().equals("")) {
@@ -279,7 +278,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
 
                     @Override
                     public void onParseSubredditDataFail() {
-                        Toast.makeText(ViewSubredditDetailActivity.this, "Cannot fetch subreddit info", Toast.LENGTH_SHORT).show();
+                        makeSnackbar(R.string.cannot_fetch_subreddit_info);
                     }
                 });
             }

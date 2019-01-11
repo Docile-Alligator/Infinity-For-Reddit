@@ -9,24 +9,17 @@ import android.support.annotation.NonNull;
 public class SubscribedUserData {
     @PrimaryKey
     @NonNull
-    @ColumnInfo(name = "id")
-    private String id;
     @ColumnInfo(name = "name")
     private String name;
     @ColumnInfo(name = "icon")
     private String iconUrl;
 
-    public SubscribedUserData(@NonNull String id, String name, String iconUrl) {
-        this.id = id;
+    public SubscribedUserData(@NonNull String name, String iconUrl) {
         this.name = name;
         this.iconUrl = iconUrl;
     }
 
     @NonNull
-    public String getId() {
-        return id;
-    }
-
     public String getName() {
         return name;
     }

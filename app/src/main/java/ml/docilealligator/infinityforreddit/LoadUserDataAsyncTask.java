@@ -2,8 +2,7 @@ package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
 
-import User.FetchUserData;
-import User.User;
+import User.UserData;
 import User.UserDao;
 import retrofit2.Retrofit;
 
@@ -29,7 +28,7 @@ public class LoadUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
         if(userDao.getUserData(userName) != null) {
-            iconImageUrl = userDao.getUserData(userName).getIcon();
+            iconImageUrl = userDao.getUserData(userName).getIconUrl();
             hasUserInDb = true;
         } else {
             hasUserInDb = false;
@@ -45,13 +44,8 @@ public class LoadUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
         } else {
             FetchUserData.fetchUserData(retrofit, userName, new FetchUserData.FetchUserDataListener() {
                 @Override
-                public void onFetchUserDataSuccess(User user) {
-                    new InsertUserDataAsyncTask(userDao, user, new InsertUserDataAsyncTask.InsertUserDataCallback() {
-                        @Override
-                        public void insertSuccess() {
-                            loadUserDataAsyncTaskListener.loadUserDataSuccess(user.getIcon());
-                        }
-                    }).execute();
+                public void onFetchUserDataSuccess(UserData userData) {
+                    new InsertUserDataAsyncTask(userDao, userData, () -> loadUserDataAsyncTaskListener.loadUserDataSuccess(userData.getIconUrl())).execute();
                 }
 
                 @Override

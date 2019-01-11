@@ -94,7 +94,7 @@ class ParseSubscribedThing {
                     if(data.getString(JSONUtils.SUBREDDIT_TYPE_KEY)
                             .equals(JSONUtils.SUBREDDIT_TYPE_VALUE_USER)) {
                         //It's a user
-                        newSubscribedUserData.add(new SubscribedUserData(id, name.substring(2), iconUrl));
+                        newSubscribedUserData.add(new SubscribedUserData(name.substring(2), iconUrl));
                     } else {
                         String subredditFullName = data.getString(JSONUtils.DISPLAY_NAME);
                         String description = data.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY).trim();

@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.subscriptions_label_main_activity) TextView subscriptionsLabelTextView;
     @BindView(R.id.subscribed_user_recycler_view_main_activity) RecyclerView subscribedUserRecyclerView;
     @BindView(R.id.following_label_main_activity) TextView followingLabelTextView;
+    @BindView(R.id.profile_linear_layout_main_activity) LinearLayout profileLinearLayout;
 
     private TextView mNameTextView;
     private TextView mKarmaTextView;
@@ -153,13 +155,14 @@ public class MainActivity extends AppCompatActivity {
                 glide.load(mBannerImageUrl).into(mBannerImageView);
             }
 
-            final SubscribedSubredditRecyclerViewAdapter subredditadapter = new SubscribedSubredditRecyclerViewAdapter(this,
-                    new SubscribedSubredditRecyclerViewAdapter.OnItemClickListener() {
-                        @Override
-                        public void onClick() {
-                            drawer.closeDrawers();
-                        }
-                    });
+            profileLinearLayout.setOnClickListener(view -> {
+                Intent intent = new Intent(MainActivity.this, ViewUserDetailActivity.class);
+                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mName);
+                startActivity(intent);
+            });
+
+            final SubscribedSubredditRecyclerViewAdapter subredditadapter =
+                    new SubscribedSubredditRecyclerViewAdapter(this, drawer::closeDrawers);
             subscribedSubredditRecyclerView.setAdapter(subredditadapter);
 
             mSubscribedSubredditViewModel = ViewModelProviders.of(this).get(SubscribedSubredditViewModel.class);
@@ -176,13 +179,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            final SubscribedUserRecyclerViewAdapter userAdapter = new SubscribedUserRecyclerViewAdapter(this,
-                    new SubscribedUserRecyclerViewAdapter.OnItemClickListener() {
-                        @Override
-                        public void onClick() {
-                            drawer.closeDrawers();
-                        }
-                    });
+            final SubscribedUserRecyclerViewAdapter userAdapter =
+                    new SubscribedUserRecyclerViewAdapter(this, drawer::closeDrawers);
             subscribedUserRecyclerView.setAdapter(userAdapter);
             mSubscribedUserViewModel = ViewModelProviders.of(this).get(SubscribedUserViewModel.class);
             mSubscribedUserViewModel.getAllSubscribedUsers().observe(this, new Observer<List<SubscribedUserData>>() {

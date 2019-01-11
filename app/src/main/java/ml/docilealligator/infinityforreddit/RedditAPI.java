@@ -3,11 +3,13 @@ package ml.docilealligator.infinityforreddit;
 import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.http.DELETE;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -45,4 +47,10 @@ public interface RedditAPI {
     @FormUrlEncoded
     @POST("api/subscribe")
     Call<String> subredditSubscription(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @PUT("/api/v1/me/friends/username")
+    Call<String> subscribeUser(@HeaderMap Map<String, String> headers);
+
+    @DELETE("/api/v1/me/friends/username")
+    Call<String> unsubscribeUser(@HeaderMap Map<String, String> headers);
 }

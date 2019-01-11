@@ -16,6 +16,12 @@ public interface SubscribedUserDao {
     @Query("DELETE FROM subscribed_users")
     void deleteAllSubscribedUsers();
 
-    @Query("SELECT * from subscribed_users ORDER BY name COLLATE NOCASE ASC")
+    @Query("SELECT * FROM subscribed_users ORDER BY name COLLATE NOCASE ASC")
     LiveData<List<SubscribedUserData>> getAllSubscribedUsers();
+
+    @Query("SELECT * FROM subscribed_users WHERE name = :userName LIMIT 1")
+    SubscribedUserData getSubscribedUser(String userName);
+
+    @Query("DELETE FROM subscribed_users WHERE name = :userName")
+    void deleteSubscribedUser(String userName);
 }
