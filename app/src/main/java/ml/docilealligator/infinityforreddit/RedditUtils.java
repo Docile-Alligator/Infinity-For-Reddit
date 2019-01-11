@@ -30,7 +30,7 @@ public class RedditUtils {
 
     static final String AUTHORIZATION_KEY = "Authorization";
     static final String AUTHORIZATION_BASE = "bearer ";
-    static final String USER_AGENT_KEY = "UserData-Agent";
+    static final String USER_AGENT_KEY = "User-Agent";
     static final String USER_AGENT = "";
 
     static final String GRANT_TYPE_KEY = "grant_type";
