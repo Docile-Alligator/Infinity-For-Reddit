@@ -130,7 +130,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         subscribeUserChip.setOnClickListener(view -> {
             if(subscriptionReady) {
                 subscriptionReady = false;
-                if(subscribeUserChip.getText().equals(getResources().getString(R.string.subscribe))) {
+                if(subscribeUserChip.getText().equals(getResources().getString(R.string.follow))) {
                     UserFollowing.followUser(mOauthRetrofit, mRetrofit, sharedPreferences,
                             userName, subscribedUserDao, new UserFollowing.UserFollowingListener() {
                                 @Override

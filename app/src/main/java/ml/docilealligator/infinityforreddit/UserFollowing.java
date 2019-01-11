@@ -46,7 +46,7 @@ class UserFollowing {
 
         Map<String, String> params = new HashMap<>();
         params.put(RedditUtils.ACTION_KEY, action);
-        params.put(RedditUtils.SR_KEY, "u/" + userName);
+        params.put(RedditUtils.SR_NAME_KEY, "u_" + userName);
 
         Call<String> subredditSubscriptionCall = api.subredditSubscription(RedditUtils.getOAuthHeader(accessToken), params);
         subredditSubscriptionCall.enqueue(new Callback<String>() {

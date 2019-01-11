@@ -47,7 +47,6 @@ public class RedditUtils {
 
     static final String ACTION_KEY = "action";
     static final String SR_NAME_KEY = "sr_name";
-    static final String SR_KEY = "sr";
 
     static Map<String, String> getHttpBasicAuthHeader() {
         Map<String, String> params = new HashMap<>();

@@ -27,7 +27,6 @@ public class ParseUserData {
 
         ParseUserDataAsyncTask(String response, ParseUserDataListener parseUserDataListener){
             try {
-                Log.i("response", response);
                 jsonResponse = new JSONObject(response);
                 this.parseUserDataListener = parseUserDataListener;
                 parseFailed = false;
