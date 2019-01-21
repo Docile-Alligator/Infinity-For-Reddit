@@ -82,6 +82,7 @@
                 android:layout_marginEnd="16dp"
                 android:textSize="12sp"
                 android:textColor="@android:color/white"
+                android:layout_centerVertical="true"
                 app:chipBackgroundColor="@color/colorPrimaryDark"/>
 
             <ImageView
@@ -90,6 +91,7 @@
                 android:layout_height="24dp"
                 android:layout_toEndOf="@id/type_text_view_item_best_post"
                 android:layout_marginTop="8dp"
+                android:layout_centerVertical="true"
                 android:visibility="gone"/>
 
             <TextView
@@ -102,7 +104,8 @@
                 android:layout_toEndOf="@id/gilded_image_view_item_best_post"
                 android:visibility="gone"
                 android:textSize="20sp"
-                android:textColor="@color/gold"/>
+                android:textColor="@color/gold"
+                android:layout_centerVertical="true"/>
 
             <ImageView
                 android:id="@+id/crosspost_image_view_item_best_post"
@@ -115,6 +118,7 @@
                 android:layout_toEndOf="@id/gilded_number_text_view_item_best_post"
                 android:src="@drawable/crosspost"
                 android:tint="@color/colorAccent"
+                android:layout_centerVertical="true"
                 android:visibility="gone"/>
 
             <android.support.design.chip.Chip
@@ -128,6 +132,7 @@
                 android:textSize="12sp"
                 android:textColor="@android:color/white"
                 android:visibility="gone"
+                android:layout_centerVertical="true"
                 app:chipBackgroundColor="@color/colorAccent"/>
 
         </RelativeLayout>

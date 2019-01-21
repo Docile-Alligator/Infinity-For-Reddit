@@ -16,6 +16,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
     static final int TYPE_FRONT_PAGE = 0;
     static final int TYPE_SUBREDDIT = 1;
     static final int TYPE_USER = 2;
+
     private Retrofit retrofit;
     private String accessToken;
     private Locale locale;
@@ -85,6 +86,10 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
     public void loadAfter(@NonNull LoadParams<String> params, @NonNull final LoadCallback<String, Post> callback) {
         this.params = params;
         this.callback = callback;
+
+        if(params.key.equals("null")) {
+            return;
+        }
 
         paginationNetworkStateLiveData.postValue(NetworkState.LOADING);
 
