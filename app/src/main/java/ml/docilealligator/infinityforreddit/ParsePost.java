@@ -55,6 +55,10 @@ class ParsePost {
 
                 lastItem = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
                 for(int i = 0; i < allData.length(); i++) {
+                    String kind = allData.getJSONObject(i).getString(JSONUtils.KIND_KEY);
+                    if(!kind.equals("t3")) {
+                        continue;
+                    }
                     JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
                     String id = data.getString(JSONUtils.ID_KEY);
                     String fullName = data.getString(JSONUtils.NAME_KEY);

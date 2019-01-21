@@ -293,8 +293,8 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         if(savedInstanceState == null) {
             mFragment = new PostFragment();
             Bundle bundle = new Bundle();
-            bundle.putString(PostFragment.SUBREDDIT_NAME_KEY, subredditName);
-            bundle.putBoolean(PostFragment.IS_BEST_POST_KEY, false);
+            bundle.putString(PostFragment.NAME_KEY, subredditName);
+            bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_SUBREDDIT);
             mFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
         } else {

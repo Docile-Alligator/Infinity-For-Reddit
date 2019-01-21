@@ -18,8 +18,8 @@ public class PostViewModel extends ViewModel {
     private LiveData<NetworkState> initialLoadingState;
     private LiveData<PagedList<Post>> posts;
 
-    public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, boolean isBestPost) {
-        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, isBestPost);
+    public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, int postType) {
+        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, postType);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 dataSource -> dataSource.getInitialLoadStateLiveData());
@@ -34,8 +34,8 @@ public class PostViewModel extends ViewModel {
         posts = (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
     }
 
-    public PostViewModel(Retrofit retrofit, Locale locale, boolean isBestPost, String subredditName) {
-        postDataSourceFactory = new PostDataSourceFactory(retrofit, locale, isBestPost, subredditName);
+    public PostViewModel(Retrofit retrofit, Locale locale, String subredditName, int postType) {
+        postDataSourceFactory = new PostDataSourceFactory(retrofit, locale, subredditName, postType);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 dataSource -> dataSource.getInitialLoadStateLiveData());
@@ -79,30 +79,30 @@ public class PostViewModel extends ViewModel {
         private Retrofit retrofit;
         private String accessToken;
         private Locale locale;
-        private boolean isBestPost;
         private String subredditName;
+        private int postType;
 
-        public Factory(Retrofit retrofit, String accessToken, Locale locale, boolean isBestPost) {
+        public Factory(Retrofit retrofit, String accessToken, Locale locale, int postType) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.locale = locale;
-            this.isBestPost = isBestPost;
+            this.postType = postType;
         }
 
-        public Factory(Retrofit retrofit, Locale locale, boolean isBestPost, String subredditName) {
+        public Factory(Retrofit retrofit, Locale locale, String subredditName, int postType) {
             this.retrofit = retrofit;
             this.locale = locale;
-            this.isBestPost = isBestPost;
             this.subredditName = subredditName;
+            this.postType = postType;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            if(isBestPost) {
-                return (T) new PostViewModel(retrofit, accessToken, locale, isBestPost);
+            if(postType == PostDataSource.TYPE_FRONT_PAGE) {
+                return (T) new PostViewModel(retrofit, accessToken, locale, postType);
             } else {
-                return (T) new PostViewModel(retrofit, locale, isBestPost, subredditName);
+                return (T) new PostViewModel(retrofit, locale, subredditName, postType);
             }
         }
     }

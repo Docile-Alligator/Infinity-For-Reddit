@@ -31,8 +31,8 @@ import retrofit2.Retrofit;
  */
 public class PostFragment extends Fragment implements FragmentCommunicator {
 
-    static final String SUBREDDIT_NAME_KEY = "SNK";
-    static final String IS_BEST_POST_KEY = "IBPK";
+    static final String NAME_KEY = "NK";
+    static final String POST_TYPE_KEY = "PTK";
 
     private CoordinatorLayout mCoordinatorLayout;
     private RecyclerView mPostRecyclerView;
@@ -41,8 +41,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private LinearLayout mFetchPostErrorLinearLayout;
     private ImageView mFetchPostErrorImageView;
 
-    private boolean mIsBestPost;
-    private String mSubredditName;
+    private String mName;
+    private int mPostType;
 
     private PostRecyclerViewAdapter mAdapter;
 
@@ -93,20 +93,20 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
         });*/
 
-        mIsBestPost = getArguments().getBoolean(IS_BEST_POST_KEY);
+        mPostType = getArguments().getInt(POST_TYPE_KEY);
 
-        if(!mIsBestPost) {
-            mSubredditName = getArguments().getString(SUBREDDIT_NAME_KEY);
+        if(mPostType != PostDataSource.TYPE_FRONT_PAGE) {
+            mName = getArguments().getString(NAME_KEY);
         } else {
             mFetchPostErrorLinearLayout.setOnClickListener(view -> mPostViewModel.retry());
         }
 
-        if(mIsBestPost) {
+        if(mPostType == PostDataSource.TYPE_FRONT_PAGE) {
             mAdapter = new PostRecyclerViewAdapter(getActivity(), mOauthRetrofit,
-                    mSharedPreferences, mIsBestPost, () -> mPostViewModel.retryLoadingMore());
+                    mSharedPreferences, mPostType, () -> mPostViewModel.retryLoadingMore());
         } else {
             mAdapter = new PostRecyclerViewAdapter(getActivity(), mRetrofit,
-                    mSharedPreferences, mIsBestPost, () -> mPostViewModel.retryLoadingMore());
+                    mSharedPreferences, mPostType, () -> mPostViewModel.retryLoadingMore());
         }
         mPostRecyclerView.setAdapter(mAdapter);
 
@@ -114,12 +114,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
         PostViewModel.Factory factory;
-        if(mIsBestPost) {
+        if(mPostType == PostDataSource.TYPE_FRONT_PAGE) {
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, mIsBestPost);
+                    getResources().getConfiguration().locale, mPostType);
         } else {
             factory = new PostViewModel.Factory(mRetrofit,
-                    getResources().getConfiguration().locale, mIsBestPost, mSubredditName);
+                    getResources().getConfiguration().locale, mName, mPostType);
         }
         mPostViewModel = ViewModelProviders.of(this, factory).get(PostViewModel.class);
         mPostViewModel.getPosts().observe(this, posts -> mAdapter.submitList(posts));
@@ -149,7 +149,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     private void showErrorView() {
         mProgressBar.setVisibility(View.GONE);
-        if(mIsBestPost) {
+        if(mPostType == PostDataSource.TYPE_FRONT_PAGE) {
             if(getActivity() != null && isAdded()) {
                 mFetchPostErrorLinearLayout.setVisibility(View.VISIBLE);
                 Glide.with(this).load(R.drawable.load_post_error_indicator).into(mFetchPostErrorImageView);

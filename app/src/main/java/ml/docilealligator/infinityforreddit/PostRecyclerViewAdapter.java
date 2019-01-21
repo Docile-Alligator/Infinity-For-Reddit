@@ -60,7 +60,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     private SubredditDao subredditDao;
     private UserDao userDao;
     private boolean canStartActivity = true;
-    private boolean hasMultipleSubreddits;
+    private int postType;
 
     private static final int VIEW_TYPE_DATA = 0;
     private static final int VIEW_TYPE_ERROR = 1;
@@ -73,14 +73,14 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
         void retryLoadingMore();
     }
 
-    PostRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, SharedPreferences sharedPreferences, boolean hasMultipleSubreddits,
+    PostRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, SharedPreferences sharedPreferences, int postType,
                             RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         if(context != null) {
             mContext = context;
             mOauthRetrofit = oauthRetrofit;
             mSharedPreferences = sharedPreferences;
-            this.hasMultipleSubreddits = hasMultipleSubreddits;
+            this.postType = postType;
             glide = Glide.with(mContext.getApplicationContext());
             subredditDao = SubredditRoomDatabase.getDatabase(mContext.getApplicationContext()).subredditDao();
             userDao = UserRoomDatabase.getDatabase(mContext.getApplicationContext()).userDao();
@@ -148,7 +148,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                     }
                 });
 
-                if(hasMultipleSubreddits) {
+                if(postType != PostDataSource.TYPE_SUBREDDIT) {
                     if(post.getSubredditIconUrl() == null) {
                         new LoadSubredditIconAsyncTask(subredditDao, subredditName,
                                 iconImageUrl -> {
@@ -355,7 +355,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                     loadImage(holder, post);
                 }
 
-                if(!hasMultipleSubreddits && post.isStickied()) {
+                if(postType == PostDataSource.TYPE_SUBREDDIT && post.isStickied()) {
                     ((DataViewHolder) holder).stickiedPostImageView.setVisibility(View.VISIBLE);
                     glide.load(R.drawable.thumbtack).into(((DataViewHolder) holder).stickiedPostImageView);
                 }

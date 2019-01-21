@@ -12,33 +12,33 @@ class PostDataSourceFactory extends DataSource.Factory {
     private String accessToken;
     private Locale locale;
     private String subredditName;
-    private boolean isBestPost;
+    private int postType;
 
     private PostDataSource postDataSource;
     private MutableLiveData<PostDataSource> postDataSourceLiveData;
 
-    PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, boolean isBestPost) {
+    PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, int postType) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
         postDataSourceLiveData = new MutableLiveData<>();
-        this.isBestPost = isBestPost;
+        this.postType = postType;
     }
 
-    PostDataSourceFactory(Retrofit retrofit, Locale locale, boolean isBestPost, String subredditName) {
+    PostDataSourceFactory(Retrofit retrofit, Locale locale, String subredditName, int postType) {
         this.retrofit = retrofit;
         this.locale = locale;
         this.subredditName = subredditName;
         postDataSourceLiveData = new MutableLiveData<>();
-        this.isBestPost = isBestPost;
+        this.postType = postType;
     }
 
     @Override
     public DataSource create() {
-        if(isBestPost) {
-            postDataSource = new PostDataSource(retrofit, accessToken, locale, isBestPost);
+        if(postType == PostDataSource.TYPE_FRONT_PAGE) {
+            postDataSource = new PostDataSource(retrofit, accessToken, locale, postType);
         } else {
-            postDataSource = new PostDataSource(retrofit, locale, isBestPost, subredditName);
+            postDataSource = new PostDataSource(retrofit, locale, subredditName, postType);
         }
 
         postDataSourceLiveData.postValue(postDataSource);

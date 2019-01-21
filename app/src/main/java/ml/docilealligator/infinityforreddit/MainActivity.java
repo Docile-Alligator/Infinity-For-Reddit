@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             if(savedInstanceState == null) {
                 mFragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putBoolean(PostFragment.IS_BEST_POST_KEY, true);
+                bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_FRONT_PAGE);
                 mFragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
             } else {

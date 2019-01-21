@@ -36,10 +36,13 @@ public interface RedditAPI {
     Call<String> voteThing(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
     @GET("best?raw_json=1")
-    Call<String> getBestPost(@Query("after") String lastItem, @HeaderMap Map<String, String> headers);
+    Call<String> getBestPosts(@Query("after") String lastItem, @HeaderMap Map<String, String> headers);
 
     @GET("r/{subredditName}.json?raw_json=1&limit=25")
-    Call<String> getPost(@Path("subredditName") String subredditName, @Query("after") String lastItem);
+    Call<String> getSubredditBestPosts(@Path("subredditName") String subredditName, @Query("after") String lastItem);
+
+    @GET("user/{userName}.json?raw_json=1&limit=25")
+    Call<String> getUserBestPosts(@Path("userName") String userName, @Query("after") String lastItem);
 
     @GET("user/{username}/about.json?raw_json=1")
     Call<String> getUserData(@Path("username") String username);

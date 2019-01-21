@@ -13,6 +13,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -49,6 +50,8 @@ public class ViewUserDetailActivity extends AppCompatActivity {
 
     static final String EXTRA_USER_NAME_KEY = "EUNK";
 
+    private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
+
     @BindView(R.id.coordinator_layout_view_user_detail_activity) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.banner_image_view_view_user_detail_activity) ImageView bannerImageView;
     @BindView(R.id.icon_gif_image_view_view_user_detail_activity) GifImageView iconGifImageView;
@@ -56,6 +59,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     @BindView(R.id.subscribe_user_chip_view_user_detail_activity) Chip subscribeUserChip;
     @BindView(R.id.karma_text_view_view_user_detail_activity) TextView karmaTextView;
 
+    private Fragment mFragment;
     private SubscribedUserDao subscribedUserDao;
     private RequestManager glide;
     private UserViewModel userViewModel;
@@ -268,6 +272,18 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                 makeSnackbar(R.string.cannot_fetch_user_info);
             }
         });
+
+        if(savedInstanceState == null) {
+            mFragment = new PostFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(PostFragment.NAME_KEY, userName);
+            bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_USER);
+            mFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_user_detail_activity, mFragment).commit();
+        } else {
+            mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_user_detail_activity, mFragment).commit();
+        }
     }
 
     @Override

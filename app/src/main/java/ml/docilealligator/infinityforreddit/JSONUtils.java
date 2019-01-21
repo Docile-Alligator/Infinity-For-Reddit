@@ -67,4 +67,5 @@ public class JSONUtils {
     static final String LINK_ID_KEY = "link_id";
     public static final String IS_GOLD_KEY = "is_gold";
     public static final String IS_FRIEND_KEY = "is_friend";
+    static final String KIND_KEY = "kind";
 }
