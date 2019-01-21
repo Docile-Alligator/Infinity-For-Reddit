@@ -47,7 +47,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="8dp"
+            android:textColor="@android:color/black"/>
 
         <RelativeLayout
             android:id="@+id/relative_layout_item_post_comment"

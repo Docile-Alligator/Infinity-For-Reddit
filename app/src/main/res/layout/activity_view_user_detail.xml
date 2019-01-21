@@ -60,7 +60,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:textSize="18sp"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/colorPrimaryDark"
                         android:layout_gravity="center_horizontal"/>
 
                     <TextView

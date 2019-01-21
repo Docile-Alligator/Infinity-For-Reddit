@@ -222,6 +222,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         }
                     });
 
+                    ((DataViewHolder) holder).subredditNameTextView.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
                     ((DataViewHolder) holder).subredditNameTextView.setText(subredditNamePrefixed);
 
                     ((DataViewHolder) holder).subredditNameTextView.setOnClickListener(view -> {
@@ -305,6 +306,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         }
                     });
 
+                    ((DataViewHolder) holder).subredditNameTextView.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
                     ((DataViewHolder) holder).subredditNameTextView.setText(author);
 
                     ((DataViewHolder) holder).subredditNameTextView.setOnClickListener(view -> {

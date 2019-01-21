@@ -68,7 +68,14 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         final CommentData commentItem = mCommentData.get(position);
 
-        ((CommentViewHolder) holder).authorTextView.setText(commentItem.getAuthor());
+        String authorPrefixed = "u/" + commentItem.getAuthor();
+        ((CommentViewHolder) holder).authorTextView.setText(authorPrefixed);
+        ((CommentViewHolder) holder).authorTextView.setOnClickListener(view -> {
+            Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
+            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, commentItem.getAuthor());
+            mContext.startActivity(intent);
+        });
+
         ((CommentViewHolder) holder).commentTimeTextView.setText(commentItem.getCommentTime());
         SpannableConfiguration spannableConfiguration = SpannableConfiguration.builder(mContext).linkResolver((view, link) -> {
             if(link.startsWith("/u/")) {
