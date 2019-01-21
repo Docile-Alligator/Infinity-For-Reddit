@@ -49,6 +49,7 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import retrofit2.Retrofit;
+import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.view.MarkwonView;
 
 public class ViewPostDetailActivity extends AppCompatActivity {
@@ -269,7 +270,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 mTypeChip.setText("LINK");
                 if(!mPost.getSelfText().equals("")) {
                     mContentMarkdownView.setVisibility(View.VISIBLE);
-                    mContentMarkdownView.setMarkdown(mPost.getSelfText());
+                    mContentMarkdownView.setMarkdown(getCustomSpannableConfiguration(), mPost.getSelfText());
                 }
                 mNoPreviewLinkImageView.setVisibility(View.VISIBLE);
                 mNoPreviewLinkImageView.setOnClickListener(view -> {
@@ -285,7 +286,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 mTypeChip.setVisibility(View.GONE);
                 if(!mPost.getSelfText().equals("")) {
                     mContentMarkdownView.setVisibility(View.VISIBLE);
-                    mContentMarkdownView.setMarkdown(mPost.getSelfText());
+                    mContentMarkdownView.setMarkdown(getCustomSpannableConfiguration(), mPost.getSelfText());
                 }
                 break;
         }
@@ -480,6 +481,27 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         } else {
             imageRequestBuilder.into(mImageView);
         }
+    }
+
+    private SpannableConfiguration getCustomSpannableConfiguration() {
+        return SpannableConfiguration.builder(this).linkResolver((view, link) -> {
+            if(link.startsWith("/u/")) {
+                Intent intent = new Intent(ViewPostDetailActivity.this, ViewUserDetailActivity.class);
+                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, link.substring(3));
+                startActivity(intent);
+            } else if(link.startsWith("/r/")) {
+                Intent intent = new Intent(ViewPostDetailActivity.this, ViewSubredditDetailActivity.class);
+                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, link.substring(3));
+                startActivity(intent);
+            } else {
+                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                // add share action to menu list
+                builder.addDefaultShareMenuItem();
+                builder.setToolbarColor(getResources().getColor(R.color.colorPrimary));
+                CustomTabsIntent customTabsIntent = builder.build();
+                customTabsIntent.launchUrl(ViewPostDetailActivity.this, Uri.parse(link));
+            }
+        }).build();
     }
 
     private void showRetrySnackbar() {

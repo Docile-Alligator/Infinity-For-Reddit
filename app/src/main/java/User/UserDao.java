@@ -14,9 +14,9 @@ public interface UserDao {
     @Query("DELETE FROM users")
     void deleteAllUsers();
 
-    @Query("SELECT * FROM users WHERE name = :userName LIMIT 1")
+    @Query("SELECT * FROM users WHERE name = :userName COLLATE NOCASE LIMIT 1")
     LiveData<UserData> getUserLiveData(String userName);
 
-    @Query("SELECT * FROM users WHERE name = :userName LIMIT 1")
+    @Query("SELECT * FROM users WHERE name = :userName COLLATE NOCASE LIMIT 1")
     UserData getUserData(String userName);
 }

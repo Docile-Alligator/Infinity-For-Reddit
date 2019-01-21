@@ -104,8 +104,9 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         params.topMargin = statusBarHeight;
 
         String subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME_KEY);
-
         String title = "r/" + subredditName;
+        subredditNameTextView.setText(title);
+
         CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar_layout_view_subreddit_detail_activity);
         AppBarLayout appBarLayout = findViewById(R.id.app_bar_layout_view_subreddit_detail_activity);
 

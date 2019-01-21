@@ -43,20 +43,27 @@ class ParseSubredditData {
                 String id = data.getString(JSONUtils.NAME_KEY);
                 String subredditFullName = data.getString(JSONUtils.DISPLAY_NAME);
                 String description = data.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY).trim();
-                String bannerImageUrl = data.getString(JSONUtils.BANNER_BACKGROUND_IMAGE_KEY);
-                if(bannerImageUrl.equals("") || bannerImageUrl.equals("null")) {
+
+                String bannerImageUrl;
+                if(data.isNull(JSONUtils.BANNER_BACKGROUND_IMAGE_KEY)) {
+                    bannerImageUrl = "";
+                } else {
+                    bannerImageUrl = data.getString(JSONUtils.BANNER_BACKGROUND_IMAGE_KEY);
+                }
+                if(bannerImageUrl.equals("") && !data.isNull(JSONUtils.BANNER_IMG_KEY)) {
                     bannerImageUrl= data.getString(JSONUtils.BANNER_IMG_KEY);
-                    if(bannerImageUrl.equals("null")) {
-                        bannerImageUrl = "";
-                    }
                 }
-                String iconUrl = data.getString(JSONUtils.COMMUNITY_ICON_KEY);
-                if(iconUrl.equals("") || iconUrl.equals("null")) {
+
+                String iconUrl;
+                if(data.isNull(JSONUtils.COMMUNITY_ICON_KEY)) {
+                    iconUrl = "";
+                } else {
+                    iconUrl = data.getString(JSONUtils.COMMUNITY_ICON_KEY);
+                }
+                if(iconUrl.equals("") && !data.isNull(JSONUtils.ICON_IMG_KEY)) {
                     iconUrl = data.getString(JSONUtils.ICON_IMG_KEY);
-                    if(iconUrl.equals("null")) {
-                        iconUrl = "";
-                    }
                 }
+
                 int nSubscribers = data.getInt(JSONUtils.SUBSCRIBERS_KEY);
                 int nCurrentOnlineSubscribers = data.getInt(JSONUtils.ACTIVE_USER_COUNT_KEY);
                 subredditData = new SubredditData(id, subredditFullName, iconUrl, bannerImageUrl, description, nSubscribers);
