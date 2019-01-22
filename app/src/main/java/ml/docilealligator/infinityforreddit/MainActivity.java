@@ -56,16 +56,11 @@ public class MainActivity extends AppCompatActivity {
     private static final String FETCH_USER_INFO_STATE = "FUIS";
     private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";
 
-    @BindView(R.id.subscribed_subreddit_recycler_view_main_activity)
-    RecyclerView subscribedSubredditRecyclerView;
-    @BindView(R.id.subscriptions_label_main_activity)
-    TextView subscriptionsLabelTextView;
-    @BindView(R.id.subscribed_user_recycler_view_main_activity)
-    RecyclerView subscribedUserRecyclerView;
-    @BindView(R.id.following_label_main_activity)
-    TextView followingLabelTextView;
-    @BindView(R.id.profile_linear_layout_main_activity)
-    LinearLayout profileLinearLayout;
+    @BindView(R.id.subscribed_subreddit_recycler_view_main_activity) RecyclerView subscribedSubredditRecyclerView;
+    @BindView(R.id.subscriptions_label_main_activity) TextView subscriptionsLabelTextView;
+    @BindView(R.id.subscribed_user_recycler_view_main_activity) RecyclerView subscribedUserRecyclerView;
+    @BindView(R.id.following_label_main_activity) TextView followingLabelTextView;
+    @BindView(R.id.profile_linear_layout_main_activity) LinearLayout profileLinearLayout;
 
     private TextView mNameTextView;
     private TextView mKarmaTextView;

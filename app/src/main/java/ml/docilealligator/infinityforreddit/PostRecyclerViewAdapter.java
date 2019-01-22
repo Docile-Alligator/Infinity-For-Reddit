@@ -219,10 +219,17 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                     ((DataViewHolder) holder).subredditIconNameLinearLayout.setOnClickListener(view -> {
                         if(canStartActivity) {
                             canStartActivity = false;
-                            Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
-                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
-                                    post.getSubredditNamePrefixed().substring(2));
-                            mContext.startActivity(intent);
+                            if(post.getSubredditNamePrefixed().startsWith("u/")) {
+                                Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
+                                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
+                                        post.getSubredditNamePrefixed().substring(2));
+                                mContext.startActivity(intent);
+                            } else {
+                                Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
+                                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
+                                        post.getSubredditNamePrefixed().substring(2));
+                                mContext.startActivity(intent);
+                            }
                         }
                     });
                 } else {

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
@@ -43,11 +45,12 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import CustomView.AspectRatioGifImageView;
 import SubredditDatabase.SubredditRoomDatabase;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import retrofit2.Retrofit;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.view.MarkwonView;
@@ -57,6 +60,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     static final String EXTRA_TITLE = "ET";
     static final String EXTRA_POST_DATA = "EPD";
 
+    private RequestManager glide;
+
     private int orientation;
     private String orientationState = "OS";
 
@@ -64,9 +69,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private Post mPost;
 
     @BindView(R.id.coordinator_layout_view_post_detail) CoordinatorLayout mCoordinatorLayout;
-    @BindView(R.id.subreddit_icon_circle_image_view_view_post_detail) CircleImageView mSubredditIconCircleImageView;
-    @BindView(R.id.post_time_text_view_view_post_detail) TextView mPostTimeTextView;
+    @BindView(R.id.subreddit_icon_name_linear_layout_view_post_detail) LinearLayout mSubredditIconNameLinearLayout;
+    @BindView(R.id.subreddit_icon_circle_image_view_view_post_detail) AspectRatioGifImageView mSubredditIconGifImageView;
     @BindView(R.id.subreddit_text_view_view_post_detail) TextView mSubredditTextView;
+    @BindView(R.id.post_time_text_view_view_post_detail) TextView mPostTimeTextView;
     @BindView(R.id.content_markdown_view_view_post_detail) MarkwonView mContentMarkdownView;
     @BindView(R.id.type_text_view_view_post_detail) Chip mTypeChip;
     @BindView(R.id.gilded_image_view_view_post_detail) ImageView mGildedImageView;
@@ -121,33 +127,67 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         TextView titleTextView = findViewById(R.id.title_text_view_view_post_detail);
         titleTextView.setText(mPost.getTitle());
 
+        glide = Glide.with(this);
         if(mPost.getSubredditIconUrl() == null) {
             mLoadSubredditIconAsyncTask = new LoadSubredditIconAsyncTask(
-                    SubredditRoomDatabase.getDatabase(this).subredditDao(), mPost.getSubredditNamePrefixed(),
+                    SubredditRoomDatabase.getDatabase(this).subredditDao(), mPost.getSubredditNamePrefixed().substring(2),
                     iconImageUrl -> {
                         if(!iconImageUrl.equals("")) {
-                            Glide.with(ViewPostDetailActivity.this).load(iconImageUrl)
-                                    .into(mSubredditIconCircleImageView);
+                            glide.load(iconImageUrl)
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                    .error(glide.load(R.drawable.subreddit_default_icon))
+                                    .listener(new RequestListener<Drawable>() {
+                                        @Override
+                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                            return false;
+                                        }
+
+                                        @Override
+                                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                            if(resource instanceof Animatable) {
+                                                //This is a gif
+                                                //((Animatable) resource).start();
+                                                mSubredditIconGifImageView.startAnimation();
+                                            }
+                                            return false;
+                                        }
+                                    })
+                                    .into(mSubredditIconGifImageView);
                         } else {
-                            Glide.with(ViewPostDetailActivity.this).load(R.drawable.subreddit_default_icon)
-                                    .into(mSubredditIconCircleImageView);
+                            glide.load(R.drawable.subreddit_default_icon)
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                    .into(mSubredditIconGifImageView);
                         }
 
                         mPost.setSubredditIconUrl(iconImageUrl);
                     });
             mLoadSubredditIconAsyncTask.execute();
         } else if(!mPost.getSubredditIconUrl().equals("")) {
-            Glide.with(this).load(mPost.getSubredditIconUrl()).into(mSubredditIconCircleImageView);
-        } else {
-            Glide.with(this).load(R.drawable.subreddit_default_icon).into(mSubredditIconCircleImageView);
-        }
+            glide.load(mPost.getSubredditIconUrl())
+                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                    .error(glide.load(R.drawable.subreddit_default_icon))
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            return false;
+                        }
 
-        mSubredditIconCircleImageView.setOnClickListener(view -> {
-            Intent intent = new Intent(ViewPostDetailActivity.this, ViewSubredditDetailActivity.class);
-            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
-                    mPost.getSubredditNamePrefixed().substring(2));
-            startActivity(intent);
-        });
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            if(resource instanceof Animatable) {
+                                //This is a gif
+                                //((Animatable) resource).start();
+                                mSubredditIconGifImageView.startAnimation();
+                            }
+                            return false;
+                        }
+                    })
+                    .into(mSubredditIconGifImageView);
+        } else {
+            glide.load(R.drawable.subreddit_default_icon)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                    .into(mSubredditIconGifImageView);
+        }
 
         switch (mPost.getVoteType()) {
             case 1:
@@ -176,7 +216,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         mSubredditTextView.setText(mPost.getSubredditNamePrefixed());
-        mSubredditTextView.setOnClickListener(view -> {
+        mSubredditIconNameLinearLayout.setOnClickListener(view -> {
             Intent intent = new Intent(ViewPostDetailActivity.this, ViewSubredditDetailActivity.class);
             intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
                     mPost.getSubredditNamePrefixed().substring(2));
@@ -187,7 +227,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
         if(mPost.getGilded() > 0) {
             mGildedImageView.setVisibility(View.VISIBLE);
-            Glide.with(this).load(R.drawable.gold).into(mGildedImageView);
+            glide.load(R.drawable.gold).into(mGildedImageView);
             mGildedNumberTextView.setVisibility(View.VISIBLE);
             String gildedNumber = getResources().getString(R.string.gilded, mPost.getGilded());
             mGildedNumberTextView.setText(gildedNumber);
@@ -432,7 +472,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                                             mCommentCardView.setVisibility(View.VISIBLE);
                                         } else {
                                             mNoCommentWrapperLinearLayout.setVisibility(View.VISIBLE);
-                                            Glide.with(ViewPostDetailActivity.this).load(R.drawable.no_comment_indicator).into(mNoCommentImageView);
+                                            glide.load(R.drawable.no_comment_indicator).into(mNoCommentImageView);
                                         }
                                     }
 
@@ -453,7 +493,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     }
 
     private void loadImage() {
-        RequestBuilder imageRequestBuilder = Glide.with(this).load(mPost.getPreviewUrl())
+        RequestBuilder imageRequestBuilder = glide.load(mPost.getPreviewUrl())
                 .apply(new RequestOptions().override(mPost.getPreviewWidth(), mPost.getPreviewHeight()))
                 .listener(new RequestListener<Drawable>() {
             @Override
