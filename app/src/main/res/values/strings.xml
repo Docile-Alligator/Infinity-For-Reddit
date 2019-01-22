@@ -11,6 +11,7 @@
 
     <string name="tap_to_retry">Error loading image. Tap to retry.</string>
     <string name="load_posts_error">Error loading posts.\nTap to retry.</string>
+    <string name="no_posts">No posts here.</string>
 
     <string name="load_data_failed">Cannot load posts</string>
     <string name="load_comment_failed">Error loading comments</string>
@@ -47,4 +48,6 @@
     <string name="unfollow_failed">Unfollowing Failed</string>
 
     <string name="content_description_banner_imageview">Subreddit Banner Image</string>
+
+    <string name="error_loading_posts">Error loading post</string>
 </resources>

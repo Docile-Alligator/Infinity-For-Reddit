@@ -49,7 +49,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:paddingTop="36dp"
-                    android:paddingBottom="16dp"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:layout_below="@id/banner_image_view_view_subreddit_detail_activity"
@@ -75,7 +74,8 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp">
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp">
 
                         <TextView
                             android:id="@+id/subscriber_count_text_view_view_subreddit_detail_activity"
@@ -83,8 +83,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@android:color/black"
                             android:layout_alignParentStart="true"
-                            android:layout_toStartOf="@id/online_subscriber_count_text_view_view_subreddit_detail_activity"
-                            android:layout_marginBottom="16dp"/>
+                            android:layout_toStartOf="@id/online_subscriber_count_text_view_view_subreddit_detail_activity" />
 
                         <TextView
                             android:id="@+id/online_subscriber_count_text_view_view_subreddit_detail_activity"
@@ -99,6 +98,7 @@
                         android:id="@+id/description_text_view_view_subreddit_detail_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
                         android:textColor="@android:color/black"
                         android:visibility="gone"/>
 

@@ -13,49 +13,60 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <RelativeLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp">
+            android:layout_height="wrap_content">
 
-            <CustomView.AspectRatioGifImageView
-                android:id="@+id/subreddit_icon_gif_image_view_best_post_item"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"/>
-
-            <TextView
-                android:id="@+id/subreddit_text_view_best_post_item"
+            <LinearLayout
+                android:id="@+id/subreddit_icon_name_linear_layout_view_item_best_post"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="8dp"
-                android:layout_toStartOf="@id/stickied_post_image_view_best_post_item"
-                android:layout_toEndOf="@id/subreddit_icon_gif_image_view_best_post_item"
-                android:layout_centerVertical="true"
-                android:textColor="#E91E63"/>
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <CustomView.AspectRatioGifImageView
+                    android:id="@+id/subreddit_icon_gif_image_view_best_post_item"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/subreddit_text_view_best_post_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_gravity="center"
+                    android:textColor="#E91E63" />
+
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/stickied_post_image_view_best_post_item"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_toStartOf="@id/post_time_text_view_best_post_item"
+                android:layout_gravity="center"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_centerVertical="true"
                 android:tint="@color/colorPrimary"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/post_time_text_view_best_post_item"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
                 android:id="@+id/post_time_text_view_best_post_item"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:gravity="center_vertical"/>
+                android:layout_gravity="center"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </RelativeLayout>
+        </android.support.constraint.ConstraintLayout>
 
         <TextView
             android:id="@+id/title_text_view_best_post_item"

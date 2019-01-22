@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
@@ -38,8 +38,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private RecyclerView mPostRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     private CircleProgressBar mProgressBar;
-    private LinearLayout mFetchPostErrorLinearLayout;
-    private ImageView mFetchPostErrorImageView;
+    private LinearLayout mFetchPostInfoLinearLayout;
+    private ImageView mFetchPostInfoImageView;
+    private TextView mFetchPostInfoTextView;
 
     private String mName;
     private int mPostType;
@@ -82,8 +83,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mPostRecyclerView.setLayoutManager(mLinearLayoutManager);
         mProgressBar = rootView.findViewById(R.id.progress_bar_post_fragment);
-        mFetchPostErrorLinearLayout = rootView.findViewById(R.id.fetch_post_error_linear_layout_post_fragment);
-        mFetchPostErrorImageView = rootView.findViewById(R.id.fetch_post_error_image_view_post_fragment);
+        mFetchPostInfoLinearLayout = rootView.findViewById(R.id.fetch_post_info_linear_layout_post_fragment);
+        mFetchPostInfoImageView = rootView.findViewById(R.id.fetch_post_info_image_view_post_fragment);
+        mFetchPostInfoTextView = rootView.findViewById(R.id.fetch_post_info_text_view_post_fragment);
         /*FloatingActionButton fab = rootView.findViewById(R.id.fab_post_fragment);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,8 +99,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         if(mPostType != PostDataSource.TYPE_FRONT_PAGE) {
             mName = getArguments().getString(NAME_KEY);
-        } else {
-            mFetchPostErrorLinearLayout.setOnClickListener(view -> mPostViewModel.retry());
         }
 
         if(mPostType == PostDataSource.TYPE_FRONT_PAGE) {
@@ -116,11 +116,38 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         PostViewModel.Factory factory;
         if(mPostType == PostDataSource.TYPE_FRONT_PAGE) {
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, mPostType);
+                    getResources().getConfiguration().locale, mPostType, new PostDataSource.OnPostFetchedCallback() {
+                @Override
+                public void hasPost() {
+                    mFetchPostInfoLinearLayout.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void noPost() {
+                    mFetchPostInfoLinearLayout.setOnClickListener(view -> {
+                        //Do nothing
+                    });
+                    showErrorView(R.string.no_posts);
+                }
+            });
         } else {
             factory = new PostViewModel.Factory(mRetrofit,
-                    getResources().getConfiguration().locale, mName, mPostType);
+                    getResources().getConfiguration().locale, mName, mPostType, new PostDataSource.OnPostFetchedCallback() {
+                @Override
+                public void hasPost() {
+                    mFetchPostInfoLinearLayout.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void noPost() {
+                    mFetchPostInfoLinearLayout.setOnClickListener(view -> {
+                        //Do nothing
+                    });
+                    showErrorView(R.string.no_posts);
+                }
+            });
         }
+
         mPostViewModel = ViewModelProviders.of(this, factory).get(PostViewModel.class);
         mPostViewModel.getPosts().observe(this, posts -> mAdapter.submitList(posts));
 
@@ -128,9 +155,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
                 mProgressBar.setVisibility(View.GONE);
             } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
-                showErrorView();
+                mFetchPostInfoLinearLayout.setOnClickListener(view -> mPostViewModel.retry());
+                showErrorView(R.string.load_posts_error);
             } else {
-                mFetchPostErrorLinearLayout.setVisibility(View.GONE);
+                mFetchPostInfoLinearLayout.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.VISIBLE);
             }
         });
@@ -147,17 +175,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         mPostViewModel.refresh();
     }
 
-    private void showErrorView() {
+    private void showErrorView(int stringResId) {
         mProgressBar.setVisibility(View.GONE);
-        if(mPostType == PostDataSource.TYPE_FRONT_PAGE) {
-            if(getActivity() != null && isAdded()) {
-                mFetchPostErrorLinearLayout.setVisibility(View.VISIBLE);
-                Glide.with(this).load(R.drawable.load_post_error_indicator).into(mFetchPostErrorImageView);
-            }
-        } else {
-            Snackbar snackbar = Snackbar.make(mCoordinatorLayout, "Error getting post", Snackbar.LENGTH_INDEFINITE);
-            snackbar.setAction(R.string.retry, view -> mPostViewModel.retry());
-            snackbar.show();
+        if(getActivity() != null && isAdded()) {
+            mFetchPostInfoLinearLayout.setVisibility(View.VISIBLE);
+            mFetchPostInfoTextView.setText(stringResId);
+            Glide.with(this).load(R.drawable.load_post_error_indicator).into(mFetchPostInfoImageView);
         }
     }
 }

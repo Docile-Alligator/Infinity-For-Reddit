@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -212,20 +213,10 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                                 .into(((DataViewHolder) holder).subredditIconGifImageView);
                     }
 
-                    ((DataViewHolder) holder).subredditIconGifImageView.setOnClickListener(view -> {
-                        if(canStartActivity) {
-                            canStartActivity = false;
-                            Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
-                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
-                                    post.getSubredditNamePrefixed().substring(2));
-                            mContext.startActivity(intent);
-                        }
-                    });
-
                     ((DataViewHolder) holder).subredditNameTextView.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
                     ((DataViewHolder) holder).subredditNameTextView.setText(subredditNamePrefixed);
 
-                    ((DataViewHolder) holder).subredditNameTextView.setOnClickListener(view -> {
+                    ((DataViewHolder) holder).subredditIconNameLinearLayout.setOnClickListener(view -> {
                         if(canStartActivity) {
                             canStartActivity = false;
                             Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
@@ -297,19 +288,10 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                                 .into(((DataViewHolder) holder).subredditIconGifImageView);
                     }
 
-                    ((DataViewHolder) holder).subredditIconGifImageView.setOnClickListener(view -> {
-                        if(canStartActivity) {
-                            canStartActivity = false;
-                            Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
-                            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, post.getAuthor());
-                            mContext.startActivity(intent);
-                        }
-                    });
-
                     ((DataViewHolder) holder).subredditNameTextView.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
                     ((DataViewHolder) holder).subredditNameTextView.setText(author);
 
-                    ((DataViewHolder) holder).subredditNameTextView.setOnClickListener(view -> {
+                    ((DataViewHolder) holder).subredditIconNameLinearLayout.setOnClickListener(view -> {
                         if(canStartActivity) {
                             canStartActivity = false;
                             Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
@@ -645,6 +627,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
 
     class DataViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.card_view_view_post_detail) MaterialCardView cardView;
+        @BindView(R.id.subreddit_icon_name_linear_layout_view_item_best_post) LinearLayout subredditIconNameLinearLayout;
         @BindView(R.id.subreddit_icon_gif_image_view_best_post_item) AspectRatioGifImageView subredditIconGifImageView;
         @BindView(R.id.subreddit_text_view_best_post_item) TextView subredditNameTextView;
         @BindView(R.id.stickied_post_image_view_best_post_item) ImageView stickiedPostImageView;

@@ -13,6 +13,11 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 
 class PostDataSource extends PageKeyedDataSource<String, Post> {
+    interface OnPostFetchedCallback {
+        void hasPost();
+        void noPost();
+    }
+
     static final int TYPE_FRONT_PAGE = 0;
     static final int TYPE_SUBREDDIT = 1;
     static final int TYPE_USER = 2;
@@ -22,6 +27,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
     private Locale locale;
     private String name;
     private int postType;
+    private OnPostFetchedCallback onPostFetchedCallback;
 
     private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
     private MutableLiveData<NetworkState> initialLoadStateLiveData;
@@ -31,22 +37,24 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
     private LoadParams<String> params;
     private LoadCallback<String, Post> callback;
 
-    PostDataSource(Retrofit retrofit, String accessToken, Locale locale, int postType) {
+    PostDataSource(Retrofit retrofit, String accessToken, Locale locale, int postType, OnPostFetchedCallback onPostFetchedCallback) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
         paginationNetworkStateLiveData = new MutableLiveData();
         initialLoadStateLiveData = new MutableLiveData();
         this.postType = postType;
+        this.onPostFetchedCallback = onPostFetchedCallback;
     }
 
-    PostDataSource(Retrofit retrofit, Locale locale, String name, int postType) {
+    PostDataSource(Retrofit retrofit, Locale locale, String name, int postType, OnPostFetchedCallback onPostFetchedCallback) {
         this.retrofit = retrofit;
         this.locale = locale;
         this.name = name;
         paginationNetworkStateLiveData = new MutableLiveData();
         initialLoadStateLiveData = new MutableLiveData();
         this.postType = postType;
+        this.onPostFetchedCallback = onPostFetchedCallback;
     }
 
     MutableLiveData getPaginationNetworkStateLiveData() {
@@ -72,7 +80,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                 loadSubredditPostsInitial(callback);
                 break;
             case TYPE_USER:
-                loadUserPostsInitial(callback);
+                loadUserPostsInitial(callback, null);
                 break;
         }
     }
@@ -117,6 +125,12 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                             new ParsePost.ParsePostListener() {
                                 @Override
                                 public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                    if(newPosts.size() == 0) {
+                                        onPostFetchedCallback.noPost();
+                                    } else {
+                                        onPostFetchedCallback.hasPost();
+                                    }
+
                                     callback.onResult(newPosts, null, lastItem);
                                     initialLoadStateLiveData.postValue(NetworkState.LOADED);
                                 }
@@ -187,6 +201,12 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                             new ParsePost.ParsePostListener() {
                                 @Override
                                 public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                    if(newPosts.size() == 0) {
+                                        onPostFetchedCallback.noPost();
+                                    } else {
+                                        onPostFetchedCallback.hasPost();
+                                    }
+
                                     callback.onResult(newPosts, null, lastItem);
                                     initialLoadStateLiveData.postValue(NetworkState.LOADED);
                                 }
@@ -245,9 +265,9 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         });
     }
 
-    private void loadUserPostsInitial(@NonNull final LoadInitialCallback<String, Post> callback) {
+    private void loadUserPostsInitial(@NonNull final LoadInitialCallback<String, Post> callback, String lastItem) {
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> getPost = api.getUserBestPosts(name, null);
+        Call<String> getPost = api.getUserBestPosts(name, lastItem);
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
@@ -256,8 +276,17 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                             new ParsePost.ParsePostListener() {
                                 @Override
                                 public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
-                                    callback.onResult(newPosts, null, lastItem);
-                                    initialLoadStateLiveData.postValue(NetworkState.LOADED);
+                                    if(newPosts.size() == 0 && lastItem.equals("null")) {
+                                        callback.onResult(newPosts, null, lastItem);
+                                        initialLoadStateLiveData.postValue(NetworkState.LOADED);
+                                        onPostFetchedCallback.noPost();
+                                    } else if(newPosts.size() == 0) {
+                                        loadUserPostsInitial(callback, lastItem);
+                                    } else {
+                                        callback.onResult(newPosts, null, lastItem);
+                                        initialLoadStateLiveData.postValue(NetworkState.LOADED);
+                                        onPostFetchedCallback.hasPost();
+                                    }
                                 }
 
                                 @Override

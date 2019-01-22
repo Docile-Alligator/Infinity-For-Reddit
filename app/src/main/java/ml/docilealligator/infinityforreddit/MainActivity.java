@@ -56,11 +56,16 @@ public class MainActivity extends AppCompatActivity {
     private static final String FETCH_USER_INFO_STATE = "FUIS";
     private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";
 
-    @BindView(R.id.subscribed_subreddit_recycler_view_main_activity) RecyclerView subscribedSubredditRecyclerView;
-    @BindView(R.id.subscriptions_label_main_activity) TextView subscriptionsLabelTextView;
-    @BindView(R.id.subscribed_user_recycler_view_main_activity) RecyclerView subscribedUserRecyclerView;
-    @BindView(R.id.following_label_main_activity) TextView followingLabelTextView;
-    @BindView(R.id.profile_linear_layout_main_activity) LinearLayout profileLinearLayout;
+    @BindView(R.id.subscribed_subreddit_recycler_view_main_activity)
+    RecyclerView subscribedSubredditRecyclerView;
+    @BindView(R.id.subscriptions_label_main_activity)
+    TextView subscriptionsLabelTextView;
+    @BindView(R.id.subscribed_user_recycler_view_main_activity)
+    RecyclerView subscribedUserRecyclerView;
+    @BindView(R.id.following_label_main_activity)
+    TextView followingLabelTextView;
+    @BindView(R.id.profile_linear_layout_main_activity)
+    LinearLayout profileLinearLayout;
 
     private TextView mNameTextView;
     private TextView mKarmaTextView;
@@ -82,13 +87,16 @@ public class MainActivity extends AppCompatActivity {
     private SubscribedSubredditViewModel mSubscribedSubredditViewModel;
     private SubscribedUserViewModel mSubscribedUserViewModel;
 
-    @Inject @Named("user_info")
+    @Inject
+    @Named("user_info")
     SharedPreferences mUserInfoSharedPreferences;
 
-    @Inject @Named("auth_info")
+    @Inject
+    @Named("auth_info")
     SharedPreferences mAuthInfoSharedPreferences;
 
-    @Inject @Named("oauth")
+    @Inject
+    @Named("oauth")
     Retrofit mOauthRetrofit;
 
     @Override
@@ -109,11 +117,11 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
         String accessToken = getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
-        if(accessToken.equals("")) {
+        if (accessToken.equals("")) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivity(loginIntent);
         } else {
-            if(savedInstanceState == null) {
+            if (savedInstanceState == null) {
                 mFragment = new PostFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_FRONT_PAGE);
@@ -124,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
             }
 
-            loadUserData(savedInstanceState);
+            loadUserData();
 
             View header = findViewById(R.id.nav_header_main_activity);
             mNameTextView = header.findViewById(R.id.name_text_view_nav_header_main);
@@ -146,10 +154,10 @@ public class MainActivity extends AppCompatActivity {
             mNameTextView.setText(mName);
             mKarmaTextView.setText(mKarma);
             glide = Glide.with(this);
-            if(!mProfileImageUrl.equals("")) {
+            if (!mProfileImageUrl.equals("")) {
                 glide.load(mProfileImageUrl).into(mProfileImageView);
             }
-            if(!mBannerImageUrl.equals("")) {
+            if (!mBannerImageUrl.equals("")) {
                 glide.load(mBannerImageUrl).into(mBannerImageView);
             }
 
@@ -189,83 +197,76 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void loadUserData(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            if (!mFetchUserInfoSuccess) {
-                FetchMyInfo.fetchMyInfo(mOauthRetrofit, mAuthInfoSharedPreferences, new FetchMyInfo.FetchUserMyListener() {
-                    @Override
-                    public void onFetchMyInfoSuccess(String response) {
-                        ParseMyInfo.parseMyInfo(response, new ParseMyInfo.ParseMyInfoListener() {
-                            @Override
-                            public void onParseMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
-                                mNameTextView.setText(name);
-                                if (!mProfileImageUrl.equals("")) {
-                                    glide.load(profileImageUrl).into(mProfileImageView);
-                                }
-                                if (!mBannerImageUrl.equals("")) {
-                                    glide.load(bannerImageUrl).into(mBannerImageView);
-                                }
-
-                                mName = name;
-                                mProfileImageUrl = profileImageUrl;
-                                mBannerImageUrl = bannerImageUrl;
-                                mKarma = getString(R.string.karma_info, karma);
-
-                                mKarmaTextView.setText(mKarma);
-
-                                SharedPreferences.Editor editor = mUserInfoSharedPreferences.edit();
-                                editor.putString(SharedPreferencesUtils.USER_KEY, name);
-                                editor.putString(SharedPreferencesUtils.PROFILE_IMAGE_URL_KEY, profileImageUrl);
-                                editor.putString(SharedPreferencesUtils.BANNER_IMAGE_URL_KEY, bannerImageUrl);
-                                editor.putString(SharedPreferencesUtils.KARMA_KEY, mKarma);
-                                editor.apply();
-                                mFetchUserInfoSuccess = true;
+    private void loadUserData() {
+        if (!mFetchUserInfoSuccess) {
+            FetchMyInfo.fetchMyInfo(mOauthRetrofit, mAuthInfoSharedPreferences, new FetchMyInfo.FetchUserMyListener() {
+                @Override
+                public void onFetchMyInfoSuccess(String response) {
+                    ParseMyInfo.parseMyInfo(response, new ParseMyInfo.ParseMyInfoListener() {
+                        @Override
+                        public void onParseMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
+                            mNameTextView.setText(name);
+                            if (!mProfileImageUrl.equals("")) {
+                                glide.load(profileImageUrl).into(mProfileImageView);
+                            }
+                            if (!mBannerImageUrl.equals("")) {
+                                glide.load(bannerImageUrl).into(mBannerImageView);
                             }
 
-                            @Override
-                            public void onParseMyInfoFail() {
-                                mFetchUserInfoSuccess = false;
-                            }
-                        });
-                    }
+                            mName = name;
+                            mProfileImageUrl = profileImageUrl;
+                            mBannerImageUrl = bannerImageUrl;
+                            mKarma = getString(R.string.karma_info, karma);
 
-                    @Override
-                    public void onFetchMyInfoFail() {
-                        mFetchUserInfoSuccess = false;
-                    }
-                });
-            }
+                            mKarmaTextView.setText(mKarma);
 
-            if (!mInsertSuccess) {
-                FetchSubscribedThing.fetchSubscribedThing(mOauthRetrofit, mAuthInfoSharedPreferences, null,
-                        new ArrayList<SubscribedSubredditData>(), new ArrayList<SubscribedUserData>(),
-                        new ArrayList<SubredditData>(),
-                        new FetchSubscribedThing.FetchSubscribedThingListener() {
-                            @Override
-                            public void onFetchSubscribedThingSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
-                                                                      ArrayList<SubscribedUserData> subscribedUserData,
-                                                                      ArrayList<SubredditData> subredditData) {
-                                new InsertSubscribedThingsAsyncTask(
-                                        SubscribedSubredditRoomDatabase.getDatabase(MainActivity.this),
-                                        SubscribedUserRoomDatabase.getDatabase(MainActivity.this),
-                                        SubredditRoomDatabase.getDatabase(MainActivity.this),
-                                        subscribedSubredditData,
-                                        subscribedUserData,
-                                        subredditData,
-                                        new InsertSubscribedThingsAsyncTask.InsertSubscribedThingListener() {
-                                            @Override
-                                            public void insertSuccess() {
-                                                mInsertSuccess = true;
-                                            }
-                                        }).execute();
-                            }
+                            SharedPreferences.Editor editor = mUserInfoSharedPreferences.edit();
+                            editor.putString(SharedPreferencesUtils.USER_KEY, name);
+                            editor.putString(SharedPreferencesUtils.PROFILE_IMAGE_URL_KEY, profileImageUrl);
+                            editor.putString(SharedPreferencesUtils.BANNER_IMAGE_URL_KEY, bannerImageUrl);
+                            editor.putString(SharedPreferencesUtils.KARMA_KEY, mKarma);
+                            editor.apply();
+                            mFetchUserInfoSuccess = true;
+                        }
 
-                            @Override
-                            public void onFetchSubscribedThingFail() {
-                                mInsertSuccess = false;
-                            }
-                        });
-            }
+                        @Override
+                        public void onParseMyInfoFail() {
+                            mFetchUserInfoSuccess = false;
+                        }
+                    });
+                }
+
+                @Override
+                public void onFetchMyInfoFail() {
+                    mFetchUserInfoSuccess = false;
+                }
+            });
+        }
+
+        if (!mInsertSuccess) {
+            FetchSubscribedThing.fetchSubscribedThing(mOauthRetrofit, mAuthInfoSharedPreferences, null,
+                    new ArrayList<>(), new ArrayList<>(),
+                    new ArrayList<>(),
+                    new FetchSubscribedThing.FetchSubscribedThingListener() {
+                        @Override
+                        public void onFetchSubscribedThingSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
+                                                                  ArrayList<SubscribedUserData> subscribedUserData,
+                                                                  ArrayList<SubredditData> subredditData) {
+                            new InsertSubscribedThingsAsyncTask(
+                                    SubscribedSubredditRoomDatabase.getDatabase(MainActivity.this),
+                                    SubscribedUserRoomDatabase.getDatabase(MainActivity.this),
+                                    SubredditRoomDatabase.getDatabase(MainActivity.this),
+                                    subscribedSubredditData,
+                                    subscribedUserData,
+                                    subredditData,
+                                    () -> mInsertSuccess = true).execute();
+                        }
+
+                        @Override
+                        public void onFetchSubscribedThingFail() {
+                            mInsertSuccess = false;
+                        }
+                    });
         }
     }
 
@@ -279,8 +280,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh_main_activity:
-                if(mFragment instanceof FragmentCommunicator) {
+                if (mFragment instanceof FragmentCommunicator) {
                     ((FragmentCommunicator) mFragment).refresh();
+                    mFetchUserInfoSuccess = false;
+                    mInsertSuccess = false;
+                    loadUserData();
                 }
                 return true;
         }
@@ -300,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(mFragment != null) {
+        if (mFragment != null) {
             getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE, mFragment);
         }
         outState.putString(NAME_STATE, mName);
@@ -322,10 +326,10 @@ public class MainActivity extends AppCompatActivity {
         mInsertSuccess = savedInstanceState.getBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE);
         mNameTextView.setText(mName);
         mKarmaTextView.setText(mKarma);
-        if(!mProfileImageUrl.equals("")) {
+        if (!mProfileImageUrl.equals("")) {
             glide.load(mProfileImageUrl).into(mProfileImageView);
         }
-        if(!mBannerImageUrl.equals("")) {
+        if (!mBannerImageUrl.equals("")) {
             glide.load(mBannerImageUrl).into(mBannerImageView);
         }
     }
@@ -362,13 +366,13 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(final Void... params) {
-            for(SubscribedSubredditData s : subscribedSubredditData) {
+            for (SubscribedSubredditData s : subscribedSubredditData) {
                 mSubscribedSubredditDao.insert(s);
             }
-            for(SubscribedUserData s : subscribedUserData) {
+            for (SubscribedUserData s : subscribedUserData) {
                 mUserDao.insert(s);
             }
-            for(SubredditData s : subredditData) {
+            for (SubredditData s : subredditData) {
                 mSubredditDao.insert(s);
             }
             return null;

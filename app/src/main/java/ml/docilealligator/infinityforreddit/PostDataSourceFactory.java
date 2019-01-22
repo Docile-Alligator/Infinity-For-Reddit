@@ -13,32 +13,37 @@ class PostDataSourceFactory extends DataSource.Factory {
     private Locale locale;
     private String subredditName;
     private int postType;
+    private PostDataSource.OnPostFetchedCallback onPostFetchedCallback;
 
     private PostDataSource postDataSource;
     private MutableLiveData<PostDataSource> postDataSourceLiveData;
 
-    PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, int postType) {
+    PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, int postType,
+                          PostDataSource.OnPostFetchedCallback onPostFetchedCallback) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
         postDataSourceLiveData = new MutableLiveData<>();
         this.postType = postType;
+        this.onPostFetchedCallback = onPostFetchedCallback;
     }
 
-    PostDataSourceFactory(Retrofit retrofit, Locale locale, String subredditName, int postType) {
+    PostDataSourceFactory(Retrofit retrofit, Locale locale, String subredditName, int postType,
+                          PostDataSource.OnPostFetchedCallback onPostFetchedCallback) {
         this.retrofit = retrofit;
         this.locale = locale;
         this.subredditName = subredditName;
         postDataSourceLiveData = new MutableLiveData<>();
         this.postType = postType;
+        this.onPostFetchedCallback = onPostFetchedCallback;
     }
 
     @Override
     public DataSource create() {
         if(postType == PostDataSource.TYPE_FRONT_PAGE) {
-            postDataSource = new PostDataSource(retrofit, accessToken, locale, postType);
+            postDataSource = new PostDataSource(retrofit, accessToken, locale, postType, onPostFetchedCallback);
         } else {
-            postDataSource = new PostDataSource(retrofit, locale, subredditName, postType);
+            postDataSource = new PostDataSource(retrofit, locale, subredditName, postType, onPostFetchedCallback);
         }
 
         postDataSourceLiveData.postValue(postDataSource);
