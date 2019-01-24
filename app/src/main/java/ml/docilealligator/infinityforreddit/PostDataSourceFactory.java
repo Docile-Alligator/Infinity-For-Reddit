@@ -28,9 +28,10 @@ class PostDataSourceFactory extends DataSource.Factory {
         this.onPostFetchedCallback = onPostFetchedCallback;
     }
 
-    PostDataSourceFactory(Retrofit retrofit, Locale locale, String subredditName, int postType,
+    PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
                           PostDataSource.OnPostFetchedCallback onPostFetchedCallback) {
         this.retrofit = retrofit;
+        this.accessToken = accessToken;
         this.locale = locale;
         this.subredditName = subredditName;
         postDataSourceLiveData = new MutableLiveData<>();
@@ -43,7 +44,7 @@ class PostDataSourceFactory extends DataSource.Factory {
         if(postType == PostDataSource.TYPE_FRONT_PAGE) {
             postDataSource = new PostDataSource(retrofit, accessToken, locale, postType, onPostFetchedCallback);
         } else {
-            postDataSource = new PostDataSource(retrofit, locale, subredditName, postType, onPostFetchedCallback);
+            postDataSource = new PostDataSource(retrofit, accessToken, locale, subredditName, postType, onPostFetchedCallback);
         }
 
         postDataSourceLiveData.postValue(postDataSource);

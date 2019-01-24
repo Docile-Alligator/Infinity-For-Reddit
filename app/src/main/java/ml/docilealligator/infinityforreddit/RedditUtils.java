@@ -12,7 +12,7 @@ import java.util.Map;
 public class RedditUtils {
     static final String OAUTH_URL ="https://www.reddit.com/api/v1/authorize.compact";
     static final String OAUTH_API_BASE_URI = "https://oauth.reddit.com";
-    static final String API_BASE_URI = "https://www.reddit.com";
+    static final String API_BASE_URI = "https://api.reddit.com";
 
     static final String CLIENT_ID_KEY = "client_id";
     static final String CLIENT_ID = "";

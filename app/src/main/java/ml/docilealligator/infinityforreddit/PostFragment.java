@@ -23,6 +23,8 @@ import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Retrofit;
 
 
@@ -34,13 +36,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     static final String NAME_KEY = "NK";
     static final String POST_TYPE_KEY = "PTK";
 
-    private CoordinatorLayout mCoordinatorLayout;
-    private RecyclerView mPostRecyclerView;
+    @BindView(R.id.coordinator_layout_post_fragment) CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.recycler_view_post_fragment) RecyclerView mPostRecyclerView;
+    @BindView(R.id.progress_bar_post_fragment) CircleProgressBar mProgressBar;
+    @BindView(R.id.fetch_post_info_linear_layout_post_fragment) LinearLayout mFetchPostInfoLinearLayout;
+    @BindView(R.id.fetch_post_info_image_view_post_fragment) ImageView mFetchPostInfoImageView;
+    @BindView(R.id.fetch_post_info_text_view_post_fragment) TextView mFetchPostInfoTextView;
+
     private LinearLayoutManager mLinearLayoutManager;
-    private CircleProgressBar mProgressBar;
-    private LinearLayout mFetchPostInfoLinearLayout;
-    private ImageView mFetchPostInfoImageView;
-    private TextView mFetchPostInfoTextView;
 
     private String mName;
     private int mPostType;
@@ -78,14 +81,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         ((Infinity) getActivity().getApplication()).getmNetworkComponent().inject(this);
 
-        mCoordinatorLayout = rootView.findViewById(R.id.coordinator_layout_post_fragment);
-        mPostRecyclerView = rootView.findViewById(R.id.recycler_view_post_fragment);
+        ButterKnife.bind(this, rootView);
+
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mPostRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mProgressBar = rootView.findViewById(R.id.progress_bar_post_fragment);
-        mFetchPostInfoLinearLayout = rootView.findViewById(R.id.fetch_post_info_linear_layout_post_fragment);
-        mFetchPostInfoImageView = rootView.findViewById(R.id.fetch_post_info_image_view_post_fragment);
-        mFetchPostInfoTextView = rootView.findViewById(R.id.fetch_post_info_text_view_post_fragment);
         /*FloatingActionButton fab = rootView.findViewById(R.id.fab_post_fragment);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,24 +96,36 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         mPostType = getArguments().getInt(POST_TYPE_KEY);
 
-        if(mPostType != PostDataSource.TYPE_FRONT_PAGE) {
-            mName = getArguments().getString(NAME_KEY);
-        }
-
-        if(mPostType == PostDataSource.TYPE_FRONT_PAGE) {
-            mAdapter = new PostRecyclerViewAdapter(getActivity(), mOauthRetrofit,
-                    mSharedPreferences, mPostType, () -> mPostViewModel.retryLoadingMore());
-        } else {
-            mAdapter = new PostRecyclerViewAdapter(getActivity(), mRetrofit,
-                    mSharedPreferences, mPostType, () -> mPostViewModel.retryLoadingMore());
-        }
-        mPostRecyclerView.setAdapter(mAdapter);
-
         String accessToken = getActivity().getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
                 .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
         PostViewModel.Factory factory;
-        if(mPostType == PostDataSource.TYPE_FRONT_PAGE) {
+
+        if(mPostType != PostDataSource.TYPE_FRONT_PAGE) {
+            mName = getArguments().getString(NAME_KEY);
+
+            mAdapter = new PostRecyclerViewAdapter(getActivity(), mRetrofit,
+                    mSharedPreferences, mPostType, () -> mPostViewModel.retryLoadingMore());
+
+            factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
+                    getResources().getConfiguration().locale, mName, mPostType, new PostDataSource.OnPostFetchedCallback() {
+                @Override
+                public void hasPost() {
+                    mFetchPostInfoLinearLayout.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void noPost() {
+                    mFetchPostInfoLinearLayout.setOnClickListener(view -> {
+                        //Do nothing
+                    });
+                    showErrorView(R.string.no_posts);
+                }
+            });
+        } else {
+            mAdapter = new PostRecyclerViewAdapter(getActivity(), mOauthRetrofit,
+                    mSharedPreferences, mPostType, () -> mPostViewModel.retryLoadingMore());
+
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
                     getResources().getConfiguration().locale, mPostType, new PostDataSource.OnPostFetchedCallback() {
                 @Override
@@ -130,23 +141,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     showErrorView(R.string.no_posts);
                 }
             });
-        } else {
-            factory = new PostViewModel.Factory(mRetrofit,
-                    getResources().getConfiguration().locale, mName, mPostType, new PostDataSource.OnPostFetchedCallback() {
-                @Override
-                public void hasPost() {
-                    mFetchPostInfoLinearLayout.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void noPost() {
-                    mFetchPostInfoLinearLayout.setOnClickListener(view -> {
-                        //Do nothing
-                    });
-                    showErrorView(R.string.no_posts);
-                }
-            });
         }
+
+        mPostRecyclerView.setAdapter(mAdapter);
 
         mPostViewModel = ViewModelProviders.of(this, factory).get(PostViewModel.class);
         mPostViewModel.getPosts().observe(this, posts -> mAdapter.submitList(posts));

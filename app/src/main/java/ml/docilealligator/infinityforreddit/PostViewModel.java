@@ -35,9 +35,9 @@ public class PostViewModel extends ViewModel {
         posts = (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
     }
 
-    public PostViewModel(Retrofit retrofit, Locale locale, String subredditName, int postType,
+    public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
                          PostDataSource.OnPostFetchedCallback onPostFetchedCallback) {
-        postDataSourceFactory = new PostDataSourceFactory(retrofit, locale, subredditName, postType, onPostFetchedCallback);
+        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, subredditName, postType, onPostFetchedCallback);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 dataSource -> dataSource.getInitialLoadStateLiveData());
@@ -94,9 +94,10 @@ public class PostViewModel extends ViewModel {
             this.onPostFetchedCallback = onPostFetchedCallback;
         }
 
-        public Factory(Retrofit retrofit, Locale locale, String subredditName, int postType,
+        public Factory(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
                        PostDataSource.OnPostFetchedCallback onPostFetchedCallback) {
             this.retrofit = retrofit;
+            this.accessToken = accessToken;
             this.locale = locale;
             this.subredditName = subredditName;
             this.postType = postType;
@@ -109,7 +110,7 @@ public class PostViewModel extends ViewModel {
             if(postType == PostDataSource.TYPE_FRONT_PAGE) {
                 return (T) new PostViewModel(retrofit, accessToken, locale, postType, onPostFetchedCallback);
             } else {
-                return (T) new PostViewModel(retrofit, locale, subredditName, postType, onPostFetchedCallback);
+                return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, postType, onPostFetchedCallback);
             }
         }
     }
