@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.arch.paging.PagedListAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +9,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +19,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.multilevelview.MultiLevelAdapter;
-import com.multilevelview.MultiLevelRecyclerView;
 import com.multilevelview.models.RecyclerViewItem;
 
 import java.util.ArrayList;
@@ -31,52 +31,68 @@ import retrofit2.Retrofit;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.view.MarkwonView;
 
-class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
+public class CommentAdapter extends PagedListAdapter<CommentData, RecyclerView.ViewHolder> {
     private Context mContext;
     private Retrofit mRetrofit;
     private Retrofit mOauthRetrofit;
     private SharedPreferences mSharedPreferences;
-    private ArrayList<CommentData> mCommentData;
-    private MultiLevelRecyclerView mMultiLevelRecyclerView;
+    private RecyclerView mRecyclerView;
     private String subredditNamePrefixed;
     private String article;
     private Locale locale;
 
-    CommentMultiLevelRecyclerViewAdapter(Context context, Retrofit retrofit, Retrofit oauthRetrofit,
-                                         SharedPreferences sharedPreferences, ArrayList<CommentData> commentData,
-                                         MultiLevelRecyclerView multiLevelRecyclerView,
-                                         String subredditNamePrefixed, String article, Locale locale) {
-        super(commentData);
+    private NetworkState networkState;
+    private RetryLoadingMoreCallback retryLoadingMoreCallback;
+
+    interface RetryLoadingMoreCallback {
+        void retryLoadingMore();
+    }
+
+    CommentAdapter(Context context, Retrofit retrofit, Retrofit oauthRetrofit,
+                   SharedPreferences sharedPreferences, RecyclerView recyclerView,
+                   String subredditNamePrefixed, String article, Locale locale) {
+        super(DIFF_CALLBACK);
         mContext = context;
         mRetrofit = retrofit;
         mOauthRetrofit = oauthRetrofit;
         mSharedPreferences = sharedPreferences;
-        mCommentData = commentData;
-        mMultiLevelRecyclerView = multiLevelRecyclerView;
+        mRecyclerView = recyclerView;
         this.subredditNamePrefixed = subredditNamePrefixed;
         this.article = article;
         this.locale = locale;
     }
 
+    static final DiffUtil.ItemCallback<CommentData> DIFF_CALLBACK = new DiffUtil.ItemCallback<CommentData>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull CommentData commentData, @NonNull CommentData t1) {
+            return commentData.getId().equals(t1.getId());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull CommentData commentData, @NonNull CommentData t1) {
+            return commentData.getCommentContent().equals(t1.getCommentContent());
+        }
+    };
+
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
         return new CommentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_comment, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        final CommentData commentItem = mCommentData.get(position);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+        final CommentData commentItem = getItem(i);
 
         String authorPrefixed = "u/" + commentItem.getAuthor();
-        ((CommentViewHolder) holder).authorTextView.setText(authorPrefixed);
-        ((CommentViewHolder) holder).authorTextView.setOnClickListener(view -> {
+        ((CommentViewHolder) viewHolder).authorTextView.setText(authorPrefixed);
+        ((CommentViewHolder) viewHolder).authorTextView.setOnClickListener(view -> {
             Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
             intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, commentItem.getAuthor());
             mContext.startActivity(intent);
         });
 
-        ((CommentViewHolder) holder).commentTimeTextView.setText(commentItem.getCommentTime());
+        ((CommentViewHolder) viewHolder).commentTimeTextView.setText(commentItem.getCommentTime());
         SpannableConfiguration spannableConfiguration = SpannableConfiguration.builder(mContext).linkResolver((view, link) -> {
             if(link.startsWith("/u/")) {
                 Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
@@ -96,20 +112,20 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
             }
         }).build();
 
-        ((CommentViewHolder) holder).commentMarkdownView.setMarkdown(spannableConfiguration, commentItem.getCommentContent());
-        ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore()));
+        ((CommentViewHolder) viewHolder).commentMarkdownView.setMarkdown(spannableConfiguration, commentItem.getCommentContent());
+        ((CommentViewHolder) viewHolder).scoreTextView.setText(Integer.toString(commentItem.getScore()));
 
-        ((CommentViewHolder) holder).verticalBlock.getLayoutParams().width = commentItem.getDepth() * 16;
+        ((CommentViewHolder) viewHolder).verticalBlock.getLayoutParams().width = commentItem.getDepth() * 16;
         if(commentItem.hasReply()) {
-            setExpandButton(((CommentViewHolder) holder).expandButton, commentItem.isExpanded());
+            setExpandButton(((CommentViewHolder) viewHolder).expandButton, commentItem.isExpanded());
         }
 
-        ((CommentViewHolder) holder).expandButton.setOnClickListener(view -> {
+        ((CommentViewHolder) viewHolder).expandButton.setOnClickListener(view -> {
             if(commentItem.hasChildren() && commentItem.getChildren().size() > 0) {
-                mMultiLevelRecyclerView.toggleItemsGroup(holder.getAdapterPosition());
-                setExpandButton(((CommentViewHolder) holder).expandButton, commentItem.isExpanded());
+                //mRecyclerView.toggleItemsGroup(viewHolder.getAdapterPosition());
+                setExpandButton(((CommentViewHolder) viewHolder).expandButton, commentItem.isExpanded());
             } else {
-                ((CommentViewHolder) holder).loadMoreCommentsProgressBar.setVisibility(View.VISIBLE);
+                ((CommentViewHolder) viewHolder).loadMoreCommentsProgressBar.setVisibility(View.VISIBLE);
                 FetchComment.fetchComment(mRetrofit, subredditNamePrefixed, article, commentItem.getId(),
                         new FetchComment.FetchCommentListener() {
                             @Override
@@ -121,16 +137,16 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                                             public void onParseCommentSuccess(List<?> commentData,
                                                                               String parentId, String commaSeparatedChildren) {
                                                 commentItem.addChildren((List<RecyclerViewItem>) commentData);
-                                                ((CommentViewHolder) holder).loadMoreCommentsProgressBar
+                                                ((CommentViewHolder) viewHolder).loadMoreCommentsProgressBar
                                                         .setVisibility(View.GONE);
-                                                mMultiLevelRecyclerView.toggleItemsGroup(holder.getAdapterPosition());
-                                                ((CommentViewHolder) holder).expandButton
+                                                //mRecyclerView.toggleItemsGroup(viewHolder.getAdapterPosition());
+                                                ((CommentViewHolder) viewHolder).expandButton
                                                         .setImageResource(R.drawable.ic_expand_less_black_20dp);
                                             }
 
                                             @Override
                                             public void onParseCommentFailed() {
-                                                ((CommentViewHolder) holder).loadMoreCommentsProgressBar
+                                                ((CommentViewHolder) viewHolder).loadMoreCommentsProgressBar
                                                         .setVisibility(View.GONE);
                                             }
                                         });
@@ -146,26 +162,26 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
 
         switch (commentItem.getVoteType()) {
             case 1:
-                ((CommentViewHolder) holder).upvoteButton
+                ((CommentViewHolder) viewHolder).upvoteButton
                         .setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
                 break;
             case 2:
-                ((CommentViewHolder) holder).downvoteButton
+                ((CommentViewHolder) viewHolder).downvoteButton
                         .setColorFilter(ContextCompat.getColor(mContext, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
                 break;
         }
 
-        ((CommentViewHolder) holder).upvoteButton.setOnClickListener(view -> {
-            final boolean isDownvotedBefore = ((CommentViewHolder) holder).downvoteButton.getColorFilter() != null;
-            final ColorFilter minusButtonColorFilter = ((CommentViewHolder) holder).downvoteButton.getColorFilter();
-            ((CommentViewHolder) holder).downvoteButton.clearColorFilter();
+        ((CommentViewHolder) viewHolder).upvoteButton.setOnClickListener(view -> {
+            final boolean isDownvotedBefore = ((CommentViewHolder) viewHolder).downvoteButton.getColorFilter() != null;
+            final ColorFilter minusButtonColorFilter = ((CommentViewHolder) viewHolder).downvoteButton.getColorFilter();
+            ((CommentViewHolder) viewHolder).downvoteButton.clearColorFilter();
 
-            if (((CommentViewHolder) holder).upvoteButton.getColorFilter() == null) {
-                ((CommentViewHolder) holder).upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+            if (((CommentViewHolder) viewHolder).upvoteButton.getColorFilter() == null) {
+                ((CommentViewHolder) viewHolder).upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
                 if(isDownvotedBefore) {
-                    ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() + 2));
+                    ((CommentViewHolder) viewHolder).scoreTextView.setText(Integer.toString(commentItem.getScore() + 2));
                 } else {
-                    ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() + 1));
+                    ((CommentViewHolder) viewHolder).scoreTextView.setText(Integer.toString(commentItem.getScore() + 1));
                 }
 
                 VoteThing.voteThing(mOauthRetrofit,mSharedPreferences,  new VoteThing.VoteThingListener() {
@@ -182,15 +198,15 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                     @Override
                     public void onVoteThingFail(int position1) {
                         Toast.makeText(mContext, "Cannot upvote this comment", Toast.LENGTH_SHORT).show();
-                        ((CommentViewHolder) holder).upvoteButton.clearColorFilter();
-                        ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore()));
-                        ((CommentViewHolder) holder).downvoteButton.setColorFilter(minusButtonColorFilter);
+                        ((CommentViewHolder) viewHolder).upvoteButton.clearColorFilter();
+                        ((CommentViewHolder) viewHolder).scoreTextView.setText(Integer.toString(commentItem.getScore()));
+                        ((CommentViewHolder) viewHolder).downvoteButton.setColorFilter(minusButtonColorFilter);
                     }
-                }, commentItem.getFullName(), RedditUtils.DIR_UPVOTE, ((CommentViewHolder) holder).getAdapterPosition());
+                }, commentItem.getFullName(), RedditUtils.DIR_UPVOTE, ((CommentViewHolder) viewHolder).getAdapterPosition());
             } else {
                 //Upvoted before
-                ((CommentViewHolder) holder).upvoteButton.clearColorFilter();
-                ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() - 1));
+                ((CommentViewHolder) viewHolder).upvoteButton.clearColorFilter();
+                ((CommentViewHolder) viewHolder).scoreTextView.setText(Integer.toString(commentItem.getScore() - 1));
 
                 VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
                     @Override
@@ -202,26 +218,26 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                     @Override
                     public void onVoteThingFail(int position1) {
                         Toast.makeText(mContext, "Cannot unvote this comment", Toast.LENGTH_SHORT).show();
-                        ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() + 1));
-                        ((CommentViewHolder) holder).upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+                        ((CommentViewHolder) viewHolder).scoreTextView.setText(Integer.toString(commentItem.getScore() + 1));
+                        ((CommentViewHolder) viewHolder).upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
                         commentItem.setScore(commentItem.getScore() + 1);
                     }
-                }, commentItem.getFullName(), RedditUtils.DIR_UNVOTE, ((CommentViewHolder) holder).getAdapterPosition());
+                }, commentItem.getFullName(), RedditUtils.DIR_UNVOTE, ((CommentViewHolder) viewHolder).getAdapterPosition());
             }
         });
 
-        ((CommentViewHolder) holder).downvoteButton.setOnClickListener(view -> {
-            final boolean isUpvotedBefore = ((CommentViewHolder) holder).upvoteButton.getColorFilter() != null;
+        ((CommentViewHolder) viewHolder).downvoteButton.setOnClickListener(view -> {
+            final boolean isUpvotedBefore = ((CommentViewHolder) viewHolder).upvoteButton.getColorFilter() != null;
 
-            final ColorFilter upvoteButtonColorFilter = ((CommentViewHolder) holder).upvoteButton.getColorFilter();
-            ((CommentViewHolder) holder).upvoteButton.clearColorFilter();
+            final ColorFilter upvoteButtonColorFilter = ((CommentViewHolder) viewHolder).upvoteButton.getColorFilter();
+            ((CommentViewHolder) viewHolder).upvoteButton.clearColorFilter();
 
-            if (((CommentViewHolder) holder).downvoteButton.getColorFilter() == null) {
-                ((CommentViewHolder) holder).downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+            if (((CommentViewHolder) viewHolder).downvoteButton.getColorFilter() == null) {
+                ((CommentViewHolder) viewHolder).downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
                 if (isUpvotedBefore) {
-                    ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() - 2));
+                    ((CommentViewHolder) viewHolder).scoreTextView.setText(Integer.toString(commentItem.getScore() - 2));
                 } else {
-                    ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() - 1));
+                    ((CommentViewHolder) viewHolder).scoreTextView.setText(Integer.toString(commentItem.getScore() - 1));
                 }
 
                 VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
@@ -238,15 +254,15 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                     @Override
                     public void onVoteThingFail(int position12) {
                         Toast.makeText(mContext, "Cannot downvote this comment", Toast.LENGTH_SHORT).show();
-                        ((CommentViewHolder) holder).downvoteButton.clearColorFilter();
-                        ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore()));
-                        ((CommentViewHolder) holder).upvoteButton.setColorFilter(upvoteButtonColorFilter);
+                        ((CommentViewHolder) viewHolder).downvoteButton.clearColorFilter();
+                        ((CommentViewHolder) viewHolder).scoreTextView.setText(Integer.toString(commentItem.getScore()));
+                        ((CommentViewHolder) viewHolder).upvoteButton.setColorFilter(upvoteButtonColorFilter);
                     }
-                }, commentItem.getFullName(), RedditUtils.DIR_DOWNVOTE, holder.getAdapterPosition());
+                }, commentItem.getFullName(), RedditUtils.DIR_DOWNVOTE, viewHolder.getAdapterPosition());
             } else {
                 //Down voted before
-                ((CommentViewHolder) holder).downvoteButton.clearColorFilter();
-                ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() + 1));
+                ((CommentViewHolder) viewHolder).downvoteButton.clearColorFilter();
+                ((CommentViewHolder) viewHolder).scoreTextView.setText(Integer.toString(commentItem.getScore() + 1));
 
                 VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
                     @Override
@@ -258,19 +274,47 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                     @Override
                     public void onVoteThingFail(int position12) {
                         Toast.makeText(mContext, "Cannot unvote this comment", Toast.LENGTH_SHORT).show();
-                        ((CommentViewHolder) holder).downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
-                        ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore()));
+                        ((CommentViewHolder) viewHolder).downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                        ((CommentViewHolder) viewHolder).scoreTextView.setText(Integer.toString(commentItem.getScore()));
                         commentItem.setScore(commentItem.getScore());
                     }
-                }, commentItem.getFullName(), RedditUtils.DIR_UNVOTE, holder.getAdapterPosition());
+                }, commentItem.getFullName(), RedditUtils.DIR_UNVOTE, viewHolder.getAdapterPosition());
             }
         });
     }
 
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
-        ((CommentViewHolder) holder).expandButton.setVisibility(View.GONE);
-        ((CommentViewHolder) holder).loadMoreCommentsProgressBar.setVisibility(View.GONE);
+        ((CommentMultiLevelRecyclerViewAdapter.CommentViewHolder) holder).expandButton.setVisibility(View.GONE);
+        ((CommentMultiLevelRecyclerViewAdapter.CommentViewHolder) holder).loadMoreCommentsProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public int getItemCount() {
+        if(hasExtraRow()) {
+            return super.getItemCount() + 1;
+        }
+        return super.getItemCount();
+    }
+
+    private boolean hasExtraRow() {
+        return networkState != null && networkState.getStatus() != NetworkState.Status.SUCCESS;
+    }
+
+    void setNetworkState(NetworkState newNetworkState) {
+        NetworkState previousState = this.networkState;
+        boolean previousExtraRow = hasExtraRow();
+        this.networkState = newNetworkState;
+        boolean newExtraRow = hasExtraRow();
+        if (previousExtraRow != newExtraRow) {
+            if (previousExtraRow) {
+                notifyItemRemoved(super.getItemCount());
+            } else {
+                notifyItemInserted(super.getItemCount());
+            }
+        } else if (newExtraRow && !previousState.equals(newNetworkState)) {
+            notifyItemChanged(getItemCount() - 1);
+        }
     }
 
     private void setExpandButton(ImageView expandButton, boolean isExpanded) {

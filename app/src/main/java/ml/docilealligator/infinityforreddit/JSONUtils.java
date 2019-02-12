@@ -68,4 +68,7 @@ public class JSONUtils {
     public static final String IS_GOLD_KEY = "is_gold";
     public static final String IS_FRIEND_KEY = "is_friend";
     static final String KIND_KEY = "kind";
+    static final String JSON_KEY = "json";
+    static final String THINGS_KEY = "things";
+    static final String PARENT_ID_KEY = "parent_id";
 }

@@ -120,7 +120,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         Call<String> bestPost = api.getBestPosts(null, RedditUtils.getOAuthHeader(accessToken));
         bestPost.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+            public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
                     ParsePost.parsePost(response.body(), locale,
                             new ParsePost.ParsePostListener() {

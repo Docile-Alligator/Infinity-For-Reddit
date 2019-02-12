@@ -15,73 +15,118 @@ import java.util.Locale;
 
 class ParseComment {
     interface ParseCommentListener {
-        void onParseCommentSuccess(List<?> commentData, int moreCommentCount);
-        void onParseCommentFail();
+        void onParseCommentSuccess(List<?> commentData, String parentId, String commaSeparatedChildren);
+        void onParseCommentFailed();
+    }
+
+    interface ParseMoreCommentBasicInfoListener {
+        void onParseMoreCommentBasicInfoSuccess(String commaSeparatedChildrenId);
+        void onParseMoreCommentBasicInfoFailed();
     }
 
     static void parseComment(String response, ArrayList<CommentData> commentData, Locale locale,
-                             boolean isPost, int parentDepth, ParseCommentListener parseCommentListener) {
-        new ParseCommentAsyncTask(response, commentData, locale, isPost, parentDepth, parseCommentListener).execute();
+                             boolean isPost, int parentDepth, int childrenStartIndex, ParseCommentListener parseCommentListener) {
+        try {
+            JSONArray childrenArray = new JSONArray(response);
+
+            if(isPost) {
+                childrenArray = childrenArray.getJSONObject(childrenStartIndex).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+            } else {
+                childrenArray = childrenArray.getJSONObject(childrenStartIndex).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY)
+                        .getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY).getJSONObject(JSONUtils.REPLIES_KEY)
+                        .getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+            }
+            new ParseCommentAsyncTask(childrenArray, commentData, locale, isPost, parentDepth, childrenStartIndex, parseCommentListener).execute();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.i("comment json error", e.getMessage());
+            parseCommentListener.onParseCommentFailed();
+        }
+    }
+
+    static void parseMoreCommentBasicInfo(String response, ParseMoreCommentBasicInfoListener parseMoreCommentBasicInfoListener) {
+        new ParseMoreCommentBasicInfoAsyncTask(response, parseMoreCommentBasicInfoListener).execute();
+    }
+
+    static void parseMoreComment(String response, ArrayList<CommentData> commentData, Locale locale,
+                                 boolean isPost, int parentDepth, int childrenStartIndex, ParseCommentListener parseCommentListener) {
+        try {
+            JSONArray childrenArray = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+            new ParseCommentAsyncTask(childrenArray, commentData, locale, isPost, parentDepth, childrenStartIndex, parseCommentListener).execute();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.i("comment json error", e.getMessage());
+            parseCommentListener.onParseCommentFailed();
+        }
     }
 
     private static class ParseCommentAsyncTask extends AsyncTask<Void, Void, Void> {
-        private JSONArray jsonResponse;
+        private JSONArray comments;
         private ArrayList<CommentData> commentData;
         private ArrayList<CommentData> newcommentData;
+        private StringBuilder commaSeparatedChildren;
         private Locale locale;
         private boolean isPost;
         private int parentDepth;
+        private int childrenStartIndex;
         private ParseCommentListener parseCommentListener;
         private boolean parseFailed;
-        private int moreCommentCount;
+        private String parentId;
 
-        ParseCommentAsyncTask(String response, ArrayList<CommentData> commentData, Locale locale,
-                              boolean isPost, int parentDepth, ParseCommentListener parseCommentListener){
-            try {
-                jsonResponse = new JSONArray(response);
-                this.commentData = commentData;
-                newcommentData = new ArrayList<>();
-                this.locale = locale;
-                this.isPost = isPost;
-                this.parentDepth = parentDepth;
-                this.parseCommentListener = parseCommentListener;
-                parseFailed = false;
-            } catch (JSONException e) {
-                Log.i("comment json error", e.getMessage());
-                parseCommentListener.onParseCommentFail();
-            }
+        ParseCommentAsyncTask(JSONArray comments, ArrayList<CommentData> commentData, Locale locale,
+                              boolean isPost, int parentDepth, int childrenStartIndex, ParseCommentListener parseCommentListener){
+            this.comments = comments;
+            this.commentData = commentData;
+            newcommentData = new ArrayList<>();
+            commaSeparatedChildren = new StringBuilder();
+            this.locale = locale;
+            this.isPost = isPost;
+            this.parentDepth = parentDepth;
+            this.childrenStartIndex =  childrenStartIndex;
+            parseFailed = false;
+            this.parseCommentListener = parseCommentListener;
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                moreCommentCount = 0;
                 int actualCommentLength;
-                JSONArray allComments;
+                ArrayList<String> children = new ArrayList<>();
 
-                if(isPost) {
-                    allComments = jsonResponse.getJSONObject(1).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+                /*if(isPost) {
+                    allComments = comments.getJSONObject(childrenStartIndex).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
                 } else {
-                    allComments = jsonResponse.getJSONObject(1).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY)
+                    allComments = comments.getJSONObject(childrenStartIndex).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY)
                             .getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY).getJSONObject(JSONUtils.REPLIES_KEY)
                             .getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-                }
-                if(allComments.length() == 0) {
+                }*/
+                if(comments.length() == 0) {
                     return null;
                 }
 
-                JSONObject more = allComments.getJSONObject(allComments.length() - 1).getJSONObject(JSONUtils.DATA_KEY);
+                JSONObject more = comments.getJSONObject(comments.length() - 1).getJSONObject(JSONUtils.DATA_KEY);
 
                 //Maybe children contain only comments and no more info
                 if(more.has(JSONUtils.COUNT_KEY)) {
-                    moreCommentCount = more.getInt(JSONUtils.COUNT_KEY);
-                    actualCommentLength = allComments.length() - 1;
+                    JSONArray childrenArray = more.getJSONArray(JSONUtils.CHILDREN_KEY);
+
+                    parentId = more.getString(JSONUtils.PARENT_ID_KEY);
+                    for(int i = 0; i < childrenArray.length(); i++) {
+                        children.add(childrenArray.getString(i));
+                    }
+
+                    for(String c : children) {
+                        commaSeparatedChildren.append(c).append(",");
+                    }
+                    commaSeparatedChildren.deleteCharAt(commaSeparatedChildren.length() - 1);
+
+                    actualCommentLength = comments.length() - 1;
                 } else {
-                    actualCommentLength = allComments.length();
+                    actualCommentLength = comments.length();
                 }
 
                 for (int i = 0; i < actualCommentLength; i++) {
-                    JSONObject data = allComments.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
+                    JSONObject data = comments.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
                     String id = data.getString(JSONUtils.ID_KEY);
                     String fullName = data.getString(JSONUtils.LINK_ID_KEY);
                     String author = data.getString(JSONUtils.AUTHOR_KEY);
@@ -100,7 +145,12 @@ class ParseComment {
                     String formattedSubmitTime = new SimpleDateFormat("MMM d, YYYY, HH:mm",
                             locale).format(submitTimeCalendar.getTime());
 
-                    int depth = data.getInt(JSONUtils.DEPTH_KEY) + parentDepth;
+                    int depth;
+                    if(data.has(JSONUtils.DEPTH_KEY)) {
+                        depth = data.getInt(JSONUtils.DEPTH_KEY) + parentDepth;
+                    } else {
+                        depth = parentDepth;
+                    }
                     boolean collapsed = data.getBoolean(JSONUtils.COLLAPSED_KEY);
                     boolean hasReply = !(data.get(JSONUtils.REPLIES_KEY) instanceof String);
 
@@ -117,9 +167,55 @@ class ParseComment {
         protected void onPostExecute(Void aVoid) {
             if(!parseFailed) {
                 commentData.addAll(newcommentData);
-                parseCommentListener.onParseCommentSuccess(commentData, moreCommentCount);
+                parseCommentListener.onParseCommentSuccess(commentData, parentId, commaSeparatedChildren.toString());
             } else {
-                parseCommentListener.onParseCommentFail();
+                parseCommentListener.onParseCommentFailed();
+            }
+        }
+    }
+
+    private static class ParseMoreCommentBasicInfoAsyncTask extends AsyncTask<Void, Void, Void> {
+        private JSONArray children;
+        private StringBuilder commaSeparatedChildren;
+        private ParseMoreCommentBasicInfoListener parseMoreCommentBasicInfoListener;
+        private boolean parseFailed;
+
+        ParseMoreCommentBasicInfoAsyncTask(String response, ParseMoreCommentBasicInfoListener parseMoreCommentBasicInfoListener) {
+            this.parseMoreCommentBasicInfoListener = parseMoreCommentBasicInfoListener;
+            try {
+                children = new JSONObject(response).getJSONObject(JSONUtils.JSON_KEY)
+                        .getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.THINGS_KEY);
+                commaSeparatedChildren = new StringBuilder();
+            } catch (JSONException e) {
+                parseMoreCommentBasicInfoListener.onParseMoreCommentBasicInfoFailed();
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                for(int i = 0; i < children.length(); i++) {
+                    commaSeparatedChildren.append(children.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.ID_KEY));
+                    commaSeparatedChildren.append(",");
+                }
+                commaSeparatedChildren.deleteCharAt(commaSeparatedChildren.length() - 1);
+                parseFailed = false;
+            } catch (JSONException e) {
+                parseMoreCommentBasicInfoListener.onParseMoreCommentBasicInfoFailed();
+                parseFailed = true;
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(!parseFailed) {
+                parseMoreCommentBasicInfoListener.onParseMoreCommentBasicInfoSuccess(commaSeparatedChildren.toString());
+            } else {
+                parseMoreCommentBasicInfoListener.onParseMoreCommentBasicInfoFailed();
             }
         }
     }
