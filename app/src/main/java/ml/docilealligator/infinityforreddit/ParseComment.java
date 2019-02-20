@@ -25,18 +25,18 @@ class ParseComment {
     }
 
     static void parseComment(String response, ArrayList<CommentData> commentData, Locale locale,
-                             boolean isPost, int parentDepth, int childrenStartIndex, ParseCommentListener parseCommentListener) {
+                             boolean isPost, int parentDepth, ParseCommentListener parseCommentListener) {
         try {
             JSONArray childrenArray = new JSONArray(response);
 
             if(isPost) {
-                childrenArray = childrenArray.getJSONObject(childrenStartIndex).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+                childrenArray = childrenArray.getJSONObject(1).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
             } else {
-                childrenArray = childrenArray.getJSONObject(childrenStartIndex).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY)
+                childrenArray = childrenArray.getJSONObject(1).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY)
                         .getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY).getJSONObject(JSONUtils.REPLIES_KEY)
                         .getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
             }
-            new ParseCommentAsyncTask(childrenArray, commentData, locale, isPost, parentDepth, childrenStartIndex, parseCommentListener).execute();
+            new ParseCommentAsyncTask(childrenArray, commentData, locale, parentDepth, parseCommentListener).execute();
         } catch (JSONException e) {
             e.printStackTrace();
             Log.i("comment json error", e.getMessage());
@@ -49,10 +49,10 @@ class ParseComment {
     }
 
     static void parseMoreComment(String response, ArrayList<CommentData> commentData, Locale locale,
-                                 boolean isPost, int parentDepth, int childrenStartIndex, ParseCommentListener parseCommentListener) {
+                                 int parentDepth, ParseCommentListener parseCommentListener) {
         try {
             JSONArray childrenArray = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-            new ParseCommentAsyncTask(childrenArray, commentData, locale, isPost, parentDepth, childrenStartIndex, parseCommentListener).execute();
+            new ParseCommentAsyncTask(childrenArray, commentData, locale, parentDepth, parseCommentListener).execute();
         } catch (JSONException e) {
             e.printStackTrace();
             Log.i("comment json error", e.getMessage());
@@ -66,23 +66,19 @@ class ParseComment {
         private ArrayList<CommentData> newcommentData;
         private StringBuilder commaSeparatedChildren;
         private Locale locale;
-        private boolean isPost;
         private int parentDepth;
-        private int childrenStartIndex;
         private ParseCommentListener parseCommentListener;
         private boolean parseFailed;
         private String parentId;
 
         ParseCommentAsyncTask(JSONArray comments, ArrayList<CommentData> commentData, Locale locale,
-                              boolean isPost, int parentDepth, int childrenStartIndex, ParseCommentListener parseCommentListener){
+                              int parentDepth, ParseCommentListener parseCommentListener){
             this.comments = comments;
             this.commentData = commentData;
             newcommentData = new ArrayList<>();
             commaSeparatedChildren = new StringBuilder();
             this.locale = locale;
-            this.isPost = isPost;
             this.parentDepth = parentDepth;
-            this.childrenStartIndex =  childrenStartIndex;
             parseFailed = false;
             this.parseCommentListener = parseCommentListener;
         }
@@ -93,13 +89,6 @@ class ParseComment {
                 int actualCommentLength;
                 ArrayList<String> children = new ArrayList<>();
 
-                /*if(isPost) {
-                    allComments = comments.getJSONObject(childrenStartIndex).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-                } else {
-                    allComments = comments.getJSONObject(childrenStartIndex).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY)
-                            .getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY).getJSONObject(JSONUtils.REPLIES_KEY)
-                            .getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-                }*/
                 if(comments.length() == 0) {
                     return null;
                 }

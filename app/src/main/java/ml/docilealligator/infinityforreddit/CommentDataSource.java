@@ -74,7 +74,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, Post> {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if(response.isSuccessful()) {
                     ParseComment.parseComment(response.body(), new ArrayList<>(), locale, isPost,
-                            0, 1, new ParseComment.ParseCommentListener() {
+                            0, new ParseComment.ParseCommentListener() {
                                 @Override
                                 public void onParseCommentSuccess(List<?> commentData, String parentId,
                                                                   String commaSeparatedChildren) {
@@ -138,8 +138,8 @@ public class CommentDataSource extends PageKeyedDataSource<String, Post> {
                                 @Override
                                 public void onResponse(Call<String> call, Response<String> response) {
                                     if(response.isSuccessful()) {
-                                        ParseComment.parseMoreComment(response.body(), new ArrayList<>(), locale, isPost,
-                                                0, 0, new ParseComment.ParseCommentListener() {
+                                        ParseComment.parseMoreComment(response.body(), new ArrayList<>(), locale,
+                                                0, new ParseComment.ParseCommentListener() {
                                                     @Override
                                                     public void onParseCommentSuccess(List<?> commentData, String parentId,
                                                                                       String commaSeparatedChildren) {

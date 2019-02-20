@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import com.multilevelview.models.RecyclerViewItem;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -77,7 +76,7 @@ public class CommentAdapter extends PagedListAdapter<CommentData, RecyclerView.V
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        return new CommentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_comment, parent, false));
+        return new CommentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false));
     }
 
     @Override
@@ -122,16 +121,22 @@ public class CommentAdapter extends PagedListAdapter<CommentData, RecyclerView.V
 
         ((CommentViewHolder) viewHolder).expandButton.setOnClickListener(view -> {
             if(commentItem.hasChildren() && commentItem.getChildren().size() > 0) {
-                //mRecyclerView.toggleItemsGroup(viewHolder.getAdapterPosition());
                 setExpandButton(((CommentViewHolder) viewHolder).expandButton, commentItem.isExpanded());
             } else {
                 ((CommentViewHolder) viewHolder).loadMoreCommentsProgressBar.setVisibility(View.VISIBLE);
                 FetchComment.fetchComment(mRetrofit, subredditNamePrefixed, article, commentItem.getId(),
-                        new FetchComment.FetchCommentListener() {
+                        locale, false, commentItem.getDepth(), new FetchComment.FetchCommentListener() {
                             @Override
-                            public void onFetchCommentSuccess(String response) {
-                                ParseComment.parseComment(response, new ArrayList<CommentData>(),
-                                        locale, false, commentItem.getDepth(), 1,
+                            public void onFetchCommentSuccess(List<?> commentData,
+                                                              String parentId, String commaSeparatedChildren) {
+                                commentItem.addChildren((List<RecyclerViewItem>) commentData);
+                                ((CommentViewHolder) viewHolder).loadMoreCommentsProgressBar
+                                        .setVisibility(View.GONE);
+                                ((CommentViewHolder) viewHolder).expandButton
+                                        .setImageResource(R.drawable.ic_expand_less_black_20dp);
+
+                                /*ParseComment.parseComment(response, new ArrayList<>(),
+                                        locale, false, commentItem.getDepth(),
                                         new ParseComment.ParseCommentListener() {
                                             @Override
                                             public void onParseCommentSuccess(List<?> commentData,
@@ -139,7 +144,6 @@ public class CommentAdapter extends PagedListAdapter<CommentData, RecyclerView.V
                                                 commentItem.addChildren((List<RecyclerViewItem>) commentData);
                                                 ((CommentViewHolder) viewHolder).loadMoreCommentsProgressBar
                                                         .setVisibility(View.GONE);
-                                                //mRecyclerView.toggleItemsGroup(viewHolder.getAdapterPosition());
                                                 ((CommentViewHolder) viewHolder).expandButton
                                                         .setImageResource(R.drawable.ic_expand_less_black_20dp);
                                             }
@@ -149,12 +153,13 @@ public class CommentAdapter extends PagedListAdapter<CommentData, RecyclerView.V
                                                 ((CommentViewHolder) viewHolder).loadMoreCommentsProgressBar
                                                         .setVisibility(View.GONE);
                                             }
-                                        });
+                                        });*/
                             }
 
                             @Override
-                            public void onFetchCommentFail() {
-
+                            public void onFetchCommentFailed() {
+                                ((CommentViewHolder) viewHolder).loadMoreCommentsProgressBar
+                                        .setVisibility(View.GONE);
                             }
                         });
             }

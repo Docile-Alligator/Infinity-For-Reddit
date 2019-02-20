@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.ColorFilter;
@@ -19,7 +18,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -38,7 +36,11 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
+import com.multilevelview.MultiLevelRecyclerView;
 import com.santalu.aspectratioimageview.AspectRatioImageView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -64,6 +66,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private String orientationState = "OS";
 
     private Post mPost;
+
+    private String mCommaSeparatedChildren;
 
     @BindView(R.id.coordinator_layout_view_post_detail) CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.subreddit_icon_name_linear_layout_view_post_detail) LinearLayout mSubredditIconNameLinearLayout;
@@ -91,11 +95,13 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.comment_progress_bar_view_post_detail) CircleProgressBar mCommentProgressbar;
     @BindView(R.id.comment_card_view_view_post_detail) CardView mCommentCardView;
-    @BindView(R.id.recycler_view_view_post_detail) RecyclerView mRecyclerView;
+    @BindView(R.id.recycler_view_view_post_detail) MultiLevelRecyclerView mRecyclerView;
 
     @BindView(R.id.no_comment_wrapper_linear_layout_view_post_detail) LinearLayout mNoCommentWrapperLinearLayout;
     @BindView(R.id.no_comment_image_view_view_post_detail) ImageView mNoCommentImageView;
 
+    private CommentMultiLevelRecyclerViewAdapter mAdapter;
+    private LinearLayoutManager mLayoutManager;
     private LoadSubredditIconAsyncTask mLoadSubredditIconAsyncTask;
 
     @Inject @Named("no_oauth")
@@ -208,8 +214,9 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             mCrosspostImageView.setVisibility(View.VISIBLE);
         }
 
+        mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setNestedScrollingEnabled(false);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         mSubredditTextView.setText(mPost.getSubredditNamePrefixed());
@@ -327,9 +334,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 }
                 break;
         }
-        //queryComment();
 
-        CommentAdapter adapter = new CommentAdapter(this, mRetrofit, mOauthRetrofit, mSharedPreferences,
+        fetchComment();
+
+        /*CommentAdapter mAdapter = new CommentAdapter(this, mRetrofit, mOauthRetrofit, mSharedPreferences,
                 mRecyclerView, mPost.getSubredditNamePrefixed(), mPost.getId(), getResources().getConfiguration().locale);
 
         CommentViewModel.Factory factory = new CommentViewModel.Factory(mRetrofit, getResources().getConfiguration().locale,
@@ -337,10 +345,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             @Override
             public void hasComment() {
                 mCommentProgressbar.setVisibility(View.GONE);
-                /*mRecyclerView.removeItemClickListeners();
-                mRecyclerView.setToggleItemOnClick(false);
-                mRecyclerView.setAccordion(false);*/
-                mRecyclerView.setAdapter(adapter);
+                mRecyclerView.setAdapter(mAdapter);
                 mCommentCardView.setVisibility(View.VISIBLE);
             }
 
@@ -351,7 +356,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         });
 
         CommentViewModel commentViewModel = ViewModelProviders.of(this, factory).get(CommentViewModel.class);
-        commentViewModel.getComments().observe(this, posts -> adapter.submitList(posts));
+        commentViewModel.getComments().observe(this, posts -> mAdapter.submitList(posts));*/
 
 
         mUpvoteButton.setOnClickListener(view -> {
@@ -467,52 +472,59 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         });
     }
 
-    /*private void queryComment() {
+    private void fetchComment() {
         mCommentProgressbar.setVisibility(View.VISIBLE);
         mNoCommentWrapperLinearLayout.setVisibility(View.GONE);
         FetchComment.fetchComment(mRetrofit, mPost.getSubredditNamePrefixed(), mPost.getId(),
-                null, new FetchComment.FetchCommentListener() {
+                null, getResources().getConfiguration().locale, true, 0, new FetchComment.FetchCommentListener() {
                     @Override
-                    public void onFetchCommentSuccess(String response) {
-                        ParseComment.parseComment(response, new ArrayList<CommentData>(),
-                                getResources().getConfiguration().locale, true, 0, 1,
-                                new ParseComment.ParseCommentListener() {
-                                    @Override
-                                    public void onParseCommentSuccess(List<?> commentData,
-                                                                      String parentId, String commaSeparatedChildren) {
-                                        mCommentProgressbar.setVisibility(View.GONE);
-                                        if (commentData.size() > 0) {
-                                            CommentMultiLevelRecyclerViewAdapter adapter = new CommentMultiLevelRecyclerViewAdapter(
-                                                    ViewPostDetailActivity.this, mRetrofit, mOauthRetrofit,
-                                                    mSharedPreferences, (ArrayList<CommentData>) commentData,
-                                                    mRecyclerView, mPost.getSubredditNamePrefixed(),
-                                                    mPost.getId(), getResources().getConfiguration().locale);
-                                            mRecyclerView.removeItemClickListeners();
-                                            mRecyclerView.setToggleItemOnClick(false);
-                                            mRecyclerView.setAccordion(false);
-                                            mRecyclerView.setAdapter(adapter);
-                                            mCommentCardView.setVisibility(View.VISIBLE);
-                                        } else {
-                                            mNoCommentWrapperLinearLayout.setVisibility(View.VISIBLE);
-                                            glide.load(R.drawable.no_comment_indicator).into(mNoCommentImageView);
-                                        }
-                                    }
+                    public void onFetchCommentSuccess(List<?> commentData,
+                                                      String parentId, String commaSeparatedChildren) {
+                        mCommaSeparatedChildren = commaSeparatedChildren;
+                        mCommentProgressbar.setVisibility(View.GONE);
+                        if (commentData.size() > 0) {
+                            mAdapter = new CommentMultiLevelRecyclerViewAdapter(
+                                    ViewPostDetailActivity.this, mRetrofit, mOauthRetrofit,
+                                    mSharedPreferences, (ArrayList<CommentData>) commentData,
+                                    mRecyclerView, mPost.getSubredditNamePrefixed(),
+                                    mPost.getId(), getResources().getConfiguration().locale);
+                            mRecyclerView.removeItemClickListeners();
+                            mRecyclerView.setToggleItemOnClick(false);
+                            mRecyclerView.setAccordion(false);
+                            mRecyclerView.setAdapter(mAdapter);
+                            mCommentCardView.setVisibility(View.VISIBLE);
 
-                                    @Override
-                                    public void onParseCommentFailed() {
-                                        mCommentProgressbar.setVisibility(View.GONE);
-                                        showRetrySnackbar();
-                                    }
-                                });
+                            fetchMoreComment();
+                        } else {
+                            mNoCommentWrapperLinearLayout.setVisibility(View.VISIBLE);
+                            glide.load(R.drawable.no_comment_indicator).into(mNoCommentImageView);
+                        }
                     }
 
                     @Override
-                    public void onFetchCommentFail() {
+                    public void onFetchCommentFailed() {
                         mCommentProgressbar.setVisibility(View.GONE);
                         showRetrySnackbar();
                     }
                 });
-    }*/
+    }
+
+    private void fetchMoreComment() {
+        FetchComment.fetchMoreComment(mRetrofit, mPost.getSubredditNamePrefixed(), mPost.getFullName(),
+                mCommaSeparatedChildren, getResources().getConfiguration().locale, new FetchComment.FetchMoreCommentListener() {
+                    @Override
+                    public void onFetchMoreCommentSuccess(List<?> commentData) {
+                        mAdapter.addComments((ArrayList<CommentData>) commentData);
+                    }
+
+                    @Override
+                    public void onFetchMoreCommentFailed() {
+                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, R.string.load_more_comment_failed, Snackbar.LENGTH_INDEFINITE);
+                        snackbar.setAction(R.string.retry, view -> fetchMoreComment());
+                        snackbar.show();
+                    }
+                });
+    }
 
     private void loadImage() {
         RequestBuilder imageRequestBuilder = glide.load(mPost.getPreviewUrl())
@@ -568,12 +580,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
     private void showRetrySnackbar() {
         Snackbar snackbar = Snackbar.make(mCoordinatorLayout, R.string.load_comment_failed, Snackbar.LENGTH_INDEFINITE);
-        snackbar.setAction(R.string.retry, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //queryComment();
-            }
-        });
+        snackbar.setAction(R.string.retry, view -> fetchComment());
         snackbar.show();
     }
 

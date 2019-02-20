@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new CommentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_comment, parent, false));
+        return new CommentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false));
     }
 
     @Override
@@ -78,11 +79,11 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
 
         ((CommentViewHolder) holder).commentTimeTextView.setText(commentItem.getCommentTime());
         SpannableConfiguration spannableConfiguration = SpannableConfiguration.builder(mContext).linkResolver((view, link) -> {
-            if(link.startsWith("/u/")) {
+            if (link.startsWith("/u/")) {
                 Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
                 intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, link.substring(3));
                 mContext.startActivity(intent);
-            } else if(link.startsWith("/r/")) {
+            } else if (link.startsWith("/r/")) {
                 Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
                 intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, link.substring(3));
                 mContext.startActivity(intent);
@@ -100,45 +101,36 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
         ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore()));
 
         ((CommentViewHolder) holder).verticalBlock.getLayoutParams().width = commentItem.getDepth() * 16;
-        if(commentItem.hasReply()) {
+        if (commentItem.hasReply()) {
             setExpandButton(((CommentViewHolder) holder).expandButton, commentItem.isExpanded());
         }
 
         ((CommentViewHolder) holder).expandButton.setOnClickListener(view -> {
-            if(commentItem.hasChildren() && commentItem.getChildren().size() > 0) {
+            if (commentItem.hasChildren() && commentItem.getChildren().size() > 0) {
                 mMultiLevelRecyclerView.toggleItemsGroup(holder.getAdapterPosition());
                 setExpandButton(((CommentViewHolder) holder).expandButton, commentItem.isExpanded());
             } else {
                 ((CommentViewHolder) holder).loadMoreCommentsProgressBar.setVisibility(View.VISIBLE);
                 FetchComment.fetchComment(mRetrofit, subredditNamePrefixed, article, commentItem.getId(),
-                        new FetchComment.FetchCommentListener() {
+                        locale, false, commentItem.getDepth(), new FetchComment.FetchCommentListener() {
                             @Override
-                            public void onFetchCommentSuccess(String response) {
-                                ParseComment.parseComment(response, new ArrayList<CommentData>(),
-                                        locale, false, commentItem.getDepth(), 1,
-                                        new ParseComment.ParseCommentListener() {
-                                            @Override
-                                            public void onParseCommentSuccess(List<?> commentData,
-                                                                              String parentId, String commaSeparatedChildren) {
-                                                commentItem.addChildren((List<RecyclerViewItem>) commentData);
-                                                ((CommentViewHolder) holder).loadMoreCommentsProgressBar
-                                                        .setVisibility(View.GONE);
-                                                mMultiLevelRecyclerView.toggleItemsGroup(holder.getAdapterPosition());
-                                                ((CommentViewHolder) holder).expandButton
-                                                        .setImageResource(R.drawable.ic_expand_less_black_20dp);
-                                            }
-
-                                            @Override
-                                            public void onParseCommentFailed() {
-                                                ((CommentViewHolder) holder).loadMoreCommentsProgressBar
-                                                        .setVisibility(View.GONE);
-                                            }
-                                        });
+                            public void onFetchCommentSuccess(List<?> commentData,
+                                                              String parentId, String commaSeparatedChildren) {
+                                commentItem.addChildren((List<RecyclerViewItem>) commentData);
+                                for (RecyclerViewItem r : (List<RecyclerViewItem>) commentData) {
+                                    Log.i("asdfasdfasd", Integer.toString(r.getLevel()));
+                                }
+                                ((CommentViewHolder) holder).loadMoreCommentsProgressBar
+                                        .setVisibility(View.GONE);
+                                mMultiLevelRecyclerView.toggleItemsGroup(holder.getAdapterPosition());
+                                ((CommentViewHolder) holder).expandButton
+                                        .setImageResource(R.drawable.ic_expand_less_black_20dp);
                             }
 
                             @Override
-                            public void onFetchCommentFail() {
-
+                            public void onFetchCommentFailed() {
+                                ((CommentViewHolder) holder).loadMoreCommentsProgressBar
+                                        .setVisibility(View.GONE);
                             }
                         });
             }
@@ -162,17 +154,17 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
 
             if (((CommentViewHolder) holder).upvoteButton.getColorFilter() == null) {
                 ((CommentViewHolder) holder).upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
-                if(isDownvotedBefore) {
+                if (isDownvotedBefore) {
                     ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() + 2));
                 } else {
                     ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() + 1));
                 }
 
-                VoteThing.voteThing(mOauthRetrofit,mSharedPreferences,  new VoteThing.VoteThingListener() {
+                VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
                     @Override
                     public void onVoteThingSuccess(int position1) {
                         commentItem.setVoteType(1);
-                        if(isDownvotedBefore) {
+                        if (isDownvotedBefore) {
                             commentItem.setScore(commentItem.getScore() + 2);
                         } else {
                             commentItem.setScore(commentItem.getScore() + 1);
@@ -228,7 +220,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                     @Override
                     public void onVoteThingSuccess(int position12) {
                         commentItem.setVoteType(-1);
-                        if(isUpvotedBefore) {
+                        if (isUpvotedBefore) {
                             commentItem.setScore(commentItem.getScore() - 2);
                         } else {
                             commentItem.setScore(commentItem.getScore() - 1);
@@ -269,8 +261,16 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
 
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
-        ((CommentViewHolder) holder).expandButton.setVisibility(View.GONE);
-        ((CommentViewHolder) holder).loadMoreCommentsProgressBar.setVisibility(View.GONE);
+        if (holder instanceof CommentViewHolder) {
+            ((CommentViewHolder) holder).expandButton.setVisibility(View.GONE);
+            ((CommentViewHolder) holder).loadMoreCommentsProgressBar.setVisibility(View.GONE);
+        }
+    }
+
+    void addComments(ArrayList<CommentData> comments) {
+        int sizeBefore = mCommentData.size();
+        mCommentData.addAll(comments);
+        notifyItemRangeInserted(sizeBefore, mCommentData.size() - sizeBefore);
     }
 
     private void setExpandButton(ImageView expandButton, boolean isExpanded) {
@@ -280,16 +280,26 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
     }
 
     class CommentViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.author_text_view_item_post_comment) TextView authorTextView;
-        @BindView(R.id.comment_time_text_view_item_post_comment) TextView commentTimeTextView;
-        @BindView(R.id.comment_markdown_view_item_post_comment) MarkwonView commentMarkdownView;
-        @BindView(R.id.plus_button_item_post_comment) ImageView upvoteButton;
-        @BindView(R.id.score_text_view_item_post_comment) TextView scoreTextView;
-        @BindView(R.id.minus_button_item_post_comment) ImageView downvoteButton;
-        @BindView(R.id.expand_button_item_post_comment) ImageView expandButton;
-        @BindView(R.id.load_more_comments_progress_bar) ProgressBar loadMoreCommentsProgressBar;
-        @BindView(R.id.reply_button_item_post_comment) ImageView replyButton;
-        @BindView(R.id.vertical_block_item_post_comment) View verticalBlock;
+        @BindView(R.id.author_text_view_item_post_comment)
+        TextView authorTextView;
+        @BindView(R.id.comment_time_text_view_item_post_comment)
+        TextView commentTimeTextView;
+        @BindView(R.id.comment_markdown_view_item_post_comment)
+        MarkwonView commentMarkdownView;
+        @BindView(R.id.plus_button_item_post_comment)
+        ImageView upvoteButton;
+        @BindView(R.id.score_text_view_item_post_comment)
+        TextView scoreTextView;
+        @BindView(R.id.minus_button_item_post_comment)
+        ImageView downvoteButton;
+        @BindView(R.id.expand_button_item_post_comment)
+        ImageView expandButton;
+        @BindView(R.id.load_more_comments_progress_bar)
+        ProgressBar loadMoreCommentsProgressBar;
+        @BindView(R.id.reply_button_item_post_comment)
+        ImageView replyButton;
+        @BindView(R.id.vertical_block_item_post_comment)
+        View verticalBlock;
 
         CommentViewHolder(View itemView) {
             super(itemView);

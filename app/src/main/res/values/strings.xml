@@ -15,6 +15,7 @@
 
     <string name="load_data_failed">Cannot load posts</string>
     <string name="load_comment_failed">Error loading comments</string>
+    <string name="load_more_comment_failed">Error loading more comments</string>
     <string name="retry">Retry</string>
     <string name="comments">Comments</string>
     <string name="no_comments_yet">No comments yet. Write a comment?</string>
