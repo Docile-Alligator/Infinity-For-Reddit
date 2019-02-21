@@ -191,7 +191,6 @@ class ParseComment {
                 commaSeparatedChildren.deleteCharAt(commaSeparatedChildren.length() - 1);
                 parseFailed = false;
             } catch (JSONException e) {
-                parseMoreCommentBasicInfoListener.onParseMoreCommentBasicInfoFailed();
                 parseFailed = true;
                 e.printStackTrace();
             }

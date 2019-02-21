@@ -494,7 +494,9 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                             mRecyclerView.setAdapter(mAdapter);
                             mCommentCardView.setVisibility(View.VISIBLE);
 
-                            fetchMoreComment();
+                            if(!mCommaSeparatedChildren.equals("")) {
+                                fetchMoreComment();
+                            }
                         } else {
                             mNoCommentWrapperLinearLayout.setVisibility(View.VISIBLE);
                             glide.load(R.drawable.no_comment_indicator).into(mNoCommentImageView);
