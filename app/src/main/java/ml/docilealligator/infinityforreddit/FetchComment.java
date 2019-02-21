@@ -24,6 +24,11 @@ class FetchComment {
         void onFetchMoreCommentFailed();
     }
 
+    interface FetchAllCommentListener {
+        void onFetchAllCommentSuccess(List<?> commentData);
+        void onFetchAllCommentFailed();
+    }
+
     static void fetchComment(Retrofit retrofit, String subredditNamePrefixed, String article,
                              String comment, Locale locale, boolean isPost, int parentDepth,
                              final FetchCommentListener fetchCommentListener) {
@@ -125,5 +130,41 @@ class FetchComment {
                 fetchMoreCommentListener.onFetchMoreCommentFailed();
             }
         });
+    }
+
+    static void fetchAllComment(Retrofit retrofit, String subredditNamePrefixed, String article,
+                                String comment, Locale locale, boolean isPost, int parentDepth,
+                                FetchAllCommentListener fetchAllCommentListener) {
+        fetchComment(retrofit, subredditNamePrefixed, article, comment, locale, isPost, parentDepth,
+                new FetchCommentListener() {
+                    @Override
+                    public void onFetchCommentSuccess(List<?> commentData, String parentId, String commaSeparatedChildren) {
+                        if(!commaSeparatedChildren.equals("")) {
+                            fetchMoreComment(retrofit, subredditNamePrefixed, parentId, commaSeparatedChildren,
+                                    locale, new FetchMoreCommentListener() {
+                                        @Override
+                                        public void onFetchMoreCommentSuccess(List<?> moreCommentData) {
+                                            ((ArrayList<CommentData>)commentData).addAll((ArrayList<CommentData>) moreCommentData);
+                                            fetchAllCommentListener.onFetchAllCommentSuccess(commentData);
+                                        }
+
+                                        @Override
+                                        public void onFetchMoreCommentFailed() {
+                                            Log.i("fetch more comment", "error");
+                                            fetchAllCommentListener.onFetchAllCommentFailed();
+                                        }
+                                    });
+                        } else {
+                            fetchAllCommentListener.onFetchAllCommentSuccess(commentData);
+                        }
+                    }
+
+                    @Override
+                    public void onFetchCommentFailed() {
+                        Log.i("fetch comment", "error");
+                        fetchAllCommentListener.onFetchAllCommentFailed();
+                    }
+                });
+
     }
 }

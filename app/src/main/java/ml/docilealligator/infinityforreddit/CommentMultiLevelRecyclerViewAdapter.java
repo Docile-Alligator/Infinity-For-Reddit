@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,15 +110,11 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                 setExpandButton(((CommentViewHolder) holder).expandButton, commentItem.isExpanded());
             } else {
                 ((CommentViewHolder) holder).loadMoreCommentsProgressBar.setVisibility(View.VISIBLE);
-                FetchComment.fetchComment(mRetrofit, subredditNamePrefixed, article, commentItem.getId(),
-                        locale, false, commentItem.getDepth(), new FetchComment.FetchCommentListener() {
+                FetchComment.fetchAllComment(mRetrofit, subredditNamePrefixed, article, commentItem.getId(),
+                        locale, false, commentItem.getDepth(), new FetchComment.FetchAllCommentListener() {
                             @Override
-                            public void onFetchCommentSuccess(List<?> commentData,
-                                                              String parentId, String commaSeparatedChildren) {
+                            public void onFetchAllCommentSuccess(List<?> commentData) {
                                 commentItem.addChildren((List<RecyclerViewItem>) commentData);
-                                for (RecyclerViewItem r : (List<RecyclerViewItem>) commentData) {
-                                    Log.i("asdfasdfasd", Integer.toString(r.getLevel()));
-                                }
                                 ((CommentViewHolder) holder).loadMoreCommentsProgressBar
                                         .setVisibility(View.GONE);
                                 mMultiLevelRecyclerView.toggleItemsGroup(holder.getAdapterPosition());
@@ -128,7 +123,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                             }
 
                             @Override
-                            public void onFetchCommentFailed() {
+                            public void onFetchAllCommentFailed() {
                                 ((CommentViewHolder) holder).loadMoreCommentsProgressBar
                                         .setVisibility(View.GONE);
                             }
