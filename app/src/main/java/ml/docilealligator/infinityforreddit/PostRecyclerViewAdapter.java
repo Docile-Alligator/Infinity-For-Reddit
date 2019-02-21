@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.ColorFilter;
-import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -158,22 +157,6 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                                             glide.load(iconImageUrl)
                                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                                     .error(glide.load(R.drawable.subreddit_default_icon))
-                                                    .listener(new RequestListener<Drawable>() {
-                                                        @Override
-                                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                                            return false;
-                                                        }
-
-                                                        @Override
-                                                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                                            if(resource instanceof Animatable) {
-                                                                //This is a gif
-                                                                //((Animatable) resource).start();
-                                                                ((DataViewHolder) holder).subredditIconGifImageView.startAnimation();
-                                                            }
-                                                            return false;
-                                                        }
-                                                    })
                                                     .into(((DataViewHolder) holder).subredditIconGifImageView);
                                         } else {
                                             glide.load(R.drawable.subreddit_default_icon)
@@ -190,22 +173,6 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         glide.load(post.getSubredditIconUrl())
                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                 .error(glide.load(R.drawable.subreddit_default_icon))
-                                .listener(new RequestListener<Drawable>() {
-                                    @Override
-                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                        return false;
-                                    }
-
-                                    @Override
-                                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                        if(resource instanceof Animatable) {
-                                            //This is a gif
-                                            //((Animatable) resource).start();
-                                            ((DataViewHolder) holder).subredditIconGifImageView.startAnimation();
-                                        }
-                                        return false;
-                                    }
-                                })
                                 .into(((DataViewHolder) holder).subredditIconGifImageView);
                     } else {
                         glide.load(R.drawable.subreddit_default_icon)
@@ -240,22 +207,6 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                                     glide.load(iconImageUrl)
                                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                             .error(glide.load(R.drawable.subreddit_default_icon))
-                                            .listener(new RequestListener<Drawable>() {
-                                                @Override
-                                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                                    return false;
-                                                }
-
-                                                @Override
-                                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                                    if(resource instanceof Animatable) {
-                                                        //This is a gif
-                                                        //((Animatable) resource).start();
-                                                        ((DataViewHolder) holder).subredditIconGifImageView.startAnimation();
-                                                    }
-                                                    return false;
-                                                }
-                                            })
                                             .into(((DataViewHolder) holder).subredditIconGifImageView);
                                 } else {
                                     glide.load(R.drawable.subreddit_default_icon)
@@ -272,22 +223,6 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         glide.load(post.getAuthorIconUrl())
                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                 .error(glide.load(R.drawable.subreddit_default_icon))
-                                .listener(new RequestListener<Drawable>() {
-                                    @Override
-                                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                        return false;
-                                    }
-
-                                    @Override
-                                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                        if(resource instanceof Animatable) {
-                                            //This is a gif
-                                            //((Animatable) resource).start();
-                                            ((DataViewHolder) holder).subredditIconGifImageView.startAnimation();
-                                        }
-                                        return false;
-                                    }
-                                })
                                 .into(((DataViewHolder) holder).subredditIconGifImageView);
                     } else {
                         glide.load(R.drawable.subreddit_default_icon)
@@ -687,12 +622,6 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if(holder instanceof DataViewHolder) {
-            if(((DataViewHolder) holder).imageView.isAnimating()) {
-                ((DataViewHolder) holder).imageView.stopAnimation();
-            }
-            if(((DataViewHolder) holder).subredditIconGifImageView.isAnimating()) {
-                ((DataViewHolder) holder).subredditIconGifImageView.stopAnimation();
-            }
             glide.clear(((DataViewHolder) holder).imageView);
             glide.clear(((DataViewHolder) holder).subredditIconGifImageView);
             ((DataViewHolder) holder).stickiedPostImageView.setVisibility(View.GONE);

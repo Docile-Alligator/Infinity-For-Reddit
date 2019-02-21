@@ -32,17 +32,14 @@
                     android:layout_height="180dp"
                     android:contentDescription="@string/content_description_banner_imageview" />
 
-                <com.felipecsl.gifimageview.library.GifImageView
+                <pl.droidsonroids.gif.GifImageView
                     android:id="@+id/icon_gif_image_view_view_subreddit_detail_activity"
                     android:layout_width="72dp"
                     android:layout_height="72dp"
                     android:layout_marginTop="-36dp"
-                    app:civ_border_color="@android:color/white"
-                    app:civ_border_width="1dp"
                     android:layout_below="@id/banner_image_view_view_subreddit_detail_activity"
                     android:layout_centerHorizontal="true"
-                    android:elevation="4dp"
-                    app:civ_circle_background_color="@android:color/white"/>
+                    android:elevation="4dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

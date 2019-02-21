@@ -2,10 +2,7 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Animatable;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,17 +11,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
-import com.felipecsl.gifimageview.library.GifImageView;
 
 import java.util.List;
 
 import SubscribedSubredditDatabase.SubscribedSubredditData;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import pl.droidsonroids.gif.GifImageView;
 
 class SubscribedSubredditRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
@@ -62,23 +55,7 @@ class SubscribedSubredditRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             glide.load(mSubscribedSubredditData.get(i).getIconUrl())
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                     .error(glide.load(R.drawable.subreddit_default_icon))
-                    .listener(new RequestListener<Drawable>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            if(resource instanceof Animatable) {
-                                //This is a gif
-                                //((Animatable) resource).start();
-                                ((SubredditViewHolder) viewHolder).iconGifImageView.startAnimation();
-                            }
-                            return false;
-                        }
-                    }).into(((SubredditViewHolder) viewHolder).iconGifImageView);
-
+                    .into(((SubredditViewHolder) viewHolder).iconGifImageView);
         } else {
             glide.load(R.drawable.subreddit_default_icon)
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -97,9 +74,6 @@ class SubscribedSubredditRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
 
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
-        if(((SubredditViewHolder) holder).iconGifImageView.isAnimating()) {
-            ((SubredditViewHolder) holder).iconGifImageView.stopAnimation();
-        }
         glide.clear(((SubredditViewHolder) holder).iconGifImageView);
     }
 

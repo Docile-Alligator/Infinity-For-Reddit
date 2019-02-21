@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -139,22 +138,6 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                             glide.load(iconImageUrl)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                     .error(glide.load(R.drawable.subreddit_default_icon))
-                                    .listener(new RequestListener<Drawable>() {
-                                        @Override
-                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                            return false;
-                                        }
-
-                                        @Override
-                                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                            if(resource instanceof Animatable) {
-                                                //This is a gif
-                                                //((Animatable) resource).start();
-                                                mSubredditIconGifImageView.startAnimation();
-                                            }
-                                            return false;
-                                        }
-                                    })
                                     .into(mSubredditIconGifImageView);
                         } else {
                             glide.load(R.drawable.subreddit_default_icon)
@@ -169,22 +152,6 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             glide.load(mPost.getSubredditIconUrl())
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                     .error(glide.load(R.drawable.subreddit_default_icon))
-                    .listener(new RequestListener<Drawable>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            if(resource instanceof Animatable) {
-                                //This is a gif
-                                //((Animatable) resource).start();
-                                mSubredditIconGifImageView.startAnimation();
-                            }
-                            return false;
-                        }
-                    })
                     .into(mSubredditIconGifImageView);
         } else {
             glide.load(R.drawable.subreddit_default_icon)

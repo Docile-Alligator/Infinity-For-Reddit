@@ -3,11 +3,8 @@ package ml.docilealligator.infinityforreddit;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Animatable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.chip.Chip;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -24,12 +21,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
-import com.felipecsl.gifimageview.library.GifImageView;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -44,6 +36,7 @@ import User.UserViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
 public class ViewUserDetailActivity extends AppCompatActivity {
@@ -166,23 +159,8 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                     glide.load(userData.getIconUrl())
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0)))
                             .error(glide.load(R.drawable.subreddit_default_icon))
-                            .listener(new RequestListener<Drawable>() {
-                                @Override
-                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                    return false;
-                                }
-
-                                @Override
-                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                    if(resource instanceof Animatable) {
-                                        //This is a gif
-                                        ((Animatable) resource).start();
-                                        iconGifImageView.startAnimation();
-                                    }
-                                    return false;
-                                }
-                            })
                             .into(iconGifImageView);
+
                     iconGifImageView.setOnClickListener(view -> {
                         Intent intent = new Intent(this, ViewImageActivity.class);
                         intent.putExtra(ViewImageActivity.TITLE_KEY, title);

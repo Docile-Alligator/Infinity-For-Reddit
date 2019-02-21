@@ -7,7 +7,7 @@
     android:focusable="true"
     android:background="?attr/selectableItemBackground">
 
-    <com.felipecsl.gifimageview.library.GifImageView
+    <pl.droidsonroids.gif.GifImageView
         android:id="@+id/subreddit_icon_gif_image_view_item_subscribed_subreddit"
         android:layout_width="24dp"
         android:layout_height="24dp"

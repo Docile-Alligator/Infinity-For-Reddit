@@ -68,10 +68,10 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.github.santalu:aspect-ratio-imageview:1.0.6'
-    implementation 'com.felipecsl:gifimageview:2.2.0'
     implementation "android.arch.paging:runtime:1.0.1"
     implementation "com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE"
     implementation "ru.noties:markwon:2.0.1"
     implementation "ru.noties:markwon-syntax-highlight:2.0.1"
     implementation "ru.noties:markwon-view:2.0.1"
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.16'
 }
