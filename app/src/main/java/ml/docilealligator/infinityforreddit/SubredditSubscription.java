@@ -2,7 +2,7 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import java.util.HashMap;

@@ -1,8 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -12,6 +10,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import okhttp3.Authenticator;
 import okhttp3.Headers;
 import okhttp3.Request;
@@ -31,7 +31,7 @@ class AccessTokenAuthenticator implements Authenticator {
 
     @Nullable
     @Override
-    public Request authenticate(@NonNull Route route, @NonNull Response response) throws IOException {
+    public Request authenticate(@NonNull Route route, @NonNull Response response) {
         if (response.code() == 401) {
             String accessToken = response.request().header(RedditUtils.AUTHORIZATION_KEY).substring(RedditUtils.AUTHORIZATION_BASE.length());
             synchronized (this) {

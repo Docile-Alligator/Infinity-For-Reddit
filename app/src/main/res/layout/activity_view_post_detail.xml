@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinator_layout_view_post_detail"
@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".ViewPostDetailActivity">
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -17,7 +17,7 @@
             android:orientation="vertical"
             android:descendantFocusability="blocksDescendants">
 
-            <android.support.design.card.MaterialCardView
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -26,7 +26,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <android.support.constraint.ConstraintLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/relative_layout_view_post_detail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -66,7 +66,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"/>
 
-                    </android.support.constraint.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <TextView
                         android:id="@+id/title_text_view_view_post_detail"
@@ -94,7 +94,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp">
 
-                        <android.support.design.chip.Chip
+                        <com.google.android.material.chip.Chip
                             android:id="@+id/type_text_view_view_post_detail"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -138,7 +138,7 @@
                             android:tint="@color/colorAccent"
                             android:visibility="gone"/>
 
-                        <android.support.design.chip.Chip
+                        <com.google.android.material.chip.Chip
                             android:id="@+id/nsfw_text_view_view_post_detail"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -257,7 +257,7 @@
 
                 </LinearLayout>
 
-            </android.support.design.card.MaterialCardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar
                 android:id="@+id/comment_progress_bar_view_post_detail"
@@ -269,7 +269,7 @@
                 app:mlpb_progress_color="@color/colorAccent"
                 android:layout_gravity="center_horizontal"/>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/comment_card_view_view_post_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -300,7 +300,7 @@
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
             <LinearLayout
                 android:id="@+id/no_comment_wrapper_linear_layout_view_post_detail"
@@ -329,6 +329,6 @@
         </LinearLayout>
 
 
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

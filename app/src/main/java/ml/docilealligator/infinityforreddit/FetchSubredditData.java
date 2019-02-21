@@ -1,6 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import retrofit2.Call;
