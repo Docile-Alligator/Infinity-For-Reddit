@@ -1,13 +1,13 @@
 package ml.docilealligator.infinityforreddit;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.paging.PageKeyedDataSource;
-import androidx.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
+import androidx.paging.PageKeyedDataSource;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -21,6 +21,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
     static final int TYPE_FRONT_PAGE = 0;
     static final int TYPE_SUBREDDIT = 1;
     static final int TYPE_USER = 2;
+    static final int TYPE_SEARCH = 3;
 
     private Retrofit retrofit;
     private String accessToken;
@@ -47,11 +48,11 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         this.onPostFetchedCallback = onPostFetchedCallback;
     }
 
-    PostDataSource(Retrofit retrofit, String accessToken, Locale locale, String name, int postType, OnPostFetchedCallback onPostFetchedCallback) {
+    PostDataSource(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType, OnPostFetchedCallback onPostFetchedCallback) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
-        this.name = name;
+        this.name = subredditName;
         paginationNetworkStateLiveData = new MutableLiveData();
         initialLoadStateLiveData = new MutableLiveData();
         this.postType = postType;
@@ -83,6 +84,9 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             case TYPE_USER:
                 loadUserPostsInitial(callback, null);
                 break;
+            case TYPE_SEARCH:
+                loadSearchPostsInitial(callback);
+                break;
         }
     }
 
@@ -111,6 +115,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                 break;
             case TYPE_USER:
                 loadUserPostsAfter(params, callback);
+            case TYPE_SEARCH:
+                loadSearchPostsAfter(params, callback);
         }
     }
 
@@ -313,6 +319,81 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
     private void loadUserPostsAfter(@NonNull LoadParams<String> params, @NonNull final LoadCallback<String, Post> callback) {
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> getPost = api.getUserBestPosts(name, params.key, RedditUtils.getOAuthHeader(accessToken));
+        getPost.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                if(response.isSuccessful()) {
+                    ParsePost.parsePost(response.body(), locale, new ParsePost.ParsePostListener() {
+                        @Override
+                        public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
+                            callback.onResult(newPosts, lastItem);
+                            paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
+                        }
+
+                        @Override
+                        public void onParsePostFail() {
+                            Log.i("Best post", "Error parsing data");
+                            paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
+                        }
+                    });
+                } else {
+                    Log.i("Best post", response.message());
+                    paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                String errorMessage = t == null ? "unknown error" : t.getMessage();
+                paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
+            }
+        });
+    }
+
+    private void loadSearchPostsInitial(@NonNull final LoadInitialCallback<String, Post> callback) {
+        RedditAPI api = retrofit.create(RedditAPI.class);
+        Call<String> getPost = api.searchPosts(name, null, RedditUtils.getOAuthHeader(accessToken));
+        getPost.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+                if(response.isSuccessful()) {
+                    ParsePost.parsePost(response.body(), locale,
+                            new ParsePost.ParsePostListener() {
+                                @Override
+                                public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                    if(newPosts.size() == 0) {
+                                        onPostFetchedCallback.noPost();
+                                    } else {
+                                        onPostFetchedCallback.hasPost();
+                                    }
+
+                                    callback.onResult(newPosts, null, lastItem);
+                                    initialLoadStateLiveData.postValue(NetworkState.LOADED);
+                                }
+
+                                @Override
+                                public void onParsePostFail() {
+                                    Log.i("Post fetch error", "Error parsing data");
+                                    initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
+                                }
+                            });
+                } else {
+                    Log.i("Post fetch error", response.message());
+                    initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                String errorMessage = t == null ? "unknown error" : t.getMessage();
+                initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
+            }
+        });
+    }
+
+    private void loadSearchPostsAfter(@NonNull LoadParams<String> params, @NonNull final LoadCallback<String, Post> callback) {
+        RedditAPI api = retrofit.create(RedditAPI.class);
+        Call<String> getPost = api.searchPosts(name, params.key, RedditUtils.getOAuthHeader(accessToken));
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {

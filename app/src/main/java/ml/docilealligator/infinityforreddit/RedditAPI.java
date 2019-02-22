@@ -58,14 +58,18 @@ public interface RedditAPI {
     Call<String> getInfo(@Path("subredditNamePrefixed") String subredditNamePrefixed, @Query("id") String id);
 
     @GET("subreddits/search.json?raw_json=1&include_over_18=on")
-    Call<String> searchSubreddits(@Query("q") String subredditName, @Query("after") String after);
+    Call<String> searchSubreddits(@Query("q") String subredditName, @Query("after") String after,
+                                  @HeaderMap Map<String, String> headers);
 
-    @GET("/profiles/search.json?raw_json=1")
-    Call<String> searchProfiles(@Query("q") String profileName, @Query("after") String after);
+    @GET("profiles/search.json?raw_json=1")
+    Call<String> searchProfiles(@Query("q") String profileName, @Query("after") String after,
+                                @HeaderMap Map<String, String> headers);
 
-    @GET("/search.json?raw_json=1")
-    Call<String> searchPosts(@Query("q") String query, @Query("after") String after);
+    @GET("search.json?raw_json=1&type=link")
+    Call<String> searchPosts(@Query("q") String query, @Query("after") String after,
+                             @HeaderMap Map<String, String> headers);
 
-    @GET("/r/{subredditName}/search.json?raw_json=1&restrict_sr=true")
-    Call<String> searchPostsInSpecificSubreddit(@Query("q") String query, @Query("after") String after);
+    @GET("r/{subredditName}/search.json?raw_json=1&type=link&restrict_sr=true")
+    Call<String> searchPostsInSpecificSubreddit(@Query("q") String query, @Query("after") String after,
+                                                @HeaderMap Map<String, String> headers);
 }

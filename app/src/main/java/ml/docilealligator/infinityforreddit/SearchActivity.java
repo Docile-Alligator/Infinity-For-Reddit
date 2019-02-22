@@ -17,6 +17,7 @@ import androidx.viewpager.widget.ViewPager;
 public class SearchActivity extends AppCompatActivity {
     static final String QUERY_KEY = "QK";
 
+    private String mQuery;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +37,7 @@ public class SearchActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String query = intent.getExtras().getString(QUERY_KEY);
         if(query != null) {
+            mQuery = query;
             setTitle(query);
         }
     }
@@ -58,13 +60,33 @@ public class SearchActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            PostFragment mFragment = new PostFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_FRONT_PAGE);
-            mFragment.setArguments(bundle);
-            return mFragment;
+            switch (position) {
+                case 0: {
+                    PostFragment mFragment = new PostFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_SEARCH);
+                    bundle.putString(PostFragment.NAME_KEY, mQuery);
+                    mFragment.setArguments(bundle);
+                    return mFragment;
+                }
+                case 1: {
+                    PostFragment mFragment = new PostFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_FRONT_PAGE);
+                    bundle.putString(PostFragment.NAME_KEY, mQuery);
+                    mFragment.setArguments(bundle);
+                    return mFragment;
+                }
+                default:
+                {
+                    PostFragment mFragment = new PostFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_FRONT_PAGE);
+                    bundle.putString(PostFragment.NAME_KEY, mQuery);
+                    mFragment.setArguments(bundle);
+                    return mFragment;
+                }
+            }
         }
 
         @Override
