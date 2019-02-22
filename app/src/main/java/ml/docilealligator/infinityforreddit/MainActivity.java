@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -141,13 +140,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSearchViewShown() {
                 transparentOverlay.setVisibility(View.VISIBLE);
-                getWindow().setStatusBarColor(Color.GRAY);
             }
 
             @Override
             public void onSearchViewClosed() {
                 transparentOverlay.setVisibility(View.GONE);
-                getWindow().setStatusBarColor(Color.TRANSPARENT);
             }
 
             @Override
