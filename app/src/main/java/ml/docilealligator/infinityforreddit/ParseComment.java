@@ -15,7 +15,7 @@ import java.util.Locale;
 
 class ParseComment {
     interface ParseCommentListener {
-        void onParseCommentSuccess(List<?> commentData, String parentId, String commaSeparatedChildren);
+        void onParseCommentSuccess(List<?> commentData, String parentId, ArrayList<String> children);
         void onParseCommentFailed();
     }
 
@@ -64,7 +64,7 @@ class ParseComment {
         private JSONArray comments;
         private ArrayList<CommentData> commentData;
         private ArrayList<CommentData> newcommentData;
-        private StringBuilder commaSeparatedChildren;
+        private ArrayList<String> children;
         private Locale locale;
         private int parentDepth;
         private ParseCommentListener parseCommentListener;
@@ -76,7 +76,7 @@ class ParseComment {
             this.comments = comments;
             this.commentData = commentData;
             newcommentData = new ArrayList<>();
-            commaSeparatedChildren = new StringBuilder();
+            children = new ArrayList<>();
             this.locale = locale;
             this.parentDepth = parentDepth;
             parseFailed = false;
@@ -87,7 +87,6 @@ class ParseComment {
         protected Void doInBackground(Void... voids) {
             try {
                 int actualCommentLength;
-                ArrayList<String> children = new ArrayList<>();
 
                 if(comments.length() == 0) {
                     return null;
@@ -103,11 +102,6 @@ class ParseComment {
                     for(int i = 0; i < childrenArray.length(); i++) {
                         children.add(childrenArray.getString(i));
                     }
-
-                    for(String c : children) {
-                        commaSeparatedChildren.append(c).append(",");
-                    }
-                    commaSeparatedChildren.deleteCharAt(commaSeparatedChildren.length() - 1);
 
                     actualCommentLength = comments.length() - 1;
                 } else {
@@ -156,7 +150,7 @@ class ParseComment {
         protected void onPostExecute(Void aVoid) {
             if(!parseFailed) {
                 commentData.addAll(newcommentData);
-                parseCommentListener.onParseCommentSuccess(commentData, parentId, commaSeparatedChildren.toString());
+                parseCommentListener.onParseCommentSuccess(commentData, parentId, children);
             } else {
                 parseCommentListener.onParseCommentFailed();
             }

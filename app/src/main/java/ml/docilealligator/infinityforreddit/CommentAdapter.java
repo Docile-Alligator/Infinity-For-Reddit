@@ -1,16 +1,10 @@
 package ml.docilealligator.infinityforreddit;
 
-import androidx.paging.PagedListAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.ColorFilter;
 import android.net.Uri;
-import androidx.annotation.NonNull;
-import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +15,16 @@ import android.widget.Toast;
 
 import com.multilevelview.models.RecyclerViewItem;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.core.content.ContextCompat;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Retrofit;
@@ -128,7 +129,7 @@ public class CommentAdapter extends PagedListAdapter<CommentData, RecyclerView.V
                         locale, false, commentItem.getDepth(), new FetchComment.FetchCommentListener() {
                             @Override
                             public void onFetchCommentSuccess(List<?> commentData,
-                                                              String parentId, String commaSeparatedChildren) {
+                                                              String parentId, ArrayList<String> children) {
                                 commentItem.addChildren((List<RecyclerViewItem>) commentData);
                                 ((CommentViewHolder) viewHolder).loadMoreCommentsProgressBar
                                         .setVisibility(View.GONE);
@@ -140,7 +141,7 @@ public class CommentAdapter extends PagedListAdapter<CommentData, RecyclerView.V
                                         new ParseComment.ParseCommentListener() {
                                             @Override
                                             public void onParseCommentSuccess(List<?> commentData,
-                                                                              String parentId, String commaSeparatedChildren) {
+                                                                              String parentId, String children) {
                                                 commentItem.addChildren((List<RecyclerViewItem>) commentData);
                                                 ((CommentViewHolder) viewHolder).loadMoreCommentsProgressBar
                                                         .setVisibility(View.GONE);

@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSearchViewClosed() {
                 transparentOverlay.setVisibility(View.GONE);
-                getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+                getWindow().setStatusBarColor(Color.TRANSPARENT);
             }
 
             @Override

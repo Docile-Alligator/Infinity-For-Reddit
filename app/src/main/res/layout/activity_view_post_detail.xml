@@ -8,6 +8,7 @@
     tools:context=".ViewPostDetailActivity">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scroll_view_view_post_detail_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

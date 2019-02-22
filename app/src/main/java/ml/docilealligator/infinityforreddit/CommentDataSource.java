@@ -1,17 +1,11 @@
 package ml.docilealligator.infinityforreddit;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.paging.PageKeyedDataSource;
-import androidx.annotation.NonNull;
-import android.util.Log;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
+import androidx.paging.PageKeyedDataSource;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class CommentDataSource extends PageKeyedDataSource<String, Post> {
@@ -69,7 +63,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, Post> {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
         Call<String> comments = api.getComments(subredditNamePrefixed, article, comment);
-        comments.enqueue(new Callback<String>() {
+        /*comments.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if(response.isSuccessful()) {
@@ -104,7 +98,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, Post> {
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error fetching comment"));
             }
-        });
+        });*/
     }
 
     @Override
@@ -126,7 +120,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, Post> {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
         Call<String> moreChildrenBasicInfo = api.getMoreChildren(mParentId, params.key);
-        moreChildrenBasicInfo.enqueue(new Callback<String>() {
+        /*moreChildrenBasicInfo.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if(response.isSuccessful()) {
@@ -182,7 +176,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, Post> {
                 String errorMessage = t == null ? "unknown error" : t.getMessage();
                 paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
             }
-        });
+        });*/
     }
 
     void retry() {

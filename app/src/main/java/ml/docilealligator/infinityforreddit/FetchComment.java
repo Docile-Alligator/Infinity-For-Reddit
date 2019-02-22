@@ -15,12 +15,12 @@ import retrofit2.Retrofit;
 class FetchComment {
     interface FetchCommentListener {
         void onFetchCommentSuccess(List<?> commentData,
-                                   String parentId, String commaSeparatedChildren);
+                                   String parentId, ArrayList<String> children);
         void onFetchCommentFailed();
     }
 
     interface FetchMoreCommentListener {
-        void onFetchMoreCommentSuccess(List<?> commentData);
+        void onFetchMoreCommentSuccess(List<?> commentData, int childrenStartingIndex);
         void onFetchMoreCommentFailed();
     }
 
@@ -43,9 +43,9 @@ class FetchComment {
                             new ParseComment.ParseCommentListener() {
                                 @Override
                                 public void onParseCommentSuccess(List<?> commentData,
-                                                                  String parentId, String commaSeparatedChildren) {
+                                                                  String parentId, ArrayList<String> children) {
                                     fetchCommentListener.onFetchCommentSuccess(commentData, parentId,
-                                            commaSeparatedChildren);
+                                            children);
                                 }
 
                                 @Override
@@ -69,9 +69,25 @@ class FetchComment {
     }
 
     static void fetchMoreComment(Retrofit retrofit, String subredditNamePrefixed, String mParentId,
-                                 String children, Locale locale, FetchMoreCommentListener fetchMoreCommentListener) {
+                                 ArrayList<String> allChildren, int startingIndex, Locale locale,
+                                 FetchMoreCommentListener fetchMoreCommentListener) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for(int i = 0; i < 100; i++) {
+            if(allChildren.size() <= startingIndex + i) {
+                break;
+            }
+            stringBuilder.append(allChildren.get(startingIndex + i)).append(",");
+        }
+
+        if(stringBuilder.length() == 0) {
+            return;
+        }
+
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        //final int finalStartingIndex = startingIndex + 100;
+
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> moreChildrenBasicInfo = api.getMoreChildren(mParentId, children);
+        Call<String> moreChildrenBasicInfo = api.getMoreChildren(mParentId, stringBuilder.toString());
         moreChildrenBasicInfo.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
@@ -88,8 +104,11 @@ class FetchComment {
                                                 0, new ParseComment.ParseCommentListener() {
                                                     @Override
                                                     public void onParseCommentSuccess(List<?> commentData, String parentId,
-                                                                                      String commaSeparatedChildren) {
-                                                        fetchMoreCommentListener.onFetchMoreCommentSuccess(commentData);
+                                                                                      ArrayList<String> children) {
+                                                        fetchMoreCommentListener.onFetchMoreCommentSuccess(commentData, startingIndex + 100);
+                                                        /*fetchMoreComment(retrofit, subredditNamePrefixed,
+                                                                mParentId, allChildren, finalStartingIndex,
+                                                                locale, fetchMoreCommentListener);*/
                                                     }
 
                                                     @Override
@@ -138,12 +157,13 @@ class FetchComment {
         fetchComment(retrofit, subredditNamePrefixed, article, comment, locale, isPost, parentDepth,
                 new FetchCommentListener() {
                     @Override
-                    public void onFetchCommentSuccess(List<?> commentData, String parentId, String commaSeparatedChildren) {
-                        if(!commaSeparatedChildren.equals("")) {
-                            fetchMoreComment(retrofit, subredditNamePrefixed, parentId, commaSeparatedChildren,
-                                    locale, new FetchMoreCommentListener() {
+                    public void onFetchCommentSuccess(List<?> commentData, String parentId, ArrayList<String> children) {
+                        if(children.size() != 0) {
+                            fetchMoreComment(retrofit, subredditNamePrefixed, parentId, children,
+                                    0, locale, new FetchMoreCommentListener() {
                                         @Override
-                                        public void onFetchMoreCommentSuccess(List<?> moreCommentData) {
+                                        public void onFetchMoreCommentSuccess(List<?> moreCommentData,
+                                                                              int childrenStartingIndex) {
                                             ((ArrayList<CommentData>)commentData).addAll((ArrayList<CommentData>) moreCommentData);
                                             fetchAllCommentListener.onFetchAllCommentSuccess(commentData);
                                         }

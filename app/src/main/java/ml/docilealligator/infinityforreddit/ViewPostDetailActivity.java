@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -44,6 +45,7 @@ import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.cardview.widget.CardView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
@@ -66,9 +68,12 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
     private Post mPost;
 
-    private String mCommaSeparatedChildren;
+    private boolean isLoadingMoreChildren = false;
+    private ArrayList<String> children;
+    private int mChildrenStartingIndex = 0;
 
     @BindView(R.id.coordinator_layout_view_post_detail) CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.nested_scroll_view_view_post_detail_activity) NestedScrollView mNestedScrollView;
     @BindView(R.id.subreddit_icon_name_linear_layout_view_post_detail) LinearLayout mSubredditIconNameLinearLayout;
     @BindView(R.id.subreddit_icon_circle_image_view_view_post_detail) AspectRatioGifImageView mSubredditIconGifImageView;
     @BindView(R.id.subreddit_text_view_view_post_detail) TextView mSubredditTextView;
@@ -446,8 +451,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 null, getResources().getConfiguration().locale, true, 0, new FetchComment.FetchCommentListener() {
                     @Override
                     public void onFetchCommentSuccess(List<?> commentData,
-                                                      String parentId, String commaSeparatedChildren) {
-                        mCommaSeparatedChildren = commaSeparatedChildren;
+                                                      String parentId, ArrayList<String> children) {
+                        ViewPostDetailActivity.this.children = children;
                         mCommentProgressbar.setVisibility(View.GONE);
                         if (commentData.size() > 0) {
                             mAdapter = new CommentMultiLevelRecyclerViewAdapter(
@@ -461,9 +466,19 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                             mRecyclerView.setAdapter(mAdapter);
                             mCommentCardView.setVisibility(View.VISIBLE);
 
-                            if(!mCommaSeparatedChildren.equals("")) {
-                                fetchMoreComment();
-                            }
+                            mNestedScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+                                @Override
+                                public void onScrollChanged() {
+                                    if(!isLoadingMoreChildren) {
+                                        View view = mNestedScrollView.getChildAt(mNestedScrollView.getChildCount() - 1);
+                                        int diff = view.getBottom() - (mNestedScrollView.getHeight() +
+                                                mNestedScrollView.getScrollY());
+                                        if(diff == 0) {
+                                            fetchMoreComment(mChildrenStartingIndex);
+                                        }
+                                    }
+                                }
+                            });
                         } else {
                             mNoCommentWrapperLinearLayout.setVisibility(View.VISIBLE);
                             glide.load(R.drawable.no_comment_indicator).into(mNoCommentImageView);
@@ -478,18 +493,23 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 });
     }
 
-    private void fetchMoreComment() {
+    private void fetchMoreComment(int startingIndex) {
+        isLoadingMoreChildren = true;
         FetchComment.fetchMoreComment(mRetrofit, mPost.getSubredditNamePrefixed(), mPost.getFullName(),
-                mCommaSeparatedChildren, getResources().getConfiguration().locale, new FetchComment.FetchMoreCommentListener() {
+                children, startingIndex, getResources().getConfiguration().locale,
+                new FetchComment.FetchMoreCommentListener() {
                     @Override
-                    public void onFetchMoreCommentSuccess(List<?> commentData) {
+                    public void onFetchMoreCommentSuccess(List<?> commentData, int childrenStartingIndex) {
                         mAdapter.addComments((ArrayList<CommentData>) commentData);
+                        mChildrenStartingIndex = childrenStartingIndex;
+                        isLoadingMoreChildren = false;
                     }
 
                     @Override
                     public void onFetchMoreCommentFailed() {
+                        isLoadingMoreChildren = false;
                         Snackbar snackbar = Snackbar.make(mCoordinatorLayout, R.string.load_more_comment_failed, Snackbar.LENGTH_INDEFINITE);
-                        snackbar.setAction(R.string.retry, view -> fetchMoreComment());
+                        snackbar.setAction(R.string.retry, view -> fetchMoreComment(startingIndex));
                         snackbar.show();
                     }
                 });
