@@ -5,8 +5,15 @@
     tools:context="ml.docilealligator.infinityforreddit.MainActivity">
     <item
         android:id="@+id/action_refresh_main_activity"
-        android:orderInCategory="1"
+        android:orderInCategory="2"
         android:title="@string/action_refresh"
         android:icon="@drawable/ic_refresh_white_24dp"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_search_main_activity"
+        android:orderInCategory="1"
+        android:title="@string/action_search"
+        android:icon="@drawable/ic_search_white_24dp"
+        app:showAsAction="always" />
 </menu>

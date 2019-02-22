@@ -11,21 +11,25 @@
         android:maxSdkVersion="22" />
 
     <application
-        android:allowBackup="true"
         android:name=".Infinity"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".SearchActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/search_activity_label"
+            android:parentActivityName=".MainActivity">
+        </activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBarWithTransparentStatusBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -47,11 +51,11 @@
         <activity
             android:name=".ViewSubredditDetailActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBarWithTranslucentStatusBar" />
+            android:theme="@style/AppTheme.NoActionBarWithTranslucentWindow" />
         <activity
             android:name=".ViewUserDetailActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBarWithTranslucentStatusBar" />
+            android:theme="@style/AppTheme.NoActionBarWithTranslucentWindow" />
     </application>
 
 </manifest>

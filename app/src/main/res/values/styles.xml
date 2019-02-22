@@ -13,10 +13,13 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.NoActionBarWithTransparentStatusBar" parent="AppTheme.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="AppTheme.NoActionBarWithTranslucentStatusBar" parent="AppTheme.NoActionBar">
+    <style name="AppTheme.NoActionBarWithTranslucentWindow" parent="AppTheme.NoActionBarWithTransparentStatusBar">
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
@@ -35,6 +38,13 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+    <style name="CustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabIndicatorColor">@android:color/white</item>
+        <item name="tabIndicatorHeight">3dp</item>
+        <item name="tabBackground">?attr/selectableItemBackground</item>
+        <item name="tabSelectedTextColor">@android:color/white</item>
     </style>
 
 </resources>

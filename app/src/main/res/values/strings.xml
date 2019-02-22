@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Infinity</string>
     <string name="login_activity_label">Login</string>
+    <string name="search_activity_label">Search</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -8,6 +9,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_download">Download</string>
     <string name="action_refresh">Refresh</string>
+    <string name="action_search">Search</string>
 
     <string name="tap_to_retry">Error loading image. Tap to retry.</string>
     <string name="load_posts_error">Error loading posts.\nTap to retry.</string>
@@ -51,4 +53,12 @@
     <string name="content_description_banner_imageview">Subreddit Banner Image</string>
 
     <string name="error_loading_posts">Error loading post</string>
+
+    <string name="app_label">Infinity</string>
+    <string name="search_hint">Search anything</string>
+    <string name="title_activity_search">Search</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_3">Tab 3</string>
 </resources>

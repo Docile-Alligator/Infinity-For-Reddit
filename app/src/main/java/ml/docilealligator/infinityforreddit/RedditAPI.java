@@ -3,13 +3,11 @@ package ml.docilealligator.infinityforreddit;
 import java.util.Map;
 
 import retrofit2.Call;
-import retrofit2.http.DELETE;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
-import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -53,15 +51,21 @@ public interface RedditAPI {
     @POST("api/subscribe")
     Call<String> subredditSubscription(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
-    @PUT("api/v1/me/friends/username")
-    Call<String> subscribeUser(@HeaderMap Map<String, String> headers);
-
-    @DELETE("api/v1/me/friends/username")
-    Call<String> unsubscribeUser(@HeaderMap Map<String, String> headers);
-
     @GET("api/morechildren?api_type=json&raw_json=1")
     Call<String> getMoreChildren(@Query("link_id") String linkId, @Query("children") String children);
 
     @GET("{subredditNamePrefixed}/api/info.json?raw_json=1")
     Call<String> getInfo(@Path("subredditNamePrefixed") String subredditNamePrefixed, @Query("id") String id);
+
+    @GET("subreddits/search.json?raw_json=1&include_over_18=on")
+    Call<String> searchSubreddits(@Query("q") String subredditName, @Query("after") String after);
+
+    @GET("/profiles/search.json?raw_json=1")
+    Call<String> searchProfiles(@Query("q") String profileName, @Query("after") String after);
+
+    @GET("/search.json?raw_json=1")
+    Call<String> searchPosts(@Query("q") String query, @Query("after") String after);
+
+    @GET("/r/{subredditName}/search.json?raw_json=1&restrict_sr=true")
+    Call<String> searchPostsInSpecificSubreddit(@Query("q") String query, @Query("after") String after);
 }

@@ -11,14 +11,36 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <FrameLayout
+            android:id="@+id/toolbar_frame_layout_main_activity"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+            <com.ferfalk.simplesearchview.SimpleSearchView
+                android:id="@+id/search_view_main_activity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@android:color/white"
+                app:voiceSearch="true"/>
+
+        </FrameLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <View
+        android:id="@+id/transparent_overlay_main_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#40000000"
+        android:elevation="1dp"
+        android:visibility="gone"/>
 
     <include layout="@layout/content_main" />
 
