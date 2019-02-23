@@ -115,8 +115,10 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                 break;
             case TYPE_USER:
                 loadUserPostsAfter(params, callback);
+                break;
             case TYPE_SEARCH:
                 loadSearchPostsAfter(params, callback);
+                break;
         }
     }
 

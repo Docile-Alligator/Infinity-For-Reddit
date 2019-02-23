@@ -1,18 +1,9 @@
 package ml.docilealligator.infinityforreddit;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +14,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.snackbar.Snackbar;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -32,8 +27,12 @@ import SubredditDatabase.SubredditData;
 import SubredditDatabase.SubredditRoomDatabase;
 import SubredditDatabase.SubredditViewModel;
 import SubscribedSubredditDatabase.SubscribedSubredditDao;
-import SubscribedSubredditDatabase.SubscribedSubredditData;
 import SubscribedSubredditDatabase.SubscribedSubredditRoomDatabase;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -244,8 +243,12 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
 
         FetchSubredditData.fetchSubredditData(mRetrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
             @Override
-            public void onFetchSubredditDataSuccess(String response) {
-                ParseSubredditData.parseSubredditData(response, new ParseSubredditData.ParseSubredditDataListener() {
+            public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
+                new InsertSubredditDataAsyncTask(SubredditRoomDatabase.getDatabase(ViewSubredditDetailActivity.this), subredditData)
+                        .execute();
+                String nOnlineSubscribers = getString(R.string.online_subscribers_number_detail, nCurrentOnlineSubscribers);
+                nOnlineSubscribersTextView.setText(nOnlineSubscribers);
+                /*ParseSubredditData.parseSubredditData(response, new ParseSubredditData.ParseSubredditDataListener() {
                     @Override
                     public void onParseSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                         new InsertSubredditDataAsyncTask(SubredditRoomDatabase.getDatabase(ViewSubredditDetailActivity.this), subredditData)
@@ -258,7 +261,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
                     public void onParseSubredditDataFail() {
                         makeSnackbar(R.string.cannot_fetch_subreddit_info);
                     }
-                });
+                });*/
             }
 
             @Override
@@ -329,7 +332,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         }
     }
 
-    private static class CheckIsSubscribedToSubredditAsyncTask extends AsyncTask<Void, Void, Void> {
+    /*private static class CheckIsSubscribedToSubredditAsyncTask extends AsyncTask<Void, Void, Void> {
 
         private SubscribedSubredditDao subscribedSubredditDao;
         private String subredditName;
@@ -363,5 +366,5 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
                 checkIsSubscribedToSubredditListener.isNotSubscribed();
             }
         }
-    }
+    }*/
 }

@@ -58,8 +58,7 @@ public interface RedditAPI {
     Call<String> getInfo(@Path("subredditNamePrefixed") String subredditNamePrefixed, @Query("id") String id);
 
     @GET("subreddits/search.json?raw_json=1&include_over_18=on")
-    Call<String> searchSubreddits(@Query("q") String subredditName, @Query("after") String after,
-                                  @HeaderMap Map<String, String> headers);
+    Call<String> searchSubreddits(@Query("q") String subredditName, @Query("after") String after);
 
     @GET("profiles/search.json?raw_json=1")
     Call<String> searchProfiles(@Query("q") String profileName, @Query("after") String after,

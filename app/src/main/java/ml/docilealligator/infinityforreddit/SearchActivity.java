@@ -70,10 +70,9 @@ public class SearchActivity extends AppCompatActivity {
                     return mFragment;
                 }
                 case 1: {
-                    PostFragment mFragment = new PostFragment();
+                    SubredditListingFragment mFragment = new SubredditListingFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_FRONT_PAGE);
-                    bundle.putString(PostFragment.NAME_KEY, mQuery);
+                    bundle.putString(SubredditListingFragment.QUERY_KEY, mQuery);
                     mFragment.setArguments(bundle);
                     return mFragment;
                 }

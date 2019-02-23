@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,19 +16,15 @@ import com.bumptech.glide.RequestManager;
 import com.ferfalk.simplesearchview.SimpleSearchView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import SubredditDatabase.SubredditDao;
 import SubredditDatabase.SubredditData;
 import SubredditDatabase.SubredditRoomDatabase;
-import SubscribedSubredditDatabase.SubscribedSubredditDao;
 import SubscribedSubredditDatabase.SubscribedSubredditData;
 import SubscribedSubredditDatabase.SubscribedSubredditRoomDatabase;
 import SubscribedSubredditDatabase.SubscribedSubredditViewModel;
-import SubscribedUserDatabase.SubscribedUserDao;
 import SubscribedUserDatabase.SubscribedUserData;
 import SubscribedUserDatabase.SubscribedUserRoomDatabase;
 import SubscribedUserDatabase.SubscribedUserViewModel;
@@ -295,9 +290,9 @@ public class MainActivity extends AppCompatActivity {
                                                                   ArrayList<SubscribedUserData> subscribedUserData,
                                                                   ArrayList<SubredditData> subredditData) {
                             new InsertSubscribedThingsAsyncTask(
-                                    SubscribedSubredditRoomDatabase.getDatabase(MainActivity.this),
-                                    SubscribedUserRoomDatabase.getDatabase(MainActivity.this),
-                                    SubredditRoomDatabase.getDatabase(MainActivity.this),
+                                    SubscribedSubredditRoomDatabase.getDatabase(MainActivity.this).subscribedSubredditDao(),
+                                    SubscribedUserRoomDatabase.getDatabase(MainActivity.this).subscribedUserDao(),
+                                    SubredditRoomDatabase.getDatabase(MainActivity.this).subredditDao(),
                                     subscribedSubredditData,
                                     subscribedUserData,
                                     subredditData,
@@ -389,56 +384,6 @@ public class MainActivity extends AppCompatActivity {
         }
         if (!mBannerImageUrl.equals("")) {
             glide.load(mBannerImageUrl).into(mBannerImageView);
-        }
-    }
-
-    private static class InsertSubscribedThingsAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        interface InsertSubscribedThingListener {
-            void insertSuccess();
-        }
-
-        private final SubscribedSubredditDao mSubscribedSubredditDao;
-        private final SubscribedUserDao mUserDao;
-        private final SubredditDao mSubredditDao;
-        private List<SubscribedSubredditData> subscribedSubredditData;
-        private List<SubscribedUserData> subscribedUserData;
-        private List<SubredditData> subredditData;
-        private InsertSubscribedThingListener insertSubscribedThingListener;
-
-        InsertSubscribedThingsAsyncTask(SubscribedSubredditRoomDatabase subscribedSubredditDb,
-                                        SubscribedUserRoomDatabase userDb,
-                                        SubredditRoomDatabase subredditDb,
-                                        List<SubscribedSubredditData> subscribedSubredditData,
-                                        List<SubscribedUserData> subscribedUserData,
-                                        List<SubredditData> subredditData,
-                                        InsertSubscribedThingListener insertSubscribedThingListener) {
-            mSubscribedSubredditDao = subscribedSubredditDb.subscribedSubredditDao();
-            mUserDao = userDb.subscribedUserDao();
-            mSubredditDao = subredditDb.subredditDao();
-            this.subscribedSubredditData = subscribedSubredditData;
-            this.subscribedUserData = subscribedUserData;
-            this.subredditData = subredditData;
-            this.insertSubscribedThingListener = insertSubscribedThingListener;
-        }
-
-        @Override
-        protected Void doInBackground(final Void... params) {
-            for (SubscribedSubredditData s : subscribedSubredditData) {
-                mSubscribedSubredditDao.insert(s);
-            }
-            for (SubscribedUserData s : subscribedUserData) {
-                mUserDao.insert(s);
-            }
-            for (SubredditData s : subredditData) {
-                mSubredditDao.insert(s);
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            insertSubscribedThingListener.insertSuccess();
         }
     }
 }

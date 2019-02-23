@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import androidx.annotation.NonNull;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -11,6 +10,7 @@ import java.util.Map;
 import SubredditDatabase.SubredditData;
 import SubscribedSubredditDatabase.SubscribedSubredditDao;
 import SubscribedSubredditDatabase.SubscribedSubredditData;
+import androidx.annotation.NonNull;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -55,8 +55,10 @@ class SubredditSubscription {
                     if(action.equals("sub")) {
                         FetchSubredditData.fetchSubredditData(retrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
                             @Override
-                            public void onFetchSubredditDataSuccess(String response) {
-                                ParseSubredditData.parseSubredditData(response, new ParseSubredditData.ParseSubredditDataListener() {
+                            public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
+                                new UpdateSubscriptionAsyncTask(subscribedSubredditDao,
+                                        subredditData, true).execute();
+                                /*ParseSubredditData.parseSubredditData(response, new ParseSubredditData.ParseSubredditDataListener() {
                                     @Override
                                     public void onParseSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                                         new UpdateSubscriptionAsyncTask(subscribedSubredditDao,
@@ -67,7 +69,7 @@ class SubredditSubscription {
                                     public void onParseSubredditDataFail() {
 
                                     }
-                                });
+                                });*/
                             }
 
                             @Override

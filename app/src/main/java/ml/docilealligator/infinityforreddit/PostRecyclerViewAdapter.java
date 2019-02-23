@@ -1,21 +1,11 @@
 package ml.docilealligator.infinityforreddit;
 
-import androidx.paging.PagedListAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.browser.customtabs.CustomTabsIntent;
-import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.chip.Chip;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,12 +26,22 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.chip.Chip;
 
 import CustomView.AspectRatioGifImageView;
 import SubredditDatabase.SubredditDao;
 import SubredditDatabase.SubredditRoomDatabase;
 import User.UserDao;
 import User.UserRoomDatabase;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -600,12 +600,14 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     }
 
     class ErrorViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.relative_layout_footer_progress_bar_item) RelativeLayout relativeLayout;
-        @BindView(R.id.retry_button_footer_progress_bar_item) Button retryButton;
+        @BindView(R.id.relative_layout_footer_error_item) RelativeLayout relativeLayout;
+        @BindView(R.id.error_text_view_footer_error_item) TextView errorTextView;
+        @BindView(R.id.retry_button_footer_error_item) Button retryButton;
 
         ErrorViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            errorTextView.setText(R.string.load_posts_failed);
             retryButton.setOnClickListener(view -> retryLoadingMoreCallback.retryLoadingMore());
         }
     }

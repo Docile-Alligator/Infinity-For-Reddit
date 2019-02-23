@@ -1,15 +1,15 @@
 package ml.docilealligator.infinityforreddit;
 
+import java.util.Locale;
+
+import androidx.annotation.NonNull;
+import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
-import androidx.annotation.NonNull;
-
-import java.util.Locale;
-
 import retrofit2.Retrofit;
 
 public class PostViewModel extends ViewModel {
@@ -23,9 +23,9 @@ public class PostViewModel extends ViewModel {
         postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, postType, onPostFetchedCallback);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
-                dataSource -> dataSource.getInitialLoadStateLiveData());
+                (Function<PostDataSource, LiveData<NetworkState>>) PostDataSource::getInitialLoadStateLiveData);
         paginationNetworkState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
-                dataSource -> dataSource.getPaginationNetworkStateLiveData());
+                (Function<PostDataSource, LiveData<NetworkState>>) PostDataSource::getPaginationNetworkStateLiveData);
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
                         .setEnablePlaceholders(false)

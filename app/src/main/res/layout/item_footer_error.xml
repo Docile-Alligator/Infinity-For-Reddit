@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/relative_layout_footer_progress_bar_item"
+    android:id="@+id/relative_layout_footer_error_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
@@ -9,16 +9,16 @@
     android:layout_marginBottom="16dp">
 
     <TextView
+        android:id="@+id/error_text_view_footer_error_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        android:layout_toStartOf="@id/retry_button_footer_progress_bar_item"
-        android:text="@string/load_data_failed"
+        android:layout_toStartOf="@id/retry_button_footer_error_item"
         android:textSize="18sp" />
 
     <Button
-        android:id="@+id/retry_button_footer_progress_bar_item"
+        android:id="@+id/retry_button_footer_error_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
