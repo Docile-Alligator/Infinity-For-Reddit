@@ -58,18 +58,6 @@ class SubredditSubscription {
                             public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                                 new UpdateSubscriptionAsyncTask(subscribedSubredditDao,
                                         subredditData, true).execute();
-                                /*ParseSubredditData.parseSubredditData(response, new ParseSubredditData.ParseSubredditDataListener() {
-                                    @Override
-                                    public void onParseSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
-                                        new UpdateSubscriptionAsyncTask(subscribedSubredditDao,
-                                                subredditData, true).execute();
-                                    }
-
-                                    @Override
-                                    public void onParseSubredditDataFail() {
-
-                                    }
-                                });*/
                             }
 
                             @Override

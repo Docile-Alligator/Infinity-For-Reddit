@@ -13,8 +13,9 @@
 
     <string name="tap_to_retry">Error loading image. Tap to retry.</string>
     <string name="load_posts_error">Error loading posts.\nTap to retry.</string>
-    <string name="no_posts">No posts here.</string>
+    <string name="no_posts">No posts found.</string>
     <string name="no_subreddits">No subreddits found.</string>
+    <string name="no_users">No users found.</string>
 
     <string name="load_posts_failed">Error loading posts</string>
     <string name="load_comment_failed">Error loading comments</string>

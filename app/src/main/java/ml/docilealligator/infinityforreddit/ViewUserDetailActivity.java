@@ -1,18 +1,9 @@
 package ml.docilealligator.infinityforreddit;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,17 +13,25 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.snackbar.Snackbar;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import SubscribedUserDatabase.SubscribedUserDao;
-import SubscribedUserDatabase.SubscribedUserData;
 import SubscribedUserDatabase.SubscribedUserRoomDatabase;
 import User.UserDao;
 import User.UserData;
 import User.UserRoomDatabase;
 import User.UserViewModel;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -246,7 +245,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFetchUserDataFail() {
+            public void onFetchUserDataFailed() {
                 makeSnackbar(R.string.cannot_fetch_user_info);
             }
         });
@@ -295,7 +294,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         }
     }
 
-    private static class CheckIsFollowingUserAsyncTask extends AsyncTask<Void, Void, Void> {
+    /*private static class CheckIsFollowingUserAsyncTask extends AsyncTask<Void, Void, Void> {
 
         private SubscribedUserDao subscribedUserDao;
         private String userName;
@@ -329,5 +328,5 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                 checkIsFollowingUserListener.isNotSubscribed();
             }
         }
-    }
+    }*/
 }

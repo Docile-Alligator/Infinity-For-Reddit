@@ -61,7 +61,7 @@ class UserFollowing {
                             }
 
                             @Override
-                            public void onFetchUserDataFail() {
+                            public void onFetchUserDataFailed() {
 
                             }
                         });

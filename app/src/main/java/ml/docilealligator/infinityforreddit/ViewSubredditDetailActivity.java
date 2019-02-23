@@ -248,20 +248,6 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
                         .execute();
                 String nOnlineSubscribers = getString(R.string.online_subscribers_number_detail, nCurrentOnlineSubscribers);
                 nOnlineSubscribersTextView.setText(nOnlineSubscribers);
-                /*ParseSubredditData.parseSubredditData(response, new ParseSubredditData.ParseSubredditDataListener() {
-                    @Override
-                    public void onParseSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
-                        new InsertSubredditDataAsyncTask(SubredditRoomDatabase.getDatabase(ViewSubredditDetailActivity.this), subredditData)
-                                .execute();
-                        String nOnlineSubscribers = getString(R.string.online_subscribers_number_detail, nCurrentOnlineSubscribers);
-                        nOnlineSubscribersTextView.setText(nOnlineSubscribers);
-                    }
-
-                    @Override
-                    public void onParseSubredditDataFail() {
-                        makeSnackbar(R.string.cannot_fetch_subreddit_info);
-                    }
-                });*/
             }
 
             @Override
@@ -331,40 +317,4 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
             return null;
         }
     }
-
-    /*private static class CheckIsSubscribedToSubredditAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        private SubscribedSubredditDao subscribedSubredditDao;
-        private String subredditName;
-        private SubscribedSubredditData subscribedSubredditData;
-        private CheckIsSubscribedToSubredditListener checkIsSubscribedToSubredditListener;
-
-        interface CheckIsSubscribedToSubredditListener {
-            void isSubscribed();
-            void isNotSubscribed();
-        }
-
-        CheckIsSubscribedToSubredditAsyncTask(SubscribedSubredditDao subscribedSubredditDao, String subredditName,
-                                              CheckIsSubscribedToSubredditListener checkIsSubscribedToSubredditListener) {
-            this.subscribedSubredditDao = subscribedSubredditDao;
-            this.subredditName =subredditName;
-            this.checkIsSubscribedToSubredditListener = checkIsSubscribedToSubredditListener;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            subscribedSubredditData = subscribedSubredditDao.getSubscribedSubreddit(subredditName);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if(subscribedSubredditData != null) {
-                checkIsSubscribedToSubredditListener.isSubscribed();
-            } else {
-                checkIsSubscribedToSubredditListener.isNotSubscribed();
-            }
-        }
-    }*/
 }

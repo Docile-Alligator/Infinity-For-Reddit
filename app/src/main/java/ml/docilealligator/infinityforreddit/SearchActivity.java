@@ -78,10 +78,9 @@ public class SearchActivity extends AppCompatActivity {
                 }
                 default:
                 {
-                    PostFragment mFragment = new PostFragment();
+                    UserListingFragment mFragment = new UserListingFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_FRONT_PAGE);
-                    bundle.putString(PostFragment.NAME_KEY, mQuery);
+                    bundle.putString(UserListingFragment.QUERY_KEY, mQuery);
                     mFragment.setArguments(bundle);
                     return mFragment;
                 }

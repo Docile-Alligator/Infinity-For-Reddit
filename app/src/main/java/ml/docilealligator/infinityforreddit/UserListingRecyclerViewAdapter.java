@@ -17,8 +17,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 
-import SubredditDatabase.SubredditData;
-import SubscribedSubredditDatabase.SubscribedSubredditDao;
+import SubscribedUserDatabase.SubscribedUserDao;
+import User.UserData;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.paging.PagedListAdapter;
@@ -30,7 +30,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<SubredditData, RecyclerView.ViewHolder> {
+public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, RecyclerView.ViewHolder> {
     interface RetryLoadingMoreCallback {
         void retryLoadingMore();
     }
@@ -45,33 +45,33 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
     private Retrofit oauthRetrofit;
     private Retrofit retrofit;
     private SharedPreferences authInfoSharedPreferences;
-    private SubscribedSubredditDao subscribedSubredditDao;
+    private SubscribedUserDao subscribedUserDao;
 
     private NetworkState networkState;
-    private RetryLoadingMoreCallback retryLoadingMoreCallback;
+    private UserListingRecyclerViewAdapter.RetryLoadingMoreCallback retryLoadingMoreCallback;
 
-    SubredditListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, Retrofit retrofit,
+    UserListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, Retrofit retrofit,
                                         SharedPreferences authInfoSharedPreferences,
-                                        SubscribedSubredditDao subscribedSubredditDao,
-                                        RetryLoadingMoreCallback retryLoadingMoreCallback) {
+                                        SubscribedUserDao subscribedUserDao,
+                                        UserListingRecyclerViewAdapter.RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         this.context = context;
         this.oauthRetrofit = oauthRetrofit;
         this.retrofit = retrofit;
         this.authInfoSharedPreferences = authInfoSharedPreferences;
-        this.subscribedSubredditDao = subscribedSubredditDao;
+        this.subscribedUserDao = subscribedUserDao;
         this.retryLoadingMoreCallback = retryLoadingMoreCallback;
         glide = Glide.with(context.getApplicationContext());
     }
 
-    static final DiffUtil.ItemCallback<SubredditData> DIFF_CALLBACK = new DiffUtil.ItemCallback<SubredditData>() {
+    static final DiffUtil.ItemCallback<UserData> DIFF_CALLBACK = new DiffUtil.ItemCallback<UserData>() {
         @Override
-        public boolean areItemsTheSame(@NonNull SubredditData oldItem, @NonNull SubredditData newItem) {
-            return oldItem.getId().equals(newItem.getId());
+        public boolean areItemsTheSame(@NonNull UserData oldItem, @NonNull UserData newItem) {
+            return oldItem.getName().equals(newItem.getName());
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull SubredditData oldItem, @NonNull SubredditData newItem) {
+        public boolean areContentsTheSame(@NonNull UserData oldItem, @NonNull UserData newItem) {
             return true;
         }
     };
@@ -80,63 +80,63 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if(viewType == VIEW_TYPE_DATA) {
-            ConstraintLayout constraintLayout = (ConstraintLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_subreddit_listing, parent, false);
-            return new DataViewHolder(constraintLayout);
+            ConstraintLayout constraintLayout = (ConstraintLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_user_listing, parent, false);
+            return new UserListingRecyclerViewAdapter.DataViewHolder(constraintLayout);
         } else if(viewType == VIEW_TYPE_ERROR) {
             RelativeLayout relativeLayout = (RelativeLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_error, parent, false);
-            return new ErrorViewHolder(relativeLayout);
+            return new UserListingRecyclerViewAdapter.ErrorViewHolder(relativeLayout);
         } else {
             RelativeLayout relativeLayout = (RelativeLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_loading, parent, false);
-            return new LoadingViewHolder(relativeLayout);
+            return new UserListingRecyclerViewAdapter.LoadingViewHolder(relativeLayout);
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if(holder instanceof DataViewHolder) {
-            SubredditData subredditData = getItem(position);
-            ((DataViewHolder) holder).constraintLayout.setOnClickListener(view -> {
-                Intent intent = new Intent(context, ViewSubredditDetailActivity.class);
-                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditData.getName());
+        if(holder instanceof UserListingRecyclerViewAdapter.DataViewHolder) {
+            UserData UserData = getItem(position);
+            ((UserListingRecyclerViewAdapter.DataViewHolder) holder).constraintLayout.setOnClickListener(view -> {
+                Intent intent = new Intent(context, ViewUserDetailActivity.class);
+                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, UserData.getName());
                 context.startActivity(intent);
             });
 
-            if(subredditData.getIconUrl() != null) {
-                glide.load(subredditData.getIconUrl())
+            if(UserData.getIconUrl() != null) {
+                glide.load(UserData.getIconUrl())
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                         .error(glide.load(R.drawable.subreddit_default_icon))
-                        .into(((DataViewHolder) holder).iconGifImageView);
+                        .into(((UserListingRecyclerViewAdapter.DataViewHolder) holder).iconGifImageView);
             } else {
                 glide.load(R.drawable.subreddit_default_icon)
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                        .into(((DataViewHolder) holder).iconGifImageView);
+                        .into(((UserListingRecyclerViewAdapter.DataViewHolder) holder).iconGifImageView);
             }
 
-            ((DataViewHolder) holder).subredditNameTextView.setText(subredditData.getName());
+            ((UserListingRecyclerViewAdapter.DataViewHolder) holder).UserNameTextView.setText(UserData.getName());
 
-            new CheckIsSubscribedToSubredditAsyncTask(subscribedSubredditDao, subredditData.getName(),
-                    new CheckIsSubscribedToSubredditAsyncTask.CheckIsSubscribedToSubredditListener() {
+            new CheckIsFollowingUserAsyncTask(subscribedUserDao, UserData.getName(),
+                    new CheckIsFollowingUserAsyncTask.CheckIsFollowingUserListener() {
                         @Override
                         public void isSubscribed() {
-                            ((DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
+                            ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
                         }
 
                         @Override
                         public void isNotSubscribed() {
-                            ((DataViewHolder) holder).subscribeButton.setVisibility(View.VISIBLE);
-                            ((DataViewHolder) holder).subscribeButton.setOnClickListener(view -> {
-                                SubredditSubscription.subscribeToSubreddit(oauthRetrofit, retrofit,
-                                        authInfoSharedPreferences, subredditData.getName(), subscribedSubredditDao,
-                                        new SubredditSubscription.SubredditSubscriptionListener() {
+                            ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setVisibility(View.VISIBLE);
+                            ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setOnClickListener(view -> {
+                                UserFollowing.followUser(oauthRetrofit, retrofit,
+                                        authInfoSharedPreferences, UserData.getName(), subscribedUserDao,
+                                        new UserFollowing.UserFollowingListener() {
                                             @Override
-                                            public void onSubredditSubscriptionSuccess() {
-                                                ((DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
-                                                Toast.makeText(context, R.string.subscribed, Toast.LENGTH_SHORT).show();
+                                            public void onUserFollowingSuccess() {
+                                                ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
+                                                Toast.makeText(context, R.string.followed, Toast.LENGTH_SHORT).show();
                                             }
 
                                             @Override
-                                            public void onSubredditSubscriptionFail() {
-                                                Toast.makeText(context, R.string.subscribe_failed, Toast.LENGTH_SHORT).show();
+                                            public void onUserFollowingFail() {
+                                                Toast.makeText(context, R.string.follow_failed, Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             });
@@ -188,10 +188,10 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
     }
 
     class DataViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.constraint_layout_item_subreddit_listing) ConstraintLayout constraintLayout;
-        @BindView(R.id.subreddit_icon_gif_image_view_item_subreddit_listing) GifImageView iconGifImageView;
-        @BindView(R.id.subreddit_name_text_view_item_subreddit_listing) TextView subredditNameTextView;
-        @BindView(R.id.subscribe_image_view_item_subreddit_listing) ImageView subscribeButton;
+        @BindView(R.id.constraint_layout_item_user_listing) ConstraintLayout constraintLayout;
+        @BindView(R.id.user_icon_gif_image_view_item_user_listing) GifImageView iconGifImageView;
+        @BindView(R.id.user_name_text_view_item_user_listing) TextView UserNameTextView;
+        @BindView(R.id.subscribe_image_view_item_user_listing) ImageView subscribeButton;
 
         DataViewHolder(View itemView) {
             super(itemView);
@@ -223,9 +223,9 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
 
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
-        if(holder instanceof DataViewHolder) {
-            glide.clear(((DataViewHolder) holder).iconGifImageView);
-            ((DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
+        if(holder instanceof UserListingRecyclerViewAdapter.DataViewHolder) {
+            glide.clear(((UserListingRecyclerViewAdapter.DataViewHolder) holder).iconGifImageView);
+            ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
         }
     }
 }
