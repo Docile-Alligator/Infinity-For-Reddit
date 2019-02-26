@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.RequestOptions;
 import com.ferfalk.simplesearchview.SimpleSearchView;
 
 import java.util.ArrayList;
@@ -40,16 +41,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String FRAGMENT_OUT_STATE = "FOS";
-    private static final String NAME_STATE = "NS";
-    private static final String PROFILE_IMAGE_URL_STATE = "PIUS";
-    private static final String BANNER_IMAGE_URL_STATE = "BIUS";
-    private static final String KARMA_STATE = "KS";
     private static final String FETCH_USER_INFO_STATE = "FUIS";
     private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";
 
@@ -66,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mNameTextView;
     private TextView mKarmaTextView;
-    private CircleImageView mProfileImageView;
+    private GifImageView mProfileImageView;
     private ImageView mBannerImageView;
 
     private Fragment mFragment;
@@ -76,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
     private String mProfileImageUrl;
     private String mBannerImageUrl;
     private String mKarma;
-    private boolean mFetchUserInfoSuccess;
-    private boolean mInsertSuccess;
+    private boolean mFetchUserInfoSuccess = false;
+    private boolean mInsertSuccess = false;
 
     private SubscribedSubredditViewModel mSubscribedSubredditViewModel;
     private SubscribedUserViewModel mSubscribedUserViewModel;
@@ -169,15 +167,20 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
+
+                mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
+                mInsertSuccess = savedInstanceState.getBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE);
             }
 
-            loadUserData();
+            glide = Glide.with(this);
 
             View header = findViewById(R.id.nav_header_main_activity);
             mNameTextView = header.findViewById(R.id.name_text_view_nav_header_main);
             mKarmaTextView = header.findViewById(R.id.karma_text_view_nav_header_main);
             mProfileImageView = header.findViewById(R.id.profile_image_view_nav_header_main);
             mBannerImageView = header.findViewById(R.id.banner_image_view_nav_header_main);
+
+            loadUserData();
 
             subscribedSubredditRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             subscribedSubredditRecyclerView.setNestedScrollingEnabled(false);
@@ -192,10 +195,18 @@ public class MainActivity extends AppCompatActivity {
 
             mNameTextView.setText(mName);
             mKarmaTextView.setText(mKarma);
-            glide = Glide.with(this);
+
             if (!mProfileImageUrl.equals("")) {
-                glide.load(mProfileImageUrl).into(mProfileImageView);
+                glide.load(mProfileImageUrl)
+                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0)))
+                        .error(glide.load(R.drawable.subreddit_default_icon))
+                        .into(mProfileImageView);
+            } else {
+                glide.load(R.drawable.subreddit_default_icon)
+                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0)))
+                        .into(mProfileImageView);
             }
+
             if (!mBannerImageUrl.equals("")) {
                 glide.load(mBannerImageUrl).into(mBannerImageView);
             }
@@ -245,10 +256,17 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onParseMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
                             mNameTextView.setText(name);
-                            if (!mProfileImageUrl.equals("")) {
-                                glide.load(profileImageUrl).into(mProfileImageView);
+                            if (!profileImageUrl.equals("")) {
+                                glide.load(profileImageUrl)
+                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
+                                        .error(glide.load(R.drawable.subreddit_default_icon))
+                                        .into(mProfileImageView);
+                            } else {
+                                glide.load(R.drawable.subreddit_default_icon)
+                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
+                                        .into(mProfileImageView);
                             }
-                            if (!mBannerImageUrl.equals("")) {
+                            if (!bannerImageUrl.equals("")) {
                                 glide.load(bannerImageUrl).into(mBannerImageView);
                             }
 
@@ -368,30 +386,8 @@ public class MainActivity extends AppCompatActivity {
         if (mFragment != null) {
             getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE, mFragment);
         }
-        outState.putString(NAME_STATE, mName);
-        outState.putString(PROFILE_IMAGE_URL_STATE, mProfileImageUrl);
-        outState.putString(BANNER_IMAGE_URL_STATE, mBannerImageUrl);
-        outState.putString(KARMA_STATE, mKarma);
+
         outState.putBoolean(FETCH_USER_INFO_STATE, mFetchUserInfoSuccess);
         outState.putBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE, mInsertSuccess);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        mName = savedInstanceState.getString(NAME_STATE);
-        mProfileImageUrl = savedInstanceState.getString(PROFILE_IMAGE_URL_STATE);
-        mBannerImageUrl = savedInstanceState.getString(BANNER_IMAGE_URL_STATE);
-        mKarma = savedInstanceState.getString(KARMA_STATE);
-        mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
-        mInsertSuccess = savedInstanceState.getBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE);
-        mNameTextView.setText(mName);
-        mKarmaTextView.setText(mKarma);
-        if (!mProfileImageUrl.equals("")) {
-            glide.load(mProfileImageUrl).into(mProfileImageView);
-        }
-        if (!mBannerImageUrl.equals("")) {
-            glide.load(mBannerImageUrl).into(mBannerImageView);
-        }
     }
 }

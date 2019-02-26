@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"/>
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <pl.droidsonroids.gif.GifImageView
         android:id="@+id/profile_image_view_nav_header_main"
         android:layout_width="64dp"
         android:layout_height="64dp"

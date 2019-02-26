@@ -8,6 +8,7 @@ import dagger.Component;
 @Component(modules = NetworkModule.class)
 interface NetworkComponent {
     void inject(MainActivity mainActivity);
+    void inject(LoginActivity loginActivity);
     void inject(PostFragment postFragment);
     void inject(SubredditListingFragment subredditListingFragment);
     void inject(UserListingFragment userListingFragment);

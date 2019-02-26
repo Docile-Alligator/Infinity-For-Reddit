@@ -12,27 +12,37 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class LoginActivity extends AppCompatActivity {
 
     private String authCode;
 
+    @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        ((Infinity) getApplication()).getmNetworkComponent().inject(this);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         WebView webView = findViewById(R.id.webview_login_activity);
@@ -53,7 +63,68 @@ public class LoginActivity extends AppCompatActivity {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
+                if(url.contains("&code=") || url.contains("?code=")) {
+                    Uri uri = Uri.parse(url);
+                    String state = uri.getQueryParameter("state");
+                    if(state.equals(RedditUtils.STATE)) {
+                        authCode = uri.getQueryParameter("code");
+
+                        SharedPreferences.Editor editor = getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE).edit();
+                        editor.putString(SharedPreferencesUtils.AUTH_CODE_KEY, authCode);
+                        editor.apply();
+
+                        Map<String, String> params = new HashMap<>();
+                        params.put(RedditUtils.GRANT_TYPE_KEY, "authorization_code");
+                        params.put("code", authCode);
+                        params.put("redirect_uri", RedditUtils.REDIRECT_URI);
+
+                        RedditAPI api = mRetrofit.create(RedditAPI.class);
+                        Call<String> accessTokenCall = api.getAccessToken(RedditUtils.getHttpBasicAuthHeader(), params);
+                        accessTokenCall.enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                if(response.isSuccessful()) {
+                                    try {
+                                        JSONObject responseJSON = new JSONObject(response.body());
+                                        String accessToken = responseJSON.getString(RedditUtils.ACCESS_TOKEN_KEY);
+                                        String refreshToken = responseJSON.getString(RedditUtils.REFRESH_TOKEN_KEY);
+
+                                        editor.putString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, accessToken);
+                                        editor.putString(SharedPreferencesUtils.REFRESH_TOKEN_KEY, refreshToken);
+                                        editor.apply();
+
+                                        Intent resultIntent = new Intent();
+                                        setResult(Activity.RESULT_OK, resultIntent);
+                                        finish();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                        Toast.makeText(LoginActivity.this, "Error occurred when parsing the JSON response", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                } else {
+                                    Toast.makeText(LoginActivity.this, "Error Retrieving the token", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
+                                Toast.makeText(LoginActivity.this, "Error Retrieving the token", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Something went wrong. Try again later.", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+
+                } else if (url.contains("error=access_denied")) {
+                    Toast.makeText(LoginActivity.this, "Access denied", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    view.loadUrl(url);
+                }
+
                 return true;
             }
 
@@ -65,68 +136,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if(url.contains("&code=") || url.contains("?code=")) {
-                    Uri uri = Uri.parse(url);
-                    String state = uri.getQueryParameter("state");
-                    if(state.equals(RedditUtils.STATE)) {
-                        authCode = uri.getQueryParameter("code");
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        intent.putExtra("authCode", authCode);
-
-                        final SharedPreferences.Editor editor = getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE).edit();
-                        editor.putString(SharedPreferencesUtils.AUTH_CODE_KEY, authCode);
-                        editor.apply();
-
-                        RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
-                        String tokenRetrievalUrl = "https://www.reddit.com/api/v1/access_token";
-                        StringRequest requestToken = new StringRequest(Request.Method.POST, tokenRetrievalUrl, response -> {
-                            try {
-                                JSONObject responseJSON = new JSONObject(response);
-                                String accessToken = responseJSON.getString(RedditUtils.ACCESS_TOKEN_KEY);
-                                String refreshToken = responseJSON.getString(RedditUtils.REFRESH_TOKEN_KEY);
-
-                                editor.putString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, accessToken);
-                                editor.putString(SharedPreferencesUtils.REFRESH_TOKEN_KEY, refreshToken);
-                                editor.apply();
-
-                                Intent resultIntent = new Intent();
-                                setResult(Activity.RESULT_OK, resultIntent);
-                                finish();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                Toast.makeText(LoginActivity.this, "Error occurred when parsing the JSON response", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
-                        }, error -> {
-                            Toast.makeText(LoginActivity.this, "Error Retrieving the token", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }){
-                            @Override
-                            protected Map<String, String> getParams() {
-                                Map<String, String> params = new HashMap<>();
-                                params.put(RedditUtils.GRANT_TYPE_KEY, "authorization_code");
-                                params.put("code", authCode);
-                                params.put("redirect_uri", RedditUtils.REDIRECT_URI);
-
-                                return params;
-                            }
-
-                            @Override
-                            public Map<String, String> getHeaders() {
-                                return RedditUtils.getHttpBasicAuthHeader();
-                            }
-                        };
-
-                        queue.add(requestToken);
-                    } else {
-                        Toast.makeText(LoginActivity.this, "Something went wrong. Try again later.", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-
-                } else if (url.contains("error=access_denied")) {
-                    Toast.makeText(LoginActivity.this, "Access denied", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
             }
         });
     }
