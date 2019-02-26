@@ -2,36 +2,96 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
+import com.ferfalk.simplesearchview.SimpleSearchView;
 import com.google.android.material.tabs.TabLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class SearchActivity extends AppCompatActivity {
     static final String QUERY_KEY = "QK";
 
     private String mQuery;
+
+    @BindView(R.id.toolbar_search_activity) Toolbar toolbar;
+    @BindView(R.id.search_view_search_activity) SimpleSearchView simpleSearchView;
+    @BindView(R.id.tab_layout_search_activity) TabLayout tabLayout;
+    @BindView(R.id.transparent_overlay_search_activity) View transparentOverlay;
+    @BindView(R.id.view_pager_search_activity) ViewPager viewPager;
+
+    private SectionsPagerAdapter sectionsPagerAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        ButterKnife.bind(this);
 
-        Toolbar toolbar = findViewById(R.id.toolbar_search_activity);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ViewPager viewPager = findViewById(R.id.view_pager_search_activity);
-        PagerAdapter pagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
-        TabLayout tabLayout = findViewById(R.id.tab_layout_search_activity);
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
+
+        transparentOverlay.setOnClickListener(view -> simpleSearchView.onBackPressed());
+
+        simpleSearchView.setOnQueryTextListener(new SimpleSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Intent intent = getIntent();
+                intent.putExtra(SearchActivity.QUERY_KEY, query);
+                finish();
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextCleared() {
+                return false;
+            }
+        });
+
+        simpleSearchView.setOnSearchViewListener(new SimpleSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+                transparentOverlay.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+                transparentOverlay.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onSearchViewShownAnimation() {
+
+            }
+
+            @Override
+            public void onSearchViewClosedAnimation() {
+
+            }
+        });
 
         // Get the intent, verify the action and get the query
         Intent intent = getIntent();
@@ -43,21 +103,54 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (simpleSearchView.onActivityResult(requestCode, resultCode, data)) {
+            return;
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_activity, menu);
+
+        simpleSearchView.setMenuItem(menu.findItem(R.id.action_search_main_activity));
+
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.action_refresh_main_activity:
+                sectionsPagerAdapter.refresh();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (simpleSearchView.onBackPressed()) {
+            return;
+        }
+        super.onBackPressed();
+    }
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+        private PostFragment postFragment;
+        private SubredditListingFragment subredditListingFragment;
+        private UserListingFragment userListingFragment;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             switch (position) {
@@ -103,6 +196,42 @@ public class SearchActivity extends AppCompatActivity {
                     return "Users";
             }
             return null;
+        }
+
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
+            Fragment fragment = (Fragment) super.instantiateItem(container, position);
+            switch (position) {
+                case 0:
+                    postFragment = (PostFragment) fragment;
+                    break;
+                case 1:
+                    subredditListingFragment = (SubredditListingFragment) fragment;
+                    break;
+                case 2:
+                    userListingFragment = (UserListingFragment) fragment;
+                    break;
+            }
+            return fragment;
+        }
+
+        public void refresh() {
+            if(postFragment != null) {
+                ((FragmentCommunicator) postFragment).refresh();
+            }
+            if(subredditListingFragment != null) {
+                ((FragmentCommunicator) subredditListingFragment).refresh();
+            }
+            if (userListingFragment != null) {
+                ((FragmentCommunicator) userListingFragment).refresh();
+            }
+        }
+
+        public void newSearch() {
+            getItem(0);
+            getItem(1);
+            getItem(2);
         }
     }
 }

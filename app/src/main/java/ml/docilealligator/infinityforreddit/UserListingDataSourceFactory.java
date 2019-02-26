@@ -10,31 +10,31 @@ public class UserListingDataSourceFactory extends DataSource.Factory {
     private String query;
     private UserListingDataSource.OnUserListingDataFetchedCallback onUserListingDataFetchedCallback;
 
-    private UserListingDataSource UserListingDataSource;
-    private MutableLiveData<UserListingDataSource> UserListingDataSourceMutableLiveData;
+    private UserListingDataSource userListingDataSource;
+    private MutableLiveData<UserListingDataSource> userListingDataSourceMutableLiveData;
 
     UserListingDataSourceFactory(Retrofit retrofit, String query,
                                       UserListingDataSource.OnUserListingDataFetchedCallback onUserListingDataFetchedCallback) {
         this.retrofit = retrofit;
         this.query = query;
         this.onUserListingDataFetchedCallback = onUserListingDataFetchedCallback;
-        UserListingDataSourceMutableLiveData = new MutableLiveData<>();
+        userListingDataSourceMutableLiveData = new MutableLiveData<>();
     }
 
     @NonNull
     @Override
     public DataSource create() {
-        UserListingDataSource UserListingDataSource = new UserListingDataSource(retrofit,
+        userListingDataSource = new UserListingDataSource(retrofit,
                 query, onUserListingDataFetchedCallback);
-        UserListingDataSourceMutableLiveData.postValue(UserListingDataSource);
-        return UserListingDataSource;
+        userListingDataSourceMutableLiveData.postValue(userListingDataSource);
+        return userListingDataSource;
     }
 
     public MutableLiveData<UserListingDataSource> getUserListingDataSourceMutableLiveData() {
-        return UserListingDataSourceMutableLiveData;
+        return userListingDataSourceMutableLiveData;
     }
 
     UserListingDataSource getUserListingDataSource() {
-        return UserListingDataSource;
+        return userListingDataSource;
     }
 }

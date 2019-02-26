@@ -37,19 +37,24 @@ class ParsePost {
 
         ParsePostDataAsyncTask(String response, Locale locale,
                                ParsePostListener parsePostListener) {
+            this.parsePostListener = parsePostListener;
             try {
                 jsonResponse = new JSONObject(response);
                 this.locale = locale;
-                this.parsePostListener = parsePostListener;
                 newPosts = new ArrayList<>();
                 parseFailed = false;
             } catch (JSONException e) {
                 e.printStackTrace();
+                parseFailed = true;
             }
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
+            if(parseFailed) {
+                return null;
+            }
+
             try {
                 JSONArray allData = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
 

@@ -31,7 +31,7 @@ import retrofit2.Retrofit;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class UserListingFragment extends Fragment {
+public class UserListingFragment extends Fragment implements FragmentCommunicator {
     static final String QUERY_KEY = "QK";
 
     @BindView(R.id.coordinator_layout_user_listing_fragment)
@@ -122,7 +122,7 @@ public class UserListingFragment extends Fragment {
                 mProgressBar.setVisibility(View.GONE);
             } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
                 mFetchUserListingInfoLinearLayout.setOnClickListener(view -> mUserListingViewModel.retry());
-                showErrorView(R.string.load_posts_error);
+                showErrorView(R.string.search_users_error);
             } else {
                 mFetchUserListingInfoLinearLayout.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.VISIBLE);
@@ -143,5 +143,10 @@ public class UserListingFragment extends Fragment {
             mFetchUserListingInfoTextView.setText(stringResId);
             Glide.with(this).load(R.drawable.load_post_error_indicator).into(mFetchUserListingInfoImageView);
         }
+    }
+
+    @Override
+    public void refresh() {
+        mUserListingViewModel.refresh();
     }
 }

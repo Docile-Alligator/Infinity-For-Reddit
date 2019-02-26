@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,7 +30,7 @@ import retrofit2.Retrofit;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SubredditListingFragment extends Fragment {
+public class SubredditListingFragment extends Fragment implements FragmentCommunicator {
 
     static final String QUERY_KEY = "QK";
 
@@ -79,9 +78,6 @@ public class SubredditListingFragment extends Fragment {
 
         mQuery = getArguments().getString(QUERY_KEY);
 
-        String accessToken = getActivity().getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
-                .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
-
         SubredditListingViewModel.Factory factory = new SubredditListingViewModel.Factory(mRetrofit, mQuery,
                 new SubredditListingDataSource.OnSubredditListingDataFetchedCallback() {
             @Override
@@ -116,7 +112,7 @@ public class SubredditListingFragment extends Fragment {
                 mProgressBar.setVisibility(View.GONE);
             } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
                 mFetchSubredditListingInfoLinearLayout.setOnClickListener(view -> mSubredditListingViewModel.retry());
-                showErrorView(R.string.load_posts_error);
+                showErrorView(R.string.search_subreddits_error);
             } else {
                 mFetchSubredditListingInfoLinearLayout.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.VISIBLE);
@@ -137,5 +133,10 @@ public class SubredditListingFragment extends Fragment {
             mFetchSubredditListingInfoTextView.setText(stringResId);
             Glide.with(this).load(R.drawable.load_post_error_indicator).into(mFetchSubredditListingInfoImageView);
         }
+    }
+
+    @Override
+    public void refresh() {
+        mSubredditListingViewModel.refresh();
     }
 }

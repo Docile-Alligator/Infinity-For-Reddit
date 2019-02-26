@@ -75,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean mFetchUserInfoSuccess;
     private boolean mInsertSuccess;
 
-    private FragmentCommunicator mFragmentCommunicator;
-
     private SubscribedSubredditViewModel mSubscribedSubredditViewModel;
     private SubscribedUserViewModel mSubscribedUserViewModel;
 

@@ -52,24 +52,6 @@ public class ParseUserData {
         protected Void doInBackground(Void... voids) {
             try {
                 userData = parseUserDataBase(jsonResponse);
-                /*jsonResponse = jsonResponse.getJSONObject(JSONUtils.DATA_KEY);
-                String userName = jsonResponse.getString(JSONUtils.NAME_KEY);
-                String iconImageUrl = jsonResponse.getString(JSONUtils.ICON_IMG_KEY);
-                String bannerImageUrl = "";
-                boolean canBeFollowed;
-                if(jsonResponse.has(JSONUtils.SUBREDDIT_KEY) && !jsonResponse.isNull(JSONUtils.SUBREDDIT_KEY)) {
-                    bannerImageUrl = jsonResponse.getJSONObject(JSONUtils.SUBREDDIT_KEY).getString(JSONUtils.BANNER_IMG_KEY);
-                    canBeFollowed = true;
-                } else {
-                    canBeFollowed = false;
-                }
-                int linkKarma = jsonResponse.getInt(JSONUtils.LINK_KARMA_KEY);
-                int commentKarma = jsonResponse.getInt(JSONUtils.COMMENT_KARMA_KEY);
-                int karma = linkKarma + commentKarma;
-                boolean isGold = jsonResponse.getBoolean(JSONUtils.IS_GOLD_KEY);
-                boolean isFriend = jsonResponse.getBoolean(JSONUtils.IS_FRIEND_KEY);
-
-                userData = new UserData(userName, iconImageUrl, bannerImageUrl, karma, isGold, isFriend, canBeFollowed);*/
             } catch (JSONException e) {
                 parseFailed = true;
                 Log.i("parse user data error", e.getMessage());
@@ -88,6 +70,7 @@ public class ParseUserData {
     }
 
     private static class ParseUserListingDataAsyncTask extends AsyncTask<Void, Void, Void> {
+        private String response;
         private JSONObject jsonResponse;
         private ParseUserListingDataListener parseUserListingDataListener;
         private String after;
@@ -96,24 +79,27 @@ public class ParseUserData {
         private ArrayList<UserData> userDataArrayList;
 
         ParseUserListingDataAsyncTask(String response, ParseUserListingDataListener parseUserListingDataListener){
+            this.parseUserListingDataListener = parseUserListingDataListener;
+            this.response = response;
             try {
                 jsonResponse = new JSONObject(response);
-                this.parseUserListingDataListener = parseUserListingDataListener;
                 parseFailed = false;
                 userDataArrayList = new ArrayList<>();
             } catch (JSONException e) {
                 Log.i("userdata json error", e.getMessage());
-                this.parseUserListingDataListener.onParseUserListingDataFailed();
+                parseFailed = true;
             }
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                after = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
-                JSONArray children = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-                for(int i = 0; i < children.length(); i++) {
-                    userDataArrayList.add(parseUserDataBase(children.getJSONObject(i)));
+                if(!parseFailed) {
+                    after = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
+                    JSONArray children = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+                    for(int i = 0; i < children.length(); i++) {
+                        userDataArrayList.add(parseUserDataBase(children.getJSONObject(i)));
+                    }
                 }
             } catch (JSONException e) {
                 parseFailed = true;
@@ -127,7 +113,11 @@ public class ParseUserData {
             if(!parseFailed) {
                 parseUserListingDataListener.onParseUserListingDataSuccess(userDataArrayList, after);
             } else {
-                parseUserListingDataListener.onParseUserListingDataFailed();
+                if(response.equals("\"{}\"")) {
+                    parseUserListingDataListener.onParseUserListingDataSuccess(new ArrayList<>(), null);
+                } else {
+                    parseUserListingDataListener.onParseUserListingDataFailed();
+                }
             }
         }
     }

@@ -13,6 +13,8 @@
 
     <string name="tap_to_retry">Error loading image. Tap to retry.</string>
     <string name="load_posts_error">Error loading posts.\nTap to retry.</string>
+    <string name="search_subreddits_error">Error searching subreddits.\nTap to retry.</string>
+    <string name="search_users_error">Error searching users.\nTap to retry.</string>
     <string name="no_posts">No posts found.</string>
     <string name="no_subreddits">No subreddits found.</string>
     <string name="no_users">No users found.</string>

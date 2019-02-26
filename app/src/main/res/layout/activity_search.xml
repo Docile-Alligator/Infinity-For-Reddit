@@ -11,12 +11,32 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_search_activity"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_search_activity"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+            <com.ferfalk.simplesearchview.SimpleSearchView
+                android:id="@+id/search_view_search_activity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@android:color/white"
+                app:voiceSearch="true"
+                app:searchBackground="@color/colorPrimary"
+                app:cursorColor="@android:color/white"
+                app:hintColor="#E0E0E0"
+                app:iconsTint="@android:color/white"
+                app:backIconTint="@android:color/white"
+                app:iconsAlpha="1"
+                app:backIconAlpha="1" />
+
+        </FrameLayout>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout_search_activity"
@@ -33,6 +53,14 @@
             app:tabUnboundedRipple="false"/>
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <View
+        android:id="@+id/transparent_overlay_search_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#40000000"
+        android:elevation="1dp"
+        android:visibility="gone"/>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager_search_activity"

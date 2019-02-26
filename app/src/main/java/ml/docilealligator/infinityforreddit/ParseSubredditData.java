@@ -116,7 +116,6 @@ class ParseSubredditData {
             } catch (JSONException e) {
                 Log.i("subreddit json error", e.getMessage());
                 parseFailed = true;
-                parseSubredditListingDataListener.onParseSubredditListingDataFail();
             }
         }
 

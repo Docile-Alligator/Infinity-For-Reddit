@@ -24,7 +24,7 @@ public class SubredditListingDataSourceFactory extends DataSource.Factory {
     @NonNull
     @Override
     public DataSource create() {
-        SubredditListingDataSource subredditListingDataSource = new SubredditListingDataSource(retrofit,
+        subredditListingDataSource = new SubredditListingDataSource(retrofit,
                 query, onSubredditListingDataFetchedCallback);
         subredditListingDataSourceMutableLiveData.postValue(subredditListingDataSource);
         return subredditListingDataSource;
