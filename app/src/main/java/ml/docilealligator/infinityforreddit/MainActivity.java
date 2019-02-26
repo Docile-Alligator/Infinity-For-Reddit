@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -52,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String FETCH_USER_INFO_STATE = "FUIS";
     private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";
 
+    private static final int LOGIN_ACTIVITY_REQUEST_CODE = 0;
+
+    @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.search_view_main_activity) SimpleSearchView simpleSearchView;
     @BindView(R.id.transparent_overlay_main_activity) View transparentOverlay;
     @BindView(R.id.subscribed_subreddit_recycler_view_main_activity) RecyclerView subscribedSubredditRecyclerView;
@@ -91,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
     Retrofit mOauthRetrofit;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -101,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -154,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         String accessToken = getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
         if (accessToken.equals("")) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivity(loginIntent);
+            startActivityForResult(loginIntent, LOGIN_ACTIVITY_REQUEST_CODE);
         } else {
             if (savedInstanceState == null) {
                 mFragment = new PostFragment();
@@ -309,6 +313,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (simpleSearchView.onActivityResult(requestCode, resultCode, data)) {
             return;
+        }
+        if(requestCode == LOGIN_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+            overridePendingTransition(0, 0);
         }
 
         super.onActivityResult(requestCode, resultCode, data);

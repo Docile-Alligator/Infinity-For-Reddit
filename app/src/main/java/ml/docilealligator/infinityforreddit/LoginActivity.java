@@ -1,22 +1,19 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -25,6 +22,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -80,33 +79,30 @@ public class LoginActivity extends AppCompatActivity {
 
                         RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
                         String tokenRetrievalUrl = "https://www.reddit.com/api/v1/access_token";
-                        StringRequest requestToken = new StringRequest(Request.Method.POST, tokenRetrievalUrl, new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                try {
-                                    JSONObject responseJSON = new JSONObject(response);
-                                    String accessToken = responseJSON.getString(RedditUtils.ACCESS_TOKEN_KEY);
-                                    String refreshToken = responseJSON.getString(RedditUtils.REFRESH_TOKEN_KEY);
+                        StringRequest requestToken = new StringRequest(Request.Method.POST, tokenRetrievalUrl, response -> {
+                            try {
+                                JSONObject responseJSON = new JSONObject(response);
+                                String accessToken = responseJSON.getString(RedditUtils.ACCESS_TOKEN_KEY);
+                                String refreshToken = responseJSON.getString(RedditUtils.REFRESH_TOKEN_KEY);
 
-                                    editor.putString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, accessToken);
-                                    editor.putString(SharedPreferencesUtils.REFRESH_TOKEN_KEY, refreshToken);
-                                    editor.apply();
-                                    finish();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                    Toast.makeText(LoginActivity.this, "Error occurred when parsing the JSON response", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(LoginActivity.this, "Error Retrieving the token", Toast.LENGTH_SHORT).show();
+                                editor.putString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, accessToken);
+                                editor.putString(SharedPreferencesUtils.REFRESH_TOKEN_KEY, refreshToken);
+                                editor.apply();
+
+                                Intent resultIntent = new Intent();
+                                setResult(Activity.RESULT_OK, resultIntent);
+                                finish();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Toast.makeText(LoginActivity.this, "Error occurred when parsing the JSON response", Toast.LENGTH_SHORT).show();
                                 finish();
                             }
+                        }, error -> {
+                            Toast.makeText(LoginActivity.this, "Error Retrieving the token", Toast.LENGTH_SHORT).show();
+                            finish();
                         }){
                             @Override
-                            protected Map<String, String> getParams() throws AuthFailureError {
+                            protected Map<String, String> getParams() {
                                 Map<String, String> params = new HashMap<>();
                                 params.put(RedditUtils.GRANT_TYPE_KEY, "authorization_code");
                                 params.put("code", authCode);
@@ -116,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public Map<String, String> getHeaders() throws AuthFailureError {
+                            public Map<String, String> getHeaders() {
                                 return RedditUtils.getHttpBasicAuthHeader();
                             }
                         };
