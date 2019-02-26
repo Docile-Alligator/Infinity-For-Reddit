@@ -142,7 +142,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                         if(!iconImageUrl.equals("")) {
                             glide.load(iconImageUrl)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                    .error(glide.load(R.drawable.subreddit_default_icon))
+                                    .error(glide.load(R.drawable.subreddit_default_icon)
+                                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                                     .into(mSubredditIconGifImageView);
                         } else {
                             glide.load(R.drawable.subreddit_default_icon)
@@ -156,7 +157,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         } else if(!mPost.getSubredditIconUrl().equals("")) {
             glide.load(mPost.getSubredditIconUrl())
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                    .error(glide.load(R.drawable.subreddit_default_icon))
+                    .error(glide.load(R.drawable.subreddit_default_icon)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                     .into(mSubredditIconGifImageView);
         } else {
             glide.load(R.drawable.subreddit_default_icon)

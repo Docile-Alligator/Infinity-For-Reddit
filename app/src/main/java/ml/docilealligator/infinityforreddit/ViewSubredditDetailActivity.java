@@ -159,7 +159,8 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
                 } else {
                     glide.load(subredditData.getIconUrl())
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0)))
-                            .error(glide.load(R.drawable.subreddit_default_icon))
+                            .error(glide.load(R.drawable.subreddit_default_icon)
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0))))
                             .into(iconGifImageView);
                     iconGifImageView.setOnClickListener(view -> {
                         Intent intent = new Intent(ViewSubredditDetailActivity.this, ViewImageActivity.class);

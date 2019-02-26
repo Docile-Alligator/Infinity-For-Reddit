@@ -104,7 +104,8 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
             if(UserData.getIconUrl() != null) {
                 glide.load(UserData.getIconUrl())
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                        .error(glide.load(R.drawable.subreddit_default_icon))
+                        .error(glide.load(R.drawable.subreddit_default_icon)
+                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                         .into(((UserListingRecyclerViewAdapter.DataViewHolder) holder).iconGifImageView);
             } else {
                 glide.load(R.drawable.subreddit_default_icon)

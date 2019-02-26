@@ -2,8 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
 import android.content.Intent;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +14,8 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.List;
 
 import SubscribedSubredditDatabase.SubscribedSubredditData;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -54,7 +54,8 @@ class SubscribedSubredditRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         if(!mSubscribedSubredditData.get(i).getIconUrl().equals("")) {
             glide.load(mSubscribedSubredditData.get(i).getIconUrl())
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                    .error(glide.load(R.drawable.subreddit_default_icon))
+                    .error(glide.load(R.drawable.subreddit_default_icon)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                     .into(((SubredditViewHolder) viewHolder).iconGifImageView);
         } else {
             glide.load(R.drawable.subreddit_default_icon)

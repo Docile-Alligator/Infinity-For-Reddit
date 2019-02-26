@@ -199,7 +199,8 @@ public class MainActivity extends AppCompatActivity {
             if (!mProfileImageUrl.equals("")) {
                 glide.load(mProfileImageUrl)
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0)))
-                        .error(glide.load(R.drawable.subreddit_default_icon))
+                        .error(glide.load(R.drawable.subreddit_default_icon)
+                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0))))
                         .into(mProfileImageView);
             } else {
                 glide.load(R.drawable.subreddit_default_icon)
@@ -259,7 +260,8 @@ public class MainActivity extends AppCompatActivity {
                             if (!profileImageUrl.equals("")) {
                                 glide.load(profileImageUrl)
                                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
-                                        .error(glide.load(R.drawable.subreddit_default_icon))
+                                        .error(glide.load(R.drawable.subreddit_default_icon)
+                                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0))))
                                         .into(mProfileImageView);
                             } else {
                                 glide.load(R.drawable.subreddit_default_icon)

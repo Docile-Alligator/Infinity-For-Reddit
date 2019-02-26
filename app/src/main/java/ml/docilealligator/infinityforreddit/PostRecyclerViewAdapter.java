@@ -156,7 +156,8 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                                         if(!iconImageUrl.equals("")) {
                                             glide.load(iconImageUrl)
                                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                                    .error(glide.load(R.drawable.subreddit_default_icon))
+                                                    .error(glide.load(R.drawable.subreddit_default_icon)
+                                                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                                                     .into(((DataViewHolder) holder).subredditIconGifImageView);
                                         } else {
                                             glide.load(R.drawable.subreddit_default_icon)
@@ -172,7 +173,8 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                     } else if(!post.getSubredditIconUrl().equals("")) {
                         glide.load(post.getSubredditIconUrl())
                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                .error(glide.load(R.drawable.subreddit_default_icon))
+                                .error(glide.load(R.drawable.subreddit_default_icon)
+                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                                 .into(((DataViewHolder) holder).subredditIconGifImageView);
                     } else {
                         glide.load(R.drawable.subreddit_default_icon)
@@ -206,7 +208,8 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                                 if(!iconImageUrl.equals("")) {
                                     glide.load(iconImageUrl)
                                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                            .error(glide.load(R.drawable.subreddit_default_icon))
+                                            .error(glide.load(R.drawable.subreddit_default_icon)
+                                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                                             .into(((DataViewHolder) holder).subredditIconGifImageView);
                                 } else {
                                     glide.load(R.drawable.subreddit_default_icon)
@@ -222,7 +225,8 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                     } else if(!post.getAuthorIconUrl().equals("")) {
                         glide.load(post.getAuthorIconUrl())
                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                .error(glide.load(R.drawable.subreddit_default_icon))
+                                .error(glide.load(R.drawable.subreddit_default_icon)
+                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                                 .into(((DataViewHolder) holder).subredditIconGifImageView);
                     } else {
                         glide.load(R.drawable.subreddit_default_icon)
