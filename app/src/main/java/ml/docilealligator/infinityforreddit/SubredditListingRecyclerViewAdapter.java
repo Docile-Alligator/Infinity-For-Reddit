@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,8 +101,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
                 context.startActivity(intent);
             });
 
-            if(subredditData.getIconUrl() != null) {
-                Log.i("url", subredditData.getIconUrl());
+            if(!subredditData.getIconUrl().equals("")) {
                 glide.load(subredditData.getIconUrl())
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                         .error(glide.load(R.drawable.subreddit_default_icon)

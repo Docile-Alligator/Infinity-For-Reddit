@@ -94,15 +94,15 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof UserListingRecyclerViewAdapter.DataViewHolder) {
-            UserData UserData = getItem(position);
+            UserData userData = getItem(position);
             ((UserListingRecyclerViewAdapter.DataViewHolder) holder).constraintLayout.setOnClickListener(view -> {
                 Intent intent = new Intent(context, ViewUserDetailActivity.class);
-                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, UserData.getName());
+                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, userData.getName());
                 context.startActivity(intent);
             });
 
-            if(UserData.getIconUrl() != null) {
-                glide.load(UserData.getIconUrl())
+            if(!userData.getIconUrl().equals("")) {
+                glide.load(userData.getIconUrl())
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                         .error(glide.load(R.drawable.subreddit_default_icon)
                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
@@ -113,9 +113,9 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
                         .into(((UserListingRecyclerViewAdapter.DataViewHolder) holder).iconGifImageView);
             }
 
-            ((UserListingRecyclerViewAdapter.DataViewHolder) holder).UserNameTextView.setText(UserData.getName());
+            ((UserListingRecyclerViewAdapter.DataViewHolder) holder).UserNameTextView.setText(userData.getName());
 
-            new CheckIsFollowingUserAsyncTask(subscribedUserDao, UserData.getName(),
+            new CheckIsFollowingUserAsyncTask(subscribedUserDao, userData.getName(),
                     new CheckIsFollowingUserAsyncTask.CheckIsFollowingUserListener() {
                         @Override
                         public void isSubscribed() {
@@ -127,7 +127,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
                             ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setVisibility(View.VISIBLE);
                             ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setOnClickListener(view -> {
                                 UserFollowing.followUser(oauthRetrofit, retrofit,
-                                        authInfoSharedPreferences, UserData.getName(), subscribedUserDao,
+                                        authInfoSharedPreferences, userData.getName(), subscribedUserDao,
                                         new UserFollowing.UserFollowingListener() {
                                             @Override
                                             public void onUserFollowingSuccess() {
