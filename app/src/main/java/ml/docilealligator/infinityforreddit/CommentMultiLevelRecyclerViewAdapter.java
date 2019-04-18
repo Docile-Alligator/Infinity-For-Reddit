@@ -13,6 +13,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.multilevelview.MultiLevelAdapter;
 import com.multilevelview.MultiLevelRecyclerView;
 import com.multilevelview.models.RecyclerViewItem;
@@ -21,10 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import androidx.annotation.NonNull;
-import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Retrofit;
@@ -184,6 +185,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                 @Override
                 public void onVoteThingFail(int position1) {
                     Toast.makeText(mContext, R.string.vote_failed, Toast.LENGTH_SHORT).show();
+                    commentItem.setVoteType(previousVoteType);
                     ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() + previousVoteType));
                     ((CommentViewHolder) holder).upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                     ((CommentViewHolder) holder).downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
@@ -233,6 +235,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                 @Override
                 public void onVoteThingFail(int position1) {
                     Toast.makeText(mContext, R.string.vote_failed, Toast.LENGTH_SHORT).show();
+                    commentItem.setVoteType(previousVoteType);
                     ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() + previousVoteType));
                     ((CommentViewHolder) holder).upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                     ((CommentViewHolder) holder).downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);

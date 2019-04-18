@@ -18,6 +18,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
@@ -29,19 +38,13 @@ import com.bumptech.glide.request.target.Target;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 
+import org.greenrobot.eventbus.EventBus;
+
 import CustomView.AspectRatioGifImageView;
 import SubredditDatabase.SubredditDao;
 import SubredditDatabase.SubredditRoomDatabase;
 import User.UserDao;
 import User.UserRoomDatabase;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
-import androidx.paging.PagedListAdapter;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -144,6 +147,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         Intent intent = new Intent(mContext, ViewPostDetailActivity.class);
                         intent.putExtra(ViewPostDetailActivity.EXTRA_TITLE, title);
                         intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
+                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, position);
                         mContext.startActivity(intent);
                     }
                 });
@@ -249,7 +253,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
 
                 ((DataViewHolder) holder).postTimeTextView.setText(postTime);
                 ((DataViewHolder) holder).titleTextView.setText(title);
-                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore()));
+                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
 
                 if(gilded > 0) {
                     ((DataViewHolder) holder).gildedImageView.setVisibility(View.VISIBLE);
@@ -414,14 +418,19 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
 
                             ((DataViewHolder) holder).downvoteButton.clearColorFilter();
                             ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
+
+                            EventBus.getDefault().post(new VoteEventToDetailActivity(post.getId(), post.getVoteType()));
                         }
 
                         @Override
                         public void onVoteThingFail(int position1) {
                             Toast.makeText(mContext, R.string.vote_failed, Toast.LENGTH_SHORT).show();
+                            post.setVoteType(previousVoteType);
                             ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + previousVoteType));
                             ((DataViewHolder) holder).upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                             ((DataViewHolder) holder).downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
+
+                            EventBus.getDefault().post(new VoteEventToDetailActivity(post.getId(), post.getVoteType()));
                         }
                     }, id, newVoteType, holder.getAdapterPosition());
                 });
@@ -464,14 +473,19 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
 
                             ((DataViewHolder) holder).upvoteButton.clearColorFilter();
                             ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
+
+                            EventBus.getDefault().post(new VoteEventToDetailActivity(post.getId(), post.getVoteType()));
                         }
 
                         @Override
                         public void onVoteThingFail(int position1) {
                             Toast.makeText(mContext, R.string.vote_failed, Toast.LENGTH_SHORT).show();
+                            post.setVoteType(previousVoteType);
                             ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + previousVoteType));
                             ((DataViewHolder) holder).upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                             ((DataViewHolder) holder).downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
+
+                            EventBus.getDefault().post(new VoteEventToDetailActivity(post.getId(), post.getVoteType()));
                         }
                     }, id, newVoteType, holder.getAdapterPosition());
                 });

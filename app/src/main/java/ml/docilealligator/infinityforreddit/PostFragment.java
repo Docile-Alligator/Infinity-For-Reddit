@@ -1,15 +1,9 @@
 package ml.docilealligator.infinityforreddit;
 
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +11,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -82,6 +86,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         ((Infinity) getActivity().getApplication()).getmNetworkComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
+
+        EventBus.getDefault().register(this);
 
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mPostRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -179,5 +185,20 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mFetchPostInfoTextView.setText(stringResId);
             Glide.with(this).load(R.drawable.load_post_error_indicator).into(mFetchPostInfoImageView);
         }
+    }
+
+    @Subscribe
+    public void onVoteEvent(VoteEventToPostList event) {
+        Post post = mAdapter.getCurrentList().get(event.positionInList);
+        if(post != null) {
+            post.setVoteType(event.voteType);
+            mAdapter.notifyItemChanged(event.positionInList);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }

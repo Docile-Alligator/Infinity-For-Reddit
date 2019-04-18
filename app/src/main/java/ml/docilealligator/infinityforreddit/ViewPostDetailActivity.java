@@ -17,6 +17,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.cardview.widget.CardView;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
@@ -31,6 +41,9 @@ import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 import com.multilevelview.MultiLevelRecyclerView;
 import com.santalu.aspectratioimageview.AspectRatioImageView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,15 +52,6 @@ import javax.inject.Named;
 
 import CustomView.AspectRatioGifImageView;
 import SubredditDatabase.SubredditRoomDatabase;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.cardview.widget.CardView;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -60,6 +64,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
     static final String EXTRA_TITLE = "ET";
     static final String EXTRA_POST_DATA = "EPD";
+    static final String EXTRA_POST_LIST_POSITION = "EPLI";
 
     private RequestManager glide;
 
@@ -67,6 +72,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private String orientationState = "OS";
 
     private Post mPost;
+    private int postListPosition = -1;
 
     private boolean isLoadingMoreChildren = false;
     private ArrayList<String> children;
@@ -121,7 +127,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_post_detail);
+
         ButterKnife.bind(this);
+
+        EventBus.getDefault().register(this);
 
         ((Infinity) getApplication()).getmNetworkComponent().inject(this);
 
@@ -130,6 +139,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         orientation = getResources().getConfiguration().orientation;
 
         mPost = getIntent().getExtras().getParcelable(EXTRA_POST_DATA);
+
+        if(getIntent().hasExtra(EXTRA_POST_LIST_POSITION)) {
+            postListPosition = getIntent().getExtras().getInt(EXTRA_POST_LIST_POSITION);
+        }
 
         TextView titleTextView = findViewById(R.id.title_text_view_view_post_detail);
         titleTextView.setText(mPost.getTitle());
@@ -214,7 +227,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         if(mPost.isNSFW()) {
             mNSFWChip.setVisibility(View.VISIBLE);
         }
-        mScoreTextView.setText(Integer.toString(mPost.getScore()));
+        mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
 
         mShareButton.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_SEND);
@@ -333,6 +346,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
             mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
 
+            if(postListPosition != -1) {
+                EventBus.getDefault().post(new VoteEventToPostList(postListPosition, mPost.getVoteType()));
+            }
+
             VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingWithoutPositionListener() {
                 @Override
                 public void onVoteThingSuccess() {
@@ -346,14 +363,23 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
                     mDownvoteButton.clearColorFilter();
                     mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
+
+                    if(postListPosition != -1) {
+                        EventBus.getDefault().post(new VoteEventToPostList(postListPosition, mPost.getVoteType()));
+                    }
                 }
 
                 @Override
                 public void onVoteThingFail() {
                     Toast.makeText(ViewPostDetailActivity.this, R.string.vote_failed, Toast.LENGTH_SHORT).show();
+                    mPost.setVoteType(previousVoteType);
                     mScoreTextView.setText(Integer.toString(mPost.getScore() + previousVoteType));
                     mUpvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                     mDownvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
+
+                    if(postListPosition != -1) {
+                        EventBus.getDefault().post(new VoteEventToPostList(postListPosition, mPost.getVoteType()));
+                    }
                 }
             }, mPost.getFullName(), newVoteType);
         });
@@ -380,6 +406,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
             mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
 
+            if(postListPosition != -1) {
+                EventBus.getDefault().post(new VoteEventToPostList(postListPosition, mPost.getVoteType()));
+            }
+
             VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingWithoutPositionListener() {
                 @Override
                 public void onVoteThingSuccess() {
@@ -393,14 +423,23 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
                     mUpvoteButton.clearColorFilter();
                     mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
+
+                    if(postListPosition != -1) {
+                        EventBus.getDefault().post(new VoteEventToPostList(postListPosition, mPost.getVoteType()));
+                    }
                 }
 
                 @Override
                 public void onVoteThingFail() {
                     Toast.makeText(ViewPostDetailActivity.this, R.string.vote_failed, Toast.LENGTH_SHORT).show();
+                    mPost.setVoteType(previousVoteType);
                     mScoreTextView.setText(Integer.toString(mPost.getScore() + previousVoteType));
                     mUpvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                     mDownvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
+
+                    if(postListPosition != -1) {
+                        EventBus.getDefault().post(new VoteEventToPostList(postListPosition, mPost.getVoteType()));
+                    }
                 }
             }, mPost.getFullName(), newVoteType);
         });
@@ -535,6 +574,14 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         snackbar.show();
     }
 
+    @Subscribe
+    public void onVoteEvent(VoteEventToDetailActivity event) {
+        if(mPost.getId() == event.postId) {
+            mPost.setVoteType(event.voteType);
+            mScoreTextView.setText(Integer.toString(mPost.getScore() + event.voteType));
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -568,6 +615,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
         if(mLoadSubredditIconAsyncTask != null) {
             mLoadSubredditIconAsyncTask.cancel(true);

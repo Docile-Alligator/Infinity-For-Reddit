@@ -81,7 +81,9 @@ class ParsePost {
                         voteType = 0;
                     } else {
                         voteType = data.getBoolean(JSONUtils.LIKES_KEY) ? 1 : -1;
+                        score -= voteType;
                     }
+
                     Calendar postTimeCalendar = Calendar.getInstance();
                     postTimeCalendar.setTimeInMillis(postTime);
                     String formattedPostTime = new SimpleDateFormat("MMM d, YYYY, HH:mm",
