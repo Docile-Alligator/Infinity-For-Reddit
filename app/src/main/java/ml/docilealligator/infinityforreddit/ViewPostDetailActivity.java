@@ -311,138 +311,98 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
         fetchComment();
 
-        /*CommentAdapter mAdapter = new CommentAdapter(this, mRetrofit, mOauthRetrofit, mSharedPreferences,
-                mRecyclerView, mPost.getSubredditNamePrefixed(), mPost.getId(), getResources().getConfiguration().locale);
-
-        CommentViewModel.Factory factory = new CommentViewModel.Factory(mRetrofit, getResources().getConfiguration().locale,
-                mPost.getSubredditNamePrefixed(), mPost.getId(), null, true, new CommentDataSource.OnCommentFetchedCallback() {
-            @Override
-            public void hasComment() {
-                mCommentProgressbar.setVisibility(View.GONE);
-                mRecyclerView.setAdapter(mAdapter);
-                mCommentCardView.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void noComment() {
-
-            }
-        });
-
-        CommentViewModel commentViewModel = ViewModelProviders.of(this, factory).get(CommentViewModel.class);
-        commentViewModel.getComments().observe(this, posts -> mAdapter.submitList(posts));*/
-
-
         mUpvoteButton.setOnClickListener(view -> {
-            final boolean isDownvotedBefore = mDownvoteButton.getColorFilter() != null;
+            ColorFilter previousUpvoteButtonColorFilter = mUpvoteButton.getColorFilter();
+            ColorFilter previousDownvoteButtonColorFilter = mDownvoteButton.getColorFilter();
+            int previousVoteType = mPost.getVoteType();
+            String newVoteType;
 
-            final ColorFilter downVoteButtonColorFilter = mDownvoteButton.getColorFilter();
             mDownvoteButton.clearColorFilter();
 
-            if (mUpvoteButton.getColorFilter() == null) {
-                mUpvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-                if(isDownvotedBefore) {
-                    mScoreTextView.setText(Integer.toString(mPost.getScore() + 2));
-                } else {
-                    mScoreTextView.setText(Integer.toString(mPost.getScore() + 1));
-                }
-
-                VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingWithoutPositionListener() {
-                    @Override
-                    public void onVoteThingSuccess() {
-                        mPost.setVoteType(1);
-                        if(isDownvotedBefore) {
-                            mPost.setScore(mPost.getScore() + 2);
-                        } else {
-                            mPost.setScore(mPost.getScore() + 1);
-                        }
-                    }
-
-                    @Override
-                    public void onVoteThingFail() {
-                        Toast.makeText(ViewPostDetailActivity.this, "Cannot upvote this post", Toast.LENGTH_SHORT).show();
-                        mUpvoteButton.clearColorFilter();
-                        mScoreTextView.setText(Integer.toString(mPost.getScore()));
-                        mDownvoteButton.setColorFilter(downVoteButtonColorFilter);
-                    }
-                }, mPost.getFullName(), RedditUtils.DIR_UPVOTE);
+            if(previousUpvoteButtonColorFilter == null) {
+                //Not upvoted before
+                mPost.setVoteType(1);
+                newVoteType = RedditUtils.DIR_UPVOTE;
+                mUpvoteButton.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
             } else {
                 //Upvoted before
+                mPost.setVoteType(0);
+                newVoteType = RedditUtils.DIR_UNVOTE;
                 mUpvoteButton.clearColorFilter();
-                mScoreTextView.setText(Integer.toString(mPost.getScore() - 1));
-
-                VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingWithoutPositionListener() {
-                    @Override
-                    public void onVoteThingSuccess() {
-                        mPost.setVoteType(0);
-                        mPost.setScore(mPost.getScore() - 1);
-                    }
-
-                    @Override
-                    public void onVoteThingFail() {
-                        Toast.makeText(ViewPostDetailActivity.this, "Cannot unvote this post", Toast.LENGTH_SHORT).show();
-                        mScoreTextView.setText(Integer.toString(mPost.getScore() + 1));
-                        mUpvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-                        mPost.setScore(mPost.getScore() + 1);
-                    }
-                }, mPost.getFullName(), RedditUtils.DIR_UNVOTE);
             }
+
+            mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
+
+            VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingWithoutPositionListener() {
+                @Override
+                public void onVoteThingSuccess() {
+                    if(newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
+                        mPost.setVoteType(1);
+                        mUpvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+                    } else {
+                        mPost.setVoteType(0);
+                        mUpvoteButton.clearColorFilter();
+                    }
+
+                    mDownvoteButton.clearColorFilter();
+                    mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
+                }
+
+                @Override
+                public void onVoteThingFail() {
+                    Toast.makeText(ViewPostDetailActivity.this, R.string.vote_failed, Toast.LENGTH_SHORT).show();
+                    mScoreTextView.setText(Integer.toString(mPost.getScore() + previousVoteType));
+                    mUpvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
+                    mDownvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
+                }
+            }, mPost.getFullName(), newVoteType);
         });
 
         mDownvoteButton.setOnClickListener(view -> {
-            final boolean isUpvotedBefore = mUpvoteButton.getColorFilter() != null;
+            ColorFilter previousUpvoteButtonColorFilter = mUpvoteButton.getColorFilter();
+            ColorFilter previousDownvoteButtonColorFilter = mDownvoteButton.getColorFilter();
+            int previousVoteType = mPost.getVoteType();
+            String newVoteType;
 
-            final ColorFilter upvoteButtonColorFilter = mUpvoteButton.getColorFilter();
             mUpvoteButton.clearColorFilter();
 
-            if (mDownvoteButton.getColorFilter() == null) {
-                mDownvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.minusButtonColor), PorterDuff.Mode.SRC_IN);
-                if (isUpvotedBefore) {
-                    mScoreTextView.setText(Integer.toString(mPost.getScore() - 2));
-                } else {
-                    mScoreTextView.setText(Integer.toString(mPost.getScore() - 1));
+            if(previousDownvoteButtonColorFilter == null) {
+                //Not upvoted before
+                mPost.setVoteType(-1);
+                newVoteType = RedditUtils.DIR_DOWNVOTE;
+                mDownvoteButton.setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+            } else {
+                //Upvoted before
+                mPost.setVoteType(0);
+                newVoteType = RedditUtils.DIR_UNVOTE;
+                mDownvoteButton.clearColorFilter();
+            }
+
+            mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
+
+            VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingWithoutPositionListener() {
+                @Override
+                public void onVoteThingSuccess() {
+                    if(newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {
+                        mPost.setVoteType(-1);
+                        mDownvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+                    } else {
+                        mPost.setVoteType(0);
+                        mDownvoteButton.clearColorFilter();
+                    }
+
+                    mUpvoteButton.clearColorFilter();
+                    mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
                 }
 
-                VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingWithoutPositionListener() {
-                    @Override
-                    public void onVoteThingSuccess() {
-                        mPost.setVoteType(-1);
-                        if(isUpvotedBefore) {
-                            mPost.setScore(mPost.getScore() - 2);
-                        } else {
-                            mPost.setScore(mPost.getScore() - 1);
-                        }
-                    }
-
-                    @Override
-                    public void onVoteThingFail() {
-                        Toast.makeText(ViewPostDetailActivity.this, "Cannot downvote this post", Toast.LENGTH_SHORT).show();
-                        mDownvoteButton.clearColorFilter();
-                        mScoreTextView.setText(Integer.toString(mPost.getScore()));
-                        mUpvoteButton.setColorFilter(upvoteButtonColorFilter);
-                    }
-                }, mPost.getFullName(), RedditUtils.DIR_DOWNVOTE);
-            } else {
-                //Down voted before
-                mDownvoteButton.clearColorFilter();
-                mScoreTextView.setText(Integer.toString(mPost.getScore() + 1));
-
-                VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingWithoutPositionListener() {
-                    @Override
-                    public void onVoteThingSuccess() {
-                        mPost.setVoteType(0);
-                        mPost.setScore(mPost.getScore());
-                    }
-
-                    @Override
-                    public void onVoteThingFail() {
-                        Toast.makeText(ViewPostDetailActivity.this, "Cannot unvote this post", Toast.LENGTH_SHORT).show();
-                        mDownvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.minusButtonColor), PorterDuff.Mode.SRC_IN);
-                        mScoreTextView.setText(Integer.toString(mPost.getScore()));
-                        mPost.setScore(mPost.getScore());
-                    }
-                }, mPost.getFullName(), RedditUtils.DIR_UNVOTE);
-            }
+                @Override
+                public void onVoteThingFail() {
+                    Toast.makeText(ViewPostDetailActivity.this, R.string.vote_failed, Toast.LENGTH_SHORT).show();
+                    mScoreTextView.setText(Integer.toString(mPost.getScore() + previousVoteType));
+                    mUpvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
+                    mDownvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
+                }
+            }, mPost.getFullName(), newVoteType);
         });
     }
 
