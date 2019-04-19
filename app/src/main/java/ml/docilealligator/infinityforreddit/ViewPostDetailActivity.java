@@ -69,7 +69,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private RequestManager glide;
 
     private int orientation;
-    private String orientationState = "OS";
+    private static String ORIENTATION_STATE = "OS";
+    private static final String POST_STATE = "PS";
 
     private Post mPost;
     private int postListPosition = -1;
@@ -136,9 +137,13 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        orientation = getResources().getConfiguration().orientation;
-
-        mPost = getIntent().getExtras().getParcelable(EXTRA_POST_DATA);
+        if(savedInstanceState == null) {
+            orientation = getResources().getConfiguration().orientation;
+            mPost = getIntent().getExtras().getParcelable(EXTRA_POST_DATA);
+        } else {
+            orientation = savedInstanceState.getInt(ORIENTATION_STATE);
+            mPost = savedInstanceState.getParcelable(POST_STATE);
+        }
 
         if(getIntent().hasExtra(EXTRA_POST_LIST_POSITION)) {
             postListPosition = getIntent().getExtras().getInt(EXTRA_POST_LIST_POSITION);
@@ -576,7 +581,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
     @Subscribe
     public void onVoteEvent(VoteEventToDetailActivity event) {
-        if(mPost.getId() == event.postId) {
+        if(mPost.getId().equals(event.postId)) {
             mPost.setVoteType(event.voteType);
             mScoreTextView.setText(Integer.toString(mPost.getScore() + event.voteType));
         }
@@ -595,13 +600,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(orientationState, orientation);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        orientation = savedInstanceState.getInt(orientationState);
+        outState.putInt(ORIENTATION_STATE, orientation);
+        outState.putParcelable(POST_STATE, mPost);
     }
 
     @Override

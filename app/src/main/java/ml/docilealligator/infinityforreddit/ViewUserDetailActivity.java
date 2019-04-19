@@ -10,10 +10,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
@@ -27,11 +32,6 @@ import User.UserDao;
 import User.UserData;
 import User.UserRoomDatabase;
 import User.UserViewModel;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -74,14 +74,10 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_user_detail);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         ButterKnife.bind(this);
 
         ((Infinity) getApplication()).getmNetworkComponent().inject(this);
-
-        setSupportActionBar(toolbar);
 
         //Get status bar height
         int statusBarHeight = 0;
@@ -90,40 +86,19 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             statusBarHeight = getResources().getDimensionPixelSize(resourceId);
         }
 
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
-        params.topMargin = statusBarHeight;
-
         String userName = getIntent().getExtras().getString(EXTRA_USER_NAME_KEY);
         String title = "u/" + userName;
         userNameTextView.setText(title);
 
         CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar_layout_view_user_detail_activity);
-        AppBarLayout appBarLayout = findViewById(R.id.app_bar_layout_view_user_detail_activity);
+        collapsingToolbarLayout.setTitleEnabled(false);
 
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            int previousVerticalOffset = 0;
-            int scrollRange = -1;
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle(title);
+        setSupportActionBar(toolbar);
 
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if(scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange();
-                } else {
-                    if(verticalOffset < previousVerticalOffset) {
-                        //Scroll down
-                        if(scrollRange - Math.abs(verticalOffset) <= toolbar.getHeight()) {
-                            collapsingToolbarLayout.setTitle(title);
-                        }
-                    } else {
-                        //Scroll up
-                        if(scrollRange - Math.abs(verticalOffset) > toolbar.getHeight()) {
-                            collapsingToolbarLayout.setTitle(" ");//carefull there should a space between double quote otherwise it wont work
-                        }
-                    }
-                    previousVerticalOffset = verticalOffset;
-                }
-            }
-        });
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
+        params.topMargin = statusBarHeight;
 
         subscribedUserDao = SubscribedUserRoomDatabase.getDatabase(this).subscribedUserDao();
         glide = Glide.with(this);
