@@ -20,7 +20,6 @@ import androidx.lifecycle.ViewModelProviders;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -92,10 +91,6 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         String subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME_KEY);
         String title = "r/" + subredditName;
         subredditNameTextView.setText(title);
-
-
-        CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar_layout_view_subreddit_detail_activity);
-        collapsingToolbarLayout.setTitleEnabled(false);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(title);
