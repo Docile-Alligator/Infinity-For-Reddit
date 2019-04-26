@@ -2,8 +2,9 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import androidx.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -109,7 +110,7 @@ class UserFollowing {
             if(isSubscribing) {
                 subscribedUserDao.insert(subscribedUserData);
             } else {
-                subscribedUserDao.deleteSubscribedUser(userName);;
+                subscribedUserDao.deleteSubscribedUser(userName);
             }
             return null;
         }

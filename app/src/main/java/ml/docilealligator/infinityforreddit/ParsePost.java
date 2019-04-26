@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
+import android.text.Html;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -148,7 +149,7 @@ class ParsePost {
                 if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
                     post.setSelfText("");
                 } else {
-                    post.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
+                    post.setSelfText(Html.fromHtml(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim()).toString());
                 }
                 bestPostData.add(post);
             } else {
@@ -161,7 +162,7 @@ class ParsePost {
                 if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
                     linkPost.setSelfText("");
                 } else {
-                    linkPost.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
+                    linkPost.setSelfText(Html.fromHtml(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim()).toString());
                 }
                 bestPostData.add(linkPost);
             }
@@ -252,7 +253,7 @@ class ParsePost {
                             if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
                                 textWithImagePost.setSelfText("");
                             } else {
-                                textWithImagePost.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
+                                textWithImagePost.setSelfText(Html.fromHtml(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim()).toString());
                             }
                             bestPostData.add(textWithImagePost);
                         } else {
@@ -265,7 +266,7 @@ class ParsePost {
                             if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
                                 linkPost.setSelfText("");
                             } else {
-                                linkPost.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
+                                linkPost.setSelfText(Html.fromHtml(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim()).toString());
                             }
 
                             linkPost.setPreviewWidth(previewWidth);

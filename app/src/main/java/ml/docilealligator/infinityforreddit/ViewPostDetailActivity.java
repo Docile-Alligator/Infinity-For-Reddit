@@ -245,6 +245,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         switch (mPost.getPostType()) {
             case Post.IMAGE_TYPE:
                 mTypeChip.setText("IMAGE");
+
                 mImageView.setOnClickListener(view -> {
                     Intent intent = new Intent(ViewPostDetailActivity.this, ViewImageActivity.class);
                     intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, mPost.getUrl());
@@ -304,6 +305,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 break;
             case Post.NO_PREVIEW_LINK_TYPE:
                 mTypeChip.setText("LINK");
+
                 if(!mPost.getSelfText().equals("")) {
                     mContentMarkdownView.setVisibility(View.VISIBLE);
                     mContentMarkdownView.setMarkdown(getCustomSpannableConfiguration(), mPost.getSelfText());
@@ -319,7 +321,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 });
                 break;
             case Post.TEXT_TYPE:
-                mTypeChip.setVisibility(View.GONE);
+                mTypeChip.setText("TEXT");
+
                 if(!mPost.getSelfText().equals("")) {
                     mContentMarkdownView.setVisibility(View.VISIBLE);
                     mContentMarkdownView.setMarkdown(getCustomSpannableConfiguration(), mPost.getSelfText());

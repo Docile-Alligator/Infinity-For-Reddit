@@ -298,7 +298,6 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
 
                 switch (post.getPostType()) {
                     case Post.IMAGE_TYPE:
-                        ((DataViewHolder) holder).typeChip.setVisibility(View.VISIBLE);
                         ((DataViewHolder) holder).typeChip.setText("IMAGE");
 
                         final String imageUrl = post.getUrl();
@@ -312,7 +311,6 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         });
                         break;
                     case Post.LINK_TYPE:
-                        ((DataViewHolder) holder).typeChip.setVisibility(View.VISIBLE);
                         ((DataViewHolder) holder).typeChip.setText("LINK");
 
                         ((DataViewHolder) holder).imageView.setOnClickListener(view -> {
@@ -325,7 +323,6 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         });
                         break;
                     case Post.GIF_VIDEO_TYPE:
-                        ((DataViewHolder) holder).typeChip.setVisibility(View.VISIBLE);
                         ((DataViewHolder) holder).typeChip.setText("GIF");
 
                         final Uri gifVideoUri = Uri.parse(post.getVideoUrl());
@@ -344,7 +341,6 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         });
                         break;
                     case Post.VIDEO_TYPE:
-                        ((DataViewHolder) holder).typeChip.setVisibility(View.VISIBLE);
                         ((DataViewHolder) holder).typeChip.setText("VIDEO");
 
                         final Uri videoUri = Uri.parse(post.getVideoUrl());
@@ -363,7 +359,6 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         });
                         break;
                     case Post.NO_PREVIEW_LINK_TYPE:
-                        ((DataViewHolder) holder).typeChip.setVisibility(View.VISIBLE);
                         ((DataViewHolder) holder).typeChip.setText("LINK");
                         final String noPreviewLinkUrl = post.getUrl();
                         ((DataViewHolder) holder).noPreviewLinkImageView.setVisibility(View.VISIBLE);
@@ -377,7 +372,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         });
                         break;
                     case Post.TEXT_TYPE:
-                        ((DataViewHolder) holder).typeChip.setVisibility(View.GONE);
+                        ((DataViewHolder) holder).typeChip.setText("TEXT");
                         break;
                 }
 
