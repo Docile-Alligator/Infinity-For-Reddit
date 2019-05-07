@@ -20,7 +20,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.cardview.widget.CardView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
@@ -35,6 +34,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
@@ -105,7 +105,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     @BindView(R.id.share_button_view_post_detail) ImageView mShareButton;
 
     @BindView(R.id.comment_progress_bar_view_post_detail) CircleProgressBar mCommentProgressbar;
-    @BindView(R.id.comment_card_view_view_post_detail) CardView mCommentCardView;
+    @BindView(R.id.comment_card_view_view_post_detail) MaterialCardView mCommentCardView;
     @BindView(R.id.recycler_view_view_post_detail) MultiLevelRecyclerView mRecyclerView;
 
     @BindView(R.id.no_comment_wrapper_linear_layout_view_post_detail) LinearLayout mNoCommentWrapperLinearLayout;
@@ -187,7 +187,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         switch (mPost.getVoteType()) {
             case 1:
                 //Upvote
-                mUpvoteButton.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+                mUpvoteButton.setColorFilter(ContextCompat.getColor(this, R.color.backgroundColorPrimaryDark), PorterDuff.Mode.SRC_IN);
                 break;
             case -1:
                 //Downvote
@@ -344,7 +344,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 //Not upvoted before
                 mPost.setVoteType(1);
                 newVoteType = RedditUtils.DIR_UPVOTE;
-                mUpvoteButton.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+                mUpvoteButton.setColorFilter(ContextCompat.getColor(this, R.color.backgroundColorPrimaryDark), android.graphics.PorterDuff.Mode.SRC_IN);
             } else {
                 //Upvoted before
                 mPost.setVoteType(0);
@@ -363,7 +363,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 public void onVoteThingSuccess() {
                     if(newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
                         mPost.setVoteType(1);
-                        mUpvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+                        mUpvoteButton.setColorFilter(ContextCompat.getColor(ViewPostDetailActivity.this, R.color.backgroundColorPrimaryDark), android.graphics.PorterDuff.Mode.SRC_IN);
                     } else {
                         mPost.setVoteType(0);
                         mUpvoteButton.clearColorFilter();

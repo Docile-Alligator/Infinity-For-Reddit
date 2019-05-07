@@ -9,4 +9,18 @@
     <color name="transparentActionBarColor">#88000000</color>
     
     <color name="gold">#FFC107</color>
+
+    <color name="primaryTextColor">#000000</color>
+
+    <color name="textColorPrimaryDark">@color/colorPrimaryDark</color>
+
+    <color name="circularProgressBarBackground">#242424</color>
+
+    <color name="dividerColor">#E0E0E0</color>
+
+    <color name="grey">#E0E0E0</color>
+
+    <color name="backgroundColor">#FFFFFF</color>
+
+    <color name="backgroundColorPrimaryDark">@color/colorPrimaryDark</color>
 </resources>

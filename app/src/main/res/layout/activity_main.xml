@@ -46,21 +46,22 @@
                         android:layout_height="24dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginEnd="32dp"
-                        android:src="@drawable/ic_outline_account_circle_24px" />
+                        android:src="@drawable/ic_outline_account_circle_24px"
+                        android:tint="@color/primaryTextColor"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:text="@string/profile"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@color/primaryTextColor" />
 
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#E0E0E0" />
+                    android:background="@color/dividerColor" />
 
                 <TextView
                     android:id="@+id/following_label_main_activity"

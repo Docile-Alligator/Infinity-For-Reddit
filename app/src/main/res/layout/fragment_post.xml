@@ -14,6 +14,7 @@
         android:layout_marginBottom="16dp"
         app:mlpb_progress_stoke_width="3dp"
         app:mlpb_progress_color="@color/colorAccent"
+        app:mlpb_background_color="@color/circularProgressBarBackground"
         android:layout_gravity="center_horizontal"/>
 
     <androidx.recyclerview.widget.RecyclerView

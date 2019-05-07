@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#242424</color>
+    <color name="colorPrimaryDark">#141414</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="minusButtonColor">#E91E63</color>
+
+    <color name="transparentActionBarColor">#88000000</color>
+    
+    <color name="gold">#FFC107</color>
+
+    <color name="primaryTextColor">#FFFFFF</color>
+
+    <color name="textColorPrimaryDark">#1E88E5</color>
+
+    <color name="circularProgressBarBackground">#242424</color>
+
+    <color name="dividerColor">#69666C</color>
+
+    <color name="grey">#424242</color>
+
+    <color name="backgroundColor">#181818</color>
+
+    <color name="backgroundColorPrimaryDark">#1976D2</color>
+</resources>

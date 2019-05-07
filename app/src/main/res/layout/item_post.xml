@@ -50,7 +50,7 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:tint="@color/colorPrimary"
+                android:tint="@color/textColorPrimaryDark"
                 android:visibility="gone"
                 app:layout_constraintStart_toEndOf="@id/subreddit_icon_name_linear_layout_view_item_best_post"
                 app:layout_constraintEnd_toStartOf="@+id/post_time_text_view_best_post_item"
@@ -77,7 +77,7 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:textSize="18sp"
-            android:textColor="#000000"/>
+            android:textColor="@color/primaryTextColor"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -93,7 +93,7 @@
                 android:layout_marginEnd="16dp"
                 android:textColor="@android:color/white"
                 android:layout_centerVertical="true"
-                app:chipBackgroundColor="@color/colorPrimaryDark" />
+                app:chipBackgroundColor="@color/backgroundColorPrimaryDark" />
 
             <ImageView
                 android:id="@+id/gilded_image_view_item_best_post"
@@ -187,7 +187,8 @@
             android:layout_marginTop="16dp"
             android:scaleType="center"
             android:src="@drawable/ic_link"
-            android:background="#E0E0E0"
+            android:tint="@android:color/tab_indicator_text"
+            android:background="@color/grey"
             android:visibility="gone"/>
 
         <RelativeLayout

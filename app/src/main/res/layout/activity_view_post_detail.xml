@@ -78,7 +78,7 @@
                         android:layout_height="wrap_content"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:textColor="#000000"
+                        android:textColor="@color/primaryTextColor"
                         android:textSize="18sp" />
 
                     <ru.noties.markwon.view.MarkwonView
@@ -104,7 +104,7 @@
                             android:layout_marginEnd="8dp"
                             android:textColor="@android:color/white"
                             android:layout_centerVertical="true"
-                            app:chipBackgroundColor="@color/colorPrimaryDark"/>
+                            app:chipBackgroundColor="@color/backgroundColorPrimaryDark"/>
 
                         <ImageView
                             android:id="@+id/gilded_image_view_view_post_detail"
@@ -197,9 +197,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="150dp"
                         android:layout_marginTop="16dp"
-                        android:background="#E0E0E0"
+                        android:background="@color/grey"
                         android:scaleType="center"
                         android:src="@drawable/ic_link"
+                        android:tint="@android:color/tab_indicator_text"
                         android:visibility="gone" />
 
                     <RelativeLayout
@@ -267,9 +268,10 @@
                 android:layout_marginBottom="16dp"
                 app:mlpb_progress_stoke_width="3dp"
                 app:mlpb_progress_color="@color/colorAccent"
+                app:mlpb_background_color="@color/circularProgressBarBackground"
                 android:layout_gravity="center_horizontal"/>
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/comment_card_view_view_post_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -290,7 +292,7 @@
                         android:paddingStart="16dp"
                         android:paddingTop="16dp"
                         android:text="@string/comments"
-                        android:textColor="#000000"
+                        android:textColor="@color/primaryTextColor"
                         android:textSize="18sp" />
 
                     <com.multilevelview.MultiLevelRecyclerView
@@ -300,7 +302,7 @@
 
                 </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
                 android:id="@+id/no_comment_wrapper_linear_layout_view_post_detail"

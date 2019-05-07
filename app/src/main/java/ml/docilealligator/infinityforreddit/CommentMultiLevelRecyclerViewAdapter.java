@@ -156,7 +156,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                 commentItem.setVoteType(1);
                 newVoteType = RedditUtils.DIR_UPVOTE;
                 ((CommentViewHolder) holder).upvoteButton
-                        .setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+                        .setColorFilter(ContextCompat.getColor(mContext, R.color.backgroundColorPrimaryDark), android.graphics.PorterDuff.Mode.SRC_IN);
             } else {
                 //Upvoted before
                 commentItem.setVoteType(0);
@@ -172,7 +172,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                     if(newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
                         commentItem.setVoteType(1);
                         ((CommentViewHolder) holder).upvoteButton
-                                .setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+                                .setColorFilter(ContextCompat.getColor(mContext, R.color.backgroundColorPrimaryDark), android.graphics.PorterDuff.Mode.SRC_IN);
                     } else {
                         commentItem.setVoteType(0);
                         ((CommentViewHolder) holder).upvoteButton.clearColorFilter();

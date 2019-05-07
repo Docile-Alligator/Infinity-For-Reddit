@@ -48,7 +48,7 @@
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:layout_below="@id/banner_image_view_view_user_detail_activity"
-                    android:background="@android:color/white">
+                    android:background="@color/backgroundColor">
 
                     <TextView
                         android:id="@+id/user_name_text_view_view_user_detail_activity"
@@ -56,7 +56,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:textSize="18sp"
-                        android:textColor="@color/colorPrimaryDark"
+                        android:textColor="@color/textColorPrimaryDark"
                         android:layout_gravity="center_horizontal"/>
 
                     <TextView
@@ -65,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/primaryTextColor"
                         android:layout_gravity="center_horizontal"/>
 
                     <com.google.android.material.chip.Chip

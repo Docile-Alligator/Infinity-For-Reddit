@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
@@ -14,8 +17,6 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.List;
 
 import SubscribedUserDatabase.SubscribedUserData;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pl.droidsonroids.gif.GifImageView;
 
@@ -38,7 +39,7 @@ public class SubscribedUserRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new UserViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_subscribed_subreddit, viewGroup, false));
+        return new UserViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_subscribed_thing, viewGroup, false));
     }
 
     @Override

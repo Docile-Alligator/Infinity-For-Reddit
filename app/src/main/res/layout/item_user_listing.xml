@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="32dp"
-        android:textColor="@android:color/black"
+        android:textColor="@color/primaryTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/user_icon_gif_image_view_item_user_listing"
         app:layout_constraintTop_toTopOf="parent" />
@@ -34,9 +34,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-
         android:src="@drawable/baseline_add_white_24"
-        android:tint="@color/colorPrimary"
+        android:tint="@color/textColorPrimaryDark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

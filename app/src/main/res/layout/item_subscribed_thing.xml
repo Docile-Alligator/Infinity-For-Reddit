@@ -18,7 +18,7 @@
         android:id="@+id/subreddit_name_text_view_item_subscribed_subreddit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
+        android:textColor="@color/primaryTextColor"
         android:layout_gravity="center_vertical"/>
 
 </LinearLayout>
