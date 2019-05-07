@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
-import android.text.Html;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -117,7 +116,7 @@ class ParseComment {
                     boolean isSubmitter = data.getBoolean(JSONUtils.IS_SUBMITTER_KEY);
                     String commentContent = "";
                     if(!data.isNull(JSONUtils.BODY_HTML_KEY)) {
-                        commentContent = Html.fromHtml(data.getString(JSONUtils.BODY_HTML_KEY).trim()).toString();
+                        commentContent = data.getString(JSONUtils.BODY_HTML_KEY).trim();
                     }
                     String permalink = data.getString(JSONUtils.PERMALINK_KEY);
                     int score = data.getInt(JSONUtils.SCORE_KEY);

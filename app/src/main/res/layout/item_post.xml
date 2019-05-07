@@ -19,11 +19,13 @@
 
             <LinearLayout
                 android:id="@+id/subreddit_icon_name_linear_layout_view_item_best_post"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                app:layout_constrainedWidth="true"
                 android:padding="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/stickied_post_image_view_best_post_item"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <CustomView.AspectRatioGifImageView
@@ -38,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_gravity="center"
-                    android:textColor="#E91E63" />
+                    android:textColor="#E91E63"/>
 
             </LinearLayout>
 
@@ -46,11 +48,11 @@
                 android:id="@+id/stickied_post_image_view_best_post_item"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_gravity="center"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:tint="@color/colorPrimary"
                 android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@id/subreddit_icon_name_linear_layout_view_item_best_post"
                 app:layout_constraintEnd_toStartOf="@+id/post_time_text_view_best_post_item"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -58,12 +60,13 @@
             <TextView
                 android:id="@+id/post_time_text_view_best_post_item"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/stickied_post_image_view_best_post_item"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_bias="1"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

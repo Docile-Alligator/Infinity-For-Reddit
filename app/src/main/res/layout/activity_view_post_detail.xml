@@ -34,11 +34,13 @@
 
                         <LinearLayout
                             android:id="@+id/subreddit_icon_name_linear_layout_view_post_detail"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:padding="16dp"
+                            app:layout_constrainedWidth="true"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/post_time_text_view_view_post_detail"
                             app:layout_constraintTop_toTopOf="parent">
 
                             <CustomView.AspectRatioGifImageView
@@ -64,6 +66,7 @@
                             android:layout_gravity="center"
                             android:layout_marginEnd="16dp"
                             app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/subreddit_icon_name_linear_layout_view_post_detail"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"/>
 

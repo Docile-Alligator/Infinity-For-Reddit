@@ -26,7 +26,10 @@
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"/>
+                    android:layout_height="?attr/actionBarSize"
+                    app:layout_collapseMode="pin"
+                    app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
+                    app:popupTheme="@style/AppTheme.PopupOverlay" />
 
                 <com.ferfalk.simplesearchview.SimpleSearchView
                     android:id="@+id/search_view_main_activity"

@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
-import android.text.Html;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -63,6 +62,7 @@ class ParsePost {
                 for(int i = 0; i < allData.length(); i++) {
                     String kind = allData.getJSONObject(i).getString(JSONUtils.KIND_KEY);
                     if(!kind.equals("t3")) {
+                        //It's a comment
                         continue;
                     }
                     JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
@@ -149,7 +149,7 @@ class ParsePost {
                 if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
                     post.setSelfText("");
                 } else {
-                    post.setSelfText(Html.fromHtml(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim()).toString());
+                    post.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
                 }
                 bestPostData.add(post);
             } else {
@@ -162,7 +162,7 @@ class ParsePost {
                 if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
                     linkPost.setSelfText("");
                 } else {
-                    linkPost.setSelfText(Html.fromHtml(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim()).toString());
+                    linkPost.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
                 }
                 bestPostData.add(linkPost);
             }
@@ -253,7 +253,7 @@ class ParsePost {
                             if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
                                 textWithImagePost.setSelfText("");
                             } else {
-                                textWithImagePost.setSelfText(Html.fromHtml(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim()).toString());
+                                textWithImagePost.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
                             }
                             bestPostData.add(textWithImagePost);
                         } else {
@@ -266,7 +266,7 @@ class ParsePost {
                             if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
                                 linkPost.setSelfText("");
                             } else {
-                                linkPost.setSelfText(Html.fromHtml(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim()).toString());
+                                linkPost.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
                             }
 
                             linkPost.setPreviewWidth(previewWidth);
