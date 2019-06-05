@@ -3,18 +3,18 @@ package ml.docilealligator.infinityforreddit;
 import android.app.Application;
 
 public class Infinity extends Application {
-    private NetworkComponent mNetworkComponent;
+    private AppComponent mAppComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        mNetworkComponent = DaggerNetworkComponent.builder()
-                .networkModule(new NetworkModule(this))
+        mAppComponent = DaggerAppComponent.builder()
+                .appModule(new AppModule(this))
                 .build();
     }
 
-    public NetworkComponent getmNetworkComponent() {
-        return mNetworkComponent;
+    public AppComponent getmAppComponent() {
+        return mAppComponent;
     }
 }

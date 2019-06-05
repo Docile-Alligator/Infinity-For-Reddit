@@ -5,8 +5,8 @@ import javax.inject.Singleton;
 import dagger.Component;
 
 @Singleton
-@Component(modules = NetworkModule.class)
-interface NetworkComponent {
+@Component(modules = AppModule.class)
+interface AppComponent {
     void inject(MainActivity mainActivity);
     void inject(LoginActivity loginActivity);
     void inject(PostFragment postFragment);

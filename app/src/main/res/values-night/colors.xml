@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#242424</color>
-    <color name="colorPrimaryDark">#141414</color>
+    <color name="colorPrimaryDark">#121212</color>
     <color name="colorAccent">#FF4081</color>
 
     <color name="minusButtonColor">#E91E63</color>
@@ -20,7 +20,7 @@
 
     <color name="grey">#424242</color>
 
-    <color name="backgroundColor">#181818</color>
+    <color name="backgroundColor">#121212</color>
 
-    <color name="backgroundColorPrimaryDark">#1976D2</color>
+    <color name="backgroundColorPrimaryDark">#1565C0</color>
 </resources>

@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        ((Infinity) getApplication()).getmNetworkComponent().inject(this);
+        ((Infinity) getApplication()).getmAppComponent().inject(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -79,11 +79,11 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
 
         ((CommentViewHolder) holder).commentTimeTextView.setText(commentItem.getCommentTime());
         SpannableConfiguration spannableConfiguration = SpannableConfiguration.builder(mContext).linkResolver((view, link) -> {
-            if (link.startsWith("/u/")) {
+            if (link.startsWith("/u/") || link.startsWith("u/")) {
                 Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
                 intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, link.substring(3));
                 mContext.startActivity(intent);
-            } else if (link.startsWith("/r/")) {
+            } else if (link.startsWith("/r/") || link.startsWith("r/")) {
                 Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
                 intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, link.substring(3));
                 mContext.startActivity(intent);

@@ -83,7 +83,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_post, container, false);
 
-        ((Infinity) getActivity().getApplication()).getmNetworkComponent().inject(this);
+        ((Infinity) getActivity().getApplication()).getmAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
 
@@ -91,14 +91,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mPostRecyclerView.setLayoutManager(mLinearLayoutManager);
-        /*FloatingActionButton fab = rootView.findViewById(R.id.fab_post_fragment);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
 
         mPostType = getArguments().getInt(POST_TYPE_KEY);
 

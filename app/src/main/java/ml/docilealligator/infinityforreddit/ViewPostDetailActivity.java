@@ -133,7 +133,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
         EventBus.getDefault().register(this);
 
-        ((Infinity) getApplication()).getmNetworkComponent().inject(this);
+        ((Infinity) getApplication()).getmAppComponent().inject(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -557,11 +557,11 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
     private SpannableConfiguration getCustomSpannableConfiguration() {
         return SpannableConfiguration.builder(this).linkResolver((view, link) -> {
-            if(link.startsWith("/u/")) {
+            if(link.startsWith("/u/") || link.startsWith("u/")) {
                 Intent intent = new Intent(ViewPostDetailActivity.this, ViewUserDetailActivity.class);
                 intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, link.substring(3));
                 startActivity(intent);
-            } else if(link.startsWith("/r/")) {
+            } else if(link.startsWith("/r/") || link.startsWith("r/")) {
                 Intent intent = new Intent(ViewPostDetailActivity.this, ViewSubredditDetailActivity.class);
                 intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, link.substring(3));
                 startActivity(intent);

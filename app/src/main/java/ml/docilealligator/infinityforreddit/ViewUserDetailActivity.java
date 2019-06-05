@@ -76,7 +76,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        ((Infinity) getApplication()).getmNetworkComponent().inject(this);
+        ((Infinity) getApplication()).getmAppComponent().inject(this);
 
         //Get status bar height
         int statusBarHeight = 0;

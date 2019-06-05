@@ -79,7 +79,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_subreddit_detail);
         ButterKnife.bind(this);
 
-        ((Infinity) getApplication()).getmNetworkComponent().inject(this);
+        ((Infinity) getApplication()).getmAppComponent().inject(this);
 
         //Get status bar height
         int statusBarHeight = 0;

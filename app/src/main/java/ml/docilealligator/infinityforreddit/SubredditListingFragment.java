@@ -69,7 +69,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_subreddit_listing, container, false);
 
-        ((Infinity) getActivity().getApplication()).getmNetworkComponent().inject(this);
+        ((Infinity) getActivity().getApplication()).getmAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
 

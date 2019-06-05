@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        ((Infinity) getApplication()).getmNetworkComponent().inject(this);
+        ((Infinity) getApplication()).getmAppComponent().inject(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

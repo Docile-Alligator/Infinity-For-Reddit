@@ -14,10 +14,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 @Module
-class NetworkModule {
+class AppModule {
     Application mApplication;
 
-    public NetworkModule(Application application) {
+    public AppModule(Application application) {
         mApplication = application;
     }
 

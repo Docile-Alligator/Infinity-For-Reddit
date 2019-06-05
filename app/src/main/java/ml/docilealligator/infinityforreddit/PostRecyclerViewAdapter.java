@@ -238,7 +238,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                                 .into(((DataViewHolder) holder).subredditIconGifImageView);
                     }
 
-                    ((DataViewHolder) holder).subredditNameTextView.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
+                    ((DataViewHolder) holder).subredditNameTextView.setTextColor(mContext.getResources().getColor(R.color.textColorPrimaryDark));
                     ((DataViewHolder) holder).subredditNameTextView.setText(author);
 
                     ((DataViewHolder) holder).subredditIconNameLinearLayout.setOnClickListener(view -> {

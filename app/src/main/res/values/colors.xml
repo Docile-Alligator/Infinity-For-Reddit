@@ -14,7 +14,7 @@
 
     <color name="textColorPrimaryDark">@color/colorPrimaryDark</color>
 
-    <color name="circularProgressBarBackground">#242424</color>
+    <color name="circularProgressBarBackground">#FFFFFF</color>
 
     <color name="dividerColor">#E0E0E0</color>
 
