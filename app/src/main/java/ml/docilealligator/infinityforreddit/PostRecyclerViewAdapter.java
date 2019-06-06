@@ -312,6 +312,9 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         break;
                     case Post.LINK_TYPE:
                         ((DataViewHolder) holder).typeChip.setText("LINK");
+                        ((DataViewHolder) holder).linkTextView.setVisibility(View.VISIBLE);
+                        String domain = Uri.parse(post.getUrl()).getHost();
+                        ((DataViewHolder) holder).linkTextView.setText(domain);
 
                         ((DataViewHolder) holder).imageView.setOnClickListener(view -> {
                             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
@@ -360,7 +363,10 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         break;
                     case Post.NO_PREVIEW_LINK_TYPE:
                         ((DataViewHolder) holder).typeChip.setText("LINK");
-                        final String noPreviewLinkUrl = post.getUrl();
+                        String noPreviewLinkUrl = post.getUrl();
+                        ((DataViewHolder) holder).linkTextView.setVisibility(View.VISIBLE);
+                        String noPreviewLinkDomain = Uri.parse(noPreviewLinkUrl).getHost();
+                        ((DataViewHolder) holder).linkTextView.setText(noPreviewLinkDomain);
                         ((DataViewHolder) holder).noPreviewLinkImageView.setVisibility(View.VISIBLE);
                         ((DataViewHolder) holder).noPreviewLinkImageView.setOnClickListener(view -> {
                             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
@@ -569,27 +575,28 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     }
 
     class DataViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.card_view_view_post_detail) MaterialCardView cardView;
-        @BindView(R.id.subreddit_icon_name_linear_layout_view_item_best_post) LinearLayout subredditIconNameLinearLayout;
-        @BindView(R.id.subreddit_icon_gif_image_view_best_post_item) AspectRatioGifImageView subredditIconGifImageView;
-        @BindView(R.id.subreddit_text_view_best_post_item) TextView subredditNameTextView;
-        @BindView(R.id.stickied_post_image_view_best_post_item) ImageView stickiedPostImageView;
-        @BindView(R.id.post_time_text_view_best_post_item) TextView postTimeTextView;
-        @BindView(R.id.title_text_view_best_post_item) TextView titleTextView;
-        @BindView(R.id.type_text_view_item_best_post) Chip typeChip;
-        @BindView(R.id.gilded_image_view_item_best_post) ImageView gildedImageView;
-        @BindView(R.id.gilded_number_text_view_item_best_post) TextView gildedNumberTextView;
-        @BindView(R.id.crosspost_image_view_item_best_post) ImageView crosspostImageView;
-        @BindView(R.id.nsfw_text_view_item_best_post) Chip nsfwChip;
-        @BindView(R.id.image_view_wrapper_item_best_post) RelativeLayout relativeLayout;
-        @BindView(R.id.progress_bar_best_post_item) ProgressBar progressBar;
+        @BindView(R.id.card_view_item_post) MaterialCardView cardView;
+        @BindView(R.id.subreddit_icon_name_linear_layout_view_item_post) LinearLayout subredditIconNameLinearLayout;
+        @BindView(R.id.subreddit_icon_gif_image_view_item_post) AspectRatioGifImageView subredditIconGifImageView;
+        @BindView(R.id.subreddit_text_view_item_post) TextView subredditNameTextView;
+        @BindView(R.id.stickied_post_image_view_item_post) ImageView stickiedPostImageView;
+        @BindView(R.id.post_time_text_view_best_item_post) TextView postTimeTextView;
+        @BindView(R.id.title_text_view_best_item_post) TextView titleTextView;
+        @BindView(R.id.type_text_view_item_post) Chip typeChip;
+        @BindView(R.id.gilded_image_view_item_post) ImageView gildedImageView;
+        @BindView(R.id.gilded_number_text_view_item_post) TextView gildedNumberTextView;
+        @BindView(R.id.crosspost_image_view_item_post) ImageView crosspostImageView;
+        @BindView(R.id.nsfw_text_view_item_post) Chip nsfwChip;
+        @BindView(R.id.link_text_view_item_post) TextView linkTextView;
+        @BindView(R.id.image_view_wrapper_item_post) RelativeLayout relativeLayout;
+        @BindView(R.id.progress_bar_item_post) ProgressBar progressBar;
         @BindView(R.id.image_view_best_post_item) AspectRatioGifImageView imageView;
-        @BindView(R.id.load_image_error_relative_layout_best_post_item) RelativeLayout errorRelativeLayout;
-        @BindView(R.id.image_view_no_preview_link_best_post_item) ImageView noPreviewLinkImageView;
-        @BindView(R.id.plus_button_item_best_post) ImageView upvoteButton;
-        @BindView(R.id.score_text_view_item_best_post) TextView scoreTextView;
-        @BindView(R.id.minus_button_item_best_post) ImageView downvoteButton;
-        @BindView(R.id.share_button_item_best_post) ImageView shareButton;
+        @BindView(R.id.load_image_error_relative_layout_item_post) RelativeLayout errorRelativeLayout;
+        @BindView(R.id.image_view_no_preview_link_item_post) ImageView noPreviewLinkImageView;
+        @BindView(R.id.plus_button_item_post) ImageView upvoteButton;
+        @BindView(R.id.score_text_view_item_post) TextView scoreTextView;
+        @BindView(R.id.minus_button_item_post) ImageView downvoteButton;
+        @BindView(R.id.share_button_item_post) ImageView shareButton;
 
         DataViewHolder(View itemView) {
             super(itemView);
@@ -633,6 +640,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
             ((DataViewHolder) holder).gildedNumberTextView.setVisibility(View.GONE);
             ((DataViewHolder) holder).crosspostImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).nsfwChip.setVisibility(View.GONE);
+            ((DataViewHolder) holder).linkTextView.setVisibility(View.GONE);
             ((DataViewHolder) holder).progressBar.setVisibility(View.GONE);
             ((DataViewHolder) holder).imageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
