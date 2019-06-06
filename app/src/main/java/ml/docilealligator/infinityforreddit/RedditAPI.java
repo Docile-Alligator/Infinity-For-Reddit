@@ -33,6 +33,9 @@ public interface RedditAPI {
     @POST("api/vote")
     Call<String> voteThing(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
+    @GET("comments/{id}.json?raw_json=1")
+    Call<String> getPost(@Path("id") String id, @HeaderMap Map<String, String> headers);
+
     @GET("best?raw_json=1")
     Call<String> getBestPosts(@Query("after") String lastItem, @HeaderMap Map<String, String> headers);
 

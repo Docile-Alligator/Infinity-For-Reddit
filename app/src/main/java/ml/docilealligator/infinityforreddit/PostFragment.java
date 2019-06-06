@@ -180,10 +180,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     }
 
     @Subscribe
-    public void onVoteEvent(VoteEventToPostList event) {
+    public void onPostUpdateEvent(PostUpdateEventToPostList event) {
         Post post = mAdapter.getCurrentList().get(event.positionInList);
         if(post != null) {
-            post.setVoteType(event.voteType);
+            post.setTitle(event.post.getTitle());
+            post.setVoteType(event.post.getVoteType());
+            post.setScore(event.post.getScore());
             mAdapter.notifyItemChanged(event.positionInList);
         }
     }

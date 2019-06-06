@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.ColorFilter;
@@ -7,9 +8,9 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -46,6 +47,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -66,18 +68,25 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     static final String EXTRA_POST_DATA = "EPD";
     static final String EXTRA_POST_LIST_POSITION = "EPLI";
 
-    private RequestManager glide;
+    private RequestManager mGlide;
+    private Locale mLocale;
 
     private int orientation;
-    private static String ORIENTATION_STATE = "OS";
+    private static final String ORIENTATION_STATE = "OS";
     private static final String POST_STATE = "PS";
+    private static final String IS_REFRESHING_STATE = "IRS";
 
     private Post mPost;
     private int postListPosition = -1;
 
     private boolean isLoadingMoreChildren = false;
+    private boolean isRefreshing = false;
+    private ArrayList<CommentData> mCommentsData;
     private ArrayList<String> children;
     private int mChildrenStartingIndex = 0;
+
+    private CommentMultiLevelRecyclerViewAdapter mAdapter;
+    private LoadSubredditIconAsyncTask mLoadSubredditIconAsyncTask;
 
     @BindView(R.id.coordinator_layout_view_post_detail) CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.nested_scroll_view_view_post_detail_activity) NestedScrollView mNestedScrollView;
@@ -85,6 +94,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     @BindView(R.id.subreddit_icon_circle_image_view_view_post_detail) AspectRatioGifImageView mSubredditIconGifImageView;
     @BindView(R.id.subreddit_text_view_view_post_detail) TextView mSubredditTextView;
     @BindView(R.id.post_time_text_view_view_post_detail) TextView mPostTimeTextView;
+    @BindView(R.id.title_text_view_view_post_detail) TextView mTitleTextView;
     @BindView(R.id.content_markdown_view_view_post_detail) MarkwonView mContentMarkdownView;
     @BindView(R.id.type_text_view_view_post_detail) Chip mTypeChip;
     @BindView(R.id.gilded_image_view_view_post_detail) ImageView mGildedImageView;
@@ -111,10 +121,6 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     @BindView(R.id.no_comment_wrapper_linear_layout_view_post_detail) LinearLayout mNoCommentWrapperLinearLayout;
     @BindView(R.id.no_comment_image_view_view_post_detail) ImageView mNoCommentImageView;
 
-    private CommentMultiLevelRecyclerViewAdapter mAdapter;
-    private LinearLayoutManager mLayoutManager;
-    private LoadSubredditIconAsyncTask mLoadSubredditIconAsyncTask;
-
     @Inject @Named("no_oauth")
     Retrofit mRetrofit;
 
@@ -137,34 +143,53 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mGlide = Glide.with(this);
+        mLocale = getResources().getConfiguration().locale;
+
         if(savedInstanceState == null) {
             orientation = getResources().getConfiguration().orientation;
             mPost = getIntent().getExtras().getParcelable(EXTRA_POST_DATA);
         } else {
             orientation = savedInstanceState.getInt(ORIENTATION_STATE);
             mPost = savedInstanceState.getParcelable(POST_STATE);
+            isRefreshing = savedInstanceState.getBoolean(IS_REFRESHING_STATE);
+
+            if(isRefreshing) {
+                isRefreshing = false;
+                refresh();
+            }
         }
 
         if(getIntent().hasExtra(EXTRA_POST_LIST_POSITION)) {
             postListPosition = getIntent().getExtras().getInt(EXTRA_POST_LIST_POSITION);
         }
 
-        TextView titleTextView = findViewById(R.id.title_text_view_view_post_detail);
-        titleTextView.setText(mPost.getTitle());
+        mCommentsData = new ArrayList<>();
 
-        glide = Glide.with(this);
+        mRecyclerView.setNestedScrollingEnabled(false);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
+        fetchComment();
+        bindView();
+        initializeButtonOnClickListener();
+    }
+
+    private void bindView() {
+        mTitleTextView.setText(mPost.getTitle());
+
         if(mPost.getSubredditIconUrl() == null) {
             mLoadSubredditIconAsyncTask = new LoadSubredditIconAsyncTask(
                     SubredditRoomDatabase.getDatabase(this).subredditDao(), mPost.getSubredditNamePrefixed().substring(2),
                     iconImageUrl -> {
                         if(!iconImageUrl.equals("")) {
-                            glide.load(iconImageUrl)
+                            mGlide.load(iconImageUrl)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                    .error(glide.load(R.drawable.subreddit_default_icon)
+                                    .error(mGlide.load(R.drawable.subreddit_default_icon)
                                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                                     .into(mSubredditIconGifImageView);
                         } else {
-                            glide.load(R.drawable.subreddit_default_icon)
+                            mGlide.load(R.drawable.subreddit_default_icon)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                     .into(mSubredditIconGifImageView);
                         }
@@ -173,13 +198,13 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     });
             mLoadSubredditIconAsyncTask.execute();
         } else if(!mPost.getSubredditIconUrl().equals("")) {
-            glide.load(mPost.getSubredditIconUrl())
+            mGlide.load(mPost.getSubredditIconUrl())
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                    .error(glide.load(R.drawable.subreddit_default_icon)
+                    .error(mGlide.load(R.drawable.subreddit_default_icon)
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                     .into(mSubredditIconGifImageView);
         } else {
-            glide.load(R.drawable.subreddit_default_icon)
+            mGlide.load(R.drawable.subreddit_default_icon)
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                     .into(mSubredditIconGifImageView);
         }
@@ -193,6 +218,9 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 //Downvote
                 mDownvoteButton.setColorFilter(ContextCompat.getColor(this, R.color.minusButtonColor), PorterDuff.Mode.SRC_IN);
                 break;
+            case 0:
+                mUpvoteButton.clearColorFilter();
+                mDownvoteButton.clearColorFilter();
         }
 
         if(mPost.getPostType() != Post.TEXT_TYPE && mPost.getPostType() != Post.NO_PREVIEW_LINK_TYPE) {
@@ -200,30 +228,22 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             mImageView.setVisibility(View.VISIBLE);
             mImageView.setRatio((float) mPost.getPreviewHeight() / (float) mPost.getPreviewWidth());
             loadImage();
+        } else {
+            mRelativeLayout.setVisibility(View.GONE);
+            mImageView.setVisibility(View.GONE);
         }
 
         if(mPost.isCrosspost()) {
             mCrosspostImageView.setVisibility(View.VISIBLE);
         }
 
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setNestedScrollingEnabled(false);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-
         mSubredditTextView.setText(mPost.getSubredditNamePrefixed());
-        mSubredditIconNameLinearLayout.setOnClickListener(view -> {
-            Intent intent = new Intent(ViewPostDetailActivity.this, ViewSubredditDetailActivity.class);
-            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
-                    mPost.getSubredditNamePrefixed().substring(2));
-            startActivity(intent);
-        });
 
         mPostTimeTextView.setText(mPost.getPostTime());
 
         if(mPost.getGilded() > 0) {
             mGildedImageView.setVisibility(View.VISIBLE);
-            glide.load(R.drawable.gold).into(mGildedImageView);
+            mGlide.load(R.drawable.gold).into(mGildedImageView);
             mGildedNumberTextView.setVisibility(View.VISIBLE);
             String gildedNumber = getResources().getString(R.string.gilded, mPost.getGilded());
             mGildedNumberTextView.setText(gildedNumber);
@@ -231,16 +251,12 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
         if(mPost.isNSFW()) {
             mNSFWChip.setVisibility(View.VISIBLE);
+        } else {
+            mNSFWChip.setVisibility(View.GONE);
         }
-        mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
 
-        mShareButton.setOnClickListener(view -> {
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType("text/plain");
-            String extraText = mPost.getTitle() + "\n" + mPost.getPermalink();
-            intent.putExtra(Intent.EXTRA_TEXT, extraText);
-            startActivity(Intent.createChooser(intent, "Share"));
-        });
+        String scoreWithVote = Integer.toString(mPost.getScore() + mPost.getVoteType());
+        mScoreTextView.setText(scoreWithVote);
 
         switch (mPost.getPostType()) {
             case Post.IMAGE_TYPE:
@@ -329,8 +345,23 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
 
-        fetchComment();
+    private void initializeButtonOnClickListener() {
+        mSubredditIconNameLinearLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(ViewPostDetailActivity.this, ViewSubredditDetailActivity.class);
+            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
+                    mPost.getSubredditNamePrefixed().substring(2));
+            startActivity(intent);
+        });
+
+        mShareButton.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            String extraText = mPost.getTitle() + "\n" + mPost.getPermalink();
+            intent.putExtra(Intent.EXTRA_TEXT, extraText);
+            startActivity(Intent.createChooser(intent, "Share"));
+        });
 
         mUpvoteButton.setOnClickListener(view -> {
             ColorFilter previousUpvoteButtonColorFilter = mUpvoteButton.getColorFilter();
@@ -355,7 +386,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
 
             if(postListPosition != -1) {
-                EventBus.getDefault().post(new VoteEventToPostList(postListPosition, mPost.getVoteType()));
+                EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
             }
 
             VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingWithoutPositionListener() {
@@ -373,7 +404,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
 
                     if(postListPosition != -1) {
-                        EventBus.getDefault().post(new VoteEventToPostList(postListPosition, mPost.getVoteType()));
+                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                     }
                 }
 
@@ -386,7 +417,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     mDownvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
 
                     if(postListPosition != -1) {
-                        EventBus.getDefault().post(new VoteEventToPostList(postListPosition, mPost.getVoteType()));
+                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                     }
                 }
             }, mPost.getFullName(), newVoteType);
@@ -415,7 +446,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
 
             if(postListPosition != -1) {
-                EventBus.getDefault().post(new VoteEventToPostList(postListPosition, mPost.getVoteType()));
+                EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
             }
 
             VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingWithoutPositionListener() {
@@ -433,7 +464,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
 
                     if(postListPosition != -1) {
-                        EventBus.getDefault().post(new VoteEventToPostList(postListPosition, mPost.getVoteType()));
+                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                     }
                 }
 
@@ -446,7 +477,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     mDownvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
 
                     if(postListPosition != -1) {
-                        EventBus.getDefault().post(new VoteEventToPostList(postListPosition, mPost.getVoteType()));
+                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                     }
                 }
             }, mPost.getFullName(), newVoteType);
@@ -454,30 +485,32 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     }
 
     private void fetchComment() {
+        mCommentCardView.setVisibility(View.GONE);
         mCommentProgressbar.setVisibility(View.VISIBLE);
         mNoCommentWrapperLinearLayout.setVisibility(View.GONE);
+
         FetchComment.fetchComment(mRetrofit, mPost.getSubredditNamePrefixed(), mPost.getId(),
-                null, getResources().getConfiguration().locale, true, 0, new FetchComment.FetchCommentListener() {
+                null, mLocale, true, 0, new FetchComment.FetchCommentListener() {
                     @Override
-                    public void onFetchCommentSuccess(List<?> commentData,
+                    public void onFetchCommentSuccess(List<?> commentsData,
                                                       String parentId, ArrayList<String> children) {
                         ViewPostDetailActivity.this.children = children;
                         mCommentProgressbar.setVisibility(View.GONE);
-                        if (commentData.size() > 0) {
-                            mAdapter = new CommentMultiLevelRecyclerViewAdapter(
-                                    ViewPostDetailActivity.this, mRetrofit, mOauthRetrofit,
-                                    mSharedPreferences, (ArrayList<CommentData>) commentData,
-                                    mRecyclerView, mPost.getSubredditNamePrefixed(),
-                                    mPost.getId(), getResources().getConfiguration().locale);
-                            mRecyclerView.removeItemClickListeners();
-                            mRecyclerView.setToggleItemOnClick(false);
-                            mRecyclerView.setAccordion(false);
-                            mRecyclerView.setAdapter(mAdapter);
-                            mCommentCardView.setVisibility(View.VISIBLE);
+                        mCommentsData.addAll((ArrayList<CommentData>) commentsData);
 
-                            mNestedScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-                                @Override
-                                public void onScrollChanged() {
+                        if (mCommentsData.size() > 0) {
+                            if(mAdapter == null) {
+                                mAdapter = new CommentMultiLevelRecyclerViewAdapter(
+                                        ViewPostDetailActivity.this, mRetrofit, mOauthRetrofit,
+                                        mSharedPreferences, mCommentsData,
+                                        mRecyclerView, mPost.getSubredditNamePrefixed(),
+                                        mPost.getId(), mLocale);
+                                mRecyclerView.setAdapter(mAdapter);
+                                mRecyclerView.removeItemClickListeners();
+                                mRecyclerView.setToggleItemOnClick(false);
+                                mRecyclerView.setAccordion(false);
+
+                                mNestedScrollView.getViewTreeObserver().addOnScrollChangedListener(() -> {
                                     if(!isLoadingMoreChildren) {
                                         View view = mNestedScrollView.getChildAt(mNestedScrollView.getChildCount() - 1);
                                         int diff = view.getBottom() - (mNestedScrollView.getHeight() +
@@ -486,11 +519,15 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                                             fetchMoreComment(mChildrenStartingIndex);
                                         }
                                     }
-                                }
-                            });
+                                });
+                            } else {
+                                mAdapter.notifyDataSetChanged();
+                            }
+
+                            mCommentCardView.setVisibility(View.VISIBLE);
                         } else {
                             mNoCommentWrapperLinearLayout.setVisibility(View.VISIBLE);
-                            glide.load(R.drawable.no_comment_indicator).into(mNoCommentImageView);
+                            mGlide.load(R.drawable.no_comment_indicator).into(mNoCommentImageView);
                         }
                     }
 
@@ -505,11 +542,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private void fetchMoreComment(int startingIndex) {
         isLoadingMoreChildren = true;
         FetchComment.fetchMoreComment(mRetrofit, mPost.getSubredditNamePrefixed(), mPost.getFullName(),
-                children, startingIndex, getResources().getConfiguration().locale,
-                new FetchComment.FetchMoreCommentListener() {
+                children, startingIndex, mLocale, new FetchComment.FetchMoreCommentListener() {
                     @Override
-                    public void onFetchMoreCommentSuccess(List<?> commentData, int childrenStartingIndex) {
-                        mAdapter.addComments((ArrayList<CommentData>) commentData);
+                    public void onFetchMoreCommentSuccess(List<?> commentsData, int childrenStartingIndex) {
+                        mAdapter.addComments((ArrayList<CommentData>) commentsData);
                         mChildrenStartingIndex = childrenStartingIndex;
                         isLoadingMoreChildren = false;
                     }
@@ -525,7 +561,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     }
 
     private void loadImage() {
-        RequestBuilder imageRequestBuilder = glide.load(mPost.getPreviewUrl())
+        RequestBuilder imageRequestBuilder = mGlide.load(mPost.getPreviewUrl())
                 .apply(new RequestOptions().override(mPost.getPreviewWidth(), mPost.getPreviewHeight()))
                 .listener(new RequestListener<Drawable>() {
             @Override
@@ -582,8 +618,41 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         snackbar.show();
     }
 
+    private void refresh() {
+        if(!isRefreshing) {
+            isRefreshing = true;
+
+            if(mAdapter != null && mCommentsData != null) {
+                int size = mCommentsData.size();
+                mCommentsData.clear();
+                mAdapter.notifyItemRangeRemoved(0, size);
+            }
+
+            fetchComment();
+
+            String accessToken = getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
+                    .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
+            FetchPost.fetchPost(mOauthRetrofit, mPost.getId(), accessToken, mLocale,
+                    new FetchPost.FetchPostListener() {
+                        @Override
+                        public void fetchPostSuccess(Post post) {
+                            mPost = post;
+                            bindView();
+                            EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                            isRefreshing = false;
+                        }
+
+                        @Override
+                        public void fetchPostFailed() {
+                            Snackbar.make(mCoordinatorLayout, R.string.refresh_post_failed, Snackbar.LENGTH_SHORT);
+                            isRefreshing = false;
+                        }
+                    });
+        }
+    }
+
     @Subscribe
-    public void onVoteEvent(VoteEventToDetailActivity event) {
+    public void onPostUpdateEvent(PostUpdateEventToDetailActivity event) {
         if(mPost.getId().equals(event.postId)) {
             mPost.setVoteType(event.voteType);
             mScoreTextView.setText(Integer.toString(mPost.getScore() + event.voteType));
@@ -591,8 +660,17 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.view_post_detail_activity, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_refresh_view_post_detail_activity:
+                refresh();
+                return true;
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -605,6 +683,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putInt(ORIENTATION_STATE, orientation);
         outState.putParcelable(POST_STATE, mPost);
+        outState.putBoolean(IS_REFRESHING_STATE, isRefreshing);
     }
 
     @Override

@@ -414,7 +414,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                             ((DataViewHolder) holder).downvoteButton.clearColorFilter();
                             ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
 
-                            EventBus.getDefault().post(new VoteEventToDetailActivity(post.getId(), post.getVoteType()));
+                            EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post.getId(), post.getVoteType()));
                         }
 
                         @Override
@@ -425,7 +425,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                             ((DataViewHolder) holder).upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                             ((DataViewHolder) holder).downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
 
-                            EventBus.getDefault().post(new VoteEventToDetailActivity(post.getId(), post.getVoteType()));
+                            EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post.getId(), post.getVoteType()));
                         }
                     }, id, newVoteType, holder.getAdapterPosition());
                 });
@@ -469,7 +469,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                             ((DataViewHolder) holder).upvoteButton.clearColorFilter();
                             ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
 
-                            EventBus.getDefault().post(new VoteEventToDetailActivity(post.getId(), post.getVoteType()));
+                            EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post.getId(), post.getVoteType()));
                         }
 
                         @Override
@@ -480,7 +480,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                             ((DataViewHolder) holder).upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                             ((DataViewHolder) holder).downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
 
-                            EventBus.getDefault().post(new VoteEventToDetailActivity(post.getId(), post.getVoteType()));
+                            EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post.getId(), post.getVoteType()));
                         }
                     }, id, newVoteType, holder.getAdapterPosition());
                 });

@@ -26,6 +26,7 @@
     <string name="comments">Comments</string>
     <string name="no_comments_yet">No comments yet. Write a comment?</string>
     <string name="vote_failed">Vote failed</string>
+    <string name="refresh_post_failed">Error refreshing the post</string>
 
     <string name="nsfw">NSFW</string>
     <string name="karma_info">Karma: %1$d</string>

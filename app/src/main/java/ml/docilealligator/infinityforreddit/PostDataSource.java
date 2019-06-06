@@ -130,10 +130,10 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePost(response.body(), locale,
-                            new ParsePost.ParsePostListener() {
+                    ParsePost.parsePosts(response.body(), locale,
+                            new ParsePost.ParsePostsListingListener() {
                                 @Override
-                                public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                                     if(newPosts.size() == 0) {
                                         onPostFetchedCallback.noPost();
                                     } else {
@@ -145,7 +145,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                                 }
 
                                 @Override
-                                public void onParsePostFail() {
+                                public void onParsePostsListingFail() {
                                     Log.i("Post fetch error", "Error parsing data");
                                     initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                                 }
@@ -172,15 +172,15 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParsePost.parsePost(response.body(), locale, new ParsePost.ParsePostListener() {
+                    ParsePost.parsePosts(response.body(), locale, new ParsePost.ParsePostsListingListener() {
                         @Override
-                        public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
+                        public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                             callback.onResult(newPosts, lastItem);
                             paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                         }
 
                         @Override
-                        public void onParsePostFail() {
+                        public void onParsePostsListingFail() {
                             Log.i("Best post", "Error parsing data");
                             paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                         }
@@ -206,10 +206,10 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParsePost.parsePost(response.body(), locale,
-                            new ParsePost.ParsePostListener() {
+                    ParsePost.parsePosts(response.body(), locale,
+                            new ParsePost.ParsePostsListingListener() {
                                 @Override
-                                public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                                     if(newPosts.size() == 0) {
                                         onPostFetchedCallback.noPost();
                                     } else {
@@ -221,7 +221,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                                 }
 
                                 @Override
-                                public void onParsePostFail() {
+                                public void onParsePostsListingFail() {
                                     Log.i("Post fetch error", "Error parsing data");
                                     initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                                 }
@@ -247,15 +247,15 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParsePost.parsePost(response.body(), locale, new ParsePost.ParsePostListener() {
+                    ParsePost.parsePosts(response.body(), locale, new ParsePost.ParsePostsListingListener() {
                         @Override
-                        public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
+                        public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                             callback.onResult(newPosts, lastItem);
                             paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                         }
 
                         @Override
-                        public void onParsePostFail() {
+                        public void onParsePostsListingFail() {
                             Log.i("Best post", "Error parsing data");
                             paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                         }
@@ -281,10 +281,10 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParsePost.parsePost(response.body(), locale,
-                            new ParsePost.ParsePostListener() {
+                    ParsePost.parsePosts(response.body(), locale,
+                            new ParsePost.ParsePostsListingListener() {
                                 @Override
-                                public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                                     if(newPosts.size() == 0 && lastItem.equals("null")) {
                                         callback.onResult(newPosts, null, lastItem);
                                         initialLoadStateLiveData.postValue(NetworkState.LOADED);
@@ -299,7 +299,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                                 }
 
                                 @Override
-                                public void onParsePostFail() {
+                                public void onParsePostsListingFail() {
                                     Log.i("Post fetch error", "Error parsing data");
                                     initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                                 }
@@ -325,15 +325,15 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParsePost.parsePost(response.body(), locale, new ParsePost.ParsePostListener() {
+                    ParsePost.parsePosts(response.body(), locale, new ParsePost.ParsePostsListingListener() {
                         @Override
-                        public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
+                        public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                             callback.onResult(newPosts, lastItem);
                             paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                         }
 
                         @Override
-                        public void onParsePostFail() {
+                        public void onParsePostsListingFail() {
                             Log.i("Best post", "Error parsing data");
                             paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                         }
@@ -359,10 +359,10 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParsePost.parsePost(response.body(), locale,
-                            new ParsePost.ParsePostListener() {
+                    ParsePost.parsePosts(response.body(), locale,
+                            new ParsePost.ParsePostsListingListener() {
                                 @Override
-                                public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                                     if(newPosts.size() == 0) {
                                         onPostFetchedCallback.noPost();
                                     } else {
@@ -374,7 +374,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                                 }
 
                                 @Override
-                                public void onParsePostFail() {
+                                public void onParsePostsListingFail() {
                                     Log.i("Post fetch error", "Error parsing data");
                                     initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                                 }
@@ -400,15 +400,15 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(Call<String> call, retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParsePost.parsePost(response.body(), locale, new ParsePost.ParsePostListener() {
+                    ParsePost.parsePosts(response.body(), locale, new ParsePost.ParsePostsListingListener() {
                         @Override
-                        public void onParsePostSuccess(ArrayList<Post> newPosts, String lastItem) {
+                        public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                             callback.onResult(newPosts, lastItem);
                             paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                         }
 
                         @Override
-                        public void onParsePostFail() {
+                        public void onParsePostsListingFail() {
                             Log.i("Best post", "Error parsing data");
                             paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                         }

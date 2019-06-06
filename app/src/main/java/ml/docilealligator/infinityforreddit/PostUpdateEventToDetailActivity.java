@@ -1,10 +1,10 @@
 package ml.docilealligator.infinityforreddit;
 
-public class VoteEventToDetailActivity {
+public class PostUpdateEventToDetailActivity {
     public final String postId;
     public final int voteType;
 
-    public VoteEventToDetailActivity(String postId, int voteType) {
+    public PostUpdateEventToDetailActivity(String postId, int voteType) {
         this.postId = postId;
         this.voteType = voteType;
     }

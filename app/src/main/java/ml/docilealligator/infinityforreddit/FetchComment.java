@@ -2,11 +2,12 @@ package ml.docilealligator.infinityforreddit;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import androidx.annotation.NonNull;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -14,13 +15,13 @@ import retrofit2.Retrofit;
 
 class FetchComment {
     interface FetchCommentListener {
-        void onFetchCommentSuccess(List<?> commentData,
+        void onFetchCommentSuccess(List<?> commentsData,
                                    String parentId, ArrayList<String> children);
         void onFetchCommentFailed();
     }
 
     interface FetchMoreCommentListener {
-        void onFetchMoreCommentSuccess(List<?> commentData, int childrenStartingIndex);
+        void onFetchMoreCommentSuccess(List<?> commentsData, int childrenStartingIndex);
         void onFetchMoreCommentFailed();
     }
 
@@ -106,9 +107,6 @@ class FetchComment {
                                                     public void onParseCommentSuccess(List<?> commentData, String parentId,
                                                                                       ArrayList<String> children) {
                                                         fetchMoreCommentListener.onFetchMoreCommentSuccess(commentData, startingIndex + 100);
-                                                        /*fetchMoreComment(retrofit, subredditNamePrefixed,
-                                                                mParentId, allChildren, finalStartingIndex,
-                                                                locale, fetchMoreCommentListener);*/
                                                     }
 
                                                     @Override
@@ -157,15 +155,15 @@ class FetchComment {
         fetchComment(retrofit, subredditNamePrefixed, article, comment, locale, isPost, parentDepth,
                 new FetchCommentListener() {
                     @Override
-                    public void onFetchCommentSuccess(List<?> commentData, String parentId, ArrayList<String> children) {
+                    public void onFetchCommentSuccess(List<?> commentsData, String parentId, ArrayList<String> children) {
                         if(children.size() != 0) {
                             fetchMoreComment(retrofit, subredditNamePrefixed, parentId, children,
                                     0, locale, new FetchMoreCommentListener() {
                                         @Override
-                                        public void onFetchMoreCommentSuccess(List<?> moreCommentData,
+                                        public void onFetchMoreCommentSuccess(List<?> commentsData,
                                                                               int childrenStartingIndex) {
-                                            ((ArrayList<CommentData>)commentData).addAll((ArrayList<CommentData>) moreCommentData);
-                                            fetchAllCommentListener.onFetchAllCommentSuccess(commentData);
+                                            ((ArrayList<CommentData>) commentsData).addAll((ArrayList<CommentData>) commentsData);
+                                            fetchAllCommentListener.onFetchAllCommentSuccess(commentsData);
                                         }
 
                                         @Override
@@ -175,7 +173,7 @@ class FetchComment {
                                         }
                                     });
                         } else {
-                            fetchAllCommentListener.onFetchAllCommentSuccess(commentData);
+                            fetchAllCommentListener.onFetchAllCommentSuccess(commentsData);
                         }
                     }
 
