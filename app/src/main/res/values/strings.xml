@@ -10,6 +10,8 @@
     <string name="action_download">Download</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_search">Search</string>
+    <string name="action_start_lazy_mode">Start Lazy Mode</string>
+    <string name="action_stop_lazy_mode">Stop Lazy Mode</string>
 
     <string name="tap_to_retry">Error loading image. Tap to retry.</string>
     <string name="load_posts_error">Error loading posts.\nTap to retry.</string>
@@ -62,5 +64,8 @@
 
     <string name="app_label">Infinity</string>
     <string name="search_hint">Search anything</string>
+
+    <string name="lazy_mode_start">Lazy Mode starts in %1$fs</string>
+    <string name="lazy_mode_stop">Lazy Mode stopped</string>
 
 </resources>

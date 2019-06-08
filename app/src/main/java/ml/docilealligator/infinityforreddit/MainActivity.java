@@ -12,10 +12,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.ferfalk.simplesearchview.SimpleSearchView;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import java.util.ArrayList;
 
@@ -30,15 +43,6 @@ import SubscribedSubredditDatabase.SubscribedSubredditViewModel;
 import SubscribedUserDatabase.SubscribedUserData;
 import SubscribedUserDatabase.SubscribedUserRoomDatabase;
 import SubscribedUserDatabase.SubscribedUserViewModel;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -50,10 +54,12 @@ public class MainActivity extends AppCompatActivity {
     private static final String FRAGMENT_OUT_STATE = "FOS";
     private static final String FETCH_USER_INFO_STATE = "FUIS";
     private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";
+    private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
     private static final int LOGIN_ACTIVITY_REQUEST_CODE = 0;
 
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
+    @BindView(R.id.collapsing_toolbar_layout_main_activity) CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.search_view_main_activity) SimpleSearchView simpleSearchView;
     @BindView(R.id.transparent_overlay_main_activity) View transparentOverlay;
     @BindView(R.id.subscribed_subreddit_recycler_view_main_activity) RecyclerView subscribedSubredditRecyclerView;
@@ -69,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Fragment mFragment;
     private RequestManager glide;
+    private AppBarLayout.LayoutParams params;
 
     private String mName;
     private String mProfileImageUrl;
@@ -77,8 +84,12 @@ public class MainActivity extends AppCompatActivity {
     private boolean mFetchUserInfoSuccess = false;
     private boolean mInsertSuccess = false;
 
+    private Menu mMenu;
+
     private SubscribedSubredditViewModel mSubscribedSubredditViewModel;
     private SubscribedUserViewModel mSubscribedUserViewModel;
+
+    private boolean isInLazyMode = false;
 
     @Inject
     @Named("user_info")
@@ -108,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
         transparentOverlay.setOnClickListener(view -> simpleSearchView.onBackPressed());
 
@@ -170,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
                 mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
                 mInsertSuccess = savedInstanceState.getBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE);
+                isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             }
 
             glide = Glide.with(this);
@@ -347,23 +361,49 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_activity, menu);
-
-        simpleSearchView.setMenuItem(menu.findItem(R.id.action_search_main_activity));
+        mMenu = menu;
+        simpleSearchView.setMenuItem(mMenu.findItem(R.id.action_search_main_activity));
+        MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);
+        if(isInLazyMode) {
+            lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
+            collapsingToolbarLayout.setLayoutParams(params);
+        } else {
+            lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+            collapsingToolbarLayout.setLayoutParams(params);
+        }
 
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_refresh_main_activity:
-                if (mFragment instanceof FragmentCommunicator) {
+        if (mFragment instanceof FragmentCommunicator) {
+            switch (item.getItemId()) {
+                case R.id.action_refresh_main_activity:
                     ((FragmentCommunicator) mFragment).refresh();
                     mFetchUserInfoSuccess = false;
                     mInsertSuccess = false;
                     loadUserData();
-                }
-                return true;
+                    return true;
+                case R.id.action_lazy_mode_main_activity:
+                    MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);
+                    if(isInLazyMode) {
+                        isInLazyMode = false;
+                        ((FragmentCommunicator) mFragment).stopLazyMode();
+                        lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                        collapsingToolbarLayout.setLayoutParams(params);
+                    } else {
+                        isInLazyMode = true;
+                        ((FragmentCommunicator) mFragment).startLazyMode();
+                        lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
+                        collapsingToolbarLayout.setLayoutParams(params);
+                    }
+                    return true;
+            }
         }
         return false;
     }
@@ -383,7 +423,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         if (mFragment != null) {
             getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE, mFragment);
@@ -391,5 +431,6 @@ public class MainActivity extends AppCompatActivity {
 
         outState.putBoolean(FETCH_USER_INFO_STATE, mFetchUserInfoSuccess);
         outState.putBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE, mInsertSuccess);
+        outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
     }
 }

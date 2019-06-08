@@ -4,18 +4,23 @@ package ml.docilealligator.infinityforreddit;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -39,6 +44,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     static final String NAME_KEY = "NK";
     static final String POST_TYPE_KEY = "PTK";
+    private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
     @BindView(R.id.coordinator_layout_post_fragment) CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.recycler_view_post_fragment) RecyclerView mPostRecyclerView;
@@ -51,10 +57,16 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     private String mName;
     private int mPostType;
+    private boolean isInLazyMode = false;
 
     private PostRecyclerViewAdapter mAdapter;
+    private RecyclerView.SmoothScroller smoothScroller;
 
     PostViewModel mPostViewModel;
+
+    private Window window;
+    private Handler lazyModeHandler;
+    private Runnable lazyModeRunnable;
 
     @Inject @Named("no_oauth")
     Retrofit mRetrofit;
@@ -88,6 +100,24 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         ButterKnife.bind(this, rootView);
 
         EventBus.getDefault().register(this);
+
+        lazyModeHandler = new Handler();
+
+        smoothScroller = new LinearSmoothScroller(getActivity()) {
+            @Override
+            protected int getVerticalSnapPreference() {
+                return LinearSmoothScroller.SNAP_TO_START;
+            }
+        };
+
+        window = getActivity().getWindow();
+
+        if(savedInstanceState != null) {
+            isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
+            if(isInLazyMode) {
+                startLazyMode();
+            }
+        }
 
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mPostRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -166,6 +196,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
+    }
+
+    @Override
     public void refresh() {
         mPostViewModel.refresh();
     }
@@ -179,6 +215,36 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
     }
 
+    @Override
+    public void startLazyMode() {
+        Toast.makeText(getActivity(), getString(R.string.lazy_mode_start, 2.5), Toast.LENGTH_SHORT).show();
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        isInLazyMode = true;
+        lazyModeRunnable = new Runnable() {
+            @Override
+            public void run() {
+                int nPosts = mAdapter.getItemCount();
+                int firstVisiblePosition = mLinearLayoutManager.findFirstVisibleItemPosition();
+                if(firstVisiblePosition != RecyclerView.NO_POSITION && nPosts > firstVisiblePosition) {
+                    smoothScroller.setTargetPosition(firstVisiblePosition + 1);
+                    mLinearLayoutManager.startSmoothScroll(smoothScroller);
+                }
+                if(isInLazyMode) {
+                    lazyModeHandler.postDelayed(this, 2500);
+                }
+            }
+        };
+        lazyModeHandler.postDelayed(lazyModeRunnable, 2500);
+    }
+
+    @Override
+    public void stopLazyMode() {
+        lazyModeHandler.removeCallbacks(lazyModeRunnable);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        isInLazyMode = false;
+        Toast.makeText(getActivity(), getString(R.string.lazy_mode_stop), Toast.LENGTH_SHORT).show();
+    }
+
     @Subscribe
     public void onPostUpdateEvent(PostUpdateEventToPostList event) {
         Post post = mAdapter.getCurrentList().get(event.positionInList);
@@ -188,6 +254,23 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             post.setScore(event.post.getScore());
             mAdapter.notifyItemChanged(event.positionInList);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(isInLazyMode) {
+            startLazyMode();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(isInLazyMode) {
+            stopLazyMode();
+        }
+        isInLazyMode = true;
     }
 
     @Override
