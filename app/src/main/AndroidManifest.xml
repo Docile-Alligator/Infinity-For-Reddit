@@ -40,11 +40,11 @@
         <activity
             android:name=".ViewImageActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.AppCompat.Transparent" />
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".ViewVideoActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.AppCompat.Transparent" />
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".ViewPostDetailActivity"
             android:parentActivityName=".MainActivity" />

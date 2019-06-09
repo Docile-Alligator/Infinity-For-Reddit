@@ -1,11 +1,14 @@
 package ml.docilealligator.infinityforreddit;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -53,11 +56,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @BindView(R.id.fetch_post_info_image_view_post_fragment) ImageView mFetchPostInfoImageView;
     @BindView(R.id.fetch_post_info_text_view_post_fragment) TextView mFetchPostInfoTextView;
 
+    private Activity activity;
     private LinearLayoutManager mLinearLayoutManager;
 
     private String mName;
     private int mPostType;
     private boolean isInLazyMode = false;
+    private boolean isLazyModePaused = false;
 
     private PostRecyclerViewAdapter mAdapter;
     private RecyclerView.SmoothScroller smoothScroller;
@@ -67,6 +72,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private Window window;
     private Handler lazyModeHandler;
     private Runnable lazyModeRunnable;
+    private CountDownTimer resumeLazyModeCountDownTimer;
 
     @Inject @Named("no_oauth")
     Retrofit mRetrofit;
@@ -95,7 +101,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_post, container, false);
 
-        ((Infinity) getActivity().getApplication()).getmAppComponent().inject(this);
+        ((Infinity) activity.getApplication()).getmAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
 
@@ -103,28 +109,64 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         lazyModeHandler = new Handler();
 
-        smoothScroller = new LinearSmoothScroller(getActivity()) {
+        smoothScroller = new LinearSmoothScroller(activity) {
             @Override
             protected int getVerticalSnapPreference() {
                 return LinearSmoothScroller.SNAP_TO_START;
             }
         };
 
-        window = getActivity().getWindow();
+        window = activity.getWindow();
+
+        lazyModeRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if(isInLazyMode && !isLazyModePaused) {
+                    int nPosts = mAdapter.getItemCount();
+                    int firstVisiblePosition = mLinearLayoutManager.findFirstVisibleItemPosition();
+                    if(firstVisiblePosition != RecyclerView.NO_POSITION && nPosts > firstVisiblePosition) {
+                        smoothScroller.setTargetPosition(firstVisiblePosition + 1);
+                        mLinearLayoutManager.startSmoothScroll(smoothScroller);
+                    }
+                }
+                lazyModeHandler.postDelayed(this, 2500);
+            }
+        };
+
+        resumeLazyModeCountDownTimer = new CountDownTimer(2500, 2500) {
+            @Override
+            public void onTick(long l) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                resumeLazyMode(true);
+            }
+        };
 
         if(savedInstanceState != null) {
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             if(isInLazyMode) {
-                startLazyMode();
+                resumeLazyMode(false);
             }
         }
 
-        mLinearLayoutManager = new LinearLayoutManager(getActivity());
+        mLinearLayoutManager = new LinearLayoutManager(activity);
         mPostRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mPostRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(isInLazyMode) {
+                    pauseLazyMode();
+                }
+                return false;
+            }
+        });
 
         mPostType = getArguments().getInt(POST_TYPE_KEY);
 
-        String accessToken = getActivity().getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
+        String accessToken = activity.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
                 .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
         PostViewModel.Factory factory;
@@ -132,7 +174,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if(mPostType != PostDataSource.TYPE_FRONT_PAGE) {
             mName = getArguments().getString(NAME_KEY);
 
-            mAdapter = new PostRecyclerViewAdapter(getActivity(), mRetrofit,
+            mAdapter = new PostRecyclerViewAdapter(activity, mRetrofit,
                     mSharedPreferences, mPostType, () -> mPostViewModel.retryLoadingMore());
 
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
@@ -151,7 +193,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 }
             });
         } else {
-            mAdapter = new PostRecyclerViewAdapter(getActivity(), mOauthRetrofit,
+            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit,
                     mSharedPreferences, mPostType, () -> mPostViewModel.retryLoadingMore());
 
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
@@ -196,6 +238,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.activity = (Activity) context;
+    }
+
+    @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
@@ -208,7 +256,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     private void showErrorView(int stringResId) {
         mProgressBar.setVisibility(View.GONE);
-        if(getActivity() != null && isAdded()) {
+        if(activity != null && isAdded()) {
             mFetchPostInfoLinearLayout.setVisibility(View.VISIBLE);
             mFetchPostInfoTextView.setText(stringResId);
             Glide.with(this).load(R.drawable.load_post_error_indicator).into(mFetchPostInfoImageView);
@@ -217,32 +265,46 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void startLazyMode() {
-        Toast.makeText(getActivity(), getString(R.string.lazy_mode_start, 2.5), Toast.LENGTH_SHORT).show();
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         isInLazyMode = true;
-        lazyModeRunnable = new Runnable() {
-            @Override
-            public void run() {
-                int nPosts = mAdapter.getItemCount();
-                int firstVisiblePosition = mLinearLayoutManager.findFirstVisibleItemPosition();
-                if(firstVisiblePosition != RecyclerView.NO_POSITION && nPosts > firstVisiblePosition) {
-                    smoothScroller.setTargetPosition(firstVisiblePosition + 1);
-                    mLinearLayoutManager.startSmoothScroll(smoothScroller);
-                }
-                if(isInLazyMode) {
-                    lazyModeHandler.postDelayed(this, 2500);
-                }
-            }
-        };
+        isLazyModePaused = false;
         lazyModeHandler.postDelayed(lazyModeRunnable, 2500);
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        Toast.makeText(activity, getString(R.string.lazy_mode_start, 2.5), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void stopLazyMode() {
-        lazyModeHandler.removeCallbacks(lazyModeRunnable);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         isInLazyMode = false;
-        Toast.makeText(getActivity(), getString(R.string.lazy_mode_stop), Toast.LENGTH_SHORT).show();
+        isLazyModePaused = false;
+        lazyModeHandler.removeCallbacks(lazyModeRunnable);
+        resumeLazyModeCountDownTimer.cancel();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        Toast.makeText(activity, getString(R.string.lazy_mode_stop), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void resumeLazyMode(boolean resumeNow) {
+        isInLazyMode = true;
+        isLazyModePaused = false;
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        if(resumeNow) {
+            lazyModeHandler.post(lazyModeRunnable);
+        } else {
+            lazyModeHandler.postDelayed(lazyModeRunnable, 2500);
+        }
+    }
+
+    @Override
+    public void pauseLazyMode() {
+        isInLazyMode = true;
+        if(isLazyModePaused) {
+            resumeLazyModeCountDownTimer.cancel();
+        } else {
+            isLazyModePaused = true;
+            lazyModeHandler.removeCallbacks(lazyModeRunnable);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+        resumeLazyModeCountDownTimer.start();
     }
 
     @Subscribe
@@ -260,7 +322,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void onStart() {
         super.onStart();
         if(isInLazyMode) {
-            startLazyMode();
+            resumeLazyMode(false);
         }
     }
 
@@ -268,9 +330,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void onStop() {
         super.onStop();
         if(isInLazyMode) {
-            stopLazyMode();
+            pauseLazyMode();
+            resumeLazyModeCountDownTimer.cancel();
         }
-        isInLazyMode = true;
     }
 
     @Override

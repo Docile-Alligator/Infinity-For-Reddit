@@ -65,7 +65,7 @@
     <string name="app_label">Infinity</string>
     <string name="search_hint">Search anything</string>
 
-    <string name="lazy_mode_start">Lazy Mode starts in %1$fs</string>
+    <string name="lazy_mode_start">Lazy Mode starts in %1$.1fs</string>
     <string name="lazy_mode_stop">Lazy Mode stopped</string>
 
 </resources>
