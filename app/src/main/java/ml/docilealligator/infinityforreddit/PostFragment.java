@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -59,8 +58,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private Activity activity;
     private LinearLayoutManager mLinearLayoutManager;
 
-    private String mName;
-    private int mPostType;
     private boolean isInLazyMode = false;
     private boolean isLazyModePaused = false;
 
@@ -154,31 +151,28 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         mLinearLayoutManager = new LinearLayoutManager(activity);
         mPostRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mPostRecyclerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(isInLazyMode) {
-                    pauseLazyMode();
-                }
-                return false;
+        mPostRecyclerView.setOnTouchListener((view, motionEvent) -> {
+            if(isInLazyMode) {
+                pauseLazyMode(true);
             }
+            return false;
         });
 
-        mPostType = getArguments().getInt(POST_TYPE_KEY);
+        int postType = getArguments().getInt(POST_TYPE_KEY);
 
         String accessToken = activity.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
                 .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
         PostViewModel.Factory factory;
 
-        if(mPostType != PostDataSource.TYPE_FRONT_PAGE) {
-            mName = getArguments().getString(NAME_KEY);
+        if(postType != PostDataSource.TYPE_FRONT_PAGE) {
+            String name = getArguments().getString(NAME_KEY);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mRetrofit,
-                    mSharedPreferences, mPostType, () -> mPostViewModel.retryLoadingMore());
+                    mSharedPreferences, postType, () -> mPostViewModel.retryLoadingMore());
 
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, mName, mPostType, new PostDataSource.OnPostFetchedCallback() {
+                    getResources().getConfiguration().locale, name, postType, new PostDataSource.OnPostFetchedCallback() {
                 @Override
                 public void hasPost() {
                     mFetchPostInfoLinearLayout.setVisibility(View.GONE);
@@ -194,10 +188,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             });
         } else {
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit,
-                    mSharedPreferences, mPostType, () -> mPostViewModel.retryLoadingMore());
+                    mSharedPreferences, postType, () -> mPostViewModel.retryLoadingMore());
 
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, mPostType, new PostDataSource.OnPostFetchedCallback() {
+                    getResources().getConfiguration().locale, postType, new PostDataSource.OnPostFetchedCallback() {
                 @Override
                 public void hasPost() {
                     mFetchPostInfoLinearLayout.setVisibility(View.GONE);
@@ -284,27 +278,28 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void resumeLazyMode(boolean resumeNow) {
-        isInLazyMode = true;
-        isLazyModePaused = false;
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        if(resumeNow) {
-            lazyModeHandler.post(lazyModeRunnable);
-        } else {
-            lazyModeHandler.postDelayed(lazyModeRunnable, 2500);
+        if(isInLazyMode) {
+            isLazyModePaused = false;
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            if(resumeNow) {
+                lazyModeHandler.post(lazyModeRunnable);
+            } else {
+                lazyModeHandler.postDelayed(lazyModeRunnable, 2500);
+            }
         }
     }
 
     @Override
-    public void pauseLazyMode() {
+    public void pauseLazyMode(boolean startTimer) {
+        resumeLazyModeCountDownTimer.cancel();
         isInLazyMode = true;
-        if(isLazyModePaused) {
-            resumeLazyModeCountDownTimer.cancel();
-        } else {
-            isLazyModePaused = true;
-            lazyModeHandler.removeCallbacks(lazyModeRunnable);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        isLazyModePaused = true;
+        lazyModeHandler.removeCallbacks(lazyModeRunnable);
+        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        if(startTimer) {
+            resumeLazyModeCountDownTimer.start();
         }
-        resumeLazyModeCountDownTimer.start();
     }
 
     @Subscribe
@@ -330,8 +325,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void onStop() {
         super.onStop();
         if(isInLazyMode) {
-            pauseLazyMode();
-            resumeLazyModeCountDownTimer.cancel();
+            pauseLazyMode(false);
         }
     }
 
