@@ -8,11 +8,13 @@
     tools:context=".ViewSubredditDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout_view_subreddit_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar_layout_view_subreddit_detail_activity"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:titleEnabled="false"

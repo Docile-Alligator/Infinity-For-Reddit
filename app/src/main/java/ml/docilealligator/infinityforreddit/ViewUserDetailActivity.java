@@ -104,10 +104,6 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
 
-        if(savedInstanceState != null) {
-            isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
-        }
-
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
         params.topMargin = statusBarHeight;
 
@@ -253,6 +249,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                 bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_USER);
                 mFragment.setArguments(bundle);
             }
+            isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_user_detail_activity, mFragment).commit();
         }
     }

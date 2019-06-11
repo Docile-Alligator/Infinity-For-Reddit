@@ -20,6 +20,8 @@ import androidx.lifecycle.ViewModelProviders;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -43,8 +45,11 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
     static final String EXTRA_SUBREDDIT_NAME_KEY = "ESN";
 
     private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
+    private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
     @BindView(R.id.coordinator_layout_view_subreddit_detail_activity) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.appbar_layout_view_subreddit_detail) AppBarLayout appBarLayout;
+    @BindView(R.id.collapsing_toolbar_layout_view_subreddit_detail_activity) CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.banner_image_view_view_subreddit_detail_activity) GifImageView bannerImageView;
     @BindView(R.id.icon_gif_image_view_view_subreddit_detail_activity) GifImageView iconGifImageView;
     @BindView(R.id.subscribe_subreddit_chip_view_subreddit_detail_activity) Chip subscribeSubredditChip;
@@ -54,9 +59,12 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
     @BindView(R.id.description_text_view_view_subreddit_detail_activity) TextView descriptionTextView;
 
     private boolean subscriptionReady = false;
+    private boolean isInLazyMode = false;
 
     private RequestManager glide;
     private Fragment mFragment;
+    private Menu mMenu;
+    private AppBarLayout.LayoutParams params;
 
     private SubscribedSubredditDao subscribedSubredditDao;
     private SubredditViewModel mSubredditViewModel;
@@ -80,6 +88,8 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         ((Infinity) getApplication()).getmAppComponent().inject(this);
+
+        params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
         //Get status bar height
         int statusBarHeight = 0;
@@ -245,6 +255,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
                 bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_SUBREDDIT);
                 mFragment.setArguments(bundle);
             }
+            isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
         }
     }
@@ -252,6 +263,18 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_subreddit_detail_activity, menu);
+        mMenu = menu;
+        MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity);
+        if(isInLazyMode) {
+            lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+            collapsingToolbarLayout.setLayoutParams(params);
+        } else {
+            lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
+                    AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
+            collapsingToolbarLayout.setLayoutParams(params);
+        }
         return true;
     }
 
@@ -265,6 +288,24 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
                 if(mFragment instanceof FragmentCommunicator) {
                     ((FragmentCommunicator) mFragment).refresh();
                 }
+                break;
+            case R.id.action_lazy_mode_view_subreddit_detail_activity:
+                MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity);
+                if(isInLazyMode) {
+                    isInLazyMode = false;
+                    ((FragmentCommunicator) mFragment).stopLazyMode();
+                    lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
+                            AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
+                    collapsingToolbarLayout.setLayoutParams(params);
+                } else {
+                    isInLazyMode = true;
+                    ((FragmentCommunicator) mFragment).startLazyMode();
+                    lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+                    appBarLayout.setExpanded(false);
+                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                    collapsingToolbarLayout.setLayoutParams(params);
+                }
         }
         return false;
     }
@@ -272,6 +313,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
         getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE_KEY, mFragment);
     }
 
