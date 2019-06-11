@@ -8,9 +8,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -45,7 +45,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
     private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
 
     @BindView(R.id.coordinator_layout_view_subreddit_detail_activity) CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.banner_image_view_view_subreddit_detail_activity) ImageView bannerImageView;
+    @BindView(R.id.banner_image_view_view_subreddit_detail_activity) GifImageView bannerImageView;
     @BindView(R.id.icon_gif_image_view_view_subreddit_detail_activity) GifImageView iconGifImageView;
     @BindView(R.id.subscribe_subreddit_chip_view_subreddit_detail_activity) Chip subscribeSubredditChip;
     @BindView(R.id.subreddit_name_text_view_view_subreddit_detail_activity) TextView subredditNameTextView;
@@ -238,6 +238,13 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
         } else {
             mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
+            if(mFragment == null) {
+                mFragment = new PostFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(PostFragment.NAME_KEY, subredditName);
+                bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_SUBREDDIT);
+                mFragment.setArguments(bundle);
+            }
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
         }
     }
@@ -263,11 +270,9 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(mFragment != null) {
-            getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE_KEY, mFragment);
-        }
+        getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE_KEY, mFragment);
     }
 
     private void makeSnackbar(int resId) {

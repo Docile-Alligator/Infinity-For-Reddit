@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ImageView
+                <pl.droidsonroids.gif.GifImageView
                     android:id="@+id/banner_image_view_view_subreddit_detail_activity"
                     android:layout_width="match_parent"
                     android:scaleType="centerCrop"

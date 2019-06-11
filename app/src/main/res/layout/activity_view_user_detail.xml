@@ -8,11 +8,13 @@
     tools:context=".ViewUserDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout_view_user_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar_layout_view_user_detail_activity"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:titleEnabled="false"
@@ -24,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <ImageView
+                <pl.droidsonroids.gif.GifImageView
                     android:id="@+id/banner_image_view_view_user_detail_activity"
                     android:layout_width="match_parent"
                     android:scaleType="centerCrop"

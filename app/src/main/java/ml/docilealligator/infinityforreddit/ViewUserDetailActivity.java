@@ -4,12 +4,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -19,6 +20,8 @@ import androidx.lifecycle.ViewModelProviders;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -42,9 +45,12 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     static final String EXTRA_USER_NAME_KEY = "EUNK";
 
     private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
+    private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
     @BindView(R.id.coordinator_layout_view_user_detail_activity) CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.banner_image_view_view_user_detail_activity) ImageView bannerImageView;
+    @BindView(R.id.appbar_layout_view_user_detail) AppBarLayout appBarLayout;
+    @BindView(R.id.collapsing_toolbar_layout_view_user_detail_activity) CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.banner_image_view_view_user_detail_activity) GifImageView bannerImageView;
     @BindView(R.id.icon_gif_image_view_view_user_detail_activity) GifImageView iconGifImageView;
     @BindView(R.id.user_name_text_view_view_user_detail_activity) TextView userNameTextView;
     @BindView(R.id.subscribe_user_chip_view_user_detail_activity) Chip subscribeUserChip;
@@ -54,8 +60,11 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     private SubscribedUserDao subscribedUserDao;
     private RequestManager glide;
     private UserViewModel userViewModel;
+    private Menu mMenu;
+    private AppBarLayout.LayoutParams params;
 
     private boolean subscriptionReady = false;
+    private boolean isInLazyMode = false;
 
     @Inject
     @Named("no_oauth")
@@ -78,6 +87,8 @@ public class ViewUserDetailActivity extends AppCompatActivity {
 
         ((Infinity) getApplication()).getmAppComponent().inject(this);
 
+        params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
+
         //Get status bar height
         int statusBarHeight = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
@@ -92,6 +103,10 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
+
+        if(savedInstanceState != null) {
+            isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
+        }
 
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
         params.topMargin = statusBarHeight;
@@ -169,7 +184,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                                             @Override
                                             public void onUserFollowingSuccess() {
                                                 subscribeUserChip.setText(R.string.follow);
-                                                subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorPrimaryDark));
+                                                subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.textColorPrimaryDark));
                                                 makeSnackbar(R.string.unfollowed);
                                                 subscriptionReady = true;
                                             }
@@ -195,7 +210,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                         @Override
                         public void isNotSubscribed() {
                             subscribeUserChip.setText(R.string.follow);
-                            subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorPrimaryDark));
+                            subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.textColorPrimaryDark));
                             subscriptionReady = true;
                         }
                     }).execute();
@@ -231,8 +246,34 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_user_detail_activity, mFragment).commit();
         } else {
             mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
+            if(mFragment == null) {
+                mFragment = new PostFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(PostFragment.NAME_KEY, userName);
+                bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_USER);
+                mFragment.setArguments(bundle);
+            }
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_user_detail_activity, mFragment).commit();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.view_user_detail_activity, menu);
+        mMenu = menu;
+        MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity);
+        if(isInLazyMode) {
+            lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+            collapsingToolbarLayout.setLayoutParams(params);
+        } else {
+            lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
+                    AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
+            collapsingToolbarLayout.setLayoutParams(params);
+        }
+
+        return true;
     }
 
     @Override
@@ -241,8 +282,39 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.action_refresh_view_user_detail_activity:
+                if (mFragment instanceof FragmentCommunicator) {
+                    ((FragmentCommunicator) mFragment).refresh();
+                    return true;
+                }
+                break;
+            case R.id.action_lazy_mode_view_user_detail_activity:
+                MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity);
+                if(isInLazyMode) {
+                    isInLazyMode = false;
+                    ((FragmentCommunicator) mFragment).stopLazyMode();
+                    lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
+                            AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
+                    collapsingToolbarLayout.setLayoutParams(params);
+                } else {
+                    isInLazyMode = true;
+                    ((FragmentCommunicator) mFragment).startLazyMode();
+                    lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+                    appBarLayout.setExpanded(false);
+                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                    collapsingToolbarLayout.setLayoutParams(params);
+                }
+                return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
+        getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE_KEY, mFragment);
     }
 
     private void makeSnackbar(int resId) {
