@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -101,6 +103,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     @BindView(R.id.gilded_number_text_view_view_post_detail) TextView mGildedNumberTextView;
     @BindView(R.id.crosspost_image_view_view_post_detail) ImageView mCrosspostImageView;
     @BindView(R.id.nsfw_text_view_view_post_detail) Chip mNSFWChip;
+    @BindView(R.id.link_text_view_view_post_detail) TextView linkTextView;
     @BindView(R.id.image_view_wrapper_view_post_detail) RelativeLayout mRelativeLayout;
 
     @BindView(R.id.load_wrapper_view_post_detail) RelativeLayout mLoadWrapper;
@@ -141,7 +144,9 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
         ((Infinity) getApplication()).getmAppComponent().inject(this);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPrimary)));
 
         mGlide = Glide.with(this);
         mLocale = getResources().getConfiguration().locale;
@@ -274,6 +279,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             case Post.LINK_TYPE:
                 mTypeChip.setText("LINK");
 
+                linkTextView.setVisibility(View.VISIBLE);
+                String domain = Uri.parse(mPost.getUrl()).getHost();
+                linkTextView.setText(domain);
+
                 mImageView.setOnClickListener(view -> {
                     CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                     // add share action to menu list
@@ -321,6 +330,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 break;
             case Post.NO_PREVIEW_LINK_TYPE:
                 mTypeChip.setText("LINK");
+
+                linkTextView.setVisibility(View.VISIBLE);
+                String noPreviewLinkDomain = Uri.parse(mPost.getUrl()).getHost();
+                linkTextView.setText(noPreviewLinkDomain);
 
                 if(!mPost.getSelfText().equals("")) {
                     mContentMarkdownView.setVisibility(View.VISIBLE);

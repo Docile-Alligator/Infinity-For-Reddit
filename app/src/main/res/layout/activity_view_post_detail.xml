@@ -101,7 +101,7 @@
                             android:id="@+id/type_text_view_view_post_detail"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="8dp"
+                            android:layout_marginEnd="16dp"
                             android:textColor="@android:color/white"
                             android:layout_centerVertical="true"
                             app:chipBackgroundColor="@color/backgroundColorPrimaryDark"/>
@@ -151,6 +151,15 @@
                             app:chipBackgroundColor="@color/colorAccent"/>
 
                     </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/link_text_view_view_post_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:textSize="12sp"
+                        android:visibility="gone"/>
 
                     <RelativeLayout
                         android:id="@+id/image_view_wrapper_view_post_detail"
