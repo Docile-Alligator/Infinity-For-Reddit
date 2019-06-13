@@ -2,9 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_comment_view_post_detail_activity"
+        android:orderInCategory="1"
+        android:title="@string/action_add_comment"
+        android:icon="@drawable/ic_insert_comment_white_24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_refresh_view_post_detail_activity"
         android:orderInCategory="2"
         android:title="@string/action_refresh"
-        android:icon="@drawable/ic_refresh_white_24dp"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 </menu>

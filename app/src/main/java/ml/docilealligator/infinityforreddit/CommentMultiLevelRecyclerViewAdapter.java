@@ -258,6 +258,11 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
         notifyItemRangeInserted(sizeBefore, mCommentData.size() - sizeBefore);
     }
 
+    void addComment(CommentData comment) {
+        mCommentData.add(0, comment);
+        notifyItemInserted(0);
+    }
+
     private void setExpandButton(ImageView expandButton, boolean isExpanded) {
         // set the icon based on the current state
         expandButton.setVisibility(View.VISIBLE);
@@ -265,26 +270,16 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
     }
 
     class CommentViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.author_text_view_item_post_comment)
-        TextView authorTextView;
-        @BindView(R.id.comment_time_text_view_item_post_comment)
-        TextView commentTimeTextView;
-        @BindView(R.id.comment_markdown_view_item_post_comment)
-        MarkwonView commentMarkdownView;
-        @BindView(R.id.plus_button_item_post_comment)
-        ImageView upvoteButton;
-        @BindView(R.id.score_text_view_item_post_comment)
-        TextView scoreTextView;
-        @BindView(R.id.minus_button_item_post_comment)
-        ImageView downvoteButton;
-        @BindView(R.id.expand_button_item_post_comment)
-        ImageView expandButton;
-        @BindView(R.id.load_more_comments_progress_bar)
-        ProgressBar loadMoreCommentsProgressBar;
-        @BindView(R.id.reply_button_item_post_comment)
-        ImageView replyButton;
-        @BindView(R.id.vertical_block_item_post_comment)
-        View verticalBlock;
+        @BindView(R.id.author_text_view_item_post_comment) TextView authorTextView;
+        @BindView(R.id.comment_time_text_view_item_post_comment) TextView commentTimeTextView;
+        @BindView(R.id.comment_markdown_view_item_post_comment) MarkwonView commentMarkdownView;
+        @BindView(R.id.plus_button_item_post_comment) ImageView upvoteButton;
+        @BindView(R.id.score_text_view_item_post_comment) TextView scoreTextView;
+        @BindView(R.id.minus_button_item_post_comment) ImageView downvoteButton;
+        @BindView(R.id.expand_button_item_post_comment) ImageView expandButton;
+        @BindView(R.id.load_more_comments_progress_bar) ProgressBar loadMoreCommentsProgressBar;
+        @BindView(R.id.reply_button_item_post_comment) ImageView replyButton;
+        @BindView(R.id.vertical_block_item_post_comment) View verticalBlock;
 
         CommentViewHolder(View itemView) {
             super(itemView);

@@ -382,10 +382,13 @@ public class MainActivity extends AppCompatActivity {
         if (mFragment instanceof FragmentCommunicator) {
             switch (item.getItemId()) {
                 case R.id.action_refresh_main_activity:
-                    ((FragmentCommunicator) mFragment).refresh();
+                    /*((FragmentCommunicator) mFragment).refresh();
                     mFetchUserInfoSuccess = false;
                     mInsertSuccess = false;
-                    loadUserData();
+                    loadUserData();*/
+                    Intent intent = new Intent(this, CommentActivity.class);
+                    intent.putExtra(CommentActivity.EXTRA_COMMENT_DATA, "asdfasdfas");
+                    startActivity(intent);
                     return true;
                 case R.id.action_lazy_mode_main_activity:
                     MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);

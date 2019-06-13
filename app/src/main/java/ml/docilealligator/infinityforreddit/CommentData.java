@@ -1,8 +1,11 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.multilevelview.models.RecyclerViewItem;
 
-class CommentData extends RecyclerViewItem {
+class CommentData extends RecyclerViewItem implements Parcelable {
     private String id;
     private String fullName;
     private String author;
@@ -34,6 +37,36 @@ class CommentData extends RecyclerViewItem {
         this.hasReply = hasReply;
         this.scoreHidden = scoreHidden;
     }
+
+    protected CommentData(Parcel in) {
+        super(0);
+        id = in.readString();
+        fullName = in.readString();
+        author = in.readString();
+        commentTime = in.readString();
+        commentContent = in.readString();
+        score = in.readInt();
+        voteType = in.readInt();
+        isSubmitter = in.readByte() != 0;
+        permalink = in.readString();
+        depth = in.readInt();
+        collapsed = in.readByte() != 0;
+        hasReply = in.readByte() != 0;
+        scoreHidden = in.readByte() != 0;
+        super.setLevel(depth);
+    }
+
+    public static final Creator<CommentData> CREATOR = new Creator<CommentData>() {
+        @Override
+        public CommentData createFromParcel(Parcel in) {
+            return new CommentData(in);
+        }
+
+        @Override
+        public CommentData[] newArray(int size) {
+            return new CommentData[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -97,5 +130,27 @@ class CommentData extends RecyclerViewItem {
 
     public void setVoteType(int voteType) {
         this.voteType = voteType;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(fullName);
+        parcel.writeString(author);
+        parcel.writeString(commentTime);
+        parcel.writeString(commentContent);
+        parcel.writeInt(score);
+        parcel.writeInt(voteType);
+        parcel.writeByte((byte) (isSubmitter ? 1 : 0));
+        parcel.writeString(permalink);
+        parcel.writeInt(depth);
+        parcel.writeByte((byte) (collapsed ? 1 : 0));
+        parcel.writeByte((byte) (hasReply ? 1 : 0));
+        parcel.writeByte((byte) (scoreHidden ? 1 : 0));
     }
 }

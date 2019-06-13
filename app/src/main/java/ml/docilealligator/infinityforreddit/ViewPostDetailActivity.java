@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,9 +18,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
@@ -64,6 +64,9 @@ import retrofit2.Retrofit;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.view.MarkwonView;
 
+import static ml.docilealligator.infinityforreddit.CommentActivity.EXTRA_COMMENT_DATA;
+import static ml.docilealligator.infinityforreddit.CommentActivity.WRITE_COMMENT_REQUEST_CODE;
+
 public class ViewPostDetailActivity extends AppCompatActivity {
 
     static final String EXTRA_TITLE = "ET";
@@ -91,6 +94,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private LoadSubredditIconAsyncTask mLoadSubredditIconAsyncTask;
 
     @BindView(R.id.coordinator_layout_view_post_detail) CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.toolbar_view_post_detail_activity) Toolbar toolbar;
     @BindView(R.id.nested_scroll_view_view_post_detail_activity) NestedScrollView mNestedScrollView;
     @BindView(R.id.subreddit_icon_name_linear_layout_view_post_detail) LinearLayout mSubredditIconNameLinearLayout;
     @BindView(R.id.subreddit_icon_circle_image_view_view_post_detail) AspectRatioGifImageView mSubredditIconGifImageView;
@@ -105,22 +109,18 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     @BindView(R.id.nsfw_text_view_view_post_detail) Chip mNSFWChip;
     @BindView(R.id.link_text_view_view_post_detail) TextView linkTextView;
     @BindView(R.id.image_view_wrapper_view_post_detail) RelativeLayout mRelativeLayout;
-
     @BindView(R.id.load_wrapper_view_post_detail) RelativeLayout mLoadWrapper;
     @BindView(R.id.progress_bar_view_post_detail) ProgressBar mLoadImageProgressBar;
     @BindView(R.id.load_image_error_text_view_view_post_detail) TextView mLoadImageErrorTextView;
     @BindView(R.id.image_view_view_post_detail) AspectRatioImageView mImageView;
     @BindView(R.id.image_view_no_preview_link_view_post_detail) ImageView mNoPreviewLinkImageView;
-
     @BindView(R.id.plus_button_view_post_detail) ImageView mUpvoteButton;
     @BindView(R.id.score_text_view_view_post_detail) TextView mScoreTextView;
     @BindView(R.id.minus_button_view_post_detail) ImageView mDownvoteButton;
     @BindView(R.id.share_button_view_post_detail) ImageView mShareButton;
-
     @BindView(R.id.comment_progress_bar_view_post_detail) CircleProgressBar mCommentProgressbar;
     @BindView(R.id.comment_card_view_view_post_detail) MaterialCardView mCommentCardView;
     @BindView(R.id.recycler_view_view_post_detail) MultiLevelRecyclerView mRecyclerView;
-
     @BindView(R.id.no_comment_wrapper_linear_layout_view_post_detail) LinearLayout mNoCommentWrapperLinearLayout;
     @BindView(R.id.no_comment_image_view_view_post_detail) ImageView mNoCommentImageView;
 
@@ -144,9 +144,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
         ((Infinity) getApplication()).getmAppComponent().inject(this);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorPrimary)));
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
 
         mGlide = Glide.with(this);
         mLocale = getResources().getConfiguration().locale;
@@ -684,6 +683,11 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             case R.id.action_refresh_view_post_detail_activity:
                 refresh();
                 return true;
+            case R.id.action_comment_view_post_detail_activity:
+                Intent intent = new Intent(this, CommentActivity.class);
+                intent.putExtra(CommentActivity.COMMENT_PARENT_TEXT, mPost.getTitle());
+                startActivityForResult(intent, WRITE_COMMENT_REQUEST_CODE);
+                return true;
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -692,7 +696,16 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && requestCode == WRITE_COMMENT_REQUEST_CODE) {
+            CommentData comment = data.getExtras().getParcelable(EXTRA_COMMENT_DATA);
+            mAdapter.addComment(comment);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(ORIENTATION_STATE, orientation);
         outState.putParcelable(POST_STATE, mPost);
