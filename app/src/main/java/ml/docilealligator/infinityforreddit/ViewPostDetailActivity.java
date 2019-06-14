@@ -688,6 +688,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, mPost.getTitle());
                 intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, mPost.getFullName());
                 intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, 0);
+                intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, false);
                 startActivityForResult(intent, WRITE_COMMENT_REQUEST_CODE);
                 return true;
             case android.R.id.home:
@@ -703,7 +704,12 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         if(data != null && resultCode == RESULT_OK && requestCode == WRITE_COMMENT_REQUEST_CODE) {
             if(data.hasExtra(EXTRA_COMMENT_DATA_KEY)) {
                 CommentData comment = data.getExtras().getParcelable(EXTRA_COMMENT_DATA_KEY);
-                mAdapter.addComment(comment);
+                if(comment.getDepth() == 0) {
+                    mAdapter.addComment(comment);
+                } else {
+                    int parentPosition = data.getExtras().getInt(CommentActivity.EXTRA_PARENT_POSITION_KEY);
+                    mAdapter.addChildComment(comment, parentPosition);
+                }
             } else {
                 Toast.makeText(this, R.string.send_comment_failed, Toast.LENGTH_SHORT).show();
             }

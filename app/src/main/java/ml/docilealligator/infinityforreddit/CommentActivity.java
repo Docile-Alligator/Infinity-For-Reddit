@@ -3,10 +3,10 @@ package ml.docilealligator.infinityforreddit;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +21,7 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Retrofit;
+import ru.noties.markwon.view.MarkwonView;
 
 public class CommentActivity extends AppCompatActivity {
 
@@ -28,15 +29,19 @@ public class CommentActivity extends AppCompatActivity {
     static final String EXTRA_PARENT_FULLNAME_KEY = "EPFK";
     static final String EXTRA_COMMENT_DATA_KEY = "ECDK";
     static final String EXTRA_PARENT_DEPTH_KEY = "EPDK";
+    static final String EXTRA_PARENT_POSITION_KEY = "EPPK";
+    static final String EXTRA_IS_REPLYING_KEY = "EIRK";
     static final int WRITE_COMMENT_REQUEST_CODE = 1;
 
     @BindView(R.id.coordinator_layout_comment_activity) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.toolbar_comment_activity) Toolbar toolbar;
-    @BindView(R.id.comment_parent_text_view_comment_activity) TextView commentParentTextView;
+    @BindView(R.id.comment_parent_markwon_view_comment_activity) MarkwonView commentParentMarkwonView;
     @BindView(R.id.comment_edit_text_comment_activity) EditText commentEditText;
 
     private String parentFullname;
     private int parentDepth;
+    private int parentPosition;
+    private boolean isReplying;
 
     @Inject
     @Named("oauth")
@@ -55,12 +60,18 @@ public class CommentActivity extends AppCompatActivity {
 
         ((Infinity) getApplication()).getmAppComponent().inject(this);
 
-        setSupportActionBar(toolbar);
-
         Intent intent = getIntent();
-        commentParentTextView.setText(intent.getExtras().getString(EXTRA_COMMENT_PARENT_TEXT_KEY));
+        commentParentMarkwonView.setMarkdown(intent.getExtras().getString(EXTRA_COMMENT_PARENT_TEXT_KEY));
         parentFullname = intent.getExtras().getString(EXTRA_PARENT_FULLNAME_KEY);
         parentDepth = intent.getExtras().getInt(EXTRA_PARENT_DEPTH_KEY);
+        parentPosition = intent.getExtras().getInt(EXTRA_PARENT_POSITION_KEY);
+        isReplying = intent.getExtras().getBoolean(EXTRA_IS_REPLYING_KEY);
+        if(isReplying) {
+            toolbar.setTitle(getString(R.string.comment_activity_label_is_replying));
+        }
+
+        Log.i("fullname", parentFullname);
+        setSupportActionBar(toolbar);
     }
 
     @Override
@@ -89,6 +100,9 @@ public class CommentActivity extends AppCompatActivity {
                             public void sendCommentSuccess(CommentData commentData) {
                                 Intent returnIntent = new Intent();
                                 returnIntent.putExtra(EXTRA_COMMENT_DATA_KEY, commentData);
+                                if(isReplying) {
+                                    returnIntent.putExtra(EXTRA_PARENT_POSITION_KEY, parentPosition);
+                                }
                                 setResult(RESULT_OK, returnIntent);
                                 finish();
                             }

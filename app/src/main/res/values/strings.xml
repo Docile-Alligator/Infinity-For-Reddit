@@ -3,6 +3,7 @@
     <string name="login_activity_label">Login</string>
     <string name="search_activity_label">Search</string>
     <string name="comment_activity_label">Add Comment</string>
+    <string name="comment_activity_label_is_replying">Reply</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

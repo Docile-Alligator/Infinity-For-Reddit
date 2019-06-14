@@ -28,8 +28,15 @@
         android:padding="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <TextView
+        <!--<TextView
             android:id="@+id/comment_parent_text_view_comment_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:textSize="16sp" />-->
+
+        <ru.noties.markwon.view.MarkwonView
+            android:id="@+id/comment_parent_markwon_view_comment_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"

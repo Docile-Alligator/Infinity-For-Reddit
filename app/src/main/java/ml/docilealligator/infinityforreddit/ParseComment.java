@@ -232,7 +232,7 @@ class ParseComment {
 
     private static CommentData parseSingleComment(JSONObject singleCommentData, int parentDepth, Locale locale) throws JSONException {
         String id = singleCommentData.getString(JSONUtils.ID_KEY);
-        String fullName = singleCommentData.getString(JSONUtils.LINK_ID_KEY);
+        String fullName = singleCommentData.getString(JSONUtils.NAME_KEY);
         String author = singleCommentData.getString(JSONUtils.AUTHOR_KEY);
         boolean isSubmitter = singleCommentData.getBoolean(JSONUtils.IS_SUBMITTER_KEY);
         String commentContent = "";

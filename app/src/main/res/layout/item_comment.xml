@@ -104,7 +104,7 @@
                     android:id="@+id/expand_button_item_post_comment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toStartOf="@id/reply_button_item_post_comment"
+                    android:layout_toStartOf="@id/share_button_item_post_comment"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="16dp"
                     android:tint="@android:color/tab_indicator_text"
@@ -112,6 +112,19 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/share_button_item_post_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toStartOf="@id/reply_button_item_post_comment"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_outline_share_20px"
+                    android:tint="@android:color/tab_indicator_text"
+                    android:background="?actionBarItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"/>
 
                 <ImageView
                     android:id="@+id/reply_button_item_post_comment"
