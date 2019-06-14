@@ -15,4 +15,5 @@ interface AppComponent {
     void inject(ViewPostDetailActivity viewPostDetailActivity);
     void inject(ViewSubredditDetailActivity viewSubredditDetailActivity);
     void inject(ViewUserDetailActivity viewUserDetailActivity);
+    void inject(CommentActivity commentActivity);
 }

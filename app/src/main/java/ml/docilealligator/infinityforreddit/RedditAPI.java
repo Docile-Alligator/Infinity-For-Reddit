@@ -73,4 +73,8 @@ public interface RedditAPI {
     @GET("r/{subredditName}/search.json?raw_json=1&type=link&restrict_sr=true")
     Call<String> searchPostsInSpecificSubreddit(@Query("q") String query, @Query("after") String after,
                                                 @HeaderMap Map<String, String> headers);
+
+    @FormUrlEncoded
+    @POST("/api/comment")
+    Call<String> sendComment(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }

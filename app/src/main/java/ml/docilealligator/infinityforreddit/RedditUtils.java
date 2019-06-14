@@ -48,6 +48,11 @@ public class RedditUtils {
     static final String ACTION_KEY = "action";
     static final String SR_NAME_KEY = "sr_name";
 
+    static final String API_TYPE_KEY = "api_type";
+    static final String RETURN_RTJSON_KEY = "return_rtjson";
+    static final String TEXT_KEY = "text";
+    static final String THING_ID_KEY = "thing_id";
+
     static Map<String, String> getHttpBasicAuthHeader() {
         Map<String, String> params = new HashMap<>();
         String credentials = String.format("%s:%s", RedditUtils.CLIENT_ID, "");

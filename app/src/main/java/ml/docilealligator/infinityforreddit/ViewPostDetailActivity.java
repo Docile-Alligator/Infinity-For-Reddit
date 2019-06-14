@@ -64,7 +64,6 @@ import retrofit2.Retrofit;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.view.MarkwonView;
 
-import static ml.docilealligator.infinityforreddit.CommentActivity.EXTRA_COMMENT_DATA;
 import static ml.docilealligator.infinityforreddit.CommentActivity.WRITE_COMMENT_REQUEST_CODE;
 
 public class ViewPostDetailActivity extends AppCompatActivity {
@@ -686,6 +685,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             case R.id.action_comment_view_post_detail_activity:
                 Intent intent = new Intent(this, CommentActivity.class);
                 intent.putExtra(CommentActivity.COMMENT_PARENT_TEXT, mPost.getTitle());
+                intent.putExtra(CommentActivity.PARENT_FULLNAME, mPost.getFullName());
                 startActivityForResult(intent, WRITE_COMMENT_REQUEST_CODE);
                 return true;
             case android.R.id.home:
@@ -699,8 +699,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK && requestCode == WRITE_COMMENT_REQUEST_CODE) {
-            CommentData comment = data.getExtras().getParcelable(EXTRA_COMMENT_DATA);
-            mAdapter.addComment(comment);
+            /*CommentData comment = data.getExtras().getParcelable(EXTRA_COMMENT_DATA);
+            mAdapter.addComment(comment);*/
         }
     }
 

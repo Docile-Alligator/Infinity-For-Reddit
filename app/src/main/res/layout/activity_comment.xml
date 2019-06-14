@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/coordinator_layout_comment_activity"
     tools:context=".CommentActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -24,32 +25,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:padding="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <TextView
             android:id="@+id/comment_parent_text_view_comment_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:layout_marginBottom="16dp"
             android:textSize="16sp" />
 
-        <com.chinalwb.are.AREditText
-            android:id="@+id/arEditText"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:gravity="top"
-            android:hint="@string/write_comment_hint"
-            android:inputType="textMultiLine|textCapSentences"
-            android:textSize="18sp"
-            android:textColor="@color/primaryTextColor"/>
-
-        <com.chinalwb.are.styles.toolbar.ARE_ToolbarDefault
-            android:id="@+id/areToolbar"
+        <EditText
+            android:id="@+id/comment_edit_text_comment_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical" />
+            android:hint="@string/write_comment_hint"
+            android:inputType="textCapSentences|textMultiLine"
+            android:textSize="18sp"
+            android:background="#00000000" />
 
     </LinearLayout>
 
