@@ -24,6 +24,11 @@ class ParseComment {
         void onParseMoreCommentBasicInfoFailed();
     }
 
+    interface ParseSentCommentListener {
+        void onParseSentCommentSuccess(CommentData commentData);
+        void onParseSentCommentFailed();
+    }
+
     static void parseComment(String response, ArrayList<CommentData> commentData, Locale locale,
                              boolean isPost, int parentDepth, ParseCommentListener parseCommentListener) {
         try {
@@ -39,7 +44,9 @@ class ParseComment {
             new ParseCommentAsyncTask(childrenArray, commentData, locale, parentDepth, parseCommentListener).execute();
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.i("comment json error", e.getMessage());
+            if(e.getMessage() != null) {
+                Log.i("comment json error", e.getMessage());
+            }
             parseCommentListener.onParseCommentFailed();
         }
     }
@@ -55,9 +62,16 @@ class ParseComment {
             new ParseCommentAsyncTask(childrenArray, commentData, locale, parentDepth, parseCommentListener).execute();
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.i("comment json error", e.getMessage());
+            if(e.getMessage() != null) {
+                Log.i("comment json error", e.getMessage());
+            }
             parseCommentListener.onParseCommentFailed();
         }
+    }
+
+    static void parseSentComment(String response, int parentDepth, Locale locale,
+                                 ParseSentCommentListener parseSentCommentListener) {
+        new ParseSentCommentAsyncTask(response, parentDepth, locale, parseSentCommentListener).execute();
     }
 
     private static class ParseCommentAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -110,38 +124,13 @@ class ParseComment {
 
                 for (int i = 0; i < actualCommentLength; i++) {
                     JSONObject data = comments.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
-                    String id = data.getString(JSONUtils.ID_KEY);
-                    String fullName = data.getString(JSONUtils.LINK_ID_KEY);
-                    String author = data.getString(JSONUtils.AUTHOR_KEY);
-                    boolean isSubmitter = data.getBoolean(JSONUtils.IS_SUBMITTER_KEY);
-                    String commentContent = "";
-                    if(!data.isNull(JSONUtils.BODY_HTML_KEY)) {
-                        commentContent = data.getString(JSONUtils.BODY_HTML_KEY).trim();
-                    }
-                    String permalink = data.getString(JSONUtils.PERMALINK_KEY);
-                    int score = data.getInt(JSONUtils.SCORE_KEY);
-                    long submitTime = data.getLong(JSONUtils.CREATED_UTC_KEY) * 1000;
-                    boolean scoreHidden = data.getBoolean(JSONUtils.SCORE_HIDDEN_KEY);
-
-                    Calendar submitTimeCalendar = Calendar.getInstance();
-                    submitTimeCalendar.setTimeInMillis(submitTime);
-                    String formattedSubmitTime = new SimpleDateFormat("MMM d, YYYY, HH:mm",
-                            locale).format(submitTimeCalendar.getTime());
-
-                    int depth;
-                    if(data.has(JSONUtils.DEPTH_KEY)) {
-                        depth = data.getInt(JSONUtils.DEPTH_KEY) + parentDepth;
-                    } else {
-                        depth = parentDepth;
-                    }
-                    boolean collapsed = data.getBoolean(JSONUtils.COLLAPSED_KEY);
-                    boolean hasReply = !(data.get(JSONUtils.REPLIES_KEY) instanceof String);
-
-                    newcommentData.add(new CommentData(id, fullName, author, formattedSubmitTime, commentContent, score, isSubmitter, permalink, depth, collapsed, hasReply, scoreHidden));
+                    newcommentData.add(parseSingleComment(data, parentDepth, locale));
                 }
             } catch (JSONException e) {
                 parseFailed = true;
-                Log.i("parse comment error", e.getMessage());
+                if(e.getMessage() != null) {
+                    Log.i("parse comment error", e.getMessage());
+                }
             }
             return null;
         }
@@ -200,5 +189,76 @@ class ParseComment {
                 parseMoreCommentBasicInfoListener.onParseMoreCommentBasicInfoFailed();
             }
         }
+    }
+
+    private static class ParseSentCommentAsyncTask extends AsyncTask<Void, Void, Void> {
+        private String response;
+        private int parentDepth;
+        private Locale locale;
+        private ParseSentCommentListener parseSentCommentListener;
+        private boolean parseFailed;
+        private CommentData commentData;
+
+        ParseSentCommentAsyncTask(String response, int parentDepth, Locale locale, ParseSentCommentListener parseSentCommentListener) {
+            this.response = response;
+            this.parentDepth = parentDepth;
+            this.locale = locale;
+            this.parseSentCommentListener = parseSentCommentListener;
+            parseFailed = false;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                JSONObject sentCommentData = new JSONObject(response);
+                commentData = parseSingleComment(sentCommentData, parentDepth, locale);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                parseFailed = true;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if(parseFailed) {
+                parseSentCommentListener.onParseSentCommentFailed();
+            } else {
+                parseSentCommentListener.onParseSentCommentSuccess(commentData);
+            }
+        }
+    }
+
+    private static CommentData parseSingleComment(JSONObject singleCommentData, int parentDepth, Locale locale) throws JSONException {
+        String id = singleCommentData.getString(JSONUtils.ID_KEY);
+        String fullName = singleCommentData.getString(JSONUtils.LINK_ID_KEY);
+        String author = singleCommentData.getString(JSONUtils.AUTHOR_KEY);
+        boolean isSubmitter = singleCommentData.getBoolean(JSONUtils.IS_SUBMITTER_KEY);
+        String commentContent = "";
+        if(!singleCommentData.isNull(JSONUtils.BODY_HTML_KEY)) {
+            commentContent = singleCommentData.getString(JSONUtils.BODY_HTML_KEY).trim();
+        }
+        String permalink = singleCommentData.getString(JSONUtils.PERMALINK_KEY);
+        int score = singleCommentData.getInt(JSONUtils.SCORE_KEY);
+        long submitTime = singleCommentData.getLong(JSONUtils.CREATED_UTC_KEY) * 1000;
+        boolean scoreHidden = singleCommentData.getBoolean(JSONUtils.SCORE_HIDDEN_KEY);
+
+        Calendar submitTimeCalendar = Calendar.getInstance();
+        submitTimeCalendar.setTimeInMillis(submitTime);
+        String formattedSubmitTime = new SimpleDateFormat("MMM d, YYYY, HH:mm",
+                locale).format(submitTimeCalendar.getTime());
+
+        int depth;
+        if(singleCommentData.has(JSONUtils.DEPTH_KEY)) {
+            depth = singleCommentData.getInt(JSONUtils.DEPTH_KEY) + parentDepth;
+        } else {
+            depth = parentDepth;
+        }
+        boolean collapsed = singleCommentData.getBoolean(JSONUtils.COLLAPSED_KEY);
+        boolean hasReply = !(singleCommentData.get(JSONUtils.REPLIES_KEY) instanceof String);
+
+        return new CommentData(id, fullName, author, formattedSubmitTime, commentContent, score,
+                isSubmitter, permalink, depth, collapsed, hasReply, scoreHidden);
     }
 }

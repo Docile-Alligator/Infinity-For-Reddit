@@ -64,6 +64,7 @@ import retrofit2.Retrofit;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.view.MarkwonView;
 
+import static ml.docilealligator.infinityforreddit.CommentActivity.EXTRA_COMMENT_DATA_KEY;
 import static ml.docilealligator.infinityforreddit.CommentActivity.WRITE_COMMENT_REQUEST_CODE;
 
 public class ViewPostDetailActivity extends AppCompatActivity {
@@ -684,8 +685,9 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 return true;
             case R.id.action_comment_view_post_detail_activity:
                 Intent intent = new Intent(this, CommentActivity.class);
-                intent.putExtra(CommentActivity.COMMENT_PARENT_TEXT, mPost.getTitle());
-                intent.putExtra(CommentActivity.PARENT_FULLNAME, mPost.getFullName());
+                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, mPost.getTitle());
+                intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, mPost.getFullName());
+                intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, 0);
                 startActivityForResult(intent, WRITE_COMMENT_REQUEST_CODE);
                 return true;
             case android.R.id.home:
@@ -698,9 +700,13 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && requestCode == WRITE_COMMENT_REQUEST_CODE) {
-            /*CommentData comment = data.getExtras().getParcelable(EXTRA_COMMENT_DATA);
-            mAdapter.addComment(comment);*/
+        if(data != null && resultCode == RESULT_OK && requestCode == WRITE_COMMENT_REQUEST_CODE) {
+            if(data.hasExtra(EXTRA_COMMENT_DATA_KEY)) {
+                CommentData comment = data.getExtras().getParcelable(EXTRA_COMMENT_DATA_KEY);
+                mAdapter.addComment(comment);
+            } else {
+                Toast.makeText(this, R.string.send_comment_failed, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

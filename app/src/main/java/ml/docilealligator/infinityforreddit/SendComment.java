@@ -1,10 +1,9 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -15,12 +14,14 @@ import retrofit2.Retrofit;
 class SendComment {
 
     interface SendCommentListener {
-        void sendCommentSuccess();
+        void sendCommentSuccess(CommentData commentData);
         void sendCommentFailed();
+        void parseSentCommentFailed();
     }
 
-    static void sendComment(String commentMarkdown, String thingFullname, Retrofit oauthRetrofit,
-                            String accessToken, SendCommentListener sendCommentListener) {
+    static void sendComment(String commentMarkdown, String thingFullname, int parentDepth,
+                            Locale locale, Retrofit oauthRetrofit, String accessToken,
+                            SendCommentListener sendCommentListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
         Map<String, String> headers = RedditUtils.getOAuthHeader(accessToken);
         Map<String, String> params = new HashMap<>();
@@ -35,8 +36,17 @@ class SendComment {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if(response.isSuccessful()) {
-                    Log.i("asdfasdfaf", response.body());
-                    sendCommentListener.sendCommentSuccess();
+                    ParseComment.parseSentComment(response.body(), parentDepth, locale, new ParseComment.ParseSentCommentListener() {
+                        @Override
+                        public void onParseSentCommentSuccess(CommentData commentData) {
+                            sendCommentListener.sendCommentSuccess(commentData);
+                        }
+
+                        @Override
+                        public void onParseSentCommentFailed() {
+
+                        }
+                    });
                 } else {
                     sendCommentListener.sendCommentFailed();
                 }

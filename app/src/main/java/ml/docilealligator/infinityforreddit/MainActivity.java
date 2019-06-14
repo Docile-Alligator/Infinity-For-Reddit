@@ -387,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
                     mInsertSuccess = false;
                     loadUserData();*/
                     Intent intent = new Intent(this, CommentActivity.class);
-                    intent.putExtra(CommentActivity.EXTRA_COMMENT_DATA, "asdfasdfas");
+                    intent.putExtra(CommentActivity.EXTRA_COMMENT_DATA_KEY, "asdfasdfas");
                     startActivity(intent);
                     return true;
                 case R.id.action_lazy_mode_main_activity:

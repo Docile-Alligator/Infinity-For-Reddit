@@ -24,9 +24,10 @@ import retrofit2.Retrofit;
 
 public class CommentActivity extends AppCompatActivity {
 
-    static final String COMMENT_PARENT_TEXT = "CPT";
-    static final String PARENT_FULLNAME = "PF";
-    static final String EXTRA_COMMENT_DATA = "ECD";
+    static final String EXTRA_COMMENT_PARENT_TEXT_KEY = "ECPTK";
+    static final String EXTRA_PARENT_FULLNAME_KEY = "EPFK";
+    static final String EXTRA_COMMENT_DATA_KEY = "ECDK";
+    static final String EXTRA_PARENT_DEPTH_KEY = "EPDK";
     static final int WRITE_COMMENT_REQUEST_CODE = 1;
 
     @BindView(R.id.coordinator_layout_comment_activity) CoordinatorLayout coordinatorLayout;
@@ -35,6 +36,7 @@ public class CommentActivity extends AppCompatActivity {
     @BindView(R.id.comment_edit_text_comment_activity) EditText commentEditText;
 
     private String parentFullname;
+    private int parentDepth;
 
     @Inject
     @Named("oauth")
@@ -55,8 +57,10 @@ public class CommentActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        commentParentTextView.setText(getIntent().getExtras().getString(COMMENT_PARENT_TEXT));
-        parentFullname = getIntent().getExtras().getString(PARENT_FULLNAME);
+        Intent intent = getIntent();
+        commentParentTextView.setText(intent.getExtras().getString(EXTRA_COMMENT_PARENT_TEXT_KEY));
+        parentFullname = intent.getExtras().getString(EXTRA_PARENT_FULLNAME_KEY);
+        parentDepth = intent.getExtras().getInt(EXTRA_PARENT_DEPTH_KEY);
     }
 
     @Override
@@ -72,21 +76,36 @@ public class CommentActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_send_comment_activity:
-                CommentData commentData = null;
-                SendComment.sendComment(commentEditText.getText().toString(), parentFullname, mOauthRetrofit,
+                item.setEnabled(false);
+                item.getIcon().setAlpha(130);
+                Snackbar sendingSnackbar = Snackbar.make(coordinatorLayout, R.string.sending_comment, Snackbar.LENGTH_INDEFINITE);
+                sendingSnackbar.show();
+
+                SendComment.sendComment(commentEditText.getText().toString(), parentFullname, parentDepth,
+                        getResources().getConfiguration().locale, mOauthRetrofit,
                         sharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, ""),
                         new SendComment.SendCommentListener() {
                             @Override
-                            public void sendCommentSuccess() {
+                            public void sendCommentSuccess(CommentData commentData) {
                                 Intent returnIntent = new Intent();
-                                returnIntent.putExtra(EXTRA_COMMENT_DATA, commentData);
+                                returnIntent.putExtra(EXTRA_COMMENT_DATA_KEY, commentData);
                                 setResult(RESULT_OK, returnIntent);
                                 finish();
                             }
 
                             @Override
                             public void sendCommentFailed() {
+                                sendingSnackbar.dismiss();
+                                item.setEnabled(true);
+                                item.getIcon().setAlpha(255);
                                 Snackbar.make(coordinatorLayout, R.string.send_comment_failed, Snackbar.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void parseSentCommentFailed() {
+                                Intent returnIntent = new Intent();
+                                setResult(RESULT_OK, returnIntent);
+                                finish();
                             }
                         });
         }
