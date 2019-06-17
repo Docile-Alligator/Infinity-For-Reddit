@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -70,7 +69,6 @@ public class CommentActivity extends AppCompatActivity {
             toolbar.setTitle(getString(R.string.comment_activity_label_is_replying));
         }
 
-        Log.i("fullname", parentFullname);
         setSupportActionBar(toolbar);
     }
 

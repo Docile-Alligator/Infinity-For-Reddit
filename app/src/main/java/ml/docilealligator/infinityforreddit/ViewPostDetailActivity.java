@@ -28,6 +28,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
@@ -41,14 +42,12 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
-import com.multilevelview.MultiLevelRecyclerView;
 import com.santalu.aspectratioimageview.AspectRatioImageView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -90,7 +89,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private ArrayList<String> children;
     private int mChildrenStartingIndex = 0;
 
-    private CommentMultiLevelRecyclerViewAdapter mAdapter;
+    private CommentRecyclerViewAdapter mAdapter;
     private LoadSubredditIconAsyncTask mLoadSubredditIconAsyncTask;
 
     @BindView(R.id.coordinator_layout_view_post_detail) CoordinatorLayout mCoordinatorLayout;
@@ -120,7 +119,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     @BindView(R.id.share_button_view_post_detail) ImageView mShareButton;
     @BindView(R.id.comment_progress_bar_view_post_detail) CircleProgressBar mCommentProgressbar;
     @BindView(R.id.comment_card_view_view_post_detail) MaterialCardView mCommentCardView;
-    @BindView(R.id.recycler_view_view_post_detail) MultiLevelRecyclerView mRecyclerView;
+    @BindView(R.id.recycler_view_view_post_detail) RecyclerView mRecyclerView;
     @BindView(R.id.no_comment_wrapper_linear_layout_view_post_detail) LinearLayout mNoCommentWrapperLinearLayout;
     @BindView(R.id.no_comment_image_view_view_post_detail) ImageView mNoCommentImageView;
 
@@ -504,23 +503,18 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         FetchComment.fetchComment(mRetrofit, mPost.getSubredditNamePrefixed(), mPost.getId(),
                 null, mLocale, true, 0, new FetchComment.FetchCommentListener() {
                     @Override
-                    public void onFetchCommentSuccess(List<?> commentsData,
+                    public void onFetchCommentSuccess(ArrayList<CommentData> commentsData,
                                                       String parentId, ArrayList<String> children) {
                         ViewPostDetailActivity.this.children = children;
                         mCommentProgressbar.setVisibility(View.GONE);
-                        mCommentsData.addAll((ArrayList<CommentData>) commentsData);
+                        mCommentsData.addAll(commentsData);
 
                         if (mCommentsData.size() > 0) {
                             if(mAdapter == null) {
-                                mAdapter = new CommentMultiLevelRecyclerViewAdapter(
-                                        ViewPostDetailActivity.this, mRetrofit, mOauthRetrofit,
-                                        mSharedPreferences, mCommentsData,
-                                        mRecyclerView, mPost.getSubredditNamePrefixed(),
-                                        mPost.getId(), mLocale);
+                                mAdapter = new CommentRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
+                                        mOauthRetrofit, mSharedPreferences, commentsData, mRecyclerView,
+                                        mPost.getSubredditNamePrefixed(), mPost.getId(), mLocale);
                                 mRecyclerView.setAdapter(mAdapter);
-                                mRecyclerView.removeItemClickListeners();
-                                mRecyclerView.setToggleItemOnClick(false);
-                                mRecyclerView.setAccordion(false);
 
                                 mNestedScrollView.getViewTreeObserver().addOnScrollChangedListener(() -> {
                                     if(!isLoadingMoreChildren) {
@@ -556,8 +550,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         FetchComment.fetchMoreComment(mRetrofit, mPost.getSubredditNamePrefixed(), mPost.getFullName(),
                 children, startingIndex, mLocale, new FetchComment.FetchMoreCommentListener() {
                     @Override
-                    public void onFetchMoreCommentSuccess(List<?> commentsData, int childrenStartingIndex) {
-                        mAdapter.addComments((ArrayList<CommentData>) commentsData);
+                    public void onFetchMoreCommentSuccess(ArrayList<CommentData> commentsData, int childrenStartingIndex) {
+                        mAdapter.addComments(commentsData);
                         mChildrenStartingIndex = childrenStartingIndex;
                         isLoadingMoreChildren = false;
                     }
@@ -678,7 +672,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh_view_post_detail_activity:
                 refresh();

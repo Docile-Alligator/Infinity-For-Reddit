@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.ColorFilter;
 import android.net.Uri;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +19,7 @@ import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.multilevelview.MultiLevelAdapter;
-import com.multilevelview.MultiLevelRecyclerView;
-import com.multilevelview.models.RecyclerViewItem;
-
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -32,42 +28,59 @@ import retrofit2.Retrofit;
 import ru.noties.markwon.SpannableConfiguration;
 import ru.noties.markwon.view.MarkwonView;
 
-class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
+class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Activity mActivity;
     private Retrofit mRetrofit;
     private Retrofit mOauthRetrofit;
     private SharedPreferences mSharedPreferences;
     private ArrayList<CommentData> mCommentData;
-    private MultiLevelRecyclerView mMultiLevelRecyclerView;
-    private String subredditNamePrefixed;
-    private String article;
-    private Locale locale;
+    private RecyclerView mRecyclerView;
+    private String mSubredditNamePrefixed;
+    private String mArticle;
+    private Locale mLocale;
 
-    CommentMultiLevelRecyclerViewAdapter(Activity activity, Retrofit retrofit, Retrofit oauthRetrofit,
+    private ArrayList<CommentData> mVisibleComments;
+
+    CommentRecyclerViewAdapter(Activity activity, Retrofit retrofit, Retrofit oauthRetrofit,
                                          SharedPreferences sharedPreferences, ArrayList<CommentData> commentData,
-                                         MultiLevelRecyclerView multiLevelRecyclerView,
+                                         RecyclerView recyclerView,
                                          String subredditNamePrefixed, String article, Locale locale) {
-        super(commentData);
         mActivity = activity;
         mRetrofit = retrofit;
         mOauthRetrofit = oauthRetrofit;
         mSharedPreferences = sharedPreferences;
         mCommentData = commentData;
-        mMultiLevelRecyclerView = multiLevelRecyclerView;
-        this.subredditNamePrefixed = subredditNamePrefixed;
-        this.article = article;
-        this.locale = locale;
+        mRecyclerView = recyclerView;
+        mSubredditNamePrefixed = subredditNamePrefixed;
+        mArticle = article;
+        mLocale = locale;
+        mVisibleComments = new ArrayList<>();
+
+        new Handler().post(() -> {
+            makeChildrenVisible(commentData, mVisibleComments);
+            notifyDataSetChanged();
+        });
+    }
+
+    private void makeChildrenVisible(ArrayList<CommentData> comments, ArrayList<CommentData> visibleComments) {
+        for(CommentData c : comments) {
+            visibleComments.add(c);
+            if(c.hasReply()) {
+                c.setExpanded(true);
+                makeChildrenVisible(c.getChildren(), visibleComments);
+            }
+        }
     }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new CommentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        final CommentData commentItem = mCommentData.get(position);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        final CommentData commentItem = mVisibleComments.get(position);
 
         String authorPrefixed = "u/" + commentItem.getAuthor();
         ((CommentViewHolder) holder).authorTextView.setText(authorPrefixed);
@@ -78,6 +91,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
         });
 
         ((CommentViewHolder) holder).commentTimeTextView.setText(commentItem.getCommentTime());
+
         SpannableConfiguration spannableConfiguration = SpannableConfiguration.builder(mActivity).linkResolver((view, link) -> {
             if (link.startsWith("/u/") || link.startsWith("u/")) {
                 Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
@@ -101,35 +115,49 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
         ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore()));
 
         ((CommentViewHolder) holder).verticalBlock.getLayoutParams().width = commentItem.getDepth() * 16;
-        if (commentItem.hasReply()) {
-            setExpandButton(((CommentViewHolder) holder).expandButton, commentItem.isExpanded());
-        }
 
-        ((CommentViewHolder) holder).shareButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                String extraText = commentItem.getPermalink();
-                intent.putExtra(Intent.EXTRA_TEXT, extraText);
-                mActivity.startActivity(Intent.createChooser(intent, "Share"));
-            }
+        ((CommentViewHolder) holder).shareButton.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            String extraText = commentItem.getPermalink();
+            intent.putExtra(Intent.EXTRA_TEXT, extraText);
+            mActivity.startActivity(Intent.createChooser(intent, "Share"));
         });
 
+        if (commentItem.hasReply()) {
+            if(commentItem.isExpanded()) {
+                ((CommentViewHolder) holder).expandButton.setImageResource(R.drawable.ic_expand_less_black_20dp);
+            } else {
+                ((CommentViewHolder) holder).expandButton.setImageResource(R.drawable.ic_expand_more_black_20dp);
+            }
+            ((CommentViewHolder) holder).expandButton.setVisibility(View.VISIBLE);
+        }
+
         ((CommentViewHolder) holder).expandButton.setOnClickListener(view -> {
-            if (commentItem.hasChildren() && commentItem.getChildren().size() > 0) {
-                mMultiLevelRecyclerView.toggleItemsGroup(holder.getAdapterPosition());
-                setExpandButton(((CommentViewHolder) holder).expandButton, commentItem.isExpanded());
+            if(commentItem.isExpanded()) {
+                collapseChildren(holder.getAdapterPosition());
+                ((CommentViewHolder) holder).expandButton
+                        .setImageResource(R.drawable.ic_expand_more_black_20dp);
+            } else {
+                expandChildren(holder.getAdapterPosition());
+                commentItem.setExpanded(true);
+                ((CommentViewHolder) holder).expandButton
+                        .setImageResource(R.drawable.ic_expand_less_black_20dp);
+            }
+            /*if (commentItem.hasReply() && commentItem.getChildren().size() > 0) {
+                collapseChildren(holder.getAdapterPosition());
+                ((CommentViewHolder) holder).expandButton
+                        .setImageResource(R.drawable.ic_expand_more_black_20dp);
             } else {
                 ((CommentViewHolder) holder).loadMoreCommentsProgressBar.setVisibility(View.VISIBLE);
-                FetchComment.fetchAllComment(mRetrofit, subredditNamePrefixed, article, commentItem.getId(),
+                FetchComment.fetchAllComment(mRetrofit, mSubredditNamePrefixed, article, commentItem.getId(),
                         locale, false, commentItem.getDepth(), new FetchComment.FetchAllCommentListener() {
                             @Override
                             public void onFetchAllCommentSuccess(List<?> commentData) {
-                                commentItem.addChildren((List<RecyclerViewItem>) commentData);
+                                commentItem.addChildren((ArrayList<CommentData>) commentData);
                                 ((CommentViewHolder) holder).loadMoreCommentsProgressBar
                                         .setVisibility(View.GONE);
-                                mMultiLevelRecyclerView.toggleItemsGroup(holder.getAdapterPosition());
+                                expandChildren(holder.getAdapterPosition());
                                 ((CommentViewHolder) holder).expandButton
                                         .setImageResource(R.drawable.ic_expand_less_black_20dp);
                             }
@@ -140,7 +168,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
                                         .setVisibility(View.GONE);
                             }
                         });
-            }
+            }*/
         });
 
         ((CommentViewHolder) holder).replyButton.setOnClickListener(view -> {
@@ -149,6 +177,7 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
             intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, commentItem.getCommentContent());
             intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, commentItem.getFullName());
             intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, true);
+            intent.putExtra(CommentActivity.EXTRA_PARENT_POSITION_KEY, holder.getAdapterPosition());
             mActivity.startActivityForResult(intent, CommentActivity.WRITE_COMMENT_REQUEST_CODE);
         });
 
@@ -264,6 +293,58 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
         });
     }
 
+    private void expandChildren(int position) {
+        mVisibleComments.get(position).setExpanded(true);
+        ArrayList<CommentData> children = mVisibleComments.get(position).getChildren();
+        if(children != null && children.size() > 0) {
+            mVisibleComments.addAll(position + 1, children);
+            for(int i = position + 1; i <= position + children.size(); i++) {
+                mVisibleComments.get(i).setExpanded(false);
+            }
+            notifyItemRangeInserted(position + 1, children.size());
+        }
+    }
+
+    private void collapseChildren(int position) {
+        mVisibleComments.get(position).setExpanded(false);
+        int depth = mVisibleComments.get(position).getDepth();
+        int allChildrenSize = 0;
+        for(int i = position + 1; i < mVisibleComments.size(); i++) {
+            if(mVisibleComments.get(i).getDepth() > depth) {
+                allChildrenSize++;
+            } else {
+                break;
+            }
+        }
+
+        mVisibleComments.subList(position + 1, position + 1 + allChildrenSize).clear();
+        notifyItemRangeRemoved(position + 1, allChildrenSize);
+    }
+
+    void addComments(ArrayList<CommentData> comments) {
+        int sizeBefore = mVisibleComments.size();
+        mVisibleComments.addAll(comments);
+        notifyItemRangeInserted(sizeBefore, comments.size());
+    }
+
+    //Need proper implementation
+    void addComment(CommentData comment) {
+        mCommentData.add(0, comment);
+        notifyItemInserted(0);
+    }
+
+    //Need proper implementation
+    void addChildComment(CommentData comment, int parentPosition) {
+        ArrayList<CommentData> childComments = mCommentData.get(parentPosition).getChildren();
+        if(childComments == null) {
+            childComments = new ArrayList<>();
+        }
+        childComments.add(0, comment);
+        mCommentData.get(parentPosition).addChildren(childComments);
+        mCommentData.get(parentPosition).setHasReply(true);
+        notifyItemChanged(parentPosition);
+    }
+
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof CommentViewHolder) {
@@ -272,33 +353,9 @@ class CommentMultiLevelRecyclerViewAdapter extends MultiLevelAdapter {
         }
     }
 
-    void addComments(ArrayList<CommentData> comments) {
-        int sizeBefore = mCommentData.size();
-        mCommentData.addAll(comments);
-        notifyItemRangeInserted(sizeBefore, mCommentData.size() - sizeBefore);
-    }
-
-    void addComment(CommentData comment) {
-        mCommentData.add(0, comment);
-        notifyItemInserted(0);
-    }
-
-    void addChildComment(CommentData comment, int parentPosition) {
-        List<RecyclerViewItem> childComments = mCommentData.get(parentPosition).getChildren();
-        if(childComments == null) {
-            childComments = new ArrayList<>();
-        }
-        childComments.add(0, comment);
-        mCommentData.get(parentPosition).addChildren(childComments);
-        mCommentData.get(parentPosition).setHasReply(true);
-        notifyItemChanged(parentPosition);
-        mMultiLevelRecyclerView.toggleItemsGroup(parentPosition);
-    }
-
-    private void setExpandButton(ImageView expandButton, boolean isExpanded) {
-        // set the icon based on the current state
-        expandButton.setVisibility(View.VISIBLE);
-        expandButton.setImageResource(isExpanded ? R.drawable.ic_expand_less_black_20dp : R.drawable.ic_expand_more_black_20dp);
+    @Override
+    public int getItemCount() {
+        return mVisibleComments.size();
     }
 
     class CommentViewHolder extends RecyclerView.ViewHolder {

@@ -5,7 +5,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -15,18 +14,18 @@ import retrofit2.Retrofit;
 
 class FetchComment {
     interface FetchCommentListener {
-        void onFetchCommentSuccess(List<?> commentsData,
+        void onFetchCommentSuccess(ArrayList<CommentData> commentsData,
                                    String parentId, ArrayList<String> children);
         void onFetchCommentFailed();
     }
 
     interface FetchMoreCommentListener {
-        void onFetchMoreCommentSuccess(List<?> commentsData, int childrenStartingIndex);
+        void onFetchMoreCommentSuccess(ArrayList<CommentData> commentsData, int childrenStartingIndex);
         void onFetchMoreCommentFailed();
     }
 
     interface FetchAllCommentListener {
-        void onFetchAllCommentSuccess(List<?> commentData);
+        void onFetchAllCommentSuccess(ArrayList<CommentData> commentData);
         void onFetchAllCommentFailed();
     }
 
@@ -43,10 +42,10 @@ class FetchComment {
                             locale, isPost, parentDepth,
                             new ParseComment.ParseCommentListener() {
                                 @Override
-                                public void onParseCommentSuccess(List<?> commentData,
-                                                                  String parentId, ArrayList<String> children) {
+                                public void onParseCommentSuccess(ArrayList<CommentData> commentData,
+                                                                  String parentId, ArrayList<String> moreChildrenIds) {
                                     fetchCommentListener.onFetchCommentSuccess(commentData, parentId,
-                                            children);
+                                            moreChildrenIds);
                                 }
 
                                 @Override
@@ -104,8 +103,8 @@ class FetchComment {
                                         ParseComment.parseMoreComment(response.body(), new ArrayList<>(), locale,
                                                 0, new ParseComment.ParseCommentListener() {
                                                     @Override
-                                                    public void onParseCommentSuccess(List<?> commentData, String parentId,
-                                                                                      ArrayList<String> children) {
+                                                    public void onParseCommentSuccess(ArrayList<CommentData> commentData, String parentId,
+                                                                                      ArrayList<String> moreChildrenIds) {
                                                         fetchMoreCommentListener.onFetchMoreCommentSuccess(commentData, startingIndex + 100);
                                                     }
 
@@ -155,12 +154,12 @@ class FetchComment {
         fetchComment(retrofit, subredditNamePrefixed, article, comment, locale, isPost, parentDepth,
                 new FetchCommentListener() {
                     @Override
-                    public void onFetchCommentSuccess(List<?> commentsData, String parentId, ArrayList<String> children) {
+                    public void onFetchCommentSuccess(ArrayList<CommentData> commentsData, String parentId, ArrayList<String> children) {
                         if(children.size() != 0) {
                             fetchMoreComment(retrofit, subredditNamePrefixed, parentId, children,
                                     0, locale, new FetchMoreCommentListener() {
                                         @Override
-                                        public void onFetchMoreCommentSuccess(List<?> commentsData,
+                                        public void onFetchMoreCommentSuccess(ArrayList<CommentData> commentsData,
                                                                               int childrenStartingIndex) {
                                             ((ArrayList<CommentData>) commentsData).addAll((ArrayList<CommentData>) commentsData);
                                             fetchAllCommentListener.onFetchAllCommentSuccess(commentsData);

@@ -107,6 +107,7 @@
                     android:layout_toStartOf="@id/share_button_item_post_comment"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_expand_less_black_20dp"
                     android:tint="@android:color/tab_indicator_text"
                     android:background="?actionBarItemBackground"
                     android:clickable="true"
