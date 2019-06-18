@@ -192,7 +192,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
                                 @Override
                                 public void onSubredditSubscriptionSuccess() {
                                     subscribeSubredditChip.setText(R.string.subscribe);
-                                    subscribeSubredditChip.setChipBackgroundColor(getResources().getColorStateList(R.color.textColorPrimaryDark));
+                                    subscribeSubredditChip.setChipBackgroundColor(getResources().getColorStateList(R.color.backgroundColorPrimaryDark));
                                     makeSnackbar(R.string.unsubscribed);
                                     subscriptionReady = true;
                                 }
@@ -219,7 +219,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
             @Override
             public void isNotSubscribed() {
                 subscribeSubredditChip.setText(R.string.subscribe);
-                subscribeSubredditChip.setChipBackgroundColor(getResources().getColorStateList(R.color.textColorPrimaryDark));
+                subscribeSubredditChip.setChipBackgroundColor(getResources().getColorStateList(R.color.backgroundColorPrimaryDark));
                 subscriptionReady = true;
             }
         }).execute();

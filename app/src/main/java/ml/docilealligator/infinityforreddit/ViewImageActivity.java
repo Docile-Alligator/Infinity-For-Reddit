@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -15,12 +16,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -32,6 +27,13 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.State;
@@ -89,25 +91,25 @@ public class ViewImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_image);
         ButterKnife.bind(this);
 
-        final ActionBar actionBar = getSupportActionBar();
-        final Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
+        ActionBar actionBar = getSupportActionBar();
+        Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setHomeAsUpIndicator(upArrow);
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarColor)));
 
         Intent intent = getIntent();
         mImageUrl = intent.getExtras().getString(IMAGE_URL_KEY);
         mImageFileName = intent.getExtras().getString(FILE_NAME_KEY);
+
         String title = intent.getExtras().getString(TITLE_KEY);
-        final Spannable text = new SpannableString(title);
+        Spannable text = new SpannableString(title);
+        text.setSpan(new ForegroundColorSpan(Color.WHITE), 0, title.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         setTitle(text);
 
-        mLoadErrorLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!isSwiping) {
-                    mProgressBar.setVisibility(View.VISIBLE);
-                    mLoadErrorLinearLayout.setVisibility(View.GONE);
-                    loadImage();
-                }
+        mLoadErrorLinearLayout.setOnClickListener(view -> {
+            if(!isSwiping) {
+                mProgressBar.setVisibility(View.VISIBLE);
+                mLoadErrorLinearLayout.setVisibility(View.GONE);
+                loadImage();
             }
         });
 
@@ -126,31 +128,18 @@ public class ViewImageActivity extends AppCompatActivity {
         actionBarColorAnimation.setDuration(300);
         actionBarElementColorAnimation.setDuration(300);
 
-        activityColorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                mRelativeLayout.setBackgroundColor((int) valueAnimator.getAnimatedValue());
-            }
-        });
+        activityColorAnimation.addUpdateListener(valueAnimator -> mRelativeLayout.setBackgroundColor((int) valueAnimator.getAnimatedValue()));
 
-        actionBarColorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                actionBar.setBackgroundDrawable(new ColorDrawable((int) valueAnimator.getAnimatedValue()));
-            }
-        });
+        actionBarColorAnimation.addUpdateListener(valueAnimator -> actionBar.setBackgroundDrawable(new ColorDrawable((int) valueAnimator.getAnimatedValue())));
 
-        actionBarElementColorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                text.setSpan(new ForegroundColorSpan((int) valueAnimator.getAnimatedValue()), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                actionBar.setTitle(text);
-                upArrow.setColorFilter((int) valueAnimator.getAnimatedValue(), PorterDuff.Mode.SRC_IN);
-                if(mMenu != null) {
-                    Drawable drawable = mMenu.getItem(0).getIcon();
-                    //drawable.mutate();
-                    drawable.setColorFilter((int) valueAnimator.getAnimatedValue(), PorterDuff.Mode.SRC_IN);
-                }
+        actionBarElementColorAnimation.addUpdateListener(valueAnimator -> {
+            text.setSpan(new ForegroundColorSpan((int) valueAnimator.getAnimatedValue()), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            actionBar.setTitle(text);
+            upArrow.setColorFilter((int) valueAnimator.getAnimatedValue(), PorterDuff.Mode.SRC_IN);
+            if(mMenu != null) {
+                Drawable drawable = mMenu.getItem(0).getIcon();
+                //drawable.mutate();
+                drawable.setColorFilter((int) valueAnimator.getAnimatedValue(), PorterDuff.Mode.SRC_IN);
             }
         });
 
@@ -316,25 +305,22 @@ public class ViewImageActivity extends AppCompatActivity {
 
         mImageView.getController().getSettings().setPanEnabled(true);
 
-        mImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isActionBarHidden) {
-                    getWindow().getDecorView().setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-                    isActionBarHidden = false;
-                } else {
-                    getWindow().getDecorView().setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                                    | View.SYSTEM_UI_FLAG_IMMERSIVE);
-                    isActionBarHidden = true;
-                }
+        mImageView.setOnClickListener(view -> {
+            if (isActionBarHidden) {
+                getWindow().getDecorView().setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                isActionBarHidden = false;
+            } else {
+                getWindow().getDecorView().setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE);
+                isActionBarHidden = true;
             }
         });
     }

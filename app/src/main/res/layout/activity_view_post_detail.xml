@@ -319,11 +319,6 @@
                         android:textColor="@color/primaryTextColor"
                         android:textSize="18sp" />
 
-                    <!--<com.multilevelview.MultiLevelRecyclerView
-                        android:id="@+id/recycler_view_view_post_detail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />-->
-
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view_view_post_detail"
                         android:layout_width="match_parent"

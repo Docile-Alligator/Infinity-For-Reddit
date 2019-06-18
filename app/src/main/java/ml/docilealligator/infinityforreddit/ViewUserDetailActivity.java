@@ -180,7 +180,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                                             @Override
                                             public void onUserFollowingSuccess() {
                                                 subscribeUserChip.setText(R.string.follow);
-                                                subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.textColorPrimaryDark));
+                                                subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.backgroundColorPrimaryDark));
                                                 makeSnackbar(R.string.unfollowed);
                                                 subscriptionReady = true;
                                             }
@@ -206,7 +206,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                         @Override
                         public void isNotSubscribed() {
                             subscribeUserChip.setText(R.string.follow);
-                            subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.textColorPrimaryDark));
+                            subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.backgroundColorPrimaryDark));
                             subscriptionReady = true;
                         }
                     }).execute();
