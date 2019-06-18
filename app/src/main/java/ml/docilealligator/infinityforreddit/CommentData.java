@@ -171,6 +171,13 @@ class CommentData implements Parcelable {
         }
     }
 
+    public void addChild(CommentData comment) {
+        if(children == null) {
+            children = new ArrayList<>();
+        }
+        children.add(0, comment);
+    }
+
     public ArrayList<String> getMoreChildrenIds() {
         return moreChildrenIds;
     }

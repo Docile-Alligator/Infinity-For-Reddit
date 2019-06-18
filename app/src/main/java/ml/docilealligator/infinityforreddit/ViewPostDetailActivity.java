@@ -694,8 +694,9 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 if(comment.getDepth() == 0) {
                     mAdapter.addComment(comment);
                 } else {
+                    String parentFullname = data.getExtras().getString(CommentActivity.EXTRA_PARENT_FULLNAME_KEY);
                     int parentPosition = data.getExtras().getInt(CommentActivity.EXTRA_PARENT_POSITION_KEY);
-                    mAdapter.addChildComment(comment, parentPosition);
+                    mAdapter.addChildComment(comment, parentFullname, parentPosition);
                 }
             } else {
                 Toast.makeText(this, R.string.send_comment_failed, Toast.LENGTH_SHORT).show();

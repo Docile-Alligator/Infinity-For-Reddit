@@ -334,16 +334,25 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notifyItemInserted(0);
     }
 
-    //Need proper implementation
-    void addChildComment(CommentData comment, int parentPosition) {
-        ArrayList<CommentData> childComments = mCommentData.get(parentPosition).getChildren();
-        if(childComments == null) {
-            childComments = new ArrayList<>();
+    void addChildComment(CommentData comment, String parentFullname, int parentPosition) {
+        if(parentFullname.equals(mVisibleComments.get(parentPosition).getFullName())) {
+            for(int i = 0; i < mVisibleComments.size(); i++) {
+                if(parentFullname.equals(mVisibleComments.get(i).getFullName())) {
+                    parentPosition = i;
+                    break;
+                }
+            }
         }
-        childComments.add(0, comment);
-        mCommentData.get(parentPosition).addChildren(childComments);
-        mCommentData.get(parentPosition).setHasReply(true);
-        notifyItemChanged(parentPosition);
+
+        mVisibleComments.get(parentPosition).addChild(comment);
+        mVisibleComments.get(parentPosition).setHasReply(true);
+        if(!mVisibleComments.get(parentPosition).isExpanded()) {
+            expandChildren(parentPosition);
+            notifyItemChanged(parentPosition);
+        } else {
+            mVisibleComments.add(parentPosition + 1, comment);
+            notifyItemInserted(parentPosition + 1);
+        }
     }
 
     void clearData() {

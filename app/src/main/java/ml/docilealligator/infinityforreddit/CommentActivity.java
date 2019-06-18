@@ -98,6 +98,7 @@ public class CommentActivity extends AppCompatActivity {
                             public void sendCommentSuccess(CommentData commentData) {
                                 Intent returnIntent = new Intent();
                                 returnIntent.putExtra(EXTRA_COMMENT_DATA_KEY, commentData);
+                                returnIntent.putExtra(EXTRA_PARENT_FULLNAME_KEY, parentFullname);
                                 if(isReplying) {
                                     returnIntent.putExtra(EXTRA_PARENT_POSITION_KEY, parentPosition);
                                 }
