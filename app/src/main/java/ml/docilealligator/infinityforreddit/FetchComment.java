@@ -84,7 +84,6 @@ class FetchComment {
         }
 
         stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-        //final int finalStartingIndex = startingIndex + 100;
 
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> moreChildrenBasicInfo = api.getMoreChildren(mParentId, stringBuilder.toString());

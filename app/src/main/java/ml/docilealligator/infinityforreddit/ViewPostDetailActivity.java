@@ -85,7 +85,6 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
     private boolean isLoadingMoreChildren = false;
     private boolean isRefreshing = false;
-    private ArrayList<CommentData> mCommentsData;
     private ArrayList<String> children;
     private int mChildrenStartingIndex = 0;
 
@@ -166,8 +165,6 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         if(getIntent().hasExtra(EXTRA_POST_LIST_POSITION)) {
             postListPosition = getIntent().getExtras().getInt(EXTRA_POST_LIST_POSITION);
         }
-
-        mCommentsData = new ArrayList<>();
 
         mRecyclerView.setNestedScrollingEnabled(false);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -507,15 +504,9 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                                                       String parentId, ArrayList<String> children) {
                         ViewPostDetailActivity.this.children = children;
                         mCommentProgressbar.setVisibility(View.GONE);
-                        mCommentsData.addAll(commentsData);
 
-                        if (mCommentsData.size() > 0) {
+                        if (commentsData.size() > 0) {
                             if(mAdapter == null) {
-                                mAdapter = new CommentRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
-                                        mOauthRetrofit, mSharedPreferences, commentsData, mRecyclerView,
-                                        mPost.getSubredditNamePrefixed(), mPost.getId(), mLocale);
-                                mRecyclerView.setAdapter(mAdapter);
-
                                 mNestedScrollView.getViewTreeObserver().addOnScrollChangedListener(() -> {
                                     if(!isLoadingMoreChildren) {
                                         View view = mNestedScrollView.getChildAt(mNestedScrollView.getChildCount() - 1);
@@ -526,9 +517,12 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                                         }
                                     }
                                 });
-                            } else {
-                                mAdapter.notifyDataSetChanged();
                             }
+
+                            mAdapter = new CommentRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
+                                    mOauthRetrofit, mSharedPreferences, commentsData, mRecyclerView,
+                                    mPost.getSubredditNamePrefixed(), mPost.getId(), mLocale);
+                            mRecyclerView.setAdapter(mAdapter);
 
                             mCommentCardView.setVisibility(View.VISIBLE);
                         } else {
@@ -627,11 +621,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private void refresh() {
         if(!isRefreshing) {
             isRefreshing = true;
+            mChildrenStartingIndex = 0;
 
-            if(mAdapter != null && mCommentsData != null) {
-                int size = mCommentsData.size();
-                mCommentsData.clear();
-                mAdapter.notifyItemRangeRemoved(0, size);
+            if(mAdapter != null) {
+                mAdapter.clearData();
             }
 
             fetchComment();

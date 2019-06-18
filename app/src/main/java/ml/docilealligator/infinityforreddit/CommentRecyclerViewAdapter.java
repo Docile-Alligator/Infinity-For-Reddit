@@ -56,6 +56,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         mLocale = locale;
         mVisibleComments = new ArrayList<>();
 
+
         new Handler().post(() -> {
             makeChildrenVisible(commentData, mVisibleComments);
             notifyDataSetChanged();
@@ -80,7 +81,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        final CommentData commentItem = mVisibleComments.get(position);
+        CommentData commentItem = mVisibleComments.get(holder.getAdapterPosition());
 
         String authorPrefixed = "u/" + commentItem.getAuthor();
         ((CommentViewHolder) holder).authorTextView.setText(authorPrefixed);
@@ -327,9 +328,9 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notifyItemRangeInserted(sizeBefore, comments.size());
     }
 
-    //Need proper implementation
     void addComment(CommentData comment) {
         mCommentData.add(0, comment);
+        mVisibleComments.add(0, comment);
         notifyItemInserted(0);
     }
 
@@ -343,6 +344,12 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         mCommentData.get(parentPosition).addChildren(childComments);
         mCommentData.get(parentPosition).setHasReply(true);
         notifyItemChanged(parentPosition);
+    }
+
+    void clearData() {
+        mCommentData.clear();
+        mVisibleComments.clear();
+        notifyDataSetChanged();
     }
 
     @Override
