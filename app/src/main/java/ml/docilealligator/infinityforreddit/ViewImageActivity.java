@@ -113,7 +113,7 @@ public class ViewImageActivity extends AppCompatActivity {
             }
         });
 
-        final float pxHeight = getResources().getDisplayMetrics().heightPixels;
+        float pxHeight = getResources().getDisplayMetrics().heightPixels;
 
         int activityColorFrom = getResources().getColor(android.R.color.black);
         int actionBarColorFrom = getResources().getColor(R.color.transparentActionBarColor);
@@ -303,7 +303,7 @@ public class ViewImageActivity extends AppCompatActivity {
             }
         });
 
-        mImageView.getController().getSettings().setPanEnabled(true);
+        mImageView.getController().getSettings().setMaxZoom(10f).setDoubleTapZoom(2f).setPanEnabled(true);
 
         mImageView.setOnClickListener(view -> {
             if (isActionBarHidden) {
@@ -398,7 +398,7 @@ public class ViewImageActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode == PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE && grantResults.length > 0) {
             if(grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                Toast.makeText(this, "No storage permission to save this file", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.no_storage_permission, Toast.LENGTH_SHORT).show();
             } else if(grantResults[0] == PackageManager.PERMISSION_GRANTED && isDownloading) {
                 saveImage();
             }
@@ -422,9 +422,9 @@ public class ViewImageActivity extends AppCompatActivity {
                                 super.onPostExecute(aVoid);
                                 isDownloading = false;
                                 if(saveSuccess) {
-                                    Toast.makeText(ViewImageActivity.this, "Download completed", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ViewImageActivity.this, R.string.download_completed, Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(ViewImageActivity.this, "Download failed", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ViewImageActivity.this, R.string.download_failed, Toast.LENGTH_SHORT).show();
                                 }
                             }
 

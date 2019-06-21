@@ -216,6 +216,9 @@ public class ViewUserDetailActivity extends AppCompatActivity {
 
                 String userFullName = "u/" + userData.getName();
                 userNameTextView.setText(userFullName);
+                if(!title.equals(userFullName)) {
+                    getSupportActionBar().setTitle(userFullName);
+                }
                 String karma = getString(R.string.karma_info, userData.getKarma());
                 karmaTextView.setText(karma);
             }

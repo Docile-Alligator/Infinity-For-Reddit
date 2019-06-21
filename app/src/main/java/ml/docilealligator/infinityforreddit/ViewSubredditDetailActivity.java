@@ -154,6 +154,9 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
                 }
 
                 String subredditFullName = "r/" + subredditData.getName();
+                if(!title.equals(subredditFullName)) {
+                    getSupportActionBar().setTitle(subredditFullName);
+                }
                 subredditNameTextView.setText(subredditFullName);
                 String nSubscribers = getString(R.string.subscribers_number_detail, subredditData.getNSubscribers());
                 nSubscribersTextView.setText(nSubscribers);
