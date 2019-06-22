@@ -54,9 +54,6 @@ public interface RedditAPI {
     @POST("api/subscribe")
     Call<String> subredditSubscription(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
-    @GET("api/morechildren?api_type=json&raw_json=1")
-    Call<String> getMoreChildren(@Query("link_id") String linkId, @Query("children") String children);
-
     @GET("{subredditNamePrefixed}/api/info.json?raw_json=1")
     Call<String> getInfo(@Path("subredditNamePrefixed") String subredditNamePrefixed, @Query("id") String id);
 

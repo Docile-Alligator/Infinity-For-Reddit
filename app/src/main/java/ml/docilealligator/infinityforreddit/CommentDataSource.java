@@ -1,11 +1,11 @@
 package ml.docilealligator.infinityforreddit;
 
-import java.util.Locale;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
-import retrofit2.Call;
+
+import java.util.Locale;
+
 import retrofit2.Retrofit;
 
 public class CommentDataSource extends PageKeyedDataSource<String, Post> {
@@ -62,7 +62,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, Post> {
 
         RedditAPI api = retrofit.create(RedditAPI.class);
 
-        Call<String> comments = api.getComments(subredditNamePrefixed, article, comment);
+        //Call<String> comments = api.getComments(subredditNamePrefixed, article, comment);
         /*comments.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -119,7 +119,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, Post> {
 
         RedditAPI api = retrofit.create(RedditAPI.class);
 
-        Call<String> moreChildrenBasicInfo = api.getMoreChildren(mParentId, params.key);
+        //Call<String> moreChildrenBasicInfo = api.getMoreChildren(mParentId, params.key);
         /*moreChildrenBasicInfo.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {

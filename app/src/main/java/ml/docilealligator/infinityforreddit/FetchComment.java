@@ -24,13 +24,8 @@ class FetchComment {
         void onFetchMoreCommentFailed();
     }
 
-    interface FetchAllCommentListener {
-        void onFetchAllCommentSuccess(ArrayList<CommentData> commentData);
-        void onFetchAllCommentFailed();
-    }
-
     static void fetchComment(Retrofit retrofit, String subredditNamePrefixed, String article,
-                             String comment, Locale locale, boolean isPost, int parentDepth,
+                             String comment, Locale locale, boolean isPost, int depth,
                              final FetchCommentListener fetchCommentListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> comments = api.getComments(subredditNamePrefixed, article, comment);
@@ -39,13 +34,13 @@ class FetchComment {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if(response.isSuccessful()) {
                     ParseComment.parseComment(response.body(), new ArrayList<>(),
-                            locale, isPost, parentDepth,
+                            locale, isPost, depth,
                             new ParseComment.ParseCommentListener() {
                                 @Override
                                 public void onParseCommentSuccess(ArrayList<CommentData> commentData,
-                                                                  String parentId, ArrayList<String> moreChildrenIds) {
+                                                                  String parentId, ArrayList<String> moreChildrenFullnames) {
                                     fetchCommentListener.onFetchCommentSuccess(commentData, parentId,
-                                            moreChildrenIds);
+                                            moreChildrenFullnames);
                                 }
 
                                 @Override
@@ -68,9 +63,9 @@ class FetchComment {
         });
     }
 
-    static void fetchMoreComment(Retrofit retrofit, String subredditNamePrefixed, String mParentId,
-                                 ArrayList<String> allChildren, int startingIndex, Locale locale,
-                                 FetchMoreCommentListener fetchMoreCommentListener) {
+    static void fetchMoreComment(Retrofit retrofit, String subredditNamePrefixed,
+                                 ArrayList<String> allChildren, int startingIndex, int depth,
+                                 Locale locale, FetchMoreCommentListener fetchMoreCommentListener) {
         StringBuilder stringBuilder = new StringBuilder();
         for(int i = 0; i < 100; i++) {
             if(allChildren.size() <= startingIndex + i) {
@@ -86,101 +81,37 @@ class FetchComment {
         stringBuilder.deleteCharAt(stringBuilder.length() - 1);
 
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> moreChildrenBasicInfo = api.getMoreChildren(mParentId, stringBuilder.toString());
-        moreChildrenBasicInfo.enqueue(new Callback<String>() {
+
+        Call<String> moreComments = api.getInfo(subredditNamePrefixed, stringBuilder.toString());
+        moreComments.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParseComment.parseMoreCommentBasicInfo(response.body(), new ParseComment.ParseMoreCommentBasicInfoListener() {
-                        @Override
-                        public void onParseMoreCommentBasicInfoSuccess(String commaSeparatedChildrenId) {
-                            Call<String> moreComments = api.getInfo(subredditNamePrefixed, commaSeparatedChildrenId);
-                            moreComments.enqueue(new Callback<String>() {
+                    ParseComment.parseMoreComment(response.body(), new ArrayList<>(), locale,
+                            depth, new ParseComment.ParseCommentListener() {
                                 @Override
-                                public void onResponse(Call<String> call, Response<String> response) {
-                                    if(response.isSuccessful()) {
-                                        ParseComment.parseMoreComment(response.body(), new ArrayList<>(), locale,
-                                                0, new ParseComment.ParseCommentListener() {
-                                                    @Override
-                                                    public void onParseCommentSuccess(ArrayList<CommentData> commentData, String parentId,
-                                                                                      ArrayList<String> moreChildrenIds) {
-                                                        fetchMoreCommentListener.onFetchMoreCommentSuccess(commentData, startingIndex + 100);
-                                                    }
-
-                                                    @Override
-                                                    public void onParseCommentFailed() {
-                                                        fetchMoreCommentListener.onFetchMoreCommentFailed();
-                                                        Log.i("comment parse failed", "comment parse failed");
-                                                    }
-                                                });
-                                    } else {
-                                        Log.i("more comment failed", response.message());
-                                        fetchMoreCommentListener.onFetchMoreCommentFailed();
-                                    }
+                                public void onParseCommentSuccess(ArrayList<CommentData> commentData, String parentId,
+                                                                  ArrayList<String> moreChildrenFullnames) {
+                                    fetchMoreCommentListener.onFetchMoreCommentSuccess(commentData, startingIndex + 100);
                                 }
 
                                 @Override
-                                public void onFailure(Call<String> call, Throwable t) {
-                                    Log.i("more comment failed", t.getMessage());
+                                public void onParseCommentFailed() {
                                     fetchMoreCommentListener.onFetchMoreCommentFailed();
+                                    Log.i("comment parse failed", "comment parse failed");
                                 }
                             });
-                        }
-
-                        @Override
-                        public void onParseMoreCommentBasicInfoFailed() {
-                            Log.i("comment parse failed", "comment parse failed");
-                            fetchMoreCommentListener.onFetchMoreCommentFailed();
-                        }
-                    });
                 } else {
-                    Log.i("basic info failed", response.message());
+                    Log.i("more comment failed", response.message());
                     fetchMoreCommentListener.onFetchMoreCommentFailed();
                 }
             }
 
             @Override
             public void onFailure(Call<String> call, Throwable t) {
-                Log.i("basic info failed", t.getMessage());
+                Log.i("more comment failed", t.getMessage());
                 fetchMoreCommentListener.onFetchMoreCommentFailed();
             }
         });
-    }
-
-    static void fetchAllComment(Retrofit retrofit, String subredditNamePrefixed, String article,
-                                String comment, Locale locale, boolean isPost, int parentDepth,
-                                FetchAllCommentListener fetchAllCommentListener) {
-        fetchComment(retrofit, subredditNamePrefixed, article, comment, locale, isPost, parentDepth,
-                new FetchCommentListener() {
-                    @Override
-                    public void onFetchCommentSuccess(ArrayList<CommentData> commentsData, String parentId, ArrayList<String> children) {
-                        if(children.size() != 0) {
-                            fetchMoreComment(retrofit, subredditNamePrefixed, parentId, children,
-                                    0, locale, new FetchMoreCommentListener() {
-                                        @Override
-                                        public void onFetchMoreCommentSuccess(ArrayList<CommentData> commentsData,
-                                                                              int childrenStartingIndex) {
-                                            ((ArrayList<CommentData>) commentsData).addAll((ArrayList<CommentData>) commentsData);
-                                            fetchAllCommentListener.onFetchAllCommentSuccess(commentsData);
-                                        }
-
-                                        @Override
-                                        public void onFetchMoreCommentFailed() {
-                                            Log.i("fetch more comment", "error");
-                                            fetchAllCommentListener.onFetchAllCommentFailed();
-                                        }
-                                    });
-                        } else {
-                            fetchAllCommentListener.onFetchAllCommentSuccess(commentsData);
-                        }
-                    }
-
-                    @Override
-                    public void onFetchCommentFailed() {
-                        Log.i("fetch comment", "error");
-                        fetchAllCommentListener.onFetchAllCommentFailed();
-                    }
-                });
-
     }
 }

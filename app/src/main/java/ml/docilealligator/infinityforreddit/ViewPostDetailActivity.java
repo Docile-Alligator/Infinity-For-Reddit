@@ -541,8 +541,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
     private void fetchMoreComment(int startingIndex) {
         isLoadingMoreChildren = true;
-        FetchComment.fetchMoreComment(mRetrofit, mPost.getSubredditNamePrefixed(), mPost.getFullName(),
-                children, startingIndex, mLocale, new FetchComment.FetchMoreCommentListener() {
+        FetchComment.fetchMoreComment(mRetrofit, mPost.getSubredditNamePrefixed(), children, startingIndex,
+                0, mLocale, new FetchComment.FetchMoreCommentListener() {
                     @Override
                     public void onFetchMoreCommentSuccess(ArrayList<CommentData> commentsData, int childrenStartingIndex) {
                         mAdapter.addComments(commentsData);
@@ -553,7 +553,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     @Override
                     public void onFetchMoreCommentFailed() {
                         isLoadingMoreChildren = false;
-                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, R.string.load_more_comment_failed, Snackbar.LENGTH_INDEFINITE);
+                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, R.string.post_load_more_comments_failed, Snackbar.LENGTH_INDEFINITE);
                         snackbar.setAction(R.string.retry, view -> fetchMoreComment(startingIndex));
                         snackbar.show();
                     }
@@ -613,7 +613,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     }
 
     private void showRetrySnackbar() {
-        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, R.string.load_comment_failed, Snackbar.LENGTH_INDEFINITE);
+        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, R.string.post_load_comments_failed, Snackbar.LENGTH_INDEFINITE);
         snackbar.setAction(R.string.retry, view -> fetchComment());
         snackbar.show();
     }

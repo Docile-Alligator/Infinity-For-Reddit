@@ -209,7 +209,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
             super(itemView);
             ButterKnife.bind(this, itemView);
             retryButton.setOnClickListener(view -> retryLoadingMoreCallback.retryLoadingMore());
-            errorTextView.setText(R.string.load_comment_failed);
+            errorTextView.setText(R.string.post_load_comments_failed);
         }
     }
 

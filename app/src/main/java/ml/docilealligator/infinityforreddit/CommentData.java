@@ -22,7 +22,12 @@ class CommentData implements Parcelable {
     private boolean scoreHidden;
     private boolean isExpanded;
     private ArrayList<CommentData> children;
-    private ArrayList<String> moreChildrenIds;
+    private ArrayList<String> moreChildrenFullnames;
+    private int moreChildrenStartingIndex;
+
+    private boolean isPlaceHolder;
+    private boolean isLoadingMoreChildren;
+    private boolean loadMoreChildrenFailed;
 
     CommentData(String id, String fullName, String author, String commentTime, String commentContent,
                 String parentId, int score, boolean isSubmitter, String permalink, int depth,
@@ -41,6 +46,15 @@ class CommentData implements Parcelable {
         this.hasReply = hasReply;
         this.scoreHidden = scoreHidden;
         this.isExpanded = false;
+        moreChildrenStartingIndex = 0;
+        isPlaceHolder = false;
+    }
+
+    CommentData(int depth) {
+        this.depth = depth;
+        isPlaceHolder = true;
+        isLoadingMoreChildren = false;
+        loadMoreChildrenFailed = false;
     }
 
     protected CommentData(Parcel in) {
@@ -60,7 +74,11 @@ class CommentData implements Parcelable {
         scoreHidden = in.readByte() != 0;
         isExpanded = in.readByte() != 0;
         children = in.readArrayList(null);
-        moreChildrenIds = in.readArrayList(null);
+        moreChildrenFullnames = in.readArrayList(null);
+        moreChildrenStartingIndex = in.readInt();
+        isPlaceHolder = in.readByte() != 0;
+        isLoadingMoreChildren = in.readByte() != 0;
+        loadMoreChildrenFailed = in.readByte() != 0;
     }
 
     public static final Creator<CommentData> CREATOR = new Creator<CommentData>() {
@@ -164,26 +182,70 @@ class CommentData implements Parcelable {
     }
 
     public void addChildren(ArrayList<CommentData> moreChildren) {
-        if(children == null) {
+        if(children == null || children.size() == 0) {
             setChildren(moreChildren);
         } else {
-            children.addAll(moreChildren);
+            if(children.get(children.size() - 1).isPlaceHolder) {
+                children.addAll(children.size() - 2, moreChildren);
+            } else {
+                children.addAll(moreChildren);
+            }
         }
     }
 
     public void addChild(CommentData comment) {
+        addChild(comment, 0);
+    }
+
+    public void addChild(CommentData comment, int position) {
         if(children == null) {
             children = new ArrayList<>();
         }
-        children.add(0, comment);
+        children.add(position, comment);
     }
 
-    public ArrayList<String> getMoreChildrenIds() {
-        return moreChildrenIds;
+    public ArrayList<String> getMoreChildrenFullnames() {
+        return moreChildrenFullnames;
     }
 
-    public void setMoreChildrenIds(ArrayList<String> moreChildrenIds) {
-        this.moreChildrenIds = moreChildrenIds;
+    public void setMoreChildrenFullnames(ArrayList<String> moreChildrenFullnames) {
+        this.moreChildrenFullnames = moreChildrenFullnames;
+    }
+
+    public boolean hasMoreChildrenFullnames() {
+        return moreChildrenFullnames != null;
+    }
+
+    public void removeMoreChildrenFullnames() {
+        moreChildrenFullnames.clear();
+    }
+
+    public int getMoreChildrenStartingIndex() {
+        return moreChildrenStartingIndex;
+    }
+
+    public void setMoreChildrenStartingIndex(int moreChildrenStartingIndex) {
+        this.moreChildrenStartingIndex = moreChildrenStartingIndex;
+    }
+
+    public boolean isPlaceHolder() {
+        return isPlaceHolder;
+    }
+
+    public boolean isLoadingMoreChildren() {
+        return isLoadingMoreChildren;
+    }
+
+    public void setLoadingMoreChildren(boolean isLoadingMoreChildren) {
+        this.isLoadingMoreChildren = isLoadingMoreChildren;
+    }
+
+    public boolean isLoadMoreChildrenFailed() {
+        return loadMoreChildrenFailed;
+    }
+
+    public void setLoadMoreChildrenFailed(boolean loadMoreChildrenFailed) {
+        this.loadMoreChildrenFailed = loadMoreChildrenFailed;
     }
 
     @Override
@@ -209,6 +271,10 @@ class CommentData implements Parcelable {
         parcel.writeByte((byte) (scoreHidden ? 1 : 0));
         parcel.writeByte((byte) (isExpanded ? 1 : 0));
         parcel.writeList(children);
-        parcel.writeList(moreChildrenIds);
+        parcel.writeList(moreChildrenFullnames);
+        parcel.writeInt(moreChildrenStartingIndex);
+        parcel.writeByte((byte) (isPlaceHolder ? 1 : 0));
+        parcel.writeByte((byte) (isLoadingMoreChildren ? 1 : 0));
+        parcel.writeByte((byte) (loadMoreChildrenFailed ? 1 : 0));
     }
 }
