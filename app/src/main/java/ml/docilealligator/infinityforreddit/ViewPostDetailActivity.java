@@ -498,14 +498,14 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         mNoCommentWrapperLinearLayout.setVisibility(View.GONE);
 
         FetchComment.fetchComment(mRetrofit, mPost.getSubredditNamePrefixed(), mPost.getId(),
-                null, mLocale, true, 0, new FetchComment.FetchCommentListener() {
+                mLocale, new FetchComment.FetchCommentListener() {
                     @Override
-                    public void onFetchCommentSuccess(ArrayList<CommentData> commentsData,
+                    public void onFetchCommentSuccess(ArrayList<CommentData> expandedComments,
                                                       String parentId, ArrayList<String> children) {
                         ViewPostDetailActivity.this.children = children;
                         mCommentProgressbar.setVisibility(View.GONE);
 
-                        if (commentsData.size() > 0) {
+                        if (expandedComments.size() > 0) {
                             if(mAdapter == null) {
                                 mNestedScrollView.getViewTreeObserver().addOnScrollChangedListener(() -> {
                                     if(!isLoadingMoreChildren) {
@@ -520,8 +520,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                             }
 
                             mAdapter = new CommentRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
-                                    mOauthRetrofit, mSharedPreferences, commentsData, mRecyclerView,
-                                    mPost.getSubredditNamePrefixed(), mPost.getId(), mLocale);
+                                    mOauthRetrofit, mSharedPreferences, expandedComments,
+                                    mPost.getSubredditNamePrefixed(), mLocale);
                             mRecyclerView.setAdapter(mAdapter);
 
                             mCommentCardView.setVisibility(View.VISIBLE);
@@ -544,8 +544,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         FetchComment.fetchMoreComment(mRetrofit, mPost.getSubredditNamePrefixed(), children, startingIndex,
                 0, mLocale, new FetchComment.FetchMoreCommentListener() {
                     @Override
-                    public void onFetchMoreCommentSuccess(ArrayList<CommentData> commentsData, int childrenStartingIndex) {
-                        mAdapter.addComments(commentsData);
+                    public void onFetchMoreCommentSuccess(ArrayList<CommentData> expandedComments, int childrenStartingIndex) {
+                        mAdapter.addComments(expandedComments);
                         mChildrenStartingIndex = childrenStartingIndex;
                         isLoadingMoreChildren = false;
                     }

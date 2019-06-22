@@ -14,32 +14,29 @@ import retrofit2.Retrofit;
 
 class FetchComment {
     interface FetchCommentListener {
-        void onFetchCommentSuccess(ArrayList<CommentData> commentsData,
-                                   String parentId, ArrayList<String> children);
+        void onFetchCommentSuccess(ArrayList<CommentData> expandedComments, String parentId, ArrayList<String> children);
         void onFetchCommentFailed();
     }
 
     interface FetchMoreCommentListener {
-        void onFetchMoreCommentSuccess(ArrayList<CommentData> commentsData, int childrenStartingIndex);
+        void onFetchMoreCommentSuccess(ArrayList<CommentData> expandedComments, int childrenStartingIndex);
         void onFetchMoreCommentFailed();
     }
 
     static void fetchComment(Retrofit retrofit, String subredditNamePrefixed, String article,
-                             String comment, Locale locale, boolean isPost, int depth,
-                             final FetchCommentListener fetchCommentListener) {
+                             Locale locale, FetchCommentListener fetchCommentListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> comments = api.getComments(subredditNamePrefixed, article, comment);
+        Call<String> comments = api.getComments(subredditNamePrefixed, article);
         comments.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if(response.isSuccessful()) {
                     ParseComment.parseComment(response.body(), new ArrayList<>(),
-                            locale, isPost, depth,
-                            new ParseComment.ParseCommentListener() {
+                            locale, new ParseComment.ParseCommentListener() {
                                 @Override
-                                public void onParseCommentSuccess(ArrayList<CommentData> commentData,
+                                public void onParseCommentSuccess(ArrayList<CommentData> expandedComments,
                                                                   String parentId, ArrayList<String> moreChildrenFullnames) {
-                                    fetchCommentListener.onFetchCommentSuccess(commentData, parentId,
+                                    fetchCommentListener.onFetchCommentSuccess(expandedComments, parentId,
                                             moreChildrenFullnames);
                                 }
 
@@ -90,9 +87,10 @@ class FetchComment {
                     ParseComment.parseMoreComment(response.body(), new ArrayList<>(), locale,
                             depth, new ParseComment.ParseCommentListener() {
                                 @Override
-                                public void onParseCommentSuccess(ArrayList<CommentData> commentData, String parentId,
-                                                                  ArrayList<String> moreChildrenFullnames) {
-                                    fetchMoreCommentListener.onFetchMoreCommentSuccess(commentData, startingIndex + 100);
+                                public void onParseCommentSuccess(ArrayList<CommentData> expandedComments,
+                                                                  String parentId, ArrayList<String> moreChildrenFullnames) {
+                                    fetchMoreCommentListener.onFetchMoreCommentSuccess(expandedComments,
+                                            startingIndex + 100);
                                 }
 
                                 @Override

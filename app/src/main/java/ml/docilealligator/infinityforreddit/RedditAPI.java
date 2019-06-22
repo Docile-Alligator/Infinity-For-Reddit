@@ -18,7 +18,7 @@ public interface RedditAPI {
 
     @GET("{subredditNamePrefixed}/comments/{article}.json?raw_json=1")
     Call<String> getComments(@Path("subredditNamePrefixed") String subredditNamePrefixed,
-                             @Path("article") String article, @Query("comment") String comment);
+                             @Path("article") String article);
 
     @GET("r/{subredditName}/about.json?raw_json=1")
     Call<String> getSubredditData(@Path("subredditName") String subredditName);
