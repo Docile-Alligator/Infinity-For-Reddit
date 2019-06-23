@@ -14,7 +14,7 @@
             android:background="@color/textColorPrimaryDark" />
 
         <TextView
-            android:id="@+id/load_more_comments_text_view_item_load_more_comments"
+            android:id="@+id/placeholder_text_view_item_load_more_comments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"

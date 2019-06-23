@@ -6,6 +6,10 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 class CommentData implements Parcelable {
+    static final int VOTE_TYPE_NO_VOTE = 0;
+    static final int VOTE_TYPE_UPVOTE = 1;
+    static final int VOTE_TYPE_DOWNVOTE = -1;
+
     private String id;
     private String fullName;
     private String author;

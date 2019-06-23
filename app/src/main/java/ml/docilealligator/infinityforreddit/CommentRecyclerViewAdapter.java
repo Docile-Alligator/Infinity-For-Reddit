@@ -3,14 +3,12 @@ package ml.docilealligator.infinityforreddit;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.ColorFilter;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.browser.customtabs.CustomTabsIntent;
@@ -29,8 +27,6 @@ import ru.noties.markwon.view.MarkwonView;
 class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_COMMENT = 0;
     private static final int VIEW_TYPE_LOAD_MORE_COMMENT = 1;
-    private static final int VIEW_TYPE_IS_LOADING_MORE_COMMENT = 2;
-    private static final int VIEW_TYPE_LOAD_MORE_COMMENT_FAILED = 3;
 
     private Activity mActivity;
     private Retrofit mRetrofit;
@@ -59,28 +55,17 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if(!comment.isPlaceHolder()) {
             return VIEW_TYPE_COMMENT;
         } else {
-            if(comment.isLoadMoreChildrenFailed()) {
-                return VIEW_TYPE_LOAD_MORE_COMMENT_FAILED;
-            } else if(comment.isLoadingMoreChildren()) {
-                return VIEW_TYPE_IS_LOADING_MORE_COMMENT;
-            } else {
-                return VIEW_TYPE_LOAD_MORE_COMMENT;
-            }
+            return VIEW_TYPE_LOAD_MORE_COMMENT;
         }
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        switch (viewType) {
-            case VIEW_TYPE_COMMENT:
-                return new CommentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false));
-            case VIEW_TYPE_LOAD_MORE_COMMENT:
-                return new LoadMoreCommentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_load_more_comments, parent, false));
-            case VIEW_TYPE_IS_LOADING_MORE_COMMENT:
-                return new IsLoadingMoreCommentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_is_loading_more_comments, parent, false));
-            default:
-                return new LoadMoreCommentFailedViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_load_more_comments_failed, parent, false));
+        if(viewType == VIEW_TYPE_COMMENT) {
+            return new CommentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false));
+        } else {
+            return new LoadMoreCommentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_load_more_comments_placeholder, parent, false));
         }
     }
 
@@ -91,11 +76,6 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             String authorPrefixed = "u/" + commentItem.getAuthor();
             ((CommentViewHolder) holder).authorTextView.setText(authorPrefixed);
-            ((CommentViewHolder) holder).authorTextView.setOnClickListener(view -> {
-                Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
-                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, commentItem.getAuthor());
-                mActivity.startActivity(intent);
-            });
 
             ((CommentViewHolder) holder).commentTimeTextView.setText(commentItem.getCommentTime());
 
@@ -123,14 +103,6 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             ((CommentViewHolder) holder).verticalBlock.getLayoutParams().width = commentItem.getDepth() * 16;
 
-            ((CommentViewHolder) holder).shareButton.setOnClickListener(view -> {
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                String extraText = commentItem.getPermalink();
-                intent.putExtra(Intent.EXTRA_TEXT, extraText);
-                mActivity.startActivity(Intent.createChooser(intent, "Share"));
-            });
-
             if (commentItem.hasReply()) {
                 if(commentItem.isExpanded()) {
                     ((CommentViewHolder) holder).expandButton.setImageResource(R.drawable.ic_expand_less_black_20dp);
@@ -139,29 +111,6 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
                 ((CommentViewHolder) holder).expandButton.setVisibility(View.VISIBLE);
             }
-
-            ((CommentViewHolder) holder).expandButton.setOnClickListener(view -> {
-                if(commentItem.isExpanded()) {
-                    collapseChildren(holder.getAdapterPosition());
-                    ((CommentViewHolder) holder).expandButton
-                            .setImageResource(R.drawable.ic_expand_more_black_20dp);
-                } else {
-                    expandChildren(holder.getAdapterPosition());
-                    commentItem.setExpanded(true);
-                    ((CommentViewHolder) holder).expandButton
-                            .setImageResource(R.drawable.ic_expand_less_black_20dp);
-                }
-            });
-
-            ((CommentViewHolder) holder).replyButton.setOnClickListener(view -> {
-                Intent intent = new Intent(mActivity, CommentActivity.class);
-                intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, commentItem.getDepth() + 1);
-                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, commentItem.getCommentContent());
-                intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, commentItem.getFullName());
-                intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, true);
-                intent.putExtra(CommentActivity.EXTRA_PARENT_POSITION_KEY, holder.getAdapterPosition());
-                mActivity.startActivityForResult(intent, CommentActivity.WRITE_COMMENT_REQUEST_CODE);
-            });
 
             switch (commentItem.getVoteType()) {
                 case 1:
@@ -173,280 +122,16 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                             .setColorFilter(ContextCompat.getColor(mActivity, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
                     break;
             }
-
-            ((CommentViewHolder) holder).upvoteButton.setOnClickListener(view -> {
-                ColorFilter previousUpvoteButtonColorFilter = ((CommentViewHolder) holder).upvoteButton.getColorFilter();
-                ColorFilter previousDownvoteButtonColorFilter = ((CommentViewHolder) holder).downvoteButton.getColorFilter();
-                int previousVoteType = commentItem.getVoteType();
-                String newVoteType;
-
-                ((CommentViewHolder) holder).downvoteButton.clearColorFilter();
-
-                if(previousUpvoteButtonColorFilter == null) {
-                    //Not upvoted before
-                    commentItem.setVoteType(1);
-                    newVoteType = RedditUtils.DIR_UPVOTE;
-                    ((CommentViewHolder) holder).upvoteButton
-                            .setColorFilter(ContextCompat.getColor(mActivity, R.color.backgroundColorPrimaryDark), android.graphics.PorterDuff.Mode.SRC_IN);
-                } else {
-                    //Upvoted before
-                    commentItem.setVoteType(0);
-                    newVoteType = RedditUtils.DIR_UNVOTE;
-                    ((CommentViewHolder) holder).upvoteButton.clearColorFilter();
-                }
-
-                ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() + commentItem.getVoteType()));
-
-                VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
-                    @Override
-                    public void onVoteThingSuccess(int position1) {
-                        if(newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
-                            commentItem.setVoteType(1);
-                            ((CommentViewHolder) holder).upvoteButton
-                                    .setColorFilter(ContextCompat.getColor(mActivity, R.color.backgroundColorPrimaryDark), android.graphics.PorterDuff.Mode.SRC_IN);
-                        } else {
-                            commentItem.setVoteType(0);
-                            ((CommentViewHolder) holder).upvoteButton.clearColorFilter();
-                        }
-
-                        ((CommentViewHolder) holder).downvoteButton.clearColorFilter();
-                        ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() + commentItem.getVoteType()));
-                    }
-
-                    @Override
-                    public void onVoteThingFail(int position1) {
-                        Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
-                        commentItem.setVoteType(previousVoteType);
-                        ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() + previousVoteType));
-                        ((CommentViewHolder) holder).upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
-                        ((CommentViewHolder) holder).downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
-                    }
-                }, commentItem.getFullName(), newVoteType, holder.getAdapterPosition());
-            });
-
-            ((CommentViewHolder) holder).downvoteButton.setOnClickListener(view -> {
-                ColorFilter previousUpvoteButtonColorFilter = ((CommentViewHolder) holder).upvoteButton.getColorFilter();
-                ColorFilter previousDownvoteButtonColorFilter = ((CommentViewHolder) holder).downvoteButton.getColorFilter();
-                int previousVoteType = commentItem.getVoteType();
-                String newVoteType;
-
-                ((CommentViewHolder) holder).upvoteButton.clearColorFilter();
-
-                if(previousDownvoteButtonColorFilter == null) {
-                    //Not downvoted before
-                    commentItem.setVoteType(-1);
-                    newVoteType = RedditUtils.DIR_DOWNVOTE;
-                    ((CommentViewHolder) holder).downvoteButton
-                            .setColorFilter(ContextCompat.getColor(mActivity, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
-                } else {
-                    //Downvoted before
-                    commentItem.setVoteType(0);
-                    newVoteType = RedditUtils.DIR_UNVOTE;
-                    ((CommentViewHolder) holder).downvoteButton.clearColorFilter();
-                }
-
-                ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() + commentItem.getVoteType()));
-
-                VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
-                    @Override
-                    public void onVoteThingSuccess(int position1) {
-                        if(newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {
-                            commentItem.setVoteType(-1);
-                            ((CommentViewHolder) holder).downvoteButton
-                                    .setColorFilter(ContextCompat.getColor(mActivity, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
-                        } else {
-                            commentItem.setVoteType(0);
-                            ((CommentViewHolder) holder).downvoteButton.clearColorFilter();
-                        }
-
-                        ((CommentViewHolder) holder).upvoteButton.clearColorFilter();
-                        ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() + commentItem.getVoteType()));
-                    }
-
-                    @Override
-                    public void onVoteThingFail(int position1) {
-                        Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
-                        commentItem.setVoteType(previousVoteType);
-                        ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore() + previousVoteType));
-                        ((CommentViewHolder) holder).upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
-                        ((CommentViewHolder) holder).downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
-                    }
-                }, commentItem.getFullName(), newVoteType, holder.getAdapterPosition());
-            });
-        } else if(holder.getItemViewType() == VIEW_TYPE_LOAD_MORE_COMMENT) {
+        } else {
             ((LoadMoreCommentViewHolder) holder).verticalBlock.getLayoutParams().width = mVisibleComments.get(holder.getAdapterPosition()).getDepth() * 16;
-
-            ((LoadMoreCommentViewHolder) holder).textView.setOnClickListener(view -> {
-                loadMoreComments(holder.getAdapterPosition());
-            });
-        } else if(holder.getItemViewType() == VIEW_TYPE_IS_LOADING_MORE_COMMENT){
-            ((IsLoadingMoreCommentViewHolder) holder).verticalBlock.getLayoutParams().width = mVisibleComments.get(holder.getAdapterPosition()).getDepth() * 16;
-        } else if(holder.getItemViewType() == VIEW_TYPE_LOAD_MORE_COMMENT_FAILED) {
-            ((LoadMoreCommentFailedViewHolder) holder).verticalBlock.getLayoutParams().width = mVisibleComments.get(holder.getAdapterPosition()).getDepth() * 16;
-
-            ((LoadMoreCommentFailedViewHolder) holder).retryTextView.setOnClickListener(view -> {
-                loadMoreComments(holder.getAdapterPosition());
-            });
+            if(mVisibleComments.get(holder.getAdapterPosition()).isLoadingMoreChildren()) {
+                ((LoadMoreCommentViewHolder) holder).placeholderTextView.setText(R.string.loading);
+            } else if(mVisibleComments.get(holder.getAdapterPosition()).isLoadMoreChildrenFailed()) {
+                ((LoadMoreCommentViewHolder) holder).placeholderTextView.setText(R.string.comment_load_more_comments_failed);
+            } else {
+                ((LoadMoreCommentViewHolder) holder).placeholderTextView.setText(R.string.comment_load_more_comments);
+            }
         }
-    }
-
-    private void loadMoreComments(int position) {
-        int parentPosition = getParentPosition(position);
-        CommentData parentComment = mVisibleComments.get(parentPosition);
-
-        mVisibleComments.get(position).setLoadingMoreChildren(true);
-        mVisibleComments.get(position).setLoadMoreChildrenFailed(false);
-        notifyItemChanged(position);
-
-        FetchComment.fetchMoreComment(mRetrofit, mSubredditNamePrefixed, parentComment.getMoreChildrenFullnames(),
-                parentComment.getMoreChildrenStartingIndex(), parentComment.getDepth() + 1, mLocale,
-                new FetchComment.FetchMoreCommentListener() {
-                    @Override
-                    public void onFetchMoreCommentSuccess(ArrayList<CommentData> expandedComments,
-                                                          int childrenStartingIndex) {
-                        if(mVisibleComments.size() > parentPosition
-                                && parentComment.getFullName().equals(mVisibleComments.get(parentPosition).getFullName())) {
-                            if(mVisibleComments.get(parentPosition).isExpanded()) {
-                                if(mVisibleComments.get(parentPosition).getChildren().size() > childrenStartingIndex) {
-                                    mVisibleComments.get(parentPosition).setMoreChildrenStartingIndex(childrenStartingIndex);
-                                    mVisibleComments.get(parentPosition).getChildren().get(mVisibleComments.get(parentPosition).getChildren().size() - 1)
-                                            .setLoadingMoreChildren(false);
-                                    mVisibleComments.get(parentPosition).getChildren().get(mVisibleComments.get(parentPosition).getChildren().size() - 1)
-                                            .setLoadMoreChildrenFailed(false);
-
-                                    int placeholderPosition = position;
-                                    if(mVisibleComments.get(position).getFullName().equals(parentComment.getFullName())) {
-                                        for(int i = parentPosition + 1; i < mVisibleComments.size(); i++) {
-                                            if(mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
-                                                placeholderPosition = i;
-                                                break;
-                                            }
-                                        }
-                                    }
-
-                                    mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
-                                    mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(false);
-                                    notifyItemChanged(placeholderPosition);
-
-                                    mVisibleComments.addAll(placeholderPosition, expandedComments);
-                                    notifyItemRangeInserted(placeholderPosition, expandedComments.size());
-                                } else {
-                                    mVisibleComments.get(parentPosition).getChildren()
-                                            .remove(mVisibleComments.get(parentPosition).getChildren().size() - 1);
-                                    mVisibleComments.get(parentPosition).removeMoreChildrenFullnames();
-
-                                    int placeholderPosition = position;
-                                    if(mVisibleComments.get(position).getFullName().equals(parentComment.getFullName())) {
-                                        for(int i = parentPosition + 1; i < mVisibleComments.size(); i++) {
-                                            if(mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
-                                                placeholderPosition = i;
-                                                break;
-                                            }
-                                        }
-                                    }
-
-                                    mVisibleComments.remove(placeholderPosition);
-                                    notifyItemRemoved(placeholderPosition);
-
-                                    mVisibleComments.addAll(placeholderPosition, expandedComments);
-                                    notifyItemRangeInserted(placeholderPosition, expandedComments.size());
-                                }
-                            } else {
-                                if(mVisibleComments.get(parentPosition).hasReply() && mVisibleComments.get(parentPosition).getChildren().size() <= childrenStartingIndex) {
-                                    mVisibleComments.get(parentPosition).getChildren()
-                                            .remove(mVisibleComments.get(parentPosition).getChildren().size() - 1);
-                                    mVisibleComments.get(parentPosition).removeMoreChildrenFullnames();
-                                }
-                            }
-
-                            mVisibleComments.get(parentPosition).addChildren(expandedComments);
-                        } else {
-                            for(int i = 0; i < mVisibleComments.size(); i++) {
-                                if(mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
-                                    if(mVisibleComments.get(i).isExpanded()) {
-                                        int placeholderPosition = i + mVisibleComments.get(i).getChildren().size();
-
-                                        if(!mVisibleComments.get(i).getFullName()
-                                                .equals(mVisibleComments.get(placeholderPosition).getFullName())) {
-                                            for(int j = i + 1; j < mVisibleComments.size(); j++) {
-                                                if(mVisibleComments.get(j).getFullName().equals(mVisibleComments.get(i).getFullName())) {
-                                                    placeholderPosition = j;
-                                                }
-                                            }
-                                        }
-
-                                        mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
-                                        mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(false);
-                                        notifyItemChanged(placeholderPosition);
-
-                                        mVisibleComments.addAll(placeholderPosition, expandedComments);
-                                        notifyItemRangeInserted(placeholderPosition, expandedComments.size());
-                                    }
-
-                                    mVisibleComments.get(i).getChildren().get(mVisibleComments.get(i).getChildren().size() - 1)
-                                            .setLoadingMoreChildren(false);
-                                    mVisibleComments.get(i).getChildren().get(mVisibleComments.get(i).getChildren().size() - 1)
-                                            .setLoadMoreChildrenFailed(false);
-                                    mVisibleComments.get(i).addChildren(expandedComments);
-
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFetchMoreCommentFailed() {
-                        if(parentPosition < mVisibleComments.size()
-                                && parentComment.getFullName().equals(mVisibleComments.get(parentPosition).getFullName())) {
-                            if(mVisibleComments.get(parentPosition).isExpanded()) {
-                                int placeholderPosition = position;
-                                if(!mVisibleComments.get(position).getFullName().equals(parentComment.getFullName())) {
-                                    for(int i = parentPosition + 1; i < mVisibleComments.size(); i++) {
-                                        if(mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
-                                            placeholderPosition = i;
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
-                                mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(true);
-                                notifyItemChanged(placeholderPosition);
-                            }
-
-                            mVisibleComments.get(parentPosition).getChildren().get(mVisibleComments.get(parentPosition).getChildren().size() - 1)
-                                    .setLoadingMoreChildren(false);
-                            mVisibleComments.get(parentPosition).getChildren().get(mVisibleComments.get(parentPosition).getChildren().size() - 1)
-                                    .setLoadMoreChildrenFailed(true);
-                        } else {
-                            for(int i = 0; i < mVisibleComments.size(); i++) {
-                                if(mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
-                                    if(mVisibleComments.get(i).isExpanded()) {
-                                        int placeholderPosition = i + mVisibleComments.get(i).getChildren().size();
-                                        if(!mVisibleComments.get(placeholderPosition).getFullName().equals(mVisibleComments.get(i).getFullName())) {
-                                            for(int j = i + 1; j < mVisibleComments.size(); j++) {
-                                                if(mVisibleComments.get(j).getFullName().equals(mVisibleComments.get(i).getFullName())) {
-                                                    placeholderPosition = j;
-                                                    break;
-                                                }
-                                            }
-                                        }
-
-                                        mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
-                                        mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(true);
-                                        notifyItemChanged(placeholderPosition);
-                                    }
-
-                                    mVisibleComments.get(i).getChildren().get(mVisibleComments.get(i).getChildren().size() - 1).setLoadingMoreChildren(false);
-                                    mVisibleComments.get(i).getChildren().get(mVisibleComments.get(i).getChildren().size() - 1).setLoadMoreChildrenFailed(true);
-
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                });
     }
 
     private int getParentPosition(int position) {
@@ -539,7 +224,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return mVisibleComments.size();
     }
 
-    static class CommentViewHolder extends RecyclerView.ViewHolder {
+    class CommentViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.author_text_view_item_post_comment) TextView authorTextView;
         @BindView(R.id.comment_time_text_view_item_post_comment) TextView commentTimeTextView;
         @BindView(R.id.comment_markdown_view_item_post_comment) MarkwonView commentMarkdownView;
@@ -554,35 +239,290 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         CommentViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            authorTextView.setOnClickListener(view -> {
+                Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
+                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mVisibleComments.get(getAdapterPosition()).getAuthor());
+                mActivity.startActivity(intent);
+            });
+
+            shareButton.setOnClickListener(view -> {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                String extraText = mVisibleComments.get(getAdapterPosition()).getPermalink();
+                intent.putExtra(Intent.EXTRA_TEXT, extraText);
+                mActivity.startActivity(Intent.createChooser(intent, "Share"));
+            });
+
+            expandButton.setOnClickListener(view -> {
+                if(mVisibleComments.get(getAdapterPosition()).isExpanded()) {
+                    collapseChildren(getAdapterPosition());
+                    expandButton.setImageResource(R.drawable.ic_expand_more_black_20dp);
+                } else {
+                    expandChildren(getAdapterPosition());
+                    mVisibleComments.get(getAdapterPosition()).setExpanded(true);
+                    expandButton.setImageResource(R.drawable.ic_expand_less_black_20dp);
+                }
+            });
+
+            replyButton.setOnClickListener(view -> {
+                Intent intent = new Intent(mActivity, CommentActivity.class);
+                intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, mVisibleComments.get(getAdapterPosition()).getDepth() + 1);
+                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, mVisibleComments.get(getAdapterPosition()).getCommentContent());
+                intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, mVisibleComments.get(getAdapterPosition()).getFullName());
+                intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, true);
+                intent.putExtra(CommentActivity.EXTRA_PARENT_POSITION_KEY, getAdapterPosition());
+                mActivity.startActivityForResult(intent, CommentActivity.WRITE_COMMENT_REQUEST_CODE);
+            });
+
+            upvoteButton.setOnClickListener(view -> {
+                int previousVoteType = mVisibleComments.get(getAdapterPosition()).getVoteType();
+                String newVoteType;
+
+                downvoteButton.clearColorFilter();
+
+                if(previousVoteType != CommentData.VOTE_TYPE_UPVOTE) {
+                    //Not upvoted before
+                    mVisibleComments.get(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_UPVOTE);
+                    newVoteType = RedditUtils.DIR_UPVOTE;
+                    upvoteButton.setColorFilter(ContextCompat.getColor(mActivity, R.color.backgroundColorPrimaryDark), android.graphics.PorterDuff.Mode.SRC_IN);
+                } else {
+                    //Upvoted before
+                    mVisibleComments.get(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
+                    newVoteType = RedditUtils.DIR_UNVOTE;
+                    upvoteButton.clearColorFilter();
+                }
+
+                scoreTextView.setText(Integer.toString(mVisibleComments.get(getAdapterPosition()).getScore() + mVisibleComments.get(getAdapterPosition()).getVoteType()));
+
+                VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
+                    @Override
+                    public void onVoteThingSuccess(int position) {
+                        if(newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
+                            mVisibleComments.get(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_UPVOTE);
+                            upvoteButton.setColorFilter(ContextCompat.getColor(mActivity, R.color.backgroundColorPrimaryDark), android.graphics.PorterDuff.Mode.SRC_IN);
+                        } else {
+                            mVisibleComments.get(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
+                            upvoteButton.clearColorFilter();
+                        }
+
+                        downvoteButton.clearColorFilter();
+                        scoreTextView.setText(Integer.toString(mVisibleComments.get(getAdapterPosition()).getScore() + mVisibleComments.get(getAdapterPosition()).getVoteType()));
+                    }
+
+                    @Override
+                    public void onVoteThingFail(int position) { }
+                }, mVisibleComments.get(getAdapterPosition()).getFullName(), newVoteType, getAdapterPosition());
+            });
+
+            downvoteButton.setOnClickListener(view -> {
+                int previousVoteType = mVisibleComments.get(getAdapterPosition()).getVoteType();
+                String newVoteType;
+
+                upvoteButton.clearColorFilter();
+
+                if(previousVoteType != CommentData.VOTE_TYPE_DOWNVOTE) {
+                    //Not downvoted before
+                    mVisibleComments.get(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
+                    newVoteType = RedditUtils.DIR_DOWNVOTE;
+                    downvoteButton.setColorFilter(ContextCompat.getColor(mActivity, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+                } else {
+                    //Downvoted before
+                    mVisibleComments.get(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
+                    newVoteType = RedditUtils.DIR_UNVOTE;
+                    downvoteButton.clearColorFilter();
+                }
+
+                scoreTextView.setText(Integer.toString(mVisibleComments.get(getAdapterPosition()).getScore() + mVisibleComments.get(getAdapterPosition()).getVoteType()));
+
+                VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
+                    @Override
+                    public void onVoteThingSuccess(int position1) {
+                        if(newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {
+                            mVisibleComments.get(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
+                            downvoteButton.setColorFilter(ContextCompat.getColor(mActivity, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+                        } else {
+                            mVisibleComments.get(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
+                            downvoteButton.clearColorFilter();
+                        }
+
+                        upvoteButton.clearColorFilter();
+                        scoreTextView.setText(Integer.toString(mVisibleComments.get(getAdapterPosition()).getScore() + mVisibleComments.get(getAdapterPosition()).getVoteType()));
+                    }
+
+                    @Override
+                    public void onVoteThingFail(int position1) { }
+                }, mVisibleComments.get(getAdapterPosition()).getFullName(), newVoteType, getAdapterPosition());
+            });
         }
     }
 
-    static class LoadMoreCommentViewHolder extends RecyclerView.ViewHolder {
+    class LoadMoreCommentViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.vertical_block_item_load_more_comments) View verticalBlock;
-        @BindView(R.id.load_more_comments_text_view_item_load_more_comments) TextView textView;
+        @BindView(R.id.placeholder_text_view_item_load_more_comments) TextView placeholderTextView;
 
         LoadMoreCommentViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-        }
-    }
 
-    static class IsLoadingMoreCommentViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.vertical_block_item_is_loading_more_comments) View verticalBlock;
+            placeholderTextView.setOnClickListener(view -> {
+                int parentPosition = getParentPosition(getAdapterPosition());
+                CommentData parentComment = mVisibleComments.get(parentPosition);
 
-        IsLoadingMoreCommentViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-    }
+                mVisibleComments.get(getAdapterPosition()).setLoadingMoreChildren(true);
+                mVisibleComments.get(getAdapterPosition()).setLoadMoreChildrenFailed(false);
+                placeholderTextView.setText(R.string.loading);
 
-    static class LoadMoreCommentFailedViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.vertical_block_item_load_more_comments_failed) View verticalBlock;
-        @BindView(R.id.retry_text_view_item_load_more_comments_failed) TextView retryTextView;
+                FetchComment.fetchMoreComment(mRetrofit, mSubredditNamePrefixed, parentComment.getMoreChildrenFullnames(),
+                        parentComment.getMoreChildrenStartingIndex(), parentComment.getDepth() + 1, mLocale,
+                        new FetchComment.FetchMoreCommentListener() {
+                            @Override
+                            public void onFetchMoreCommentSuccess(ArrayList<CommentData> expandedComments,
+                                                                  int childrenStartingIndex) {
+                                if(mVisibleComments.size() > parentPosition
+                                        && parentComment.getFullName().equals(mVisibleComments.get(parentPosition).getFullName())) {
+                                    if(mVisibleComments.get(parentPosition).isExpanded()) {
+                                        if(mVisibleComments.get(parentPosition).getChildren().size() > childrenStartingIndex) {
+                                            mVisibleComments.get(parentPosition).setMoreChildrenStartingIndex(childrenStartingIndex);
+                                            mVisibleComments.get(parentPosition).getChildren().get(mVisibleComments.get(parentPosition).getChildren().size() - 1)
+                                                    .setLoadingMoreChildren(false);
+                                            mVisibleComments.get(parentPosition).getChildren().get(mVisibleComments.get(parentPosition).getChildren().size() - 1)
+                                                    .setLoadMoreChildrenFailed(false);
 
-        LoadMoreCommentFailedViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+                                            int placeholderPosition = getAdapterPosition();
+                                            if(mVisibleComments.get(getAdapterPosition()).getFullName().equals(parentComment.getFullName())) {
+                                                for(int i = parentPosition + 1; i < mVisibleComments.size(); i++) {
+                                                    if(mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
+                                                        placeholderPosition = i;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+
+                                            mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
+                                            mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(false);
+                                            placeholderTextView.setText(R.string.comment_load_more_comments);
+
+                                            mVisibleComments.addAll(placeholderPosition, expandedComments);
+                                            notifyItemRangeInserted(placeholderPosition, expandedComments.size());
+                                        } else {
+                                            mVisibleComments.get(parentPosition).getChildren()
+                                                    .remove(mVisibleComments.get(parentPosition).getChildren().size() - 1);
+                                            mVisibleComments.get(parentPosition).removeMoreChildrenFullnames();
+
+                                            int placeholderPosition = getAdapterPosition();
+                                            if(mVisibleComments.get(getAdapterPosition()).getFullName().equals(parentComment.getFullName())) {
+                                                for(int i = parentPosition + 1; i < mVisibleComments.size(); i++) {
+                                                    if(mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
+                                                        placeholderPosition = i;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+
+                                            mVisibleComments.remove(placeholderPosition);
+                                            notifyItemRemoved(placeholderPosition);
+
+                                            mVisibleComments.addAll(placeholderPosition, expandedComments);
+                                            notifyItemRangeInserted(placeholderPosition, expandedComments.size());
+                                        }
+                                    } else {
+                                        if(mVisibleComments.get(parentPosition).hasReply() && mVisibleComments.get(parentPosition).getChildren().size() <= childrenStartingIndex) {
+                                            mVisibleComments.get(parentPosition).getChildren()
+                                                    .remove(mVisibleComments.get(parentPosition).getChildren().size() - 1);
+                                            mVisibleComments.get(parentPosition).removeMoreChildrenFullnames();
+                                        }
+                                    }
+
+                                    mVisibleComments.get(parentPosition).addChildren(expandedComments);
+                                } else {
+                                    for(int i = 0; i < mVisibleComments.size(); i++) {
+                                        if(mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
+                                            if(mVisibleComments.get(i).isExpanded()) {
+                                                int placeholderPosition = i + mVisibleComments.get(i).getChildren().size();
+
+                                                if(!mVisibleComments.get(i).getFullName()
+                                                        .equals(mVisibleComments.get(placeholderPosition).getFullName())) {
+                                                    for(int j = i + 1; j < mVisibleComments.size(); j++) {
+                                                        if(mVisibleComments.get(j).getFullName().equals(mVisibleComments.get(i).getFullName())) {
+                                                            placeholderPosition = j;
+                                                        }
+                                                    }
+                                                }
+
+                                                mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
+                                                mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(false);
+                                                placeholderTextView.setText(R.string.comment_load_more_comments);
+
+                                                mVisibleComments.addAll(placeholderPosition, expandedComments);
+                                                notifyItemRangeInserted(placeholderPosition, expandedComments.size());
+                                            }
+
+                                            mVisibleComments.get(i).getChildren().get(mVisibleComments.get(i).getChildren().size() - 1)
+                                                    .setLoadingMoreChildren(false);
+                                            mVisibleComments.get(i).getChildren().get(mVisibleComments.get(i).getChildren().size() - 1)
+                                                    .setLoadMoreChildrenFailed(false);
+                                            mVisibleComments.get(i).addChildren(expandedComments);
+
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFetchMoreCommentFailed() {
+                                if(parentPosition < mVisibleComments.size()
+                                        && parentComment.getFullName().equals(mVisibleComments.get(parentPosition).getFullName())) {
+                                    if(mVisibleComments.get(parentPosition).isExpanded()) {
+                                        int placeholderPosition = getAdapterPosition();
+                                        if(!mVisibleComments.get(getAdapterPosition()).getFullName().equals(parentComment.getFullName())) {
+                                            for(int i = parentPosition + 1; i < mVisibleComments.size(); i++) {
+                                                if(mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
+                                                    placeholderPosition = i;
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
+                                        mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(true);
+                                        placeholderTextView.setText(R.string.comment_load_more_comments_failed);
+                                    }
+
+                                    mVisibleComments.get(parentPosition).getChildren().get(mVisibleComments.get(parentPosition).getChildren().size() - 1)
+                                            .setLoadingMoreChildren(false);
+                                    mVisibleComments.get(parentPosition).getChildren().get(mVisibleComments.get(parentPosition).getChildren().size() - 1)
+                                            .setLoadMoreChildrenFailed(true);
+                                } else {
+                                    for(int i = 0; i < mVisibleComments.size(); i++) {
+                                        if(mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
+                                            if(mVisibleComments.get(i).isExpanded()) {
+                                                int placeholderPosition = i + mVisibleComments.get(i).getChildren().size();
+                                                if(!mVisibleComments.get(placeholderPosition).getFullName().equals(mVisibleComments.get(i).getFullName())) {
+                                                    for(int j = i + 1; j < mVisibleComments.size(); j++) {
+                                                        if(mVisibleComments.get(j).getFullName().equals(mVisibleComments.get(i).getFullName())) {
+                                                            placeholderPosition = j;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+
+                                                mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
+                                                mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(true);
+                                                placeholderTextView.setText(R.string.comment_load_more_comments_failed);
+                                            }
+
+                                            mVisibleComments.get(i).getChildren().get(mVisibleComments.get(i).getChildren().size() - 1).setLoadingMoreChildren(false);
+                                            mVisibleComments.get(i).getChildren().get(mVisibleComments.get(i).getChildren().size() - 1).setLoadMoreChildrenFailed(true);
+
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        });
+            });
         }
     }
 }
