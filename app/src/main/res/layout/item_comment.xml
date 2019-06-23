@@ -9,7 +9,7 @@
 
         <View
             android:id="@+id/vertical_block_item_post_comment"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@color/textColorPrimaryDark"/>
 
@@ -36,9 +36,8 @@
 
                 <TextView
                     android:id="@+id/comment_time_text_view_item_post_comment"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:gravity="end" />
 
             </LinearLayout>
@@ -91,14 +90,6 @@
                     android:background="?actionBarItemBackground"
                     android:clickable="true"
                     android:focusable="true"/>
-
-                <ProgressBar
-                    android:id="@+id/load_more_comments_progress_bar"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_toStartOf="@id/expand_button_item_post_comment"
-                    android:visibility="gone"/>
 
                 <ImageView
                     android:id="@+id/expand_button_item_post_comment"

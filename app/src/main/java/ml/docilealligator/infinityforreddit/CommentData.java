@@ -50,7 +50,8 @@ class CommentData implements Parcelable {
         isPlaceHolder = false;
     }
 
-    CommentData(int depth) {
+    CommentData(String parentFullName, int depth) {
+        this.fullName = parentFullName;
         this.depth = depth;
         isPlaceHolder = true;
         isLoadingMoreChildren = false;

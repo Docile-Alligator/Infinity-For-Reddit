@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -309,27 +308,54 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                                 && parentComment.getFullName().equals(mVisibleComments.get(parentPosition).getFullName())) {
                             if(mVisibleComments.get(parentPosition).isExpanded()) {
                                 if(mVisibleComments.get(parentPosition).getChildren().size() > childrenStartingIndex) {
-                                    mVisibleComments.get(position).setLoadingMoreChildren(false);
-                                    mVisibleComments.get(position).setLoadMoreChildrenFailed(false);
-                                    notifyItemChanged(position);
-
                                     mVisibleComments.get(parentPosition).setMoreChildrenStartingIndex(childrenStartingIndex);
                                     mVisibleComments.get(parentPosition).getChildren().get(mVisibleComments.get(parentPosition).getChildren().size() - 1)
                                             .setLoadingMoreChildren(false);
                                     mVisibleComments.get(parentPosition).getChildren().get(mVisibleComments.get(parentPosition).getChildren().size() - 1)
                                             .setLoadMoreChildrenFailed(false);
 
-                                    mVisibleComments.addAll(position, expandedComments);
-                                    notifyItemRangeInserted(position, expandedComments.size());
+                                    int placeholderPosition = position;
+                                    if(mVisibleComments.get(position).getFullName().equals(parentComment.getFullName())) {
+                                        for(int i = parentPosition + 1; i < mVisibleComments.size(); i++) {
+                                            if(mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
+                                                placeholderPosition = i;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
+                                    mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(false);
+                                    notifyItemChanged(placeholderPosition);
+
+                                    mVisibleComments.addAll(placeholderPosition, expandedComments);
+                                    notifyItemRangeInserted(placeholderPosition, expandedComments.size());
                                 } else {
                                     mVisibleComments.get(parentPosition).getChildren()
                                             .remove(mVisibleComments.get(parentPosition).getChildren().size() - 1);
-                                    mVisibleComments.remove(position);
-                                    notifyItemRemoved(position);
                                     mVisibleComments.get(parentPosition).removeMoreChildrenFullnames();
 
-                                    mVisibleComments.addAll(position, expandedComments);
-                                    notifyItemRangeInserted(position, expandedComments.size());
+                                    int placeholderPosition = position;
+                                    if(mVisibleComments.get(position).getFullName().equals(parentComment.getFullName())) {
+                                        for(int i = parentPosition + 1; i < mVisibleComments.size(); i++) {
+                                            if(mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
+                                                placeholderPosition = i;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    mVisibleComments.remove(placeholderPosition);
+                                    notifyItemRemoved(placeholderPosition);
+
+                                    mVisibleComments.addAll(placeholderPosition, expandedComments);
+                                    notifyItemRangeInserted(placeholderPosition, expandedComments.size());
+                                }
+                            } else {
+                                if(mVisibleComments.get(parentPosition).hasReply() && mVisibleComments.get(parentPosition).getChildren().size() <= childrenStartingIndex) {
+                                    mVisibleComments.get(parentPosition).getChildren()
+                                            .remove(mVisibleComments.get(parentPosition).getChildren().size() - 1);
+                                    mVisibleComments.get(parentPosition).removeMoreChildrenFullnames();
                                 }
                             }
 
@@ -337,17 +363,24 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         } else {
                             for(int i = 0; i < mVisibleComments.size(); i++) {
                                 if(mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
-                                    mVisibleComments.get(i).setMoreChildrenStartingIndex(childrenStartingIndex);
-
                                     if(mVisibleComments.get(i).isExpanded()) {
-                                        mVisibleComments.get(i + mVisibleComments.get(i).getChildren().size()).setLoadingMoreChildren(false);
-                                        mVisibleComments.get(i + mVisibleComments.get(i).getChildren().size()).setLoadMoreChildrenFailed(false);
-                                        notifyItemChanged(i + mVisibleComments.get(i).getChildren().size());
+                                        int placeholderPosition = i + mVisibleComments.get(i).getChildren().size();
 
-                                        mVisibleComments.addAll(i + mVisibleComments.get(i).getChildren().size(),
-                                                expandedComments);
-                                        notifyItemRangeInserted(i + mVisibleComments.get(i).getChildren().size(),
-                                                expandedComments.size());
+                                        if(!mVisibleComments.get(i).getFullName()
+                                                .equals(mVisibleComments.get(placeholderPosition).getFullName())) {
+                                            for(int j = i + 1; j < mVisibleComments.size(); j++) {
+                                                if(mVisibleComments.get(j).getFullName().equals(mVisibleComments.get(i).getFullName())) {
+                                                    placeholderPosition = j;
+                                                }
+                                            }
+                                        }
+
+                                        mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
+                                        mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(false);
+                                        notifyItemChanged(placeholderPosition);
+
+                                        mVisibleComments.addAll(placeholderPosition, expandedComments);
+                                        notifyItemRangeInserted(placeholderPosition, expandedComments.size());
                                     }
 
                                     mVisibleComments.get(i).getChildren().get(mVisibleComments.get(i).getChildren().size() - 1)
@@ -367,9 +400,19 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         if(parentPosition < mVisibleComments.size()
                                 && parentComment.getFullName().equals(mVisibleComments.get(parentPosition).getFullName())) {
                             if(mVisibleComments.get(parentPosition).isExpanded()) {
-                                mVisibleComments.get(position).setLoadingMoreChildren(false);
-                                mVisibleComments.get(position).setLoadMoreChildrenFailed(true);
-                                notifyItemChanged(position);
+                                int placeholderPosition = position;
+                                if(!mVisibleComments.get(position).getFullName().equals(parentComment.getFullName())) {
+                                    for(int i = parentPosition + 1; i < mVisibleComments.size(); i++) {
+                                        if(mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
+                                            placeholderPosition = i;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
+                                mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(true);
+                                notifyItemChanged(placeholderPosition);
                             }
 
                             mVisibleComments.get(parentPosition).getChildren().get(mVisibleComments.get(parentPosition).getChildren().size() - 1)
@@ -380,9 +423,19 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                             for(int i = 0; i < mVisibleComments.size(); i++) {
                                 if(mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
                                     if(mVisibleComments.get(i).isExpanded()) {
-                                        mVisibleComments.get(i + mVisibleComments.get(i).getChildren().size()).setLoadingMoreChildren(false);
-                                        mVisibleComments.get(i + mVisibleComments.get(i).getChildren().size()).setLoadMoreChildrenFailed(true);
-                                        notifyItemChanged(i + mVisibleComments.get(i).getChildren().size());
+                                        int placeholderPosition = i + mVisibleComments.get(i).getChildren().size();
+                                        if(!mVisibleComments.get(placeholderPosition).getFullName().equals(mVisibleComments.get(i).getFullName())) {
+                                            for(int j = i + 1; j < mVisibleComments.size(); j++) {
+                                                if(mVisibleComments.get(j).getFullName().equals(mVisibleComments.get(i).getFullName())) {
+                                                    placeholderPosition = j;
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
+                                        mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(true);
+                                        notifyItemChanged(placeholderPosition);
                                     }
 
                                     mVisibleComments.get(i).getChildren().get(mVisibleComments.get(i).getChildren().size() - 1).setLoadingMoreChildren(false);
@@ -478,7 +531,6 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof CommentViewHolder) {
             ((CommentViewHolder) holder).expandButton.setVisibility(View.GONE);
-            ((CommentViewHolder) holder).loadMoreCommentsProgressBar.setVisibility(View.GONE);
         }
     }
 
@@ -487,14 +539,13 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return mVisibleComments.size();
     }
 
-    class CommentViewHolder extends RecyclerView.ViewHolder {
+    static class CommentViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.author_text_view_item_post_comment) TextView authorTextView;
         @BindView(R.id.comment_time_text_view_item_post_comment) TextView commentTimeTextView;
         @BindView(R.id.comment_markdown_view_item_post_comment) MarkwonView commentMarkdownView;
         @BindView(R.id.plus_button_item_post_comment) ImageView upvoteButton;
         @BindView(R.id.score_text_view_item_post_comment) TextView scoreTextView;
         @BindView(R.id.minus_button_item_post_comment) ImageView downvoteButton;
-        @BindView(R.id.load_more_comments_progress_bar) ProgressBar loadMoreCommentsProgressBar;
         @BindView(R.id.expand_button_item_post_comment) ImageView expandButton;
         @BindView(R.id.share_button_item_post_comment) ImageView shareButton;
         @BindView(R.id.reply_button_item_post_comment) ImageView replyButton;
@@ -506,7 +557,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    class LoadMoreCommentViewHolder extends RecyclerView.ViewHolder {
+    static class LoadMoreCommentViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.vertical_block_item_load_more_comments) View verticalBlock;
         @BindView(R.id.load_more_comments_text_view_item_load_more_comments) TextView textView;
 
@@ -516,7 +567,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    class IsLoadingMoreCommentViewHolder extends RecyclerView.ViewHolder {
+    static class IsLoadingMoreCommentViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.vertical_block_item_is_loading_more_comments) View verticalBlock;
 
         IsLoadingMoreCommentViewHolder(View itemView) {
@@ -525,7 +576,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    class LoadMoreCommentFailedViewHolder extends RecyclerView.ViewHolder {
+    static class LoadMoreCommentFailedViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.vertical_block_item_load_more_comments_failed) View verticalBlock;
         @BindView(R.id.retry_text_view_item_load_more_comments_failed) TextView retryTextView;
 

@@ -93,7 +93,7 @@ class ParseComment {
         protected Void doInBackground(Void... voids) {
             try {
                 parseCommentRecursion(commentsJSONArray, newComments, moreChildrenFullnames, depth, locale);
-                makeChildrenVisible(newComments, expandedNewComments);
+                expandChildren(newComments, expandedNewComments);
             } catch (JSONException e) {
                 parseFailed = true;
                 if(e.getMessage() != null) {
@@ -156,17 +156,18 @@ class ParseComment {
         }
     }
 
-    private static void makeChildrenVisible(ArrayList<CommentData> comments, ArrayList<CommentData> visibleComments) {
+    private static void expandChildren(ArrayList<CommentData> comments, ArrayList<CommentData> visibleComments) {
         for(CommentData c : comments) {
             visibleComments.add(c);
             if(c.hasReply()) {
                 c.setExpanded(true);
-                makeChildrenVisible(c.getChildren(), visibleComments);
+                expandChildren(c.getChildren(), visibleComments);
             }
             if(c.hasMoreChildrenFullnames() && c.getMoreChildrenFullnames().size() > c.getMoreChildrenStartingIndex()) {
                 //Add a load more placeholder
-                visibleComments.add(new CommentData(c.getDepth() + 1));
-                c.addChild(new CommentData(c.getDepth() + 1), c.getChildren().size());
+                CommentData placeholder = new CommentData(c.getFullName(), c.getDepth() + 1);
+                visibleComments.add(placeholder);
+                c.addChild(placeholder, c.getChildren().size());
             }
         }
     }
