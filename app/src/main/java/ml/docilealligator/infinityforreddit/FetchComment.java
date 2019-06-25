@@ -106,7 +106,7 @@ class FetchComment {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.i("more comment failed", t.getMessage());
                 fetchMoreCommentListener.onFetchMoreCommentFailed();
             }

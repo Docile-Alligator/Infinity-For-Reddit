@@ -34,6 +34,8 @@ class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        loadSubredditIconAsyncTaskListener.loadIconSuccess(iconImageUrl);
+        if(!isCancelled()) {
+            loadSubredditIconAsyncTaskListener.loadIconSuccess(iconImageUrl);
+        }
     }
 }
