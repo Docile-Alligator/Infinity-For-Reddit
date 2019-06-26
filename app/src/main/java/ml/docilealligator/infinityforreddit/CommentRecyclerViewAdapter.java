@@ -143,25 +143,24 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if(mPost.getSubredditIconUrl() == null) {
                 if(mLoadSubredditIconAsyncTask != null) {
                     mLoadSubredditIconAsyncTask.cancel(true);
-                } else {
-                    mLoadSubredditIconAsyncTask = new LoadSubredditIconAsyncTask(
-                            SubredditRoomDatabase.getDatabase(mActivity).subredditDao(), mPost.getSubredditNamePrefixed().substring(2),
-                            iconImageUrl -> {
-                                if(!iconImageUrl.equals("")) {
-                                    mGlide.load(iconImageUrl)
-                                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                            .error(mGlide.load(R.drawable.subreddit_default_icon)
-                                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                                            .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
-                                } else {
-                                    mGlide.load(R.drawable.subreddit_default_icon)
-                                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                            .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
-                                }
-
-                                mPost.setSubredditIconUrl(iconImageUrl);
-                            });
                 }
+                mLoadSubredditIconAsyncTask = new LoadSubredditIconAsyncTask(
+                        SubredditRoomDatabase.getDatabase(mActivity).subredditDao(), mPost.getSubredditNamePrefixed().substring(2),
+                        iconImageUrl -> {
+                            if(!iconImageUrl.equals("")) {
+                                mGlide.load(iconImageUrl)
+                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                        .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                                        .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
+                            } else {
+                                mGlide.load(R.drawable.subreddit_default_icon)
+                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                        .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
+                            }
+
+                            mPost.setSubredditIconUrl(iconImageUrl);
+                        });
 
                 mLoadSubredditIconAsyncTask.execute();
             } else if(!mPost.getSubredditIconUrl().equals("")) {
@@ -378,11 +377,8 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
         } else if(holder instanceof LoadMoreCommentViewHolder) {
             CommentData placeholder;
-            if(isInitiallyLoading || isInitiallyLoadingFailed) {
-                placeholder = mVisibleComments.get(holder.getAdapterPosition() - 2);
-            } else {
-                placeholder = mVisibleComments.get(holder.getAdapterPosition() - 1);
-            }
+            placeholder = mVisibleComments.get(holder.getAdapterPosition() - 1);
+
             ((LoadMoreCommentViewHolder) holder).verticalBlock.getLayoutParams().width = placeholder.getDepth() * 16;
             if(placeholder.isLoadingMoreChildren()) {
                 ((LoadMoreCommentViewHolder) holder).placeholderTextView.setText(R.string.loading);
@@ -467,11 +463,14 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             comment.setExpanded(true);
             ArrayList<CommentData> children = comment.getChildren();
             if(children != null && children.size() > 0) {
-                mVisibleComments.addAll(position + 1, children);
-                for(int i = position + 1; i <= position + children.size(); i++) {
-                    mVisibleComments.get(i).setExpanded(false);
+                for(int i = 0; i < children.size(); i++) {
+                    children.get(i).setExpanded(false);
                 }
-                notifyItemRangeInserted(position + 1, children.size());
+                mVisibleComments.addAll(position + 1, children);
+                /*for(int i = position + 1; i <= position + children.size(); i++) {
+                    mVisibleComments.get(i).setExpanded(false);
+                }*/
+                notifyItemRangeInserted(position + 2, children.size());
             }
         }
     }
@@ -489,7 +488,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
 
         mVisibleComments.subList(position + 1, position + 1 + allChildrenSize).clear();
-        notifyItemRangeRemoved(position + 1, allChildrenSize);
+        notifyItemRangeRemoved(position + 2, allChildrenSize);
     }
 
     void addComments(ArrayList<CommentData> comments) {
@@ -509,12 +508,21 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     void addComment(CommentData comment) {
+        if(mVisibleComments.size() == 0 || isInitiallyLoadingFailed) {
+            notifyItemRemoved(1);
+        }
+
         mVisibleComments.add(0, comment);
-        notifyItemInserted(0);
+
+        if(isInitiallyLoading) {
+            notifyItemInserted(2);
+        } else {
+            notifyItemInserted(1);
+        }
     }
 
     void addChildComment(CommentData comment, String parentFullname, int parentPosition) {
-        if(parentFullname.equals(mVisibleComments.get(parentPosition).getFullName())) {
+        if(!parentFullname.equals(mVisibleComments.get(parentPosition).getFullName())) {
             for(int i = 0; i < mVisibleComments.size(); i++) {
                 if(parentFullname.equals(mVisibleComments.get(i).getFullName())) {
                     parentPosition = i;
@@ -527,10 +535,10 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         mVisibleComments.get(parentPosition).setHasReply(true);
         if(!mVisibleComments.get(parentPosition).isExpanded()) {
             expandChildren(parentPosition);
-            notifyItemChanged(parentPosition);
+            notifyItemChanged(parentPosition + 1);
         } else {
             mVisibleComments.add(parentPosition + 1, comment);
-            notifyItemInserted(parentPosition + 1);
+            notifyItemInserted(parentPosition + 2);
         }
     }
 
@@ -539,7 +547,13 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             mLoadSubredditIconAsyncTask.cancel(true);
         }
 
-        if(isInitiallyLoading || isInitiallyLoadingFailed) {
+        if(mVisibleComments.size() != 0) {
+            int previousSize = mVisibleComments.size();
+            mVisibleComments.clear();
+            notifyItemRangeRemoved(1, previousSize);
+        }
+
+        if(isInitiallyLoading || isInitiallyLoadingFailed || mVisibleComments.size() == 0) {
             isInitiallyLoading = true;
             isInitiallyLoadingFailed = false;
             notifyItemChanged(1);
@@ -548,22 +562,12 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             isInitiallyLoadingFailed = false;
             notifyItemInserted(1);
         }
-
-        clearComments();
     }
 
     void initiallyLoadCommentsFailed() {
         isInitiallyLoading = false;
         isInitiallyLoadingFailed = true;
         notifyItemChanged(1);
-    }
-
-    private void clearComments() {
-        if(mVisibleComments.size() != 0) {
-            int previousSize = mVisibleComments.size();
-            mVisibleComments.clear();
-            notifyItemRangeRemoved(1, previousSize);
-        }
     }
 
     @Override
@@ -575,7 +579,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        if(isInitiallyLoading || isInitiallyLoadingFailed) {
+        if(isInitiallyLoading || isInitiallyLoadingFailed || mVisibleComments.size() == 0) {
             return 2;
         }
 
@@ -767,10 +771,10 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             expandButton.setOnClickListener(view -> {
                 if(mVisibleComments.get(getAdapterPosition() - 1).isExpanded()) {
-                    collapseChildren(getAdapterPosition());
+                    collapseChildren(getAdapterPosition() - 1);
                     expandButton.setImageResource(R.drawable.ic_expand_more_black_20dp);
                 } else {
-                    expandChildren(getAdapterPosition());
+                    expandChildren(getAdapterPosition() - 1);
                     mVisibleComments.get(getAdapterPosition() - 1).setExpanded(true);
                     expandButton.setImageResource(R.drawable.ic_expand_less_black_20dp);
                 }
@@ -782,7 +786,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, mVisibleComments.get(getAdapterPosition() - 1).getCommentContent());
                 intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, mVisibleComments.get(getAdapterPosition() - 1).getFullName());
                 intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, true);
-                intent.putExtra(CommentActivity.EXTRA_PARENT_POSITION_KEY, getAdapterPosition());
+                intent.putExtra(CommentActivity.EXTRA_PARENT_POSITION_KEY, getAdapterPosition() - 1);
                 mActivity.startActivityForResult(intent, CommentActivity.WRITE_COMMENT_REQUEST_CODE);
             });
 
@@ -1038,22 +1042,19 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     class LoadCommentsViewHolder extends RecyclerView.ViewHolder {
-
-        public LoadCommentsViewHolder(@NonNull View itemView) {
+        LoadCommentsViewHolder(@NonNull View itemView) {
             super(itemView);
         }
     }
 
     class LoadCommentsFailedViewHolder extends RecyclerView.ViewHolder {
-
-        public LoadCommentsFailedViewHolder(@NonNull View itemView) {
+        LoadCommentsFailedViewHolder(@NonNull View itemView) {
             super(itemView);
         }
     }
 
     class NoCommentViewHolder extends RecyclerView.ViewHolder {
-
-        public NoCommentViewHolder(@NonNull View itemView) {
+        NoCommentViewHolder(@NonNull View itemView) {
             super(itemView);
         }
     }
