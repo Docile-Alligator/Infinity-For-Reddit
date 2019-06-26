@@ -9,7 +9,7 @@
 
         <View
             android:id="@+id/vertical_block_item_load_more_comments"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@color/textColorPrimaryDark" />
 

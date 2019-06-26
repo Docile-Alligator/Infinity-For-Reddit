@@ -320,17 +320,12 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     break;
             }
         } else if(holder.getItemViewType() == VIEW_TYPE_COMMENT) {
-            CommentData commentItem;
-            if(isInitiallyLoading || isInitiallyLoadingFailed) {
-                commentItem = mVisibleComments.get(holder.getAdapterPosition() - 2);
-            } else {
-                commentItem = mVisibleComments.get(holder.getAdapterPosition() - 1);
-            }
+            CommentData comment = mVisibleComments.get(holder.getAdapterPosition() - 1);
 
-            String authorPrefixed = "u/" + commentItem.getAuthor();
+            String authorPrefixed = "u/" + comment.getAuthor();
             ((CommentViewHolder) holder).authorTextView.setText(authorPrefixed);
 
-            ((CommentViewHolder) holder).commentTimeTextView.setText(commentItem.getCommentTime());
+            ((CommentViewHolder) holder).commentTimeTextView.setText(comment.getCommentTime());
 
             SpannableConfiguration spannableConfiguration = SpannableConfiguration.builder(mActivity).linkResolver((view, link) -> {
                 if (link.startsWith("/u/") || link.startsWith("u/")) {
@@ -351,13 +346,15 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             }).build();
 
-            ((CommentViewHolder) holder).commentMarkdownView.setMarkdown(spannableConfiguration, commentItem.getCommentContent());
-            ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(commentItem.getScore()));
+            ((CommentViewHolder) holder).commentMarkdownView.setMarkdown(spannableConfiguration, comment.getCommentContent());
+            ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore()));
 
-            ((CommentViewHolder) holder).verticalBlock.getLayoutParams().width = commentItem.getDepth() * 16;
+            ViewGroup.LayoutParams params = ((CommentViewHolder) holder).verticalBlock.getLayoutParams();
+            params.width = comment.getDepth() * 16;
+            ((CommentViewHolder) holder).verticalBlock.setLayoutParams(params);
 
-            if (commentItem.hasReply()) {
-                if(commentItem.isExpanded()) {
+            if (comment.hasReply()) {
+                if(comment.isExpanded()) {
                     ((CommentViewHolder) holder).expandButton.setImageResource(R.drawable.ic_expand_less_black_20dp);
                 } else {
                     ((CommentViewHolder) holder).expandButton.setImageResource(R.drawable.ic_expand_more_black_20dp);
@@ -365,7 +362,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 ((CommentViewHolder) holder).expandButton.setVisibility(View.VISIBLE);
             }
 
-            switch (commentItem.getVoteType()) {
+            switch (comment.getVoteType()) {
                 case 1:
                     ((CommentViewHolder) holder).upvoteButton
                             .setColorFilter(ContextCompat.getColor(mActivity, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
@@ -379,7 +376,10 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             CommentData placeholder;
             placeholder = mVisibleComments.get(holder.getAdapterPosition() - 1);
 
-            ((LoadMoreCommentViewHolder) holder).verticalBlock.getLayoutParams().width = placeholder.getDepth() * 16;
+            ViewGroup.LayoutParams params = ((LoadMoreCommentViewHolder) holder).verticalBlock.getLayoutParams();
+            params.width = placeholder.getDepth() * 16;
+            ((LoadMoreCommentViewHolder) holder).verticalBlock.setLayoutParams(params);
+
             if(placeholder.isLoadingMoreChildren()) {
                 ((LoadMoreCommentViewHolder) holder).placeholderTextView.setText(R.string.loading);
             } else if(placeholder.isLoadMoreChildrenFailed()) {
@@ -467,9 +467,6 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     children.get(i).setExpanded(false);
                 }
                 mVisibleComments.addAll(position + 1, children);
-                /*for(int i = position + 1; i <= position + children.size(); i++) {
-                    mVisibleComments.get(i).setExpanded(false);
-                }*/
                 notifyItemRangeInserted(position + 2, children.size());
             }
         }
