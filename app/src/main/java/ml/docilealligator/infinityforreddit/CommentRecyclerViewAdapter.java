@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -52,7 +53,9 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int VIEW_TYPE_FIRST_LOADING_FAILED = 2;
     private static final int VIEW_TYPE_NO_COMMENT_PLACEHOLDER = 3;
     private static final int VIEW_TYPE_COMMENT = 4;
-    private static final int VIEW_TYPE_LOAD_MORE_COMMENT = 5;
+    private static final int VIEW_TYPE_LOAD_MORE_CHILD_COMMENTS = 5;
+    private static final int VIEW_TYPE_IS_LOADING_MORE_COMMENTS = 6;
+    private static final int VIEW_TYPE_LOAD_MORE_COMMENTS_FAILED = 7;
 
     private Activity mActivity;
     private Retrofit mRetrofit;
@@ -63,19 +66,22 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private ArrayList<CommentData> mVisibleComments;
     private String mSubredditNamePrefixed;
     private Locale mLocale;
-    private UpdatePostInPostFragmentCallback mUpdatePostInPostFragmentCallback;
+    private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private LoadSubredditIconAsyncTask mLoadSubredditIconAsyncTask;
     private boolean isInitiallyLoading;
     private boolean isInitiallyLoadingFailed;
+    private boolean mHasMoreComments;
+    private boolean loadMoreCommentsFailed;
 
-    interface UpdatePostInPostFragmentCallback {
+    interface CommentRecyclerViewAdapterCallback {
         void updatePost(Post post);
+        void retryFetchingMoreComments();
     }
 
     CommentRecyclerViewAdapter(Activity activity, Retrofit retrofit, Retrofit oauthRetrofit, RequestManager glide,
                                SharedPreferences sharedPreferences, Post post, String subredditNamePrefixed,
                                Locale locale, LoadSubredditIconAsyncTask loadSubredditIconAsyncTask,
-                               UpdatePostInPostFragmentCallback updatePostInPostFragmentCallback) {
+                               CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
         mActivity = activity;
         mRetrofit = retrofit;
         mOauthRetrofit = oauthRetrofit;
@@ -86,9 +92,11 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         mSubredditNamePrefixed = subredditNamePrefixed;
         mLocale = locale;
         mLoadSubredditIconAsyncTask = loadSubredditIconAsyncTask;
-        mUpdatePostInPostFragmentCallback = updatePostInPostFragmentCallback;
+        mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
         isInitiallyLoadingFailed = false;
+        mHasMoreComments = false;
+        loadMoreCommentsFailed = false;
     }
 
     @Override
@@ -109,29 +117,42 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
         }
 
+        if(position == mVisibleComments.size() + 1) {
+            if(mHasMoreComments) {
+                return VIEW_TYPE_IS_LOADING_MORE_COMMENTS;
+            } else {
+                return VIEW_TYPE_LOAD_MORE_COMMENTS_FAILED;
+            }
+        }
+
         CommentData comment = mVisibleComments.get(position - 1);
         if(!comment.isPlaceHolder()) {
             return VIEW_TYPE_COMMENT;
         } else {
-            return VIEW_TYPE_LOAD_MORE_COMMENT;
+            return VIEW_TYPE_LOAD_MORE_CHILD_COMMENTS;
         }
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(viewType == VIEW_TYPE_POST_DETAIL) {
-            return new PostDetailViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail, parent, false));
-        } else if(viewType == VIEW_TYPE_FIRST_LOADING) {
-            return new LoadCommentsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_load_comments, parent, false));
-        } else if(viewType == VIEW_TYPE_FIRST_LOADING_FAILED) {
-            return new LoadCommentsFailedViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_load_comments_failed_placeholder, parent, false));
-        } else if(viewType == VIEW_TYPE_NO_COMMENT_PLACEHOLDER) {
-            return new NoCommentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_no_comment_placeholder, parent, false));
-        } else if(viewType == VIEW_TYPE_COMMENT) {
-            return new CommentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false));
-        } else {
-            return new LoadMoreCommentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_load_more_comments_placeholder, parent, false));
+        switch (viewType) {
+            case VIEW_TYPE_POST_DETAIL:
+                return new PostDetailViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail, parent, false));
+            case VIEW_TYPE_FIRST_LOADING:
+                return new LoadCommentsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_load_comments, parent, false));
+            case VIEW_TYPE_FIRST_LOADING_FAILED:
+                return new LoadCommentsFailedViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_load_comments_failed_placeholder, parent, false));
+            case VIEW_TYPE_NO_COMMENT_PLACEHOLDER:
+                return new NoCommentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_no_comment_placeholder, parent, false));
+            case VIEW_TYPE_COMMENT:
+                return new CommentViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false));
+            case VIEW_TYPE_LOAD_MORE_CHILD_COMMENTS:
+                return new LoadMoreChildCommentsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_load_more_comments_placeholder, parent, false));
+            case VIEW_TYPE_IS_LOADING_MORE_COMMENTS:
+                return new IsLoadingMoreCommentsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment_footer_loading, parent, false));
+            default:
+                return new LoadMoreCommentsFailedViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment_footer_error, parent, false));
         }
     }
 
@@ -372,21 +393,23 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                             .setColorFilter(ContextCompat.getColor(mActivity, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
                     break;
             }
-        } else if(holder instanceof LoadMoreCommentViewHolder) {
+        } else if(holder instanceof LoadMoreChildCommentsViewHolder) {
             CommentData placeholder;
             placeholder = mVisibleComments.get(holder.getAdapterPosition() - 1);
 
-            ViewGroup.LayoutParams params = ((LoadMoreCommentViewHolder) holder).verticalBlock.getLayoutParams();
+            ViewGroup.LayoutParams params = ((LoadMoreChildCommentsViewHolder) holder).verticalBlock.getLayoutParams();
             params.width = placeholder.getDepth() * 16;
-            ((LoadMoreCommentViewHolder) holder).verticalBlock.setLayoutParams(params);
+            ((LoadMoreChildCommentsViewHolder) holder).verticalBlock.setLayoutParams(params);
 
             if(placeholder.isLoadingMoreChildren()) {
-                ((LoadMoreCommentViewHolder) holder).placeholderTextView.setText(R.string.loading);
+                ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.loading);
             } else if(placeholder.isLoadMoreChildrenFailed()) {
-                ((LoadMoreCommentViewHolder) holder).placeholderTextView.setText(R.string.comment_load_more_comments_failed);
+                ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.comment_load_more_comments_failed);
             } else {
-                ((LoadMoreCommentViewHolder) holder).placeholderTextView.setText(R.string.comment_load_more_comments);
+                ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.comment_load_more_comments);
             }
+        } else if(holder instanceof LoadMoreCommentsFailedViewHolder) {
+            ((LoadMoreCommentsFailedViewHolder) holder).errorTextView.setText(R.string.post_load_comments_failed);
         }
     }
 
@@ -488,7 +511,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notifyItemRangeRemoved(position + 2, allChildrenSize);
     }
 
-    void addComments(ArrayList<CommentData> comments) {
+    void addComments(ArrayList<CommentData> comments, boolean hasMoreComments) {
         if(mVisibleComments.size() == 0) {
             isInitiallyLoading = false;
             isInitiallyLoadingFailed = false;
@@ -502,6 +525,15 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         int sizeBefore = mVisibleComments.size();
         mVisibleComments.addAll(comments);
         notifyItemRangeInserted(sizeBefore + 1, comments.size());
+
+        if(mHasMoreComments != hasMoreComments) {
+            if(hasMoreComments) {
+                notifyItemInserted(mVisibleComments.size() + 1);
+            } else {
+                notifyItemRemoved(mVisibleComments.size() + 1);
+            }
+        }
+        mHasMoreComments = hasMoreComments;
     }
 
     void addComment(CommentData comment) {
@@ -567,10 +599,17 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notifyItemChanged(1);
     }
 
+    void loadMoreCommentsFailed() {
+        loadMoreCommentsFailed = true;
+        notifyItemChanged(mVisibleComments.size() + 1);
+    }
+
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof CommentViewHolder) {
             ((CommentViewHolder) holder).expandButton.setVisibility(View.GONE);
+            ((CommentViewHolder) holder).upvoteButton.clearColorFilter();
+            ((CommentViewHolder) holder).downvoteButton.clearColorFilter();
         }
     }
 
@@ -578,6 +617,10 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public int getItemCount() {
         if(isInitiallyLoading || isInitiallyLoadingFailed || mVisibleComments.size() == 0) {
             return 2;
+        }
+
+        if(mHasMoreComments || loadMoreCommentsFailed) {
+            return mVisibleComments.size() + 2;
         }
 
         return mVisibleComments.size() + 1;
@@ -607,7 +650,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @BindView(R.id.minus_button_item_post_detail) ImageView mDownvoteButton;
         @BindView(R.id.share_button_item_post_detail) ImageView mShareButton;
 
-        public PostDetailViewHolder(@NonNull View itemView) {
+        PostDetailViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
@@ -648,7 +691,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
 
-                mUpdatePostInPostFragmentCallback.updatePost(mPost);
+                mCommentRecyclerViewAdapterCallback.updatePost(mPost);
 
                 VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingWithoutPositionListener() {
                     @Override
@@ -664,7 +707,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         mDownvoteButton.clearColorFilter();
                         mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
 
-                        mUpdatePostInPostFragmentCallback.updatePost(mPost);
+                        mCommentRecyclerViewAdapterCallback.updatePost(mPost);
                     }
 
                     @Override
@@ -675,7 +718,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         mUpvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                         mDownvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
 
-                        mUpdatePostInPostFragmentCallback.updatePost(mPost);
+                        mCommentRecyclerViewAdapterCallback.updatePost(mPost);
                     }
                 }, mPost.getFullName(), newVoteType);
             });
@@ -702,7 +745,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
 
-                mUpdatePostInPostFragmentCallback.updatePost(mPost);
+                mCommentRecyclerViewAdapterCallback.updatePost(mPost);
 
                 VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingWithoutPositionListener() {
                     @Override
@@ -718,7 +761,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         mUpvoteButton.clearColorFilter();
                         mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
 
-                        mUpdatePostInPostFragmentCallback.updatePost(mPost);
+                        mCommentRecyclerViewAdapterCallback.updatePost(mPost);
                     }
 
                     @Override
@@ -729,7 +772,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         mUpvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                         mDownvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
 
-                        mUpdatePostInPostFragmentCallback.updatePost(mPost);
+                        mCommentRecyclerViewAdapterCallback.updatePost(mPost);
                     }
                 }, mPost.getFullName(), newVoteType);
             });
@@ -869,11 +912,11 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    class LoadMoreCommentViewHolder extends RecyclerView.ViewHolder {
+    class LoadMoreChildCommentsViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.vertical_block_item_load_more_comments) View verticalBlock;
         @BindView(R.id.placeholder_text_view_item_load_more_comments) TextView placeholderTextView;
 
-        LoadMoreCommentViewHolder(View itemView) {
+        LoadMoreChildCommentsViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
@@ -1053,6 +1096,24 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     class NoCommentViewHolder extends RecyclerView.ViewHolder {
         NoCommentViewHolder(@NonNull View itemView) {
             super(itemView);
+        }
+    }
+
+    class IsLoadingMoreCommentsViewHolder extends RecyclerView.ViewHolder {
+        IsLoadingMoreCommentsViewHolder(@NonNull View itemView) {
+            super(itemView);
+        }
+    }
+
+    class LoadMoreCommentsFailedViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.error_text_view_item_comment_footer_error) TextView errorTextView;
+        @BindView(R.id.retry_button_item_comment_footer_error) Button retryButton;
+
+        public LoadMoreCommentsFailedViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+
+            retryButton.setOnClickListener(view -> mCommentRecyclerViewAdapterCallback.retryFetchingMoreComments());
         }
     }
 }

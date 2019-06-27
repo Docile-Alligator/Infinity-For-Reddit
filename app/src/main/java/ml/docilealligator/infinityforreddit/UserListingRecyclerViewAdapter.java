@@ -8,10 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -19,11 +24,6 @@ import com.bumptech.glide.request.RequestOptions;
 
 import SubscribedUserDatabase.SubscribedUserDao;
 import User.UserData;
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.paging.PagedListAdapter;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -201,9 +201,8 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
     }
 
     class ErrorViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.relative_layout_footer_error_item) RelativeLayout relativeLayout;
-        @BindView(R.id.error_text_view_footer_error_item) TextView errorTextView;
-        @BindView(R.id.retry_button_footer_error_item) Button retryButton;
+        @BindView(R.id.error_text_view_item_footer_error) TextView errorTextView;
+        @BindView(R.id.retry_button_item_footer_error) Button retryButton;
 
         ErrorViewHolder(View itemView) {
             super(itemView);
@@ -214,8 +213,6 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
     }
 
     class LoadingViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.progress_bar_footer_progress_bar_item) ProgressBar progressBar;
-
         LoadingViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

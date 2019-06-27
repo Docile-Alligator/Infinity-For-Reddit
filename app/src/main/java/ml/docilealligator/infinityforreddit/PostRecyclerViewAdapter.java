@@ -608,9 +608,8 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     }
 
     class ErrorViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.relative_layout_footer_error_item) RelativeLayout relativeLayout;
-        @BindView(R.id.error_text_view_footer_error_item) TextView errorTextView;
-        @BindView(R.id.retry_button_footer_error_item) Button retryButton;
+        @BindView(R.id.error_text_view_item_footer_error) TextView errorTextView;
+        @BindView(R.id.retry_button_item_footer_error) Button retryButton;
 
         ErrorViewHolder(View itemView) {
             super(itemView);
@@ -621,8 +620,6 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     }
 
     class LoadingViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.progress_bar_footer_progress_bar_item) ProgressBar progressBar;
-
         LoadingViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

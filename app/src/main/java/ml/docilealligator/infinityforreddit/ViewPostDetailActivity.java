@@ -57,7 +57,9 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private boolean isRefreshing = false;
     private ArrayList<String> children;
     private int mChildrenStartingIndex = 0;
+    private boolean loadMoreChildrenSuccess = true;
 
+    private LinearLayoutManager mLinearLayoutManager;
     private CommentRecyclerViewAdapter mAdapter;
     private LoadSubredditIconAsyncTask mLoadSubredditIconAsyncTask;
 
@@ -91,8 +93,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         mGlide = Glide.with(this);
         mLocale = getResources().getConfiguration().locale;
 
-        mRecyclerView.setNestedScrollingEnabled(false);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         if(savedInstanceState == null) {
             orientation = getResources().getConfiguration().orientation;
@@ -105,7 +107,20 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         mAdapter = new CommentRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
                 mOauthRetrofit, mGlide, mSharedPreferences, mPost,
                 mPost.getSubredditNamePrefixed(), mLocale, mLoadSubredditIconAsyncTask,
-                post -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
+                new CommentRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
+                    @Override
+                    public void updatePost(Post post) {
+                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                    }
+
+                    @Override
+                    public void retryFetchingMoreComments() {
+                        isLoadingMoreChildren = false;
+                        loadMoreChildrenSuccess = true;
+
+                        fetchMoreComments();
+                    }
+                });
         mRecyclerView.setAdapter(mAdapter);
 
         if(savedInstanceState != null) {
@@ -133,16 +148,26 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                                                       String parentId, ArrayList<String> children) {
                         ViewPostDetailActivity.this.children = children;
 
-                        mAdapter.addComments(expandedComments);
+                        mAdapter.addComments(expandedComments, children.size() != 0);
 
-                        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                            @Override
-                            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                                super.onScrolled(recyclerView, dx, dy);
+                        if(children.size() > 0) {
+                            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                                @Override
+                                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                                    super.onScrolled(recyclerView, dx, dy);
 
+                                    if(!isLoadingMoreChildren && loadMoreChildrenSuccess) {
+                                        int visibleItemCount = mLinearLayoutManager.getChildCount();
+                                        int totalItemCount = mLinearLayoutManager.getItemCount();
+                                        int firstVisibleItemPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
 
-                            }
-                        });
+                                        if ((visibleItemCount + firstVisibleItemPosition >= totalItemCount) && firstVisibleItemPosition >= 0) {
+                                            fetchMoreComments();
+                                        }
+                                    }
+                                }
+                            });
+                        }
 
                         /*mCommentProgressbar.setVisibility(View.GONE);
 
@@ -154,7 +179,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                                         int diff = view.getBottom() - (mNestedScrollView.getHeight() +
                                                 mNestedScrollView.getScrollY());
                                         if(diff == 0) {
-                                            fetchMoreComment(mChildrenStartingIndex);
+                                            fetchMoreComments(mChildrenStartingIndex);
                                         }
                                     }
                                 });
@@ -162,7 +187,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
                             mAdapter = new CommentRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
                                     mOauthRetrofit, mGlide, mSharedPreferences, mPost,
-                                    mPost.getSubredditNamePrefixed(), mLocale, new CommentRecyclerViewAdapter.UpdatePostInPostFragmentCallback() {
+                                    mPost.getSubredditNamePrefixed(), mLocale, new CommentRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                                 @Override
                                 public void updatePost(Post post) {
                                     EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
@@ -184,27 +209,27 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 });
     }
 
-    private void fetchMoreComment(int startingIndex) {
-        if(isLoadingMoreChildren) {
+    void fetchMoreComments() {
+        if(isLoadingMoreChildren || !loadMoreChildrenSuccess) {
             return;
         }
 
         isLoadingMoreChildren = true;
-        FetchComment.fetchMoreComment(mRetrofit, mPost.getSubredditNamePrefixed(), children, startingIndex,
+        FetchComment.fetchMoreComment(mRetrofit, mPost.getSubredditNamePrefixed(), children, mChildrenStartingIndex,
                 0, mLocale, new FetchComment.FetchMoreCommentListener() {
                     @Override
                     public void onFetchMoreCommentSuccess(ArrayList<CommentData> expandedComments, int childrenStartingIndex) {
-                        mAdapter.addComments(expandedComments);
+                        mAdapter.addComments(expandedComments, childrenStartingIndex < children.size());
                         mChildrenStartingIndex = childrenStartingIndex;
                         isLoadingMoreChildren = false;
+                        loadMoreChildrenSuccess = true;
                     }
 
                     @Override
                     public void onFetchMoreCommentFailed() {
                         isLoadingMoreChildren = false;
-                        Snackbar snackbar = Snackbar.make(mCoordinatorLayout, R.string.post_load_more_comments_failed, Snackbar.LENGTH_INDEFINITE);
-                        snackbar.setAction(R.string.retry, view -> fetchMoreComment(startingIndex));
-                        snackbar.show();
+                        loadMoreChildrenSuccess = false;
+                        mAdapter.loadMoreCommentsFailed();
                     }
                 });
     }
