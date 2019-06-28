@@ -28,13 +28,6 @@
         android:padding="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!--<TextView
-            android:id="@+id/comment_parent_text_view_comment_activity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:textSize="16sp" />-->
-
         <ru.noties.markwon.view.MarkwonView
             android:id="@+id/comment_parent_markwon_view_comment_activity"
             android:layout_width="match_parent"
@@ -45,11 +38,13 @@
         <EditText
             android:id="@+id/comment_edit_text_comment_activity"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="top"
             android:hint="@string/write_comment_hint"
             android:inputType="textCapSentences|textMultiLine"
             android:textSize="18sp"
-            android:background="#00000000" />
+            android:background="#00000000"
+            android:textColor="@color/primaryTextColor" />
 
     </LinearLayout>
 

@@ -1109,7 +1109,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @BindView(R.id.error_text_view_item_comment_footer_error) TextView errorTextView;
         @BindView(R.id.retry_button_item_comment_footer_error) Button retryButton;
 
-        public LoadMoreCommentsFailedViewHolder(@NonNull View itemView) {
+        LoadMoreCommentsFailedViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
