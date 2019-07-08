@@ -49,6 +49,11 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private static final String ORIENTATION_STATE = "OS";
     private static final String POST_STATE = "PS";
     private static final String IS_REFRESHING_STATE = "IRS";
+    private static final String IS_LOADING_MORE_CHILDREN_STATE = "ILMCS";
+    private static final String COMMENTS_STATE = "CS";
+    private static final String HAS_MORE_CHILDREN_STATE = "HMCS";
+    private static final String MORE_CHILDREN_LIST_STATE = "MCLS";
+    private static final String MORE_CHILDREN_STARTING_INDEX_STATE = "MCSIS";
 
     private Post mPost;
     private int postListPosition = -1;
@@ -58,6 +63,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private ArrayList<String> children;
     private int mChildrenStartingIndex = 0;
     private boolean loadMoreChildrenSuccess = true;
+    private boolean hasMoreChildren;
 
     private LinearLayoutManager mLinearLayoutManager;
     private CommentRecyclerViewAdapter mAdapter;
@@ -128,14 +134,24 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             if(isRefreshing) {
                 isRefreshing = false;
                 refresh();
+            } else {
+                mAdapter.addComments(savedInstanceState.getParcelableArrayList(COMMENTS_STATE),
+                        savedInstanceState.getBoolean(HAS_MORE_CHILDREN_STATE));
+                isLoadingMoreChildren = savedInstanceState.getBoolean(IS_LOADING_MORE_CHILDREN_STATE);
+                children = savedInstanceState.getStringArrayList(MORE_CHILDREN_LIST_STATE);
+                mChildrenStartingIndex = savedInstanceState.getInt(MORE_CHILDREN_STARTING_INDEX_STATE);
+                if(isLoadingMoreChildren) {
+                    isLoadingMoreChildren = false;
+                    fetchMoreComments();
+                }
             }
+        } else {
+            fetchComment();
         }
 
         if(getIntent().hasExtra(EXTRA_POST_LIST_POSITION)) {
             postListPosition = getIntent().getExtras().getInt(EXTRA_POST_LIST_POSITION);
         }
-
-        fetchComment();
     }
 
     private void fetchComment() {
@@ -148,7 +164,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                                                       String parentId, ArrayList<String> children) {
                         ViewPostDetailActivity.this.children = children;
 
-                        mAdapter.addComments(expandedComments, children.size() != 0);
+                        hasMoreChildren = children.size() != 0;
+                        mAdapter.addComments(expandedComments, hasMoreChildren);
 
                         if(children.size() > 0) {
                             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -219,7 +236,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 0, mLocale, new FetchComment.FetchMoreCommentListener() {
                     @Override
                     public void onFetchMoreCommentSuccess(ArrayList<CommentData> expandedComments, int childrenStartingIndex) {
-                        mAdapter.addComments(expandedComments, childrenStartingIndex < children.size());
+                        hasMoreChildren = childrenStartingIndex < children.size();
+                        mAdapter.addComments(expandedComments, hasMoreChildren);
                         mChildrenStartingIndex = childrenStartingIndex;
                         isLoadingMoreChildren = false;
                         loadMoreChildrenSuccess = true;
@@ -322,6 +340,11 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         outState.putInt(ORIENTATION_STATE, orientation);
         outState.putParcelable(POST_STATE, mPost);
         outState.putBoolean(IS_REFRESHING_STATE, isRefreshing);
+        outState.putBoolean(IS_LOADING_MORE_CHILDREN_STATE, isLoadingMoreChildren);
+        outState.putParcelableArrayList(COMMENTS_STATE, mAdapter.getVisibleComments());
+        outState.putBoolean(HAS_MORE_CHILDREN_STATE, hasMoreChildren);
+        outState.putStringArrayList(MORE_CHILDREN_LIST_STATE, children);
+        outState.putInt(MORE_CHILDREN_STARTING_INDEX_STATE, mChildrenStartingIndex);
     }
 
     @Override

@@ -37,8 +37,9 @@ public class SubredditViewModel extends AndroidViewModel {
             this.subredditName = subredditName;
         }
 
+        @NonNull
         @Override
-        public <T extends ViewModel> T create(Class<T> modelClass) {
+        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             //noinspection unchecked
             return (T) new SubredditViewModel(mApplication, subredditName);
         }

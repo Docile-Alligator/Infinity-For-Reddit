@@ -604,6 +604,10 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         notifyItemChanged(mVisibleComments.size() + 1);
     }
 
+    ArrayList<CommentData> getVisibleComments() {
+        return mVisibleComments;
+    }
+
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof CommentViewHolder) {
