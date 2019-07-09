@@ -8,7 +8,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -16,9 +15,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -95,15 +91,11 @@ public class ViewImageActivity extends AppCompatActivity {
         Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setHomeAsUpIndicator(upArrow);
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarColor)));
+        setTitle("");
 
         Intent intent = getIntent();
         mImageUrl = intent.getExtras().getString(IMAGE_URL_KEY);
         mImageFileName = intent.getExtras().getString(FILE_NAME_KEY);
-
-        String title = intent.getExtras().getString(TITLE_KEY);
-        Spannable text = new SpannableString(title);
-        text.setSpan(new ForegroundColorSpan(Color.WHITE), 0, title.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        setTitle(text);
 
         mLoadErrorLinearLayout.setOnClickListener(view -> {
             if(!isSwiping) {
@@ -133,8 +125,6 @@ public class ViewImageActivity extends AppCompatActivity {
         actionBarColorAnimation.addUpdateListener(valueAnimator -> actionBar.setBackgroundDrawable(new ColorDrawable((int) valueAnimator.getAnimatedValue())));
 
         actionBarElementColorAnimation.addUpdateListener(valueAnimator -> {
-            text.setSpan(new ForegroundColorSpan((int) valueAnimator.getAnimatedValue()), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            actionBar.setTitle(text);
             upArrow.setColorFilter((int) valueAnimator.getAnimatedValue(), PorterDuff.Mode.SRC_IN);
             if(mMenu != null) {
                 Drawable drawable = mMenu.getItem(0).getIcon();

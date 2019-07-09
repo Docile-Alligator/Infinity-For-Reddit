@@ -26,7 +26,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <CustomView.AspectRatioGifImageView
-                    android:id="@+id/subreddit_icon_circle_image_view_item_post_detail"
+                    android:id="@+id/subreddit_icon_gif_image_view_item_post_detail"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center"/>

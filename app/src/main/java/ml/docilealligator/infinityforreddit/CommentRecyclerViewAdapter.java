@@ -632,7 +632,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     class PostDetailViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.subreddit_icon_name_linear_layout_item_post_detail) LinearLayout mSubredditIconNameLinearLayout;
-        @BindView(R.id.subreddit_icon_circle_image_view_item_post_detail) AspectRatioGifImageView mSubredditIconGifImageView;
+        @BindView(R.id.subreddit_icon_gif_image_view_item_post_detail) AspectRatioGifImageView mSubredditIconGifImageView;
         @BindView(R.id.subreddit_text_view_item_post_detail) TextView mSubredditTextView;
         @BindView(R.id.post_time_text_view_item_post_detail) TextView mPostTimeTextView;
         @BindView(R.id.title_text_view_item_post_detail) TextView mTitleTextView;

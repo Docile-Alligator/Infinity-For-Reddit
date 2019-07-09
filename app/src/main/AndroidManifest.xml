@@ -19,10 +19,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".PostTextActivity"
+            android:label="@string/post_text_activity"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".CommentActivity"
-            android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/comment_activity_label"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".SearchActivity"
@@ -54,7 +57,7 @@
         <activity
             android:name=".ViewPostDetailActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ViewSubredditDetailActivity"
             android:parentActivityName=".MainActivity"

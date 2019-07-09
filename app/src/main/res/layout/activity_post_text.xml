@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PostTextActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <pl.droidsonroids.gif.GifImageView
+                    android:id="@+id/subreddit_icon_gif_image_view_post_text_activity"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/subreddit_default_icon" />
+
+                <TextView
+                    android:id="@+id/subreddit_name_text_view_post_text_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toStartOf="@id/rules_button_post_text_activity"
+                    android:layout_toEndOf="@id/subreddit_icon_gif_image_view_post_text_activity"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/choose_a_subreddit" />
+
+                <Button
+                    android:id="@+id/rules_button_post_text_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/rules"
+                    android:textColor="@color/colorAccent" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/dividerColor" />
+
+            <EditText
+                android:id="@+id/post_title_edit_text_post_text_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:padding="16dp"
+                android:hint="@string/post_title_hint"
+                android:inputType="textCapSentences|textMultiLine"
+                android:textSize="18sp"
+                android:background="#00000000"
+                android:textColor="@color/primaryTextColor" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/dividerColor" />
+
+            <EditText
+                android:id="@+id/post_text_content_edit_text_post_text_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:padding="16dp"
+                android:hint="@string/post_text_content_hint"
+                android:inputType="textCapSentences|textMultiLine"
+                android:textSize="18sp"
+                android:background="#00000000"
+                android:textColor="@color/primaryTextColor" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

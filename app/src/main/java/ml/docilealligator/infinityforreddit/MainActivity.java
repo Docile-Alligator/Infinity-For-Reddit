@@ -29,6 +29,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.ferfalk.simplesearchview.SimpleSearchView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.subscribed_user_recycler_view_main_activity) RecyclerView subscribedUserRecyclerView;
     @BindView(R.id.following_label_main_activity) TextView followingLabelTextView;
     @BindView(R.id.profile_linear_layout_main_activity) LinearLayout profileLinearLayout;
+    @BindView(R.id.fab_main_activity) FloatingActionButton fab;
 
     private TextView mNameTextView;
     private TextView mKarmaTextView;
@@ -260,6 +262,11 @@ public class MainActivity extends AppCompatActivity {
                 userAdapter.setSubscribedUsers(subscribedUserData);
             });
         }
+
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(this, PostTextActivity.class);
+            this.startActivity(intent);
+        });
     }
 
     private void loadUserData() {

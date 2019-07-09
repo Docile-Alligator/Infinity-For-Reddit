@@ -4,6 +4,7 @@
     <string name="search_activity_label">Search</string>
     <string name="comment_activity_label">Add Comment</string>
     <string name="comment_activity_label_is_replying">Reply</string>
+    <string name="post_text_activity">Text Post</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -84,4 +85,10 @@
     <string name="comment_load_more_comments_failed">Load failed. Tap to retry.</string>
 
     <string name="loading">Loading</string>
+
+    <string name="post_title_hint">Title</string>
+    <string name="post_text_content_hint">Content</string>
+    <string name="post_url_hint">URL</string>
+    <string name="choose_a_subreddit">Choose a subreddit</string>
+    <string name="rules">Rules</string>
 </resources>

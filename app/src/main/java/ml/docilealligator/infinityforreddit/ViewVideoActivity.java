@@ -8,7 +8,6 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -17,9 +16,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -94,9 +90,10 @@ public class ViewVideoActivity extends AppCompatActivity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarColor)));
         Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
-        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        actionBar.setHomeAsUpIndicator(upArrow);
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarColor)));
+        setTitle("");
 
         //Set player controller margin bottom in order to display it above the navbar
         int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
@@ -107,11 +104,6 @@ public class ViewVideoActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mVideoUri = intent.getData();
         mIsDashVideo = intent.getExtras().getBoolean(IS_DASH_VIDEO_KEY);
-
-        String title = intent.getExtras().getString(TITLE_KEY);
-        Spannable text = new SpannableString(title);
-        text.setSpan(new ForegroundColorSpan(Color.WHITE), 0, title.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        setTitle(text);
 
         if(intent.getExtras().getBoolean(IS_DOWNLOADABLE_KEY)) {
             mGifOrVideoFileName = intent.getExtras().getString(SUBREDDIT_KEY).substring(2)
@@ -139,8 +131,6 @@ public class ViewVideoActivity extends AppCompatActivity {
         actionBarColorAnimation.addUpdateListener(valueAnimator -> actionBar.setBackgroundDrawable(new ColorDrawable((int) valueAnimator.getAnimatedValue())));
 
         actionBarElementColorAnimation.addUpdateListener(valueAnimator -> {
-            text.setSpan(new ForegroundColorSpan((int) valueAnimator.getAnimatedValue()), 0, text.length(), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-            actionBar.setTitle(text);
             upArrow.setColorFilter((int) valueAnimator.getAnimatedValue(), PorterDuff.Mode.SRC_IN);
             if(mMenu != null) {
                 Drawable drawable = mMenu.getItem(0).getIcon();
