@@ -24,10 +24,21 @@ class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     private Context mContext;
     private List<SubscribedSubredditData> mSubscribedSubredditData;
     private RequestManager glide;
+    private ItemClickListener itemClickListener;
+
+    interface ItemClickListener {
+        void onClick(String name, String iconUrl);
+    }
 
     SubscribedSubredditsRecyclerViewAdapter(Context context) {
         mContext = context;
         glide = Glide.with(context.getApplicationContext());
+    }
+
+    SubscribedSubredditsRecyclerViewAdapter(Context context, ItemClickListener itemClickListener) {
+        mContext = context;
+        glide = Glide.with(context.getApplicationContext());
+        this.itemClickListener = itemClickListener;
     }
 
     @NonNull
@@ -40,9 +51,13 @@ class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, final int i) {
         viewHolder.itemView.setOnClickListener(view -> {
             if(viewHolder.getAdapterPosition() >= 0) {
-                Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
-                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, mSubscribedSubredditData.get(viewHolder.getAdapterPosition()).getName());
-                mContext.startActivity(intent);
+                if(itemClickListener != null) {
+                    itemClickListener.onClick(mSubscribedSubredditData.get(i).getName(), mSubscribedSubredditData.get(i).getIconUrl());
+                } else {
+                    Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
+                    intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, mSubscribedSubredditData.get(viewHolder.getAdapterPosition()).getName());
+                    mContext.startActivity(intent);
+                }
             }
         });
         if(!mSubscribedSubredditData.get(i).getIconUrl().equals("")) {

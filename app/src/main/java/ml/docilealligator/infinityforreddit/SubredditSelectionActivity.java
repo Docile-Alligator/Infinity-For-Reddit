@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -7,17 +9,14 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import SubscribedSubredditDatabase.SubscribedSubredditViewModel;
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SubredditSelectionActivity extends AppCompatActivity {
 
-    @BindView(R.id.recycler_view_subreddit_selection_activity) RecyclerView recyclerView;
+    static final String EXTRA_RETURN_SUBREDDIT_NAME_KEY = "ERSNK";
+    static final String EXTRA_RETURN_SUBREDDIT_ICON_URL_KEY = "ERSIUK";
 
     private SubscribedSubredditViewModel mSubscribedSubredditViewModel;
 
@@ -32,12 +31,11 @@ public class SubredditSelectionActivity extends AppCompatActivity {
         Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setHomeAsUpIndicator(upArrow);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        SubscribedSubredditsRecyclerViewAdapter adapter = new SubscribedSubredditsRecyclerViewAdapter(this);
-        recyclerView.setAdapter(adapter);
-
-        mSubscribedSubredditViewModel = ViewModelProviders.of(this).get(SubscribedSubredditViewModel.class);
-        mSubscribedSubredditViewModel.getAllSubscribedSubreddits().observe(this, adapter::setSubscribedSubreddits);
+        SubscribedSubredditsListingFragment fragment = new SubscribedSubredditsListingFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_FRONT_PAGE);
+        fragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, fragment).commit();
     }
 
     @Override
@@ -49,5 +47,13 @@ public class SubredditSelectionActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    void getSelectedSubreddit(String name, String iconUrl) {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_NAME_KEY, name);
+        returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_ICON_URL_KEY, iconUrl);
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
     }
 }

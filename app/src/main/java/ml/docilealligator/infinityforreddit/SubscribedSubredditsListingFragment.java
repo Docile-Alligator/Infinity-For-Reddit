@@ -27,6 +27,8 @@ import butterknife.ButterKnife;
  */
 public class SubscribedSubredditsListingFragment extends Fragment {
 
+    static final String EXTRA_IS_SUBREDDIT_SELECTION = "EISSK";
+
     @BindView(R.id.recycler_view_subscribed_subreddits_listing_fragment) RecyclerView mRecyclerView;
     @BindView(R.id.no_subscriptions_linear_layout_subreddits_listing_fragment) LinearLayout mLinearLayout;
     @BindView(R.id.no_subscriptions_image_view_subreddits_listing_fragment) ImageView mImageView;
@@ -55,7 +57,17 @@ public class SubscribedSubredditsListingFragment extends Fragment {
         mGlide = Glide.with(this);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
-        SubscribedSubredditsRecyclerViewAdapter adapter = new SubscribedSubredditsRecyclerViewAdapter(mActivity);
+
+        SubscribedSubredditsRecyclerViewAdapter adapter;
+        if(getArguments().getBoolean(EXTRA_IS_SUBREDDIT_SELECTION)) {
+            adapter = new SubscribedSubredditsRecyclerViewAdapter(mActivity);
+        } else {
+            adapter = new SubscribedSubredditsRecyclerViewAdapter(mActivity, (name, iconUrl) -> {
+                ((SubredditSelectionActivity) mActivity).getSelectedSubreddit(name, iconUrl);
+            });
+        }
+
+
         mRecyclerView.setAdapter(adapter);
 
         mSubscribedSubredditViewModel = ViewModelProviders.of(this).get(SubscribedSubredditViewModel.class);

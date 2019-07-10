@@ -54,7 +54,7 @@ public class FollowedUsersListingFragment extends Fragment {
         mGlide = Glide.with(this);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
-        SubscribedUserRecyclerViewAdapter adapter = new SubscribedUserRecyclerViewAdapter(mActivity);
+        FollowedUsersRecyclerViewAdapter adapter = new FollowedUsersRecyclerViewAdapter(mActivity);
         mRecyclerView.setAdapter(adapter);
 
         mSubscribedUserViewModel = ViewModelProviders.of(this).get(SubscribedUserViewModel.class);

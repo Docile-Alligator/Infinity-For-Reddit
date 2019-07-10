@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -71,6 +72,16 @@ public class SubscribedThingListingActivity extends AppCompatActivity {
         }
 
         loadSubscriptions();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+
+        return false;
     }
 
     @Override

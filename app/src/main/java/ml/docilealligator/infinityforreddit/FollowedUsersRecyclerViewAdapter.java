@@ -20,12 +20,12 @@ import SubscribedUserDatabase.SubscribedUserData;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pl.droidsonroids.gif.GifImageView;
 
-public class SubscribedUserRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<SubscribedUserData> mSubscribedUserData;
     private Context mContext;
     private RequestManager glide;
 
-    SubscribedUserRecyclerViewAdapter(Context context) {
+    FollowedUsersRecyclerViewAdapter(Context context) {
         mContext = context;
         glide = Glide.with(context.getApplicationContext());
     }

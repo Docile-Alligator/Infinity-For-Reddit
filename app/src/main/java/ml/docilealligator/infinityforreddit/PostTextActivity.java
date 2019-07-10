@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,6 +25,8 @@ import pl.droidsonroids.gif.GifImageView;
 public class PostTextActivity extends AppCompatActivity {
 
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
+
+    private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
 
     @BindView(R.id.subreddit_icon_gif_image_view_post_text_activity) GifImageView iconGifImageView;
     @BindView(R.id.subreddit_name_text_view_post_text_activity) TextView subreditNameTextView;
@@ -56,7 +59,7 @@ public class PostTextActivity extends AppCompatActivity {
 
         subreditNameTextView.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubredditSelectionActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
         });
     }
 
@@ -69,5 +72,29 @@ public class PostTextActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == SUBREDDIT_SELECTION_REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                subreditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
+                subreditNameTextView.setText(data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME_KEY));
+
+                String iconUrl = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_ICON_URL_KEY);
+                if(!iconUrl.equals("")) {
+                    mGlide.load(iconUrl)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                            .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                            .into(iconGifImageView);
+                } else {
+                    mGlide.load(R.drawable.subreddit_default_icon)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                            .into(iconGifImageView);
+                }
+            }
+        }
     }
 }
