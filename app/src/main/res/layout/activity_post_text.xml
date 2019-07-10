@@ -8,7 +8,8 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,8 +29,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/subreddit_default_icon" />
+                    android:layout_centerVertical="true" />
 
                 <TextView
                     android:id="@+id/subreddit_name_text_view_post_text_activity"
@@ -78,7 +78,7 @@
             <EditText
                 android:id="@+id/post_text_content_edit_text_post_text_activity"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="top"
                 android:padding="16dp"
                 android:hint="@string/post_text_content_hint"

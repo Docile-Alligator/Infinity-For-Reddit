@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
@@ -14,25 +17,17 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.List;
 
 import SubscribedSubredditDatabase.SubscribedSubredditData;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pl.droidsonroids.gif.GifImageView;
 
-class SubscribedSubredditRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context mContext;
     private List<SubscribedSubredditData> mSubscribedSubredditData;
     private RequestManager glide;
-    private OnItemClickListener mOnItemClickListener;
 
-    interface OnItemClickListener {
-        void onClick();
-    }
-
-    SubscribedSubredditRecyclerViewAdapter(Context context, OnItemClickListener onItemClickListener) {
+    SubscribedSubredditsRecyclerViewAdapter(Context context) {
         mContext = context;
         glide = Glide.with(context.getApplicationContext());
-        mOnItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -45,7 +40,6 @@ class SubscribedSubredditRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, final int i) {
         viewHolder.itemView.setOnClickListener(view -> {
             if(viewHolder.getAdapterPosition() >= 0) {
-                mOnItemClickListener.onClick();
                 Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
                 intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, mSubscribedSubredditData.get(viewHolder.getAdapterPosition()).getName());
                 mContext.startActivity(intent);
@@ -88,7 +82,7 @@ class SubscribedSubredditRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         private final GifImageView iconGifImageView;
         private final TextView subredditNameTextView;
 
-        public SubredditViewHolder(View itemView) {
+        SubredditViewHolder(View itemView) {
             super(itemView);
             iconGifImageView = itemView.findViewById(R.id.subreddit_icon_gif_image_view_item_subscribed_subreddit);
             subredditNameTextView = itemView.findViewById(R.id.subreddit_name_text_view_item_subscribed_subreddit);

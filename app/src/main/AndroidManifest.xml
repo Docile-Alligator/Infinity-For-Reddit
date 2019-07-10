@@ -19,8 +19,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".PostTextActivity"
-            android:label="@string/post_text_activity"
+        <activity android:name=".SubscribedThingListingActivity"
+            android:label="@string/subscriptions"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SubredditSelectionActivity"
+            android:label="@string/subreddit_selection_activity_label"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".PostTextActivity"
+            android:label="@string/post_text_activity_label"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".CommentActivity"

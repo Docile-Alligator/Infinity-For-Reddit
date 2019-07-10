@@ -4,7 +4,8 @@
     <string name="search_activity_label">Search</string>
     <string name="comment_activity_label">Add Comment</string>
     <string name="comment_activity_label_is_replying">Reply</string>
-    <string name="post_text_activity">Text Post</string>
+    <string name="post_text_activity_label">Text Post</string>
+    <string name="subreddit_selection_activity_label">Select a Subreddit</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -41,6 +42,7 @@
     <string name="profile">Profile</string>
     <string name="following">Following</string>
     <string name="subscriptions">Subscriptions</string>
+    <string name="settings">Settings</string>
     <string name="subscribers_number_detail">Subscribers: %1$d</string>
     <string name="online_subscribers_number_detail">Online: %1$d</string>
     <string name="cannot_fetch_subreddit_info">Cannot fetch subreddit info</string>
@@ -91,4 +93,7 @@
     <string name="post_url_hint">URL</string>
     <string name="choose_a_subreddit">Choose a subreddit</string>
     <string name="rules">Rules</string>
+
+    <string name="subreddits">Subreddits</string>
+    <string name="users">Users</string>
 </resources>

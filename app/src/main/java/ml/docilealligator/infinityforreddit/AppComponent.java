@@ -16,4 +16,5 @@ interface AppComponent {
     void inject(ViewSubredditDetailActivity viewSubredditDetailActivity);
     void inject(ViewUserDetailActivity viewUserDetailActivity);
     void inject(CommentActivity commentActivity);
+    void inject(SubscribedThingListingActivity subscribedThingListingActivity);
 }

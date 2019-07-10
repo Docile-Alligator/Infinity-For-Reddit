@@ -24,16 +24,10 @@ public class SubscribedUserRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private List<SubscribedUserData> mSubscribedUserData;
     private Context mContext;
     private RequestManager glide;
-    private OnItemClickListener mOnItemClickListener;
 
-    public interface OnItemClickListener {
-        void onClick();
-    }
-
-    SubscribedUserRecyclerViewAdapter(Context context, OnItemClickListener onItemClickListener) {
+    SubscribedUserRecyclerViewAdapter(Context context) {
         mContext = context;
         glide = Glide.with(context.getApplicationContext());
-        mOnItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -48,7 +42,6 @@ public class SubscribedUserRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
             intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mSubscribedUserData.get(viewHolder.getAdapterPosition()).getName());
             mContext.startActivity(intent);
-            mOnItemClickListener.onClick();
         });
         if(!mSubscribedUserData.get(i).getIconUrl().equals("")) {
             glide.load(mSubscribedUserData.get(i).getIconUrl())

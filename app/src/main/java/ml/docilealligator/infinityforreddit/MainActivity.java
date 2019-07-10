@@ -19,9 +19,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -31,19 +28,9 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import SubredditDatabase.SubredditData;
-import SubredditDatabase.SubredditRoomDatabase;
-import SubscribedSubredditDatabase.SubscribedSubredditData;
-import SubscribedSubredditDatabase.SubscribedSubredditRoomDatabase;
-import SubscribedSubredditDatabase.SubscribedSubredditViewModel;
-import SubscribedUserDatabase.SubscribedUserData;
-import SubscribedUserDatabase.SubscribedUserRoomDatabase;
-import SubscribedUserDatabase.SubscribedUserViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -63,11 +50,9 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.collapsing_toolbar_layout_main_activity) CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.search_view_main_activity) SimpleSearchView simpleSearchView;
     @BindView(R.id.transparent_overlay_main_activity) View transparentOverlay;
-    @BindView(R.id.subscribed_subreddit_recycler_view_main_activity) RecyclerView subscribedSubredditRecyclerView;
-    @BindView(R.id.subscriptions_label_main_activity) TextView subscriptionsLabelTextView;
-    @BindView(R.id.subscribed_user_recycler_view_main_activity) RecyclerView subscribedUserRecyclerView;
-    @BindView(R.id.following_label_main_activity) TextView followingLabelTextView;
     @BindView(R.id.profile_linear_layout_main_activity) LinearLayout profileLinearLayout;
+    @BindView(R.id.subscriptions_linear_layout_main_activity) LinearLayout subscriptionLinearLayout;
+    @BindView(R.id.settings_linear_layout_main_activity) LinearLayout settingsLinearLayout;
     @BindView(R.id.fab_main_activity) FloatingActionButton fab;
 
     private TextView mNameTextView;
@@ -84,12 +69,8 @@ public class MainActivity extends AppCompatActivity {
     private String mBannerImageUrl;
     private String mKarma;
     private boolean mFetchUserInfoSuccess = false;
-    private boolean mInsertSuccess = false;
 
     private Menu mMenu;
-
-    private SubscribedSubredditViewModel mSubscribedSubredditViewModel;
-    private SubscribedUserViewModel mSubscribedUserViewModel;
 
     private boolean isInLazyMode = false;
 
@@ -109,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         ButterKnife.bind(this);
 
         ((Infinity) getApplication()).getmAppComponent().inject(this);
@@ -184,7 +166,6 @@ public class MainActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
 
                 mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
-                mInsertSuccess = savedInstanceState.getBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE);
                 isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             }
 
@@ -197,12 +178,6 @@ public class MainActivity extends AppCompatActivity {
             mBannerImageView = header.findViewById(R.id.banner_image_view_nav_header_main);
 
             loadUserData();
-
-            subscribedSubredditRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-            subscribedSubredditRecyclerView.setNestedScrollingEnabled(false);
-
-            subscribedUserRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-            subscribedUserRecyclerView.setNestedScrollingEnabled(false);
 
             mName = getSharedPreferences(SharedPreferencesUtils.USER_INFO_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.USER_KEY, "");
             mProfileImageUrl = getSharedPreferences(SharedPreferencesUtils.USER_INFO_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.PROFILE_IMAGE_URL_KEY, "");
@@ -229,37 +204,18 @@ public class MainActivity extends AppCompatActivity {
             }
 
             profileLinearLayout.setOnClickListener(view -> {
-                Intent intent = new Intent(MainActivity.this, ViewUserDetailActivity.class);
+                Intent intent = new Intent(this, ViewUserDetailActivity.class);
                 intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mName);
                 startActivity(intent);
             });
 
-            final SubscribedSubredditRecyclerViewAdapter subredditadapter =
-                    new SubscribedSubredditRecyclerViewAdapter(this, drawer::closeDrawers);
-            subscribedSubredditRecyclerView.setAdapter(subredditadapter);
-
-            mSubscribedSubredditViewModel = ViewModelProviders.of(this).get(SubscribedSubredditViewModel.class);
-            mSubscribedSubredditViewModel.getAllSubscribedSubreddits().observe(this, subscribedSubredditData -> {
-                if (subscribedSubredditData == null || subscribedSubredditData.size() == 0) {
-                    subscriptionsLabelTextView.setVisibility(View.GONE);
-                } else {
-                    subscriptionsLabelTextView.setVisibility(View.VISIBLE);
-                }
-
-                subredditadapter.setSubscribedSubreddits(subscribedSubredditData);
+            subscriptionLinearLayout.setOnClickListener(view -> {
+                Intent intent = new Intent(this, SubscribedThingListingActivity.class);
+                startActivity(intent);
             });
 
-            final SubscribedUserRecyclerViewAdapter userAdapter =
-                    new SubscribedUserRecyclerViewAdapter(this, drawer::closeDrawers);
-            subscribedUserRecyclerView.setAdapter(userAdapter);
-            mSubscribedUserViewModel = ViewModelProviders.of(this).get(SubscribedUserViewModel.class);
-            mSubscribedUserViewModel.getAllSubscribedUsers().observe(this, subscribedUserData -> {
-                if (subscribedUserData == null || subscribedUserData.size() == 0) {
-                    followingLabelTextView.setVisibility(View.GONE);
-                } else {
-                    followingLabelTextView.setVisibility(View.VISIBLE);
-                }
-                userAdapter.setSubscribedUsers(subscribedUserData);
+            settingsLinearLayout.setOnClickListener(view -> {
+
             });
         }
 
@@ -322,32 +278,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-
-        if (!mInsertSuccess) {
-            FetchSubscribedThing.fetchSubscribedThing(mOauthRetrofit, mAuthInfoSharedPreferences, null,
-                    new ArrayList<>(), new ArrayList<>(),
-                    new ArrayList<>(),
-                    new FetchSubscribedThing.FetchSubscribedThingListener() {
-                        @Override
-                        public void onFetchSubscribedThingSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
-                                                                  ArrayList<SubscribedUserData> subscribedUserData,
-                                                                  ArrayList<SubredditData> subredditData) {
-                            new InsertSubscribedThingsAsyncTask(
-                                    SubscribedSubredditRoomDatabase.getDatabase(MainActivity.this).subscribedSubredditDao(),
-                                    SubscribedUserRoomDatabase.getDatabase(MainActivity.this).subscribedUserDao(),
-                                    SubredditRoomDatabase.getDatabase(MainActivity.this).subredditDao(),
-                                    subscribedSubredditData,
-                                    subscribedUserData,
-                                    subredditData,
-                                    () -> mInsertSuccess = true).execute();
-                        }
-
-                        @Override
-                        public void onFetchSubscribedThingFail() {
-                            mInsertSuccess = false;
-                        }
-                    });
-        }
     }
 
     @Override
@@ -391,7 +321,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.action_refresh_main_activity:
                     ((FragmentCommunicator) mFragment).refresh();
                     mFetchUserInfoSuccess = false;
-                    mInsertSuccess = false;
                     loadUserData();
                     return true;
                 case R.id.action_lazy_mode_main_activity:
@@ -437,7 +366,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         outState.putBoolean(FETCH_USER_INFO_STATE, mFetchUserInfoSuccess);
-        outState.putBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE, mInsertSuccess);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
     }
 }

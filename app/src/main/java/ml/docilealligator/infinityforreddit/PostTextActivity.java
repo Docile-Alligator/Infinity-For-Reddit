@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -11,8 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.RequestOptions;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pl.droidsonroids.gif.GifImageView;
 
 public class PostTextActivity extends AppCompatActivity {
@@ -25,6 +31,8 @@ public class PostTextActivity extends AppCompatActivity {
     @BindView(R.id.post_title_edit_text_post_text_activity) EditText titleEditText;
     @BindView(R.id.post_text_content_edit_text_post_text_activity) EditText contentEditText;
 
+    private RequestManager mGlide;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,9 +44,20 @@ public class PostTextActivity extends AppCompatActivity {
         Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setHomeAsUpIndicator(upArrow);
 
+        mGlide = Glide.with(this);
+
         if(getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
             subreditNameTextView.setText(getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME));
+        } else {
+            mGlide.load(R.drawable.subreddit_default_icon)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                    .into(iconGifImageView);
         }
+
+        subreditNameTextView.setOnClickListener(view -> {
+            Intent intent = new Intent(this, SubredditSelectionActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override
