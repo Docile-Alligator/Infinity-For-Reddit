@@ -78,4 +78,8 @@ public interface RedditAPI {
     @FormUrlEncoded
     @POST("/api/del")
     Call<String> delete(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("/api/submit")
+    Call<String> submit(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }

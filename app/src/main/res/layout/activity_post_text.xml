@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/coordinator_layout_post_detail_activity"
     tools:context=".PostTextActivity">
 
     <androidx.core.widget.NestedScrollView

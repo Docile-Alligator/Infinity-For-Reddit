@@ -145,7 +145,6 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         canStartActivity = false;
 
                         Intent intent = new Intent(mContext, ViewPostDetailActivity.class);
-                        intent.putExtra(ViewPostDetailActivity.EXTRA_TITLE, title);
                         intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
                         intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, position);
                         mContext.startActivity(intent);

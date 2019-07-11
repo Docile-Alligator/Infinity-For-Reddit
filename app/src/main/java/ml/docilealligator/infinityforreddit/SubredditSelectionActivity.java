@@ -33,7 +33,7 @@ public class SubredditSelectionActivity extends AppCompatActivity {
 
         SubscribedSubredditsListingFragment fragment = new SubscribedSubredditsListingFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_FRONT_PAGE);
+        bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_IS_SUBREDDIT_SELECTION, true);
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, fragment).commit();
     }

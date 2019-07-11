@@ -129,7 +129,11 @@ public class SubscribedThingListingActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0: {
-                    return new SubscribedSubredditsListingFragment();
+                    SubscribedSubredditsListingFragment fragment = new SubscribedSubredditsListingFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_IS_SUBREDDIT_SELECTION, false);
+                    fragment.setArguments(bundle);
+                    return fragment;
                 }
                 default:
                 {

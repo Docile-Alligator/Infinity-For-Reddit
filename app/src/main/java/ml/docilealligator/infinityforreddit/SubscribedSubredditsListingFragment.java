@@ -60,11 +60,9 @@ public class SubscribedSubredditsListingFragment extends Fragment {
 
         SubscribedSubredditsRecyclerViewAdapter adapter;
         if(getArguments().getBoolean(EXTRA_IS_SUBREDDIT_SELECTION)) {
-            adapter = new SubscribedSubredditsRecyclerViewAdapter(mActivity);
+            adapter = new SubscribedSubredditsRecyclerViewAdapter(mActivity, (name, iconUrl) -> ((SubredditSelectionActivity) mActivity).getSelectedSubreddit(name, iconUrl));
         } else {
-            adapter = new SubscribedSubredditsRecyclerViewAdapter(mActivity, (name, iconUrl) -> {
-                ((SubredditSelectionActivity) mActivity).getSelectedSubreddit(name, iconUrl);
-            });
+            adapter = new SubscribedSubredditsRecyclerViewAdapter(mActivity);
         }
 
 

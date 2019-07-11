@@ -19,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".SubscribedThingListingActivity"
+        <activity
+            android:name=".SubscribedThingListingActivity"
             android:label="@string/subscriptions"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -30,7 +31,8 @@
         <activity
             android:name=".PostTextActivity"
             android:label="@string/post_text_activity_label"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".CommentActivity"
             android:label="@string/comment_activity_label"

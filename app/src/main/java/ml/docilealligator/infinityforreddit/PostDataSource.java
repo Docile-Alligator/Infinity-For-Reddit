@@ -2,12 +2,13 @@ package ml.docilealligator.infinityforreddit;
 
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.Locale;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
+
+import java.util.ArrayList;
+import java.util.Locale;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -114,7 +115,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                 loadSubredditPostsAfter(params, callback);
                 break;
             case TYPE_USER:
-                loadUserPostsAfter(params, callback);
+                loadUserPostsAfter(params, callback, null);
                 break;
             case TYPE_SEARCH:
                 loadSearchPostsAfter(params, callback);
@@ -157,8 +158,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                String errorMessage = t == null ? "unknown error" : t.getMessage();
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                String errorMessage = t.getMessage();
                 initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
             }
         });
@@ -170,7 +171,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
         bestPost.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+            public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
                     ParsePost.parsePosts(response.body(), locale, new ParsePost.ParsePostsListingListener() {
                         @Override
@@ -192,8 +193,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                String errorMessage = t == null ? "unknown error" : t.getMessage();
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                String errorMessage = t.getMessage();
                 paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
             }
         });
@@ -204,7 +205,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         Call<String> getPost = api.getSubredditBestPosts(name, null, RedditUtils.getOAuthHeader(accessToken));
         getPost.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+            public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
                     ParsePost.parsePosts(response.body(), locale,
                             new ParsePost.ParsePostsListingListener() {
@@ -233,8 +234,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                String errorMessage = t == null ? "unknown error" : t.getMessage();
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                String errorMessage = t.getMessage();
                 initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
             }
         });
@@ -245,7 +246,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         Call<String> getPost = api.getSubredditBestPosts(name, params.key, RedditUtils.getOAuthHeader(accessToken));
         getPost.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+            public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
                     ParsePost.parsePosts(response.body(), locale, new ParsePost.ParsePostsListingListener() {
                         @Override
@@ -267,8 +268,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                String errorMessage = t == null ? "unknown error" : t.getMessage();
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                String errorMessage = t.getMessage();
                 paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
             }
         });
@@ -279,7 +280,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         Call<String> getPost = api.getUserBestPosts(name, lastItem, RedditUtils.getOAuthHeader(accessToken));
         getPost.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+            public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
                     ParsePost.parsePosts(response.body(), locale,
                             new ParsePost.ParsePostsListingListener() {
@@ -311,42 +312,48 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                String errorMessage = t == null ? "unknown error" : t.getMessage();
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                String errorMessage = t.getMessage();
                 initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
             }
         });
     }
 
-    private void loadUserPostsAfter(@NonNull LoadParams<String> params, @NonNull final LoadCallback<String, Post> callback) {
+    private void loadUserPostsAfter(@NonNull LoadParams<String> params, @NonNull final LoadCallback<String, Post> callback, String lastItem) {
+        String after = lastItem == null ? params.key : lastItem;
+
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> getPost = api.getUserBestPosts(name, params.key, RedditUtils.getOAuthHeader(accessToken));
+        Call<String> getPost = api.getUserBestPosts(name, after, RedditUtils.getOAuthHeader(accessToken));
         getPost.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+            public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
                     ParsePost.parsePosts(response.body(), locale, new ParsePost.ParsePostsListingListener() {
                         @Override
                         public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
-                            callback.onResult(newPosts, lastItem);
-                            paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
+                            if(newPosts.size() == 0 && !lastItem.equals("null")) {
+                                loadUserPostsAfter(params, callback, lastItem);
+                            } else {
+                                callback.onResult(newPosts, lastItem);
+                                paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
+                            }
                         }
 
                         @Override
                         public void onParsePostsListingFail() {
-                            Log.i("Best post", "Error parsing data");
+                            Log.i("User posts", "Error parsing data");
                             paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                         }
                     });
                 } else {
-                    Log.i("Best post", response.message());
+                    Log.i("User posts", response.message());
                     paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                 }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                String errorMessage = t == null ? "unknown error" : t.getMessage();
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                String errorMessage = t.getMessage();
                 paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
             }
         });
@@ -357,7 +364,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         Call<String> getPost = api.searchPosts(name, null, RedditUtils.getOAuthHeader(accessToken));
         getPost.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+            public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
                     ParsePost.parsePosts(response.body(), locale,
                             new ParsePost.ParsePostsListingListener() {
@@ -386,8 +393,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                String errorMessage = t == null ? "unknown error" : t.getMessage();
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                String errorMessage = t.getMessage();
                 initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
             }
         });
@@ -398,7 +405,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         Call<String> getPost = api.searchPosts(name, params.key, RedditUtils.getOAuthHeader(accessToken));
         getPost.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<String> call, retrofit2.Response<String> response) {
+            public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
                     ParsePost.parsePosts(response.body(), locale, new ParsePost.ParsePostsListingListener() {
                         @Override
@@ -409,19 +416,19 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
                         @Override
                         public void onParsePostsListingFail() {
-                            Log.i("Best post", "Error parsing data");
+                            Log.i("Search post", "Error parsing data");
                             paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                         }
                     });
                 } else {
-                    Log.i("Best post", response.message());
+                    Log.i("Search post", response.message());
                     paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                 }
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                String errorMessage = t == null ? "unknown error" : t.getMessage();
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                String errorMessage = t.getMessage();
                 paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
             }
         });

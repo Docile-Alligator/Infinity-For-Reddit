@@ -70,4 +70,5 @@ public class JSONUtils {
     static final String JSON_KEY = "json";
     static final String THINGS_KEY = "things";
     static final String PARENT_ID_KEY = "parent_id";
+    static final String ERRORS_KEY = "errors";
 }

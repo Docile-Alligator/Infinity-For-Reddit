@@ -38,7 +38,6 @@ import static ml.docilealligator.infinityforreddit.CommentActivity.WRITE_COMMENT
 
 public class ViewPostDetailActivity extends AppCompatActivity {
 
-    static final String EXTRA_TITLE = "ET";
     static final String EXTRA_POST_DATA = "EPD";
     static final String EXTRA_POST_LIST_POSITION = "EPLI";
 
@@ -185,38 +184,6 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                                 }
                             });
                         }
-
-                        /*mCommentProgressbar.setVisibility(View.GONE);
-
-                        if (expandedComments.size() > 0) {
-                            if(mAdapter == null) {
-                                mNestedScrollView.getViewTreeObserver().addOnScrollChangedListener(() -> {
-                                    if(!isLoadingMoreChildren) {
-                                        View view = mNestedScrollView.getChildAt(mNestedScrollView.getChildCount() - 1);
-                                        int diff = view.getBottom() - (mNestedScrollView.getHeight() +
-                                                mNestedScrollView.getScrollY());
-                                        if(diff == 0) {
-                                            fetchMoreComments(mChildrenStartingIndex);
-                                        }
-                                    }
-                                });
-                            }
-
-                            mAdapter = new CommentRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
-                                    mOauthRetrofit, mGlide, mSharedPreferences, mPost,
-                                    mPost.getSubredditNamePrefixed(), mLocale, new CommentRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
-                                @Override
-                                public void updatePost(Post post) {
-                                    EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                                }
-                            });
-                            mRecyclerView.setAdapter(mAdapter);
-
-                            //mCommentCardView.setVisibility(View.VISIBLE);
-                        } else {
-                            mNoCommentWrapperLinearLayout.setVisibility(View.VISIBLE);
-                            mGlide.load(R.drawable.no_comment_placeholder).into(mNoCommentImageView);
-                        }*/
                     }
 
                     @Override

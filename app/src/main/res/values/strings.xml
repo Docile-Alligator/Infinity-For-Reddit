@@ -80,6 +80,9 @@
     <string name="send_comment_failed">Could not send this comment</string>
     <string name="parse_sent_comment_failed">The comment is sent but unable to get the sent comment</string>
 
+    <string name="posting">Posting</string>
+    <string name="post_failed">Could not post it</string>
+
     <string name="download_completed">Download completed</string>
     <string name="download_failed">Download Failed</string>
 
