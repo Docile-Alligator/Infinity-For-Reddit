@@ -35,6 +35,12 @@ import retrofit2.Retrofit;
 public class PostTextActivity extends AppCompatActivity {
 
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
+    static final String EXTRA_SUBREDDIT_ICON = "ESI";
+
+    private static final String SUBREDDIT_NAME_STATE = "SNS";
+    private static final String SUBREDDIT_ICON_STATE = "SIS";
+    private static final String SUBREDDIT_SELECTED_STATE = "SSS";
+    private static final String SUBREDDIT_IS_USER_STATE = "SIUS";
 
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
 
@@ -44,6 +50,11 @@ public class PostTextActivity extends AppCompatActivity {
     @BindView(R.id.rules_button_post_text_activity) Button rulesButton;
     @BindView(R.id.post_title_edit_text_post_text_activity) EditText titleEditText;
     @BindView(R.id.post_text_content_edit_text_post_text_activity) EditText contentEditText;
+
+    private String iconUrl;
+    private String subredditName;
+    private boolean subredditSelected = false;
+    private boolean subredditIsUser;
 
     private RequestManager mGlide;
     private Locale mLocale;
@@ -72,13 +83,42 @@ public class PostTextActivity extends AppCompatActivity {
         mGlide = Glide.with(this);
         mLocale = getResources().getConfiguration().locale;
 
-        if(getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
-            subreditNameTextView.setText(getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME));
+        if(savedInstanceState != null) {
+            subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
+            iconUrl = savedInstanceState.getString(SUBREDDIT_ICON_STATE);
+            subredditSelected = savedInstanceState.getBoolean(SUBREDDIT_SELECTED_STATE);
+            subredditIsUser = savedInstanceState.getBoolean(SUBREDDIT_IS_USER_STATE);
+
+            if(subredditName != null) {
+                subreditNameTextView.setText(subredditName);
+            }
+            if(iconUrl != null && !iconUrl.equals("")) {
+                mGlide.load(iconUrl)
+                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                        .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                        .into(iconGifImageView);
+            } else {
+                mGlide.load(R.drawable.subreddit_default_icon)
+                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                        .into(iconGifImageView);
+            }
         } else {
-            mGlide.load(R.drawable.subreddit_default_icon)
-                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                    .into(iconGifImageView);
+            if(getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
+                subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
+                iconUrl = getIntent().getExtras().getString(EXTRA_SUBREDDIT_ICON);
+                subreditNameTextView.setText(subredditName);
+            } else {
+                mGlide.load(R.drawable.subreddit_default_icon)
+                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                        .into(iconGifImageView);
+            }
         }
+
+        iconGifImageView.setOnClickListener(view -> {
+            Intent intent = new Intent(this, SubredditSelectionActivity.class);
+            startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
+        });
 
         subreditNameTextView.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubredditSelectionActivity.class);
@@ -99,12 +139,24 @@ public class PostTextActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_send_post_text_activity:
+                if(!subredditSelected) {
+                    Snackbar.make(coordinatorLayout, R.string.select_a_subreddit, Snackbar.LENGTH_SHORT).show();
+                    return true;
+                }
+
                 item.setEnabled(false);
                 item.getIcon().setAlpha(130);
                 Snackbar postingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
                 postingSnackbar.show();
 
-                SubmitPost.submitPostText(mOauthRetrofit, sharedPreferences, mLocale, subreditNameTextView.getText().toString(),
+                String subredditName;
+                if(subredditIsUser) {
+                    subredditName = "u_" + subreditNameTextView.getText().toString();
+                } else {
+                    subredditName = subreditNameTextView.getText().toString();
+                }
+
+                SubmitPost.submitPostText(mOauthRetrofit, sharedPreferences, mLocale, subredditName,
                         titleEditText.getText().toString(), contentEditText.getText().toString(),
                         false, new SubmitPost.SubmitPostListener() {
                             @Override
@@ -116,11 +168,15 @@ public class PostTextActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void submitFailed() {
+                            public void submitFailed(@Nullable String errorMessage) {
                                 postingSnackbar.dismiss();
                                 item.setEnabled(true);
                                 item.getIcon().setAlpha(255);
-                                Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT);
+                                if(errorMessage == null) {
+                                    Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
+                                } else {
+                                    Snackbar.make(coordinatorLayout, errorMessage, Snackbar.LENGTH_SHORT).show();
+                                }
                             }
                         });
                 return true;
@@ -130,14 +186,26 @@ public class PostTextActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(SUBREDDIT_NAME_STATE, subredditName);
+        outState.putString(SUBREDDIT_ICON_STATE, iconUrl);
+        outState.putBoolean(SUBREDDIT_SELECTED_STATE, subredditSelected);
+        outState.putBoolean(SUBREDDIT_IS_USER_STATE, subredditIsUser);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == SUBREDDIT_SELECTION_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
-                subreditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
-                subreditNameTextView.setText(data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME_KEY));
+                subredditName = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME_KEY);
+                iconUrl = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_ICON_URL_KEY);
+                subredditSelected = true;
+                subredditIsUser = data.getExtras().getBoolean(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_IS_USER_KEY);
 
-                String iconUrl = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_ICON_URL_KEY);
+                subreditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
+                subreditNameTextView.setText(subredditName);
                 if(!iconUrl.equals("")) {
                     mGlide.load(iconUrl)
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))

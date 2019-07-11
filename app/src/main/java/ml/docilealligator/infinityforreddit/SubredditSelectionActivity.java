@@ -16,7 +16,8 @@ import butterknife.ButterKnife;
 public class SubredditSelectionActivity extends AppCompatActivity {
 
     static final String EXTRA_RETURN_SUBREDDIT_NAME_KEY = "ERSNK";
-    static final String EXTRA_RETURN_SUBREDDIT_ICON_URL_KEY = "ERSIUK";
+    static final String EXTRA_RETURN_SUBREDDIT_ICON_URL_KEY = "ERSIURLK";
+    static final String EXTRA_RETURN_SUBREDDIT_IS_USER_KEY = "ERSIUK";
 
     private SubscribedSubredditViewModel mSubscribedSubredditViewModel;
 
@@ -49,10 +50,11 @@ public class SubredditSelectionActivity extends AppCompatActivity {
         return false;
     }
 
-    void getSelectedSubreddit(String name, String iconUrl) {
+    void getSelectedSubreddit(String name, String iconUrl, boolean subredditIsUser) {
         Intent returnIntent = new Intent();
         returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_NAME_KEY, name);
         returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_ICON_URL_KEY, iconUrl);
+        returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_IS_USER_KEY, subredditIsUser);
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
     }

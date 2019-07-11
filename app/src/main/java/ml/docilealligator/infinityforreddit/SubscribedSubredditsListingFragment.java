@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit;
 
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import SubscribedSubredditDatabase.SubscribedSubredditViewModel;
 import butterknife.BindView;
@@ -41,6 +45,10 @@ public class SubscribedSubredditsListingFragment extends Fragment {
 
     private boolean mInsertSuccess = false;
 
+    @Inject
+    @Named("user_info")
+    SharedPreferences sharedPreferences;
+
     public SubscribedSubredditsListingFragment() {
         // Required empty public constructor
     }
@@ -54,17 +62,22 @@ public class SubscribedSubredditsListingFragment extends Fragment {
 
         mActivity = getActivity();
 
+        ((Infinity) mActivity.getApplication()).getmAppComponent().inject(this);
+
+        String username = sharedPreferences.getString(SharedPreferencesUtils.USER_KEY, "");
+        String userIconUrl = sharedPreferences.getString(SharedPreferencesUtils.PROFILE_IMAGE_URL_KEY, "");
+
         mGlide = Glide.with(this);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
 
         SubscribedSubredditsRecyclerViewAdapter adapter;
         if(getArguments().getBoolean(EXTRA_IS_SUBREDDIT_SELECTION)) {
-            adapter = new SubscribedSubredditsRecyclerViewAdapter(mActivity, (name, iconUrl) -> ((SubredditSelectionActivity) mActivity).getSelectedSubreddit(name, iconUrl));
+            adapter = new SubscribedSubredditsRecyclerViewAdapter(mActivity,
+                    (name, iconUrl, subredditIsUser) -> ((SubredditSelectionActivity) mActivity).getSelectedSubreddit(name, iconUrl, subredditIsUser));
         } else {
             adapter = new SubscribedSubredditsRecyclerViewAdapter(mActivity);
         }
-
 
         mRecyclerView.setAdapter(adapter);
 
@@ -79,6 +92,7 @@ public class SubscribedSubredditsListingFragment extends Fragment {
                 mRecyclerView.setVisibility(View.VISIBLE);
             }
 
+            adapter.addUser(username, userIconUrl);
             adapter.setSubscribedSubreddits(subscribedSubredditData);
         });
 

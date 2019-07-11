@@ -4,7 +4,9 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,7 +21,7 @@ import retrofit2.Retrofit;
 class SubmitPost {
     interface SubmitPostListener {
         void submitSuccessful(Post post);
-        void submitFailed();
+        void submitFailed(@Nullable String errorMessage);
     }
 
     static void submitPostText(Retrofit oauthRetrofit, SharedPreferences authInfoSharedPreferences,
@@ -32,7 +34,7 @@ class SubmitPost {
         params.put(RedditUtils.API_TYPE_KEY, RedditUtils.API_TYPE_JSON);
         params.put(RedditUtils.SR_KEY, subredditName);
         params.put(RedditUtils.TITLE_KEY, title);
-        params.put(RedditUtils.KIND_KEY, RedditUtils.KIND_TEXT);
+        params.put(RedditUtils.KIND_KEY, RedditUtils.KIND_SELF);
         params.put(RedditUtils.TEXT_KEY, text);
         params.put(RedditUtils.NSFW_KEY, Boolean.toString(isNSFW));
 
@@ -47,18 +49,18 @@ class SubmitPost {
                                 submitPostListener);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        submitPostListener.submitFailed();
+                        submitPostListener.submitFailed(null);
                     }
                 } else {
                     Log.i("call_failed", response.message());
-                    submitPostListener.submitFailed();
+                    submitPostListener.submitFailed(null);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.i("call_failed", call.request().url().toString());
-                submitPostListener.submitFailed();
+                submitPostListener.submitFailed(null);
             }
         });
     }
@@ -66,13 +68,29 @@ class SubmitPost {
     private static void getSubmittedPost(String response, Retrofit oauthRetrofit,
                                          SharedPreferences authInfoSharedPreferences, Locale locale,
                                          SubmitPostListener submitPostListener) throws JSONException {
-        JSONObject responseObject = new JSONObject(response);
-        if(responseObject.getJSONObject(JSONUtils.JSON_KEY).getJSONArray(JSONUtils.ERRORS_KEY).length() != 0) {
-            submitPostListener.submitFailed();
+        JSONObject responseObject = new JSONObject(response).getJSONObject(JSONUtils.JSON_KEY);
+        if(responseObject.getJSONArray(JSONUtils.ERRORS_KEY).length() != 0) {
+            JSONArray error = responseObject.getJSONArray(JSONUtils.ERRORS_KEY)
+                    .getJSONArray(responseObject.getJSONArray(JSONUtils.ERRORS_KEY).length() - 1);
+            if(error.length() != 0) {
+                String errorString;
+                if(error.length() >= 2) {
+                    errorString = error.getString(1);
+                    errorString = errorString.substring(0, 1).toUpperCase() + errorString.substring(1);
+                    submitPostListener.submitFailed(errorString);
+                } else {
+                    errorString = error.getString(0);
+                    errorString = errorString.substring(0, 1).toUpperCase() + errorString.substring(1);
+                    submitPostListener.submitFailed(errorString);
+                }
+            } else {
+                submitPostListener.submitFailed(null);
+            }
+
             return;
         }
 
-        String postId = responseObject.getJSONObject(JSONUtils.JSON_KEY).getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.ID_KEY);
+        String postId = responseObject.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.ID_KEY);
 
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
         String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
@@ -90,19 +108,19 @@ class SubmitPost {
 
                         @Override
                         public void onParsePostFail() {
-                            submitPostListener.submitFailed();
+                            submitPostListener.submitFailed(null);
                         }
                     });
                 } else {
                     Log.i("call_failed", response.message());
-                    submitPostListener.submitFailed();
+                    submitPostListener.submitFailed(response.message());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.i("call_failed", call.request().url().toString());
-                submitPostListener.submitFailed();
+                submitPostListener.submitFailed(t.getMessage());
             }
         });
     }
