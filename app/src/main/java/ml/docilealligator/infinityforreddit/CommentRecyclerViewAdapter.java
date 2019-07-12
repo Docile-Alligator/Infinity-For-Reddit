@@ -39,6 +39,7 @@ import java.util.Locale;
 
 import CustomView.AspectRatioGifImageView;
 import SubredditDatabase.SubredditRoomDatabase;
+import User.UserRoomDatabase;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -161,13 +162,10 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if(holder.getItemViewType() == VIEW_TYPE_POST_DETAIL) {
             ((PostDetailViewHolder) holder).mTitleTextView.setText(mPost.getTitle());
 
-            if(mPost.getSubredditIconUrl() == null) {
-                if(mLoadSubredditIconAsyncTask != null) {
-                    mLoadSubredditIconAsyncTask.cancel(true);
-                }
-                mLoadSubredditIconAsyncTask = new LoadSubredditIconAsyncTask(
-                        SubredditRoomDatabase.getDatabase(mActivity).subredditDao(), mPost.getSubredditNamePrefixed().substring(2),
-                        iconImageUrl -> {
+            if(mPost.getSubredditNamePrefixed().equals("u/" + mPost.getAuthor())) {
+                if(mPost.getAuthorIconUrl() == null) {
+                    new LoadUserDataAsyncTask(UserRoomDatabase.getDatabase(mActivity).userDao(), mPost.getAuthor(), mOauthRetrofit, iconImageUrl -> {
+                        if(mActivity != null && getItemCount() > 0) {
                             if(!iconImageUrl.equals("")) {
                                 mGlide.load(iconImageUrl)
                                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -180,20 +178,57 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                                         .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
                             }
 
-                            mPost.setSubredditIconUrl(iconImageUrl);
-                        });
-
-                mLoadSubredditIconAsyncTask.execute();
-            } else if(!mPost.getSubredditIconUrl().equals("")) {
-                mGlide.load(mPost.getSubredditIconUrl())
-                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                        .error(mGlide.load(R.drawable.subreddit_default_icon)
-                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                        .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
+                            if(holder.getAdapterPosition() >= 0) {
+                                mPost.setAuthorIconUrl(iconImageUrl);
+                            }
+                        }
+                    }).execute();
+                } else if(!mPost.getAuthorIconUrl().equals("")) {
+                    mGlide.load(mPost.getAuthorIconUrl())
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                            .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                            .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
+                } else {
+                    mGlide.load(R.drawable.subreddit_default_icon)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                            .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
+                }
             } else {
-                mGlide.load(R.drawable.subreddit_default_icon)
-                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                        .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
+                if(mPost.getSubredditIconUrl() == null) {
+                    if(mLoadSubredditIconAsyncTask != null) {
+                        mLoadSubredditIconAsyncTask.cancel(true);
+                    }
+                    mLoadSubredditIconAsyncTask = new LoadSubredditIconAsyncTask(
+                            SubredditRoomDatabase.getDatabase(mActivity).subredditDao(), mPost.getSubredditNamePrefixed().substring(2),
+                            iconImageUrl -> {
+                                if(!iconImageUrl.equals("")) {
+                                    mGlide.load(iconImageUrl)
+                                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                            .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                                            .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
+                                } else {
+                                    mGlide.load(R.drawable.subreddit_default_icon)
+                                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                            .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
+                                }
+
+                                mPost.setSubredditIconUrl(iconImageUrl);
+                            });
+
+                    mLoadSubredditIconAsyncTask.execute();
+                } else if(!mPost.getSubredditIconUrl().equals("")) {
+                    mGlide.load(mPost.getSubredditIconUrl())
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                            .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                            .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
+                } else {
+                    mGlide.load(R.drawable.subreddit_default_icon)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                            .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
+                }
             }
 
             switch (mPost.getVoteType()) {
@@ -659,9 +694,15 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ButterKnife.bind(this, itemView);
 
             mSubredditIconNameLinearLayout.setOnClickListener(view -> {
-                Intent intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
-                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
-                        mPost.getSubredditNamePrefixed().substring(2));
+                Intent intent;
+                if(mPost.getSubredditNamePrefixed().equals("u/" + mPost.getAuthor())) {
+                    intent = new Intent(mActivity, ViewUserDetailActivity.class);
+                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mPost.getAuthor());
+                } else {
+                    intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
+                    intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
+                            mPost.getSubredditNamePrefixed().substring(2));
+                }
                 mActivity.startActivity(intent);
             });
 

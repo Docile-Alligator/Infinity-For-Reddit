@@ -152,37 +152,71 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                 });
 
                 if(postType != PostDataSource.TYPE_SUBREDDIT) {
-                    if(post.getSubredditIconUrl() == null) {
-                        new LoadSubredditIconAsyncTask(subredditDao, subredditName,
-                                iconImageUrl -> {
-                                    if(mContext != null && getItemCount() > 0) {
-                                        if(!iconImageUrl.equals("")) {
-                                            glide.load(iconImageUrl)
-                                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                                    .error(glide.load(R.drawable.subreddit_default_icon)
-                                                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                                                    .into(((DataViewHolder) holder).subredditIconGifImageView);
-                                        } else {
-                                            glide.load(R.drawable.subreddit_default_icon)
-                                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                                    .into(((DataViewHolder) holder).subredditIconGifImageView);
-                                        }
-
-                                        if(holder.getAdapterPosition() >= 0) {
-                                            post.setSubredditIconUrl(iconImageUrl);
-                                        }
+                    if(author.equals(subredditNamePrefixed)) {
+                        if(post.getAuthorIconUrl() == null) {
+                            new LoadUserDataAsyncTask(userDao, post.getAuthor(), mOauthRetrofit, iconImageUrl -> {
+                                if(mContext != null && getItemCount() > 0) {
+                                    if(!iconImageUrl.equals("")) {
+                                        glide.load(iconImageUrl)
+                                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                                .error(glide.load(R.drawable.subreddit_default_icon)
+                                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                                                .into(((DataViewHolder) holder).subredditIconGifImageView);
+                                    } else {
+                                        glide.load(R.drawable.subreddit_default_icon)
+                                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                                .into(((DataViewHolder) holder).subredditIconGifImageView);
                                     }
-                                }).execute();
-                    } else if(!post.getSubredditIconUrl().equals("")) {
-                        glide.load(post.getSubredditIconUrl())
-                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                .error(glide.load(R.drawable.subreddit_default_icon)
-                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                                .into(((DataViewHolder) holder).subredditIconGifImageView);
+
+                                    if(holder.getAdapterPosition() >= 0) {
+                                        post.setAuthorIconUrl(iconImageUrl);
+                                    }
+                                }
+                            }).execute();
+                        } else if(!post.getAuthorIconUrl().equals("")) {
+                            glide.load(post.getAuthorIconUrl())
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                    .error(glide.load(R.drawable.subreddit_default_icon)
+                                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                                    .into(((DataViewHolder) holder).subredditIconGifImageView);
+                        } else {
+                            glide.load(R.drawable.subreddit_default_icon)
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                    .into(((DataViewHolder) holder).subredditIconGifImageView);
+                        }
                     } else {
-                        glide.load(R.drawable.subreddit_default_icon)
-                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                .into(((DataViewHolder) holder).subredditIconGifImageView);
+                        if(post.getSubredditIconUrl() == null) {
+                            new LoadSubredditIconAsyncTask(subredditDao, subredditName,
+                                    iconImageUrl -> {
+                                        if(mContext != null && getItemCount() > 0) {
+                                            if(!iconImageUrl.equals("")) {
+                                                glide.load(iconImageUrl)
+                                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                                        .error(glide.load(R.drawable.subreddit_default_icon)
+                                                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                                                        .into(((DataViewHolder) holder).subredditIconGifImageView);
+                                            } else {
+                                                glide.load(R.drawable.subreddit_default_icon)
+                                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                                        .into(((DataViewHolder) holder).subredditIconGifImageView);
+                                            }
+
+                                            if(holder.getAdapterPosition() >= 0) {
+                                                post.setSubredditIconUrl(iconImageUrl);
+                                            }
+                                        }
+                                    }).execute();
+                        } else if(!post.getSubredditIconUrl().equals("")) {
+                            glide.load(post.getSubredditIconUrl())
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                    .error(glide.load(R.drawable.subreddit_default_icon)
+                                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                                    .into(((DataViewHolder) holder).subredditIconGifImageView);
+                        } else {
+                            glide.load(R.drawable.subreddit_default_icon)
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                    .into(((DataViewHolder) holder).subredditIconGifImageView);
+                        }
                     }
 
                     ((DataViewHolder) holder).subredditNameTextView.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
