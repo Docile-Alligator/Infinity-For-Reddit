@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -28,6 +27,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.ferfalk.simplesearchview.SimpleSearchView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import javax.inject.Inject;
@@ -56,6 +56,13 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.subscriptions_linear_layout_main_activity) LinearLayout subscriptionLinearLayout;
     @BindView(R.id.settings_linear_layout_main_activity) LinearLayout settingsLinearLayout;
     @BindView(R.id.fab_main_activity) FloatingActionButton fab;
+
+    private LinearLayout textTypeLinearLayout;
+    private LinearLayout linkTypeLinearLayout;
+    private LinearLayout imageTypeLinearLayout;
+    private LinearLayout videoTypeLinearLayout;
+
+    private BottomSheetDialog dialog;
 
     private TextView mNameTextView;
     private TextView mKarmaTextView;
@@ -94,6 +101,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+
+        View dialogView = View.inflate(this, R.layout.post_type_bottom_sheet, null);
+        textTypeLinearLayout = dialogView.findViewById(R.id.text_type_linear_layout_post_type_bottom_sheet);
+        linkTypeLinearLayout = dialogView.findViewById(R.id.link_type_linear_layout_post_type_bottom_sheet);
+        imageTypeLinearLayout = dialogView.findViewById(R.id.image_type_linear_layout_post_type_bottom_sheet);
+        videoTypeLinearLayout = dialogView.findViewById(R.id.video_type_linear_layout_post_type_bottom_sheet);
+
+        dialog = new BottomSheetDialog(this);
+        dialog.setContentView(dialogView);
 
         ((Infinity) getApplication()).getmAppComponent().inject(this);
 
@@ -221,27 +237,27 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        fab.setOnClickListener(view -> {
-            new AlertDialog.Builder(this).setTitle(R.string.dialog_post_type)
-                    .setItems(R.array.dialog_post_types_array, (dialog, which) -> {
-                        Intent intent;
-                        switch (which) {
-                            case 0:
-                                intent = new Intent(this, PostTextActivity.class);
-                                break;
-                            case 1:
-                                intent = new Intent(this, PostLinkActivity.class);
-                                break;
-                            case 2:
-                                Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
-                                return;
-                            default:
-                                Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
-                                return;
-                        }
+        textTypeLinearLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, PostTextActivity.class);
+            startActivity(intent);
+            dialog.dismiss();
+        });
+        linkTypeLinearLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, PostLinkActivity.class);
+            startActivity(intent);
+            dialog.dismiss();
+        });
+        imageTypeLinearLayout.setOnClickListener(view -> {
+            Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
+        videoTypeLinearLayout.setOnClickListener(view -> {
+            Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
+        });
 
-                        startActivity(intent);
-                    }).show();
+        fab.setOnClickListener(view -> {
+            dialog.show();
         });
     }
 

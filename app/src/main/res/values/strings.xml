@@ -104,10 +104,8 @@
     <string name="users">Users</string>
 
     <string name="dialog_post_type">Post</string>
-    <string-array name="dialog_post_types_array">
-        <item>Text</item>
-        <item>Link</item>
-        <item>Image</item>
-        <item>Video</item>
-    </string-array>
+    <string name="dialog_post_text">Text</string>
+    <string name="dialog_post_link">Link</string>
+    <string name="dialog_post_image">Image</string>
+    <string name="dialog_post_video">Video</string>
 </resources>
