@@ -7,6 +7,7 @@
     <string name="post_text_activity_label">Text Post</string>
     <string name="subreddit_selection_activity_label">Select a Subreddit</string>
     <string name="post_link_activity_label">Link Post</string>
+    <string name="post_image_activity_label">Image Post</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -108,4 +109,8 @@
     <string name="dialog_post_link">Link</string>
     <string name="dialog_post_image">Image</string>
     <string name="dialog_post_video">Video</string>
+
+    <string name="select_from_gallery">Select a picture</string>
+    <string name="select_again">Select again</string>
+    <string name="error_getting_image">Error getting the image</string>
 </resources>

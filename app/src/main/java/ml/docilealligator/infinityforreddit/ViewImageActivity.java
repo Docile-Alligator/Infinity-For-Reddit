@@ -44,7 +44,7 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.github.pwittchen.swipe.library.rx2.SimpleSwipeListener;
@@ -405,7 +405,7 @@ public class ViewImageActivity extends AppCompatActivity {
         Glide.with(this)
                 .asBitmap()
                 .load(mImageUrl)
-                .into(new SimpleTarget<Bitmap>() {
+                .into(new CustomTarget<Bitmap>() {
                     @SuppressLint("StaticFieldLeak")
                     @Override
                     public void onResourceReady(@NonNull final Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
@@ -498,6 +498,11 @@ public class ViewImageActivity extends AppCompatActivity {
                                 return null;
                             }
                         }.execute();
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                        
                     }
                 });
     }

@@ -248,7 +248,8 @@ public class MainActivity extends AppCompatActivity {
             dialog.dismiss();
         });
         imageTypeLinearLayout.setOnClickListener(view -> {
-            Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, PostImageActivity.class);
+            startActivity(intent);
             dialog.dismiss();
         });
         videoTypeLinearLayout.setOnClickListener(view -> {

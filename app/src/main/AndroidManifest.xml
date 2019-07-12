@@ -20,6 +20,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".PostImageActivity"
+            android:label="@string/post_image_activity_label"
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".PostLinkActivity"
             android:label="@string/post_link_activity_label"
             android:parentActivityName=".MainActivity"
