@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import SubscribedSubredditDatabase.SubscribedSubredditViewModel;
 import butterknife.ButterKnife;
 
 public class SubredditSelectionActivity extends AppCompatActivity {
@@ -18,8 +17,6 @@ public class SubredditSelectionActivity extends AppCompatActivity {
     static final String EXTRA_RETURN_SUBREDDIT_NAME_KEY = "ERSNK";
     static final String EXTRA_RETURN_SUBREDDIT_ICON_URL_KEY = "ERSIURLK";
     static final String EXTRA_RETURN_SUBREDDIT_IS_USER_KEY = "ERSIUK";
-
-    private SubscribedSubredditViewModel mSubscribedSubredditViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

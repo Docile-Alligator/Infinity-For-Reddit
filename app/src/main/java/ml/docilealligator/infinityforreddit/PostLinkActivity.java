@@ -32,7 +32,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-public class PostTextActivity extends AppCompatActivity {
+public class PostLinkActivity extends AppCompatActivity {
 
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
     static final String EXTRA_SUBREDDIT_ICON = "ESI";
@@ -44,12 +44,12 @@ public class PostTextActivity extends AppCompatActivity {
 
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
 
-    @BindView(R.id.coordinator_layout_post_text_activity) CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.subreddit_icon_gif_image_view_post_text_activity) GifImageView iconGifImageView;
-    @BindView(R.id.subreddit_name_text_view_post_text_activity) TextView subreditNameTextView;
-    @BindView(R.id.rules_button_post_text_activity) Button rulesButton;
-    @BindView(R.id.post_title_edit_text_post_text_activity) EditText titleEditText;
-    @BindView(R.id.post_text_content_edit_text_post_text_activity) EditText contentEditText;
+    @BindView(R.id.coordinator_layout_post_link_activity) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.subreddit_icon_gif_image_view_post_link_activity) GifImageView iconGifImageView;
+    @BindView(R.id.subreddit_name_text_view_post_link_activity) TextView subreditNameTextView;
+    @BindView(R.id.rules_button_post_link_activity) Button rulesButton;
+    @BindView(R.id.post_title_edit_text_post_link_activity) EditText titleEditText;
+    @BindView(R.id.post_link_edit_text_post_link_activity) EditText contentEditText;
 
     private String iconUrl;
     private String subredditName;
@@ -70,7 +70,7 @@ public class PostTextActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_text);
+        setContentView(R.layout.activity_post_link);
 
         ButterKnife.bind(this);
 
@@ -128,7 +128,7 @@ public class PostTextActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.post_text_activity, menu);
+        getMenuInflater().inflate(R.menu.post_link_activity, menu);
         return true;
     }
 
@@ -138,7 +138,7 @@ public class PostTextActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.action_send_post_text_activity:
+            case R.id.action_send_post_link_activity:
                 if(!subredditSelected) {
                     Snackbar.make(coordinatorLayout, R.string.select_a_subreddit, Snackbar.LENGTH_SHORT).show();
                     return true;
@@ -158,10 +158,10 @@ public class PostTextActivity extends AppCompatActivity {
 
                 SubmitPost.submitTextOrLinkPost(mOauthRetrofit, sharedPreferences, mLocale, subredditName,
                         titleEditText.getText().toString(), contentEditText.getText().toString(),
-                        false, RedditUtils.KIND_SELF, new SubmitPost.SubmitPostListener() {
+                        false, RedditUtils.KIND_LINK, new SubmitPost.SubmitPostListener() {
                             @Override
                             public void submitSuccessful(Post post) {
-                                Intent intent = new Intent(PostTextActivity.this, ViewPostDetailActivity.class);
+                                Intent intent = new Intent(PostLinkActivity.this, ViewPostDetailActivity.class);
                                 intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
                                 startActivity(intent);
                                 finish();

@@ -24,9 +24,9 @@ class SubmitPost {
         void submitFailed(@Nullable String errorMessage);
     }
 
-    static void submitPostText(Retrofit oauthRetrofit, SharedPreferences authInfoSharedPreferences,
-                            Locale locale, String subredditName, String title, String text, boolean isNSFW,
-                            SubmitPostListener submitPostListener) {
+    static void submitTextOrLinkPost(Retrofit oauthRetrofit, SharedPreferences authInfoSharedPreferences,
+                                     Locale locale, String subredditName, String title, String content, boolean isNSFW,
+                                     String kind, SubmitPostListener submitPostListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
         String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
@@ -34,8 +34,12 @@ class SubmitPost {
         params.put(RedditUtils.API_TYPE_KEY, RedditUtils.API_TYPE_JSON);
         params.put(RedditUtils.SR_KEY, subredditName);
         params.put(RedditUtils.TITLE_KEY, title);
-        params.put(RedditUtils.KIND_KEY, RedditUtils.KIND_SELF);
-        params.put(RedditUtils.TEXT_KEY, text);
+        params.put(RedditUtils.KIND_KEY, kind);
+        if(kind.equals(RedditUtils.KIND_SELF)) {
+            params.put(RedditUtils.TEXT_KEY, content);
+        } else if(kind.equals(RedditUtils.KIND_LINK)) {
+            params.put(RedditUtils.URL_KEY, content);
+        }
         params.put(RedditUtils.NSFW_KEY, Boolean.toString(isNSFW));
 
         Call<String> submitPostCall = api.submit(RedditUtils.getOAuthHeader(accessToken), params);

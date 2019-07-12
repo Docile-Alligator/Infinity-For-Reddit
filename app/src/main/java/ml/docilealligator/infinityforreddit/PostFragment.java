@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 
@@ -55,7 +56,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @BindView(R.id.fetch_post_info_image_view_post_fragment) ImageView mFetchPostInfoImageView;
     @BindView(R.id.fetch_post_info_text_view_post_fragment) TextView mFetchPostInfoTextView;
 
-    private RequestManager glide;
+    private RequestManager mGlide;
 
     private Activity activity;
     private LinearLayoutManager mLinearLayoutManager;
@@ -116,6 +117,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         };
 
         window = activity.getWindow();
+
+        mGlide = Glide.with(activity);
 
         lazyModeRunnable = new Runnable() {
             @Override
@@ -255,7 +258,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if(activity != null && isAdded()) {
             mFetchPostInfoLinearLayout.setVisibility(View.VISIBLE);
             mFetchPostInfoTextView.setText(stringResId);
-            glide.load(R.drawable.load_post_error_indicator).into(mFetchPostInfoImageView);
+            mGlide.load(R.drawable.load_post_error_indicator).into(mFetchPostInfoImageView);
         }
     }
 

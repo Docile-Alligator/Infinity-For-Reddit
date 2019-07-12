@@ -19,4 +19,5 @@ interface AppComponent {
     void inject(SubscribedThingListingActivity subscribedThingListingActivity);
     void inject(PostTextActivity postTextActivity);
     void inject(SubscribedSubredditsListingFragment subscribedSubredditsListingFragment);
+    void inject(PostLinkActivity postLinkActivity);
 }

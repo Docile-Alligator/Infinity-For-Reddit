@@ -52,6 +52,7 @@ public class RedditUtils {
     static final String API_TYPE_JSON = "json";
     static final String RETURN_RTJSON_KEY = "return_rtjson";
     static final String TEXT_KEY = "text";
+    static final String URL_KEY = "url";
     static final String THING_ID_KEY = "thing_id";
 
     static final String SR_KEY = "sr";
@@ -60,6 +61,7 @@ public class RedditUtils {
     static final String KIND_KEY = "kind";
     static final String KIND_TEXT = "text";
     static final String KIND_SELF = "self";
+    static final String KIND_LINK = "link";
 
     static Map<String, String> getHttpBasicAuthHeader() {
         Map<String, String> params = new HashMap<>();

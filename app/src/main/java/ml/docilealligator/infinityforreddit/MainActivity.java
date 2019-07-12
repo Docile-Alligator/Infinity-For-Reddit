@@ -11,9 +11,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -220,8 +222,26 @@ public class MainActivity extends AppCompatActivity {
         }
 
         fab.setOnClickListener(view -> {
-            Intent intent = new Intent(this, PostTextActivity.class);
-            this.startActivity(intent);
+            new AlertDialog.Builder(this).setTitle(R.string.dialog_post_type)
+                    .setItems(R.array.dialog_post_types_array, (dialog, which) -> {
+                        Intent intent;
+                        switch (which) {
+                            case 0:
+                                intent = new Intent(this, PostTextActivity.class);
+                                break;
+                            case 1:
+                                intent = new Intent(this, PostLinkActivity.class);
+                                break;
+                            case 2:
+                                Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
+                                return;
+                            default:
+                                Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
+                                return;
+                        }
+
+                        startActivity(intent);
+                    }).show();
         });
     }
 

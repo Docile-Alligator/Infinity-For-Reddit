@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinator_layout_post_text_activity"
+    android:id="@+id/coordinator_layout_post_link_activity"
     tools:context=".PostTextActivity">
 
     <androidx.core.widget.NestedScrollView
@@ -26,25 +26,25 @@
                 android:paddingEnd="16dp">
 
                 <pl.droidsonroids.gif.GifImageView
-                    android:id="@+id/subreddit_icon_gif_image_view_post_text_activity"
+                    android:id="@+id/subreddit_icon_gif_image_view_post_link_activity"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true" />
 
                 <TextView
-                    android:id="@+id/subreddit_name_text_view_post_text_activity"
+                    android:id="@+id/subreddit_name_text_view_post_link_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toStartOf="@id/rules_button_post_text_activity"
-                    android:layout_toEndOf="@id/subreddit_icon_gif_image_view_post_text_activity"
+                    android:layout_toStartOf="@id/rules_button_post_link_activity"
+                    android:layout_toEndOf="@id/subreddit_icon_gif_image_view_post_link_activity"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="16dp"
                     android:text="@string/choose_a_subreddit" />
 
                 <Button
-                    android:id="@+id/rules_button_post_text_activity"
+                    android:id="@+id/rules_button_post_link_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -60,7 +60,7 @@
                 android:background="@color/dividerColor" />
 
             <EditText
-                android:id="@+id/post_title_edit_text_post_text_activity"
+                android:id="@+id/post_title_edit_text_post_link_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="top"
@@ -77,12 +77,12 @@
                 android:background="@color/dividerColor" />
 
             <EditText
-                android:id="@+id/post_text_content_edit_text_post_text_activity"
+                android:id="@+id/post_link_edit_text_post_link_activity"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="top"
                 android:padding="16dp"
-                android:hint="@string/post_text_content_hint"
+                android:hint="@string/post_link_hint"
                 android:inputType="textCapSentences|textMultiLine"
                 android:textSize="18sp"
                 android:background="#00000000"
