@@ -5,16 +5,21 @@ import android.animation.Animator;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -437,17 +442,54 @@ public class ViewImageActivity extends AppCompatActivity {
                                         }
                                     }
 
-                                    File file = new File(path + "/Infinity/", mImageFileName + ".jpg");
-                                    int postfix = 1;
-                                    while(file.exists()) {
-                                        file = new File(path + "/Infinity/", mImageFileName + "-" + postfix + ".jpg");
+                                    //Android Q support
+                                    if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                        ContentValues values = new ContentValues();
+                                        values.put(MediaStore.Images.Media.DISPLAY_NAME, mImageFileName + ".jpg");
+                                        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+                                        values.put(MediaStore.Images.Media.IS_PENDING, 1);
+
+                                        ContentResolver resolver = getContentResolver();
+                                        Uri collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+                                        Uri item = resolver.insert(collection, values);
+
+                                        if(item == null) {
+                                            saveSuccess = false;
+                                            return null;
+                                        }
+
+                                        try (ParcelFileDescriptor pfd = resolver.openFileDescriptor(item, "w", null)) {
+                                            if(pfd == null) {
+                                                saveSuccess = false;
+                                                return null;
+                                            }
+
+                                            FileOutputStream outputStream = new FileOutputStream(pfd.getFileDescriptor());
+                                            resource.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+
+                                            outputStream.flush();
+                                            outputStream.close();
+                                        } catch (IOException e) {
+                                            saveSuccess = false;
+                                            e.printStackTrace();
+                                        }
+
+                                        values.clear();
+                                        values.put(MediaStore.Images.Media.IS_PENDING, 0);
+                                        resolver.update(item, values, null, null);
+                                    } else {
+                                        File file = new File(path + "/Infinity/", mImageFileName + ".jpg");
+                                        int postfix = 1;
+                                        while(file.exists()) {
+                                            file = new File(path + "/Infinity/", mImageFileName + "-" + (postfix++) + ".jpg");
+                                        }
+                                        OutputStream outputStream = new FileOutputStream(file);
+
+                                        resource.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+
+                                        outputStream.flush();
+                                        outputStream.close();
                                     }
-                                    OutputStream outputStream = new FileOutputStream(file);
-
-                                    resource.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-
-                                    outputStream.flush();
-                                    outputStream.close();
                                 } catch (IOException e) {
                                     saveSuccess = false;
                                     e.printStackTrace();
