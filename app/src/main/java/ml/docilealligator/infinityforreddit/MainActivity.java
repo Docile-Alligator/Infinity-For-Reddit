@@ -197,10 +197,10 @@ public class MainActivity extends AppCompatActivity {
 
             loadUserData();
 
-            mName = getSharedPreferences(SharedPreferencesUtils.USER_INFO_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.USER_KEY, "");
-            mProfileImageUrl = getSharedPreferences(SharedPreferencesUtils.USER_INFO_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.PROFILE_IMAGE_URL_KEY, "");
-            mBannerImageUrl = getSharedPreferences(SharedPreferencesUtils.USER_INFO_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.BANNER_IMAGE_URL_KEY, "");
-            mKarma = getSharedPreferences(SharedPreferencesUtils.USER_INFO_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.KARMA_KEY, "");
+            mName = mUserInfoSharedPreferences.getString(SharedPreferencesUtils.USER_KEY, "");
+            mProfileImageUrl = mUserInfoSharedPreferences.getString(SharedPreferencesUtils.PROFILE_IMAGE_URL_KEY, "");
+            mBannerImageUrl = mUserInfoSharedPreferences.getString(SharedPreferencesUtils.BANNER_IMAGE_URL_KEY, "");
+            mKarma = mUserInfoSharedPreferences.getString(SharedPreferencesUtils.KARMA_KEY, "");
 
             mNameTextView.setText(mName);
             mKarmaTextView.setText(mKarma);
@@ -242,16 +242,19 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             dialog.dismiss();
         });
+
         linkTypeLinearLayout.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, PostLinkActivity.class);
             startActivity(intent);
             dialog.dismiss();
         });
+
         imageTypeLinearLayout.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, PostImageActivity.class);
             startActivity(intent);
             dialog.dismiss();
         });
+
         videoTypeLinearLayout.setOnClickListener(view -> {
             Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
             dialog.dismiss();

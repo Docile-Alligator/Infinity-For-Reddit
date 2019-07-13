@@ -1,6 +1,8 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -9,13 +11,23 @@ import androidx.annotation.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 class SubmitPost {
@@ -37,7 +49,7 @@ class SubmitPost {
         params.put(RedditUtils.KIND_KEY, kind);
         if(kind.equals(RedditUtils.KIND_SELF)) {
             params.put(RedditUtils.TEXT_KEY, content);
-        } else if(kind.equals(RedditUtils.KIND_LINK)) {
+        } else if(kind.equals(RedditUtils.KIND_LINK) || kind.equals(RedditUtils.KIND_IMAGE)) {
             params.put(RedditUtils.URL_KEY, content);
         }
         params.put(RedditUtils.NSFW_KEY, Boolean.toString(isNSFW));
@@ -49,8 +61,8 @@ class SubmitPost {
                 Log.i("code", "asfd" + response.body());
                 if(response.isSuccessful()) {
                     try {
-                        getSubmittedPost(response.body(), oauthRetrofit, authInfoSharedPreferences, locale,
-                                submitPostListener);
+                        getSubmittedPost(response.body(), kind, oauthRetrofit, authInfoSharedPreferences,
+                                locale, submitPostListener);
                     } catch (JSONException e) {
                         e.printStackTrace();
                         submitPostListener.submitFailed(null);
@@ -69,7 +81,194 @@ class SubmitPost {
         });
     }
 
-    private static void getSubmittedPost(String response, Retrofit oauthRetrofit,
+    static void submitImagePost(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
+                                SharedPreferences authInfoSharedPreferences, Locale locale,
+                                String subredditName, String title, Bitmap image, boolean isNSFW,
+                                SubmitPostListener submitPostListener) {
+        RedditAPI api = oauthRetrofit.create(RedditAPI.class);
+        String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
+
+        Map<String, String> uploadImageParams = new HashMap<>();
+        uploadImageParams.put(RedditUtils.FILEPATH_KEY, "tetestst.jpg");
+        uploadImageParams.put(RedditUtils.MIMETYPE_KEY, "image/jpeg");
+
+        Log.i("map", RedditUtils.getOAuthHeader(accessToken).toString());
+        Call<String> uploadImageCall = api.uploadImage(RedditUtils.getOAuthHeader(accessToken), uploadImageParams);
+        uploadImageCall.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if(response.isSuccessful()) {
+                    new ParseJSONResponseFromAWSAsyncTask(response.body(), new ParseJSONResponseFromAWSAsyncTask.ParseJSONResponseFromAWSListener() {
+                        @Override
+                        public void parseSuccessful(Map<String, RequestBody> nameValuePairsMap) {
+
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            image.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                            byte[] byteArray = stream.toByteArray();
+
+                            RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), byteArray);
+                            MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", "testing.jpg", fileBody);
+
+                            RedditAPI uploadMediaToAWSApi = uploadMediaRetrofit.create(RedditAPI.class);
+                            Call<String> uploadMediaToAWS = uploadMediaToAWSApi.uploadMediaToAWS(nameValuePairsMap, fileToUpload);
+
+                            uploadMediaToAWS.enqueue(new Callback<String>() {
+                                @Override
+                                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                    Log.i("responsesese", "aws" + response.body());
+                                    if(response.isSuccessful()) {
+                                        new ParseXMLReponseFromAWSAsyncTask(response.body(), new ParseXMLReponseFromAWSAsyncTask.ParseXMLResponseFromAWSListener() {
+                                            @Override
+                                            public void parseSuccessful(String imageUrl) {
+                                                submitTextOrLinkPost(oauthRetrofit, authInfoSharedPreferences, locale,
+                                                        subredditName, title, imageUrl, isNSFW, RedditUtils.KIND_IMAGE,
+                                                        submitPostListener);
+                                            }
+
+                                            @Override
+                                            public void parseFailed() {
+                                                submitPostListener.submitFailed(null);
+                                            }
+                                        }).execute();
+                                    } else {
+                                        Log.i("asfasdfsd", "failedddddddddd" + response.code());
+                                        submitPostListener.submitFailed("Error: " + response.code());
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                                    Log.i("asfasdfsd", "failedddddddddd" + t.getMessage());
+                                    submitPostListener.submitFailed(t.getMessage());
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void parseFailed() {
+                            submitPostListener.submitFailed("Parse from aws failed");
+                        }
+                    }).execute();
+                } else {
+                    submitPostListener.submitFailed(response.message());
+                }
+                Log.i("image", "dddd" + response.body());
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                submitPostListener.submitFailed(t.getMessage());
+            }
+        });
+    }
+
+    private static class ParseJSONResponseFromAWSAsyncTask extends AsyncTask<Void, Void, Void> {
+        interface ParseJSONResponseFromAWSListener {
+            void parseSuccessful(Map<String, RequestBody> nameValuePairsMap);
+            void parseFailed();
+        }
+
+        private String response;
+        private ParseJSONResponseFromAWSListener parseJSONResponseFromAWSListener;
+        private Map<String, RequestBody> nameValuePairsMap;
+        private boolean successful;
+
+        ParseJSONResponseFromAWSAsyncTask(String response, ParseJSONResponseFromAWSListener parseJSONResponseFromAWSListener) {
+            this.response = response;
+            this.parseJSONResponseFromAWSListener = parseJSONResponseFromAWSListener;
+            nameValuePairsMap = new HashMap<>();
+            successful = false;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                JSONObject responseObject = new JSONObject(response);
+                JSONArray nameValuePairs = responseObject.getJSONObject(JSONUtils.ARGS_KEY).getJSONArray(JSONUtils.FIELDS_KEY);
+
+                nameValuePairsMap = new HashMap<>();
+                for(int i = 0; i < nameValuePairs.length(); i++) {
+                    nameValuePairsMap.put(nameValuePairs.getJSONObject(i).getString(JSONUtils.NAME_KEY),
+                            RedditUtils.getRequestBody(nameValuePairs.getJSONObject(i).getString(JSONUtils.VALUE_KEY)));
+                }
+
+                successful = true;
+            } catch (JSONException e) {
+                e.printStackTrace();
+                successful = false;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(successful) {
+                parseJSONResponseFromAWSListener.parseSuccessful(nameValuePairsMap);
+            } else {
+                parseJSONResponseFromAWSListener.parseFailed();
+            }
+        }
+    }
+
+    private static class ParseXMLReponseFromAWSAsyncTask extends AsyncTask<Void, Void, Void> {
+        interface ParseXMLResponseFromAWSListener {
+            void parseSuccessful(String imageUrl);
+            void parseFailed();
+        }
+
+        private String response;
+        private ParseXMLResponseFromAWSListener parseXMLResponseFromAWSListener;
+        private String imageUrl;
+        private boolean successful;
+
+        ParseXMLReponseFromAWSAsyncTask(String response, ParseXMLResponseFromAWSListener parseXMLResponseFromAWSListener) {
+            this.response = response;
+            this.parseXMLResponseFromAWSListener = parseXMLResponseFromAWSListener;
+            successful = false;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                XmlPullParser xmlPullParser = XmlPullParserFactory.newInstance().newPullParser();
+                xmlPullParser.setInput(new StringReader(response));
+
+                boolean isLocationTag = false;
+                int eventType = xmlPullParser.getEventType();
+                while(eventType != XmlPullParser.END_DOCUMENT) {
+                    if(eventType == XmlPullParser.START_TAG) {
+                        if(xmlPullParser.getName().equals("Location")) {
+                            isLocationTag = true;
+                        }
+                    } else if(eventType == XmlPullParser.TEXT) {
+                        if(isLocationTag) {
+                            imageUrl = xmlPullParser.getText();
+                            successful = true;
+                            return null;
+                        }
+                    }
+                    eventType = xmlPullParser.next();
+                }
+            } catch (XmlPullParserException | IOException e) {
+                e.printStackTrace();
+                successful = false;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(successful) {
+                parseXMLResponseFromAWSListener.parseSuccessful(imageUrl);
+            } else {
+                parseXMLResponseFromAWSListener.parseFailed();
+            }
+        }
+    }
+
+    private static void getSubmittedPost(String response, String kind, Retrofit oauthRetrofit,
                                          SharedPreferences authInfoSharedPreferences, Locale locale,
                                          SubmitPostListener submitPostListener) throws JSONException {
         JSONObject responseObject = new JSONObject(response).getJSONObject(JSONUtils.JSON_KEY);
@@ -94,38 +293,42 @@ class SubmitPost {
             return;
         }
 
-        String postId = responseObject.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.ID_KEY);
+        if(!kind.equals(RedditUtils.KIND_IMAGE)) {
+            String postId = responseObject.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.ID_KEY);
 
-        RedditAPI api = oauthRetrofit.create(RedditAPI.class);
-        String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
+            RedditAPI api = oauthRetrofit.create(RedditAPI.class);
+            String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
-        Call<String> getPostCall = api.getPost(postId, RedditUtils.getOAuthHeader(accessToken));
-        getPostCall.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                if(response.isSuccessful()) {
-                    ParsePost.parsePost(response.body(), locale, new ParsePost.ParsePostListener() {
-                        @Override
-                        public void onParsePostSuccess(Post post) {
-                            submitPostListener.submitSuccessful(post);
-                        }
+            Call<String> getPostCall = api.getPost(postId, RedditUtils.getOAuthHeader(accessToken));
+            getPostCall.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
+                    if(response.isSuccessful()) {
+                        ParsePost.parsePost(response.body(), locale, new ParsePost.ParsePostListener() {
+                            @Override
+                            public void onParsePostSuccess(Post post) {
+                                submitPostListener.submitSuccessful(post);
+                            }
 
-                        @Override
-                        public void onParsePostFail() {
-                            submitPostListener.submitFailed(null);
-                        }
-                    });
-                } else {
-                    Log.i("call_failed", response.message());
-                    submitPostListener.submitFailed(response.message());
+                            @Override
+                            public void onParsePostFail() {
+                                submitPostListener.submitFailed(null);
+                            }
+                        });
+                    } else {
+                        Log.i("call_failed", response.message());
+                        submitPostListener.submitFailed(response.message());
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.i("call_failed", call.request().url().toString());
-                submitPostListener.submitFailed(t.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    Log.i("call_failed", call.request().url().toString());
+                    submitPostListener.submitFailed(t.getMessage());
+                }
+            });
+        } else {
+            submitPostListener.submitSuccessful(null);
+        }
     }
 }

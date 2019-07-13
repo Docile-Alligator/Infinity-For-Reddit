@@ -131,7 +131,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale,
+                    ParsePost.parsePosts(response.body(), locale, -1,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
@@ -173,7 +173,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale, new ParsePost.ParsePostsListingListener() {
+                    ParsePost.parsePosts(response.body(), locale, -1, new ParsePost.ParsePostsListingListener() {
                         @Override
                         public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                             callback.onResult(newPosts, lastItem);
@@ -207,7 +207,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale,
+                    ParsePost.parsePosts(response.body(), locale, -1,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
@@ -248,7 +248,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale, new ParsePost.ParsePostsListingListener() {
+                    ParsePost.parsePosts(response.body(), locale, -1, new ParsePost.ParsePostsListingListener() {
                         @Override
                         public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                             callback.onResult(newPosts, lastItem);
@@ -282,7 +282,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale,
+                    ParsePost.parsePosts(response.body(), locale, -1,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
@@ -328,7 +328,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale, new ParsePost.ParsePostsListingListener() {
+                    ParsePost.parsePosts(response.body(), locale, -1, new ParsePost.ParsePostsListingListener() {
                         @Override
                         public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                             if(newPosts.size() == 0 && !lastItem.equals("null")) {
@@ -366,7 +366,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale,
+                    ParsePost.parsePosts(response.body(), locale, -1,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
@@ -407,7 +407,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale, new ParsePost.ParsePostsListingListener() {
+                    ParsePost.parsePosts(response.body(), locale, -1, new ParsePost.ParsePostsListingListener() {
                         @Override
                         public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                             callback.onResult(newPosts, lastItem);

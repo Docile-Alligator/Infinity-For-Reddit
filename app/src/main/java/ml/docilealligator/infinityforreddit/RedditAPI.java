@@ -2,12 +2,17 @@ package ml.docilealligator.infinityforreddit;
 
 import java.util.Map;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -82,4 +87,12 @@ public interface RedditAPI {
     @FormUrlEncoded
     @POST("/api/submit")
     Call<String> submit(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("/api/media/asset.json?raw_json=1&gilding_detail=1")
+    Call<String> uploadImage(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @Multipart
+    @POST(".")
+    Call<String> uploadMediaToAWS(@PartMap()Map<String, RequestBody> params, @Part() MultipartBody.Part file);
 }

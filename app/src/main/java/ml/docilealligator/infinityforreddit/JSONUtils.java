@@ -71,4 +71,7 @@ public class JSONUtils {
     static final String THINGS_KEY = "things";
     static final String PARENT_ID_KEY = "parent_id";
     static final String ERRORS_KEY = "errors";
+    static final String ARGS_KEY = "args";
+    static final String FIELDS_KEY = "fields";
+    static final String VALUE_KEY = "value";
 }

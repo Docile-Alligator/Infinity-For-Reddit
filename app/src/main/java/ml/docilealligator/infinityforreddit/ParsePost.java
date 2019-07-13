@@ -27,8 +27,8 @@ class ParsePost {
         void onParsePostFail();
     }
 
-    static void parsePosts(String response, Locale locale, ParsePostsListingListener parsePostsListingListener) {
-        new ParsePostDataAsyncTask(response, locale, parsePostsListingListener).execute();
+    static void parsePosts(String response, Locale locale, int nPosts, ParsePostsListingListener parsePostsListingListener) {
+        new ParsePostDataAsyncTask(response, locale, nPosts, parsePostsListingListener).execute();
     }
 
     static void parsePost(String response, Locale locale, ParsePostListener parsePostListener) {
@@ -38,6 +38,7 @@ class ParsePost {
     private static class ParsePostDataAsyncTask extends AsyncTask<Void, Void, Void> {
         private JSONArray allData;
         private Locale locale;
+        private int nPosts;
         private ParsePostsListingListener parsePostsListingListener;
         private ParsePostListener parsePostListener;
         private ArrayList<Post> newPosts;
@@ -45,7 +46,7 @@ class ParsePost {
         private String lastItem;
         private boolean parseFailed;
 
-        ParsePostDataAsyncTask(String response, Locale locale,
+        ParsePostDataAsyncTask(String response, Locale locale, int nPosts,
                                ParsePostsListingListener parsePostsListingListener) {
             this.parsePostsListingListener = parsePostsListingListener;
             try {
@@ -53,6 +54,7 @@ class ParsePost {
                 allData = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
                 lastItem = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
                 this.locale = locale;
+                this.nPosts = nPosts;
                 newPosts = new ArrayList<>();
                 parseFailed = false;
             } catch (JSONException e) {
@@ -99,7 +101,14 @@ class ParsePost {
                     }
                 } else {
                     //Posts listing
-                    for(int i = 0; i < allData.length(); i++) {
+                    int size;
+                    if(nPosts < 0 || nPosts > allData.length()) {
+                        size = allData.length();
+                    } else {
+                        size = nPosts;
+                    }
+
+                    for(int i = 0; i < size; i++) {
                         String kind = allData.getJSONObject(i).getString(JSONUtils.KIND_KEY);
                         if(kind.equals("t3")) {
                             //It's a post

@@ -40,6 +40,15 @@ class AppModule {
                 .build();
     }
 
+    @Provides @Named("upload_media")
+    @Singleton
+    Retrofit provideUploadMediaRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(RedditUtils.API_UPLOAD_MEDIA_URI)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+    }
+
     @Provides
     @Singleton
     OkHttpClient provideOkHttpClient(@Named("no_oauth") Retrofit retrofit, @Named("auth_info") SharedPreferences sharedPreferences) {

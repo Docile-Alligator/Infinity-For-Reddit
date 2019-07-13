@@ -5,6 +5,9 @@ import android.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+
 /**
  * Created by alex on 2/23/18.
  */
@@ -13,6 +16,7 @@ public class RedditUtils {
     static final String OAUTH_URL ="https://www.reddit.com/api/v1/authorize.compact";
     static final String OAUTH_API_BASE_URI = "https://oauth.reddit.com";
     static final String API_BASE_URI = "https://www.reddit.com";
+    static final String API_UPLOAD_MEDIA_URI = "https://reddit-uploaded-media.s3-accelerate.amazonaws.com";
 
     static final String CLIENT_ID_KEY = "client_id";
     static final String CLIENT_ID = "";
@@ -62,6 +66,10 @@ public class RedditUtils {
     static final String KIND_TEXT = "text";
     static final String KIND_SELF = "self";
     static final String KIND_LINK = "link";
+    static final String KIND_IMAGE = "image";
+
+    static final String FILEPATH_KEY = "filepath";
+    static final String MIMETYPE_KEY = "mimetype";
 
     static Map<String, String> getHttpBasicAuthHeader() {
         Map<String, String> params = new HashMap<>();
@@ -76,5 +84,9 @@ public class RedditUtils {
         params.put(RedditUtils.AUTHORIZATION_KEY, RedditUtils.AUTHORIZATION_BASE + accessToken);
         params.put(RedditUtils.USER_AGENT_KEY, RedditUtils.USER_AGENT);
         return params;
+    }
+
+    static RequestBody getRequestBody(String s) {
+        return RequestBody.create(MediaType.parse("text/plain"), s);
     }
 }
