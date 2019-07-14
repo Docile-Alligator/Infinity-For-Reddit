@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,7 +31,8 @@ import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -39,11 +42,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pl.droidsonroids.gif.GifImageView;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Retrofit;
 
-public class PostImageActivity extends AppCompatActivity {
+public class PostVideoActivity extends AppCompatActivity {
 
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
     static final String EXTRA_SUBREDDIT_ICON = "ESI";
@@ -52,27 +53,27 @@ public class PostImageActivity extends AppCompatActivity {
     private static final String SUBREDDIT_ICON_STATE = "SIS";
     private static final String SUBREDDIT_SELECTED_STATE = "SSS";
     private static final String SUBREDDIT_IS_USER_STATE = "SIUS";
-    private static final String IMAGE_URI_STATE = "IUS";
+    private static final String VIDEO_URI_STATE = "IUS";
 
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
-    private static final int PICK_IMAGE_REQUEST_CODE = 1;
+    private static final int PICK_VIDEO_REQUEST_CODE = 1;
 
-    @BindView(R.id.coordinator_layout_post_image_activity) CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.subreddit_icon_gif_image_view_post_image_activity) GifImageView iconGifImageView;
-    @BindView(R.id.subreddit_name_text_view_post_image_activity) TextView subreditNameTextView;
-    @BindView(R.id.rules_button_post_image_activity) Button rulesButton;
-    @BindView(R.id.post_title_edit_text_post_image_activity) EditText titleEditText;
-    @BindView(R.id.select_image_constraint_layout_post_image_activity) ConstraintLayout constraintLayout;
-    @BindView(R.id.capture_fab_post_image_activity) FloatingActionButton captureFab;
-    @BindView(R.id.select_from_library_fab_post_image_activity) FloatingActionButton selectFromLibraryFab;
-    @BindView(R.id.select_again_text_view_post_image_activity) TextView selectAgainTextView;
-    @BindView(R.id.image_view_post_image_activity) ImageView imageView;
+    @BindView(R.id.coordinator_layout_post_video_activity) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.subreddit_icon_gif_image_view_post_video_activity) GifImageView iconGifImageView;
+    @BindView(R.id.subreddit_name_text_view_post_video_activity) TextView subreditNameTextView;
+    @BindView(R.id.rules_button_post_video_activity) Button rulesButton;
+    @BindView(R.id.post_title_edit_text_post_video_activity) EditText titleEditText;
+    @BindView(R.id.select_video_constraint_layout_post_video_activity) ConstraintLayout constraintLayout;
+    @BindView(R.id.capture_fab_post_video_activity) FloatingActionButton captureFab;
+    @BindView(R.id.select_from_library_fab_post_video_activity) FloatingActionButton selectFromLibraryFab;
+    @BindView(R.id.select_again_text_view_post_video_activity) TextView selectAgainTextView;
+    @BindView(R.id.image_view_post_video_activity) ImageView imageView;
 
     private String iconUrl;
     private String subredditName;
     private boolean subredditSelected = false;
     private boolean subredditIsUser;
-    private Uri imageUri;
+    private Uri videoUri;
 
     private RequestManager mGlide;
     private Locale mLocale;
@@ -86,6 +87,10 @@ public class PostImageActivity extends AppCompatActivity {
     Retrofit mUploadMediaRetrofit;
 
     @Inject
+    @Named("upload_video")
+    Retrofit mUploadVideoRetrofit;
+
+    @Inject
     @Named("user_info")
     SharedPreferences mUserInfoSharedPreferences;
 
@@ -96,7 +101,7 @@ public class PostImageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_image);
+        setContentView(R.layout.activity_post_video);
 
         ButterKnife.bind(this);
 
@@ -114,8 +119,8 @@ public class PostImageActivity extends AppCompatActivity {
             iconUrl = savedInstanceState.getString(SUBREDDIT_ICON_STATE);
             subredditSelected = savedInstanceState.getBoolean(SUBREDDIT_SELECTED_STATE);
             subredditIsUser = savedInstanceState.getBoolean(SUBREDDIT_IS_USER_STATE);
-            if(savedInstanceState.getString(IMAGE_URI_STATE) != null) {
-                imageUri = Uri.parse(savedInstanceState.getString(IMAGE_URI_STATE));
+            if(savedInstanceState.getString(VIDEO_URI_STATE) != null) {
+                videoUri = Uri.parse(savedInstanceState.getString(VIDEO_URI_STATE));
                 loadImage();
             }
 
@@ -162,13 +167,13 @@ public class PostImageActivity extends AppCompatActivity {
 
         selectFromLibraryFab.setOnClickListener(view -> {
             Intent intent = new Intent();
-            intent.setType("image/*");
+            intent.setType("video/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent,getResources().getString(R.string.select_from_gallery)), PICK_IMAGE_REQUEST_CODE);
+            startActivityForResult(Intent.createChooser(intent,getResources().getString(R.string.select_from_gallery)), PICK_VIDEO_REQUEST_CODE);
         });
 
         selectAgainTextView.setOnClickListener(view -> {
-            imageUri = null;
+            videoUri = null;
             selectAgainTextView.setVisibility(View.GONE);
             mGlide.clear(imageView);
             constraintLayout.setVisibility(View.VISIBLE);
@@ -179,7 +184,7 @@ public class PostImageActivity extends AppCompatActivity {
         constraintLayout.setVisibility(View.GONE);
         imageView.setVisibility(View.VISIBLE);
         selectAgainTextView.setVisibility(View.VISIBLE);
-        mGlide.load(imageUri).into(imageView);
+        mGlide.asBitmap().load(videoUri).into(imageView);
     }
 
     @Override
@@ -200,7 +205,7 @@ public class PostImageActivity extends AppCompatActivity {
                     return true;
                 }
 
-                if(imageUri == null) {
+                if(videoUri == null) {
                     Snackbar.make(coordinatorLayout, R.string.select_an_image, Snackbar.LENGTH_SHORT).show();
                     return true;
                 }
@@ -217,83 +222,59 @@ public class PostImageActivity extends AppCompatActivity {
                     subredditName = subreditNameTextView.getText().toString();
                 }
 
-                Glide.with(this)
-                        .asBitmap()
-                        .load(imageUri)
-                        .into(new CustomTarget<Bitmap>() {
+                try (ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(videoUri, "r")) {
+                    FileInputStream in = new FileInputStream(pfd.getFileDescriptor());
+                    byte[] buffer;
+                    buffer = new byte[in.available()];
+                    while (in.read(buffer) != -1);
 
-                            @Override
-                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                SubmitPost.submitImagePost(mOauthRetrofit, mUploadMediaRetrofit, sharedPreferences,
-                                        mLocale, subredditName, titleEditText.getText().toString(), resource,
-                                        false, new SubmitPost.SubmitPostListener() {
-                                            @Override
-                                            public void submitSuccessful(Post post) {
-                                                RedditAPI api = mOauthRetrofit.create(RedditAPI.class);
-                                                Call<String> getPost = api.getUserBestPosts(mUserInfoSharedPreferences.getString(SharedPreferencesUtils.USER_KEY, ""), null,
-                                                        RedditUtils.getOAuthHeader(sharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "")));
-                                                getPost.enqueue(new Callback<String>() {
-                                                    @Override
-                                                    public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                                                        if(response.isSuccessful()) {
-                                                            ParsePost.parsePosts(response.body(), mLocale, 1,
-                                                                    new ParsePost.ParsePostsListingListener() {
-                                                                        @Override
-                                                                        public void onParsePostsListingSuccess(ArrayList<Post> newPostData, String lastItem) {
-                                                                            Intent intent = new Intent(PostImageActivity.this, ViewPostDetailActivity.class);
-                                                                            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, newPostData.get(0));
-                                                                            startActivity(intent);
-                                                                            finish();
-                                                                        }
+                    Glide.with(this)
+                            .asBitmap()
+                            .load(videoUri)
+                            .into(new CustomTarget<Bitmap>() {
+                                      @Override
+                                      public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                          SubmitPost.submitVideoPost(mOauthRetrofit, mUploadMediaRetrofit, mUploadVideoRetrofit,
+                                                  sharedPreferences, mLocale, subredditName, titleEditText.getText().toString(),
+                                                  buffer, getContentResolver().getType(videoUri), resource, false,
+                                                  new SubmitPost.SubmitPostListener() {
+                                                      @Override
+                                                      public void submitSuccessful(Post post) {
+                                                          Toast.makeText(PostVideoActivity.this, R.string.video_is_processing, Toast.LENGTH_SHORT).show();
+                                                          Intent intent = new Intent(PostVideoActivity.this, ViewUserDetailActivity.class);
+                                                          intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
+                                                                  mUserInfoSharedPreferences.getString(SharedPreferencesUtils.USER_KEY, ""));
+                                                          startActivity(intent);
+                                                          finish();
+                                                      }
 
-                                                                        @Override
-                                                                        public void onParsePostsListingFail() {
-                                                                            startViewUserDetailActivity();
-                                                                        }
-                                                                    });
-                                                        } else {
-                                                            startViewUserDetailActivity();
-                                                        }
-                                                    }
+                                                      @Override
+                                                      public void submitFailed(@Nullable String errorMessage) {
+                                                          postingSnackbar.dismiss();
+                                                          item.setEnabled(true);
+                                                          item.getIcon().setAlpha(255);
+                                                          if (errorMessage == null || errorMessage.equals("")) {
+                                                              Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
+                                                          } else {
+                                                              Snackbar.make(coordinatorLayout, errorMessage, Snackbar.LENGTH_SHORT).show();
+                                                          }
+                                                      }
+                                                  });
+                                      }
 
-                                                    @Override
-                                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                                                        startViewUserDetailActivity();
-                                                    }
-                                                });
-                                            }
+                                      @Override
+                                      public void onLoadCleared(@Nullable Drawable placeholder) {
 
-                                            @Override
-                                            public void submitFailed(@Nullable String errorMessage) {
-                                                postingSnackbar.dismiss();
-                                                item.setEnabled(true);
-                                                item.getIcon().setAlpha(255);
-                                                if(errorMessage == null) {
-                                                    Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
-                                                } else {
-                                                    Snackbar.make(coordinatorLayout, errorMessage, Snackbar.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        });
-                            }
-
-                            @Override
-                            public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                            }
-                        });
+                                      }
+                                  });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Snackbar.make(coordinatorLayout, R.string.error_processing_video, Snackbar.LENGTH_SHORT).show();
+                }
                 return true;
         }
 
         return false;
-    }
-
-    private void startViewUserDetailActivity() {
-        Intent intent = new Intent(PostImageActivity.this, ViewUserDetailActivity.class);
-        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
-                mUserInfoSharedPreferences.getString(SharedPreferencesUtils.USER_KEY, ""));
-        startActivity(intent);
-        finish();
     }
 
     @Override
@@ -303,8 +284,8 @@ public class PostImageActivity extends AppCompatActivity {
         outState.putString(SUBREDDIT_ICON_STATE, iconUrl);
         outState.putBoolean(SUBREDDIT_SELECTED_STATE, subredditSelected);
         outState.putBoolean(SUBREDDIT_IS_USER_STATE, subredditIsUser);
-        if(imageUri != null) {
-            outState.putString(IMAGE_URI_STATE, imageUri.toString());
+        if(videoUri != null) {
+            outState.putString(VIDEO_URI_STATE, videoUri.toString());
         }
     }
 
@@ -332,14 +313,14 @@ public class PostImageActivity extends AppCompatActivity {
                             .into(iconGifImageView);
                 }
             }
-        } else if(requestCode == PICK_IMAGE_REQUEST_CODE) {
+        } else if(requestCode == PICK_VIDEO_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
                 if(data == null) {
                     Snackbar.make(coordinatorLayout, R.string.error_getting_image, Snackbar.LENGTH_SHORT).show();
                     return;
                 }
 
-                imageUri = data.getData();
+                videoUri = data.getData();
                 loadImage();
             }
         }

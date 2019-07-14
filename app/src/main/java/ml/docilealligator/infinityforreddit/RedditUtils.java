@@ -17,6 +17,7 @@ public class RedditUtils {
     static final String OAUTH_API_BASE_URI = "https://oauth.reddit.com";
     static final String API_BASE_URI = "https://www.reddit.com";
     static final String API_UPLOAD_MEDIA_URI = "https://reddit-uploaded-media.s3-accelerate.amazonaws.com";
+    static final String API_UPLOAD_VIDEO_URI = "https://reddit-uploaded-video.s3-accelerate.amazonaws.com";
 
     static final String CLIENT_ID_KEY = "client_id";
     static final String CLIENT_ID = "";
@@ -57,6 +58,7 @@ public class RedditUtils {
     static final String RETURN_RTJSON_KEY = "return_rtjson";
     static final String TEXT_KEY = "text";
     static final String URL_KEY = "url";
+    static final String VIDEO_POSTER_URL_KEY = "video_poster_url";
     static final String THING_ID_KEY = "thing_id";
 
     static final String SR_KEY = "sr";
@@ -67,6 +69,8 @@ public class RedditUtils {
     static final String KIND_SELF = "self";
     static final String KIND_LINK = "link";
     static final String KIND_IMAGE = "image";
+    static final String KIND_VIDEO = "video";
+    static final String KIND_VIDEOGIF = "videogif";
 
     static final String FILEPATH_KEY = "filepath";
     static final String MIMETYPE_KEY = "mimetype";

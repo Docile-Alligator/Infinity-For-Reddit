@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -256,7 +255,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         videoTypeLinearLayout.setOnClickListener(view -> {
-            Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, PostVideoActivity.class);
+            startActivity(intent);
             dialog.dismiss();
         });
 

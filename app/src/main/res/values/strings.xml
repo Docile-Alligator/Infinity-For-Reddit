@@ -8,6 +8,7 @@
     <string name="subreddit_selection_activity_label">Select a Subreddit</string>
     <string name="post_link_activity_label">Link Post</string>
     <string name="post_image_activity_label">Image Post</string>
+    <string name="post_video_activity_label">Video Post</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -86,6 +87,7 @@
     <string name="select_an_image">Please select an image first</string>
     <string name="posting">Posting</string>
     <string name="post_failed">Could not post it</string>
+    <string name="error_processing_video">Error processing this video</string>
 
     <string name="download_completed">Download completed</string>
     <string name="download_failed">Download Failed</string>
@@ -114,4 +116,6 @@
     <string name="select_from_gallery">Select a picture</string>
     <string name="select_again">Select again</string>
     <string name="error_getting_image">Error getting the image</string>
+
+    <string name="video_is_processing">Video is processing. Please wait.</string>
 </resources>

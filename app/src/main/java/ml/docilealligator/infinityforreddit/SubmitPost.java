@@ -36,9 +36,140 @@ class SubmitPost {
         void submitFailed(@Nullable String errorMessage);
     }
 
+    private interface UploadImageListener {
+        void uploaded(String imageUrl);
+        void uploadFailed(@Nullable String errorMessage);
+    }
+
     static void submitTextOrLinkPost(Retrofit oauthRetrofit, SharedPreferences authInfoSharedPreferences,
                                      Locale locale, String subredditName, String title, String content, boolean isNSFW,
                                      String kind, SubmitPostListener submitPostListener) {
+        submitPost(oauthRetrofit, authInfoSharedPreferences, locale, subredditName, title, content,
+                isNSFW, kind, null, submitPostListener);
+    }
+
+    static void submitImagePost(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
+                                SharedPreferences authInfoSharedPreferences, Locale locale,
+                                String subredditName, String title, Bitmap image, boolean isNSFW,
+                                SubmitPostListener submitPostListener) {
+        uploadImage(oauthRetrofit, uploadMediaRetrofit, authInfoSharedPreferences, image,
+                new UploadImageListener() {
+                    @Override
+                    public void uploaded(String imageUrl) {
+                        submitPost(oauthRetrofit, authInfoSharedPreferences, locale,
+                                subredditName, title, imageUrl, isNSFW, RedditUtils.KIND_IMAGE,
+                                null, submitPostListener);
+                    }
+
+                    @Override
+                    public void uploadFailed(@Nullable String errorMessage) {
+                        submitPostListener.submitFailed(errorMessage);
+                    }
+                });
+    }
+
+    static void submitVideoPost(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
+                                Retrofit uploadVideoRetrofit, SharedPreferences authInfoSharedPreferences,
+                                Locale locale, String subredditName, String title, byte[] buffer, String mimeType,
+                                Bitmap posterBitmap, boolean isNSFW, SubmitPostListener submitPostListener) {
+        RedditAPI api = oauthRetrofit.create(RedditAPI.class);
+        String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
+
+        String fileType = mimeType.substring(mimeType.indexOf("/") + 1);
+
+        Map<String, String> uploadImageParams = new HashMap<>();
+        uploadImageParams.put(RedditUtils.FILEPATH_KEY, "post_video." + fileType);
+        uploadImageParams.put(RedditUtils.MIMETYPE_KEY, mimeType);
+
+        Log.i("map", RedditUtils.getOAuthHeader(accessToken).toString());
+        Call<String> uploadImageCall = api.uploadImage(RedditUtils.getOAuthHeader(accessToken), uploadImageParams);
+        uploadImageCall.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if(response.isSuccessful()) {
+                    new ParseJSONResponseFromAWSAsyncTask(response.body(), new ParseJSONResponseFromAWSAsyncTask.ParseJSONResponseFromAWSListener() {
+                        @Override
+                        public void parseSuccessful(Map<String, RequestBody> nameValuePairsMap) {
+                            RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), buffer);
+                            MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", "post_video." + fileType, fileBody);
+
+                            RedditAPI uploadVideoToAWSApi;
+                            if(fileType.equals("gif")) {
+                                uploadVideoToAWSApi = uploadMediaRetrofit.create(RedditAPI.class);
+                            } else {
+                                uploadVideoToAWSApi = uploadVideoRetrofit.create(RedditAPI.class);
+                            }
+                            Call<String> uploadMediaToAWS = uploadVideoToAWSApi.uploadMediaToAWS(nameValuePairsMap, fileToUpload);
+
+                            uploadMediaToAWS.enqueue(new Callback<String>() {
+                                @Override
+                                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                    Log.i("responsesese", "aws" + response.body());
+                                    if(response.isSuccessful()) {
+                                        new ParseXMLReponseFromAWSAsyncTask(response.body(), new ParseXMLReponseFromAWSAsyncTask.ParseXMLResponseFromAWSListener() {
+                                            @Override
+                                            public void parseSuccessful(String url) {
+                                                uploadImage(oauthRetrofit, uploadMediaRetrofit, authInfoSharedPreferences,
+                                                        posterBitmap, new UploadImageListener() {
+                                                            @Override
+                                                            public void uploaded(String imageUrl) {
+                                                                if(fileType.equals("gif")) {
+                                                                    submitPost(oauthRetrofit, authInfoSharedPreferences, locale,
+                                                                            subredditName, title, url, isNSFW, RedditUtils.KIND_VIDEOGIF,
+                                                                            imageUrl, submitPostListener);
+                                                                } else {
+                                                                    submitPost(oauthRetrofit, authInfoSharedPreferences, locale,
+                                                                            subredditName, title, url, isNSFW, RedditUtils.KIND_VIDEO,
+                                                                            imageUrl, submitPostListener);
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void uploadFailed(@Nullable String errorMessage) {
+                                                                submitPostListener.submitFailed(errorMessage);
+                                                            }
+                                                        });
+                                            }
+
+                                            @Override
+                                            public void parseFailed() {
+                                                submitPostListener.submitFailed(null);
+                                            }
+                                        }).execute();
+                                    } else {
+                                        submitPostListener.submitFailed("Error: " + response.code());
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                                    Log.i("asfasdfsd", "failedddddddddd" + t.getMessage());
+                                    submitPostListener.submitFailed(t.getMessage());
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void parseFailed() {
+                            submitPostListener.submitFailed("Parse from aws failed");
+                        }
+                    }).execute();
+                } else {
+                    submitPostListener.submitFailed(response.message());
+                }
+                Log.i("image", "dddd" + response.code());
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                submitPostListener.submitFailed(t.getMessage());
+            }
+        });
+    }
+
+    private static void submitPost(Retrofit oauthRetrofit, SharedPreferences authInfoSharedPreferences,
+                                   Locale locale, String subredditName, String title, String content, boolean isNSFW,
+                                   String kind, @Nullable String posterUrl, SubmitPostListener submitPostListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
         String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
@@ -47,10 +178,23 @@ class SubmitPost {
         params.put(RedditUtils.SR_KEY, subredditName);
         params.put(RedditUtils.TITLE_KEY, title);
         params.put(RedditUtils.KIND_KEY, kind);
-        if(kind.equals(RedditUtils.KIND_SELF)) {
-            params.put(RedditUtils.TEXT_KEY, content);
-        } else if(kind.equals(RedditUtils.KIND_LINK) || kind.equals(RedditUtils.KIND_IMAGE)) {
-            params.put(RedditUtils.URL_KEY, content);
+        switch (kind) {
+            case RedditUtils.KIND_SELF:
+                params.put(RedditUtils.TEXT_KEY, content);
+                break;
+            case RedditUtils.KIND_LINK:
+            case RedditUtils.KIND_IMAGE:
+                params.put(RedditUtils.URL_KEY, content);
+                break;
+            case RedditUtils.KIND_VIDEOGIF:
+                params.put(RedditUtils.KIND_KEY, RedditUtils.KIND_IMAGE);
+                params.put(RedditUtils.URL_KEY, content);
+                params.put(RedditUtils.VIDEO_POSTER_URL_KEY, posterUrl);
+                break;
+            case RedditUtils.KIND_VIDEO:
+                params.put(RedditUtils.URL_KEY, content);
+                params.put(RedditUtils.VIDEO_POSTER_URL_KEY, posterUrl);
+                break;
         }
         params.put(RedditUtils.NSFW_KEY, Boolean.toString(isNSFW));
 
@@ -81,15 +225,14 @@ class SubmitPost {
         });
     }
 
-    static void submitImagePost(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
-                                SharedPreferences authInfoSharedPreferences, Locale locale,
-                                String subredditName, String title, Bitmap image, boolean isNSFW,
-                                SubmitPostListener submitPostListener) {
+    private static void uploadImage(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
+                                    SharedPreferences authInfoSharedPreferences, Bitmap image,
+                                    UploadImageListener uploadImageListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
         String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
         Map<String, String> uploadImageParams = new HashMap<>();
-        uploadImageParams.put(RedditUtils.FILEPATH_KEY, "tetestst.jpg");
+        uploadImageParams.put(RedditUtils.FILEPATH_KEY, "post_image.jpg");
         uploadImageParams.put(RedditUtils.MIMETYPE_KEY, "image/jpeg");
 
         Log.i("map", RedditUtils.getOAuthHeader(accessToken).toString());
@@ -101,13 +244,12 @@ class SubmitPost {
                     new ParseJSONResponseFromAWSAsyncTask(response.body(), new ParseJSONResponseFromAWSAsyncTask.ParseJSONResponseFromAWSListener() {
                         @Override
                         public void parseSuccessful(Map<String, RequestBody> nameValuePairsMap) {
-
                             ByteArrayOutputStream stream = new ByteArrayOutputStream();
                             image.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                             byte[] byteArray = stream.toByteArray();
 
                             RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), byteArray);
-                            MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", "testing.jpg", fileBody);
+                            MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", "post_image.jpg", fileBody);
 
                             RedditAPI uploadMediaToAWSApi = uploadMediaRetrofit.create(RedditAPI.class);
                             Call<String> uploadMediaToAWS = uploadMediaToAWSApi.uploadMediaToAWS(nameValuePairsMap, fileToUpload);
@@ -119,45 +261,43 @@ class SubmitPost {
                                     if(response.isSuccessful()) {
                                         new ParseXMLReponseFromAWSAsyncTask(response.body(), new ParseXMLReponseFromAWSAsyncTask.ParseXMLResponseFromAWSListener() {
                                             @Override
-                                            public void parseSuccessful(String imageUrl) {
-                                                submitTextOrLinkPost(oauthRetrofit, authInfoSharedPreferences, locale,
-                                                        subredditName, title, imageUrl, isNSFW, RedditUtils.KIND_IMAGE,
-                                                        submitPostListener);
+                                            public void parseSuccessful(String url) {
+                                                uploadImageListener.uploaded(url);
                                             }
 
                                             @Override
                                             public void parseFailed() {
-                                                submitPostListener.submitFailed(null);
+                                                uploadImageListener.uploadFailed(null);
                                             }
                                         }).execute();
                                     } else {
                                         Log.i("asfasdfsd", "failedddddddddd" + response.code());
-                                        submitPostListener.submitFailed("Error: " + response.code());
+                                        uploadImageListener.uploadFailed("Error: " + response.code());
                                     }
                                 }
 
                                 @Override
                                 public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                                     Log.i("asfasdfsd", "failedddddddddd" + t.getMessage());
-                                    submitPostListener.submitFailed(t.getMessage());
+                                    uploadImageListener.uploadFailed(t.getMessage());
                                 }
                             });
                         }
 
                         @Override
                         public void parseFailed() {
-                            submitPostListener.submitFailed("Parse from aws failed");
+                            uploadImageListener.uploadFailed("Parse from aws failed");
                         }
                     }).execute();
                 } else {
-                    submitPostListener.submitFailed(response.message());
+                    uploadImageListener.uploadFailed(response.message());
                 }
                 Log.i("image", "dddd" + response.body());
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                submitPostListener.submitFailed(t.getMessage());
+                uploadImageListener.uploadFailed(t.getMessage());
             }
         });
     }
@@ -213,7 +353,7 @@ class SubmitPost {
 
     private static class ParseXMLReponseFromAWSAsyncTask extends AsyncTask<Void, Void, Void> {
         interface ParseXMLResponseFromAWSListener {
-            void parseSuccessful(String imageUrl);
+            void parseSuccessful(String url);
             void parseFailed();
         }
 
@@ -293,7 +433,7 @@ class SubmitPost {
             return;
         }
 
-        if(!kind.equals(RedditUtils.KIND_IMAGE)) {
+        if(!kind.equals(RedditUtils.KIND_IMAGE) && !kind.equals(RedditUtils.KIND_VIDEO) && !kind.equals(RedditUtils.KIND_VIDEOGIF)) {
             String postId = responseObject.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.ID_KEY);
 
             RedditAPI api = oauthRetrofit.create(RedditAPI.class);
