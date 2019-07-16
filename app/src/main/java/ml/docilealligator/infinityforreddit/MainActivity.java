@@ -56,11 +56,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.settings_linear_layout_main_activity) LinearLayout settingsLinearLayout;
     @BindView(R.id.fab_main_activity) FloatingActionButton fab;
 
-    private LinearLayout textTypeLinearLayout;
-    private LinearLayout linkTypeLinearLayout;
-    private LinearLayout imageTypeLinearLayout;
-    private LinearLayout videoTypeLinearLayout;
-
     private BottomSheetDialog dialog;
 
     private TextView mNameTextView;
@@ -102,10 +97,10 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         View dialogView = View.inflate(this, R.layout.post_type_bottom_sheet, null);
-        textTypeLinearLayout = dialogView.findViewById(R.id.text_type_linear_layout_post_type_bottom_sheet);
-        linkTypeLinearLayout = dialogView.findViewById(R.id.link_type_linear_layout_post_type_bottom_sheet);
-        imageTypeLinearLayout = dialogView.findViewById(R.id.image_type_linear_layout_post_type_bottom_sheet);
-        videoTypeLinearLayout = dialogView.findViewById(R.id.video_type_linear_layout_post_type_bottom_sheet);
+        LinearLayout textTypeLinearLayout = dialogView.findViewById(R.id.text_type_linear_layout_post_type_bottom_sheet);
+        LinearLayout linkTypeLinearLayout = dialogView.findViewById(R.id.link_type_linear_layout_post_type_bottom_sheet);
+        LinearLayout imageTypeLinearLayout = dialogView.findViewById(R.id.image_type_linear_layout_post_type_bottom_sheet);
+        LinearLayout videoTypeLinearLayout = dialogView.findViewById(R.id.video_type_linear_layout_post_type_bottom_sheet);
 
         dialog = new BottomSheetDialog(this);
         dialog.setContentView(dialogView);

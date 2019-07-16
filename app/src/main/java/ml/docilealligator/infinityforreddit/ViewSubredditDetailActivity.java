@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,7 +23,9 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import javax.inject.Inject;
@@ -57,6 +60,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
     @BindView(R.id.subscriber_count_text_view_view_subreddit_detail_activity) TextView nSubscribersTextView;
     @BindView(R.id.online_subscriber_count_text_view_view_subreddit_detail_activity) TextView nOnlineSubscribersTextView;
     @BindView(R.id.description_text_view_view_subreddit_detail_activity) TextView descriptionTextView;
+    @BindView(R.id.fab_view_subreddit_detail_activity) FloatingActionButton fab;
 
     private boolean subscriptionReady = false;
     private boolean isInLazyMode = false;
@@ -65,6 +69,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
     private Fragment mFragment;
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
+    private BottomSheetDialog dialog;
 
     private SubscribedSubredditDao subscribedSubredditDao;
     private SubredditViewModel mSubredditViewModel;
@@ -85,7 +90,17 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_subreddit_detail);
+
         ButterKnife.bind(this);
+
+        View dialogView = View.inflate(this, R.layout.post_type_bottom_sheet, null);
+        LinearLayout textTypeLinearLayout = dialogView.findViewById(R.id.text_type_linear_layout_post_type_bottom_sheet);
+        LinearLayout linkTypeLinearLayout = dialogView.findViewById(R.id.link_type_linear_layout_post_type_bottom_sheet);
+        LinearLayout imageTypeLinearLayout = dialogView.findViewById(R.id.image_type_linear_layout_post_type_bottom_sheet);
+        LinearLayout videoTypeLinearLayout = dialogView.findViewById(R.id.video_type_linear_layout_post_type_bottom_sheet);
+
+        dialog = new BottomSheetDialog(this);
+        dialog.setContentView(dialogView);
 
         ((Infinity) getApplication()).getmAppComponent().inject(this);
 
@@ -261,6 +276,38 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
         }
+
+        textTypeLinearLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(this, PostTextActivity.class);
+            intent.putExtra(PostTextActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+            startActivity(intent);
+            dialog.dismiss();
+        });
+
+        linkTypeLinearLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(this, PostLinkActivity.class);
+            intent.putExtra(PostLinkActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+            startActivity(intent);
+            dialog.dismiss();
+        });
+
+        imageTypeLinearLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(this, PostImageActivity.class);
+            intent.putExtra(PostImageActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+            startActivity(intent);
+            dialog.dismiss();
+        });
+
+        videoTypeLinearLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(this, PostVideoActivity.class);
+            intent.putExtra(PostVideoActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+            startActivity(intent);
+            dialog.dismiss();
+        });
+
+        fab.setOnClickListener(view -> {
+            dialog.show();
+        });
     }
 
     @Override

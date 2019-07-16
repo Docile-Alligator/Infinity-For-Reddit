@@ -38,6 +38,7 @@ import java.util.Locale;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import SubredditDatabase.SubredditRoomDatabase;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -47,13 +48,13 @@ import retrofit2.Retrofit;
 public class PostVideoActivity extends AppCompatActivity {
 
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
-    static final String EXTRA_SUBREDDIT_ICON = "ESI";
 
     private static final String SUBREDDIT_NAME_STATE = "SNS";
     private static final String SUBREDDIT_ICON_STATE = "SIS";
     private static final String SUBREDDIT_SELECTED_STATE = "SSS";
     private static final String SUBREDDIT_IS_USER_STATE = "SIUS";
     private static final String VIDEO_URI_STATE = "IUS";
+    private static final String LOAD_SUBREDDIT_ICON_STATE = "LSIS";
 
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
     private static final int PICK_VIDEO_REQUEST_CODE = 1;
@@ -74,6 +75,7 @@ public class PostVideoActivity extends AppCompatActivity {
     private boolean subredditSelected = false;
     private boolean subredditIsUser;
     private Uri videoUri;
+    private boolean loadSubredditIconSuccessful = true;
 
     private RequestManager mGlide;
     private Locale mLocale;
@@ -119,6 +121,8 @@ public class PostVideoActivity extends AppCompatActivity {
             iconUrl = savedInstanceState.getString(SUBREDDIT_ICON_STATE);
             subredditSelected = savedInstanceState.getBoolean(SUBREDDIT_SELECTED_STATE);
             subredditIsUser = savedInstanceState.getBoolean(SUBREDDIT_IS_USER_STATE);
+            loadSubredditIconSuccessful = savedInstanceState.getBoolean(LOAD_SUBREDDIT_ICON_STATE);
+
             if(savedInstanceState.getString(VIDEO_URI_STATE) != null) {
                 videoUri = Uri.parse(savedInstanceState.getString(VIDEO_URI_STATE));
                 loadImage();
@@ -126,24 +130,16 @@ public class PostVideoActivity extends AppCompatActivity {
 
             if(subredditName != null) {
                 subreditNameTextView.setText(subredditName);
+                if(!loadSubredditIconSuccessful) {
+                    loadSubredditIcon();
+                }
             }
-            if(iconUrl != null && !iconUrl.equals("")) {
-                mGlide.load(iconUrl)
-                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                        .error(mGlide.load(R.drawable.subreddit_default_icon)
-                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                        .into(iconGifImageView);
-            } else {
-                mGlide.load(R.drawable.subreddit_default_icon)
-                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                        .into(iconGifImageView);
-            }
-
+            displaySubredditIcon();
         } else {
             if(getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
                 subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
-                iconUrl = getIntent().getExtras().getString(EXTRA_SUBREDDIT_ICON);
                 subreditNameTextView.setText(subredditName);
+                loadSubredditIcon();
             } else {
                 mGlide.load(R.drawable.subreddit_default_icon)
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -185,6 +181,29 @@ public class PostVideoActivity extends AppCompatActivity {
         imageView.setVisibility(View.VISIBLE);
         selectAgainTextView.setVisibility(View.VISIBLE);
         mGlide.asBitmap().load(videoUri).into(imageView);
+    }
+
+    private void displaySubredditIcon() {
+        if(iconUrl != null && !iconUrl.equals("")) {
+            mGlide.load(iconUrl)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                    .error(mGlide.load(R.drawable.subreddit_default_icon)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                    .into(iconGifImageView);
+        } else {
+            mGlide.load(R.drawable.subreddit_default_icon)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                    .into(iconGifImageView);
+        }
+    }
+
+    private void loadSubredditIcon() {
+        new LoadSubredditIconAsyncTask(SubredditRoomDatabase.getDatabase(this).subredditDao(),
+                subredditName, iconImageUrl -> {
+            iconUrl = iconImageUrl;
+            displaySubredditIcon();
+            loadSubredditIconSuccessful = true;
+        }).execute();
     }
 
     @Override
@@ -287,6 +306,7 @@ public class PostVideoActivity extends AppCompatActivity {
         if(videoUri != null) {
             outState.putString(VIDEO_URI_STATE, videoUri.toString());
         }
+        outState.putBoolean(LOAD_SUBREDDIT_ICON_STATE, loadSubredditIconSuccessful);
     }
 
     @Override
@@ -301,17 +321,7 @@ public class PostVideoActivity extends AppCompatActivity {
 
                 subreditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
                 subreditNameTextView.setText(subredditName);
-                if(!iconUrl.equals("")) {
-                    mGlide.load(iconUrl)
-                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                            .error(mGlide.load(R.drawable.subreddit_default_icon)
-                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                            .into(iconGifImageView);
-                } else {
-                    mGlide.load(R.drawable.subreddit_default_icon)
-                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                            .into(iconGifImageView);
-                }
+                displaySubredditIcon();
             }
         } else if(requestCode == PICK_VIDEO_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
