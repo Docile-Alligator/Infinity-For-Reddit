@@ -28,6 +28,7 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.libRG.CustomTextView;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -44,7 +45,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 
-public class PostImageActivity extends AppCompatActivity {
+public class PostImageActivity extends AppCompatActivity implements FlairBottomSheetFragment.FlairSelectionCallback {
 
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
 
@@ -54,6 +55,9 @@ public class PostImageActivity extends AppCompatActivity {
     private static final String SUBREDDIT_IS_USER_STATE = "SIUS";
     private static final String IMAGE_URI_STATE = "IUS";
     private static final String LOAD_SUBREDDIT_ICON_STATE = "LSIS";
+    private static final String FLAIR_STATE = "FS";
+    private static final String IS_SPOILER_STATE = "ISS";
+    private static final String IS_NSFW_STATE = "INS";
 
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
     private static final int PICK_IMAGE_REQUEST_CODE = 1;
@@ -62,6 +66,9 @@ public class PostImageActivity extends AppCompatActivity {
     @BindView(R.id.subreddit_icon_gif_image_view_post_image_activity) GifImageView iconGifImageView;
     @BindView(R.id.subreddit_name_text_view_post_image_activity) TextView subreditNameTextView;
     @BindView(R.id.rules_button_post_image_activity) Button rulesButton;
+    @BindView(R.id.flair_custom_text_view_post_image_activity) CustomTextView flairTextView;
+    @BindView(R.id.spoiler_custom_text_view_post_image_activity) CustomTextView spoilerTextView;
+    @BindView(R.id.nsfw_custom_text_view_post_image_activity) CustomTextView nsfwTextView;
     @BindView(R.id.post_title_edit_text_post_image_activity) EditText titleEditText;
     @BindView(R.id.select_image_constraint_layout_post_image_activity) ConstraintLayout constraintLayout;
     @BindView(R.id.capture_fab_post_image_activity) FloatingActionButton captureFab;
@@ -76,8 +83,13 @@ public class PostImageActivity extends AppCompatActivity {
     private boolean loadSubredditIconSuccessful = true;
     private Uri imageUri;
 
+    private String flair = null;
+    private boolean isSpoiler = false;
+    private boolean isNSFW = false;
+
     private RequestManager mGlide;
     private Locale mLocale;
+    private FlairBottomSheetFragment flairSelectionBottomSheetFragment;
 
     @Inject
     @Named("oauth")
@@ -117,6 +129,9 @@ public class PostImageActivity extends AppCompatActivity {
             subredditSelected = savedInstanceState.getBoolean(SUBREDDIT_SELECTED_STATE);
             subredditIsUser = savedInstanceState.getBoolean(SUBREDDIT_IS_USER_STATE);
             loadSubredditIconSuccessful = savedInstanceState.getBoolean(LOAD_SUBREDDIT_ICON_STATE);
+            flair = savedInstanceState.getString(FLAIR_STATE);
+            isSpoiler = savedInstanceState.getBoolean(IS_SPOILER_STATE);
+            isNSFW = savedInstanceState.getBoolean(IS_NSFW_STATE);
 
             if(savedInstanceState.getString(IMAGE_URI_STATE) != null) {
                 imageUri = Uri.parse(savedInstanceState.getString(IMAGE_URI_STATE));
@@ -125,11 +140,23 @@ public class PostImageActivity extends AppCompatActivity {
 
             if(subredditName != null) {
                 subreditNameTextView.setText(subredditName);
+                flairTextView.setVisibility(View.VISIBLE);
                 if(!loadSubredditIconSuccessful) {
                     loadSubredditIcon();
                 }
             }
             displaySubredditIcon();
+
+            if(flair != null) {
+                flairTextView.setText(flair);
+                flairTextView.setBackgroundColor(getResources().getColor(R.color.textColorPrimaryDark));
+            }
+            if(isSpoiler) {
+                spoilerTextView.setBackgroundColor(getResources().getColor(R.color.textColorPrimaryDark));
+            }
+            if(isNSFW) {
+                nsfwTextView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+            }
         } else {
             if(getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
                 subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
@@ -150,6 +177,40 @@ public class PostImageActivity extends AppCompatActivity {
         subreditNameTextView.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubredditSelectionActivity.class);
             startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
+        });
+
+        flairTextView.setOnClickListener(view -> {
+            if(flair == null) {
+                flairSelectionBottomSheetFragment = new FlairBottomSheetFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(FlairBottomSheetFragment.EXTRA_SUBREDDIT_NAME, subredditName);
+                flairSelectionBottomSheetFragment.setArguments(bundle);
+                flairSelectionBottomSheetFragment.show(getSupportFragmentManager(), flairSelectionBottomSheetFragment.getTag());
+            } else {
+                flairTextView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                flairTextView.setText(getString(R.string.flair));
+                flair = null;
+            }
+        });
+
+        spoilerTextView.setOnClickListener(view -> {
+            if(!isSpoiler) {
+                spoilerTextView.setBackgroundColor(getResources().getColor(R.color.textColorPrimaryDark));
+                isSpoiler = true;
+            } else {
+                spoilerTextView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                isSpoiler = false;
+            }
+        });
+
+        nsfwTextView.setOnClickListener(view -> {
+            if(!isNSFW) {
+                nsfwTextView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                isNSFW = true;
+            } else {
+                nsfwTextView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                isNSFW = false;
+            }
         });
 
         captureFab.setOnClickListener(view -> {
@@ -245,7 +306,7 @@ public class PostImageActivity extends AppCompatActivity {
                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                                 SubmitPost.submitImagePost(mOauthRetrofit, mUploadMediaRetrofit, sharedPreferences,
                                         mLocale, subredditName, titleEditText.getText().toString(), resource,
-                                        false, new SubmitPost.SubmitPostListener() {
+                                        flair, isSpoiler, isNSFW, new SubmitPost.SubmitPostListener() {
                                             @Override
                                             public void submitSuccessful(Post post) {
                                                 RedditAPI api = mOauthRetrofit.create(RedditAPI.class);
@@ -326,6 +387,9 @@ public class PostImageActivity extends AppCompatActivity {
             outState.putString(IMAGE_URI_STATE, imageUri.toString());
         }
         outState.putBoolean(LOAD_SUBREDDIT_ICON_STATE, loadSubredditIconSuccessful);
+        outState.putString(FLAIR_STATE, flair);
+        outState.putBoolean(IS_SPOILER_STATE, isSpoiler);
+        outState.putBoolean(IS_NSFW_STATE, isNSFW);
     }
 
     @Override
@@ -341,6 +405,11 @@ public class PostImageActivity extends AppCompatActivity {
                 subreditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
                 subreditNameTextView.setText(subredditName);
                 displaySubredditIcon();
+
+                flairTextView.setVisibility(View.VISIBLE);
+                flairTextView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                flairTextView.setText(getString(R.string.flair));
+                flair = null;
             }
         } else if(requestCode == PICK_IMAGE_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
@@ -353,5 +422,13 @@ public class PostImageActivity extends AppCompatActivity {
                 loadImage();
             }
         }
+    }
+
+    @Override
+    public void flairSelected(String flair) {
+        this.flair = flair;
+        flairTextView.setText(flair);
+        flairTextView.setBackgroundColor(getResources().getColor(R.color.textColorPrimaryDark));
+        flairSelectionBottomSheetFragment.dismiss();
     }
 }

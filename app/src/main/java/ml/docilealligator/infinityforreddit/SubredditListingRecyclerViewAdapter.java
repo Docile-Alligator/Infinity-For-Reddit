@@ -64,7 +64,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
         glide = Glide.with(context.getApplicationContext());
     }
 
-    static final DiffUtil.ItemCallback<SubredditData> DIFF_CALLBACK = new DiffUtil.ItemCallback<SubredditData>() {
+    private static final DiffUtil.ItemCallback<SubredditData> DIFF_CALLBACK = new DiffUtil.ItemCallback<SubredditData>() {
         @Override
         public boolean areItemsTheSame(@NonNull SubredditData oldItem, @NonNull SubredditData newItem) {
             return oldItem.getId().equals(newItem.getId());

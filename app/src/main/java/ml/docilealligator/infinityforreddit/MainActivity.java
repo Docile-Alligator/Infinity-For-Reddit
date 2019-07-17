@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String FRAGMENT_OUT_STATE = "FOS";
     private static final String FETCH_USER_INFO_STATE = "FUIS";
-    private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
     private static final int LOGIN_ACTIVITY_REQUEST_CODE = 0;

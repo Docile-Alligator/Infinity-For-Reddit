@@ -107,15 +107,21 @@
     <string name="subreddits">Subreddits</string>
     <string name="users">Users</string>
 
-    <string name="dialog_post_type">Post</string>
-    <string name="dialog_post_text">Text</string>
-    <string name="dialog_post_link">Link</string>
-    <string name="dialog_post_image">Image</string>
-    <string name="dialog_post_video">Video</string>
+    <string name="bottom_sheet_post_type">Post</string>
+    <string name="bottom_sheet_post_text">Text</string>
+    <string name="bottom_sheet_post_link">Link</string>
+    <string name="bottom_sheet_post_image">Image</string>
+    <string name="bottom_sheet_post_video">Video</string>
 
     <string name="select_from_gallery">Select a picture</string>
     <string name="select_again">Select again</string>
     <string name="error_getting_image">Error getting the image</string>
 
     <string name="video_is_processing">Video is processing. Please wait.</string>
+
+    <string name="flair">Flair</string>
+    <string name="spoiler">Spoiler</string>
+
+    <string name="no_flair">No flair</string>
+    <string name="error_loading_flairs">Error loading flairs.\nTap to retry.</string>
 </resources>

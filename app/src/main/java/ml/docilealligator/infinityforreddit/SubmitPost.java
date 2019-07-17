@@ -42,23 +42,24 @@ class SubmitPost {
     }
 
     static void submitTextOrLinkPost(Retrofit oauthRetrofit, SharedPreferences authInfoSharedPreferences,
-                                     Locale locale, String subredditName, String title, String content, boolean isNSFW,
-                                     String kind, SubmitPostListener submitPostListener) {
+                                     Locale locale, String subredditName, String title, String content,
+                                     String flair, boolean isSpoiler, boolean isNSFW, String kind,
+                                     SubmitPostListener submitPostListener) {
         submitPost(oauthRetrofit, authInfoSharedPreferences, locale, subredditName, title, content,
-                isNSFW, kind, null, submitPostListener);
+                flair, isSpoiler, isNSFW, kind, null, submitPostListener);
     }
 
     static void submitImagePost(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
                                 SharedPreferences authInfoSharedPreferences, Locale locale,
-                                String subredditName, String title, Bitmap image, boolean isNSFW,
-                                SubmitPostListener submitPostListener) {
+                                String subredditName, String title, Bitmap image, String flair,
+                                boolean isSpoiler, boolean isNSFW, SubmitPostListener submitPostListener) {
         uploadImage(oauthRetrofit, uploadMediaRetrofit, authInfoSharedPreferences, image,
                 new UploadImageListener() {
                     @Override
                     public void uploaded(String imageUrl) {
                         submitPost(oauthRetrofit, authInfoSharedPreferences, locale,
-                                subredditName, title, imageUrl, isNSFW, RedditUtils.KIND_IMAGE,
-                                null, submitPostListener);
+                                subredditName, title, imageUrl, flair, isSpoiler, isNSFW,
+                                RedditUtils.KIND_IMAGE, null, submitPostListener);
                     }
 
                     @Override
@@ -71,7 +72,8 @@ class SubmitPost {
     static void submitVideoPost(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
                                 Retrofit uploadVideoRetrofit, SharedPreferences authInfoSharedPreferences,
                                 Locale locale, String subredditName, String title, byte[] buffer, String mimeType,
-                                Bitmap posterBitmap, boolean isNSFW, SubmitPostListener submitPostListener) {
+                                Bitmap posterBitmap, String flair, boolean isSpoiler, boolean isNSFW,
+                                SubmitPostListener submitPostListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
         String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
@@ -115,12 +117,12 @@ class SubmitPost {
                                                             public void uploaded(String imageUrl) {
                                                                 if(fileType.equals("gif")) {
                                                                     submitPost(oauthRetrofit, authInfoSharedPreferences, locale,
-                                                                            subredditName, title, url, isNSFW, RedditUtils.KIND_VIDEOGIF,
-                                                                            imageUrl, submitPostListener);
+                                                                            subredditName, title, url, flair, isSpoiler, isNSFW,
+                                                                            RedditUtils.KIND_VIDEOGIF, imageUrl, submitPostListener);
                                                                 } else {
                                                                     submitPost(oauthRetrofit, authInfoSharedPreferences, locale,
-                                                                            subredditName, title, url, isNSFW, RedditUtils.KIND_VIDEO,
-                                                                            imageUrl, submitPostListener);
+                                                                            subredditName, title, url, flair, isSpoiler, isNSFW,
+                                                                            RedditUtils.KIND_VIDEO, imageUrl, submitPostListener);
                                                                 }
                                                             }
 
@@ -168,8 +170,9 @@ class SubmitPost {
     }
 
     private static void submitPost(Retrofit oauthRetrofit, SharedPreferences authInfoSharedPreferences,
-                                   Locale locale, String subredditName, String title, String content, boolean isNSFW,
-                                   String kind, @Nullable String posterUrl, SubmitPostListener submitPostListener) {
+                                   Locale locale, String subredditName, String title, String content,
+                                   String flair, boolean isSpoiler, boolean isNSFW, String kind,
+                                   @Nullable String posterUrl, SubmitPostListener submitPostListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
         String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
@@ -196,6 +199,8 @@ class SubmitPost {
                 params.put(RedditUtils.VIDEO_POSTER_URL_KEY, posterUrl);
                 break;
         }
+        params.put(RedditUtils.FLAIR_TEXT_KEY, flair);
+        params.put(RedditUtils.SPOILER_KEY, Boolean.toString(isSpoiler));
         params.put(RedditUtils.NSFW_KEY, Boolean.toString(isNSFW));
 
         Call<String> submitPostCall = api.submit(RedditUtils.getOAuthHeader(accessToken), params);

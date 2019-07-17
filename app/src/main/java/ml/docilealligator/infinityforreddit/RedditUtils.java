@@ -63,9 +63,10 @@ public class RedditUtils {
 
     static final String SR_KEY = "sr";
     static final String TITLE_KEY = "title";
+    static final String FLAIR_TEXT_KEY = "flair_text";
+    static final String SPOILER_KEY = "spoiler";
     static final String NSFW_KEY = "nsfw";
     static final String KIND_KEY = "kind";
-    static final String KIND_TEXT = "text";
     static final String KIND_SELF = "self";
     static final String KIND_LINK = "link";
     static final String KIND_IMAGE = "image";

@@ -77,20 +77,23 @@ public interface RedditAPI {
                                                 @HeaderMap Map<String, String> headers);
 
     @FormUrlEncoded
-    @POST("/api/comment")
+    @POST("api/comment")
     Call<String> sendComment(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
-    @POST("/api/del")
+    @POST("api/del")
     Call<String> delete(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
-    @POST("/api/submit")
+    @POST("api/submit")
     Call<String> submit(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
-    @POST("/api/media/asset.json?raw_json=1&gilding_detail=1")
+    @POST("api/media/asset.json?raw_json=1&gilding_detail=1")
     Call<String> uploadImage(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @GET("r/{subredditName}/api/link_flair.json?raw_json=1")
+    Call<String> getFlairs(@HeaderMap Map<String, String> headers, @Path("subredditName") String subredditName);
 
     @Multipart
     @POST(".")

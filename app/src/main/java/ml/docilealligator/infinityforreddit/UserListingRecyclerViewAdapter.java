@@ -64,7 +64,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
         glide = Glide.with(context.getApplicationContext());
     }
 
-    static final DiffUtil.ItemCallback<UserData> DIFF_CALLBACK = new DiffUtil.ItemCallback<UserData>() {
+    private static final DiffUtil.ItemCallback<UserData> DIFF_CALLBACK = new DiffUtil.ItemCallback<UserData>() {
         @Override
         public boolean areItemsTheSame(@NonNull UserData oldItem, @NonNull UserData newItem) {
             return oldItem.getName().equals(newItem.getName());

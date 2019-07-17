@@ -59,6 +59,57 @@
                 android:layout_height="1dp"
                 android:background="@color/dividerColor" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.libRG.CustomTextView
+                    android:id="@+id/flair_custom_text_view_post_video_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:padding="4dp"
+                    android:text="@string/flair"
+                    android:textColor="@color/primaryTextColor"
+                    android:visibility="gone"
+                    app:lib_setRadius="3dp"
+                    app:lib_setRoundedBorderColor="@color/textColorPrimaryDark"
+                    app:lib_setRoundedView="true"
+                    app:lib_setShape="rectangle" />
+
+                <com.libRG.CustomTextView
+                    android:id="@+id/spoiler_custom_text_view_post_video_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:padding="4dp"
+                    android:text="@string/spoiler"
+                    android:textColor="@color/primaryTextColor"
+                    app:lib_setRadius="3dp"
+                    app:lib_setRoundedBorderColor="@color/textColorPrimaryDark"
+                    app:lib_setRoundedView="true"
+                    app:lib_setShape="rectangle" />
+
+                <com.libRG.CustomTextView
+                    android:id="@+id/nsfw_custom_text_view_post_video_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:padding="4dp"
+                    android:text="@string/nsfw"
+                    android:textColor="@color/primaryTextColor"
+                    app:lib_setRadius="3dp"
+                    app:lib_setRoundedBorderColor="@color/colorAccent"
+                    app:lib_setRoundedView="true"
+                    app:lib_setShape="rectangle" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/dividerColor" />
+
             <EditText
                 android:id="@+id/post_title_edit_text_post_video_activity"
                 android:layout_width="match_parent"

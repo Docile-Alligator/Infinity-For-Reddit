@@ -74,4 +74,5 @@ dependencies {
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.16'
     implementation 'com.github.Ferfalk:SimpleSearchView:0.1.3'
     implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation 'com.libRG:customtextview:2.2'
 }

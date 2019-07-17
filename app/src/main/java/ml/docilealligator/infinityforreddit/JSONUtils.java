@@ -74,4 +74,5 @@ public class JSONUtils {
     static final String ARGS_KEY = "args";
     static final String FIELDS_KEY = "fields";
     static final String VALUE_KEY = "value";
+    static final String TEXT_KEY = "text";
 }
