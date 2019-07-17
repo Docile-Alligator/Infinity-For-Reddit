@@ -37,6 +37,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
+import com.libRG.CustomTextView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -139,6 +140,8 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                 int voteType = post.getVoteType();
                 int gilded = post.getGilded();
                 boolean nsfw = post.isNSFW();
+                boolean spoiler = post.isSpoiler();
+                String flair = post.getFlair();
 
                 ((DataViewHolder) holder).cardView.setOnClickListener(view -> {
                     if(canStartActivity) {
@@ -298,6 +301,21 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
 
                 if(nsfw) {
                     ((DataViewHolder) holder).nsfwChip.setVisibility(View.VISIBLE);
+                }
+
+                if(spoiler || flair != null) {
+                    ((DataViewHolder) holder).spoilerFlairLinearLayout.setVisibility(View.VISIBLE);
+                }
+
+                if(spoiler) {
+                    ((DataViewHolder) holder).spoilerTextView.setVisibility(View.VISIBLE);
+                    ((DataViewHolder) holder).spoilerTextView.setBackgroundColor(mContext.getResources().getColor(R.color.backgroundColorPrimaryDark));
+                }
+
+                if(flair != null) {
+                    ((DataViewHolder) holder).flairTextView.setVisibility(View.VISIBLE);
+                    ((DataViewHolder) holder).flairTextView.setText(flair);
+                    ((DataViewHolder) holder).flairTextView.setBackgroundColor(mContext.getResources().getColor(R.color.backgroundColorPrimaryDark));
                 }
 
                 switch (voteType) {
@@ -620,6 +638,9 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
         @BindView(R.id.gilded_number_text_view_item_post) TextView gildedNumberTextView;
         @BindView(R.id.crosspost_image_view_item_post) ImageView crosspostImageView;
         @BindView(R.id.nsfw_text_view_item_post) Chip nsfwChip;
+        @BindView(R.id.spoiler_flair_linear_layout_item_post) LinearLayout spoilerFlairLinearLayout;
+        @BindView(R.id.spoiler_custom_text_view_item_post) CustomTextView spoilerTextView;
+        @BindView(R.id.flair_custom_text_view_item_post) CustomTextView flairTextView;
         @BindView(R.id.link_text_view_item_post) TextView linkTextView;
         @BindView(R.id.image_view_wrapper_item_post) RelativeLayout relativeLayout;
         @BindView(R.id.progress_bar_item_post) ProgressBar progressBar;
@@ -670,6 +691,9 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
             ((DataViewHolder) holder).gildedNumberTextView.setVisibility(View.GONE);
             ((DataViewHolder) holder).crosspostImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).nsfwChip.setVisibility(View.GONE);
+            ((DataViewHolder) holder).spoilerFlairLinearLayout.setVisibility(View.GONE);
+            ((DataViewHolder) holder).spoilerTextView.setVisibility(View.GONE);
+            ((DataViewHolder) holder).flairTextView.setVisibility(View.GONE);
             ((DataViewHolder) holder).linkTextView.setVisibility(View.GONE);
             ((DataViewHolder) holder).progressBar.setVisibility(View.GONE);
             ((DataViewHolder) holder).imageView.setVisibility(View.GONE);

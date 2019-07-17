@@ -29,12 +29,14 @@ class Post implements Parcelable {
     private String videoUrl;
     private String gifOrVideoDownloadUrl;
     private String permalink;
+    private String flair;
     private int score;
     private int postType;
     private int voteType;
     private int gilded;
     private int previewWidth;
     private int previewHeight;
+    private boolean spoiler;
     private boolean nsfw;
     private boolean stickied;
     private boolean isCrosspost;
@@ -44,7 +46,7 @@ class Post implements Parcelable {
 
     Post(String id, String fullName, String subredditNamePrefixed, String author, String postTime,
          String title, String previewUrl, String permalink, int score, int postType, int voteType,
-         int gilded, boolean nsfw, boolean stickied, boolean isCrosspost, boolean isDashVideo) {
+         int gilded, String flair, boolean spoiler, boolean nsfw, boolean stickied, boolean isCrosspost, boolean isDashVideo) {
         this.id = id;
         this.fullName = fullName;
         this.subredditNamePrefixed = subredditNamePrefixed;
@@ -57,6 +59,8 @@ class Post implements Parcelable {
         this.postType = postType;
         this.voteType = voteType;
         this.gilded = gilded;
+        this.flair = flair;
+        this.spoiler = spoiler;
         this.nsfw = nsfw;
         this.stickied = stickied;
         this.isCrosspost = isCrosspost;
@@ -65,7 +69,8 @@ class Post implements Parcelable {
 
     Post(String id, String fullName, String subredditNamePrefixed, String author, String postTime,
          String title, String previewUrl, String url, String permalink, int score, int postType,
-         int voteType, int gilded, boolean nsfw, boolean stickied, boolean isCrosspost) {
+         int voteType, int gilded, String flair, boolean spoiler, boolean nsfw, boolean stickied,
+         boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditNamePrefixed = subredditNamePrefixed;
@@ -79,14 +84,16 @@ class Post implements Parcelable {
         this.postType = postType;
         this.voteType = voteType;
         this.gilded = gilded;
+        this.flair = flair;
+        this.spoiler = spoiler;
         this.nsfw = nsfw;
         this.stickied = stickied;
         this.isCrosspost = isCrosspost;
     }
 
     Post(String id, String fullName, String subredditNamePrefixed, String author, String postTime,
-         String title, String permalink, int score, int postType, int voteType, int gilded, boolean nsfw,
-         boolean stickied, boolean isCrosspost) {
+         String title, String permalink, int score, int postType, int voteType, int gilded, String flair,
+         boolean spoiler, boolean nsfw, boolean stickied, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditNamePrefixed = subredditNamePrefixed;
@@ -98,6 +105,8 @@ class Post implements Parcelable {
         this.postType = postType;
         this.voteType = voteType;
         this.gilded = gilded;
+        this.flair = flair;
+        this.spoiler = spoiler;
         this.nsfw = nsfw;
         this.stickied = stickied;
         this.isCrosspost= isCrosspost;
@@ -118,12 +127,14 @@ class Post implements Parcelable {
         videoUrl = in.readString();
         gifOrVideoDownloadUrl = in.readString();
         permalink = in.readString();
+        flair = in.readString();
         score = in.readInt();
         postType = in.readInt();
         voteType = in.readInt();
         gilded = in.readInt();
         previewWidth = in.readInt();
         previewHeight = in.readInt();
+        spoiler = in.readByte() != 0;
         nsfw = in.readByte() != 0;
         stickied = in.readByte() != 0;
         isCrosspost = in.readByte() != 0;
@@ -147,35 +158,35 @@ class Post implements Parcelable {
         return id;
     }
 
-    public String getFullName() {
+    String getFullName() {
         return fullName;
     }
 
-    public String getSubredditNamePrefixed() {
+    String getSubredditNamePrefixed() {
         return subredditNamePrefixed;
     }
 
-    public String getSubredditIconUrl() {
+    String getSubredditIconUrl() {
         return subredditIconUrl;
     }
 
-    public void setSubredditIconUrl(String subredditIconUrl) {
+    void setSubredditIconUrl(String subredditIconUrl) {
         this.subredditIconUrl = subredditIconUrl;
     }
 
-    public String getAuthor() {
+    String getAuthor() {
         return author;
     }
 
-    public String getAuthorIconUrl() {
+    String getAuthorIconUrl() {
         return authorIconUrl;
     }
 
-    public void setAuthorIconUrl(String authorIconUrl) {
+    void setAuthorIconUrl(String authorIconUrl) {
         this.authorIconUrl = authorIconUrl;
     }
 
-    public String getPostTime() {
+    String getPostTime() {
         return postTime;
     }
 
@@ -187,63 +198,67 @@ class Post implements Parcelable {
         return title;
     }
 
-    public void setSelfText(String selfText) {
+    void setSelfText(String selfText) {
         this.selfText = selfText;
     }
 
-    public String getSelfText() {
+    String getSelfText() {
         return selfText;
     }
 
-    public String getPreviewUrl() {
+    String getPreviewUrl() {
         return previewUrl;
     }
 
-    public String getUrl() {
+    String getUrl() {
         return url;
     }
 
-    public void setVideoUrl(String videoUrl) {
+    void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
     }
 
-    public String getVideoUrl() {
+    String getVideoUrl() {
         return videoUrl;
     }
 
-    public String getGifOrVideoDownloadUrl() {
+    String getGifOrVideoDownloadUrl() {
         return gifOrVideoDownloadUrl;
     }
 
-    public void setGifOrVideoDownloadUrl(String gifOrVideoDownloadUrl) {
+    void setGifOrVideoDownloadUrl(String gifOrVideoDownloadUrl) {
         this.gifOrVideoDownloadUrl = gifOrVideoDownloadUrl;
     }
 
-    public String getPermalink() {
+    String getPermalink() {
         return permalink;
     }
 
-    public void setScore(int score) {
+    public String getFlair() {
+        return flair;
+    }
+
+    void setScore(int score) {
         this.score = score;
     }
 
-    public int getScore() {
+    int getScore() {
         return score;
     }
 
-    public int getPostType() {
+    int getPostType() {
         return postType;
     }
 
-    public void setVoteType(int voteType) {
+    void setVoteType(int voteType) {
         this.voteType = voteType;
     }
 
-    public int getVoteType() {
+    int getVoteType() {
         return voteType;
     }
 
-    public int getGilded() {
+    int getGilded() {
         return gilded;
     }
 
@@ -263,7 +278,11 @@ class Post implements Parcelable {
         return previewHeight;
     }
 
-    public boolean isNSFW() {
+    boolean isSpoiler() {
+        return spoiler;
+    }
+
+    boolean isNSFW() {
         return nsfw;
     }
 
@@ -272,23 +291,23 @@ class Post implements Parcelable {
         return 0;
     }
 
-    public boolean isDashVideo() {
+    boolean isDashVideo() {
         return isDashVideo;
     }
 
-    public void setDownloadableGifOrVideo(boolean isDownloadableGifOrVideo) {
+    void setDownloadableGifOrVideo(boolean isDownloadableGifOrVideo) {
         this.isDownloadableGifOrVideo = isDownloadableGifOrVideo;
     }
 
-    public boolean isDownloadableGifOrVideo() {
+    boolean isDownloadableGifOrVideo() {
         return isDownloadableGifOrVideo;
     }
 
-    public boolean isStickied() {
+    boolean isStickied() {
         return stickied;
     }
 
-    public boolean isCrosspost() {
+    boolean isCrosspost() {
         return isCrosspost;
     }
 
@@ -308,12 +327,14 @@ class Post implements Parcelable {
         parcel.writeString(videoUrl);
         parcel.writeString(gifOrVideoDownloadUrl);
         parcel.writeString(permalink);
+        parcel.writeString(flair);
         parcel.writeInt(score);
         parcel.writeInt(postType);
         parcel.writeInt(voteType);
         parcel.writeInt(gilded);
         parcel.writeInt(previewWidth);
         parcel.writeInt(previewHeight);
+        parcel.writeByte((byte) (spoiler ? 1 : 0));
         parcel.writeByte((byte) (nsfw ? 1 : 0));
         parcel.writeByte((byte) (stickied ? 1 : 0));
         parcel.writeByte((byte) (isCrosspost ? 1 : 0));

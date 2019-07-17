@@ -119,10 +119,10 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
 
             if(flair != null) {
                 flairTextView.setText(flair);
-                flairTextView.setBackgroundColor(getResources().getColor(R.color.textColorPrimaryDark));
+                flairTextView.setBackgroundColor(getResources().getColor(R.color.backgroundColorPrimaryDark));
             }
             if(isSpoiler) {
-                spoilerTextView.setBackgroundColor(getResources().getColor(R.color.textColorPrimaryDark));
+                spoilerTextView.setBackgroundColor(getResources().getColor(R.color.backgroundColorPrimaryDark));
             }
             if(isNSFW) {
                 nsfwTextView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
@@ -166,7 +166,7 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
 
         spoilerTextView.setOnClickListener(view -> {
             if(!isSpoiler) {
-                spoilerTextView.setBackgroundColor(getResources().getColor(R.color.textColorPrimaryDark));
+                spoilerTextView.setBackgroundColor(getResources().getColor(R.color.backgroundColorPrimaryDark));
                 isSpoiler = true;
             } else {
                 spoilerTextView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
@@ -306,7 +306,7 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
     public void flairSelected(String flair) {
         this.flair = flair;
         flairTextView.setText(flair);
-        flairTextView.setBackgroundColor(getResources().getColor(R.color.textColorPrimaryDark));
+        flairTextView.setBackgroundColor(getResources().getColor(R.color.backgroundColorPrimaryDark));
         flairSelectionBottomSheetFragment.dismiss();
     }
 }

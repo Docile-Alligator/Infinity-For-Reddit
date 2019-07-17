@@ -32,6 +32,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.material.chip.Chip;
+import com.libRG.CustomTextView;
 import com.santalu.aspectratioimageview.AspectRatioImageView;
 
 import java.util.ArrayList;
@@ -269,6 +270,23 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 ((PostDetailViewHolder) holder).mGildedNumberTextView.setVisibility(View.VISIBLE);
                 String gildedNumber = mActivity.getResources().getString(R.string.gilded, mPost.getGilded());
                 ((PostDetailViewHolder) holder).mGildedNumberTextView.setText(gildedNumber);
+            }
+
+            if(mPost.isSpoiler() || mPost.getFlair() != null) {
+                ((PostDetailViewHolder) holder).spoilerFlairlinearLayout.setVisibility(View.VISIBLE);
+            }
+
+            if(mPost.isSpoiler()) {
+                ((PostDetailViewHolder) holder).spoilerTextView.setVisibility(View.VISIBLE);
+                ((PostDetailViewHolder) holder).spoilerTextView
+                        .setBackgroundColor(mActivity.getResources().getColor(R.color.backgroundColorPrimaryDark));
+            }
+
+            if(mPost.getFlair() != null) {
+                ((PostDetailViewHolder) holder).flairTextView.setVisibility(View.VISIBLE);
+                ((PostDetailViewHolder) holder).flairTextView.setText(mPost.getFlair());
+                ((PostDetailViewHolder) holder).flairTextView
+                        .setBackgroundColor(mActivity.getResources().getColor(R.color.backgroundColorPrimaryDark));
             }
 
             if(mPost.isNSFW()) {
@@ -677,6 +695,9 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @BindView(R.id.gilded_number_text_view_item_post_detail) TextView mGildedNumberTextView;
         @BindView(R.id.crosspost_image_view_item_post_detail) ImageView mCrosspostImageView;
         @BindView(R.id.nsfw_text_view_item_post_detail) Chip mNSFWChip;
+        @BindView(R.id.spoiler_flair_linear_layout_item_post_detail) LinearLayout spoilerFlairlinearLayout;
+        @BindView(R.id.spoiler_custom_text_view_item_post_detail) CustomTextView spoilerTextView;
+        @BindView(R.id.flair_custom_text_view_item_post_detail) CustomTextView flairTextView;
         @BindView(R.id.link_text_view_item_post_detail) TextView linkTextView;
         @BindView(R.id.image_view_wrapper_item_post_detail) RelativeLayout mRelativeLayout;
         @BindView(R.id.load_wrapper_item_post_detail) RelativeLayout mLoadWrapper;
