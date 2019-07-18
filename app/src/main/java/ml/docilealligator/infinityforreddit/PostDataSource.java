@@ -27,7 +27,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
     private Retrofit retrofit;
     private String accessToken;
     private Locale locale;
-    private String name;
+    private String subredditName;
+    private String query;
     private int postType;
     private OnPostFetchedCallback onPostFetchedCallback;
 
@@ -53,7 +54,20 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
-        this.name = subredditName;
+        this.subredditName = subredditName;
+        paginationNetworkStateLiveData = new MutableLiveData();
+        initialLoadStateLiveData = new MutableLiveData();
+        this.postType = postType;
+        this.onPostFetchedCallback = onPostFetchedCallback;
+    }
+
+    PostDataSource(Retrofit retrofit, String accessToken, Locale locale, String subredditName, String query,
+                   int postType, OnPostFetchedCallback onPostFetchedCallback) {
+        this.retrofit = retrofit;
+        this.accessToken = accessToken;
+        this.locale = locale;
+        this.subredditName = subredditName;
+        this.query = query;
         paginationNetworkStateLiveData = new MutableLiveData();
         initialLoadStateLiveData = new MutableLiveData();
         this.postType = postType;
@@ -202,7 +216,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
     private void loadSubredditPostsInitial(@NonNull final LoadInitialCallback<String, Post> callback) {
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> getPost = api.getSubredditBestPosts(name, null, RedditUtils.getOAuthHeader(accessToken));
+        Call<String> getPost = api.getSubredditBestPosts(subredditName, null, RedditUtils.getOAuthHeader(accessToken));
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
@@ -243,7 +257,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
     private void loadSubredditPostsAfter(@NonNull LoadParams<String> params, @NonNull final LoadCallback<String, Post> callback) {
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> getPost = api.getSubredditBestPosts(name, params.key, RedditUtils.getOAuthHeader(accessToken));
+        Call<String> getPost = api.getSubredditBestPosts(subredditName, params.key, RedditUtils.getOAuthHeader(accessToken));
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
@@ -277,7 +291,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
     private void loadUserPostsInitial(@NonNull final LoadInitialCallback<String, Post> callback, String lastItem) {
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> getPost = api.getUserBestPosts(name, lastItem, RedditUtils.getOAuthHeader(accessToken));
+        Call<String> getPost = api.getUserBestPosts(subredditName, lastItem, RedditUtils.getOAuthHeader(accessToken));
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
@@ -323,7 +337,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         String after = lastItem == null ? params.key : lastItem;
 
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> getPost = api.getUserBestPosts(name, after, RedditUtils.getOAuthHeader(accessToken));
+        Call<String> getPost = api.getUserBestPosts(subredditName, after, RedditUtils.getOAuthHeader(accessToken));
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
@@ -361,7 +375,14 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
     private void loadSearchPostsInitial(@NonNull final LoadInitialCallback<String, Post> callback) {
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> getPost = api.searchPosts(name, null, RedditUtils.getOAuthHeader(accessToken));
+        Call<String> getPost;
+
+        if(subredditName == null) {
+            getPost = api.searchPosts(subredditName, null, RedditUtils.getOAuthHeader(accessToken));
+        } else {
+            getPost = api.searchPostsInSpecificSubreddit(subredditName, query, null, RedditUtils.getOAuthHeader(accessToken));
+        }
+
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
@@ -402,7 +423,14 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
     private void loadSearchPostsAfter(@NonNull LoadParams<String> params, @NonNull final LoadCallback<String, Post> callback) {
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> getPost = api.searchPosts(name, params.key, RedditUtils.getOAuthHeader(accessToken));
+        Call<String> getPost;
+
+        if(subredditName == null) {
+            getPost = api.searchPosts(subredditName, params.key, RedditUtils.getOAuthHeader(accessToken));
+        } else {
+            getPost = api.searchPostsInSpecificSubreddit(subredditName, query, params.key, RedditUtils.getOAuthHeader(accessToken));
+        }
+
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {

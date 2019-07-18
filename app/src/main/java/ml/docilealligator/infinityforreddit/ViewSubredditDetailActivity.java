@@ -53,6 +53,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
     @BindView(R.id.coordinator_layout_view_subreddit_detail_activity) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_view_subreddit_detail) AppBarLayout appBarLayout;
     @BindView(R.id.collapsing_toolbar_layout_view_subreddit_detail_activity) CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.banner_image_view_view_subreddit_detail_activity) GifImageView bannerImageView;
     @BindView(R.id.icon_gif_image_view_view_subreddit_detail_activity) GifImageView iconGifImageView;
     @BindView(R.id.subscribe_subreddit_chip_view_subreddit_detail_activity) Chip subscribeSubredditChip;
@@ -62,6 +63,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
     @BindView(R.id.description_text_view_view_subreddit_detail_activity) TextView descriptionTextView;
     @BindView(R.id.fab_view_subreddit_detail_activity) FloatingActionButton fab;
 
+    private String subredditName;
     private boolean subscriptionReady = false;
     private boolean isInLazyMode = false;
 
@@ -113,11 +115,10 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
             statusBarHeight = getResources().getDimensionPixelSize(resourceId);
         }
 
-        String subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME_KEY);
+        subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME_KEY);
         String title = "r/" + subredditName;
         subredditNameTextView.setText(title);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
 
@@ -260,8 +261,8 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         if(savedInstanceState == null) {
             mFragment = new PostFragment();
             Bundle bundle = new Bundle();
-            bundle.putString(PostFragment.NAME_KEY, subredditName);
-            bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_SUBREDDIT);
+            bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME_KEY, subredditName);
+            bundle.putInt(PostFragment.EXTRA_POST_TYPE_KEY, PostDataSource.TYPE_SUBREDDIT);
             mFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
         } else {
@@ -269,8 +270,8 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
             if(mFragment == null) {
                 mFragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(PostFragment.NAME_KEY, subredditName);
-                bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_SUBREDDIT);
+                bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME_KEY, subredditName);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE_KEY, PostDataSource.TYPE_SUBREDDIT);
                 mFragment.setArguments(bundle);
             }
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
@@ -334,6 +335,12 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.action_search_view_subreddit_detail_activity:
+                Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_IS_USER, false);
+                startActivity(intent);
+                break;
             case R.id.action_refresh_view_subreddit_detail_activity:
                 if(mFragment instanceof FragmentCommunicator) {
                     ((FragmentCommunicator) mFragment).refresh();

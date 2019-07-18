@@ -51,8 +51,8 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
 
     @BindView(R.id.coordinator_layout_post_text_activity) CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.subreddit_icon_gif_image_view_post_text_activity) GifImageView iconGifImageView;
-    @BindView(R.id.subreddit_name_text_view_post_text_activity) TextView subreditNameTextView;
+    @BindView(R.id.subreddit_icon_gif_image_view_search_activity) GifImageView iconGifImageView;
+    @BindView(R.id.subreddit_name_text_view_search_activity) TextView subreditNameTextView;
     @BindView(R.id.rules_button_post_text_activity) Button rulesButton;
     @BindView(R.id.flair_custom_text_view_post_text_activity) CustomTextView flairTextView;
     @BindView(R.id.spoiler_custom_text_view_post_text_activity) CustomTextView spoilerTextView;
@@ -304,10 +304,10 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == SUBREDDIT_SELECTION_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
-                subredditName = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME_KEY);
-                iconUrl = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_ICON_URL_KEY);
+                subredditName = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME);
+                iconUrl = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_ICON_URL);
                 subredditSelected = true;
-                subredditIsUser = data.getExtras().getBoolean(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_IS_USER_KEY);
+                subredditIsUser = data.getExtras().getBoolean(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_IS_USER);
 
                 subreditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
                 subreditNameTextView.setText(subredditName);

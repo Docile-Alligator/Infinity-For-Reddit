@@ -3,70 +3,87 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".SearchActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar_search_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <FrameLayout
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar_layout_search_activity"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            app:titleEnabled="false"
+            app:toolbarId="@+id/toolbar">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar_search_activity"
+            <FrameLayout
+                android:id="@+id/toolbar_frame_layout_search_activity"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                android:layout_height="wrap_content">
 
-            <com.ferfalk.simplesearchview.SimpleSearchView
-                android:id="@+id/search_view_search_activity"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textColor="@android:color/white"
-                app:voiceSearch="true"
-                app:searchBackground="@color/colorPrimary"
-                app:cursorColor="@android:color/white"
-                app:hintColor="#E0E0E0"
-                app:iconsTint="@android:color/white"
-                app:backIconTint="@android:color/white"
-                app:iconsAlpha="1"
-                app:backIconAlpha="1" />
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    app:navigationIcon="?attr/homeAsUpIndicator"
+                    app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-        </FrameLayout>
+                <com.ferfalk.simplesearchview.SimpleSearchView
+                    android:id="@+id/search_view_search_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textColor="@android:color/white"
+                    app:backIconAlpha="1"
+                    app:backIconTint="@android:color/white"
+                    app:cursorColor="@android:color/white"
+                    app:hintColor="#E0E0E0"
+                    app:iconsAlpha="1"
+                    app:iconsTint="@android:color/white"
+                    app:searchBackground="@color/colorPrimary"
+                    app:voiceSearch="true" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_layout_search_activity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            app:tabGravity="fill"
-            app:tabMode="fixed"
-            app:tabIndicatorColor="@android:color/white"
-            app:tabIndicatorHeight="3dp"
-            app:tabSelectedTextColor="@android:color/white"
-            app:tabTextColor="@android:color/white"
-            app:tabRippleColor="?attr/colorControlHighlight"
-            app:tabUnboundedRipple="false"/>
+            </FrameLayout>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <View
-        android:id="@+id/transparent_overlay_search_activity"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#40000000"
-        android:elevation="1dp"
-        android:visibility="gone"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager_search_activity"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".SearchActivity" />
+        <RelativeLayout
+            android:id="@+id/subreddit_name_relative_layout_search_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:id="@+id/search_in_text_view_search_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_in"
+                android:textColor="@color/colorAccent" />
+
+            <TextView
+                android:id="@+id/subreddit_name_text_view_search_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="16dp"
+                android:layout_toEndOf="@id/search_in_text_view_search_activity"
+                android:text="@string/all_subreddits"
+                android:textColor="@color/primaryTextColor" />
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

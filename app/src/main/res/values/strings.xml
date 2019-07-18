@@ -128,4 +128,7 @@
 
     <string name="no_rule">No rule</string>
     <string name="error_loading_rules">Error loading rules.\nTap to retry.</string>
+
+    <string name="search_in">Search in</string>
+    <string name="all_subreddits">All subreddits</string>
 </resources>

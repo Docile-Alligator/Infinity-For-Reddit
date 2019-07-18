@@ -45,8 +45,10 @@ import retrofit2.Retrofit;
  */
 public class PostFragment extends Fragment implements FragmentCommunicator {
 
-    static final String NAME_KEY = "NK";
-    static final String POST_TYPE_KEY = "PTK";
+    static final String EXTRA_SUBREDDIT_NAME_KEY = "ENK";
+    static final String EXTRA_QUERY_KEY = "EQK";
+    static final String EXTRA_POST_TYPE_KEY = "EPTK";
+
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
     @BindView(R.id.coordinator_layout_post_fragment) CoordinatorLayout mCoordinatorLayout;
@@ -163,21 +165,43 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             return false;
         });
 
-        int postType = getArguments().getInt(POST_TYPE_KEY);
+        int postType = getArguments().getInt(EXTRA_POST_TYPE_KEY);
 
         String accessToken = activity.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
                 .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
         PostViewModel.Factory factory;
 
-        if(postType != PostDataSource.TYPE_FRONT_PAGE) {
-            String name = getArguments().getString(NAME_KEY);
+        if(postType == PostDataSource.TYPE_SEARCH) {
+            String subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME_KEY);
+            String query = getArguments().getString(EXTRA_QUERY_KEY);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mRetrofit,
                     mSharedPreferences, postType, () -> mPostViewModel.retryLoadingMore());
 
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, name, postType, new PostDataSource.OnPostFetchedCallback() {
+                    getResources().getConfiguration().locale, subredditName, query, postType, new PostDataSource.OnPostFetchedCallback() {
+                @Override
+                public void hasPost() {
+                    mFetchPostInfoLinearLayout.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void noPost() {
+                    mFetchPostInfoLinearLayout.setOnClickListener(view -> {
+                        //Do nothing
+                    });
+                    showErrorView(R.string.no_posts);
+                }
+            });
+        } else if(postType != PostDataSource.TYPE_FRONT_PAGE) {
+            String subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME_KEY);
+
+            mAdapter = new PostRecyclerViewAdapter(activity, mRetrofit,
+                    mSharedPreferences, postType, () -> mPostViewModel.retryLoadingMore());
+
+            factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
+                    getResources().getConfiguration().locale, subredditName, postType, new PostDataSource.OnPostFetchedCallback() {
                 @Override
                 public void hasPost() {
                     mFetchPostInfoLinearLayout.setVisibility(View.GONE);

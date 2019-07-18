@@ -12,6 +12,7 @@ class PostDataSourceFactory extends DataSource.Factory {
     private String accessToken;
     private Locale locale;
     private String subredditName;
+    private String query;
     private int postType;
     private PostDataSource.OnPostFetchedCallback onPostFetchedCallback;
 
@@ -28,8 +29,8 @@ class PostDataSourceFactory extends DataSource.Factory {
         this.onPostFetchedCallback = onPostFetchedCallback;
     }
 
-    PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
-                          PostDataSource.OnPostFetchedCallback onPostFetchedCallback) {
+    PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, String subredditName,
+                          int postType, PostDataSource.OnPostFetchedCallback onPostFetchedCallback) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
@@ -39,10 +40,24 @@ class PostDataSourceFactory extends DataSource.Factory {
         this.onPostFetchedCallback = onPostFetchedCallback;
     }
 
+    PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, String subredditName,
+                          String query, int postType, PostDataSource.OnPostFetchedCallback onPostFetchedCallback) {
+        this.retrofit = retrofit;
+        this.accessToken = accessToken;
+        this.locale = locale;
+        this.subredditName = subredditName;
+        this.query = query;
+        postDataSourceLiveData = new MutableLiveData<>();
+        this.postType = postType;
+        this.onPostFetchedCallback = onPostFetchedCallback;
+    }
+
     @Override
     public DataSource create() {
         if(postType == PostDataSource.TYPE_FRONT_PAGE) {
             postDataSource = new PostDataSource(retrofit, accessToken, locale, postType, onPostFetchedCallback);
+        } else if(postType == PostDataSource.TYPE_SEARCH) {
+            postDataSource = new PostDataSource(retrofit, accessToken, locale, subredditName, query, postType, onPostFetchedCallback);
         } else {
             postDataSource = new PostDataSource(retrofit, accessToken, locale, subredditName, postType, onPostFetchedCallback);
         }

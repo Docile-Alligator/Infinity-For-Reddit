@@ -28,6 +28,7 @@ class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
     private String username;
     private String userIconUrl;
+    private boolean hasClearSelectionRow;
 
     interface ItemClickListener {
         void onClick(String name, String iconUrl, boolean subredditIsUser);
@@ -38,8 +39,9 @@ class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         glide = Glide.with(context.getApplicationContext());
     }
 
-    SubscribedSubredditsRecyclerViewAdapter(Context context, ItemClickListener itemClickListener) {
+    SubscribedSubredditsRecyclerViewAdapter(Context context, boolean hasClearSelectionRow, ItemClickListener itemClickListener) {
         mContext = context;
+        this.hasClearSelectionRow = hasClearSelectionRow;
         glide = Glide.with(context.getApplicationContext());
         this.itemClickListener = itemClickListener;
     }
@@ -56,21 +58,31 @@ class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         String iconUrl;
 
         if(itemClickListener != null) {
-            if(viewHolder.getAdapterPosition() == 0) {
-                name = username;
-                iconUrl = userIconUrl;
-            } else {
-                name = mSubscribedSubredditData.get(viewHolder.getAdapterPosition() - 1).getName();
-                iconUrl = mSubscribedSubredditData.get(viewHolder.getAdapterPosition() - 1).getIconUrl();
-            }
-
-            viewHolder.itemView.setOnClickListener(view -> {
+            if(hasClearSelectionRow) {
                 if(viewHolder.getAdapterPosition() == 0) {
-                    itemClickListener.onClick(name, iconUrl, true);
+                    ((SubredditViewHolder) viewHolder).subredditNameTextView.setText(R.string.all_subreddits);
+                    viewHolder.itemView.setOnClickListener(view -> itemClickListener.onClick(null, null, false));
+                    return;
+                } else if(viewHolder.getAdapterPosition() == 1) {
+                    name = username;
+                    iconUrl = userIconUrl;
+                    viewHolder.itemView.setOnClickListener(view -> itemClickListener.onClick(name, iconUrl, true));
                 } else {
-                    itemClickListener.onClick(name, iconUrl, false);
+                    name = mSubscribedSubredditData.get(viewHolder.getAdapterPosition() - 2).getName();
+                    iconUrl = mSubscribedSubredditData.get(viewHolder.getAdapterPosition() - 2).getIconUrl();
+                    viewHolder.itemView.setOnClickListener(view -> itemClickListener.onClick(name, iconUrl, false));
                 }
-            });
+            } else {
+                if(viewHolder.getAdapterPosition() == 0) {
+                    name = username;
+                    iconUrl = userIconUrl;
+                    viewHolder.itemView.setOnClickListener(view -> itemClickListener.onClick(name, iconUrl, true));
+                } else {
+                    name = mSubscribedSubredditData.get(viewHolder.getAdapterPosition() - 1).getName();
+                    iconUrl = mSubscribedSubredditData.get(viewHolder.getAdapterPosition() - 1).getIconUrl();
+                    viewHolder.itemView.setOnClickListener(view -> itemClickListener.onClick(name, iconUrl, false));
+                }
+            }
         } else {
             name = mSubscribedSubredditData.get(viewHolder.getAdapterPosition()).getName();
             iconUrl = mSubscribedSubredditData.get(viewHolder.getAdapterPosition()).getIconUrl();
@@ -100,7 +112,11 @@ class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     public int getItemCount() {
         if(mSubscribedSubredditData != null) {
             if(itemClickListener != null) {
-                return mSubscribedSubredditData.size() + 1;
+                if(hasClearSelectionRow) {
+                    return mSubscribedSubredditData.size() + 2;
+                } else {
+                    return mSubscribedSubredditData.size() + 1;
+                }
             }
 
             return mSubscribedSubredditData.size();

@@ -65,16 +65,16 @@ public interface RedditAPI {
     @GET("subreddits/search.json?raw_json=1&include_over_18=on")
     Call<String> searchSubreddits(@Query("q") String subredditName, @Query("after") String after);
 
-    @GET("search.json?raw_json=1&type=user")
+    @GET("search.json?raw_json=1&type=user&include_over_18=on")
     Call<String> searchUsers(@Query("q") String profileName, @Query("after") String after);
 
-    @GET("search.json?raw_json=1&type=link")
+    @GET("search.json?raw_json=1&type=link&include_over_18=on")
     Call<String> searchPosts(@Query("q") String query, @Query("after") String after,
                              @HeaderMap Map<String, String> headers);
 
-    @GET("r/{subredditName}/search.json?raw_json=1&type=link&restrict_sr=true")
-    Call<String> searchPostsInSpecificSubreddit(@Query("q") String query, @Query("after") String after,
-                                                @HeaderMap Map<String, String> headers);
+    @GET("r/{subredditName}/search.json?raw_json=1&type=link&restrict_sr=true&include_over_18=on")
+    Call<String> searchPostsInSpecificSubreddit(@Path("subredditName") String subredditName, @Query("q") String query,
+                                                @Query("after") String after, @HeaderMap Map<String, String> headers);
 
     @FormUrlEncoded
     @POST("api/comment")

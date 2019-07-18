@@ -52,7 +52,7 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
 
     @BindView(R.id.coordinator_layout_post_link_activity) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.subreddit_icon_gif_image_view_post_link_activity) GifImageView iconGifImageView;
-    @BindView(R.id.subreddit_name_text_view_post_link_activity) TextView subreditNameTextView;
+    @BindView(R.id.subreddit_name_text_view_post_link_activity) TextView subredditNameTextView;
     @BindView(R.id.rules_button_post_link_activity) Button rulesButton;
     @BindView(R.id.flair_custom_text_view_post_link_activity) CustomTextView flairTextView;
     @BindView(R.id.spoiler_custom_text_view_post_link_activity) CustomTextView spoilerTextView;
@@ -109,7 +109,7 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
             isNSFW = savedInstanceState.getBoolean(IS_NSFW_STATE);
 
             if(subredditName != null) {
-                subreditNameTextView.setText(subredditName);
+                subredditNameTextView.setText(subredditName);
                 flairTextView.setVisibility(View.VISIBLE);
                 if(!loadSubredditIconSuccessful) {
                     loadSubredditIcon();
@@ -130,7 +130,7 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
         } else {
             if(getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
                 subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
-                subreditNameTextView.setText(subredditName);
+                subredditNameTextView.setText(subredditName);
                 flairTextView.setVisibility(View.VISIBLE);
                 loadSubredditIcon();
             } else {
@@ -145,7 +145,7 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
             startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
         });
 
-        subreditNameTextView.setOnClickListener(view -> {
+        subredditNameTextView.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubredditSelectionActivity.class);
             startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
         });
@@ -247,9 +247,9 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
 
                 String subredditName;
                 if(subredditIsUser) {
-                    subredditName = "u_" + subreditNameTextView.getText().toString();
+                    subredditName = "u_" + subredditNameTextView.getText().toString();
                 } else {
-                    subredditName = subreditNameTextView.getText().toString();
+                    subredditName = subredditNameTextView.getText().toString();
                 }
 
                 SubmitPost.submitTextOrLinkPost(mOauthRetrofit, sharedPreferences, mLocale, subredditName,
@@ -299,13 +299,13 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == SUBREDDIT_SELECTION_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
-                subredditName = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME_KEY);
-                iconUrl = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_ICON_URL_KEY);
+                subredditName = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME);
+                iconUrl = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_ICON_URL);
                 subredditSelected = true;
-                subredditIsUser = data.getExtras().getBoolean(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_IS_USER_KEY);
+                subredditIsUser = data.getExtras().getBoolean(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_IS_USER);
 
-                subreditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
-                subreditNameTextView.setText(subredditName);
+                subredditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
+                subredditNameTextView.setText(subredditName);
                 displaySubredditIcon();
 
                 flairTextView.setVisibility(View.VISIBLE);

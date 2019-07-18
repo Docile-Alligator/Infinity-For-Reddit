@@ -54,7 +54,7 @@ class ParseSubredditData {
                 JSONObject data = jsonResponse.getJSONObject(JSONUtils.DATA_KEY);
                 mNCurrentOnlineSubscribers = data.getInt(JSONUtils.ACTIVE_USER_COUNT_KEY);
                 subredditData = parseSubredditData(data);
-                /*String id = data.getString(JSONUtils.NAME_KEY);
+                /*String id = data.getString(JSONUtils.EXTRA_SUBREDDIT_NAME_KEY);
                 String subredditFullName = data.getString(JSONUtils.DISPLAY_NAME);
                 String description = data.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY).trim();
 

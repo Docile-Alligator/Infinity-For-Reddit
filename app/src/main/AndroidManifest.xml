@@ -20,6 +20,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".SearchActivity"
+            android:label="@string/search_activity_label"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".RulesActivity"
             android:label="@string/rules_activity_label"
             android:parentActivityName=".MainActivity" />
@@ -58,7 +63,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".SearchActivity"
+            android:name=".SearchResultActivity"
             android:label="@string/search_activity_label"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />

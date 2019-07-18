@@ -23,7 +23,6 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
-import com.ferfalk.simplesearchview.SimpleSearchView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -48,8 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.collapsing_toolbar_layout_main_activity) CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.search_view_main_activity) SimpleSearchView simpleSearchView;
-    @BindView(R.id.transparent_overlay_main_activity) View transparentOverlay;
     @BindView(R.id.profile_linear_layout_main_activity) LinearLayout profileLinearLayout;
     @BindView(R.id.subscriptions_linear_layout_main_activity) LinearLayout subscriptionLinearLayout;
     @BindView(R.id.settings_linear_layout_main_activity) LinearLayout settingsLinearLayout;
@@ -117,50 +114,6 @@ public class MainActivity extends AppCompatActivity {
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
-        transparentOverlay.setOnClickListener(view -> simpleSearchView.onBackPressed());
-
-        simpleSearchView.setOnQueryTextListener(new SimpleSearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-                intent.putExtra(SearchActivity.QUERY_KEY, query);
-                startActivity(intent);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextCleared() {
-                return false;
-            }
-        });
-
-        simpleSearchView.setOnSearchViewListener(new SimpleSearchView.SearchViewListener() {
-            @Override
-            public void onSearchViewShown() {
-                transparentOverlay.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onSearchViewClosed() {
-                transparentOverlay.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onSearchViewShownAnimation() {
-
-            }
-
-            @Override
-            public void onSearchViewClosedAnimation() {
-
-            }
-        });
-
         String accessToken = getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
         if (accessToken.equals("")) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
@@ -169,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
             if (savedInstanceState == null) {
                 mFragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_FRONT_PAGE);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE_KEY, PostDataSource.TYPE_FRONT_PAGE);
                 mFragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
             } else {
@@ -316,9 +269,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (simpleSearchView.onActivityResult(requestCode, resultCode, data)) {
-            return;
-        }
         if(requestCode == LOGIN_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             Intent intent = getIntent();
             finish();
@@ -333,7 +283,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_activity, menu);
         mMenu = menu;
-        simpleSearchView.setMenuItem(mMenu.findItem(R.id.action_search_main_activity));
         MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);
         if(isInLazyMode) {
             lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
@@ -352,6 +301,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mFragment instanceof FragmentCommunicator) {
             switch (item.getItemId()) {
+                case R.id.action_search_main_activity:
+                    Intent intent = new Intent(this, SearchActivity.class);
+                    startActivity(intent);
+                    return true;
                 case R.id.action_refresh_main_activity:
                     ((FragmentCommunicator) mFragment).refresh();
                     mFetchUserInfoSuccess = false;
@@ -384,10 +337,6 @@ public class MainActivity extends AppCompatActivity {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (simpleSearchView.onBackPressed()) {
-                return;
-            }
-
             super.onBackPressed();
         }
     }

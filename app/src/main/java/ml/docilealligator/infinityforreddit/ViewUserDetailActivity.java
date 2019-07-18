@@ -63,6 +63,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
 
+    private String userName;
     private boolean subscriptionReady = false;
     private boolean isInLazyMode = false;
 
@@ -96,7 +97,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             statusBarHeight = getResources().getDimensionPixelSize(resourceId);
         }
 
-        String userName = getIntent().getExtras().getString(EXTRA_USER_NAME_KEY);
+        userName = getIntent().getExtras().getString(EXTRA_USER_NAME_KEY);
         String title = "u/" + userName;
         userNameTextView.setText(title);
 
@@ -239,8 +240,8 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         if(savedInstanceState == null) {
             mFragment = new PostFragment();
             Bundle bundle = new Bundle();
-            bundle.putString(PostFragment.NAME_KEY, userName);
-            bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_USER);
+            bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME_KEY, userName);
+            bundle.putInt(PostFragment.EXTRA_POST_TYPE_KEY, PostDataSource.TYPE_USER);
             mFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_user_detail_activity, mFragment).commit();
         } else {
@@ -248,8 +249,8 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             if(mFragment == null) {
                 mFragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(PostFragment.NAME_KEY, userName);
-                bundle.putInt(PostFragment.POST_TYPE_KEY, PostDataSource.TYPE_USER);
+                bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME_KEY, userName);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE_KEY, PostDataSource.TYPE_USER);
                 mFragment.setArguments(bundle);
             }
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
@@ -282,6 +283,12 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.action_search_view_user_detail_activity:
+                Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, userName);
+                intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_IS_USER, true);
+                startActivity(intent);
+                break;
             case R.id.action_refresh_view_user_detail_activity:
                 if (mFragment instanceof FragmentCommunicator) {
                     ((FragmentCommunicator) mFragment).refresh();

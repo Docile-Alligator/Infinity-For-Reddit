@@ -411,10 +411,10 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == SUBREDDIT_SELECTION_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
-                subredditName = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME_KEY);
-                iconUrl = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_ICON_URL_KEY);
+                subredditName = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME);
+                iconUrl = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_ICON_URL);
                 subredditSelected = true;
-                subredditIsUser = data.getExtras().getBoolean(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_IS_USER_KEY);
+                subredditIsUser = data.getExtras().getBoolean(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_IS_USER);
 
                 subreditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
                 subreditNameTextView.setText(subredditName);

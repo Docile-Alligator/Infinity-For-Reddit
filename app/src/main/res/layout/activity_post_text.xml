@@ -26,18 +26,18 @@
                 android:paddingEnd="16dp">
 
                 <pl.droidsonroids.gif.GifImageView
-                    android:id="@+id/subreddit_icon_gif_image_view_post_text_activity"
+                    android:id="@+id/subreddit_icon_gif_image_view_search_activity"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true" />
 
                 <TextView
-                    android:id="@+id/subreddit_name_text_view_post_text_activity"
+                    android:id="@+id/subreddit_name_text_view_search_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toStartOf="@id/rules_button_post_text_activity"
-                    android:layout_toEndOf="@id/subreddit_icon_gif_image_view_post_text_activity"
+                    android:layout_toEndOf="@id/subreddit_icon_gif_image_view_search_activity"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="16dp"
