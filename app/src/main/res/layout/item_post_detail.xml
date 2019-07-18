@@ -63,7 +63,7 @@
             android:textColor="@color/primaryTextColor"
             android:textSize="18sp" />
 
-        <ru.noties.markwon.view.MarkwonView
+        <CustomView.CustomMarkwonView
             android:id="@+id/content_markdown_view_item_post_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -95,6 +95,9 @@ public interface RedditAPI {
     @GET("r/{subredditName}/api/link_flair.json?raw_json=1")
     Call<String> getFlairs(@HeaderMap Map<String, String> headers, @Path("subredditName") String subredditName);
 
+    @GET("/r/{subredditName}/about/rules.json?raw_json=1")
+    Call<String> getRules(@Path("subredditName") String subredditName);
+
     @Multipart
     @POST(".")
     Call<String> uploadMediaToAWS(@PartMap()Map<String, RequestBody> params, @Part() MultipartBody.Part file);

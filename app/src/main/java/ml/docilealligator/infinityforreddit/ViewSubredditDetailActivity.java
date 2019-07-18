@@ -45,7 +45,7 @@ import retrofit2.Retrofit;
 
 public class ViewSubredditDetailActivity extends AppCompatActivity {
 
-    static final String EXTRA_SUBREDDIT_NAME_KEY = "ESN";
+    public static final String EXTRA_SUBREDDIT_NAME_KEY = "ESN";
 
     private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";

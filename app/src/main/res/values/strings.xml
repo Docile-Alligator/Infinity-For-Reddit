@@ -9,6 +9,7 @@
     <string name="post_link_activity_label">Link Post</string>
     <string name="post_image_activity_label">Image Post</string>
     <string name="post_video_activity_label">Video Post</string>
+    <string name="rules_activity_label">Rules</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -124,4 +125,7 @@
 
     <string name="no_flair">No flair</string>
     <string name="error_loading_flairs">Error loading flairs.\nTap to retry.</string>
+
+    <string name="no_rule">No rule</string>
+    <string name="error_loading_rules">Error loading rules.\nTap to retry.</string>
 </resources>

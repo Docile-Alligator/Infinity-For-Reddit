@@ -76,4 +76,7 @@ public class JSONUtils {
     static final String VALUE_KEY = "value";
     static final String TEXT_KEY = "text";
     static final String SPOILER_KEY = "spoiler";
+    static final String RULES_KEY = "rules";
+    static final String SHORT_NAME_KEY = "short_name";
+    static final String DESCRIPTION_HTML_KEY = "description_html";
 }

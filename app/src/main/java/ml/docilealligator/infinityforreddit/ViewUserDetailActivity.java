@@ -42,7 +42,7 @@ import retrofit2.Retrofit;
 
 public class ViewUserDetailActivity extends AppCompatActivity {
 
-    static final String EXTRA_USER_NAME_KEY = "EUNK";
+    public static final String EXTRA_USER_NAME_KEY = "EUNK";
 
     private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";

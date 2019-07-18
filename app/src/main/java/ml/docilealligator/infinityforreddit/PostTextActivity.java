@@ -151,6 +151,20 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
             startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
         });
 
+        rulesButton.setOnClickListener(view -> {
+            if(subredditName == null) {
+                Snackbar.make(coordinatorLayout, R.string.select_a_subreddit, Snackbar.LENGTH_SHORT).show();
+            } else {
+                Intent intent = new Intent(this, RulesActivity.class);
+                if(subredditIsUser) {
+                    intent.putExtra(RulesActivity.EXTRA_SUBREDDIT_NAME, "u_" + subredditName);
+                } else {
+                    intent.putExtra(RulesActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                }
+                startActivity(intent);
+            }
+        });
+
         flairTextView.setOnClickListener(view -> {
             if(flair == null) {
                 flairSelectionBottomSheetFragment = new FlairBottomSheetFragment();

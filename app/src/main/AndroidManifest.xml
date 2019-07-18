@@ -20,6 +20,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".RulesActivity"
+            android:label="@string/rules_activity_label"
+            android:parentActivityName=".MainActivity" />
+        <activity
             android:name=".PostVideoActivity"
             android:label="@string/post_video_activity_label"
             android:parentActivityName=".MainActivity"

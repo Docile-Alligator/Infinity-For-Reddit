@@ -42,7 +42,7 @@
 
             </LinearLayout>
 
-            <ru.noties.markwon.view.MarkwonView
+            <CustomView.CustomMarkwonView
                 android:id="@+id/comment_markdown_view_item_post_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import CustomView.AspectRatioGifImageView;
+import CustomView.CustomMarkwonView;
 import SubredditDatabase.SubredditRoomDatabase;
 import User.UserRoomDatabase;
 import butterknife.BindView;
@@ -46,10 +47,8 @@ import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import retrofit2.Retrofit;
-import ru.noties.markwon.SpannableConfiguration;
-import ru.noties.markwon.view.MarkwonView;
 
-class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_POST_DETAIL = 0;
     private static final int VIEW_TYPE_FIRST_LOADING = 1;
     private static final int VIEW_TYPE_FIRST_LOADING_FAILED = 2;
@@ -80,10 +79,10 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         void retryFetchingMoreComments();
     }
 
-    CommentRecyclerViewAdapter(Activity activity, Retrofit retrofit, Retrofit oauthRetrofit, RequestManager glide,
-                               SharedPreferences sharedPreferences, Post post, String subredditNamePrefixed,
-                               Locale locale, LoadSubredditIconAsyncTask loadSubredditIconAsyncTask,
-                               CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
+    CommentAndPostRecyclerViewAdapter(Activity activity, Retrofit retrofit, Retrofit oauthRetrofit, RequestManager glide,
+                                      SharedPreferences sharedPreferences, Post post, String subredditNamePrefixed,
+                                      Locale locale, LoadSubredditIconAsyncTask loadSubredditIconAsyncTask,
+                                      CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
         mActivity = activity;
         mRetrofit = retrofit;
         mOauthRetrofit = oauthRetrofit;
@@ -372,7 +371,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                     if(!mPost.getSelfText().equals("")) {
                         ((PostDetailViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
-                        ((PostDetailViewHolder) holder).mContentMarkdownView.setMarkdown(getCustomSpannableConfiguration(), mPost.getSelfText());
+                        ((PostDetailViewHolder) holder).mContentMarkdownView.setMarkdown(mPost.getSelfText(), mActivity);
                     }
                     ((PostDetailViewHolder) holder).mNoPreviewLinkImageView.setVisibility(View.VISIBLE);
                     ((PostDetailViewHolder) holder).mNoPreviewLinkImageView.setOnClickListener(view -> {
@@ -389,7 +388,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                     if(!mPost.getSelfText().equals("")) {
                         ((PostDetailViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
-                        ((PostDetailViewHolder) holder).mContentMarkdownView.setMarkdown(getCustomSpannableConfiguration(), mPost.getSelfText());
+                        ((PostDetailViewHolder) holder).mContentMarkdownView.setMarkdown(mPost.getSelfText(), mActivity);
                     }
                     break;
             }
@@ -401,26 +400,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
             ((CommentViewHolder) holder).commentTimeTextView.setText(comment.getCommentTime());
 
-            SpannableConfiguration spannableConfiguration = SpannableConfiguration.builder(mActivity).linkResolver((view, link) -> {
-                if (link.startsWith("/u/") || link.startsWith("u/")) {
-                    Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, link.substring(3));
-                    mActivity.startActivity(intent);
-                } else if (link.startsWith("/r/") || link.startsWith("r/")) {
-                    Intent intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
-                    intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, link.substring(3));
-                    mActivity.startActivity(intent);
-                } else {
-                    CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                    // add share action to menu list
-                    builder.addDefaultShareMenuItem();
-                    builder.setToolbarColor(mActivity.getResources().getColor(R.color.colorPrimary));
-                    CustomTabsIntent customTabsIntent = builder.build();
-                    customTabsIntent.launchUrl(mActivity, Uri.parse(link));
-                }
-            }).build();
-
-            ((CommentViewHolder) holder).commentMarkdownView.setMarkdown(spannableConfiguration, comment.getCommentContent());
+            ((CommentViewHolder) holder).commentMarkdownView.setMarkdown(comment.getCommentContent(), mActivity);
             ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore()));
 
             ViewGroup.LayoutParams params = ((CommentViewHolder) holder).verticalBlock.getLayoutParams();
@@ -495,27 +475,6 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         } else {
             imageRequestBuilder.into(holder.mImageView);
         }
-    }
-
-    private SpannableConfiguration getCustomSpannableConfiguration() {
-        return SpannableConfiguration.builder(mActivity).linkResolver((view, link) -> {
-            if(link.startsWith("/u/") || link.startsWith("u/")) {
-                Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
-                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, link.substring(3));
-                mActivity.startActivity(intent);
-            } else if(link.startsWith("/r/") || link.startsWith("r/")) {
-                Intent intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
-                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, link.substring(3));
-                mActivity.startActivity(intent);
-            } else {
-                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                // add share action to menu list
-                builder.addDefaultShareMenuItem();
-                builder.setToolbarColor(mActivity.getResources().getColor(R.color.colorPrimary));
-                CustomTabsIntent customTabsIntent = builder.build();
-                customTabsIntent.launchUrl(mActivity, Uri.parse(link));
-            }
-        }).build();
     }
 
     void updatePost(Post post) {
@@ -689,7 +648,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @BindView(R.id.subreddit_text_view_item_post_detail) TextView mSubredditTextView;
         @BindView(R.id.post_time_text_view_item_post_detail) TextView mPostTimeTextView;
         @BindView(R.id.title_text_view_item_post_detail) TextView mTitleTextView;
-        @BindView(R.id.content_markdown_view_item_post_detail) MarkwonView mContentMarkdownView;
+        @BindView(R.id.content_markdown_view_item_post_detail) CustomMarkwonView mContentMarkdownView;
         @BindView(R.id.type_text_view_item_post_detail) Chip mTypeChip;
         @BindView(R.id.gilded_image_view_item_post_detail) ImageView mGildedImageView;
         @BindView(R.id.gilded_number_text_view_item_post_detail) TextView mGildedNumberTextView;
@@ -848,7 +807,7 @@ class CommentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     class CommentViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.author_text_view_item_post_comment) TextView authorTextView;
         @BindView(R.id.comment_time_text_view_item_post_comment) TextView commentTimeTextView;
-        @BindView(R.id.comment_markdown_view_item_post_comment) MarkwonView commentMarkdownView;
+        @BindView(R.id.comment_markdown_view_item_post_comment) CustomMarkwonView commentMarkdownView;
         @BindView(R.id.plus_button_item_post_comment) ImageView upvoteButton;
         @BindView(R.id.score_text_view_item_post_comment) TextView scoreTextView;
         @BindView(R.id.minus_button_item_post_comment) ImageView downvoteButton;

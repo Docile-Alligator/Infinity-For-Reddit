@@ -65,7 +65,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private boolean hasMoreChildren;
 
     private LinearLayoutManager mLinearLayoutManager;
-    private CommentRecyclerViewAdapter mAdapter;
+    private CommentAndPostRecyclerViewAdapter mAdapter;
     private LoadSubredditIconAsyncTask mLoadSubredditIconAsyncTask;
 
     @BindView(R.id.coordinator_layout_view_post_detail) CoordinatorLayout mCoordinatorLayout;
@@ -109,10 +109,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             mPost = savedInstanceState.getParcelable(POST_STATE);
         }
 
-        mAdapter = new CommentRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
+        mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
                 mOauthRetrofit, mGlide, mSharedPreferences, mPost,
                 mPost.getSubredditNamePrefixed(), mLocale, mLoadSubredditIconAsyncTask,
-                new CommentRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
+                new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                     @Override
                     public void updatePost(Post post) {
                         EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
