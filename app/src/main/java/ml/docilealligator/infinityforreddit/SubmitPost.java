@@ -159,7 +159,6 @@ class SubmitPost {
                 } else {
                     submitPostListener.submitFailed(response.message());
                 }
-                Log.i("image", "dddd" + response.code());
             }
 
             @Override
@@ -199,7 +198,10 @@ class SubmitPost {
                 params.put(RedditUtils.VIDEO_POSTER_URL_KEY, posterUrl);
                 break;
         }
-        params.put(RedditUtils.FLAIR_TEXT_KEY, flair);
+
+        if(flair != null) {
+            params.put(RedditUtils.FLAIR_TEXT_KEY, flair);
+        }
         params.put(RedditUtils.SPOILER_KEY, Boolean.toString(isSpoiler));
         params.put(RedditUtils.NSFW_KEY, Boolean.toString(isNSFW));
 
@@ -297,7 +299,6 @@ class SubmitPost {
                 } else {
                     uploadImageListener.uploadFailed(response.message());
                 }
-                Log.i("image", "dddd" + response.body());
             }
 
             @Override
