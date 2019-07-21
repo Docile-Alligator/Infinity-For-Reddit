@@ -24,4 +24,5 @@ interface AppComponent {
     void inject(PostVideoActivity postVideoActivity);
     void inject(FlairBottomSheetFragment flairBottomSheetFragment);
     void inject(RulesActivity rulesActivity);
+    void inject(CommentsListingFragment commentsListingFragment);
 }

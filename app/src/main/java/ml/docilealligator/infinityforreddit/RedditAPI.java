@@ -48,12 +48,15 @@ public interface RedditAPI {
     Call<String> getSubredditBestPosts(@Path("subredditName") String subredditName, @Query("after") String lastItem,
                                        @HeaderMap Map<String, String> headers);
 
-    @GET("user/{userName}.json?raw_json=1&limit=25")
-    Call<String> getUserBestPosts(@Path("userName") String userName, @Query("after") String lastItem,
+    @GET("user/{username}/submitted.json?raw_json=1&limit=25")
+    Call<String> getUserBestPosts(@Path("username") String username, @Query("after") String lastItem,
                                   @HeaderMap Map<String, String> headers);
 
     @GET("user/{username}/about.json?raw_json=1")
     Call<String> getUserData(@Path("username") String username);
+
+    @GET("user/{username}/comments.json?raw_json=1")
+    Call<String> getUserComments(@Path("username") String username, @Query("after") String after);
 
     @FormUrlEncoded
     @POST("api/subscribe")

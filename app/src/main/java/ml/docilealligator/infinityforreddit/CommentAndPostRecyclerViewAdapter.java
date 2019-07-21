@@ -442,7 +442,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.comment_load_more_comments);
             }
         } else if(holder instanceof LoadMoreCommentsFailedViewHolder) {
-            ((LoadMoreCommentsFailedViewHolder) holder).errorTextView.setText(R.string.post_load_comments_failed);
+            ((LoadMoreCommentsFailedViewHolder) holder).errorTextView.setText(R.string.load_comments_failed);
         }
     }
 

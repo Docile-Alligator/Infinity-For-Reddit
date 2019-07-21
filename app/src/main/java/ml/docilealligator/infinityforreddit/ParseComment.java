@@ -211,7 +211,7 @@ class ParseComment {
         }
     }
 
-    private static CommentData parseSingleComment(JSONObject singleCommentData, int depth, Locale locale) throws JSONException {
+    static CommentData parseSingleComment(JSONObject singleCommentData, int depth, Locale locale) throws JSONException {
         String id = singleCommentData.getString(JSONUtils.ID_KEY);
         String fullName = singleCommentData.getString(JSONUtils.NAME_KEY);
         String author = singleCommentData.getString(JSONUtils.AUTHOR_KEY);

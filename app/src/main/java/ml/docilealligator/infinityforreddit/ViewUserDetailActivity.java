@@ -15,7 +15,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -24,6 +27,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -48,13 +52,17 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
     @BindView(R.id.coordinator_layout_view_user_detail_activity) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.view_pager_view_user_detail_activity) ViewPager viewPager;
     @BindView(R.id.appbar_layout_view_user_detail) AppBarLayout appBarLayout;
+    @BindView(R.id.tab_layout_view_user_detail_activity) TabLayout tabLayout;
     @BindView(R.id.collapsing_toolbar_layout_view_user_detail_activity) CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.banner_image_view_view_user_detail_activity) GifImageView bannerImageView;
     @BindView(R.id.icon_gif_image_view_view_user_detail_activity) GifImageView iconGifImageView;
     @BindView(R.id.user_name_text_view_view_user_detail_activity) TextView userNameTextView;
     @BindView(R.id.subscribe_user_chip_view_user_detail_activity) Chip subscribeUserChip;
     @BindView(R.id.karma_text_view_view_user_detail_activity) TextView karmaTextView;
+
+    private SectionsPagerAdapter sectionsPagerAdapter;
 
     private Fragment mFragment;
     private SubscribedUserDao subscribedUserDao;
@@ -66,6 +74,8 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     private String userName;
     private boolean subscriptionReady = false;
     private boolean isInLazyMode = false;
+    private int colorPrimary;
+    private int white;
 
     @Inject
     @Named("no_oauth")
@@ -107,6 +117,29 @@ public class ViewUserDetailActivity extends AppCompatActivity {
 
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
         params.topMargin = statusBarHeight;
+
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setOffscreenPageLimit(2);
+        tabLayout.setupWithViewPager(viewPager);
+
+        colorPrimary = getResources().getColor(R.color.colorPrimary);
+        white = getResources().getColor(android.R.color.white);
+
+        appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+            @Override
+            void onStateChanged(AppBarLayout appBarLayout, State state) {
+                if(state == State.EXPANDED) {
+                    tabLayout.setTabTextColors(colorPrimary, colorPrimary);
+                    tabLayout.setSelectedTabIndicatorColor(colorPrimary);
+                    tabLayout.setBackgroundColor(white);
+                } else if(state == State.COLLAPSED) {
+                    tabLayout.setTabTextColors(white, white);
+                    tabLayout.setSelectedTabIndicatorColor(white);
+                    tabLayout.setBackgroundColor(colorPrimary);
+                }
+            }
+        });
 
         subscribedUserDao = SubscribedUserRoomDatabase.getDatabase(this).subscribedUserDao();
         glide = Glide.with(this);
@@ -238,23 +271,23 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         });
 
         if(savedInstanceState == null) {
-            mFragment = new PostFragment();
+            /*mFragment = new PostFragment();
             Bundle bundle = new Bundle();
             bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME_KEY, userName);
             bundle.putInt(PostFragment.EXTRA_POST_TYPE_KEY, PostDataSource.TYPE_USER);
             mFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_user_detail_activity, mFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_user_detail_activity, mFragment).commit();*/
         } else {
-            mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
+            /*mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
             if(mFragment == null) {
                 mFragment = new PostFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME_KEY, userName);
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE_KEY, PostDataSource.TYPE_USER);
                 mFragment.setArguments(bundle);
-            }
+            }*/
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_user_detail_activity, mFragment).commit();
+            //getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_user_detail_activity, mFragment).commit();
         }
     }
 
@@ -321,11 +354,49 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
-        getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE_KEY, mFragment);
+        //getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE_KEY, mFragment);
     }
 
     private void makeSnackbar(int resId) {
         Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).show();
+    }
+
+    public abstract static class AppBarStateChangeListener implements AppBarLayout.OnOffsetChangedListener {
+        // State
+        public enum State {
+            EXPANDED,
+            COLLAPSED,
+            IDLE
+        }
+
+        private State mCurrentState = State.IDLE;
+
+        @Override
+        public final void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+            if (i == 0) {
+                if (mCurrentState != State.EXPANDED) {
+                    onStateChanged(appBarLayout, State.EXPANDED);
+                }
+                mCurrentState = State.EXPANDED;
+            } else if (Math.abs(i) >= appBarLayout.getTotalScrollRange()) {
+                if (mCurrentState != State.COLLAPSED) {
+                    onStateChanged(appBarLayout, State.COLLAPSED);
+                }
+                mCurrentState = State.COLLAPSED;
+            } else {
+                if (mCurrentState != State.IDLE) {
+                    onStateChanged(appBarLayout, State.IDLE);
+                }
+                mCurrentState = State.IDLE;
+            }
+        }
+
+        /**
+         * Notifies on state change
+         * @param appBarLayout Layout
+         * @param state Collapse state
+         */
+        abstract void onStateChanged(AppBarLayout appBarLayout, State state);
     }
 
     private static class InsertUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -342,6 +413,73 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         protected Void doInBackground(final Void... params) {
             userDao.insert(subredditData);
             return null;
+        }
+    }
+
+    private class SectionsPagerAdapter extends FragmentPagerAdapter {
+        private PostFragment postFragment;
+        private CommentsListingFragment commentsListingFragment;
+
+        SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                PostFragment fragment = new PostFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE_KEY, PostDataSource.TYPE_USER);
+                bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME_KEY, userName);
+                fragment.setArguments(bundle);
+                return fragment;
+            }
+            CommentsListingFragment fragment = new CommentsListingFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(CommentsListingFragment.EXTRA_USERNAME_KEY, userName);
+            fragment.setArguments(bundle);
+            return fragment;
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "Posts";
+                case 1:
+                    return "Comments";
+            }
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
+            Fragment fragment = (Fragment) super.instantiateItem(container, position);
+            switch (position) {
+                case 0:
+                    postFragment = (PostFragment) fragment;
+                    break;
+                case 1:
+                    commentsListingFragment = (CommentsListingFragment) fragment;
+                    break;
+            }
+            return fragment;
+        }
+
+        public void refresh() {
+            if(postFragment != null) {
+                ((FragmentCommunicator) postFragment).refresh();
+            }
+            if(commentsListingFragment != null) {
+                ((FragmentCommunicator) commentsListingFragment).refresh();
+            }
         }
     }
 }

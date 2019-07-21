@@ -208,7 +208,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
             super(itemView);
             ButterKnife.bind(this, itemView);
             retryButton.setOnClickListener(view -> retryLoadingMoreCallback.retryLoadingMore());
-            errorTextView.setText(R.string.post_load_comments_failed);
+            errorTextView.setText(R.string.load_comments_failed);
         }
     }
 

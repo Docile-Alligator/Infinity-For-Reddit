@@ -90,15 +90,8 @@ class ParsePost {
                         return null;
                     }
 
-                    String kind = allData.getJSONObject(0).getString(JSONUtils.KIND_KEY);
-                    if(kind.equals("t3")) {
-                        //It's a post
-                        JSONObject data = allData.getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY);
-                        post = parseBasicData(data, locale, -1);
-                    } else {
-                        parseFailed = true;
-                        return null;
-                    }
+                    JSONObject data = allData.getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY);
+                    post = parseBasicData(data, locale, -1);
                 } else {
                     //Posts listing
                     int size;
@@ -109,12 +102,8 @@ class ParsePost {
                     }
 
                     for(int i = 0; i < size; i++) {
-                        String kind = allData.getJSONObject(i).getString(JSONUtils.KIND_KEY);
-                        if(kind.equals("t3")) {
-                            //It's a post
-                            JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
-                            newPosts.add(parseBasicData(data, locale, i));
-                        }
+                        JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
+                        newPosts.add(parseBasicData(data, locale, i));
                     }
                 }
             } catch (JSONException e) {

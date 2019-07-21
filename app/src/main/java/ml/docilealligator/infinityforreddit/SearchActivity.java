@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -96,6 +97,14 @@ public class SearchActivity extends AppCompatActivity {
             subredditNameTextView.setText(subredditName);
             subredditIsUser = intent.getExtras().getBoolean(EXTRA_SUBREDDIT_IS_USER);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        simpleSearchView.showSearch(false);
+        simpleSearchView.getSearchEditText().requestFocus();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
     @Override

@@ -190,7 +190,11 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                     ParsePost.parsePosts(response.body(), locale, -1, new ParsePost.ParsePostsListingListener() {
                         @Override
                         public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
-                            callback.onResult(newPosts, lastItem);
+                            if(lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
+                                callback.onResult(newPosts, null);
+                            } else {
+                                callback.onResult(newPosts, lastItem);
+                            }
                             paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                         }
 
@@ -265,7 +269,11 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                     ParsePost.parsePosts(response.body(), locale, -1, new ParsePost.ParsePostsListingListener() {
                         @Override
                         public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
-                            callback.onResult(newPosts, lastItem);
+                            if(lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
+                                callback.onResult(newPosts, null);
+                            } else {
+                                callback.onResult(newPosts, lastItem);
+                            }
                             paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                         }
 
@@ -378,7 +386,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         Call<String> getPost;
 
         if(subredditName == null) {
-            getPost = api.searchPosts(subredditName, null, RedditUtils.getOAuthHeader(accessToken));
+            getPost = api.searchPosts(query, null, RedditUtils.getOAuthHeader(accessToken));
         } else {
             getPost = api.searchPostsInSpecificSubreddit(subredditName, query, null, RedditUtils.getOAuthHeader(accessToken));
         }
@@ -438,7 +446,11 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                     ParsePost.parsePosts(response.body(), locale, -1, new ParsePost.ParsePostsListingListener() {
                         @Override
                         public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
-                            callback.onResult(newPosts, lastItem);
+                            if(lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
+                                callback.onResult(newPosts, null);
+                            } else {
+                                callback.onResult(newPosts, lastItem);
+                            }
                             paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                         }
 

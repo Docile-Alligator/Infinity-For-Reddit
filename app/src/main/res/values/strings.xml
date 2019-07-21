@@ -33,7 +33,7 @@
     <string name="no_storage_permission">No storage permission to save this file</string>
 
     <string name="load_posts_failed">Error loading posts</string>
-    <string name="post_load_comments_failed">Error loading comments</string>
+    <string name="load_comments_failed">Error loading comments</string>
     <string name="retry">Retry</string>
     <string name="comments">Comments</string>
     <string name="no_comments_yet">No comments yet. Write a comment?</string>
