@@ -15,6 +15,8 @@ class CommentData implements Parcelable {
     private String author;
     private String commentTime;
     private String commentContent;
+    private String linkId;
+    private String subredditName;
     private String parentId;
     private int score;
     private int voteType;
@@ -34,13 +36,15 @@ class CommentData implements Parcelable {
     private boolean loadMoreChildrenFailed;
 
     CommentData(String id, String fullName, String author, String commentTime, String commentContent,
-                String parentId, int score, boolean isSubmitter, String permalink, int depth,
-                boolean collapsed, boolean hasReply, boolean scoreHidden) {
+                String linkId, String subredditName, String parentId, int score, boolean isSubmitter, String permalink,
+                int depth, boolean collapsed, boolean hasReply, boolean scoreHidden) {
         this.id = id;
         this.fullName = fullName;
         this.author = author;
         this.commentTime = commentTime;
         this.commentContent = commentContent;
+        this.linkId = linkId;
+        this.subredditName = subredditName;
         this.parentId = parentId;
         this.score = score;
         this.isSubmitter = isSubmitter;
@@ -68,6 +72,8 @@ class CommentData implements Parcelable {
         author = in.readString();
         commentTime = in.readString();
         commentContent = in.readString();
+        linkId = in.readString();
+        subredditName = in.readString();
         parentId = in.readString();
         score = in.readInt();
         voteType = in.readInt();
@@ -116,6 +122,14 @@ class CommentData implements Parcelable {
 
     public String getCommentContent() {
         return commentContent;
+    }
+
+    public String getLinkId() {
+        return linkId;
+    }
+
+    public String getSubredditName() {
+        return subredditName;
     }
 
     public String getParentId() {
@@ -265,6 +279,8 @@ class CommentData implements Parcelable {
         parcel.writeString(author);
         parcel.writeString(commentTime);
         parcel.writeString(commentContent);
+        parcel.writeString(linkId);
+        parcel.writeString(subredditName);
         parcel.writeString(parentId);
         parcel.writeInt(score);
         parcel.writeInt(voteType);

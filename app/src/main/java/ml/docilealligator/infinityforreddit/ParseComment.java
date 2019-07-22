@@ -215,6 +215,8 @@ class ParseComment {
         String id = singleCommentData.getString(JSONUtils.ID_KEY);
         String fullName = singleCommentData.getString(JSONUtils.NAME_KEY);
         String author = singleCommentData.getString(JSONUtils.AUTHOR_KEY);
+        String linkId = singleCommentData.getString(JSONUtils.LINK_ID_KEY).substring(3);
+        String subredditName = singleCommentData.getString(JSONUtils.SUBREDDIT_KEY);
         String parentId = singleCommentData.getString(JSONUtils.PARENT_ID_KEY);
         boolean isSubmitter = singleCommentData.getBoolean(JSONUtils.IS_SUBMITTER_KEY);
         String commentContent = "";
@@ -238,7 +240,7 @@ class ParseComment {
         boolean collapsed = singleCommentData.getBoolean(JSONUtils.COLLAPSED_KEY);
         boolean hasReply = !(singleCommentData.get(JSONUtils.REPLIES_KEY) instanceof String);
 
-        return new CommentData(id, fullName, author, formattedSubmitTime, commentContent, parentId, score,
-                isSubmitter, permalink, depth, collapsed, hasReply, scoreHidden);
+        return new CommentData(id, fullName, author, formattedSubmitTime, commentContent, linkId,
+                subredditName, parentId, score, isSubmitter, permalink, depth, collapsed, hasReply, scoreHidden);
     }
 }

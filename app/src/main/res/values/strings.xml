@@ -131,4 +131,6 @@
 
     <string name="search_in">Search in</string>
     <string name="all_subreddits">All subreddits</string>
+
+    <string name="error_loading_post">Error loading this post.\nTap to retry.</string>
 </resources>

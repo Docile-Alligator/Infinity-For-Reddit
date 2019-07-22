@@ -155,7 +155,11 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                                         onPostFetchedCallback.hasPost();
                                     }
 
-                                    callback.onResult(newPosts, null, lastItem);
+                                    if(lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
+                                        callback.onResult(newPosts, null, null);
+                                    } else {
+                                        callback.onResult(newPosts, null, lastItem);
+                                    }
                                     initialLoadStateLiveData.postValue(NetworkState.LOADED);
                                 }
 
@@ -235,7 +239,11 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                                         onPostFetchedCallback.hasPost();
                                     }
 
-                                    callback.onResult(newPosts, null, lastItem);
+                                    if(lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
+                                        callback.onResult(newPosts, null, null);
+                                    } else {
+                                        callback.onResult(newPosts, null, lastItem);
+                                    }
                                     initialLoadStateLiveData.postValue(NetworkState.LOADED);
                                 }
 
@@ -308,17 +316,18 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
-                                    if(newPosts.size() == 0 && lastItem.equals("null")) {
-                                        callback.onResult(newPosts, null, lastItem);
-                                        initialLoadStateLiveData.postValue(NetworkState.LOADED);
+                                    if(newPosts.size() == 0) {
                                         onPostFetchedCallback.noPost();
-                                    } else if(newPosts.size() == 0) {
-                                        loadUserPostsInitial(callback, lastItem);
                                     } else {
-                                        callback.onResult(newPosts, null, lastItem);
-                                        initialLoadStateLiveData.postValue(NetworkState.LOADED);
                                         onPostFetchedCallback.hasPost();
                                     }
+
+                                    if(lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
+                                        callback.onResult(newPosts, null, null);
+                                    } else {
+                                        callback.onResult(newPosts, null, lastItem);
+                                    }
+                                    initialLoadStateLiveData.postValue(NetworkState.LOADED);
                                 }
 
                                 @Override

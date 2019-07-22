@@ -101,6 +101,9 @@ public interface RedditAPI {
     @GET("/r/{subredditName}/about/rules.json?raw_json=1")
     Call<String> getRules(@Path("subredditName") String subredditName);
 
+    @GET("/comments/{id}.json?raw_json=1")
+    Call<String> getPostAndCommentsById(@Path("id") String id, @HeaderMap Map<String, String> headers);
+
     @Multipart
     @POST(".")
     Call<String> uploadMediaToAWS(@PartMap()Map<String, RequestBody> params, @Part() MultipartBody.Part file);

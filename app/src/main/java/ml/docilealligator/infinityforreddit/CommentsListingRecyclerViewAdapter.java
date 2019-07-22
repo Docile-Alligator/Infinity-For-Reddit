@@ -18,6 +18,8 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.card.MaterialCardView;
+
 import CustomView.CustomMarkwonView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,6 +29,8 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
     private Context mContext;
     private Retrofit mOauthRetrofit;
     private SharedPreferences mSharedPreferences;
+    private int textColorPrimaryDark;
+    private int colorAccent;
 
     private static final int VIEW_TYPE_DATA = 0;
     private static final int VIEW_TYPE_ERROR = 1;
@@ -46,6 +50,8 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
         mOauthRetrofit = oauthRetrofit;
         mSharedPreferences = sharedPreferences;
         mRetryLoadingMoreCallback = retryLoadingMoreCallback;
+        textColorPrimaryDark = mContext.getResources().getColor(R.color.textColorPrimaryDark);
+        colorAccent = mContext.getResources().getColor(R.color.colorAccent);
     }
 
     private static final DiffUtil.ItemCallback<CommentData> DIFF_CALLBACK = new DiffUtil.ItemCallback<CommentData>() {
@@ -80,8 +86,23 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
         if(holder instanceof DataViewHolder) {
             CommentData comment = getItem(holder.getAdapterPosition());
 
-            String authorPrefixed = "u/" + comment.getAuthor();
-            ((DataViewHolder) holder).authorTextView.setText(authorPrefixed);
+            if(comment.getAuthor().equals(comment.getSubredditName().substring(2))) {
+                ((DataViewHolder) holder).authorTextView.setText("u/" + comment.getAuthor());
+                ((DataViewHolder) holder).authorTextView.setTextColor(textColorPrimaryDark);
+                ((DataViewHolder) holder).authorTextView.setOnClickListener(view -> {
+                    Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
+                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, comment.getAuthor());
+                    mContext.startActivity(intent);
+                });
+            } else {
+                ((DataViewHolder) holder).authorTextView.setText("r/" + comment.getSubredditName());
+                ((DataViewHolder) holder).authorTextView.setTextColor(colorAccent);
+                ((DataViewHolder) holder).authorTextView.setOnClickListener(view -> {
+                    Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
+                    intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, comment.getSubredditName());
+                    mContext.startActivity(intent);
+                });
+            }
 
             ((DataViewHolder) holder).commentTimeTextView.setText(comment.getCommentTime());
 
@@ -144,6 +165,7 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
     }
 
     class DataViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.card_view_item_comment) MaterialCardView cardView;
         @BindView(R.id.vertical_block_item_post_comment) View verticalBlock;
         @BindView(R.id.author_text_view_item_post_comment) TextView authorTextView;
         @BindView(R.id.comment_time_text_view_item_post_comment) TextView commentTimeTextView;
@@ -158,13 +180,15 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            verticalBlock.setVisibility(View.GONE);
-
-            authorTextView.setOnClickListener(view -> {
-                Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
-                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, getItem(getAdapterPosition()).getAuthor());
+            cardView.setOnClickListener(view -> {
+                Intent intent = new Intent(mContext, ViewPostDetailActivity.class);
+                intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, getItem(getAdapterPosition()).getLinkId());
                 mContext.startActivity(intent);
             });
+
+            verticalBlock.setVisibility(View.GONE);
+
+            commentMarkdownView.setOnClickListener(view -> cardView.callOnClick());
 
             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) shareButton.getLayoutParams();
             lp.addRule(RelativeLayout.ALIGN_PARENT_END);

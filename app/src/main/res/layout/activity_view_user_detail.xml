@@ -10,7 +10,7 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager_view_user_detail_activity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.appbar.AppBarLayout
@@ -113,7 +113,5 @@
             app:tabUnboundedRipple="false" />
 
     </com.google.android.material.appbar.AppBarLayout>
-
-    <!--<include layout="@layout/content_view_user_detail" />-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

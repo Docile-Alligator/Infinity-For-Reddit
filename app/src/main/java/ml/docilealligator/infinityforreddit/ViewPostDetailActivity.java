@@ -6,6 +6,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,6 +36,9 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 import static ml.docilealligator.infinityforreddit.CommentActivity.EXTRA_COMMENT_DATA_KEY;
@@ -40,6 +48,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
     static final String EXTRA_POST_DATA = "EPD";
     static final String EXTRA_POST_LIST_POSITION = "EPLI";
+    static final String EXTRA_POST_ID = "EPI";
 
     private RequestManager mGlide;
     private Locale mLocale;
@@ -70,7 +79,11 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.coordinator_layout_view_post_detail) CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.toolbar_view_post_detail_activity) Toolbar toolbar;
+    @BindView(R.id.progress_bar_view_post_detail_activity) ProgressBar mProgressBar;
     @BindView(R.id.recycler_view_view_post_detail) RecyclerView mRecyclerView;
+    @BindView(R.id.fetch_post_info_linear_layout_view_post_detail_activity) LinearLayout mFetchPostInfoLinearLayout;
+    @BindView(R.id.fetch_post_info_image_view_view_post_detail_activity) ImageView mFetchPostInfoImageView;
+    @BindView(R.id.fetch_post_info_text_view_view_post_detail_activity) TextView mFetchPostInfoTextView;
 
     @Inject @Named("no_oauth")
     Retrofit mRetrofit;
@@ -109,48 +122,145 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             mPost = savedInstanceState.getParcelable(POST_STATE);
         }
 
-        mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
-                mOauthRetrofit, mGlide, mSharedPreferences, mPost,
-                mPost.getSubredditNamePrefixed(), mLocale, mLoadSubredditIconAsyncTask,
-                new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
-                    @Override
-                    public void updatePost(Post post) {
-                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                    }
+        if(mPost == null) {
+            mProgressBar.setVisibility(View.VISIBLE);
+            fetchPostAndCommentsById(getIntent().getExtras().getString(EXTRA_POST_ID));
+        } else {
+            mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
+                    mOauthRetrofit, mGlide, mSharedPreferences, mPost,
+                    mPost.getSubredditNamePrefixed(), mLocale, mLoadSubredditIconAsyncTask,
+                    new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
+                        @Override
+                        public void updatePost(Post post) {
+                            EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                        }
 
-                    @Override
-                    public void retryFetchingMoreComments() {
+                        @Override
+                        public void retryFetchingMoreComments() {
+                            isLoadingMoreChildren = false;
+                            loadMoreChildrenSuccess = true;
+
+                            fetchMoreComments();
+                        }
+                    });
+            mRecyclerView.setAdapter(mAdapter);
+
+            if(savedInstanceState != null) {
+                isRefreshing = savedInstanceState.getBoolean(IS_REFRESHING_STATE);
+                if(isRefreshing) {
+                    isRefreshing = false;
+                    refresh();
+                } else {
+                    mAdapter.addComments(savedInstanceState.getParcelableArrayList(COMMENTS_STATE),
+                            savedInstanceState.getBoolean(HAS_MORE_CHILDREN_STATE));
+                    isLoadingMoreChildren = savedInstanceState.getBoolean(IS_LOADING_MORE_CHILDREN_STATE);
+                    children = savedInstanceState.getStringArrayList(MORE_CHILDREN_LIST_STATE);
+                    mChildrenStartingIndex = savedInstanceState.getInt(MORE_CHILDREN_STARTING_INDEX_STATE);
+                    if(isLoadingMoreChildren) {
                         isLoadingMoreChildren = false;
-                        loadMoreChildrenSuccess = true;
-
                         fetchMoreComments();
                     }
-                });
-        mRecyclerView.setAdapter(mAdapter);
-
-        if(savedInstanceState != null) {
-            isRefreshing = savedInstanceState.getBoolean(IS_REFRESHING_STATE);
-            if(isRefreshing) {
-                isRefreshing = false;
-                refresh();
-            } else {
-                mAdapter.addComments(savedInstanceState.getParcelableArrayList(COMMENTS_STATE),
-                        savedInstanceState.getBoolean(HAS_MORE_CHILDREN_STATE));
-                isLoadingMoreChildren = savedInstanceState.getBoolean(IS_LOADING_MORE_CHILDREN_STATE);
-                children = savedInstanceState.getStringArrayList(MORE_CHILDREN_LIST_STATE);
-                mChildrenStartingIndex = savedInstanceState.getInt(MORE_CHILDREN_STARTING_INDEX_STATE);
-                if(isLoadingMoreChildren) {
-                    isLoadingMoreChildren = false;
-                    fetchMoreComments();
                 }
+            } else {
+                fetchComment();
             }
-        } else {
-            fetchComment();
         }
 
         if(getIntent().hasExtra(EXTRA_POST_LIST_POSITION)) {
             postListPosition = getIntent().getExtras().getInt(EXTRA_POST_LIST_POSITION);
         }
+    }
+
+    private void fetchPostAndCommentsById(String subredditId) {
+        mFetchPostInfoLinearLayout.setVisibility(View.GONE);
+        mGlide.clear(mFetchPostInfoImageView);
+
+        String accessToken = getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
+                .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
+
+        RedditAPI api = mOauthRetrofit.create(RedditAPI.class);
+        Call<String> postAndComments = api.getPostAndCommentsById(subredditId, RedditUtils.getOAuthHeader(accessToken));
+        postAndComments.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                mProgressBar.setVisibility(View.GONE);
+
+                if(response.isSuccessful()) {
+                    ParsePost.parsePost(response.body(), mLocale, new ParsePost.ParsePostListener() {
+                        @Override
+                        public void onParsePostSuccess(Post post) {
+                            mPost = post;
+
+                            mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
+                                    mOauthRetrofit, mGlide, mSharedPreferences, mPost,
+                                    mPost.getSubredditNamePrefixed(), mLocale, mLoadSubredditIconAsyncTask,
+                                    new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
+                                        @Override
+                                        public void updatePost(Post post) {
+                                            EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                                        }
+
+                                        @Override
+                                        public void retryFetchingMoreComments() {
+                                            isLoadingMoreChildren = false;
+                                            loadMoreChildrenSuccess = true;
+
+                                            fetchMoreComments();
+                                        }
+                                    });
+                            mRecyclerView.setAdapter(mAdapter);
+
+                            ParseComment.parseComment(response.body(), new ArrayList<>(), mLocale,
+                                    new ParseComment.ParseCommentListener() {
+                                        @Override
+                                        public void onParseCommentSuccess(ArrayList<CommentData> expandedComments, String parentId, ArrayList<String> moreChildrenFullnames) {
+                                            ViewPostDetailActivity.this.children = moreChildrenFullnames;
+
+                                            hasMoreChildren = children.size() != 0;
+                                            mAdapter.addComments(expandedComments, hasMoreChildren);
+
+                                            if(children.size() > 0) {
+                                                mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                                                    @Override
+                                                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                                                        super.onScrolled(recyclerView, dx, dy);
+
+                                                        if(!isLoadingMoreChildren && loadMoreChildrenSuccess) {
+                                                            int visibleItemCount = mLinearLayoutManager.getChildCount();
+                                                            int totalItemCount = mLinearLayoutManager.getItemCount();
+                                                            int firstVisibleItemPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
+
+                                                            if ((visibleItemCount + firstVisibleItemPosition >= totalItemCount) && firstVisibleItemPosition >= 0) {
+                                                                fetchMoreComments();
+                                                            }
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onParseCommentFailed() {
+                                            mAdapter.initiallyLoadCommentsFailed();
+                                        }
+                                    });
+                        }
+
+                        @Override
+                        public void onParsePostFail() {
+                            showErrorView(subredditId);
+                        }
+                    });
+                } else {
+                    showErrorView(subredditId);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                showErrorView(subredditId);
+            }
+        });
     }
 
     private void fetchComment() {
@@ -224,6 +334,9 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             isRefreshing = true;
             mChildrenStartingIndex = 0;
 
+            mFetchPostInfoLinearLayout.setVisibility(View.GONE);
+            mGlide.clear(mFetchPostInfoImageView);
+
             fetchComment();
 
             String accessToken = getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
@@ -245,6 +358,14 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                         }
                     });
         }
+    }
+
+    private void showErrorView(String subredditId) {
+        mProgressBar.setVisibility(View.GONE);
+        mFetchPostInfoLinearLayout.setVisibility(View.VISIBLE);
+        mFetchPostInfoLinearLayout.setOnClickListener(view -> fetchPostAndCommentsById(subredditId));
+        mFetchPostInfoTextView.setText(R.string.error_loading_post);
+        mGlide.load(R.drawable.load_post_error_indicator).into(mFetchPostInfoImageView);
     }
 
     @Subscribe

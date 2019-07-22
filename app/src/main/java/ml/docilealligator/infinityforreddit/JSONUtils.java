@@ -61,6 +61,7 @@ public class JSONUtils {
     static final String IS_FRIEND_KEY = "is_friend";
     static final String JSON_KEY = "json";
     static final String PARENT_ID_KEY = "parent_id";
+    static final String LINK_ID_KEY = "link_id";
     static final String ERRORS_KEY = "errors";
     static final String ARGS_KEY = "args";
     static final String FIELDS_KEY = "fields";
