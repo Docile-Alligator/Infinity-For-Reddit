@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,6 +63,7 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
 
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
     private static final int PICK_VIDEO_REQUEST_CODE = 1;
+    private static final int CAPTURE_VIDEO_REQUEST_CODE = 2;
 
     @BindView(R.id.coordinator_layout_post_video_activity) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.subreddit_icon_gif_image_view_post_video_activity) GifImageView iconGifImageView;
@@ -233,7 +235,10 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
         });
 
         captureFab.setOnClickListener(view -> {
-
+            Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+            if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(takeVideoIntent, CAPTURE_VIDEO_REQUEST_CODE);
+            }
         });
 
         selectFromLibraryFab.setOnClickListener(view -> {
@@ -416,6 +421,9 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
                 videoUri = data.getData();
                 loadImage();
             }
+        } else if (requestCode == CAPTURE_VIDEO_REQUEST_CODE) {
+            videoUri = data.getData();
+            loadImage();
         }
     }
 

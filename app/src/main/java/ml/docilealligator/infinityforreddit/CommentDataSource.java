@@ -68,9 +68,11 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
         initialParams = params;
         initialCallback = callback;
 
+        initialLoadStateLiveData.postValue(NetworkState.LOADING);
+
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> bestPost = api.getUserComments(username, null);
-        bestPost.enqueue(new Callback<String>() {
+        Call<String> commentsCall = api.getUserComments(username, null);
+        commentsCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if(response.isSuccessful()) {
@@ -116,6 +118,8 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
     public void loadAfter(@NonNull LoadParams<String> params, @NonNull LoadCallback<String, CommentData> callback) {
         this.params = params;
         this.callback = callback;
+
+        paginationNetworkStateLiveData.postValue(NetworkState.LOADING);
 
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> bestPost = api.getUserComments(username, params.key);

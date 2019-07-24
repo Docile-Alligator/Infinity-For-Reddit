@@ -25,7 +25,8 @@
         android:id="@+id/progress_bar_view_post_detail_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_view_post_detail"

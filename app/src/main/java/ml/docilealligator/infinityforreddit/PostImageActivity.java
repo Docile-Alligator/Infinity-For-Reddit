@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +23,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -30,7 +34,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.libRG.CustomTextView;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -61,6 +66,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
 
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
     private static final int PICK_IMAGE_REQUEST_CODE = 1;
+    private static final int CAPTURE_IMAGE_REQUEST_CODE = 2;
 
     @BindView(R.id.coordinator_layout_post_image_activity) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.subreddit_icon_gif_image_view_post_image_activity) GifImageView iconGifImageView;
@@ -228,7 +234,19 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
         });
 
         captureFab.setOnClickListener(view -> {
-
+            Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if(pictureIntent.resolveActivity(getPackageManager()) != null) {
+                try {
+                    imageUri = FileProvider.getUriForFile(this, "ml.docilealligator.infinityforreddit.provider",
+                            File.createTempFile("temp_img", ".jpg", getExternalFilesDir(Environment.DIRECTORY_PICTURES)));
+                    pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    startActivityForResult(pictureIntent, CAPTURE_IMAGE_REQUEST_CODE);
+                } catch (IOException ex) {
+                    Snackbar.make(coordinatorLayout, R.string.error_creating_temp_file, Snackbar.LENGTH_SHORT).show();
+                }
+            } else {
+                Snackbar.make(coordinatorLayout, R.string.no_camera_available, Snackbar.LENGTH_SHORT).show();
+            }
         });
 
         selectFromLibraryFab.setOnClickListener(view -> {
@@ -330,21 +348,12 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
                                                     @Override
                                                     public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                                                         if(response.isSuccessful()) {
-                                                            ParsePost.parsePosts(response.body(), mLocale, 1,
-                                                                    new ParsePost.ParsePostsListingListener() {
-                                                                        @Override
-                                                                        public void onParsePostsListingSuccess(ArrayList<Post> newPostData, String lastItem) {
-                                                                            Intent intent = new Intent(PostImageActivity.this, ViewPostDetailActivity.class);
-                                                                            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, newPostData.get(0));
-                                                                            startActivity(intent);
-                                                                            finish();
-                                                                        }
-
-                                                                        @Override
-                                                                        public void onParsePostsListingFail() {
-                                                                            startViewUserDetailActivity();
-                                                                        }
-                                                                    });
+                                                            Toast.makeText(PostImageActivity.this, R.string.image_is_processing, Toast.LENGTH_SHORT).show();
+                                                            Intent intent = new Intent(PostImageActivity.this, ViewUserDetailActivity.class);
+                                                            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
+                                                                    mUserInfoSharedPreferences.getString(SharedPreferencesUtils.USER_KEY, ""));
+                                                            startActivity(intent);
+                                                            finish();
                                                         } else {
                                                             startViewUserDetailActivity();
                                                         }
@@ -433,6 +442,10 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
                 }
 
                 imageUri = data.getData();
+                loadImage();
+            }
+        } else if(requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
                 loadImage();
             }
         }

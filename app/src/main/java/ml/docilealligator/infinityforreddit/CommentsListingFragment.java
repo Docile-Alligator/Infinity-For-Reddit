@@ -113,7 +113,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
                 mProgressBar.setVisibility(View.GONE);
             } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
                 mFetchCommentInfoLinearLayout.setOnClickListener(view -> mCommentViewModel.retry());
-                showErrorView(R.string.load_posts_error);
+                showErrorView(R.string.load_comments_failed);
             } else {
                 mFetchCommentInfoLinearLayout.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.VISIBLE);
