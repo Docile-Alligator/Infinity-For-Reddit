@@ -45,9 +45,9 @@ import retrofit2.Retrofit;
  */
 public class PostFragment extends Fragment implements FragmentCommunicator {
 
-    static final String EXTRA_SUBREDDIT_NAME_KEY = "ENK";
-    static final String EXTRA_QUERY_KEY = "EQK";
-    static final String EXTRA_POST_TYPE_KEY = "EPTK";
+    static final String EXTRA_SUBREDDIT_NAME = "EN";
+    static final String EXTRA_QUERY = "EQ";
+    static final String EXTRA_POST_TYPE = "EPT";
 
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
@@ -165,7 +165,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             return false;
         });
 
-        int postType = getArguments().getInt(EXTRA_POST_TYPE_KEY);
+        int postType = getArguments().getInt(EXTRA_POST_TYPE);
 
         String accessToken = activity.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
                 .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
@@ -173,8 +173,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         PostViewModel.Factory factory;
 
         if(postType == PostDataSource.TYPE_SEARCH) {
-            String subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME_KEY);
-            String query = getArguments().getString(EXTRA_QUERY_KEY);
+            String subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
+            String query = getArguments().getString(EXTRA_QUERY);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mRetrofit,
                     mSharedPreferences, postType, () -> mPostViewModel.retryLoadingMore());
@@ -195,7 +195,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 }
             });
         } else if(postType != PostDataSource.TYPE_FRONT_PAGE) {
-            String subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME_KEY);
+            if(postType == PostDataSource.TYPE_USER) {
+                CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mFetchPostInfoLinearLayout.getLayoutParams();
+                params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                mFetchPostInfoLinearLayout.setLayoutParams(params);
+            }
+
+            String subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mRetrofit,
                     mSharedPreferences, postType, () -> mPostViewModel.retryLoadingMore());

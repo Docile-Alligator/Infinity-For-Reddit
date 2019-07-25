@@ -261,8 +261,8 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         if(savedInstanceState == null) {
             mFragment = new PostFragment();
             Bundle bundle = new Bundle();
-            bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME_KEY, subredditName);
-            bundle.putInt(PostFragment.EXTRA_POST_TYPE_KEY, PostDataSource.TYPE_SUBREDDIT);
+            bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, subredditName);
+            bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
             mFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
         } else {
@@ -270,8 +270,8 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
             if(mFragment == null) {
                 mFragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME_KEY, subredditName);
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE_KEY, PostDataSource.TYPE_SUBREDDIT);
+                bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, subredditName);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
                 mFragment.setArguments(bundle);
             }
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);

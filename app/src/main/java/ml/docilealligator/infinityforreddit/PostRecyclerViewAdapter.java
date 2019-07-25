@@ -668,7 +668,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
         ErrorViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            errorTextView.setText(R.string.load_posts_failed);
+            errorTextView.setText(R.string.load_posts_error);
             retryButton.setOnClickListener(view -> retryLoadingMoreCallback.retryLoadingMore());
         }
     }

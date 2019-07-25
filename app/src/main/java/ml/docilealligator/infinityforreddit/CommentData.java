@@ -84,8 +84,8 @@ class CommentData implements Parcelable {
         hasReply = in.readByte() != 0;
         scoreHidden = in.readByte() != 0;
         isExpanded = in.readByte() != 0;
-        children = in.readArrayList(null);
-        moreChildrenFullnames = in.readArrayList(null);
+        children = in.readArrayList(CommentData.class.getClassLoader());
+        moreChildrenFullnames = in.readArrayList(CommentData.class.getClassLoader());
         moreChildrenStartingIndex = in.readInt();
         isPlaceHolder = in.readByte() != 0;
         isLoadingMoreChildren = in.readByte() != 0;

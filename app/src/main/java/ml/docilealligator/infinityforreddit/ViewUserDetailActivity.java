@@ -273,8 +273,8 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         if(savedInstanceState == null) {
             /*mFragment = new PostFragment();
             Bundle bundle = new Bundle();
-            bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME_KEY, userName);
-            bundle.putInt(PostFragment.EXTRA_POST_TYPE_KEY, PostDataSource.TYPE_USER);
+            bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, userName);
+            bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_USER);
             mFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_user_detail_activity, mFragment).commit();*/
         } else {
@@ -282,8 +282,8 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             if(mFragment == null) {
                 mFragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME_KEY, userName);
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE_KEY, PostDataSource.TYPE_USER);
+                bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, userName);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_USER);
                 mFragment.setArguments(bundle);
             }*/
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
@@ -430,8 +430,8 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             if (position == 0) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE_KEY, PostDataSource.TYPE_USER);
-                bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME_KEY, userName);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_USER);
+                bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, userName);
                 fragment.setArguments(bundle);
                 return fragment;
             }
