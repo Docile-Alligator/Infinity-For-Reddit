@@ -133,4 +133,16 @@
     <string name="all_subreddits">All subreddits</string>
 
     <string name="error_loading_post">Error loading this post.\nTap to retry.</string>
+
+    <string name="sort">Sort</string>
+    <string name="sort_best">Best</string>
+    <string name="sort_hot">Hot</string>
+    <string name="sort_new">New</string>
+    <string name="sort_random">Random</string>
+    <string name="sort_rising">Rising</string>
+    <string name="sort_top">Top</string>
+    <string name="sort_controversial">Controversial</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

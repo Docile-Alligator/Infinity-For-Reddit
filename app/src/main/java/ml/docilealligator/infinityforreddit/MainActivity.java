@@ -37,7 +37,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SortTypeBottomSheetFragment.SortTypeSelectionCallback {
 
     private static final String FRAGMENT_OUT_STATE = "FOS";
     private static final String FETCH_USER_INFO_STATE = "FUIS";
@@ -52,8 +52,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.settings_linear_layout_main_activity) LinearLayout settingsLinearLayout;
     @BindView(R.id.fab_main_activity) FloatingActionButton fab;
 
-    private BottomSheetDialog dialog;
-
     private TextView mNameTextView;
     private TextView mKarmaTextView;
     private GifImageView mProfileImageView;
@@ -62,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
     private Fragment mFragment;
     private RequestManager glide;
     private AppBarLayout.LayoutParams params;
+    private BottomSheetDialog postTypedialog;
+    private SortTypeBottomSheetFragment sortTypeBottomSheetFragment;
 
     private String mName;
     private String mProfileImageUrl;
@@ -92,16 +92,18 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        View dialogView = View.inflate(this, R.layout.post_type_bottom_sheet, null);
-        LinearLayout textTypeLinearLayout = dialogView.findViewById(R.id.text_type_linear_layout_post_type_bottom_sheet);
-        LinearLayout linkTypeLinearLayout = dialogView.findViewById(R.id.link_type_linear_layout_post_type_bottom_sheet);
-        LinearLayout imageTypeLinearLayout = dialogView.findViewById(R.id.image_type_linear_layout_post_type_bottom_sheet);
-        LinearLayout videoTypeLinearLayout = dialogView.findViewById(R.id.video_type_linear_layout_post_type_bottom_sheet);
-
-        dialog = new BottomSheetDialog(this);
-        dialog.setContentView(dialogView);
-
         ((Infinity) getApplication()).getmAppComponent().inject(this);
+
+        View postTypeDialogView = View.inflate(this, R.layout.post_type_bottom_sheet, null);
+        LinearLayout textTypeLinearLayout = postTypeDialogView.findViewById(R.id.text_type_linear_layout_post_type_bottom_sheet);
+        LinearLayout linkTypeLinearLayout = postTypeDialogView.findViewById(R.id.link_type_linear_layout_post_type_bottom_sheet);
+        LinearLayout imageTypeLinearLayout = postTypeDialogView.findViewById(R.id.image_type_linear_layout_post_type_bottom_sheet);
+        LinearLayout videoTypeLinearLayout = postTypeDialogView.findViewById(R.id.video_type_linear_layout_post_type_bottom_sheet);
+
+        postTypedialog = new BottomSheetDialog(this);
+        postTypedialog.setContentView(postTypeDialogView);
+
+        sortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -120,11 +122,7 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(loginIntent, LOGIN_ACTIVITY_REQUEST_CODE);
         } else {
             if (savedInstanceState == null) {
-                mFragment = new PostFragment();
-                Bundle bundle = new Bundle();
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_FRONT_PAGE);
-                mFragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
+                replaceFragment(PostDataSource.SORT_TYPE_BEST);
             } else {
                 mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
@@ -186,30 +184,37 @@ public class MainActivity extends AppCompatActivity {
         textTypeLinearLayout.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, PostTextActivity.class);
             startActivity(intent);
-            dialog.dismiss();
+            postTypedialog.dismiss();
         });
 
         linkTypeLinearLayout.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, PostLinkActivity.class);
             startActivity(intent);
-            dialog.dismiss();
+            postTypedialog.dismiss();
         });
 
         imageTypeLinearLayout.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, PostImageActivity.class);
             startActivity(intent);
-            dialog.dismiss();
+            postTypedialog.dismiss();
         });
 
         videoTypeLinearLayout.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, PostVideoActivity.class);
             startActivity(intent);
-            dialog.dismiss();
+            postTypedialog.dismiss();
         });
 
-        fab.setOnClickListener(view -> {
-            dialog.show();
-        });
+        fab.setOnClickListener(view -> postTypedialog.show());
+    }
+
+    private void replaceFragment(String sortType) {
+        mFragment = new PostFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_FRONT_PAGE);
+        bundle.putString(PostFragment.EXTRA_SORT_TYPE, sortType);
+        mFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
     }
 
     private void loadUserData() {
@@ -301,6 +306,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mFragment instanceof FragmentCommunicator) {
             switch (item.getItemId()) {
+                case R.id.action_sort_main_activity:
+                    sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
+                    return true;
                 case R.id.action_search_main_activity:
                     Intent intent = new Intent(this, SearchActivity.class);
                     startActivity(intent);
@@ -350,5 +358,10 @@ public class MainActivity extends AppCompatActivity {
 
         outState.putBoolean(FETCH_USER_INFO_STATE, mFetchUserInfoSuccess);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
+    }
+
+    @Override
+    public void sortTypeSelected(String sortType) {
+        replaceFragment(sortType);
     }
 }

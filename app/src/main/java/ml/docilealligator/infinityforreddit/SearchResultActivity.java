@@ -102,6 +102,7 @@ public class SearchResultActivity extends AppCompatActivity {
                     PostFragment mFragment = new PostFragment();
                     Bundle bundle = new Bundle();
                     bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SEARCH);
+                    bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_BEST);
                     bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, mSubredditName);
                     bundle.putString(PostFragment.EXTRA_QUERY, mQuery);
                     mFragment.setArguments(bundle);

@@ -13,9 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -77,7 +77,7 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
     @BindView(R.id.capture_fab_post_video_activity) FloatingActionButton captureFab;
     @BindView(R.id.select_from_library_fab_post_video_activity) FloatingActionButton selectFromLibraryFab;
     @BindView(R.id.select_again_text_view_post_video_activity) TextView selectAgainTextView;
-    @BindView(R.id.image_view_post_video_activity) ImageView imageView;
+    @BindView(R.id.video_view_post_video_activity) VideoView videoView;
 
     private String iconUrl;
     private String subredditName;
@@ -248,19 +248,26 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
             startActivityForResult(Intent.createChooser(intent,getResources().getString(R.string.select_from_gallery)), PICK_VIDEO_REQUEST_CODE);
         });
 
+        videoView.setOnPreparedListener(mediaPlayer -> {
+            mediaPlayer.setLooping(true);
+            mediaPlayer.setVolume(0, 0);
+        });
+
         selectAgainTextView.setOnClickListener(view -> {
             videoUri = null;
             selectAgainTextView.setVisibility(View.GONE);
-            mGlide.clear(imageView);
+            videoView.stopPlayback();
+            videoView.setVisibility(View.GONE);
             constraintLayout.setVisibility(View.VISIBLE);
         });
     }
 
     private void loadImage() {
         constraintLayout.setVisibility(View.GONE);
-        imageView.setVisibility(View.VISIBLE);
+        videoView.setVisibility(View.VISIBLE);
         selectAgainTextView.setVisibility(View.VISIBLE);
-        mGlide.asBitmap().load(videoUri).into(imageView);
+        videoView.setVideoURI(videoUri);
+        videoView.start();
     }
 
     private void displaySubredditIcon() {
@@ -374,6 +381,12 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
         }
 
         return false;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        videoView.stopPlayback();
     }
 
     @Override

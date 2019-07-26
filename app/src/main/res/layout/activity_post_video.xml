@@ -166,13 +166,11 @@
                 android:textColor="@color/colorAccent"
                 android:visibility="gone" />
 
-            <ImageView
-                android:id="@+id/image_view_post_video_activity"
+            <VideoView
+                android:id="@+id/video_view_post_video_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleType="fitStart"
-                android:adjustViewBounds="true"
-                android:visibility="gone" />
+                android:visibility="gone"/>
 
         </LinearLayout>
 

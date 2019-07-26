@@ -43,7 +43,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-public class ViewSubredditDetailActivity extends AppCompatActivity {
+public class ViewSubredditDetailActivity extends AppCompatActivity implements SortTypeBottomSheetFragment.SortTypeSelectionCallback {
 
     public static final String EXTRA_SUBREDDIT_NAME_KEY = "ESN";
 
@@ -72,6 +72,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
     private BottomSheetDialog dialog;
+    private SortTypeBottomSheetFragment sortTypeBottomSheetFragment;
 
     private SubscribedSubredditDao subscribedSubredditDao;
     private SubredditViewModel mSubredditViewModel;
@@ -95,6 +96,8 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        ((Infinity) getApplication()).getmAppComponent().inject(this);
+
         View dialogView = View.inflate(this, R.layout.post_type_bottom_sheet, null);
         LinearLayout textTypeLinearLayout = dialogView.findViewById(R.id.text_type_linear_layout_post_type_bottom_sheet);
         LinearLayout linkTypeLinearLayout = dialogView.findViewById(R.id.link_type_linear_layout_post_type_bottom_sheet);
@@ -104,7 +107,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         dialog = new BottomSheetDialog(this);
         dialog.setContentView(dialogView);
 
-        ((Infinity) getApplication()).getmAppComponent().inject(this);
+        sortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
@@ -259,12 +262,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         });
 
         if(savedInstanceState == null) {
-            mFragment = new PostFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, subredditName);
-            bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
-            mFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
+            replaceFragment(PostDataSource.SORT_TYPE_BEST);
         } else {
             mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
             if(mFragment == null) {
@@ -272,6 +270,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, subredditName);
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+                bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_BEST);
                 mFragment.setArguments(bundle);
             }
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
@@ -335,6 +334,9 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.action_sort_view_subreddit_detail_activity:
+                sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
+                return true;
             case R.id.action_search_view_subreddit_detail_activity:
                 Intent intent = new Intent(this, SearchActivity.class);
                 intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, subredditName);
@@ -367,6 +369,16 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
         return false;
     }
 
+    private void replaceFragment(String sortType) {
+        mFragment = new PostFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, subredditName);
+        bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+        bundle.putString(PostFragment.EXTRA_SORT_TYPE, sortType);
+        mFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
+    }
+
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -376,6 +388,11 @@ public class ViewSubredditDetailActivity extends AppCompatActivity {
 
     private void makeSnackbar(int resId) {
         Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void sortTypeSelected(String sortType) {
+        replaceFragment(sortType);
     }
 
     private static class InsertSubredditDataAsyncTask extends AsyncTask<Void, Void, Void> {

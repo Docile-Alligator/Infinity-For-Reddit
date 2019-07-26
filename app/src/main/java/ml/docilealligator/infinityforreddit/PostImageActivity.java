@@ -260,6 +260,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
             imageUri = null;
             selectAgainTextView.setVisibility(View.GONE);
             mGlide.clear(imageView);
+            imageView.setVisibility(View.GONE);
             constraintLayout.setVisibility(View.VISIBLE);
         });
     }

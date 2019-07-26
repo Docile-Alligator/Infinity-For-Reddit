@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
+import android.text.Html;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -223,7 +224,7 @@ class ParseComment {
         if(!singleCommentData.isNull(JSONUtils.BODY_HTML_KEY)) {
             commentContent = singleCommentData.getString(JSONUtils.BODY_HTML_KEY).trim();
         }
-        String permalink = singleCommentData.getString(JSONUtils.PERMALINK_KEY);
+        String permalink = Html.fromHtml(singleCommentData.getString(JSONUtils.PERMALINK_KEY)).toString();
         int score = singleCommentData.getInt(JSONUtils.SCORE_KEY);
         long submitTime = singleCommentData.getLong(JSONUtils.CREATED_UTC_KEY) * 1000;
         boolean scoreHidden = singleCommentData.getBoolean(JSONUtils.SCORE_HIDDEN_KEY);

@@ -41,12 +41,12 @@ public interface RedditAPI {
     @GET("comments/{id}.json?raw_json=1")
     Call<String> getPost(@Path("id") String id, @HeaderMap Map<String, String> headers);
 
-    @GET("best?raw_json=1")
-    Call<String> getBestPosts(@Query("after") String lastItem, @HeaderMap Map<String, String> headers);
+    @GET("{sortType}?raw_json=1")
+    Call<String> getBestPosts(@Path("sortType") String sortType, @Query("after") String lastItem, @HeaderMap Map<String, String> headers);
 
-    @GET("r/{subredditName}.json?raw_json=1&limit=25")
-    Call<String> getSubredditBestPosts(@Path("subredditName") String subredditName, @Query("after") String lastItem,
-                                       @HeaderMap Map<String, String> headers);
+    @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=25")
+    Call<String> getSubredditBestPosts(@Path("subredditName") String subredditName, @Path("sortType") String sortType,
+                                       @Query("after") String lastItem, @HeaderMap Map<String, String> headers);
 
     @GET("user/{username}/submitted.json?raw_json=1&limit=25")
     Call<String> getUserBestPosts(@Path("username") String username, @Query("after") String lastItem,

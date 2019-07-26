@@ -48,6 +48,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     static final String EXTRA_SUBREDDIT_NAME = "EN";
     static final String EXTRA_QUERY = "EQ";
     static final String EXTRA_POST_TYPE = "EPT";
+    static final String EXTRA_SORT_TYPE = "EST";
 
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
@@ -166,6 +167,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         });
 
         int postType = getArguments().getInt(EXTRA_POST_TYPE);
+        String sortType = getArguments().getString(EXTRA_SORT_TYPE);
 
         String accessToken = activity.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
                 .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
@@ -178,9 +180,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mRetrofit,
                     mSharedPreferences, postType, () -> mPostViewModel.retryLoadingMore());
-
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, subredditName, query, postType, new PostDataSource.OnPostFetchedCallback() {
+                    getResources().getConfiguration().locale, subredditName, query, postType, sortType, new PostDataSource.OnPostFetchedCallback() {
                 @Override
                 public void hasPost() {
                     mFetchPostInfoLinearLayout.setVisibility(View.GONE);
@@ -194,12 +195,31 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     showErrorView(R.string.no_posts);
                 }
             });
-        } else if(postType != PostDataSource.TYPE_FRONT_PAGE) {
-            if(postType == PostDataSource.TYPE_USER) {
-                CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mFetchPostInfoLinearLayout.getLayoutParams();
-                params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                mFetchPostInfoLinearLayout.setLayoutParams(params);
-            }
+        } else if(postType == PostDataSource.TYPE_SUBREDDIT) {
+            String subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
+
+            mAdapter = new PostRecyclerViewAdapter(activity, mRetrofit,
+                    mSharedPreferences, postType, () -> mPostViewModel.retryLoadingMore());
+
+            factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
+                    getResources().getConfiguration().locale, subredditName, postType, sortType, new PostDataSource.OnPostFetchedCallback() {
+                @Override
+                public void hasPost() {
+                    mFetchPostInfoLinearLayout.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void noPost() {
+                    mFetchPostInfoLinearLayout.setOnClickListener(view -> {
+                        //Do nothing
+                    });
+                    showErrorView(R.string.no_posts);
+                }
+            });
+        } else if(postType == PostDataSource.TYPE_USER) {
+            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mFetchPostInfoLinearLayout.getLayoutParams();
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            mFetchPostInfoLinearLayout.setLayoutParams(params);
 
             String subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
 
@@ -207,7 +227,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     mSharedPreferences, postType, () -> mPostViewModel.retryLoadingMore());
 
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, subredditName, postType, new PostDataSource.OnPostFetchedCallback() {
+                    getResources().getConfiguration().locale, subredditName, postType, sortType,
+                    new PostDataSource.OnPostFetchedCallback() {
                 @Override
                 public void hasPost() {
                     mFetchPostInfoLinearLayout.setVisibility(View.GONE);
@@ -226,7 +247,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     mSharedPreferences, postType, () -> mPostViewModel.retryLoadingMore());
 
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, postType, new PostDataSource.OnPostFetchedCallback() {
+                    getResources().getConfiguration().locale, postType, sortType, new PostDataSource.OnPostFetchedCallback() {
                 @Override
                 public void hasPost() {
                     mFetchPostInfoLinearLayout.setVisibility(View.GONE);

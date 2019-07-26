@@ -4,21 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="ml.docilealligator.infinityforreddit.ViewSubredditDetailActivity">
     <item
-        android:id="@+id/action_search_view_subreddit_detail_activity"
+        android:id="@+id/action_sort_view_subreddit_detail_activity"
         android:orderInCategory="1"
+        android:title="@string/action_search"
+        android:icon="@drawable/ic_outline_sort_24px"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_search_view_subreddit_detail_activity"
+        android:orderInCategory="2"
         android:title="@string/action_search"
         android:icon="@drawable/ic_search_white_24dp"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_refresh_view_subreddit_detail_activity"
-        android:orderInCategory="2"
+        android:orderInCategory="3"
         android:title="@string/action_refresh"
         android:icon="@drawable/ic_refresh_white_24dp"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_lazy_mode_view_subreddit_detail_activity"
-        android:orderInCategory="3"
+        android:orderInCategory="4"
         android:title="@string/action_start_lazy_mode"
         app:showAsAction="never" />
 </menu>

@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
+import android.text.Html;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -122,7 +123,7 @@ class ParsePost {
                     parsePostListener.onParsePostSuccess(post);
                 }
             } else {
-                if(newPosts != null) {
+                if(parsePostsListingListener != null) {
                     parsePostsListingListener.onParsePostsListingFail();
                 } else {
                     parsePostListener.onParsePostFail();
@@ -160,7 +161,7 @@ class ParsePost {
         postTimeCalendar.setTimeInMillis(postTime);
         String formattedPostTime = new SimpleDateFormat("MMM d, YYYY, HH:mm",
                 locale).format(postTimeCalendar.getTime());
-        String permalink = data.getString(JSONUtils.PERMALINK_KEY);
+        String permalink = Html.fromHtml(data.getString(JSONUtils.PERMALINK_KEY)).toString();
 
         String previewUrl = "";
         int previewWidth = -1;
@@ -194,7 +195,7 @@ class ParsePost {
         Post post;
 
         boolean isVideo = data.getBoolean(JSONUtils.IS_VIDEO_KEY);
-        String url = data.getString(JSONUtils.URL_KEY);
+        String url = Html.fromHtml(data.getString(JSONUtils.URL_KEY)).toString();
 
         if(!data.has(JSONUtils.PREVIEW_KEY) && previewUrl.equals("")) {
             if(url.contains(permalink)) {
@@ -224,8 +225,8 @@ class ParsePost {
             }
         } else {
             if(previewUrl.equals("")) {
-                previewUrl = data.getJSONObject(JSONUtils.PREVIEW_KEY).getJSONArray(JSONUtils.IMAGES_KEY).getJSONObject(0)
-                        .getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY);
+                previewUrl = Html.fromHtml(data.getJSONObject(JSONUtils.PREVIEW_KEY).getJSONArray(JSONUtils.IMAGES_KEY).getJSONObject(0)
+                        .getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY)).toString();
             }
 
             if(isVideo) {
@@ -233,7 +234,7 @@ class ParsePost {
                 Log.i("video", Integer.toString(i));
                 JSONObject redditVideoObject = data.getJSONObject(JSONUtils.MEDIA_KEY).getJSONObject(JSONUtils.REDDIT_VIDEO_KEY);
                 int postType = Post.VIDEO_TYPE;
-                String videoUrl = redditVideoObject.getString(JSONUtils.DASH_URL_KEY);
+                String videoUrl = Html.fromHtml(redditVideoObject.getString(JSONUtils.DASH_URL_KEY)).toString();
 
                 post = new Post(id, fullName, subredditNamePrefixed, author, formattedPostTime,
                         title, previewUrl, permalink, score, postType, voteType,
@@ -249,8 +250,8 @@ class ParsePost {
                     //Gif video post (MP4)
                     Log.i("gif video mp4", Integer.toString(i));
                     int postType = Post.GIF_VIDEO_TYPE;
-                    String videoUrl = variations.getJSONObject(JSONUtils.VARIANTS_KEY).getJSONObject(JSONUtils.MP4_KEY).getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY);
-                    String gifDownloadUrl = variations.getJSONObject(JSONUtils.VARIANTS_KEY).getJSONObject(JSONUtils.GIF_KEY).getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY);
+                    String videoUrl = Html.fromHtml(variations.getJSONObject(JSONUtils.VARIANTS_KEY).getJSONObject(JSONUtils.MP4_KEY).getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY)).toString();
+                    String gifDownloadUrl = Html.fromHtml(variations.getJSONObject(JSONUtils.VARIANTS_KEY).getJSONObject(JSONUtils.GIF_KEY).getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY)).toString();
 
                     post = new Post(id, fullName, subredditNamePrefixed, author, formattedPostTime, title,
                             previewUrl, permalink, score, postType, voteType,
@@ -264,8 +265,8 @@ class ParsePost {
                     //Gif video post (Dash)
                     Log.i("gif video dash", Integer.toString(i));
                     int postType = Post.GIF_VIDEO_TYPE;
-                    String videoUrl = data.getJSONObject(JSONUtils.PREVIEW_KEY)
-                            .getJSONObject(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY).getString(JSONUtils.DASH_URL_KEY);
+                    String videoUrl = Html.fromHtml(data.getJSONObject(JSONUtils.PREVIEW_KEY)
+                            .getJSONObject(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY).getString(JSONUtils.DASH_URL_KEY)).toString();
 
                     post = new Post(id, fullName, subredditNamePrefixed, author, formattedPostTime, title,
                             previewUrl, permalink, score, postType, voteType,
