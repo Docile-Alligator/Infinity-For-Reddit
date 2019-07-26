@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,7 +22,6 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -43,7 +41,8 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-public class ViewSubredditDetailActivity extends AppCompatActivity implements SortTypeBottomSheetFragment.SortTypeSelectionCallback {
+public class ViewSubredditDetailActivity extends AppCompatActivity implements SortTypeBottomSheetFragment.SortTypeSelectionCallback,
+        PostTypeBottomSheetFragment.PostTypeSelectionCallback {
 
     public static final String EXTRA_SUBREDDIT_NAME_KEY = "ESN";
 
@@ -71,7 +70,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     private Fragment mFragment;
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
-    private BottomSheetDialog dialog;
+    private PostTypeBottomSheetFragment postTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment sortTypeBottomSheetFragment;
 
     private SubscribedSubredditDao subscribedSubredditDao;
@@ -98,15 +97,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
 
         ((Infinity) getApplication()).getmAppComponent().inject(this);
 
-        View dialogView = View.inflate(this, R.layout.post_type_bottom_sheet, null);
-        LinearLayout textTypeLinearLayout = dialogView.findViewById(R.id.text_type_linear_layout_post_type_bottom_sheet);
-        LinearLayout linkTypeLinearLayout = dialogView.findViewById(R.id.link_type_linear_layout_post_type_bottom_sheet);
-        LinearLayout imageTypeLinearLayout = dialogView.findViewById(R.id.image_type_linear_layout_post_type_bottom_sheet);
-        LinearLayout videoTypeLinearLayout = dialogView.findViewById(R.id.video_type_linear_layout_post_type_bottom_sheet);
-
-        dialog = new BottomSheetDialog(this);
-        dialog.setContentView(dialogView);
-
+        postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
         sortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
@@ -277,37 +268,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
         }
 
-        textTypeLinearLayout.setOnClickListener(view -> {
-            Intent intent = new Intent(this, PostTextActivity.class);
-            intent.putExtra(PostTextActivity.EXTRA_SUBREDDIT_NAME, subredditName);
-            startActivity(intent);
-            dialog.dismiss();
-        });
-
-        linkTypeLinearLayout.setOnClickListener(view -> {
-            Intent intent = new Intent(this, PostLinkActivity.class);
-            intent.putExtra(PostLinkActivity.EXTRA_SUBREDDIT_NAME, subredditName);
-            startActivity(intent);
-            dialog.dismiss();
-        });
-
-        imageTypeLinearLayout.setOnClickListener(view -> {
-            Intent intent = new Intent(this, PostImageActivity.class);
-            intent.putExtra(PostImageActivity.EXTRA_SUBREDDIT_NAME, subredditName);
-            startActivity(intent);
-            dialog.dismiss();
-        });
-
-        videoTypeLinearLayout.setOnClickListener(view -> {
-            Intent intent = new Intent(this, PostVideoActivity.class);
-            intent.putExtra(PostVideoActivity.EXTRA_SUBREDDIT_NAME, subredditName);
-            startActivity(intent);
-            dialog.dismiss();
-        });
-
-        fab.setOnClickListener(view -> {
-            dialog.show();
-        });
+        fab.setOnClickListener(view -> postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag()));
     }
 
     @Override
@@ -393,6 +354,32 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     @Override
     public void sortTypeSelected(String sortType) {
         replaceFragment(sortType);
+    }
+
+    @Override
+    public void postTypeSelected(int postType) {
+        Intent intent;
+        switch (postType) {
+            case PostTypeBottomSheetFragment.TYPE_TEXT:
+                intent = new Intent(this, PostTextActivity.class);
+                intent.putExtra(PostTextActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                startActivity(intent);
+                break;
+            case PostTypeBottomSheetFragment.TYPE_LINK:
+                intent = new Intent(this, PostLinkActivity.class);
+                intent.putExtra(PostTextActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                startActivity(intent);
+                break;
+            case PostTypeBottomSheetFragment.TYPE_IMAGE:
+                intent = new Intent(this, PostImageActivity.class);
+                intent.putExtra(PostTextActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                startActivity(intent);
+                break;
+            case PostTypeBottomSheetFragment.TYPE_VIDEO:
+                intent = new Intent(this, PostVideoActivity.class);
+                intent.putExtra(PostTextActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                startActivity(intent);
+        }
     }
 
     private static class InsertSubredditDataAsyncTask extends AsyncTask<Void, Void, Void> {

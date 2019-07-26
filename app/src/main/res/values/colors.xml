@@ -23,4 +23,6 @@
     <color name="backgroundColor">#FFFFFF</color>
 
     <color name="backgroundColorPrimaryDark">@color/colorPrimaryDark</color>
+
+    <color name="roundedBottomSheetPrimaryNavigationBarColor">#000000</color>
 </resources>

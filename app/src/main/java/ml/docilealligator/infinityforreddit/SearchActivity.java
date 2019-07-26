@@ -147,14 +147,6 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        if (simpleSearchView.onBackPressed()) {
-            return;
-        }
-        super.onBackPressed();
-    }
-
-    @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(SUBREDDIT_NAME_STATE, subredditName);

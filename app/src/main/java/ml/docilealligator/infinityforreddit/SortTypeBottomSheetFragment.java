@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SortTypeBottomSheetFragment extends BottomSheetDialogFragment {
+public class SortTypeBottomSheetFragment extends RoundedBottomSheetDialogFragment {
 
     interface SortTypeSelectionCallback {
         void sortTypeSelected(String sortType);

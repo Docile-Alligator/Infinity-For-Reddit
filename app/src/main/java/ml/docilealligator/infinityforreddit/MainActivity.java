@@ -25,7 +25,6 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import javax.inject.Inject;
@@ -37,7 +36,8 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-public class MainActivity extends AppCompatActivity implements SortTypeBottomSheetFragment.SortTypeSelectionCallback {
+public class MainActivity extends AppCompatActivity implements SortTypeBottomSheetFragment.SortTypeSelectionCallback,
+        PostTypeBottomSheetFragment.PostTypeSelectionCallback {
 
     private static final String FRAGMENT_OUT_STATE = "FOS";
     private static final String FETCH_USER_INFO_STATE = "FUIS";
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     private Fragment mFragment;
     private RequestManager glide;
     private AppBarLayout.LayoutParams params;
-    private BottomSheetDialog postTypedialog;
+    private PostTypeBottomSheetFragment postTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment sortTypeBottomSheetFragment;
 
     private String mName;
@@ -94,15 +94,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
         ((Infinity) getApplication()).getmAppComponent().inject(this);
 
-        View postTypeDialogView = View.inflate(this, R.layout.post_type_bottom_sheet, null);
-        LinearLayout textTypeLinearLayout = postTypeDialogView.findViewById(R.id.text_type_linear_layout_post_type_bottom_sheet);
-        LinearLayout linkTypeLinearLayout = postTypeDialogView.findViewById(R.id.link_type_linear_layout_post_type_bottom_sheet);
-        LinearLayout imageTypeLinearLayout = postTypeDialogView.findViewById(R.id.image_type_linear_layout_post_type_bottom_sheet);
-        LinearLayout videoTypeLinearLayout = postTypeDialogView.findViewById(R.id.video_type_linear_layout_post_type_bottom_sheet);
-
-        postTypedialog = new BottomSheetDialog(this);
-        postTypedialog.setContentView(postTypeDialogView);
-
+        postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
         sortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -181,31 +173,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             });
         }
 
-        textTypeLinearLayout.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, PostTextActivity.class);
-            startActivity(intent);
-            postTypedialog.dismiss();
-        });
-
-        linkTypeLinearLayout.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, PostLinkActivity.class);
-            startActivity(intent);
-            postTypedialog.dismiss();
-        });
-
-        imageTypeLinearLayout.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, PostImageActivity.class);
-            startActivity(intent);
-            postTypedialog.dismiss();
-        });
-
-        videoTypeLinearLayout.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, PostVideoActivity.class);
-            startActivity(intent);
-            postTypedialog.dismiss();
-        });
-
-        fab.setOnClickListener(view -> postTypedialog.show());
+        fab.setOnClickListener(view -> postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag()));
     }
 
     private void replaceFragment(String sortType) {
@@ -303,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (mFragment instanceof FragmentCommunicator) {
             switch (item.getItemId()) {
                 case R.id.action_sort_main_activity:
@@ -363,5 +331,27 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     @Override
     public void sortTypeSelected(String sortType) {
         replaceFragment(sortType);
+    }
+
+    @Override
+    public void postTypeSelected(int postType) {
+        Intent intent;
+        switch (postType) {
+            case PostTypeBottomSheetFragment.TYPE_TEXT:
+                intent = new Intent(MainActivity.this, PostTextActivity.class);
+                startActivity(intent);
+                break;
+            case PostTypeBottomSheetFragment.TYPE_LINK:
+                intent = new Intent(MainActivity.this, PostLinkActivity.class);
+                startActivity(intent);
+                break;
+            case PostTypeBottomSheetFragment.TYPE_IMAGE:
+                intent = new Intent(MainActivity.this, PostImageActivity.class);
+                startActivity(intent);
+                break;
+            case PostTypeBottomSheetFragment.TYPE_VIDEO:
+                intent = new Intent(MainActivity.this, PostVideoActivity.class);
+                startActivity(intent);
+        }
     }
 }
