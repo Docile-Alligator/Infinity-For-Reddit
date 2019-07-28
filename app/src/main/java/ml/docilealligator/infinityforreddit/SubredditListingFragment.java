@@ -10,6 +10,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 
@@ -17,11 +23,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import SubscribedSubredditDatabase.SubscribedSubredditRoomDatabase;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Retrofit;
@@ -79,7 +80,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         mQuery = getArguments().getString(QUERY_KEY);
 
         SubredditListingViewModel.Factory factory = new SubredditListingViewModel.Factory(mRetrofit, mQuery,
-                new SubredditListingDataSource.OnSubredditListingDataFetchedCallback() {
+                PostDataSource.SORT_TYPE_RELEVANCE, new SubredditListingDataSource.OnSubredditListingDataFetchedCallback() {
             @Override
             public void hasSubreddit() {
                 mFetchSubredditListingInfoLinearLayout.setVisibility(View.GONE);
@@ -87,11 +88,8 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
             @Override
             public void noSubreddit() {
-                mFetchSubredditListingInfoLinearLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //Do nothing
-                    }
+                mFetchSubredditListingInfoLinearLayout.setOnClickListener(view -> {
+                    //Do nothing
                 });
                 showErrorView(R.string.no_subreddits);
             }
@@ -133,6 +131,10 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
             mFetchSubredditListingInfoTextView.setText(stringResId);
             Glide.with(this).load(R.drawable.load_post_error_indicator).into(mFetchSubredditListingInfoImageView);
         }
+    }
+
+    void changeSortType(String sortType) {
+        mSubredditListingViewModel.changeSortType(sortType);
     }
 
     @Override

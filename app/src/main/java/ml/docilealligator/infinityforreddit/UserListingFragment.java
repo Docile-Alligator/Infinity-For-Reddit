@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +10,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 
@@ -18,11 +23,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import SubscribedUserDatabase.SubscribedUserRoomDatabase;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Retrofit;
@@ -85,11 +85,8 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
 
         mQuery = getArguments().getString(QUERY_KEY);
 
-        String accessToken = getActivity().getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
-                .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
-
         UserListingViewModel.Factory factory = new UserListingViewModel.Factory(mRetrofit, mQuery,
-                new UserListingDataSource.OnUserListingDataFetchedCallback() {
+                PostDataSource.SORT_TYPE_RELEVANCE, new UserListingDataSource.OnUserListingDataFetchedCallback() {
                     @Override
                     public void hasUser() {
                         mFetchUserListingInfoLinearLayout.setVisibility(View.GONE);
@@ -97,11 +94,8 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
 
                     @Override
                     public void noUser() {
-                        mFetchUserListingInfoLinearLayout.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                //Do nothing
-                            }
+                        mFetchUserListingInfoLinearLayout.setOnClickListener(view -> {
+                            //Do nothing
                         });
                         showErrorView(R.string.no_users);
                     }
@@ -143,6 +137,10 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
             mFetchUserListingInfoTextView.setText(stringResId);
             Glide.with(this).load(R.drawable.load_post_error_indicator).into(mFetchUserListingInfoImageView);
         }
+    }
+
+    void changeSortType(String sortType) {
+        mUserListingViewModel.changeSortType(sortType);
     }
 
     @Override

@@ -1,11 +1,12 @@
 package ml.docilealligator.infinityforreddit;
 
-import java.util.ArrayList;
-
-import User.UserData;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
+
+import java.util.ArrayList;
+
+import User.UserData;
 import retrofit2.Retrofit;
 
 public class UserListingDataSource extends PageKeyedDataSource<String, UserData> {
@@ -13,8 +14,10 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
         void hasUser();
         void noUser();
     }
+
     private Retrofit retrofit;
     private String query;
+    private String sortType;
     private UserListingDataSource.OnUserListingDataFetchedCallback onUserListingDataFetchedCallback;
 
     private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
@@ -25,10 +28,11 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
     private PageKeyedDataSource.LoadParams<String> params;
     private PageKeyedDataSource.LoadCallback<String, UserData> callback;
 
-    UserListingDataSource(Retrofit retrofit, String query,
+    UserListingDataSource(Retrofit retrofit, String query, String sortType,
                                UserListingDataSource.OnUserListingDataFetchedCallback onUserListingDataFetchedCallback) {
         this.retrofit = retrofit;
         this.query = query;
+        this.sortType = sortType;
         this.onUserListingDataFetchedCallback = onUserListingDataFetchedCallback;
         paginationNetworkStateLiveData = new MutableLiveData();
         initialLoadStateLiveData = new MutableLiveData();
@@ -49,7 +53,7 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
 
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
-        FetchUserData.fetchUserListingData(retrofit, query, null, new FetchUserData.FetchUserListingDataListener() {
+        FetchUserData.fetchUserListingData(retrofit, query, null, sortType, new FetchUserData.FetchUserListingDataListener() {
             @Override
             public void onFetchUserListingDataSuccess(ArrayList<UserData> UserData, String after) {
                 if(UserData.size() == 0) {
@@ -83,7 +87,7 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
             return;
         }
 
-        FetchUserData.fetchUserListingData(retrofit, query, params.key, new FetchUserData.FetchUserListingDataListener() {
+        FetchUserData.fetchUserListingData(retrofit, query, params.key, sortType, new FetchUserData.FetchUserListingDataListener() {
             @Override
             public void onFetchUserListingDataSuccess(ArrayList<UserData> UserData, String after) {
                 callback.onResult(UserData, after);

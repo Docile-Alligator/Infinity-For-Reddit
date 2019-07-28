@@ -2,10 +2,11 @@ package ml.docilealligator.infinityforreddit;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 
 import SubredditDatabase.SubredditData;
-import androidx.annotation.NonNull;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -56,10 +57,10 @@ class FetchSubredditData {
         });
     }
 
-    static void fetchSubredditListingData(Retrofit retrofit, String query, String after, final FetchSubredditListingDataListener fetchSubredditListingDataListener) {
+    static void fetchSubredditListingData(Retrofit retrofit, String query, String after, String sortType, final FetchSubredditListingDataListener fetchSubredditListingDataListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
-        Call<String> subredditDataCall = api.searchSubreddits(query, after);
+        Call<String> subredditDataCall = api.searchSubreddits(query, after, sortType);
         subredditDataCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

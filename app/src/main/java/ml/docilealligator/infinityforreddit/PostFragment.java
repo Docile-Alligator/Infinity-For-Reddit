@@ -287,6 +287,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         return rootView;
     }
 
+    void changeSortType(String sortType) {
+        mPostViewModel.changeSortType(sortType);
+    }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);

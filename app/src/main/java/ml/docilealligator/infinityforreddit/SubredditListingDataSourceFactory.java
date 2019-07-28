@@ -8,15 +8,17 @@ import retrofit2.Retrofit;
 public class SubredditListingDataSourceFactory extends DataSource.Factory {
     private Retrofit retrofit;
     private String query;
+    private String sortType;
     private SubredditListingDataSource.OnSubredditListingDataFetchedCallback onSubredditListingDataFetchedCallback;
 
     private SubredditListingDataSource subredditListingDataSource;
     private MutableLiveData<SubredditListingDataSource> subredditListingDataSourceMutableLiveData;
 
-    SubredditListingDataSourceFactory(Retrofit retrofit, String query,
+    SubredditListingDataSourceFactory(Retrofit retrofit, String query, String sortType,
                                       SubredditListingDataSource.OnSubredditListingDataFetchedCallback onSubredditListingDataFetchedCallback) {
         this.retrofit = retrofit;
         this.query = query;
+        this.sortType = sortType;
         this.onSubredditListingDataFetchedCallback = onSubredditListingDataFetchedCallback;
         subredditListingDataSourceMutableLiveData = new MutableLiveData<>();
     }
@@ -25,7 +27,7 @@ public class SubredditListingDataSourceFactory extends DataSource.Factory {
     @Override
     public DataSource create() {
         subredditListingDataSource = new SubredditListingDataSource(retrofit,
-                query, onSubredditListingDataFetchedCallback);
+                query, sortType, onSubredditListingDataFetchedCallback);
         subredditListingDataSourceMutableLiveData.postValue(subredditListingDataSource);
         return subredditListingDataSource;
     }
@@ -36,5 +38,9 @@ public class SubredditListingDataSourceFactory extends DataSource.Factory {
 
     SubredditListingDataSource getSubredditListingDataSource() {
         return subredditListingDataSource;
+    }
+
+    void changeSortType(String sortType) {
+        this.sortType = sortType;
     }
 }

@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit;
 import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -18,6 +19,7 @@ public class PostViewModel extends ViewModel {
     private LiveData<NetworkState> paginationNetworkState;
     private LiveData<NetworkState> initialLoadingState;
     private LiveData<PagedList<Post>> posts;
+    private MutableLiveData<String> sortTypeLiveData;
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, int postType, String sortType,
                          PostDataSource.OnPostFetchedCallback onPostFetchedCallback) {
@@ -27,13 +29,20 @@ public class PostViewModel extends ViewModel {
                 (Function<PostDataSource, LiveData<NetworkState>>) PostDataSource::getInitialLoadStateLiveData);
         paginationNetworkState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 (Function<PostDataSource, LiveData<NetworkState>>) PostDataSource::getPaginationNetworkStateLiveData);
+
+        sortTypeLiveData = new MutableLiveData<>();
+        sortTypeLiveData.postValue(sortType);
+
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
                         .setEnablePlaceholders(false)
                         .setPageSize(25)
                         .build();
 
-        posts = (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
+        posts = Transformations.switchMap(sortTypeLiveData, sort -> {
+            postDataSourceFactory.changeSortType(sortTypeLiveData.getValue());
+            return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
+        });
     }
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
@@ -41,9 +50,12 @@ public class PostViewModel extends ViewModel {
         postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, subredditName, postType, sortType, onPostFetchedCallback);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
-                dataSource -> dataSource.getInitialLoadStateLiveData());
+                (Function<PostDataSource, LiveData<NetworkState>>) PostDataSource::getInitialLoadStateLiveData);
         paginationNetworkState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
-                dataSource -> dataSource.getPaginationNetworkStateLiveData());
+                (Function<PostDataSource, LiveData<NetworkState>>) PostDataSource::getPaginationNetworkStateLiveData);
+
+        sortTypeLiveData = new MutableLiveData<>();
+        sortTypeLiveData.postValue(sortType);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -51,7 +63,10 @@ public class PostViewModel extends ViewModel {
                         .setPageSize(25)
                         .build();
 
-        posts = (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
+        posts = Transformations.switchMap(sortTypeLiveData, sort -> {
+            postDataSourceFactory.changeSortType(sortTypeLiveData.getValue());
+            return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
+        });
     }
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
@@ -61,7 +76,7 @@ public class PostViewModel extends ViewModel {
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 dataSource -> dataSource.getInitialLoadStateLiveData());
         paginationNetworkState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
-                dataSource -> dataSource.getPaginationNetworkStateLiveData());
+                (Function<PostDataSource, LiveData<NetworkState>>) PostDataSource::getPaginationNetworkStateLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -82,13 +97,19 @@ public class PostViewModel extends ViewModel {
         paginationNetworkState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 dataSource -> dataSource.getPaginationNetworkStateLiveData());
 
+        sortTypeLiveData = new MutableLiveData<>();
+        sortTypeLiveData.postValue(sortType);
+
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
                         .setEnablePlaceholders(false)
                         .setPageSize(25)
                         .build();
 
-        posts = (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
+        posts = Transformations.switchMap(sortTypeLiveData, sort -> {
+            postDataSourceFactory.changeSortType(sortTypeLiveData.getValue());
+            return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
+        });
     }
 
     LiveData<PagedList<Post>> getPosts() {
@@ -113,6 +134,10 @@ public class PostViewModel extends ViewModel {
 
     void retryLoadingMore() {
         postDataSourceFactory.getPostDataSource().retryLoadingMore();
+    }
+
+    void changeSortType(String sortType) {
+        sortTypeLiveData.postValue(sortType);
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {

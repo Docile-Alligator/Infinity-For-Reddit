@@ -31,6 +31,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
     static final String SORT_TYPE_RISING = "rising";
     static final String SORT_TYPE_TOP = "top";
     static final String SORT_TYPE_CONTROVERSIAL = "controversial";
+    static final String SORT_TYPE_RELEVANCE = "relevance";
+    static final String SORT_TYPE_COMMENTS = "comments";
 
     private Retrofit retrofit;
     private String accessToken;
@@ -459,7 +461,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         Call<String> getPost;
 
         if(subredditName == null) {
-            getPost = api.searchPosts(query, null, RedditUtils.getOAuthHeader(accessToken));
+            getPost = api.searchPosts(query, null, sortType, RedditUtils.getOAuthHeader(accessToken));
         } else {
             getPost = api.searchPostsInSpecificSubreddit(subredditName, query, null, RedditUtils.getOAuthHeader(accessToken));
         }
@@ -467,6 +469,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
+                Log.i("initial", call.request().url().toString());
                 if(response.isSuccessful()) {
                     ParsePost.parsePosts(response.body(), locale, -1,
                             new ParsePost.ParsePostsListingListener() {
@@ -507,7 +510,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         Call<String> getPost;
 
         if(subredditName == null) {
-            getPost = api.searchPosts(subredditName, params.key, RedditUtils.getOAuthHeader(accessToken));
+            getPost = api.searchPosts(query, params.key, sortType, RedditUtils.getOAuthHeader(accessToken));
         } else {
             getPost = api.searchPostsInSpecificSubreddit(subredditName, query, params.key, RedditUtils.getOAuthHeader(accessToken));
         }
@@ -515,6 +518,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
+                Log.i("after", call.request().url().toString());
                 if(response.isSuccessful()) {
                     ParsePost.parsePosts(response.body(), locale, -1, new ParsePost.ParsePostsListingListener() {
                         @Override

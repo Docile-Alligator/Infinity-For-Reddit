@@ -114,7 +114,12 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             startActivityForResult(loginIntent, LOGIN_ACTIVITY_REQUEST_CODE);
         } else {
             if (savedInstanceState == null) {
-                replaceFragment(PostDataSource.SORT_TYPE_BEST);
+                mFragment = new PostFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_FRONT_PAGE);
+                bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_BEST);
+                mFragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
             } else {
                 mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
@@ -174,15 +179,6 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         }
 
         fab.setOnClickListener(view -> postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag()));
-    }
-
-    private void replaceFragment(String sortType) {
-        mFragment = new PostFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_FRONT_PAGE);
-        bundle.putString(PostFragment.EXTRA_SORT_TYPE, sortType);
-        mFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
     }
 
     private void loadUserData() {
@@ -330,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
     @Override
     public void sortTypeSelected(String sortType) {
-        replaceFragment(sortType);
+        ((PostFragment) mFragment).changeSortType(sortType);
     }
 
     @Override

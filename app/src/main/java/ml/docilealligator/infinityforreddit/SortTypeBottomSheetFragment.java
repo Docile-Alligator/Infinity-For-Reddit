@@ -78,7 +78,7 @@ public class SortTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
         });
 
         controversialTypeTextView.setOnClickListener(view -> {
-            ((SortTypeSelectionCallback) activity).sortTypeSelected(PostDataSource.SORT_TYPE_BEST);
+            ((SortTypeSelectionCallback) activity).sortTypeSelected(PostDataSource.SORT_TYPE_CONTROVERSIAL);
             dismiss();
         });
 

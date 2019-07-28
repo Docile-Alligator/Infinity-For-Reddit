@@ -19,7 +19,8 @@ import com.google.android.material.tabs.TabLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SearchResultActivity extends AppCompatActivity {
+public class SearchResultActivity extends AppCompatActivity implements SearchPostSortTypeBottomSheetFragment.SearchSortTypeSelectionCallback,
+        SearchUserAndSubredditSortTypeBottomSheetFragment.SearchUserAndSubredditSortTypeSelectionCallback {
     static final String EXTRA_QUERY = "QK";
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
 
@@ -31,6 +32,9 @@ public class SearchResultActivity extends AppCompatActivity {
     @BindView(R.id.view_pager_search_result_activity) ViewPager viewPager;
 
     private SectionsPagerAdapter sectionsPagerAdapter;
+
+    private SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment;
+    private SearchUserAndSubredditSortTypeBottomSheetFragment searchUserAndSubredditSortTypeBottomSheetFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +49,15 @@ public class SearchResultActivity extends AppCompatActivity {
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(2);
+
         tabLayout.setupWithViewPager(viewPager);
+
+        searchPostSortTypeBottomSheetFragment = new SearchPostSortTypeBottomSheetFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(SearchPostSortTypeBottomSheetFragment.EXTRA_FRAGMENT_POSITION, viewPager.getCurrentItem());
+        searchPostSortTypeBottomSheetFragment.setArguments(bundle);
+
+        searchUserAndSubredditSortTypeBottomSheetFragment = new SearchUserAndSubredditSortTypeBottomSheetFragment();
 
         // Get the intent, verify the action and get the query
         Intent intent = getIntent();
@@ -73,6 +85,21 @@ public class SearchResultActivity extends AppCompatActivity {
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.action_sort_search_result_activity:
+                switch (viewPager.getCurrentItem()) {
+                    case 0: {
+                        searchPostSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchPostSortTypeBottomSheetFragment.getTag());
+                        break;
+                    }
+                    case 1:
+                    case 2:
+                        Bundle bundle = new Bundle();
+                        bundle.putInt(SearchUserAndSubredditSortTypeBottomSheetFragment.EXTRA_FRAGMENT_POSITION, viewPager.getCurrentItem());
+                        searchUserAndSubredditSortTypeBottomSheetFragment.setArguments(bundle);
+                        searchUserAndSubredditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchUserAndSubredditSortTypeBottomSheetFragment.getTag());
+                        break;
+                }
+                return true;
             case R.id.action_search_search_result_activity:
                 Intent intent = new Intent(this, SearchActivity.class);
                 finish();
@@ -85,7 +112,18 @@ public class SearchResultActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void searchSortTypeSelected(String sortType) {
+        sectionsPagerAdapter.changeSortType(sortType, 0);
+    }
+
+    @Override
+    public void searchUserAndSubredditSortTypeSelected(String sortType, int fragmentPosition) {
+        sectionsPagerAdapter.changeSortType(sortType, fragmentPosition);
+    }
+
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
+
         private PostFragment postFragment;
         private SubredditListingFragment subredditListingFragment;
         private UserListingFragment userListingFragment;
@@ -102,7 +140,7 @@ public class SearchResultActivity extends AppCompatActivity {
                     PostFragment mFragment = new PostFragment();
                     Bundle bundle = new Bundle();
                     bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SEARCH);
-                    bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_BEST);
+                    bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_RELEVANCE);
                     bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, mSubredditName);
                     bundle.putString(PostFragment.EXTRA_QUERY, mQuery);
                     mFragment.setArguments(bundle);
@@ -115,8 +153,7 @@ public class SearchResultActivity extends AppCompatActivity {
                     mFragment.setArguments(bundle);
                     return mFragment;
                 }
-                default:
-                {
+                default: {
                     UserListingFragment mFragment = new UserListingFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString(UserListingFragment.QUERY_KEY, mQuery);
@@ -160,6 +197,19 @@ public class SearchResultActivity extends AppCompatActivity {
                     break;
             }
             return fragment;
+        }
+
+        void changeSortType(String sortType, int fragmentPosition) {
+            switch (fragmentPosition) {
+                case 0:
+                    postFragment.changeSortType(sortType);
+                    break;
+                case 1:
+                    subredditListingFragment.changeSortType(sortType);
+                    break;
+                case 2:
+                    userListingFragment.changeSortType(sortType);
+            }
         }
 
         public void refresh() {

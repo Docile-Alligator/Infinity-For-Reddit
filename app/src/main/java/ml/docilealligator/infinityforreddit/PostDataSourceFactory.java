@@ -90,4 +90,8 @@ class PostDataSourceFactory extends DataSource.Factory {
     PostDataSource getPostDataSource() {
         return postDataSource;
     }
+
+    void changeSortType(String sortType) {
+        this.sortType = sortType;
+    }
 }

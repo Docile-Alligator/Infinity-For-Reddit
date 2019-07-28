@@ -8,15 +8,17 @@ import retrofit2.Retrofit;
 public class UserListingDataSourceFactory extends DataSource.Factory {
     private Retrofit retrofit;
     private String query;
+    private String sortType;
     private UserListingDataSource.OnUserListingDataFetchedCallback onUserListingDataFetchedCallback;
 
     private UserListingDataSource userListingDataSource;
     private MutableLiveData<UserListingDataSource> userListingDataSourceMutableLiveData;
 
-    UserListingDataSourceFactory(Retrofit retrofit, String query,
+    UserListingDataSourceFactory(Retrofit retrofit, String query, String sortType,
                                       UserListingDataSource.OnUserListingDataFetchedCallback onUserListingDataFetchedCallback) {
         this.retrofit = retrofit;
         this.query = query;
+        this.sortType = sortType;
         this.onUserListingDataFetchedCallback = onUserListingDataFetchedCallback;
         userListingDataSourceMutableLiveData = new MutableLiveData<>();
     }
@@ -25,7 +27,7 @@ public class UserListingDataSourceFactory extends DataSource.Factory {
     @Override
     public DataSource create() {
         userListingDataSource = new UserListingDataSource(retrofit,
-                query, onUserListingDataFetchedCallback);
+                query, sortType, onUserListingDataFetchedCallback);
         userListingDataSourceMutableLiveData.postValue(userListingDataSource);
         return userListingDataSource;
     }
@@ -36,5 +38,9 @@ public class UserListingDataSourceFactory extends DataSource.Factory {
 
     UserListingDataSource getUserListingDataSource() {
         return userListingDataSource;
+    }
+
+    void changeSortType(String sortType) {
+        this.sortType = sortType;
     }
 }

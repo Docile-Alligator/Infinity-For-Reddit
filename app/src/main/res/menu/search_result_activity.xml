@@ -2,15 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_search_search_result_activity"
+        android:id="@+id/action_sort_search_result_activity"
         android:orderInCategory="1"
+        android:title="@string/action_search"
+        android:icon="@drawable/ic_outline_sort_24px"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_search_search_result_activity"
+        android:orderInCategory="2"
         android:title="@string/action_search"
         android:icon="@drawable/ic_search_white_24dp"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_refresh_search_result_activity"
-        android:orderInCategory="2"
+        android:orderInCategory="3"
         android:title="@string/action_refresh"
         app:showAsAction="never" />
 </menu>

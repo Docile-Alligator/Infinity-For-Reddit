@@ -253,7 +253,13 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         });
 
         if(savedInstanceState == null) {
-            replaceFragment(PostDataSource.SORT_TYPE_BEST);
+            mFragment = new PostFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, subredditName);
+            bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+            bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_BEST);
+            mFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
         } else {
             mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
             if(mFragment == null) {
@@ -330,16 +336,6 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         return false;
     }
 
-    private void replaceFragment(String sortType) {
-        mFragment = new PostFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, subredditName);
-        bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
-        bundle.putString(PostFragment.EXTRA_SORT_TYPE, sortType);
-        mFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
-    }
-
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -353,7 +349,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
 
     @Override
     public void sortTypeSelected(String sortType) {
-        replaceFragment(sortType);
+        ((PostFragment) mFragment).changeSortType(sortType);
     }
 
     @Override
