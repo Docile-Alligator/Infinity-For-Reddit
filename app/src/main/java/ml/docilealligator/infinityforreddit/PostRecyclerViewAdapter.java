@@ -65,6 +65,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     private UserDao userDao;
     private boolean canStartActivity = true;
     private int postType;
+    private boolean displaySubredditName;
 
     private static final int VIEW_TYPE_DATA = 0;
     private static final int VIEW_TYPE_ERROR = 1;
@@ -78,13 +79,14 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     }
 
     PostRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, SharedPreferences sharedPreferences, int postType,
-                            RetryLoadingMoreCallback retryLoadingMoreCallback) {
+                            boolean displaySubredditName, RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         if(context != null) {
             mContext = context;
             mOauthRetrofit = oauthRetrofit;
             mSharedPreferences = sharedPreferences;
             this.postType = postType;
+            this.displaySubredditName = displaySubredditName;
             glide = Glide.with(mContext.getApplicationContext());
             subredditDao = SubredditRoomDatabase.getDatabase(mContext.getApplicationContext()).subredditDao();
             userDao = UserRoomDatabase.getDatabase(mContext.getApplicationContext()).userDao();
@@ -154,7 +156,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                     }
                 });
 
-                if(postType != PostDataSource.TYPE_SUBREDDIT) {
+                if(displaySubredditName) {
                     if(author.equals(subredditNamePrefixed)) {
                         if(post.getAuthorIconUrl() == null) {
                             new LoadUserDataAsyncTask(userDao, post.getAuthor(), mOauthRetrofit, iconImageUrl -> {

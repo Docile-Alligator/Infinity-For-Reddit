@@ -14,8 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:id="@+id/subreddit_icon_name_linear_layout_item_post_detail"
+            <RelativeLayout
+                android:id="@+id/subreddit_icon_name_relative_layout_item_post_detail"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
@@ -26,20 +26,31 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <CustomView.AspectRatioGifImageView
-                    android:id="@+id/subreddit_icon_gif_image_view_item_post_detail"
+                    android:id="@+id/icon_gif_image_view_item_post_detail"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_gravity="center"/>
+                    android:layout_centerVertical="true" />
 
                 <TextView
                     android:id="@+id/subreddit_text_view_item_post_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_gravity="center"
-                    android:textColor="#E91E63" />
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@id/icon_gif_image_view_item_post_detail"
+                    android:textColor="@color/colorAccent" />
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/user_text_view_item_post_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@id/subreddit_text_view_item_post_detail"
+                    android:layout_toEndOf="@id/icon_gif_image_view_item_post_detail"
+                    android:textColor="@color/textColorPrimaryDark" />
+
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/post_time_text_view_item_post_detail"
@@ -48,7 +59,7 @@
                 android:layout_gravity="center"
                 android:layout_marginEnd="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/subreddit_icon_name_linear_layout_item_post_detail"
+                app:layout_constraintStart_toEndOf="@id/subreddit_icon_name_relative_layout_item_post_detail"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
 

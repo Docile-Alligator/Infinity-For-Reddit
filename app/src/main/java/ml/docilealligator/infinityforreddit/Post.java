@@ -20,6 +20,7 @@ class Post implements Parcelable {
     private String subredditNamePrefixed;
     private String subredditIconUrl;
     private String author;
+    private String authorNamePrefixed;
     private String authorIconUrl;
     private String postTime;
     private String title;
@@ -51,6 +52,7 @@ class Post implements Parcelable {
         this.fullName = fullName;
         this.subredditNamePrefixed = subredditNamePrefixed;
         this.author = author;
+        this.authorNamePrefixed = "u/" + author;
         this.postTime = postTime;
         this.title = title;
         this.previewUrl = previewUrl;
@@ -75,6 +77,7 @@ class Post implements Parcelable {
         this.fullName = fullName;
         this.subredditNamePrefixed = subredditNamePrefixed;
         this.author = author;
+        this.authorNamePrefixed = "u/" + author;
         this.postTime = postTime;
         this.title = title;
         this.previewUrl = previewUrl;
@@ -98,6 +101,7 @@ class Post implements Parcelable {
         this.fullName = fullName;
         this.subredditNamePrefixed = subredditNamePrefixed;
         this.author = author;
+        this.authorNamePrefixed = "u/" + author;
         this.postTime = postTime;
         this.title = title;
         this.permalink = RedditUtils.API_BASE_URI + permalink;
@@ -118,6 +122,7 @@ class Post implements Parcelable {
         subredditNamePrefixed = in.readString();
         subredditIconUrl = in.readString();
         author = in.readString();
+        authorNamePrefixed = in.readString();
         authorIconUrl = in.readString();
         postTime = in.readString();
         title = in.readString();
@@ -176,6 +181,10 @@ class Post implements Parcelable {
 
     String getAuthor() {
         return author;
+    }
+
+    String getAuthorNamePrefixed() {
+        return authorNamePrefixed;
     }
 
     String getAuthorIconUrl() {
@@ -318,6 +327,7 @@ class Post implements Parcelable {
         parcel.writeString(subredditNamePrefixed);
         parcel.writeString(subredditIconUrl);
         parcel.writeString(author);
+        parcel.writeString(authorNamePrefixed);
         parcel.writeString(authorIconUrl);
         parcel.writeString(postTime);
         parcel.writeString(title);

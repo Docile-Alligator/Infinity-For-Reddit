@@ -179,7 +179,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             String query = getArguments().getString(EXTRA_QUERY);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mRetrofit,
-                    mSharedPreferences, postType, () -> mPostViewModel.retryLoadingMore());
+                    mSharedPreferences, postType, true, () -> mPostViewModel.retryLoadingMore());
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
                     getResources().getConfiguration().locale, subredditName, query, postType, sortType, new PostDataSource.OnPostFetchedCallback() {
                 @Override
@@ -198,8 +198,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         } else if(postType == PostDataSource.TYPE_SUBREDDIT) {
             String subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
 
+            boolean displaySubredditName = subredditName.equals("popular");
             mAdapter = new PostRecyclerViewAdapter(activity, mRetrofit,
-                    mSharedPreferences, postType, () -> mPostViewModel.retryLoadingMore());
+                    mSharedPreferences, postType, displaySubredditName, () -> mPostViewModel.retryLoadingMore());
 
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
                     getResources().getConfiguration().locale, subredditName, postType, sortType, new PostDataSource.OnPostFetchedCallback() {
@@ -224,7 +225,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             String subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mRetrofit,
-                    mSharedPreferences, postType, () -> mPostViewModel.retryLoadingMore());
+                    mSharedPreferences, postType, true, () -> mPostViewModel.retryLoadingMore());
 
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
                     getResources().getConfiguration().locale, subredditName, postType, sortType,
@@ -244,7 +245,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             });
         } else {
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit,
-                    mSharedPreferences, postType, () -> mPostViewModel.retryLoadingMore());
+                    mSharedPreferences, postType, true, () -> mPostViewModel.retryLoadingMore());
 
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
                     getResources().getConfiguration().locale, postType, sortType, new PostDataSource.OnPostFetchedCallback() {

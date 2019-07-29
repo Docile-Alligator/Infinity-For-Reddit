@@ -171,11 +171,11 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                         .error(mGlide.load(R.drawable.subreddit_default_icon)
                                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                                        .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
+                                        .into(((PostDetailViewHolder) holder).mIconGifImageView);
                             } else {
                                 mGlide.load(R.drawable.subreddit_default_icon)
                                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                        .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
+                                        .into(((PostDetailViewHolder) holder).mIconGifImageView);
                             }
 
                             if(holder.getAdapterPosition() >= 0) {
@@ -188,11 +188,11 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                             .error(mGlide.load(R.drawable.subreddit_default_icon)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                            .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
+                            .into(((PostDetailViewHolder) holder).mIconGifImageView);
                 } else {
                     mGlide.load(R.drawable.subreddit_default_icon)
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                            .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
+                            .into(((PostDetailViewHolder) holder).mIconGifImageView);
                 }
             } else {
                 if(mPost.getSubredditIconUrl() == null) {
@@ -207,11 +207,11 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                             .error(mGlide.load(R.drawable.subreddit_default_icon)
                                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                                            .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
+                                            .into(((PostDetailViewHolder) holder).mIconGifImageView);
                                 } else {
                                     mGlide.load(R.drawable.subreddit_default_icon)
                                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                            .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
+                                            .into(((PostDetailViewHolder) holder).mIconGifImageView);
                                 }
 
                                 mPost.setSubredditIconUrl(iconImageUrl);
@@ -223,11 +223,11 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                             .error(mGlide.load(R.drawable.subreddit_default_icon)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                            .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
+                            .into(((PostDetailViewHolder) holder).mIconGifImageView);
                 } else {
                     mGlide.load(R.drawable.subreddit_default_icon)
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                            .into(((PostDetailViewHolder) holder).mSubredditIconGifImageView);
+                            .into(((PostDetailViewHolder) holder).mIconGifImageView);
                 }
             }
 
@@ -260,6 +260,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             }
 
             ((PostDetailViewHolder) holder).mSubredditTextView.setText(mPost.getSubredditNamePrefixed());
+            ((PostDetailViewHolder) holder).mUserTextView.setText(mPost.getAuthorNamePrefixed());
 
             ((PostDetailViewHolder) holder).mPostTimeTextView.setText(mPost.getPostTime());
 
@@ -643,9 +644,9 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     class PostDetailViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.subreddit_icon_name_linear_layout_item_post_detail) LinearLayout mSubredditIconNameLinearLayout;
-        @BindView(R.id.subreddit_icon_gif_image_view_item_post_detail) AspectRatioGifImageView mSubredditIconGifImageView;
+        @BindView(R.id.icon_gif_image_view_item_post_detail) AspectRatioGifImageView mIconGifImageView;
         @BindView(R.id.subreddit_text_view_item_post_detail) TextView mSubredditTextView;
+        @BindView(R.id.user_text_view_item_post_detail) TextView mUserTextView;
         @BindView(R.id.post_time_text_view_item_post_detail) TextView mPostTimeTextView;
         @BindView(R.id.title_text_view_item_post_detail) TextView mTitleTextView;
         @BindView(R.id.content_markdown_view_item_post_detail) CustomMarkwonView mContentMarkdownView;
@@ -673,7 +674,9 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            mSubredditIconNameLinearLayout.setOnClickListener(view -> {
+            mIconGifImageView.setOnClickListener(view -> mSubredditTextView.performClick());
+
+            mSubredditTextView.setOnClickListener(view -> {
                 Intent intent;
                 if(mPost.getSubredditNamePrefixed().equals("u/" + mPost.getAuthor())) {
                     intent = new Intent(mActivity, ViewUserDetailActivity.class);
@@ -683,6 +686,12 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
                             mPost.getSubredditNamePrefixed().substring(2));
                 }
+                mActivity.startActivity(intent);
+            });
+
+            mUserTextView.setOnClickListener(view -> {
+                Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
+                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mPost.getAuthor());
                 mActivity.startActivity(intent);
             });
 
