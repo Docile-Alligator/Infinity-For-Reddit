@@ -98,7 +98,11 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         ((Infinity) getApplication()).getmAppComponent().inject(this);
 
         postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
+
         sortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
+        Bundle bottomSheetBundle = new Bundle();
+        bottomSheetBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
+        sortTypeBottomSheetFragment.setArguments(bottomSheetBundle);
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 

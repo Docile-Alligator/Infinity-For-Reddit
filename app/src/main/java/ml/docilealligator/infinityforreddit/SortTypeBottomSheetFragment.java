@@ -26,6 +26,8 @@ public class SortTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
         void sortTypeSelected(String sortType);
     }
 
+    static final String EXTRA_NO_BEST_TYPE = "ENBT";
+
     @BindView(R.id.best_type_text_view_sort_type_bottom_sheet_fragment) TextView bestTypeTextView;
     @BindView(R.id.hot_type_text_view_sort_type_bottom_sheet_fragment) TextView hotTypeTextView;
     @BindView(R.id.new_type_text_view_sort_type_bottom_sheet_fragment) TextView newTypeTextView;
@@ -47,10 +49,14 @@ public class SortTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
 
         Activity activity = getActivity();
 
-        bestTypeTextView.setOnClickListener(view -> {
-            ((SortTypeSelectionCallback) activity).sortTypeSelected(PostDataSource.SORT_TYPE_BEST);
-            dismiss();
-        });
+        if(getArguments().getBoolean(EXTRA_NO_BEST_TYPE)) {
+            bestTypeTextView.setVisibility(View.GONE);
+        } else {
+            bestTypeTextView.setOnClickListener(view -> {
+                ((SortTypeSelectionCallback) activity).sortTypeSelected(PostDataSource.SORT_TYPE_BEST);
+                dismiss();
+            });
+        }
 
         hotTypeTextView.setOnClickListener(view -> {
             ((SortTypeSelectionCallback) activity).sortTypeSelected(PostDataSource.SORT_TYPE_HOT);

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,6 +20,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -26,6 +30,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -39,29 +44,32 @@ import retrofit2.Retrofit;
 public class MainActivity extends AppCompatActivity implements SortTypeBottomSheetFragment.SortTypeSelectionCallback,
         PostTypeBottomSheetFragment.PostTypeSelectionCallback {
 
-    private static final String FRAGMENT_OUT_STATE = "FOS";
     private static final String FETCH_USER_INFO_STATE = "FUIS";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
     private static final int LOGIN_ACTIVITY_REQUEST_CODE = 0;
 
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
+    @BindView(R.id.view_pager_main_activity) ViewPager viewPager;
     @BindView(R.id.collapsing_toolbar_layout_main_activity) CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.profile_linear_layout_main_activity) LinearLayout profileLinearLayout;
     @BindView(R.id.subscriptions_linear_layout_main_activity) LinearLayout subscriptionLinearLayout;
     @BindView(R.id.settings_linear_layout_main_activity) LinearLayout settingsLinearLayout;
+    @BindView(R.id.tab_layout_main_activity) TabLayout tabLayout;
     @BindView(R.id.fab_main_activity) FloatingActionButton fab;
+
+    private SectionsPagerAdapter sectionsPagerAdapter;
 
     private TextView mNameTextView;
     private TextView mKarmaTextView;
     private GifImageView mProfileImageView;
     private ImageView mBannerImageView;
 
-    private Fragment mFragment;
     private RequestManager glide;
     private AppBarLayout.LayoutParams params;
     private PostTypeBottomSheetFragment postTypeBottomSheetFragment;
-    private SortTypeBottomSheetFragment sortTypeBottomSheetFragment;
+    private SortTypeBottomSheetFragment bestSortTypeBottomSheetFragment;
+    private SortTypeBottomSheetFragment popularSortTypeBottomSheetFragment;
 
     private String mName;
     private String mProfileImageUrl;
@@ -95,7 +103,16 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         ((Infinity) getApplication()).getmAppComponent().inject(this);
 
         postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
-        sortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
+
+        bestSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
+        Bundle bestBundle = new Bundle();
+        bestBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, false);
+        bestSortTypeBottomSheetFragment.setArguments(bestBundle);
+
+        popularSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
+        Bundle popularBundle = new Bundle();
+        popularBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
+        popularSortTypeBottomSheetFragment.setArguments(popularBundle);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -108,22 +125,17 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setOffscreenPageLimit(2);
+        tabLayout.setupWithViewPager(viewPager);
+
         String accessToken = getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
         if (accessToken.equals("")) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
             startActivityForResult(loginIntent, LOGIN_ACTIVITY_REQUEST_CODE);
         } else {
-            if (savedInstanceState == null) {
-                mFragment = new PostFragment();
-                Bundle bundle = new Bundle();
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_FRONT_PAGE);
-                bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_BEST);
-                mFragment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
-            } else {
-                mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_content_main, mFragment).commit();
-
+            if (savedInstanceState != null) {
                 mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
                 isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             }
@@ -268,37 +280,39 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (mFragment instanceof FragmentCommunicator) {
-            switch (item.getItemId()) {
-                case R.id.action_sort_main_activity:
-                    sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
-                    return true;
-                case R.id.action_search_main_activity:
-                    Intent intent = new Intent(this, SearchActivity.class);
-                    startActivity(intent);
-                    return true;
-                case R.id.action_refresh_main_activity:
-                    ((FragmentCommunicator) mFragment).refresh();
-                    mFetchUserInfoSuccess = false;
-                    loadUserData();
-                    return true;
-                case R.id.action_lazy_mode_main_activity:
-                    MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);
-                    if(isInLazyMode) {
-                        isInLazyMode = false;
-                        ((FragmentCommunicator) mFragment).stopLazyMode();
-                        lazyModeItem.setTitle(R.string.action_start_lazy_mode);
-                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
-                        collapsingToolbarLayout.setLayoutParams(params);
-                    } else {
-                        isInLazyMode = true;
-                        ((FragmentCommunicator) mFragment).startLazyMode();
-                        lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
-                        collapsingToolbarLayout.setLayoutParams(params);
-                    }
-                    return true;
-            }
+        switch (item.getItemId()) {
+            case R.id.action_sort_main_activity:
+                if(viewPager.getCurrentItem() == 1) {
+                    popularSortTypeBottomSheetFragment.show(getSupportFragmentManager(), popularSortTypeBottomSheetFragment.getTag());
+                } else {
+                    bestSortTypeBottomSheetFragment.show(getSupportFragmentManager(), bestSortTypeBottomSheetFragment.getTag());
+                }
+                return true;
+            case R.id.action_search_main_activity:
+                Intent intent = new Intent(this, SearchActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_refresh_main_activity:
+                sectionsPagerAdapter.refresh(viewPager.getCurrentItem());
+                mFetchUserInfoSuccess = false;
+                loadUserData();
+                return true;
+            case R.id.action_lazy_mode_main_activity:
+                MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);
+                /*if(isInLazyMode) {
+                    isInLazyMode = false;
+                    ((FragmentCommunicator) mFragment).stopLazyMode();
+                    lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                    collapsingToolbarLayout.setLayoutParams(params);
+                } else {
+                    isInLazyMode = true;
+                    ((FragmentCommunicator) mFragment).startLazyMode();
+                    lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
+                    collapsingToolbarLayout.setLayoutParams(params);
+                }*/
+                return true;
         }
         return false;
     }
@@ -316,17 +330,13 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (mFragment != null) {
-            getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE, mFragment);
-        }
-
         outState.putBoolean(FETCH_USER_INFO_STATE, mFetchUserInfoSuccess);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
     }
 
     @Override
     public void sortTypeSelected(String sortType) {
-        ((PostFragment) mFragment).changeSortType(sortType);
+        sectionsPagerAdapter.changeSortType(sortType, viewPager.getCurrentItem());
     }
 
     @Override
@@ -348,6 +358,89 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             case PostTypeBottomSheetFragment.TYPE_VIDEO:
                 intent = new Intent(MainActivity.this, PostVideoActivity.class);
                 startActivity(intent);
+        }
+    }
+
+    private class SectionsPagerAdapter extends FragmentPagerAdapter {
+        private PostFragment frontPagePostFragment;
+        private PostFragment popularPostFragment;
+
+        SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                PostFragment fragment = new PostFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_FRONT_PAGE);
+                bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_BEST);
+                fragment.setArguments(bundle);
+                return fragment;
+            }
+            PostFragment fragment = new PostFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+            bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, "popular");
+            bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_HOT);
+            fragment.setArguments(bundle);
+            return fragment;
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "Best";
+                case 1:
+                    return "Popular";
+            }
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
+            Fragment fragment = (Fragment) super.instantiateItem(container, position);
+            switch (position) {
+                case 0:
+                    frontPagePostFragment = (PostFragment) fragment;
+                    break;
+                case 1:
+                    popularPostFragment = (PostFragment) fragment;
+                    break;
+            }
+            return fragment;
+        }
+
+        void changeSortType(String sortType, int fragmentPosition) {
+            switch (fragmentPosition) {
+                case 0:
+                    frontPagePostFragment.changeSortType(sortType);
+                    break;
+                case 1:
+                    popularPostFragment.changeSortType(sortType);
+                    break;
+            }
+        }
+
+        public void refresh(int fragmentPosition) {
+            if(fragmentPosition == 0) {
+                if(frontPagePostFragment != null) {
+                    ((FragmentCommunicator) frontPagePostFragment).refresh();
+                }
+            } else {
+                if(popularPostFragment != null) {
+                    ((FragmentCommunicator) popularPostFragment).refresh();
+                }
+            }
         }
     }
 }

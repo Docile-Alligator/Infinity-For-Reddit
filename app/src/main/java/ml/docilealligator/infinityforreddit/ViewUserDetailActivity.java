@@ -48,7 +48,6 @@ public class ViewUserDetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_USER_NAME_KEY = "EUNK";
 
-    private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
     @BindView(R.id.coordinator_layout_view_user_detail_activity) CoordinatorLayout coordinatorLayout;

@@ -50,6 +50,22 @@
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout_main_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            app:tabIndicatorColor="@android:color/white"
+            app:tabIndicatorHeight="3dp"
+            app:tabSelectedTextColor="@android:color/white"
+            app:tabTextColor="@android:color/white"
+            app:tabRippleColor="?attr/colorControlHighlight"
+            app:tabUnboundedRipple="false" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <View
@@ -60,7 +76,13 @@
         android:elevation="1dp"
         android:visibility="gone"/>
 
-    <include layout="@layout/content_main" />
+    <!--<include layout="@layout/content_main" />-->
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_pager_main_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_main_activity"
