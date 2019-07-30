@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     private AppBarLayout.LayoutParams params;
     private PostTypeBottomSheetFragment postTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment bestSortTypeBottomSheetFragment;
-    private SortTypeBottomSheetFragment popularSortTypeBottomSheetFragment;
+    private SortTypeBottomSheetFragment popularAndAllSortTypeBottomSheetFragment;
 
     private String mName;
     private String mProfileImageUrl;
@@ -109,10 +109,10 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         bestBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, false);
         bestSortTypeBottomSheetFragment.setArguments(bestBundle);
 
-        popularSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
+        popularAndAllSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
         Bundle popularBundle = new Bundle();
         popularBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-        popularSortTypeBottomSheetFragment.setArguments(popularBundle);
+        popularAndAllSortTypeBottomSheetFragment.setArguments(popularBundle);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -282,8 +282,8 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_sort_main_activity:
-                if(viewPager.getCurrentItem() == 1) {
-                    popularSortTypeBottomSheetFragment.show(getSupportFragmentManager(), popularSortTypeBottomSheetFragment.getTag());
+                if(viewPager.getCurrentItem() == 1 ||viewPager.getCurrentItem() == 2) {
+                    popularAndAllSortTypeBottomSheetFragment.show(getSupportFragmentManager(), popularAndAllSortTypeBottomSheetFragment.getTag());
                 } else {
                     bestSortTypeBottomSheetFragment.show(getSupportFragmentManager(), bestSortTypeBottomSheetFragment.getTag());
                 }
@@ -364,6 +364,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
         private PostFragment frontPagePostFragment;
         private PostFragment popularPostFragment;
+        private PostFragment allPostFragment;
 
         SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -379,19 +380,28 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_BEST);
                 fragment.setArguments(bundle);
                 return fragment;
+            } else if(position == 1) {
+                PostFragment fragment = new PostFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+                bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, "popular");
+                bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_HOT);
+                fragment.setArguments(bundle);
+                return fragment;
+            } else {
+                PostFragment fragment = new PostFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+                bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, "all");
+                bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_HOT);
+                fragment.setArguments(bundle);
+                return fragment;
             }
-            PostFragment fragment = new PostFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
-            bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, "popular");
-            bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_HOT);
-            fragment.setArguments(bundle);
-            return fragment;
         }
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override
@@ -401,6 +411,8 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                     return "Best";
                 case 1:
                     return "Popular";
+                case 2:
+                    return "All";
             }
             return null;
         }
@@ -416,6 +428,8 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 case 1:
                     popularPostFragment = (PostFragment) fragment;
                     break;
+                case 2:
+                    allPostFragment = (PostFragment) fragment;
             }
             return fragment;
         }
@@ -428,6 +442,8 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 case 1:
                     popularPostFragment.changeSortType(sortType);
                     break;
+                case 2:
+                    allPostFragment.changeSortType(sortType);
             }
         }
 
@@ -436,9 +452,13 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 if(frontPagePostFragment != null) {
                     ((FragmentCommunicator) frontPagePostFragment).refresh();
                 }
-            } else {
+            } else if(fragmentPosition == 1) {
                 if(popularPostFragment != null) {
                     ((FragmentCommunicator) popularPostFragment).refresh();
+                }
+            } else {
+                if(allPostFragment != null) {
+                    ((FragmentCommunicator) allPostFragment).refresh();
                 }
             }
         }

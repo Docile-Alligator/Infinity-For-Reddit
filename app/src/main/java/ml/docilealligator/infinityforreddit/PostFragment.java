@@ -198,7 +198,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         } else if(postType == PostDataSource.TYPE_SUBREDDIT) {
             String subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
 
-            boolean displaySubredditName = subredditName.equals("popular");
+            boolean displaySubredditName = subredditName.equals("popular") || subredditName.equals("all");
             mAdapter = new PostRecyclerViewAdapter(activity, mRetrofit,
                     mSharedPreferences, postType, displaySubredditName, () -> mPostViewModel.retryLoadingMore());
 
