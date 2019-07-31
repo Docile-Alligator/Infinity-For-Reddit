@@ -76,4 +76,7 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.libRG:customtextview:2.2'
     implementation 'com.github.Deishelon:RoundedBottomSheet:1.0.1'
+    implementation 'com.github.livefront:bridge:v1.2.0'
+    implementation 'com.evernote:android-state:1.4.1'
+    annotationProcessor 'com.evernote:android-state-processor:1.4.1'
 }

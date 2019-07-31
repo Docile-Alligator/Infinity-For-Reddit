@@ -4,7 +4,7 @@
     <item
         android:id="@+id/action_sort_search_result_activity"
         android:orderInCategory="1"
-        android:title="@string/action_search"
+        android:title="@string/action_sort"
         android:icon="@drawable/ic_outline_sort_24px"
         app:showAsAction="ifRoom" />
 

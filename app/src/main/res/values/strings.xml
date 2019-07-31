@@ -22,6 +22,7 @@
     <string name="action_start_lazy_mode">Start Lazy Mode</string>
     <string name="action_stop_lazy_mode">Stop Lazy Mode</string>
     <string name="action_send">Send</string>
+    <string name="action_sort">Sort</string>
 
     <string name="tap_to_retry">Error loading image. Tap to retry.</string>
     <string name="load_posts_error">Error loading posts.\nTap to retry.</string>

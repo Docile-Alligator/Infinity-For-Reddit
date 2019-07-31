@@ -23,8 +23,8 @@ class FetchComment {
         void onFetchMoreCommentFailed();
     }
 
-    static void fetchComment(Retrofit retrofit, String subredditNamePrefixed, String article,
-                             Locale locale, FetchCommentListener fetchCommentListener) {
+    static void fetchComments(Retrofit retrofit, String subredditNamePrefixed, String article,
+                              Locale locale, FetchCommentListener fetchCommentListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> comments = api.getComments(subredditNamePrefixed, article);
         comments.enqueue(new Callback<String>() {

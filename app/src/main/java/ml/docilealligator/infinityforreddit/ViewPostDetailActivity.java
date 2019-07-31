@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +24,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.evernote.android.state.State;
 import com.google.android.material.snackbar.Snackbar;
+import com.livefront.bridge.Bridge;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -54,24 +57,24 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private Locale mLocale;
 
     private int orientation;
-    private static final String ORIENTATION_STATE = "OS";
-    private static final String POST_STATE = "PS";
-    private static final String IS_REFRESHING_STATE = "IRS";
-    private static final String IS_LOADING_MORE_CHILDREN_STATE = "ILMCS";
-    private static final String COMMENTS_STATE = "CS";
-    private static final String HAS_MORE_CHILDREN_STATE = "HMCS";
-    private static final String MORE_CHILDREN_LIST_STATE = "MCLS";
-    private static final String MORE_CHILDREN_STARTING_INDEX_STATE = "MCSIS";
-
-    private Post mPost;
     private int postListPosition = -1;
 
-    private boolean isLoadingMoreChildren = false;
-    private boolean isRefreshing = false;
-    private ArrayList<String> children;
-    private int mChildrenStartingIndex = 0;
-    private boolean loadMoreChildrenSuccess = true;
-    private boolean hasMoreChildren;
+    @State
+    Post mPost;
+    @State
+    boolean isLoadingMoreChildren = false;
+    @State
+    boolean isRefreshing = false;
+    @State
+    ArrayList<CommentData> comments;
+    @State
+    ArrayList<String> children;
+    @State
+    int mChildrenStartingIndex = 0;
+    @State
+    boolean loadMoreChildrenSuccess = true;
+    @State
+    boolean hasMoreChildren;
 
     private LinearLayoutManager mLinearLayoutManager;
     private CommentAndPostRecyclerViewAdapter mAdapter;
@@ -99,6 +102,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_post_detail);
 
+        Bridge.restoreInstanceState(this, savedInstanceState);
+
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
@@ -114,12 +119,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        if(savedInstanceState == null) {
-            orientation = getResources().getConfiguration().orientation;
+        orientation = getResources().getConfiguration().orientation;
+
+        if(mPost == null) {
             mPost = getIntent().getExtras().getParcelable(EXTRA_POST_DATA);
-        } else {
-            orientation = savedInstanceState.getInt(ORIENTATION_STATE);
-            mPost = savedInstanceState.getParcelable(POST_STATE);
         }
 
         if(mPost == null) {
@@ -145,24 +148,19 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     });
             mRecyclerView.setAdapter(mAdapter);
 
-            if(savedInstanceState != null) {
-                isRefreshing = savedInstanceState.getBoolean(IS_REFRESHING_STATE);
+            if(comments == null) {
+                fetchComments();
+            } else {
                 if(isRefreshing) {
                     isRefreshing = false;
                     refresh();
                 } else {
-                    mAdapter.addComments(savedInstanceState.getParcelableArrayList(COMMENTS_STATE),
-                            savedInstanceState.getBoolean(HAS_MORE_CHILDREN_STATE));
-                    isLoadingMoreChildren = savedInstanceState.getBoolean(IS_LOADING_MORE_CHILDREN_STATE);
-                    children = savedInstanceState.getStringArrayList(MORE_CHILDREN_LIST_STATE);
-                    mChildrenStartingIndex = savedInstanceState.getInt(MORE_CHILDREN_STARTING_INDEX_STATE);
+                    mAdapter.addComments(comments, hasMoreChildren);
                     if(isLoadingMoreChildren) {
                         isLoadingMoreChildren = false;
                         fetchMoreComments();
                     }
                 }
-            } else {
-                fetchComment();
             }
         }
 
@@ -263,16 +261,20 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchComment() {
+    private void fetchComments() {
         mAdapter.initiallyLoading();
 
-        FetchComment.fetchComment(mRetrofit, mPost.getSubredditNamePrefixed(), mPost.getId(),
+        FetchComment.fetchComments(mRetrofit, mPost.getSubredditNamePrefixed(), mPost.getId(),
                 mLocale, new FetchComment.FetchCommentListener() {
                     @Override
                     public void onFetchCommentSuccess(ArrayList<CommentData> expandedComments,
                                                       String parentId, ArrayList<String> children) {
                         ViewPostDetailActivity.this.children = children;
 
+                        comments = expandedComments;
+                        if(comments != null) {
+                            Log.i("thisis ", "not null");
+                        }
                         hasMoreChildren = children.size() != 0;
                         mAdapter.addComments(expandedComments, hasMoreChildren);
 
@@ -337,7 +339,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             mFetchPostInfoLinearLayout.setVisibility(View.GONE);
             mGlide.clear(mFetchPostInfoImageView);
 
-            fetchComment();
+            fetchComments();
 
             String accessToken = getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
                     .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
@@ -425,14 +427,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(ORIENTATION_STATE, orientation);
-        outState.putParcelable(POST_STATE, mPost);
-        outState.putBoolean(IS_REFRESHING_STATE, isRefreshing);
-        outState.putBoolean(IS_LOADING_MORE_CHILDREN_STATE, isLoadingMoreChildren);
-        outState.putParcelableArrayList(COMMENTS_STATE, mAdapter.getVisibleComments());
-        outState.putBoolean(HAS_MORE_CHILDREN_STATE, hasMoreChildren);
-        outState.putStringArrayList(MORE_CHILDREN_LIST_STATE, children);
-        outState.putInt(MORE_CHILDREN_STARTING_INDEX_STATE, mChildrenStartingIndex);
+        Bridge.saveInstanceState(this, outState);
     }
 
     @Override
@@ -448,6 +443,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+        Bridge.clear(this);
         if(mLoadSubredditIconAsyncTask != null) {
             mLoadSubredditIconAsyncTask.cancel(true);
         }
