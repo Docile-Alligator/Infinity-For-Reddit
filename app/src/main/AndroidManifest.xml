@@ -73,7 +73,6 @@
             android:theme="@style/AppTheme.NoActionBarWithTransparentStatusBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -92,15 +91,42 @@
         <activity
             android:name=".ViewPostDetailActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https"
+                    android:host="www.reddit.com"
+                    android:pathPattern="/r/..*/comments/..*"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ViewSubredditDetailActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBarWithTranslucentWindow" />
+            android:theme="@style/AppTheme.NoActionBarWithTranslucentWindow">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https"
+                    android:host="www.reddit.com"
+                    android:pathPattern="/r/..*"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ViewUserDetailActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBarWithTranslucentWindow" />
+            android:theme="@style/AppTheme.NoActionBarWithTranslucentWindow">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https"
+                    android:host="www.reddit.com"
+                    android:pathPattern="/user/..*"/>
+            </intent-filter>
+        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"

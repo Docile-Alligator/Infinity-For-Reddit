@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -28,6 +29,8 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -71,6 +74,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     private AppBarLayout.LayoutParams params;
 
     private String userName;
+    private Uri userUri;
     private boolean subscriptionReady = false;
     private boolean isInLazyMode = false;
     private int colorPrimary;
@@ -106,7 +110,20 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             statusBarHeight = getResources().getDimensionPixelSize(resourceId);
         }
 
-        userName = getIntent().getExtras().getString(EXTRA_USER_NAME_KEY);
+        if(getIntent().getData() != null) {
+            userUri = getIntent().getData();
+            List<String> segments = userUri.getPathSegments();
+            int userIndex = segments.indexOf("user");
+            if(userIndex >= 0 && userIndex < segments.size() - 1) {
+                userName = segments.get(userIndex + 1);
+            } else {
+                //Deep link error handling
+                finish();
+            }
+        } else {
+            userName = getIntent().getExtras().getString(EXTRA_USER_NAME_KEY);
+        }
+
         String title = "u/" + userName;
         userNameTextView.setText(title);
 

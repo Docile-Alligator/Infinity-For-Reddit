@@ -44,6 +44,8 @@ import retrofit2.Retrofit;
 public class MainActivity extends AppCompatActivity implements SortTypeBottomSheetFragment.SortTypeSelectionCallback,
         PostTypeBottomSheetFragment.PostTypeSelectionCallback {
 
+    static final String EXTRA_POST_TYPE = "EPT";
+
     private static final String FETCH_USER_INFO_STATE = "FUIS";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
@@ -138,6 +140,14 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             if (savedInstanceState != null) {
                 mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
                 isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
+            } else {
+                if(getIntent().hasExtra(EXTRA_POST_TYPE)) {
+                    if(getIntent().getExtras().getString(EXTRA_POST_TYPE).equals("popular")) {
+                        viewPager.setCurrentItem(1);
+                    } else {
+                        viewPager.setCurrentItem(2);
+                    }
+                }
             }
 
             glide = Glide.with(this);
