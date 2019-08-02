@@ -201,7 +201,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     }
                     mLoadSubredditIconAsyncTask = new LoadSubredditIconAsyncTask(
                             SubredditRoomDatabase.getDatabase(mActivity).subredditDao(), mPost.getSubredditNamePrefixed().substring(2),
-                            iconImageUrl -> {
+                            mRetrofit, iconImageUrl -> {
                                 if(!iconImageUrl.equals("")) {
                                     mGlide.load(iconImageUrl)
                                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))

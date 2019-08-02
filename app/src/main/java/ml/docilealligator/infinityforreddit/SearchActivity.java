@@ -45,6 +45,28 @@ public class SearchActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
+        simpleSearchView.setOnSearchViewListener(new SimpleSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+                finish();
+            }
+
+            @Override
+            public void onSearchViewShownAnimation() {
+
+            }
+
+            @Override
+            public void onSearchViewClosedAnimation() {
+
+            }
+        });
+
         simpleSearchView.setOnQueryTextListener(new SimpleSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

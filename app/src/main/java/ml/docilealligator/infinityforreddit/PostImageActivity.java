@@ -98,6 +98,10 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
     private FlairBottomSheetFragment flairSelectionBottomSheetFragment;
 
     @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+
+    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
 
@@ -288,7 +292,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
 
     private void loadSubredditIcon() {
         new LoadSubredditIconAsyncTask(SubredditRoomDatabase.getDatabase(this).subredditDao(),
-                subredditName, iconImageUrl -> {
+                subredditName, mRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
             loadSubredditIconSuccessful = true;

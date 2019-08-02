@@ -469,7 +469,6 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                Log.i("initial", call.request().url().toString());
                 if(response.isSuccessful()) {
                     ParsePost.parsePosts(response.body(), locale, -1,
                             new ParsePost.ParsePostsListingListener() {
@@ -518,7 +517,6 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                Log.i("after", call.request().url().toString());
                 if(response.isSuccessful()) {
                     ParsePost.parsePosts(response.body(), locale, -1, new ParsePost.ParsePostsListingListener() {
                         @Override

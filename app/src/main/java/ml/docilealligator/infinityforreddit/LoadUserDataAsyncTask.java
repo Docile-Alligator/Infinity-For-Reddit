@@ -50,7 +50,7 @@ public class LoadUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
 
                 @Override
                 public void onFetchUserDataFailed() {
-                    loadUserDataAsyncTaskListener.loadUserDataSuccess("");
+                    loadUserDataAsyncTaskListener.loadUserDataSuccess(null);
                 }
             });
         }

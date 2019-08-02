@@ -59,6 +59,7 @@ import retrofit2.Retrofit;
 class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHolder> {
     private Context mContext;
     private Retrofit mOauthRetrofit;
+    private Retrofit mRetrofit;
     private SharedPreferences mSharedPreferences;
     private RequestManager glide;
     private SubredditDao subredditDao;
@@ -78,12 +79,14 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
         void retryLoadingMore();
     }
 
-    PostRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, SharedPreferences sharedPreferences, int postType,
-                            boolean displaySubredditName, RetryLoadingMoreCallback retryLoadingMoreCallback) {
+    PostRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, Retrofit retrofit,
+                            SharedPreferences sharedPreferences, int postType, boolean displaySubredditName,
+                            RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         if(context != null) {
             mContext = context;
             mOauthRetrofit = oauthRetrofit;
+            mRetrofit = retrofit;
             mSharedPreferences = sharedPreferences;
             this.postType = postType;
             this.displaySubredditName = displaySubredditName;
@@ -159,7 +162,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                 if(displaySubredditName) {
                     if(author.equals(subredditNamePrefixed)) {
                         if(post.getAuthorIconUrl() == null) {
-                            new LoadUserDataAsyncTask(userDao, post.getAuthor(), mOauthRetrofit, iconImageUrl -> {
+                            new LoadUserDataAsyncTask(userDao, post.getAuthor(), mRetrofit, iconImageUrl -> {
                                 if(mContext != null && getItemCount() > 0) {
                                     if(!iconImageUrl.equals("")) {
                                         glide.load(iconImageUrl)
@@ -191,10 +194,12 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         }
                     } else {
                         if(post.getSubredditIconUrl() == null) {
-                            new LoadSubredditIconAsyncTask(subredditDao, subredditName,
+                            new LoadSubredditIconAsyncTask(subredditDao, subredditName, mRetrofit,
                                     iconImageUrl -> {
                                         if(mContext != null && getItemCount() > 0) {
-                                            if(!iconImageUrl.equals("")) {
+                                            if(iconImageUrl == null) {
+
+                                            } else if(!iconImageUrl.equals("")) {
                                                 glide.load(iconImageUrl)
                                                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                                         .error(glide.load(R.drawable.subreddit_default_icon)
@@ -245,7 +250,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                     });
                 } else {
                     if(post.getAuthorIconUrl() == null) {
-                        new LoadUserDataAsyncTask(userDao, post.getAuthor(), mOauthRetrofit, iconImageUrl -> {
+                        new LoadUserDataAsyncTask(userDao, post.getAuthor(), mRetrofit, iconImageUrl -> {
                             if(mContext != null && getItemCount() > 0) {
                                 if(!iconImageUrl.equals("")) {
                                     glide.load(iconImageUrl)

@@ -1,8 +1,9 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.SharedPreferences;
-import androidx.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +43,11 @@ class VoteThing {
             voteThingCall.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                    voteThingListener.onVoteThingSuccess(position);
+                    if(response.isSuccessful()) {
+                        voteThingListener.onVoteThingSuccess(position);
+                    } else {
+                        voteThingListener.onVoteThingFail(position);
+                    }
                 }
 
                 @Override
@@ -68,7 +73,11 @@ class VoteThing {
             voteThingCall.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                    voteThingWithoutPositionListener.onVoteThingSuccess();
+                    if(response.isSuccessful()) {
+                        voteThingWithoutPositionListener.onVoteThingSuccess();
+                    } else {
+                        voteThingWithoutPositionListener.onVoteThingFail();
+                    }
                 }
 
                 @Override

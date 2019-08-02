@@ -22,8 +22,7 @@ public class FetchUserData {
         void onFetchUserListingDataFailed();
     }
 
-    public static void fetchUserData(final Retrofit retrofit, String userName,
-                              final FetchUserDataListener fetchUserDataListener) {
+    public static void fetchUserData(Retrofit retrofit, String userName, FetchUserDataListener fetchUserDataListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
         Call<String> userInfo = api.getUserData(userName);
