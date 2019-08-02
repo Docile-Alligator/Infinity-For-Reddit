@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -26,8 +25,6 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -66,7 +63,6 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     @BindView(R.id.fab_view_subreddit_detail_activity) FloatingActionButton fab;
 
     private String subredditName;
-    private Uri subredditUri;
     private boolean subscriptionReady = false;
     private boolean isInLazyMode = false;
 
@@ -117,26 +113,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
             statusBarHeight = getResources().getDimensionPixelSize(resourceId);
         }
 
-        if(getIntent().getData() != null) {
-            subredditUri = getIntent().getData();
-            List<String> segments = subredditUri.getPathSegments();
-            int rIndex = segments.indexOf("r");
-            if(rIndex >= 0 && rIndex < segments.size() - 1) {
-                subredditName = segments.get(rIndex + 1);
-                if(subredditName.equals("popular") || subredditName.equals("all")) {
-                    Intent intent = new Intent(this, MainActivity.class);
-                    intent.putExtra(MainActivity.EXTRA_POST_TYPE, subredditName);
-                    startActivity(intent);
-                    finish();
-                }
-            } else {
-                //Deep link error handling
-                finish();
-            }
-        } else {
-            subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME_KEY);
-        }
-
+        subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME_KEY);
         String title = "r/" + subredditName;
         subredditNameTextView.setText(title);
 

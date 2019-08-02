@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -33,7 +32,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -63,8 +61,6 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
     @State
     Post mPost;
-    @State
-    Uri postUri;
     @State
     boolean isLoadingMoreChildren = false;
     @State
@@ -126,17 +122,13 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         orientation = getResources().getConfiguration().orientation;
 
         if(mPost == null) {
-            if(getIntent().getData() != null) {
-                postUri = getIntent().getData();
-            } else {
-                mPost = getIntent().getExtras().getParcelable(EXTRA_POST_DATA);
-            }
+            mPost = getIntent().getExtras().getParcelable(EXTRA_POST_DATA);
         }
 
-        if(postUri == null && mPost == null) {
+        if(mPost == null) {
             mProgressBar.setVisibility(View.VISIBLE);
             fetchPostAndCommentsById(getIntent().getExtras().getString(EXTRA_POST_ID));
-        } else if(mPost != null) {
+        } else {
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
                     mOauthRetrofit, mGlide, mSharedPreferences, mPost,
                     mPost.getSubredditNamePrefixed(), mLocale, mLoadSubredditIconAsyncTask,
@@ -169,17 +161,6 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                         fetchMoreComments();
                     }
                 }
-            }
-        } else {
-            mProgressBar.setVisibility(View.VISIBLE);
-            List<String> segments = postUri.getPathSegments();
-            int commentIndex = segments.indexOf("comments");
-            if(commentIndex >= 0 || commentIndex != segments.size() - 1) {
-                mProgressBar.setVisibility(View.VISIBLE);
-                fetchPostAndCommentsById(segments.get(commentIndex + 1));
-            } else {
-                //Deep link error handling
-                finish();
             }
         }
 

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -118,7 +119,13 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                 userName = segments.get(userIndex + 1);
             } else {
                 //Deep link error handling
+                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                builder.addDefaultShareMenuItem();
+                builder.setToolbarColor(getResources().getColor(R.color.colorPrimary));
+                CustomTabsIntent customTabsIntent = builder.build();
+                customTabsIntent.launchUrl(this, userUri);
                 finish();
+                return;
             }
         } else {
             userName = getIntent().getExtras().getString(EXTRA_USER_NAME_KEY);

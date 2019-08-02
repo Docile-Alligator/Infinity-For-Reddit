@@ -19,6 +19,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".LinkResolverActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="www.reddit.com"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".SearchActivity"
             android:label="@string/search_activity_label"
@@ -73,6 +85,7 @@
             android:theme="@style/AppTheme.NoActionBarWithTransparentStatusBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -91,42 +104,15 @@
         <activity
             android:name=".ViewPostDetailActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https"
-                    android:host="www.reddit.com"
-                    android:pathPattern="/r/..*/comments/..*"/>
-            </intent-filter>
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ViewSubredditDetailActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBarWithTranslucentWindow">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https"
-                    android:host="www.reddit.com"
-                    android:pathPattern="/r/..*"/>
-            </intent-filter>
-        </activity>
+            android:theme="@style/AppTheme.NoActionBarWithTranslucentWindow" />
         <activity
             android:name=".ViewUserDetailActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBarWithTranslucentWindow">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https"
-                    android:host="www.reddit.com"
-                    android:pathPattern="/user/..*"/>
-            </intent-filter>
-        </activity>
+            android:theme="@style/AppTheme.NoActionBarWithTranslucentWindow" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -135,8 +121,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths">
-            </meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
     </application>
 
