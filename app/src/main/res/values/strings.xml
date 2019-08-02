@@ -146,4 +146,7 @@
     <string name="sort_relevance">Relevance</string>
     <string name="sort_comments">Comments</string>
     <string name="sort_activity">Activity</string>
+
+    <string name="open_link_with">Open link with</string>
+    <string name="no_browser_found">No browser found</string>
 </resources>

@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -30,8 +28,6 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
-
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -75,7 +71,6 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     private AppBarLayout.LayoutParams params;
 
     private String userName;
-    private Uri userUri;
     private boolean subscriptionReady = false;
     private boolean isInLazyMode = false;
     private int colorPrimary;
@@ -111,26 +106,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             statusBarHeight = getResources().getDimensionPixelSize(resourceId);
         }
 
-        if(getIntent().getData() != null) {
-            userUri = getIntent().getData();
-            List<String> segments = userUri.getPathSegments();
-            int userIndex = segments.indexOf("user");
-            if(userIndex >= 0 && userIndex < segments.size() - 1) {
-                userName = segments.get(userIndex + 1);
-            } else {
-                //Deep link error handling
-                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                builder.addDefaultShareMenuItem();
-                builder.setToolbarColor(getResources().getColor(R.color.colorPrimary));
-                CustomTabsIntent customTabsIntent = builder.build();
-                customTabsIntent.launchUrl(this, userUri);
-                finish();
-                return;
-            }
-        } else {
-            userName = getIntent().getExtras().getString(EXTRA_USER_NAME_KEY);
-        }
-
+        userName = getIntent().getExtras().getString(EXTRA_USER_NAME_KEY);
         String title = "u/" + userName;
         userNameTextView.setText(title);
 
