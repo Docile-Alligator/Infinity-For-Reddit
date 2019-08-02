@@ -147,6 +147,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                 boolean nsfw = post.isNSFW();
                 boolean spoiler = post.isSpoiler();
                 String flair = post.getFlair();
+                boolean isArchived = post.isArchived();
 
                 ((DataViewHolder) holder).cardView.setOnClickListener(view -> {
                     if(canStartActivity) {
@@ -350,6 +351,13 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                     glide.load(R.drawable.thumbtack).into(((DataViewHolder) holder).stickiedPostImageView);
                 }
 
+                if(isArchived) {
+                    ((DataViewHolder) holder).upvoteButton
+                            .setColorFilter(ContextCompat.getColor(mContext, R.color.voteUnavailableVoteButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                    ((DataViewHolder) holder).downvoteButton
+                            .setColorFilter(ContextCompat.getColor(mContext, R.color.voteUnavailableVoteButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                }
+
                 if(post.isCrosspost()) {
                     ((DataViewHolder) holder).crosspostImageView.setVisibility(View.VISIBLE);
                 }
@@ -441,6 +449,11 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                 }
 
                 ((DataViewHolder) holder).upvoteButton.setOnClickListener(view -> {
+                    if(isArchived) {
+                        Toast.makeText(mContext, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     ColorFilter previousUpvoteButtonColorFilter = ((DataViewHolder) holder).upvoteButton.getColorFilter();
                     ColorFilter previousDownvoteButtonColorFilter = ((DataViewHolder) holder).downvoteButton.getColorFilter();
                     int previousVoteType = post.getVoteType();
@@ -495,6 +508,11 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                 });
 
                 ((DataViewHolder) holder).downvoteButton.setOnClickListener(view -> {
+                    if(isArchived) {
+                        Toast.makeText(mContext, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     ColorFilter previousUpvoteButtonColorFilter = ((DataViewHolder) holder).upvoteButton.getColorFilter();
                     ColorFilter previousDownvoteButtonColorFilter = ((DataViewHolder) holder).downvoteButton.getColorFilter();
 

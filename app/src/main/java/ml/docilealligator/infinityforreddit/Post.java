@@ -40,14 +40,15 @@ class Post implements Parcelable {
     private boolean spoiler;
     private boolean nsfw;
     private boolean stickied;
+    private boolean archived;
     private boolean isCrosspost;
     private boolean isDashVideo;
     private boolean isDownloadableGifOrVideo;
-    private Post crosspostParentPost;
 
     Post(String id, String fullName, String subredditNamePrefixed, String author, String postTime,
          String title, String previewUrl, String permalink, int score, int postType, int voteType,
-         int gilded, String flair, boolean spoiler, boolean nsfw, boolean stickied, boolean isCrosspost, boolean isDashVideo) {
+         int gilded, String flair, boolean spoiler, boolean nsfw, boolean stickied, boolean archived,
+         boolean isCrosspost, boolean isDashVideo) {
         this.id = id;
         this.fullName = fullName;
         this.subredditNamePrefixed = subredditNamePrefixed;
@@ -65,6 +66,7 @@ class Post implements Parcelable {
         this.spoiler = spoiler;
         this.nsfw = nsfw;
         this.stickied = stickied;
+        this.archived = archived;
         this.isCrosspost = isCrosspost;
         this.isDashVideo = isDashVideo;
     }
@@ -72,7 +74,7 @@ class Post implements Parcelable {
     Post(String id, String fullName, String subredditNamePrefixed, String author, String postTime,
          String title, String previewUrl, String url, String permalink, int score, int postType,
          int voteType, int gilded, String flair, boolean spoiler, boolean nsfw, boolean stickied,
-         boolean isCrosspost) {
+         boolean archived, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditNamePrefixed = subredditNamePrefixed;
@@ -91,12 +93,13 @@ class Post implements Parcelable {
         this.spoiler = spoiler;
         this.nsfw = nsfw;
         this.stickied = stickied;
+        this.archived = archived;
         this.isCrosspost = isCrosspost;
     }
 
     Post(String id, String fullName, String subredditNamePrefixed, String author, String postTime,
          String title, String permalink, int score, int postType, int voteType, int gilded, String flair,
-         boolean spoiler, boolean nsfw, boolean stickied, boolean isCrosspost) {
+         boolean spoiler, boolean nsfw, boolean stickied, boolean archived, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditNamePrefixed = subredditNamePrefixed;
@@ -113,6 +116,7 @@ class Post implements Parcelable {
         this.spoiler = spoiler;
         this.nsfw = nsfw;
         this.stickied = stickied;
+        this.archived = archived;
         this.isCrosspost= isCrosspost;
     }
 
@@ -142,6 +146,7 @@ class Post implements Parcelable {
         spoiler = in.readByte() != 0;
         nsfw = in.readByte() != 0;
         stickied = in.readByte() != 0;
+        archived = in.readByte() != 0;
         isCrosspost = in.readByte() != 0;
         isDashVideo = in.readByte() != 0;
         isDownloadableGifOrVideo = in.readByte() != 0;
@@ -316,6 +321,10 @@ class Post implements Parcelable {
         return stickied;
     }
 
+    boolean isArchived() {
+        return archived;
+    }
+
     boolean isCrosspost() {
         return isCrosspost;
     }
@@ -347,6 +356,7 @@ class Post implements Parcelable {
         parcel.writeByte((byte) (spoiler ? 1 : 0));
         parcel.writeByte((byte) (nsfw ? 1 : 0));
         parcel.writeByte((byte) (stickied ? 1 : 0));
+        parcel.writeByte((byte) (archived ? 1 : 0));
         parcel.writeByte((byte) (isCrosspost ? 1 : 0));
         parcel.writeByte((byte) (isDashVideo ? 1 : 0));
         parcel.writeByte((byte) (isDownloadableGifOrVideo ? 1 : 0));

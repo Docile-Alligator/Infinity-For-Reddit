@@ -255,6 +255,13 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 ((PostDetailViewHolder) holder).mImageView.setVisibility(View.GONE);
             }
 
+            if(mPost.isArchived()) {
+                ((PostDetailViewHolder) holder).mUpvoteButton
+                        .setColorFilter(ContextCompat.getColor(mActivity, R.color.voteUnavailableVoteButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                ((PostDetailViewHolder) holder).mDownvoteButton
+                        .setColorFilter(ContextCompat.getColor(mActivity, R.color.voteUnavailableVoteButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+            }
+
             if(mPost.isCrosspost()) {
                 ((PostDetailViewHolder) holder).mCrosspostImageView.setVisibility(View.VISIBLE);
             }
@@ -704,6 +711,11 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             });
 
             mUpvoteButton.setOnClickListener(view -> {
+                if(mPost.isArchived()) {
+                    Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 ColorFilter previousUpvoteButtonColorFilter = mUpvoteButton.getColorFilter();
                 ColorFilter previousDownvoteButtonColorFilter = mDownvoteButton.getColorFilter();
                 int previousVoteType = mPost.getVoteType();
@@ -758,6 +770,11 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             });
 
             mDownvoteButton.setOnClickListener(view -> {
+                if(mPost.isArchived()) {
+                    Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 ColorFilter previousUpvoteButtonColorFilter = mUpvoteButton.getColorFilter();
                 ColorFilter previousDownvoteButtonColorFilter = mDownvoteButton.getColorFilter();
                 int previousVoteType = mPost.getVoteType();
