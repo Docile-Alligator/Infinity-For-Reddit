@@ -166,15 +166,15 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 if(mPost.getAuthorIconUrl() == null) {
                     new LoadUserDataAsyncTask(UserRoomDatabase.getDatabase(mActivity).userDao(), mPost.getAuthor(), mOauthRetrofit, iconImageUrl -> {
                         if(mActivity != null && getItemCount() > 0) {
-                            if(!iconImageUrl.equals("")) {
+                            if(iconImageUrl == null || iconImageUrl.equals("")) {
+                                mGlide.load(R.drawable.subreddit_default_icon)
+                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                        .into(((PostDetailViewHolder) holder).mIconGifImageView);
+                            } else {
                                 mGlide.load(iconImageUrl)
                                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                         .error(mGlide.load(R.drawable.subreddit_default_icon)
                                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                                        .into(((PostDetailViewHolder) holder).mIconGifImageView);
-                            } else {
-                                mGlide.load(R.drawable.subreddit_default_icon)
-                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                         .into(((PostDetailViewHolder) holder).mIconGifImageView);
                             }
 
@@ -202,15 +202,15 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     mLoadSubredditIconAsyncTask = new LoadSubredditIconAsyncTask(
                             SubredditRoomDatabase.getDatabase(mActivity).subredditDao(), mPost.getSubredditNamePrefixed().substring(2),
                             mRetrofit, iconImageUrl -> {
-                                if(!iconImageUrl.equals("")) {
+                                if(iconImageUrl == null || iconImageUrl.equals("")) {
+                                    mGlide.load(R.drawable.subreddit_default_icon)
+                                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                            .into(((PostDetailViewHolder) holder).mIconGifImageView);
+                                } else {
                                     mGlide.load(iconImageUrl)
                                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                             .error(mGlide.load(R.drawable.subreddit_default_icon)
                                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                                            .into(((PostDetailViewHolder) holder).mIconGifImageView);
-                                } else {
-                                    mGlide.load(R.drawable.subreddit_default_icon)
-                                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                             .into(((PostDetailViewHolder) holder).mIconGifImageView);
                                 }
 

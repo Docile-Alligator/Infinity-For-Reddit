@@ -29,4 +29,16 @@
     <color name="roundedBottomSheetPrimaryNavigationBarColor">#000000</color>
 
     <color name="voteUnavailableVoteButtonColor">#F0F0F0</color>
+
+    <color name="tabLayoutWithExpandedCollapsingToolbarTextColor">@color/colorPrimary</color>
+
+    <color name="tabLayoutWithExpandedCollapsingToolbarTabBackground">#FFFFFF</color>
+
+    <color name="tabLayoutWithExpandedCollapsingToolbarTabIndicator">@color/tabLayoutWithExpandedCollapsingToolbarTextColor</color>
+
+    <color name="tabLayoutWithCollapsedCollapsingToolbarTextColor">#FFFFFF</color>
+
+    <color name="tabLayoutWithCollapsedCollapsingToolbarTabBackground">@color/colorPrimary</color>
+
+    <color name="tabLayoutWithCollapsedCollapsingToolbarTabIndicator">@color/tabLayoutWithCollapsedCollapsingToolbarTextColor</color>
 </resources>

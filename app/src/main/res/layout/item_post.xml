@@ -19,7 +19,7 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:id="@+id/subreddit_icon_name_linear_layout_view_item_post"
+                android:id="@+id/icon_name_linear_layout_view_item_post"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constrainedWidth="true"
@@ -30,13 +30,13 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <CustomView.AspectRatioGifImageView
-                    android:id="@+id/subreddit_icon_gif_image_view_item_post"
+                    android:id="@+id/icon_gif_image_view_item_post"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center"/>
 
                 <TextView
-                    android:id="@+id/subreddit_text_view_item_post"
+                    android:id="@+id/name_text_view_item_post"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -53,7 +53,7 @@
                 android:layout_marginEnd="8dp"
                 android:tint="@color/backgroundColorPrimaryDark"
                 android:visibility="gone"
-                app:layout_constraintStart_toEndOf="@id/subreddit_icon_name_linear_layout_view_item_post"
+                app:layout_constraintStart_toEndOf="@id/icon_name_linear_layout_view_item_post"
                 app:layout_constraintEnd_toStartOf="@+id/post_time_text_view_best_item_post"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>

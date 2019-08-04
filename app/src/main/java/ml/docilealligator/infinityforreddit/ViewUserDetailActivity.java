@@ -73,8 +73,12 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     private String userName;
     private boolean subscriptionReady = false;
     private boolean isInLazyMode = false;
-    private int colorPrimary;
-    private int white;
+    private int expandedTabTextColor;
+    private int expandedTabBackgroundColor;
+    private int expandedTabIndicatorColor;
+    private int collapsedTabTextColor;
+    private int collapsedTabBackgroundColor;
+    private int collapsedTabIndicatorColor;
 
     @Inject
     @Named("no_oauth")
@@ -122,20 +126,25 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
 
-        colorPrimary = getResources().getColor(R.color.colorPrimary);
-        white = getResources().getColor(android.R.color.white);
+        expandedTabTextColor = getResources().getColor(R.color.tabLayoutWithExpandedCollapsingToolbarTextColor);
+        expandedTabBackgroundColor = getResources().getColor(R.color.tabLayoutWithExpandedCollapsingToolbarTabBackground);
+        expandedTabIndicatorColor = getResources().getColor(R.color.tabLayoutWithExpandedCollapsingToolbarTabIndicator);
+
+        collapsedTabTextColor = getResources().getColor(R.color.tabLayoutWithCollapsedCollapsingToolbarTextColor);
+        collapsedTabBackgroundColor = getResources().getColor(R.color.tabLayoutWithCollapsedCollapsingToolbarTabBackground);
+        collapsedTabIndicatorColor = getResources().getColor(R.color.tabLayoutWithCollapsedCollapsingToolbarTabIndicator);
 
         appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
             @Override
             void onStateChanged(AppBarLayout appBarLayout, State state) {
                 if(state == State.EXPANDED) {
-                    tabLayout.setTabTextColors(colorPrimary, colorPrimary);
-                    tabLayout.setSelectedTabIndicatorColor(colorPrimary);
-                    tabLayout.setBackgroundColor(white);
+                    tabLayout.setTabTextColors(expandedTabTextColor, expandedTabTextColor);
+                    tabLayout.setSelectedTabIndicatorColor(expandedTabIndicatorColor);
+                    tabLayout.setBackgroundColor(expandedTabBackgroundColor);
                 } else if(state == State.COLLAPSED) {
-                    tabLayout.setTabTextColors(white, white);
-                    tabLayout.setSelectedTabIndicatorColor(white);
-                    tabLayout.setBackgroundColor(colorPrimary);
+                    tabLayout.setTabTextColors(collapsedTabTextColor, collapsedTabTextColor);
+                    tabLayout.setSelectedTabIndicatorColor(collapsedTabIndicatorColor);
+                    tabLayout.setBackgroundColor(collapsedTabBackgroundColor);
                 }
             }
         });
