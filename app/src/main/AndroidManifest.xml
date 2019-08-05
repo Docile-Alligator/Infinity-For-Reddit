@@ -38,6 +38,15 @@
                 <data
                     android:host="www.reddit.com"
                     android:scheme="https" />
+                <data
+                    android:host="reddit.com"
+                    android:scheme="https" />
+                <data
+                    android:host="amp.reddit.com"
+                    android:scheme="https" />
+                <data
+                    android:host="m.reddit.com"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
         <activity

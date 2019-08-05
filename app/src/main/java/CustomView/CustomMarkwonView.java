@@ -40,8 +40,11 @@ public class CustomMarkwonView extends MarkwonView {
                 builder.addDefaultShareMenuItem();
                 builder.setToolbarColor(context.getResources().getColor(R.color.colorPrimary));
                 CustomTabsIntent customTabsIntent = builder.build();
-                customTabsIntent.intent.setPackage(context.getPackageName());
-                customTabsIntent.launchUrl(context, Uri.parse(link));
+                Uri uri = Uri.parse(link);
+                if(uri.getHost() != null && uri.getHost().equals("www.reddit.com")) {
+                    customTabsIntent.intent.setPackage(context.getPackageName());
+                }
+                customTabsIntent.launchUrl(context, uri);
             }
         }).build();
 
