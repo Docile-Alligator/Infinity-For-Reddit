@@ -19,8 +19,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.FileProvider;
@@ -69,6 +69,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
     private static final int CAPTURE_IMAGE_REQUEST_CODE = 2;
 
     @BindView(R.id.coordinator_layout_post_image_activity) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.toolbar_post_image_activity) Toolbar toolbar;
     @BindView(R.id.subreddit_icon_gif_image_view_post_image_activity) GifImageView iconGifImageView;
     @BindView(R.id.subreddit_name_text_view_post_image_activity) TextView subreditNameTextView;
     @BindView(R.id.rules_button_post_image_activity) Button rulesButton;
@@ -126,9 +127,8 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
 
         ((Infinity) getApplication()).getmAppComponent().inject(this);
 
-        ActionBar actionBar = getSupportActionBar();
-        Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
-        actionBar.setHomeAsUpIndicator(upArrow);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mGlide = Glide.with(this);
         mLocale = getResources().getConfiguration().locale;

@@ -19,8 +19,8 @@ import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
@@ -66,6 +66,7 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
     private static final int CAPTURE_VIDEO_REQUEST_CODE = 2;
 
     @BindView(R.id.coordinator_layout_post_video_activity) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.toolbar_post_video_activity) Toolbar toolbar;
     @BindView(R.id.subreddit_icon_gif_image_view_post_video_activity) GifImageView iconGifImageView;
     @BindView(R.id.subreddit_name_text_view_post_video_activity) TextView subreditNameTextView;
     @BindView(R.id.rules_button_post_video_activity) Button rulesButton;
@@ -127,9 +128,8 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
 
         ((Infinity) getApplication()).getmAppComponent().inject(this);
 
-        ActionBar actionBar = getSupportActionBar();
-        Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
-        actionBar.setHomeAsUpIndicator(upArrow);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mGlide = Glide.with(this);
         mLocale = getResources().getConfiguration().locale;

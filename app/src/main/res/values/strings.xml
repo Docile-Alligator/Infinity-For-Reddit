@@ -10,6 +10,7 @@
     <string name="post_image_activity_label">Image Post</string>
     <string name="post_video_activity_label">Video Post</string>
     <string name="rules_activity_label">Rules</string>
+    <string name="search_subreddits_activity_label">Subreddits</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

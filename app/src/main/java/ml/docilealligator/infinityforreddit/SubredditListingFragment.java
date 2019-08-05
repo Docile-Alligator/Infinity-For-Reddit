@@ -1,6 +1,8 @@
 package ml.docilealligator.infinityforreddit;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -33,7 +35,8 @@ import retrofit2.Retrofit;
  */
 public class SubredditListingFragment extends Fragment implements FragmentCommunicator {
 
-    static final String QUERY_KEY = "QK";
+    static final String EXTRA_QUERY_KEY = "EQK";
+    static final String EXTRA_IS_POSTING = "EIP";
 
     @BindView(R.id.coordinator_layout_subreddit_listing_fragment) CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.recycler_view_subreddit_listing_fragment) RecyclerView mSubredditListingRecyclerView;
@@ -43,8 +46,6 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
     @BindView(R.id.fetch_subreddit_listing_info_text_view_subreddit_listing_fragment) TextView mFetchSubredditListingInfoTextView;
 
     private LinearLayoutManager mLinearLayoutManager;
-
-    private String mQuery;
 
     private SubredditListingRecyclerViewAdapter mAdapter;
 
@@ -70,16 +71,19 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_subreddit_listing, container, false);
 
-        ((Infinity) getActivity().getApplication()).getmAppComponent().inject(this);
+        Activity activity = getActivity();
+
+        ((Infinity) activity.getApplication()).getmAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
 
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mSubredditListingRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        mQuery = getArguments().getString(QUERY_KEY);
+        String query = getArguments().getString(EXTRA_QUERY_KEY);
+        boolean isPosting = getArguments().getBoolean(EXTRA_IS_POSTING);
 
-        SubredditListingViewModel.Factory factory = new SubredditListingViewModel.Factory(mRetrofit, mQuery,
+        SubredditListingViewModel.Factory factory = new SubredditListingViewModel.Factory(mRetrofit, query,
                 PostDataSource.SORT_TYPE_RELEVANCE, new SubredditListingDataSource.OnSubredditListingDataFetchedCallback() {
             @Override
             public void hasSubreddit() {
@@ -98,7 +102,23 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         mAdapter = new SubredditListingRecyclerViewAdapter(getActivity(), mOauthRetrofit, mRetrofit,
                 mAuthInfoSharedPreferences,
                 SubscribedSubredditRoomDatabase.getDatabase(getContext()).subscribedSubredditDao(),
-                () -> mSubredditListingViewModel.retryLoadingMore());
+                new SubredditListingRecyclerViewAdapter.Callback() {
+                    @Override
+                    public void retryLoadingMore() {
+                        mSubredditListingViewModel.retryLoadingMore();
+                    }
+
+                    @Override
+                    public void subredditSelected(String subredditName, String iconUrl) {
+                        if(isPosting) {
+                            ((SearchSubredditsResultActivity) activity).getSelectedSubreddit(subredditName, iconUrl);
+                        } else {
+                            Intent intent = new Intent(activity, ViewSubredditDetailActivity.class);
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditName);
+                            activity.startActivity(intent);
+                        }
+                    }
+                });
 
         mSubredditListingRecyclerView.setAdapter(mAdapter);
 

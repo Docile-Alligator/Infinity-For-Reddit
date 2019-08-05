@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,8 +12,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.bumptech.glide.Glide;
@@ -51,6 +50,7 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
 
     @BindView(R.id.coordinator_layout_post_link_activity) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.toolbar_post_link_activity) Toolbar toolbar;
     @BindView(R.id.subreddit_icon_gif_image_view_post_link_activity) GifImageView iconGifImageView;
     @BindView(R.id.subreddit_name_text_view_post_link_activity) TextView subredditNameTextView;
     @BindView(R.id.rules_button_post_link_activity) Button rulesButton;
@@ -95,9 +95,8 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
 
         ((Infinity) getApplication()).getmAppComponent().inject(this);
 
-        ActionBar actionBar = getSupportActionBar();
-        Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
-        actionBar.setHomeAsUpIndicator(upArrow);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mGlide = Glide.with(this);
         mLocale = getResources().getConfiguration().locale;

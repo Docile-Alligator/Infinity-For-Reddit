@@ -2,14 +2,17 @@ package ml.docilealligator.infinityforreddit;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SubredditSelectionActivity extends AppCompatActivity {
@@ -19,6 +22,13 @@ public class SubredditSelectionActivity extends AppCompatActivity {
     static final String EXTRA_RETURN_SUBREDDIT_ICON_URL = "ERSIURL";
     static final String EXTRA_RETURN_SUBREDDIT_IS_USER = "ERSIU";
 
+    private static final int SUBREDDIT_SEARCH_REQUEST_CODE = 0;
+    private static final String FRAGMENT_OUT_STATE = "FOS";
+
+    @BindView(R.id.toolbar_subreddit_selection_activity) Toolbar toolbar;
+
+    private Fragment mFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,19 +36,29 @@ public class SubredditSelectionActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        ActionBar actionBar = getSupportActionBar();
-        Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
-        actionBar.setHomeAsUpIndicator(upArrow);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        SubscribedSubredditsListingFragment fragment = new SubscribedSubredditsListingFragment();
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_IS_SUBREDDIT_SELECTION, true);
-        if(getIntent().hasExtra(EXTRA_EXTRA_CLEAR_SELECTION)) {
-            bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_EXTRA_CLEAR_SELECTION,
-                    getIntent().getExtras().getBoolean(EXTRA_EXTRA_CLEAR_SELECTION));
+        if(savedInstanceState == null) {
+            mFragment = new SubscribedSubredditsListingFragment();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_IS_SUBREDDIT_SELECTION, true);
+            if(getIntent().hasExtra(EXTRA_EXTRA_CLEAR_SELECTION)) {
+                bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_EXTRA_CLEAR_SELECTION,
+                        getIntent().getExtras().getBoolean(EXTRA_EXTRA_CLEAR_SELECTION));
+            }
+            mFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, mFragment).commit();
+        } else {
+            mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, mFragment).commit();
         }
-        fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, fragment).commit();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.subreddit_selection_activity, menu);
+        return true;
     }
 
     @Override
@@ -46,6 +66,11 @@ public class SubredditSelectionActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                return true;
+            case R.id.action_search_subreddit_selection_activity:
+                Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, true);
+                startActivityForResult(intent, SUBREDDIT_SEARCH_REQUEST_CODE);
                 return true;
         }
 
@@ -59,5 +84,30 @@ public class SubredditSelectionActivity extends AppCompatActivity {
         returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_IS_USER, subredditIsUser);
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode == SUBREDDIT_SEARCH_REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                String name = data.getExtras().getString(SearchActivity.EXTRA_RETURN_SUBREDDIT_NAME);
+                String iconUrl = data.getExtras().getString(SearchActivity.EXTRA_RETURN_SUBREDDIT_ICON_URL);
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_NAME, name);
+                returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_ICON_URL, iconUrl);
+                returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_IS_USER, false);
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mFragment != null) {
+            getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE, mFragment);
+        }
     }
 }

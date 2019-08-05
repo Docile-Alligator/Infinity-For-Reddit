@@ -19,6 +19,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".SearchSubredditsResultActivity"
+            android:label="@string/search_subreddits_activity_label"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".LinkResolverActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -44,17 +49,17 @@
             android:name=".PostVideoActivity"
             android:label="@string/post_video_activity_label"
             android:parentActivityName=".MainActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PostImageActivity"
             android:label="@string/post_image_activity_label"
             android:parentActivityName=".MainActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PostLinkActivity"
             android:label="@string/post_link_activity_label"
             android:parentActivityName=".MainActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SubscribedThingListingActivity"
             android:label="@string/subscriptions"
@@ -63,12 +68,14 @@
         <activity
             android:name=".SubredditSelectionActivity"
             android:label="@string/subreddit_selection_activity_label"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PostTextActivity"
             android:label="@string/post_text_activity_label"
             android:parentActivityName=".MainActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".CommentActivity"
             android:label="@string/comment_activity_label"

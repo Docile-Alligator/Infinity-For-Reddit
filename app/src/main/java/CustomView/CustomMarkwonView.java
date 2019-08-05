@@ -24,23 +24,24 @@ public class CustomMarkwonView extends MarkwonView {
         super(context, attrs);
     }
 
-    public void setMarkdown(@Nullable String markdown, Context conte) {
-        SpannableConfiguration configuration = SpannableConfiguration.builder(conte).linkResolver((view, link) -> {
+    public void setMarkdown(@Nullable String markdown, Context context) {
+        SpannableConfiguration configuration = SpannableConfiguration.builder(context).linkResolver((view, link) -> {
             if(link.startsWith("/u/") || link.startsWith("u/")) {
-                Intent intent = new Intent(conte, ViewUserDetailActivity.class);
+                Intent intent = new Intent(context, ViewUserDetailActivity.class);
                 intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, link.substring(3));
-                conte.startActivity(intent);
+                context.startActivity(intent);
             } else if(link.startsWith("/r/") || link.startsWith("r/")) {
-                Intent intent = new Intent(conte, ViewSubredditDetailActivity.class);
+                Intent intent = new Intent(context, ViewSubredditDetailActivity.class);
                 intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, link.substring(3));
-                conte.startActivity(intent);
+                context.startActivity(intent);
             } else {
                 CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                 // add share action to menu list
                 builder.addDefaultShareMenuItem();
-                builder.setToolbarColor(conte.getResources().getColor(R.color.colorPrimary));
+                builder.setToolbarColor(context.getResources().getColor(R.color.colorPrimary));
                 CustomTabsIntent customTabsIntent = builder.build();
-                customTabsIntent.launchUrl(conte, Uri.parse(link));
+                customTabsIntent.intent.setPackage(context.getPackageName());
+                customTabsIntent.launchUrl(context, Uri.parse(link));
             }
         }).build();
 

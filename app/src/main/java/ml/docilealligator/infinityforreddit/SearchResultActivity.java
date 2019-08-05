@@ -149,7 +149,8 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
                 case 1: {
                     SubredditListingFragment mFragment = new SubredditListingFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString(SubredditListingFragment.QUERY_KEY, mQuery);
+                    bundle.putString(SubredditListingFragment.EXTRA_QUERY_KEY, mQuery);
+                    bundle.putBoolean(SubredditListingFragment.EXTRA_IS_POSTING, false);
                     mFragment.setArguments(bundle);
                     return mFragment;
                 }

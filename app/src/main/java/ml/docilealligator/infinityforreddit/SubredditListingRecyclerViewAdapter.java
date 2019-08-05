@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,8 +30,9 @@ import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
 public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<SubredditData, RecyclerView.ViewHolder> {
-    interface RetryLoadingMoreCallback {
+    interface Callback {
         void retryLoadingMore();
+        void subredditSelected(String subredditName, String iconUrl);
     }
 
     private RequestManager glide;
@@ -48,19 +48,19 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
     private SubscribedSubredditDao subscribedSubredditDao;
 
     private NetworkState networkState;
-    private RetryLoadingMoreCallback retryLoadingMoreCallback;
+    private Callback callback;
 
     SubredditListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, Retrofit retrofit,
                                         SharedPreferences authInfoSharedPreferences,
                                         SubscribedSubredditDao subscribedSubredditDao,
-                                        RetryLoadingMoreCallback retryLoadingMoreCallback) {
+                                        Callback callback) {
         super(DIFF_CALLBACK);
         this.context = context;
         this.oauthRetrofit = oauthRetrofit;
         this.retrofit = retrofit;
         this.authInfoSharedPreferences = authInfoSharedPreferences;
         this.subscribedSubredditDao = subscribedSubredditDao;
-        this.retryLoadingMoreCallback = retryLoadingMoreCallback;
+        this.callback = callback;
         glide = Glide.with(context.getApplicationContext());
     }
 
@@ -95,11 +95,8 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof DataViewHolder) {
             SubredditData subredditData = getItem(position);
-            ((DataViewHolder) holder).constraintLayout.setOnClickListener(view -> {
-                Intent intent = new Intent(context, ViewSubredditDetailActivity.class);
-                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditData.getName());
-                context.startActivity(intent);
-            });
+            ((DataViewHolder) holder).constraintLayout.setOnClickListener(view ->
+                    callback.subredditSelected(subredditData.getName(), subredditData.getIconUrl()));
 
             if(!subredditData.getIconUrl().equals("")) {
                 glide.load(subredditData.getIconUrl())
@@ -207,7 +204,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
         ErrorViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            retryButton.setOnClickListener(view -> retryLoadingMoreCallback.retryLoadingMore());
+            retryButton.setOnClickListener(view -> callback.retryLoadingMore());
             errorTextView.setText(R.string.load_comments_failed);
         }
     }

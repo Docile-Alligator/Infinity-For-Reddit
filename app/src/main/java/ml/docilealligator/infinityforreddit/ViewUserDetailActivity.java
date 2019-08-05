@@ -328,6 +328,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, SearchActivity.class);
                 intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, userName);
                 intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_IS_USER, true);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, false);
                 startActivity(intent);
                 break;
             case R.id.action_refresh_view_user_detail_activity:

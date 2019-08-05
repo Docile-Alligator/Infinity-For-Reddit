@@ -312,6 +312,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                 Intent intent = new Intent(this, SearchActivity.class);
                 intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, subredditName);
                 intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_IS_USER, false);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, false);
                 startActivity(intent);
                 break;
             case R.id.action_refresh_view_subreddit_detail_activity:
