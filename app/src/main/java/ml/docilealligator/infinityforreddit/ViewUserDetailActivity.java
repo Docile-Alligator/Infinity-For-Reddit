@@ -70,7 +70,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
 
-    private String userName;
+    private String username;
     private boolean subscriptionReady = false;
     private boolean isInLazyMode = false;
     private int expandedTabTextColor;
@@ -110,8 +110,8 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             statusBarHeight = getResources().getDimensionPixelSize(resourceId);
         }
 
-        userName = getIntent().getExtras().getString(EXTRA_USER_NAME_KEY);
-        String title = "u/" + userName;
+        username = getIntent().getExtras().getString(EXTRA_USER_NAME_KEY);
+        String title = "u/" + username;
         userNameTextView.setText(title);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -152,7 +152,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         subscribedUserDao = SubscribedUserRoomDatabase.getDatabase(this).subscribedUserDao();
         glide = Glide.with(this);
 
-        userViewModel = ViewModelProviders.of(this, new UserViewModel.Factory(getApplication(), userName))
+        userViewModel = ViewModelProviders.of(this, new UserViewModel.Factory(getApplication(), username))
                 .get(UserViewModel.class);
         userViewModel.getUserLiveData().observe(this, userData -> {
             if(userData != null) {
@@ -166,7 +166,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                         Intent intent = new Intent(this, ViewImageActivity.class);
                         intent.putExtra(ViewImageActivity.TITLE_KEY, title);
                         intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, userData.getBanner());
-                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, userName + "-banner");
+                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, username + "-banner");
                         startActivity(intent);
                     });
                 }
@@ -189,7 +189,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                         Intent intent = new Intent(this, ViewImageActivity.class);
                         intent.putExtra(ViewImageActivity.TITLE_KEY, title);
                         intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, userData.getIconUrl());
-                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, userName + "-icon");
+                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, username + "-icon");
                         startActivity(intent);
                     });
                 }
@@ -201,7 +201,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                             subscriptionReady = false;
                             if(subscribeUserChip.getText().equals(getResources().getString(R.string.follow))) {
                                 UserFollowing.followUser(mOauthRetrofit, mRetrofit, sharedPreferences,
-                                        userName, subscribedUserDao, new UserFollowing.UserFollowingListener() {
+                                        username, subscribedUserDao, new UserFollowing.UserFollowingListener() {
                                             @Override
                                             public void onUserFollowingSuccess() {
                                                 subscribeUserChip.setText(R.string.unfollow);
@@ -218,7 +218,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                                         });
                             } else {
                                 UserFollowing.unfollowUser(mOauthRetrofit, mRetrofit, sharedPreferences,
-                                        userName, subscribedUserDao, new UserFollowing.UserFollowingListener() {
+                                        username, subscribedUserDao, new UserFollowing.UserFollowingListener() {
                                             @Override
                                             public void onUserFollowingSuccess() {
                                                 subscribeUserChip.setText(R.string.follow);
@@ -237,7 +237,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                         }
                     });
 
-                    new CheckIsFollowingUserAsyncTask(subscribedUserDao, userName, new CheckIsFollowingUserAsyncTask.CheckIsFollowingUserListener() {
+                    new CheckIsFollowingUserAsyncTask(subscribedUserDao, username, new CheckIsFollowingUserAsyncTask.CheckIsFollowingUserListener() {
                         @Override
                         public void isSubscribed() {
                             subscribeUserChip.setText(R.string.unfollow);
@@ -266,7 +266,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             }
         });
 
-        FetchUserData.fetchUserData(mRetrofit, userName, new FetchUserData.FetchUserDataListener() {
+        FetchUserData.fetchUserData(mRetrofit, username, new FetchUserData.FetchUserDataListener() {
             @Override
             public void onFetchUserDataSuccess(UserData userData) {
                 new InsertUserDataAsyncTask(UserRoomDatabase.getDatabase(ViewUserDetailActivity.this).userDao(), userData).execute();
@@ -281,7 +281,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         if(savedInstanceState == null) {
             /*mFragment = new PostFragment();
             Bundle bundle = new Bundle();
-            bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, userName);
+            bundle.putString(PostFragment.EXTRA_NAME, username);
             bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_USER);
             mFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_user_detail_activity, mFragment).commit();*/
@@ -290,7 +290,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             if(mFragment == null) {
                 mFragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, userName);
+                bundle.putString(PostFragment.EXTRA_NAME, username);
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_USER);
                 mFragment.setArguments(bundle);
             }*/
@@ -326,7 +326,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                 return true;
             case R.id.action_search_view_user_detail_activity:
                 Intent intent = new Intent(this, SearchActivity.class);
-                intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, userName);
+                intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, username);
                 intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_IS_USER, true);
                 intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, false);
                 startActivity(intent);
@@ -440,13 +440,14 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_USER);
-                bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, userName);
+                bundle.putString(PostFragment.EXTRA_USER_NAME, username);
+                bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                 fragment.setArguments(bundle);
                 return fragment;
             }
             CommentsListingFragment fragment = new CommentsListingFragment();
             Bundle bundle = new Bundle();
-            bundle.putString(CommentsListingFragment.EXTRA_USERNAME_KEY, userName);
+            bundle.putString(CommentsListingFragment.EXTRA_USERNAME_KEY, username);
             fragment.setArguments(bundle);
             return fragment;
         }

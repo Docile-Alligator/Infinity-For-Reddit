@@ -20,6 +20,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".FilteredPostsActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".SearchSubredditsResultActivity"
             android:label="@string/search_subreddits_activity_label"
             android:parentActivityName=".MainActivity"
@@ -74,8 +78,8 @@
             android:name=".PostTextActivity"
             android:label="@string/post_text_activity_label"
             android:parentActivityName=".MainActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".CommentActivity"
             android:label="@string/comment_activity_label"

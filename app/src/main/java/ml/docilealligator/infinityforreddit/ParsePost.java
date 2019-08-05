@@ -28,8 +28,8 @@ class ParsePost {
         void onParsePostFail();
     }
 
-    static void parsePosts(String response, Locale locale, int nPosts, ParsePostsListingListener parsePostsListingListener) {
-        new ParsePostDataAsyncTask(response, locale, nPosts, parsePostsListingListener).execute();
+    static void parsePosts(String response, Locale locale, int nPosts, int filter, ParsePostsListingListener parsePostsListingListener) {
+        new ParsePostDataAsyncTask(response, locale, nPosts, filter, parsePostsListingListener).execute();
     }
 
     static void parsePost(String response, Locale locale, ParsePostListener parsePostListener) {
@@ -40,6 +40,7 @@ class ParsePost {
         private JSONArray allData;
         private Locale locale;
         private int nPosts;
+        private int filter;
         private ParsePostsListingListener parsePostsListingListener;
         private ParsePostListener parsePostListener;
         private ArrayList<Post> newPosts;
@@ -47,7 +48,7 @@ class ParsePost {
         private String lastItem;
         private boolean parseFailed;
 
-        ParsePostDataAsyncTask(String response, Locale locale, int nPosts,
+        ParsePostDataAsyncTask(String response, Locale locale, int nPosts, int filter,
                                ParsePostsListingListener parsePostsListingListener) {
             this.parsePostsListingListener = parsePostsListingListener;
             try {
@@ -56,6 +57,7 @@ class ParsePost {
                 lastItem = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
                 this.locale = locale;
                 this.nPosts = nPosts;
+                this.filter = filter;
                 newPosts = new ArrayList<>();
                 parseFailed = false;
             } catch (JSONException e) {
@@ -104,7 +106,14 @@ class ParsePost {
 
                     for(int i = 0; i < size; i++) {
                         JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
-                        newPosts.add(parseBasicData(data, locale, i));
+                        Post post = parseBasicData(data, locale, i);
+                        if(filter == PostFragment.EXTRA_NO_FILTER) {
+                            newPosts.add(post);
+                        } else if(filter == post.getPostType()) {
+                            newPosts.add(post);
+                        } else if(filter == Post.LINK_TYPE && post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
+                            newPosts.add(post);
+                        }
                     }
                 }
             } catch (JSONException e) {
@@ -192,7 +201,8 @@ class ParsePost {
                                   String subredditNamePrefixed, String author, String formattedPostTime,
                                   String title, String previewUrl, int previewWidth, int previewHeight,
                                   int score, int voteType, int gilded, String flair, boolean spoiler,
-                                  boolean nsfw, boolean stickied, boolean archived, boolean isCrosspost, int i) throws JSONException {
+                                  boolean nsfw, boolean stickied, boolean archived, boolean isCrosspost,
+                                  int i) throws JSONException {
         Post post;
 
         boolean isVideo = data.getBoolean(JSONUtils.IS_VIDEO_KEY);

@@ -73,15 +73,16 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     private static final int VIEW_TYPE_LOADING = 2;
 
     private NetworkState networkState;
-    private RetryLoadingMoreCallback retryLoadingMoreCallback;
+    private Callback callback;
 
-    interface RetryLoadingMoreCallback {
+    interface Callback {
         void retryLoadingMore();
+        void typeChipClicked(int filter);
     }
 
     PostRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, Retrofit retrofit,
-                            SharedPreferences sharedPreferences, int postType, boolean displaySubredditName,
-                            RetryLoadingMoreCallback retryLoadingMoreCallback) {
+                            SharedPreferences sharedPreferences, int postType,
+                            boolean displaySubredditName, Callback callback) {
         super(DIFF_CALLBACK);
         if(context != null) {
             mContext = context;
@@ -93,7 +94,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
             glide = Glide.with(mContext.getApplicationContext());
             subredditDao = SubredditRoomDatabase.getDatabase(mContext.getApplicationContext()).subredditDao();
             userDao = UserRoomDatabase.getDatabase(mContext.getApplicationContext()).userDao();
-            this.retryLoadingMoreCallback = retryLoadingMoreCallback;
+            this.callback = callback;
         }
     }
 
@@ -360,9 +361,11 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                     ((DataViewHolder) holder).crosspostImageView.setVisibility(View.VISIBLE);
                 }
 
+                ((DataViewHolder) holder).typeChip.setOnClickListener(view -> callback.typeChipClicked(post.getPostType()));
+
                 switch (post.getPostType()) {
                     case Post.IMAGE_TYPE:
-                        ((DataViewHolder) holder).typeChip.setText("IMAGE");
+                        ((DataViewHolder) holder).typeChip.setText(R.string.image);
 
                         final String imageUrl = post.getUrl();
                         ((DataViewHolder) holder).imageView.setOnClickListener(view -> {
@@ -375,7 +378,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         });
                         break;
                     case Post.LINK_TYPE:
-                        ((DataViewHolder) holder).typeChip.setText("LINK");
+                        ((DataViewHolder) holder).typeChip.setText(R.string.link);
                         ((DataViewHolder) holder).linkTextView.setVisibility(View.VISIBLE);
                         String domain = Uri.parse(post.getUrl()).getHost();
                         ((DataViewHolder) holder).linkTextView.setText(domain);
@@ -390,7 +393,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         });
                         break;
                     case Post.GIF_VIDEO_TYPE:
-                        ((DataViewHolder) holder).typeChip.setText("GIF");
+                        ((DataViewHolder) holder).typeChip.setText(R.string.gif);
 
                         final Uri gifVideoUri = Uri.parse(post.getVideoUrl());
                         ((DataViewHolder) holder).imageView.setOnClickListener(view -> {
@@ -408,7 +411,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         });
                         break;
                     case Post.VIDEO_TYPE:
-                        ((DataViewHolder) holder).typeChip.setText("VIDEO");
+                        ((DataViewHolder) holder).typeChip.setText(R.string.video);
 
                         final Uri videoUri = Uri.parse(post.getVideoUrl());
                         ((DataViewHolder) holder).imageView.setOnClickListener(view -> {
@@ -426,7 +429,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         });
                         break;
                     case Post.NO_PREVIEW_LINK_TYPE:
-                        ((DataViewHolder) holder).typeChip.setText("LINK");
+                        ((DataViewHolder) holder).typeChip.setText(R.string.link);
                         String noPreviewLinkUrl = post.getUrl();
                         ((DataViewHolder) holder).linkTextView.setVisibility(View.VISIBLE);
                         String noPreviewLinkDomain = Uri.parse(noPreviewLinkUrl).getHost();
@@ -442,7 +445,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         });
                         break;
                     case Post.TEXT_TYPE:
-                        ((DataViewHolder) holder).typeChip.setText("TEXT");
+                        ((DataViewHolder) holder).typeChip.setText(R.string.text);
                         break;
                 }
 
@@ -692,7 +695,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
             super(itemView);
             ButterKnife.bind(this, itemView);
             errorTextView.setText(R.string.load_posts_error);
-            retryButton.setOnClickListener(view -> retryLoadingMoreCallback.retryLoadingMore());
+            retryButton.setOnClickListener(view -> callback.retryLoadingMore());
         }
     }
 

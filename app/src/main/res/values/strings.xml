@@ -152,4 +152,12 @@
     <string name="no_browser_found">No browser found</string>
 
     <string name="archived_post_vote_unavailable">Archived post. Vote unavailable.</string>
+
+    <string name="text">TEXT</string>
+    <string name="link">LINK</string>
+    <string name="image">IMAGE</string>
+    <string name="video">VIDEO</string>
+    <string name="gif">GIF</string>
+    <string name="best">Best</string>
+    <string name="search">Search</string>
 </resources>

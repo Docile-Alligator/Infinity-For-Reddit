@@ -102,6 +102,7 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
                 return true;
             case R.id.action_search_search_result_activity:
                 Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, false);
                 finish();
                 startActivity(intent);
                 return true;
@@ -141,8 +142,9 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
                     Bundle bundle = new Bundle();
                     bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SEARCH);
                     bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_RELEVANCE);
-                    bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, mSubredditName);
+                    bundle.putString(PostFragment.EXTRA_NAME, mSubredditName);
                     bundle.putString(PostFragment.EXTRA_QUERY, mQuery);
+                    bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                     mFragment.setArguments(bundle);
                     return mFragment;
                 }

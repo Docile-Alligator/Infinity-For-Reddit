@@ -389,22 +389,25 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 Bundle bundle = new Bundle();
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_FRONT_PAGE);
                 bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_BEST);
+                bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                 fragment.setArguments(bundle);
                 return fragment;
             } else if(position == 1) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
-                bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, "popular");
+                bundle.putString(PostFragment.EXTRA_NAME, "popular");
                 bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_HOT);
+                bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                 fragment.setArguments(bundle);
                 return fragment;
             } else {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
-                bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, "all");
+                bundle.putString(PostFragment.EXTRA_NAME, "all");
                 bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_HOT);
+                bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                 fragment.setArguments(bundle);
                 return fragment;
             }

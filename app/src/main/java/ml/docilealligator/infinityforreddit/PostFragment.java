@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -45,10 +46,13 @@ import retrofit2.Retrofit;
  */
 public class PostFragment extends Fragment implements FragmentCommunicator {
 
-    static final String EXTRA_SUBREDDIT_NAME = "EN";
+    static final String EXTRA_NAME = "EN";
+    static final String EXTRA_USER_NAME = "EN";
     static final String EXTRA_QUERY = "EQ";
     static final String EXTRA_POST_TYPE = "EPT";
     static final String EXTRA_SORT_TYPE = "EST";
+    static final String EXTRA_FILTER = "EF";
+    static final int EXTRA_NO_FILTER = -1;
 
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
@@ -168,6 +172,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         int postType = getArguments().getInt(EXTRA_POST_TYPE);
         String sortType = getArguments().getString(EXTRA_SORT_TYPE);
+        int filter = getArguments().getInt(EXTRA_FILTER);
 
         String accessToken = activity.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
                 .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
@@ -175,13 +180,30 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         PostViewModel.Factory factory;
 
         if(postType == PostDataSource.TYPE_SEARCH) {
-            String subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
+            String subredditName = getArguments().getString(EXTRA_NAME);
             String query = getArguments().getString(EXTRA_QUERY);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit,
-                    mSharedPreferences, postType, true, () -> mPostViewModel.retryLoadingMore());
+                    mSharedPreferences, postType, true, new PostRecyclerViewAdapter.Callback() {
+                @Override
+                public void retryLoadingMore() {
+                    mPostViewModel.retryLoadingMore();
+                }
+
+                @Override
+                public void typeChipClicked(int filter) {
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_QUERY, query);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_SORT_TYPE, sortType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
+                    startActivity(intent);
+                }
+            });
+
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, subredditName, query, postType, sortType, new PostDataSource.OnPostFetchedCallback() {
+                    getResources().getConfiguration().locale, subredditName, query, postType, sortType, filter, new PostDataSource.OnPostFetchedCallback() {
                 @Override
                 public void hasPost() {
                     mFetchPostInfoLinearLayout.setVisibility(View.GONE);
@@ -196,14 +218,29 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 }
             });
         } else if(postType == PostDataSource.TYPE_SUBREDDIT) {
-            String subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
+            String subredditName = getArguments().getString(EXTRA_NAME);
 
             boolean displaySubredditName = subredditName.equals("popular") || subredditName.equals("all");
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit,
-                    mSharedPreferences, postType, displaySubredditName, () -> mPostViewModel.retryLoadingMore());
+                    mSharedPreferences, postType, displaySubredditName, new PostRecyclerViewAdapter.Callback() {
+                @Override
+                public void retryLoadingMore() {
+                    mPostViewModel.retryLoadingMore();
+                }
+
+                @Override
+                public void typeChipClicked(int filter) {
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_SORT_TYPE, sortType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
+                    startActivity(intent);
+                }
+            });
 
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, subredditName, postType, sortType, new PostDataSource.OnPostFetchedCallback() {
+                    getResources().getConfiguration().locale, subredditName, postType, sortType, filter, new PostDataSource.OnPostFetchedCallback() {
                 @Override
                 public void hasPost() {
                     mFetchPostInfoLinearLayout.setVisibility(View.GONE);
@@ -222,13 +259,28 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
             mFetchPostInfoLinearLayout.setLayoutParams(params);
 
-            String subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
+            String username = getArguments().getString(EXTRA_USER_NAME);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit,
-                    mSharedPreferences, postType, true, () -> mPostViewModel.retryLoadingMore());
+                    mSharedPreferences, postType, true, new PostRecyclerViewAdapter.Callback() {
+                @Override
+                public void retryLoadingMore() {
+                    mPostViewModel.retryLoadingMore();
+                }
+
+                @Override
+                public void typeChipClicked(int filter) {
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, username);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_SORT_TYPE, sortType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
+                    startActivity(intent);
+                }
+            });
 
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, subredditName, postType, sortType,
+                    getResources().getConfiguration().locale, username, postType, sortType, filter,
                     new PostDataSource.OnPostFetchedCallback() {
                 @Override
                 public void hasPost() {
@@ -245,10 +297,25 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             });
         } else {
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit,
-                    mSharedPreferences, postType, true, () -> mPostViewModel.retryLoadingMore());
+                    mSharedPreferences, postType, true, new PostRecyclerViewAdapter.Callback() {
+                @Override
+                public void retryLoadingMore() {
+                    mPostViewModel.retryLoadingMore();
+                }
+
+                @Override
+                public void typeChipClicked(int filter) {
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, activity.getString(R.string.best));
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_SORT_TYPE, sortType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
+                    startActivity(intent);
+                }
+            });
 
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, postType, sortType, new PostDataSource.OnPostFetchedCallback() {
+                    getResources().getConfiguration().locale, postType, sortType, filter, new PostDataSource.OnPostFetchedCallback() {
                 @Override
                 public void hasPost() {
                     mFetchPostInfoLinearLayout.setVisibility(View.GONE);

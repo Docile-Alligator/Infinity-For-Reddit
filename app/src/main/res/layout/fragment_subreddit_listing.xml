@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
+        android:background="@color/backgroundColor"
         app:mlpb_progress_stoke_width="3dp"
         app:mlpb_progress_color="@color/colorAccent"
         android:layout_gravity="center_horizontal"/>

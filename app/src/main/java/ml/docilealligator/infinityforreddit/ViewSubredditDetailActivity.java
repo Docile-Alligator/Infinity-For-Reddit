@@ -259,9 +259,10 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         if(savedInstanceState == null) {
             mFragment = new PostFragment();
             Bundle bundle = new Bundle();
-            bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, subredditName);
+            bundle.putString(PostFragment.EXTRA_NAME, subredditName);
             bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
             bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_BEST);
+            bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
             mFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
         } else {
@@ -269,9 +270,10 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
             if(mFragment == null) {
                 mFragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(PostFragment.EXTRA_SUBREDDIT_NAME, subredditName);
+                bundle.putString(PostFragment.EXTRA_NAME, subredditName);
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
                 bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_BEST);
+                bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                 mFragment.setArguments(bundle);
             }
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
