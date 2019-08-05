@@ -102,7 +102,7 @@
                 android:layout_height="24dp"
                 android:layout_toEndOf="@id/type_text_view_item_post"
                 android:layout_centerVertical="true"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/gilded_number_text_view_item_post"

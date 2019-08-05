@@ -25,8 +25,6 @@ public class SearchPostSortTypeBottomSheetFragment extends RoundedBottomSheetDia
         void searchSortTypeSelected(String sortType);
     }
 
-    static final String EXTRA_FRAGMENT_POSITION = "EFP";
-
     @BindView(R.id.relevance_type_text_view_search_sort_type_bottom_sheet_fragment) TextView relevanceTypeTextView;
     @BindView(R.id.hot_type_text_view_search_sort_type_bottom_sheet_fragment) TextView hotTypeTextView;
     @BindView(R.id.top_type_text_view_search_sort_type_bottom_sheet_fragment) TextView topTypeTextView;

@@ -305,6 +305,16 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             String scoreWithVote = Integer.toString(mPost.getScore() + mPost.getVoteType());
             ((PostDetailViewHolder) holder).mScoreTextView.setText(scoreWithVote);
 
+            ((PostDetailViewHolder) holder).mTypeChip.setOnClickListener(view -> {
+                Intent intent = new Intent(mActivity, FilteredPostsActivity.class);
+                intent.putExtra(FilteredPostsActivity.EXTRA_NAME, mSubredditNamePrefixed.substring(2));
+                intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+                intent.putExtra(FilteredPostsActivity.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_HOT);
+                intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, mPost.getPostType());
+                mActivity.startActivity(intent);
+
+            });
+
             switch (mPost.getPostType()) {
                 case Post.IMAGE_TYPE:
                     ((PostDetailViewHolder) holder).mTypeChip.setText("IMAGE");

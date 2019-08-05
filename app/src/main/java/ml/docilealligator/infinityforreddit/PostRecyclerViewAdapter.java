@@ -361,7 +361,9 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                     ((DataViewHolder) holder).crosspostImageView.setVisibility(View.VISIBLE);
                 }
 
-                ((DataViewHolder) holder).typeChip.setOnClickListener(view -> callback.typeChipClicked(post.getPostType()));
+                if(!(mContext instanceof FilteredPostsActivity)) {
+                    ((DataViewHolder) holder).typeChip.setOnClickListener(view -> callback.typeChipClicked(post.getPostType()));
+                }
 
                 switch (post.getPostType()) {
                     case Post.IMAGE_TYPE:
@@ -379,6 +381,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         break;
                     case Post.LINK_TYPE:
                         ((DataViewHolder) holder).typeChip.setText(R.string.link);
+
                         ((DataViewHolder) holder).linkTextView.setVisibility(View.VISIBLE);
                         String domain = Uri.parse(post.getUrl()).getHost();
                         ((DataViewHolder) holder).linkTextView.setText(domain);
@@ -430,6 +433,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         break;
                     case Post.NO_PREVIEW_LINK_TYPE:
                         ((DataViewHolder) holder).typeChip.setText(R.string.link);
+
                         String noPreviewLinkUrl = post.getUrl();
                         ((DataViewHolder) holder).linkTextView.setVisibility(View.VISIBLE);
                         String noPreviewLinkDomain = Uri.parse(noPreviewLinkUrl).getHost();

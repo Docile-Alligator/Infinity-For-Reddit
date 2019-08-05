@@ -54,7 +54,6 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
 
         searchPostSortTypeBottomSheetFragment = new SearchPostSortTypeBottomSheetFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(SearchPostSortTypeBottomSheetFragment.EXTRA_FRAGMENT_POSITION, viewPager.getCurrentItem());
         searchPostSortTypeBottomSheetFragment.setArguments(bundle);
 
         searchUserAndSubredditSortTypeBottomSheetFragment = new SearchUserAndSubredditSortTypeBottomSheetFragment();
