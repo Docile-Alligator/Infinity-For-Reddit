@@ -25,5 +25,5 @@ interface AppComponent {
     void inject(FlairBottomSheetFragment flairBottomSheetFragment);
     void inject(RulesActivity rulesActivity);
     void inject(CommentsListingFragment commentsListingFragment);
-    void inject(PostMediaService postMediaService);
+    void inject(SubmitPostService submitPostService);
 }

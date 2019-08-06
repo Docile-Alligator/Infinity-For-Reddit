@@ -148,7 +148,7 @@
                 android:gravity="top"
                 android:padding="16dp"
                 android:hint="@string/post_link_hint"
-                android:inputType="textCapSentences|textMultiLine"
+                android:inputType="textMultiLine"
                 android:textSize="18sp"
                 android:background="#00000000"
                 android:textColor="@color/primaryTextColor" />

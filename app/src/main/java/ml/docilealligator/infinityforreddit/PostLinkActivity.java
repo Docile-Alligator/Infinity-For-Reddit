@@ -97,6 +97,8 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
 
         ButterKnife.bind(this);
 
+        EventBus.getDefault().register(this);
+
         ((Infinity) getApplication()).getmAppComponent().inject(this);
 
         setSupportActionBar(toolbar);
@@ -241,8 +243,8 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
         getMenuInflater().inflate(R.menu.post_link_activity, menu);
         mMemu = menu;
         if(isPosting) {
-            mMemu.findItem(R.id.action_send_post_image_activity).setEnabled(false);
-            mMemu.findItem(R.id.action_send_post_image_activity).getIcon().setAlpha(130);
+            mMemu.findItem(R.id.action_send_post_link_activity).setEnabled(false);
+            mMemu.findItem(R.id.action_send_post_link_activity).getIcon().setAlpha(130);
         }
         return true;
     }
@@ -259,6 +261,8 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
                     return true;
                 }
 
+                isPosting = true;
+
                 item.setEnabled(false);
                 item.getIcon().setAlpha(130);
                 Snackbar postingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
@@ -271,15 +275,16 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
                     subredditName = subredditNameTextView.getText().toString();
                 }
 
-                Intent intent = new Intent(this, PostMediaService.class);
-                intent.putExtra(PostMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
-                intent.putExtra(PostMediaService.EXTRA_TITLE, titleEditText.getText().toString());
-                intent.putExtra(PostMediaService.EXTRA_CONTENT, contentEditText.getText().toString());
-                intent.putExtra(PostMediaService.EXTRA_KIND, RedditUtils.KIND_LINK);
-                intent.putExtra(PostMediaService.EXTRA_FLAIR, flair);
-                intent.putExtra(PostMediaService.EXTRA_IS_SPOILER, isSpoiler);
-                intent.putExtra(PostMediaService.EXTRA_IS_NSFW, isNSFW);
-                intent.putExtra(PostMediaService.EXTRA_POST_TYPE, PostMediaService.EXTRA_POST_TYPE_IMAGE);
+                Intent intent = new Intent(this, SubmitPostService.class);
+                intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
+                intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
+                intent.putExtra(SubmitPostService.EXTRA_CONTENT, contentEditText.getText().toString());
+                intent.putExtra(SubmitPostService.EXTRA_KIND, RedditUtils.KIND_LINK);
+                intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
+                intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
+                intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);
+                intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TEXT_OR_LINK);
+                startService(intent);
 
                 return true;
         }

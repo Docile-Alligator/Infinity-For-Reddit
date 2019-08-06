@@ -22,7 +22,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <service
-            android:name=".PostMediaService"
+            android:name=".SubmitPostService"
             android:enabled="true"
             android:exported="false"></service>
 

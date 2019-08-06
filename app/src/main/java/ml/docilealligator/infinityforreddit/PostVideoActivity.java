@@ -345,14 +345,14 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
                     subredditName = subreditNameTextView.getText().toString();
                 }
 
-                Intent intent = new Intent(this, PostMediaService.class);
+                Intent intent = new Intent(this, SubmitPostService.class);
                 intent.setData(videoUri);
-                intent.putExtra(PostMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
-                intent.putExtra(PostMediaService.EXTRA_TITLE, titleEditText.getText().toString());
-                intent.putExtra(PostMediaService.EXTRA_FLAIR, flair);
-                intent.putExtra(PostMediaService.EXTRA_IS_SPOILER, isSpoiler);
-                intent.putExtra(PostMediaService.EXTRA_IS_NSFW, isNSFW);
-                intent.putExtra(PostMediaService.EXTRA_POST_TYPE, PostMediaService.EXTRA_POST_TYPE_VIDEO);
+                intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
+                intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
+                intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
+                intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
+                intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);
+                intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_VIDEO);
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     startForegroundService(intent);

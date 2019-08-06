@@ -32,7 +32,7 @@ import javax.inject.Named;
 
 import retrofit2.Retrofit;
 
-public class PostMediaService extends Service {
+public class SubmitPostService extends Service {
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
     static final String EXTRA_TITLE = "ET";
     static final String EXTRA_CONTENT = "EC";
@@ -65,7 +65,7 @@ public class PostMediaService extends Service {
     @Named("auth_info")
     SharedPreferences sharedPreferences;
 
-    public PostMediaService() {
+    public SubmitPostService() {
     }
 
     @Override
@@ -158,7 +158,7 @@ public class PostMediaService extends Service {
                                     @Override
                                     public void submitSuccessful(Post post) {
                                         EventBus.getDefault().post(new SubmitImagePostEvent(true, null));
-                                        Toast.makeText(PostMediaService.this, R.string.image_is_processing, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SubmitPostService.this, R.string.image_is_processing, Toast.LENGTH_SHORT).show();
 
                                         stopForeground(true);
                                         stopSelf();
@@ -202,7 +202,7 @@ public class PostMediaService extends Service {
                                         @Override
                                         public void submitSuccessful(Post post) {
                                             EventBus.getDefault().post(new SubmitVideoPostEvent(true, false, null));
-                                            Toast.makeText(PostMediaService.this, R.string.video_is_processing, Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(SubmitPostService.this, R.string.video_is_processing, Toast.LENGTH_SHORT).show();
 
                                             stopForeground(true);
                                             stopSelf();
