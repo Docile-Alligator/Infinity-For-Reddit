@@ -63,7 +63,6 @@ public class ViewUserDetailActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter sectionsPagerAdapter;
 
-    private Fragment mFragment;
     private SubscribedUserDao subscribedUserDao;
     private RequestManager glide;
     private UserViewModel userViewModel;
@@ -330,15 +329,12 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                 intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_IS_USER, true);
                 intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, false);
                 startActivity(intent);
-                break;
+                return true;
             case R.id.action_refresh_view_user_detail_activity:
-                if (mFragment instanceof FragmentCommunicator) {
-                    ((FragmentCommunicator) mFragment).refresh();
-                    return true;
-                }
-                break;
+                sectionsPagerAdapter.refresh();
+                return true;
             case R.id.action_lazy_mode_view_user_detail_activity:
-                MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity);
+                /*MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity);
                 if(isInLazyMode) {
                     isInLazyMode = false;
                     ((FragmentCommunicator) mFragment).stopLazyMode();
@@ -354,7 +350,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                     params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
                     collapsingToolbarLayout.setLayoutParams(params);
                 }
-                return true;
+                return true;*/
         }
         return false;
     }
@@ -484,11 +480,10 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         }
 
         public void refresh() {
-            if(postFragment != null) {
-                ((FragmentCommunicator) postFragment).refresh();
-            }
-            if(commentsListingFragment != null) {
-                ((FragmentCommunicator) commentsListingFragment).refresh();
+            if(viewPager.getCurrentItem() == 0) {
+                postFragment.refresh();
+            } else {
+                commentsListingFragment.refresh();
             }
         }
     }

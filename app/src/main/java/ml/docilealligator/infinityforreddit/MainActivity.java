@@ -309,8 +309,8 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 loadUserData();
                 return true;
             case R.id.action_lazy_mode_main_activity:
-                MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);
-                /*if(isInLazyMode) {
+                /*MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);
+                if(isInLazyMode) {
                     isInLazyMode = false;
                     ((FragmentCommunicator) mFragment).stopLazyMode();
                     lazyModeItem.setTitle(R.string.action_start_lazy_mode);

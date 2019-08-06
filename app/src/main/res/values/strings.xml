@@ -160,4 +160,8 @@
     <string name="gif">GIF</string>
     <string name="best">Best</string>
     <string name="search">Search</string>
+
+    <string name="posting_video">Posting video</string>
+    <string name="posting_image">Posting image</string>
+    <string name="please_wait">Please wait.</string>
 </resources>

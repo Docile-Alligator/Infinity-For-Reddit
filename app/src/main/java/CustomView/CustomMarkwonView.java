@@ -41,7 +41,7 @@ public class CustomMarkwonView extends MarkwonView {
                 builder.setToolbarColor(context.getResources().getColor(R.color.colorPrimary));
                 CustomTabsIntent customTabsIntent = builder.build();
                 Uri uri = Uri.parse(link);
-                if(uri.getHost() != null && uri.getHost().equals("www.reddit.com")) {
+                if(uri.getHost() != null && uri.getHost().contains("reddit.com")) {
                     customTabsIntent.intent.setPackage(context.getPackageName());
                 }
                 customTabsIntent.launchUrl(context, uri);

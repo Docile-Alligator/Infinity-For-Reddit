@@ -10,6 +10,8 @@
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="22" />
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
         android:name=".Infinity"
         android:allowBackup="true"
@@ -19,6 +21,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <service
+            android:name=".PostMediaService"
+            android:enabled="true"
+            android:exported="false"></service>
+
         <activity
             android:name=".FilteredPostsActivity"
             android:parentActivityName=".MainActivity"
@@ -62,17 +69,20 @@
             android:name=".PostVideoActivity"
             android:label="@string/post_video_activity_label"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".PostImageActivity"
             android:label="@string/post_image_activity_label"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".PostLinkActivity"
             android:label="@string/post_link_activity_label"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".SubscribedThingListingActivity"
             android:label="@string/subscriptions"

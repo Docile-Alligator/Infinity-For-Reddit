@@ -2,9 +2,8 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -15,7 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,15 +26,15 @@ import androidx.core.content.FileProvider;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.libRG.CustomTextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.Locale;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -46,8 +44,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pl.droidsonroids.gif.GifImageView;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Retrofit;
 
 public class PostImageActivity extends AppCompatActivity implements FlairBottomSheetFragment.FlairSelectionCallback {
@@ -60,6 +56,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
     private static final String SUBREDDIT_IS_USER_STATE = "SIUS";
     private static final String IMAGE_URI_STATE = "IUS";
     private static final String LOAD_SUBREDDIT_ICON_STATE = "LSIS";
+    private static final String IS_POSTING_STATE = "IPS";
     private static final String FLAIR_STATE = "FS";
     private static final String IS_SPOILER_STATE = "ISS";
     private static final String IS_NSFW_STATE = "INS";
@@ -88,15 +85,17 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
     private boolean subredditSelected = false;
     private boolean subredditIsUser;
     private boolean loadSubredditIconSuccessful = true;
+    private boolean isPosting;
     private Uri imageUri;
 
     private String flair = null;
     private boolean isSpoiler = false;
     private boolean isNSFW = false;
 
+    private Menu mMemu;
     private RequestManager mGlide;
-    private Locale mLocale;
     private FlairBottomSheetFragment flairSelectionBottomSheetFragment;
+    private Snackbar mPostingSnackbar;
 
     @Inject
     @Named("no_oauth")
@@ -125,13 +124,14 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
 
         ButterKnife.bind(this);
 
+        EventBus.getDefault().register(this);
+
         ((Infinity) getApplication()).getmAppComponent().inject(this);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mGlide = Glide.with(this);
-        mLocale = getResources().getConfiguration().locale;
 
         if(savedInstanceState != null) {
             subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
@@ -139,6 +139,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
             subredditSelected = savedInstanceState.getBoolean(SUBREDDIT_SELECTED_STATE);
             subredditIsUser = savedInstanceState.getBoolean(SUBREDDIT_IS_USER_STATE);
             loadSubredditIconSuccessful = savedInstanceState.getBoolean(LOAD_SUBREDDIT_ICON_STATE);
+            isPosting = savedInstanceState.getBoolean(IS_POSTING_STATE);
             flair = savedInstanceState.getString(FLAIR_STATE);
             isSpoiler = savedInstanceState.getBoolean(IS_SPOILER_STATE);
             isNSFW = savedInstanceState.getBoolean(IS_NSFW_STATE);
@@ -157,6 +158,11 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
             }
             displaySubredditIcon();
 
+            if(isPosting) {
+                mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
+                mPostingSnackbar.show();
+            }
+
             if(flair != null) {
                 flairTextView.setText(flair);
                 flairTextView.setBackgroundColor(getResources().getColor(R.color.backgroundColorPrimaryDark));
@@ -168,6 +174,8 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
                 nsfwTextView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             }
         } else {
+            isPosting = false;
+
             if(getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
                 subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
                 subreditNameTextView.setText(subredditName);
@@ -302,6 +310,11 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.post_image_activity, menu);
+        mMemu = menu;
+        if(isPosting) {
+            mMemu.findItem(R.id.action_send_post_image_activity).setEnabled(false);
+            mMemu.findItem(R.id.action_send_post_image_activity).getIcon().setAlpha(130);
+        }
         return true;
     }
 
@@ -322,10 +335,12 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
                     return true;
                 }
 
+                isPosting = true;
+
                 item.setEnabled(false);
                 item.getIcon().setAlpha(130);
-                Snackbar postingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
-                postingSnackbar.show();
+                mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
+                mPostingSnackbar.show();
 
                 String subredditName;
                 if(subredditIsUser) {
@@ -334,74 +349,25 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
                     subredditName = subreditNameTextView.getText().toString();
                 }
 
-                Glide.with(this)
-                        .asBitmap()
-                        .load(imageUri)
-                        .into(new CustomTarget<Bitmap>() {
+                Intent intent = new Intent(this, PostMediaService.class);
+                intent.setData(imageUri);
+                intent.putExtra(PostMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
+                intent.putExtra(PostMediaService.EXTRA_TITLE, titleEditText.getText().toString());
+                intent.putExtra(PostMediaService.EXTRA_FLAIR, flair);
+                intent.putExtra(PostMediaService.EXTRA_IS_SPOILER, isSpoiler);
+                intent.putExtra(PostMediaService.EXTRA_IS_NSFW, isNSFW);
+                intent.putExtra(PostMediaService.EXTRA_POST_TYPE, PostMediaService.EXTRA_POST_TYPE_IMAGE);
 
-                            @Override
-                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                SubmitPost.submitImagePost(mOauthRetrofit, mUploadMediaRetrofit, sharedPreferences,
-                                        mLocale, subredditName, titleEditText.getText().toString(), resource,
-                                        flair, isSpoiler, isNSFW, new SubmitPost.SubmitPostListener() {
-                                            @Override
-                                            public void submitSuccessful(Post post) {
-                                                RedditAPI api = mOauthRetrofit.create(RedditAPI.class);
-                                                Call<String> getPost = api.getUserBestPosts(mUserInfoSharedPreferences.getString(SharedPreferencesUtils.USER_KEY, ""), null,
-                                                        RedditUtils.getOAuthHeader(sharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "")));
-                                                getPost.enqueue(new Callback<String>() {
-                                                    @Override
-                                                    public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                                                        if(response.isSuccessful()) {
-                                                            Toast.makeText(PostImageActivity.this, R.string.image_is_processing, Toast.LENGTH_SHORT).show();
-                                                            Intent intent = new Intent(PostImageActivity.this, ViewUserDetailActivity.class);
-                                                            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
-                                                                    mUserInfoSharedPreferences.getString(SharedPreferencesUtils.USER_KEY, ""));
-                                                            startActivity(intent);
-                                                            finish();
-                                                        } else {
-                                                            startViewUserDetailActivity();
-                                                        }
-                                                    }
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(intent);
+                } else {
+                    startService(intent);
+                }
 
-                                                    @Override
-                                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                                                        startViewUserDetailActivity();
-                                                    }
-                                                });
-                                            }
-
-                                            @Override
-                                            public void submitFailed(@Nullable String errorMessage) {
-                                                postingSnackbar.dismiss();
-                                                item.setEnabled(true);
-                                                item.getIcon().setAlpha(255);
-                                                if(errorMessage == null) {
-                                                    Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
-                                                } else {
-                                                    Snackbar.make(coordinatorLayout, errorMessage, Snackbar.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        });
-                            }
-
-                            @Override
-                            public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                            }
-                        });
                 return true;
         }
 
         return false;
-    }
-
-    private void startViewUserDetailActivity() {
-        Intent intent = new Intent(PostImageActivity.this, ViewUserDetailActivity.class);
-        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
-                mUserInfoSharedPreferences.getString(SharedPreferencesUtils.USER_KEY, ""));
-        startActivity(intent);
-        finish();
     }
 
     @Override
@@ -415,6 +381,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
             outState.putString(IMAGE_URI_STATE, imageUri.toString());
         }
         outState.putBoolean(LOAD_SUBREDDIT_ICON_STATE, loadSubredditIconSuccessful);
+        outState.putBoolean(IS_POSTING_STATE, isPosting);
         outState.putString(FLAIR_STATE, flair);
         outState.putBoolean(IS_SPOILER_STATE, isSpoiler);
         outState.putBoolean(IS_NSFW_STATE, isNSFW);
@@ -457,10 +424,37 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
     }
 
     @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
     public void flairSelected(String flair) {
         this.flair = flair;
         flairTextView.setText(flair);
         flairTextView.setBackgroundColor(getResources().getColor(R.color.backgroundColorPrimaryDark));
         flairSelectionBottomSheetFragment.dismiss();
+    }
+
+    @Subscribe
+    public void onSubmitImagePostEvent(SubmitImagePostEvent submitImagePostEvent) {
+        isPosting = false;
+        if(submitImagePostEvent.postSuccess) {
+            Intent intent = new Intent(this, ViewUserDetailActivity.class);
+            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
+                    mUserInfoSharedPreferences.getString(SharedPreferencesUtils.USER_KEY, ""));
+            startActivity(intent);
+            finish();
+        } else {
+            mPostingSnackbar.dismiss();
+            mMemu.getItem(R.id.action_send_post_image_activity).setEnabled(true);
+            mMemu.getItem(R.id.action_send_post_image_activity).getIcon().setAlpha(255);
+            if (submitImagePostEvent.errorMessage == null || submitImagePostEvent.errorMessage.equals("")) {
+                Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
+            } else {
+                Snackbar.make(coordinatorLayout, submitImagePostEvent.errorMessage, Snackbar.LENGTH_SHORT).show();
+            }
+        }
     }
 }

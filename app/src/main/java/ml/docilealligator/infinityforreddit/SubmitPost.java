@@ -83,7 +83,6 @@ class SubmitPost {
         uploadImageParams.put(RedditUtils.FILEPATH_KEY, "post_video." + fileType);
         uploadImageParams.put(RedditUtils.MIMETYPE_KEY, mimeType);
 
-        Log.i("map", RedditUtils.getOAuthHeader(accessToken).toString());
         Call<String> uploadImageCall = api.uploadImage(RedditUtils.getOAuthHeader(accessToken), uploadImageParams);
         uploadImageCall.enqueue(new Callback<String>() {
             @Override
