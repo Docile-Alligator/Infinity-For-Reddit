@@ -35,12 +35,15 @@ import retrofit2.Retrofit;
 public class PostMediaService extends Service {
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
     static final String EXTRA_TITLE = "ET";
+    static final String EXTRA_CONTENT = "EC";
+    static final String EXTRA_KIND = "EK";
     static final String EXTRA_FLAIR = "EF";
     static final String EXTRA_IS_SPOILER = "EIS";
     static final String EXTRA_IS_NSFW = "EIN";
     static final String EXTRA_POST_TYPE = "EPT";
-    static final int EXTRA_POST_TYPE_IMAGE = 0;
-    static final int EXTRA_POST_TYPE_VIDEO = 1;
+    static final int EXTRA_POST_TEXT_OR_LINK = 0;
+    static final int EXTRA_POST_TYPE_IMAGE = 1;
+    static final int EXTRA_POST_TYPE_VIDEO = 2;
 
     @Inject
     @Named("oauth")
@@ -74,7 +77,6 @@ public class PostMediaService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         ((Infinity) getApplication()).getmAppComponent().inject(this);
 
-        Uri mediaUri = intent.getData();
         String subredditName = intent.getExtras().getString(EXTRA_SUBREDDIT_NAME);
         String title = intent.getExtras().getString(EXTRA_TITLE);
         String flair = intent.getExtras().getString(EXTRA_FLAIR);
@@ -93,12 +95,19 @@ public class PostMediaService extends Service {
             manager.createNotificationChannel(serviceChannel);
         }
 
-        if(postType == EXTRA_POST_TYPE_IMAGE) {
+        if(postType == EXTRA_POST_TEXT_OR_LINK) {
+            String content = intent.getExtras().getString(EXTRA_CONTENT);
+            String kind = intent.getExtras().getString(EXTRA_KIND);
+            startForeground(1, createNotification(R.string.posting));
+            submitTextOrLinkPost(subredditName, title, content, flair, isSpoiler, isNSFW, kind);
+        } else if(postType == EXTRA_POST_TYPE_IMAGE) {
+            Uri imageUri = intent.getData();
             startForeground(1, createNotification(R.string.posting_image));
-            submitImagePost(mediaUri, subredditName, title, flair, isSpoiler, isNSFW);
+            submitImagePost(imageUri, subredditName, title, flair, isSpoiler, isNSFW);
         } else {
+            Uri videoUri = intent.getData();
             startForeground(1, createNotification(R.string.posting_video));
-            submitVideoPost(mediaUri, subredditName, title, flair, isSpoiler, isNSFW);
+            submitVideoPost(videoUri, subredditName, title, flair, isSpoiler, isNSFW);
         }
 
         return START_NOT_STICKY;
@@ -110,6 +119,28 @@ public class PostMediaService extends Service {
                 .setContentText(getString(R.string.please_wait))
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .build();
+    }
+
+    private void submitTextOrLinkPost(String subredditName, String title, String content, String flair,
+                                      boolean isSpoiler, boolean isNSFW, String kind) {
+        SubmitPost.submitTextOrLinkPost(mOauthRetrofit, sharedPreferences, getResources().getConfiguration().locale,
+                subredditName, title, content, flair, isSpoiler, isNSFW, kind, new SubmitPost.SubmitPostListener() {
+                    @Override
+                    public void submitSuccessful(Post post) {
+                        EventBus.getDefault().post(new SubmitTextOrLinkPostEvent(true, post, null));
+
+                        stopForeground(true);
+                        stopSelf();
+                    }
+
+                    @Override
+                    public void submitFailed(@Nullable String errorMessage) {
+                        EventBus.getDefault().post(new SubmitTextOrLinkPostEvent(false, null, errorMessage));
+
+                        stopForeground(true);
+                        stopSelf();
+                    }
+                });
     }
 
     private void submitImagePost(Uri imageUri, String subredditName, String title, String flair,

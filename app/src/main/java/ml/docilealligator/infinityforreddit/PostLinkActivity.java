@@ -22,7 +22,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.libRG.CustomTextView;
 
-import java.util.Locale;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -43,6 +44,7 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
     private static final String SUBREDDIT_SELECTED_STATE = "SSS";
     private static final String SUBREDDIT_IS_USER_STATE = "SIUS";
     private static final String LOAD_SUBREDDIT_ICON_STATE = "LSIS";
+    private static final String IS_POSTING_STATE = "IPS";
     private static final String FLAIR_STATE = "FS";
     private static final String IS_SPOILER_STATE = "ISS";
     private static final String IS_NSFW_STATE = "INS";
@@ -65,14 +67,16 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
     private boolean subredditSelected = false;
     private boolean subredditIsUser;
     private boolean loadSubredditIconSuccessful = true;
+    private boolean isPosting;
 
     private String flair = null;
     private boolean isSpoiler = false;
     private boolean isNSFW = false;
 
+    private Menu mMemu;
     private RequestManager mGlide;
-    private Locale mLocale;
     private FlairBottomSheetFragment flairSelectionBottomSheetFragment;
+    private Snackbar mPostingSnackbar;
 
     @Inject
     @Named("no_oauth")
@@ -99,7 +103,6 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mGlide = Glide.with(this);
-        mLocale = getResources().getConfiguration().locale;
 
         if(savedInstanceState != null) {
             subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
@@ -107,6 +110,7 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
             subredditSelected = savedInstanceState.getBoolean(SUBREDDIT_SELECTED_STATE);
             subredditIsUser = savedInstanceState.getBoolean(SUBREDDIT_IS_USER_STATE);
             loadSubredditIconSuccessful = savedInstanceState.getBoolean(LOAD_SUBREDDIT_ICON_STATE);
+            isPosting = savedInstanceState.getBoolean(IS_POSTING_STATE);
             flair = savedInstanceState.getString(FLAIR_STATE);
             isSpoiler = savedInstanceState.getBoolean(IS_SPOILER_STATE);
             isNSFW = savedInstanceState.getBoolean(IS_NSFW_STATE);
@@ -120,6 +124,11 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
             }
             displaySubredditIcon();
 
+            if(isPosting) {
+                mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
+                mPostingSnackbar.show();
+            }
+
             if(flair != null) {
                 flairTextView.setText(flair);
                 flairTextView.setBackgroundColor(getResources().getColor(R.color.backgroundColorPrimaryDark));
@@ -131,6 +140,8 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
                 nsfwTextView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             }
         } else {
+            isPosting = false;
+
             if(getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
                 subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
                 subredditNameTextView.setText(subredditName);
@@ -228,6 +239,11 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.post_link_activity, menu);
+        mMemu = menu;
+        if(isPosting) {
+            mMemu.findItem(R.id.action_send_post_image_activity).setEnabled(false);
+            mMemu.findItem(R.id.action_send_post_image_activity).getIcon().setAlpha(130);
+        }
         return true;
     }
 
@@ -255,29 +271,16 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
                     subredditName = subredditNameTextView.getText().toString();
                 }
 
-                SubmitPost.submitTextOrLinkPost(mOauthRetrofit, sharedPreferences, mLocale, subredditName,
-                        titleEditText.getText().toString(), contentEditText.getText().toString(),
-                        flair, isSpoiler, isNSFW, RedditUtils.KIND_LINK, new SubmitPost.SubmitPostListener() {
-                            @Override
-                            public void submitSuccessful(Post post) {
-                                Intent intent = new Intent(PostLinkActivity.this, ViewPostDetailActivity.class);
-                                intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
-                                startActivity(intent);
-                                finish();
-                            }
+                Intent intent = new Intent(this, PostMediaService.class);
+                intent.putExtra(PostMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
+                intent.putExtra(PostMediaService.EXTRA_TITLE, titleEditText.getText().toString());
+                intent.putExtra(PostMediaService.EXTRA_CONTENT, contentEditText.getText().toString());
+                intent.putExtra(PostMediaService.EXTRA_KIND, RedditUtils.KIND_LINK);
+                intent.putExtra(PostMediaService.EXTRA_FLAIR, flair);
+                intent.putExtra(PostMediaService.EXTRA_IS_SPOILER, isSpoiler);
+                intent.putExtra(PostMediaService.EXTRA_IS_NSFW, isNSFW);
+                intent.putExtra(PostMediaService.EXTRA_POST_TYPE, PostMediaService.EXTRA_POST_TYPE_IMAGE);
 
-                            @Override
-                            public void submitFailed(@Nullable String errorMessage) {
-                                postingSnackbar.dismiss();
-                                item.setEnabled(true);
-                                item.getIcon().setAlpha(255);
-                                if(errorMessage == null) {
-                                    Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
-                                } else {
-                                    Snackbar.make(coordinatorLayout, errorMessage, Snackbar.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
                 return true;
         }
 
@@ -292,6 +295,7 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
         outState.putBoolean(SUBREDDIT_SELECTED_STATE, subredditSelected);
         outState.putBoolean(SUBREDDIT_IS_USER_STATE, subredditIsUser);
         outState.putBoolean(LOAD_SUBREDDIT_ICON_STATE, loadSubredditIconSuccessful);
+        outState.putBoolean(IS_POSTING_STATE, isPosting);
         outState.putString(FLAIR_STATE, flair);
         outState.putBoolean(IS_SPOILER_STATE, isSpoiler);
         outState.putBoolean(IS_NSFW_STATE, isNSFW);
@@ -320,10 +324,36 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
     }
 
     @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
+    @Override
     public void flairSelected(String flair) {
         this.flair = flair;
         flairTextView.setText(flair);
         flairTextView.setBackgroundColor(getResources().getColor(R.color.backgroundColorPrimaryDark));
         flairSelectionBottomSheetFragment.dismiss();
+    }
+
+    @Subscribe
+    public void onSubmitLinkPostEvent(SubmitTextOrLinkPostEvent submitTextOrLinkPostEvent) {
+        isPosting = false;
+        if(submitTextOrLinkPostEvent.postSuccess) {
+            Intent intent = new Intent(PostLinkActivity.this, ViewPostDetailActivity.class);
+            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, submitTextOrLinkPostEvent.post);
+            startActivity(intent);
+            finish();
+        } else {
+            mPostingSnackbar.dismiss();
+            mMemu.findItem(R.id.action_send_post_link_activity).setEnabled(true);
+            mMemu.findItem(R.id.action_send_post_link_activity).getIcon().setAlpha(255);
+            if(submitTextOrLinkPostEvent.errorMessage == null) {
+                Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
+            } else {
+                Snackbar.make(coordinatorLayout, submitTextOrLinkPostEvent.errorMessage, Snackbar.LENGTH_SHORT).show();
+            }
+        }
     }
 }
