@@ -12,6 +12,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,8 +24,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import Account.AccountRoomDatabase;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,6 +37,10 @@ public class LoginActivity extends AppCompatActivity {
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
+
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,41 +91,69 @@ public class LoginActivity extends AppCompatActivity {
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                                 if(response.isSuccessful()) {
                                     try {
-                                        JSONObject responseJSON = new JSONObject(response.body());
+                                        String accountResponse = response.body();
+                                        if(accountResponse == null) {
+                                            //Handle error
+                                            return;
+                                        }
+
+                                        JSONObject responseJSON = new JSONObject(accountResponse);
                                         String accessToken = responseJSON.getString(RedditUtils.ACCESS_TOKEN_KEY);
                                         String refreshToken = responseJSON.getString(RedditUtils.REFRESH_TOKEN_KEY);
 
-                                        editor.putString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, accessToken);
-                                        editor.putString(SharedPreferencesUtils.REFRESH_TOKEN_KEY, refreshToken);
-                                        editor.apply();
+                                        FetchMyInfo.fetchMyInfo(mOauthRetrofit, accessToken, new FetchMyInfo.FetchUserMyListener() {
+                                            @Override
+                                            public void onFetchMyInfoSuccess(String response) {
+                                                ParseMyInfo.parseMyInfo(response, new ParseMyInfo.ParseMyInfoListener() {
+                                                    @Override
+                                                    public void onParseMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
+                                                        new ParseAndInsertAccount(name, accessToken, refreshToken, profileImageUrl, bannerImageUrl,
+                                                                karma, authCode, AccountRoomDatabase.getDatabase(LoginActivity.this).accountDao(),
+                                                                () -> {
+                                                                    Intent resultIntent = new Intent();
+                                                                    setResult(Activity.RESULT_OK, resultIntent);
+                                                                    finish();
+                                                                }).execute();
+                                                    }
 
-                                        Intent resultIntent = new Intent();
-                                        setResult(Activity.RESULT_OK, resultIntent);
-                                        finish();
+                                                    @Override
+                                                    public void onParseMyInfoFail() {
+                                                        Toast.makeText(LoginActivity.this, R.string.parse_user_info_error, Toast.LENGTH_SHORT).show();
+                                                        finish();
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onFetchMyInfoFail() {
+                                                Toast.makeText(LoginActivity.this, R.string.cannot_fetch_user_info, Toast.LENGTH_SHORT).show();
+                                                finish();
+                                            }
+                                        });
                                     } catch (JSONException e) {
                                         e.printStackTrace();
-                                        Toast.makeText(LoginActivity.this, "Error occurred when parsing the JSON response", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(LoginActivity.this, R.string.parse_json_response_error, Toast.LENGTH_SHORT).show();
                                         finish();
                                     }
                                 } else {
-                                    Toast.makeText(LoginActivity.this, "Error Retrieving the token", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity.this, R.string.retrieve_token_error, Toast.LENGTH_SHORT).show();
                                     finish();
                                 }
                             }
 
                             @Override
-                            public void onFailure(Call<String> call, Throwable t) {
-                                Toast.makeText(LoginActivity.this, "Error Retrieving the token", Toast.LENGTH_SHORT).show();
+                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                                Toast.makeText(LoginActivity.this, R.string.retrieve_token_error, Toast.LENGTH_SHORT).show();
                                 finish();
                             }
                         });
                     } else {
-                        Toast.makeText(LoginActivity.this, "Something went wrong. Try again later.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, R.string.something_went_wrong, Toast.LENGTH_SHORT).show();
                         finish();
                     }
 
                 } else if (url.contains("error=access_denied")) {
-                    Toast.makeText(LoginActivity.this, "Access denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, R.string.access_denied, Toast.LENGTH_SHORT).show();
                     finish();
                 } else {
                     view.loadUrl(url);
@@ -142,10 +176,9 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
         }
         return false;
     }

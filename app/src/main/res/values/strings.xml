@@ -25,6 +25,12 @@
     <string name="action_send">Send</string>
     <string name="action_sort">Sort</string>
 
+    <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
+    <string name="retrieve_token_error">Error Retrieving the token</string>
+    <string name="something_went_wrong">Something went wrong. Try again later.</string>
+    <string name="access_denied">Access denied</string>
+    <string name="parse_user_info_error">Error occurred when parsing the user info</string>
+
     <string name="tap_to_retry">Error loading image. Tap to retry.</string>
     <string name="load_posts_error">Error loading posts.\nTap to retry.</string>
     <string name="search_subreddits_error">Error searching subreddits.\nTap to retry.</string>
