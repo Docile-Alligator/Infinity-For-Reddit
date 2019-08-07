@@ -1,13 +1,18 @@
 package User;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.annotation.NonNull;
-
-import SubscribedUserDatabase.SubscribedUserData;
+import androidx.room.PrimaryKey;
 
 @Entity(tableName = "users")
-public class UserData extends SubscribedUserData {
+public class UserData {
+    @PrimaryKey
+    @NonNull
+    @ColumnInfo(name = "name")
+    private String name;
+    @ColumnInfo(name = "icon")
+    private String iconUrl;
     @ColumnInfo(name = "banner")
     private String banner;
     @ColumnInfo(name = "karma")
@@ -20,12 +25,22 @@ public class UserData extends SubscribedUserData {
     private boolean canBeFollowed;
 
     public UserData(@NonNull String name, String iconUrl, String banner, int karma, boolean isGold, boolean isFriend, boolean canBeFollowed) {
-        super(name, iconUrl);
+        this.name = name;
+        this.iconUrl = iconUrl;
         this.banner = banner;
         this.karma = karma;
         this.isGold = isGold;
         this.isFriend = isFriend;
         this.canBeFollowed = canBeFollowed;
+    }
+
+    @NonNull
+    public String getName() {
+        return name;
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
     }
 
     public String getBanner() {

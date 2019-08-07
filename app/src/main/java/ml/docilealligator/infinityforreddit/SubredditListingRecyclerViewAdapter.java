@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,21 +43,23 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
     private Context context;
     private Retrofit oauthRetrofit;
     private Retrofit retrofit;
-    private SharedPreferences authInfoSharedPreferences;
+    private String accessToken;
+    private String accountName;
     private SubscribedSubredditDao subscribedSubredditDao;
 
     private NetworkState networkState;
     private Callback callback;
 
     SubredditListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, Retrofit retrofit,
-                                        SharedPreferences authInfoSharedPreferences,
+                                        String accessToken, String accountName,
                                         SubscribedSubredditDao subscribedSubredditDao,
                                         Callback callback) {
         super(DIFF_CALLBACK);
         this.context = context;
         this.oauthRetrofit = oauthRetrofit;
         this.retrofit = retrofit;
-        this.authInfoSharedPreferences = authInfoSharedPreferences;
+        this.accessToken = accessToken;
+        this.accountName = accountName;
         this.subscribedSubredditDao = subscribedSubredditDao;
         this.callback = callback;
         glide = Glide.with(context.getApplicationContext());
@@ -112,7 +113,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
 
             ((DataViewHolder) holder).subredditNameTextView.setText(subredditData.getName());
 
-            new CheckIsSubscribedToSubredditAsyncTask(subscribedSubredditDao, subredditData.getName(),
+            new CheckIsSubscribedToSubredditAsyncTask(subscribedSubredditDao, subredditData.getName(), accountName,
                     new CheckIsSubscribedToSubredditAsyncTask.CheckIsSubscribedToSubredditListener() {
                         @Override
                         public void isSubscribed() {
@@ -124,7 +125,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
                             ((DataViewHolder) holder).subscribeButton.setVisibility(View.VISIBLE);
                             ((DataViewHolder) holder).subscribeButton.setOnClickListener(view -> {
                                 SubredditSubscription.subscribeToSubreddit(oauthRetrofit, retrofit,
-                                        authInfoSharedPreferences, subredditData.getName(), subscribedSubredditDao,
+                                        accessToken, accountName, subredditData.getName(), subscribedSubredditDao,
                                         new SubredditSubscription.SubredditSubscriptionListener() {
                                             @Override
                                             public void onSubredditSubscriptionSuccess() {

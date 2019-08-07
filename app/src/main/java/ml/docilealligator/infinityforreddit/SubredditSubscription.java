@@ -1,8 +1,9 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +11,6 @@ import java.util.Map;
 import SubredditDatabase.SubredditData;
 import SubscribedSubredditDatabase.SubscribedSubredditDao;
 import SubscribedSubredditDatabase.SubscribedSubredditData;
-import androidx.annotation.NonNull;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -22,26 +22,26 @@ class SubredditSubscription {
     }
 
     static void subscribeToSubreddit(Retrofit oauthRetrofit, Retrofit retrofit,
-                                     SharedPreferences authInfoSharedPreferences, String subredditName,
+                                     String accessToken, String subredditName, String accountName,
                                      SubscribedSubredditDao subscribedSubredditDao,
                                      SubredditSubscriptionListener subredditSubscriptionListener) {
-        subredditSubscription(oauthRetrofit, retrofit, authInfoSharedPreferences, subredditName, "sub",
+        subredditSubscription(oauthRetrofit, retrofit, accessToken, subredditName, accountName, "sub",
                 subscribedSubredditDao, subredditSubscriptionListener);
     }
 
-    static void unsubscribeToSubreddit(Retrofit oauthRetrofit, SharedPreferences authInfoSharedPreferences,
-                                       String subredditName, SubscribedSubredditDao subscribedSubredditDao,
+    static void unsubscribeToSubreddit(Retrofit oauthRetrofit, String accessToken,
+                                       String subredditName, String accountName,
+                                       SubscribedSubredditDao subscribedSubredditDao,
                                        SubredditSubscriptionListener subredditSubscriptionListener) {
-        subredditSubscription(oauthRetrofit, null, authInfoSharedPreferences, subredditName, "unsub",
+        subredditSubscription(oauthRetrofit, null, accessToken, subredditName, accountName, "unsub",
                 subscribedSubredditDao,subredditSubscriptionListener);
     }
 
-    private static void subredditSubscription(Retrofit oauthRetrofit, Retrofit retrofit, SharedPreferences authInfoSharedPreferences,
-                                              String subredditName, String action, SubscribedSubredditDao subscribedSubredditDao,
+    private static void subredditSubscription(Retrofit oauthRetrofit, Retrofit retrofit, String accessToken,
+                                              String subredditName, String accountName, String action,
+                                              SubscribedSubredditDao subscribedSubredditDao,
                                               SubredditSubscriptionListener subredditSubscriptionListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
-
-        String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
         Map<String, String> params = new HashMap<>();
         params.put(RedditUtils.ACTION_KEY, action);
@@ -57,7 +57,7 @@ class SubredditSubscription {
                             @Override
                             public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                                 new UpdateSubscriptionAsyncTask(subscribedSubredditDao,
-                                        subredditData, true).execute();
+                                        subredditData, accountName, true).execute();
                             }
 
                             @Override
@@ -66,7 +66,7 @@ class SubredditSubscription {
                             }
                         });
                     } else {
-                        new UpdateSubscriptionAsyncTask(subscribedSubredditDao, subredditName, false).execute();
+                        new UpdateSubscriptionAsyncTask(subscribedSubredditDao, subredditName, accountName, false).execute();
                     }
                     subredditSubscriptionListener.onSubredditSubscriptionSuccess();
                 } else {
@@ -87,20 +87,24 @@ class SubredditSubscription {
 
         private SubscribedSubredditDao subscribedSubredditDao;
         private String subredditName;
+        private String accountName;
         private SubscribedSubredditData subscribedSubredditData;
         private boolean isSubscribing;
 
         UpdateSubscriptionAsyncTask(SubscribedSubredditDao subscribedSubredditDao, String subredditName,
-                                    boolean isSubscribing) {
+                                    String accountName, boolean isSubscribing) {
             this.subscribedSubredditDao = subscribedSubredditDao;
             this.subredditName = subredditName;
+            this.accountName = accountName;
             this.isSubscribing = isSubscribing;
         }
 
-        UpdateSubscriptionAsyncTask(SubscribedSubredditDao subscribedSubredditDao, SubscribedSubredditData subscribedSubredditData,
-                                    boolean isSubscribing) {
+        UpdateSubscriptionAsyncTask(SubscribedSubredditDao subscribedSubredditDao, SubredditData subredditData,
+                                    String accountName, boolean isSubscribing) {
             this.subscribedSubredditDao = subscribedSubredditDao;
-            this.subscribedSubredditData = subscribedSubredditData;
+            this.subscribedSubredditData = new SubscribedSubredditData(subredditData.getId(), subredditData.getName(),
+                    subredditData.getIconUrl(), accountName);
+            this.accountName = accountName;
             this.isSubscribing = isSubscribing;
         }
 
@@ -109,7 +113,7 @@ class SubredditSubscription {
             if(isSubscribing) {
                 subscribedSubredditDao.insert(subscribedSubredditData);
             } else {
-                subscribedSubredditDao.deleteSubscribedSubreddit(subredditName);;
+                subscribedSubredditDao.deleteSubscribedSubreddit(subredditName, accountName);
             }
             return null;
         }

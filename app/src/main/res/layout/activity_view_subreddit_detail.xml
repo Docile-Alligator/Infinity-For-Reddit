@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/coordinator_layout_view_subreddit_detail_activity"
-    tools:context=".ViewSubredditDetailActivity">
+    tools:application=".ViewSubredditDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_view_subreddit_detail"

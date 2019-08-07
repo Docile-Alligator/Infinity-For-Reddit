@@ -60,9 +60,9 @@ class AppModule {
 
     @Provides
     @Singleton
-    OkHttpClient provideOkHttpClient(@Named("no_oauth") Retrofit retrofit, @Named("auth_info") SharedPreferences sharedPreferences) {
+    OkHttpClient provideOkHttpClient(@Named("no_oauth") Retrofit retrofit, RedditDataRoomDatabase accountRoomDatabase) {
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
-        okHttpClientBuilder.authenticator(new AccessTokenAuthenticator(retrofit, sharedPreferences));
+        okHttpClientBuilder.authenticator(new AccessTokenAuthenticator(retrofit, accountRoomDatabase));
         return okHttpClientBuilder.build();
     }
 
@@ -75,5 +75,11 @@ class AppModule {
     @Provides @Named("user_info")
     SharedPreferences provideUserInfoSharedPreferences() {
         return mApplication.getSharedPreferences(SharedPreferencesUtils.USER_INFO_FILE_KEY, Context.MODE_PRIVATE);
+    }
+
+    @Provides
+    @Singleton
+    RedditDataRoomDatabase provideRedditDataRoomDatabase() {
+        return RedditDataRoomDatabase.getDatabase(mApplication);
     }
 }

@@ -1,9 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,7 +22,6 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import Account.AccountRoomDatabase;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -41,6 +38,9 @@ public class LoginActivity extends AppCompatActivity {
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
+
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,10 +75,6 @@ public class LoginActivity extends AppCompatActivity {
                     if(state.equals(RedditUtils.STATE)) {
                         authCode = uri.getQueryParameter("code");
 
-                        SharedPreferences.Editor editor = getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE).edit();
-                        editor.putString(SharedPreferencesUtils.AUTH_CODE_KEY, authCode);
-                        editor.apply();
-
                         Map<String, String> params = new HashMap<>();
                         params.put(RedditUtils.GRANT_TYPE_KEY, "authorization_code");
                         params.put("code", authCode);
@@ -107,8 +103,8 @@ public class LoginActivity extends AppCompatActivity {
                                                 ParseMyInfo.parseMyInfo(response, new ParseMyInfo.ParseMyInfoListener() {
                                                     @Override
                                                     public void onParseMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
-                                                        new ParseAndInsertAccount(name, accessToken, refreshToken, profileImageUrl, bannerImageUrl,
-                                                                karma, authCode, AccountRoomDatabase.getDatabase(LoginActivity.this).accountDao(),
+                                                        new ParseAndInsertNewAccountAsyncTask(name, accessToken, refreshToken, profileImageUrl, bannerImageUrl,
+                                                                karma, authCode, mRedditDataRoomDatabase.accountDao(),
                                                                 () -> {
                                                                     Intent resultIntent = new Intent();
                                                                     setResult(Activity.RESULT_OK, resultIntent);

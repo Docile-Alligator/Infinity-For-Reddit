@@ -7,13 +7,15 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.annotation.NonNull;
 
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+
 public class SubredditViewModel extends AndroidViewModel {
     private SubredditRepository mSubredditRepository;
     private LiveData<SubredditData> mSubredditLiveData;
 
-    public SubredditViewModel(Application application, String id) {
+    public SubredditViewModel(Application application, RedditDataRoomDatabase redditDataRoomDatabase, String id) {
         super(application);
-        mSubredditRepository = new SubredditRepository(application, id);
+        mSubredditRepository = new SubredditRepository(redditDataRoomDatabase, id);
         mSubredditLiveData = mSubredditRepository.getSubredditLiveData();
     }
 
@@ -29,19 +31,20 @@ public class SubredditViewModel extends AndroidViewModel {
 
         @NonNull
         private final Application mApplication;
+        private final RedditDataRoomDatabase mRedditDataRoomDatabase;
+        private final String mSubredditName;
 
-        private final String subredditName;
-
-        public Factory(@NonNull Application application, String subredditName) {
+        public Factory(@NonNull Application application, RedditDataRoomDatabase redditDataRoomDatabase, String subredditname) {
             mApplication = application;
-            this.subredditName = subredditName;
+            mRedditDataRoomDatabase = redditDataRoomDatabase;
+            mSubredditName = subredditname;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             //noinspection unchecked
-            return (T) new SubredditViewModel(mApplication, subredditName);
+            return (T) new SubredditViewModel(mApplication, mRedditDataRoomDatabase, mSubredditName);
         }
     }
 }

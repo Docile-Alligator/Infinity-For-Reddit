@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import Account.Account;
 import Account.AccountDao;
 
-class ParseAndInsertAccount extends AsyncTask<Void, Void, Void> {
+class ParseAndInsertNewAccountAsyncTask extends AsyncTask<Void, Void, Void> {
 
     interface ParseAndInsertAccountListener {
         void success();
@@ -21,9 +21,9 @@ class ParseAndInsertAccount extends AsyncTask<Void, Void, Void> {
     private AccountDao accountDao;
     private ParseAndInsertAccountListener parseAndInsertAccountListener;
 
-    ParseAndInsertAccount(String username, String accessToken, String refreshToken, String profileImageUrl, String bannerImageUrl,
-                          int karma, String code, AccountDao accountDao,
-                          ParseAndInsertAccountListener parseAndInsertAccountListener) {
+    ParseAndInsertNewAccountAsyncTask(String username, String accessToken, String refreshToken, String profileImageUrl, String bannerImageUrl,
+                                      int karma, String code, AccountDao accountDao,
+                                      ParseAndInsertAccountListener parseAndInsertAccountListener) {
         this.username = username;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
@@ -39,6 +39,7 @@ class ParseAndInsertAccount extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... voids) {
         Account account = new Account(username, accessToken, refreshToken, code, profileImageUrl,
                 bannerImageUrl, karma, true);
+        accountDao.markAllAccountsNonCurrent();
         accountDao.insert(account);
         return null;
     }

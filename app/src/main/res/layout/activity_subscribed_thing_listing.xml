@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SubscribedThingListingActivity">
+    tools:application=".SubscribedThingListingActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_subscribed_thing_listing_activity"
@@ -40,6 +40,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".SubscribedThingListingActivity" />
+        tools:application=".SubscribedThingListingActivity" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

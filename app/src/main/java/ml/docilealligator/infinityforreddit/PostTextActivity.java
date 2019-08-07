@@ -28,7 +28,6 @@ import org.greenrobot.eventbus.Subscribe;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import SubredditDatabase.SubredditRoomDatabase;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -48,6 +47,8 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
     private static final String FLAIR_STATE = "FS";
     private static final String IS_SPOILER_STATE = "ISS";
     private static final String IS_NSFW_STATE = "INS";
+    private static final String NULL_ACCOUNT_NAME_STATE = "NATS";
+    private static final String ACCOUNT_NAME_STATE = "ANS";
 
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
 
@@ -62,6 +63,8 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
     @BindView(R.id.post_title_edit_text_post_text_activity) EditText titleEditText;
     @BindView(R.id.post_text_content_edit_text_post_text_activity) EditText contentEditText;
 
+    private boolean mNullAccountName = false;
+    private String mAccountName;
     private String iconUrl;
     private String subredditName;
     private boolean subredditSelected = false;
@@ -89,6 +92,9 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
     @Inject
     @Named("auth_info")
     SharedPreferences sharedPreferences;
+
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,6 +226,16 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
         });
     }
 
+    private void getCurrentAccountName() {
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if(account == null) {
+                mNullAccountName = true;
+            } else {
+                mAccountName = account.getUsername();
+            }
+        }).execute();
+    }
+
     private void displaySubredditIcon() {
         if(iconUrl != null && !iconUrl.equals("")) {
             mGlide.load(iconUrl)
@@ -235,7 +251,7 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
     }
 
     private void loadSubredditIcon() {
-        new LoadSubredditIconAsyncTask(SubredditRoomDatabase.getDatabase(this).subredditDao(),
+        new LoadSubredditIconAsyncTask(mRedditDataRoomDatabase.subredditDao(),
                 subredditName, mRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
@@ -309,6 +325,8 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
         outState.putString(FLAIR_STATE, flair);
         outState.putBoolean(IS_SPOILER_STATE, isSpoiler);
         outState.putBoolean(IS_NSFW_STATE, isNSFW);
+        outState.putBoolean(NULL_ACCOUNT_NAME_STATE, mNullAccountName);
+        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
     }
 
     @Override

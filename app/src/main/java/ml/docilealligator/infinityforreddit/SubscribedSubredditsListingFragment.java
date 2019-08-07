@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,7 +19,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import SubscribedSubredditDatabase.SubscribedSubredditViewModel;
 import butterknife.BindView;
@@ -31,6 +30,8 @@ import butterknife.ButterKnife;
  */
 public class SubscribedSubredditsListingFragment extends Fragment {
 
+    static final String EXTRA_ACCOUNT_NAME = "EAT";
+    static final String EXTRA_ACCOUNT_PROFILE_IMAGE_URL = "EAPIU";
     static final String EXTRA_IS_SUBREDDIT_SELECTION = "EISS";
     static final String EXTRA_EXTRA_CLEAR_SELECTION = "EECS";
 
@@ -45,15 +46,14 @@ public class SubscribedSubredditsListingFragment extends Fragment {
     private SubscribedSubredditViewModel mSubscribedSubredditViewModel;
 
     @Inject
-    @Named("user_info")
-    SharedPreferences sharedPreferences;
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
 
     public SubscribedSubredditsListingFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_subscribed_subreddits_listing, container, false);
 
@@ -63,8 +63,7 @@ public class SubscribedSubredditsListingFragment extends Fragment {
 
         ((Infinity) mActivity.getApplication()).getmAppComponent().inject(this);
 
-        String username = sharedPreferences.getString(SharedPreferencesUtils.USER_KEY, "");
-        String userIconUrl = sharedPreferences.getString(SharedPreferencesUtils.PROFILE_IMAGE_URL_KEY, "");
+        String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
 
         mGlide = Glide.with(this);
 
@@ -80,7 +79,9 @@ public class SubscribedSubredditsListingFragment extends Fragment {
 
         mRecyclerView.setAdapter(adapter);
 
-        mSubscribedSubredditViewModel = ViewModelProviders.of(this).get(SubscribedSubredditViewModel.class);
+        mSubscribedSubredditViewModel = ViewModelProviders.of(this,
+                new SubscribedSubredditViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, accountName))
+                .get(SubscribedSubredditViewModel.class);
         mSubscribedSubredditViewModel.getAllSubscribedSubreddits().observe(this, subscribedSubredditData -> {
             if (subscribedSubredditData == null || subscribedSubredditData.size() == 0) {
                 mRecyclerView.setVisibility(View.GONE);
@@ -91,7 +92,7 @@ public class SubscribedSubredditsListingFragment extends Fragment {
                 mRecyclerView.setVisibility(View.VISIBLE);
             }
 
-            adapter.addUser(username, userIconUrl);
+            adapter.addUser(accountName, getArguments().getString(EXTRA_ACCOUNT_PROFILE_IMAGE_URL));
             adapter.setSubscribedSubreddits(subscribedSubredditData);
         });
 

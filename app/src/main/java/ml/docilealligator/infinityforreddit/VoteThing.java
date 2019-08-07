@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -28,12 +27,11 @@ class VoteThing {
         void onVoteThingFail();
     }
 
-    static void voteThing(final Retrofit retrofit, SharedPreferences authInfoSharedPreferences,
+    static void voteThing(final Retrofit retrofit, String accessToken,
                           final VoteThingListener voteThingListener, final String fullName,
                           final String point, final int position) {
             RedditAPI api = retrofit.create(RedditAPI.class);
 
-            String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
             Map<String, String> params = new HashMap<>();
             params.put(RedditUtils.DIR_KEY, point);
             params.put(RedditUtils.ID_KEY, fullName);
@@ -58,12 +56,11 @@ class VoteThing {
             });
     }
 
-    static void voteThing(final Retrofit retrofit, SharedPreferences authInfoSharedPreferences,
+    static void voteThing(final Retrofit retrofit, String accessToken,
                           final VoteThingWithoutPositionListener voteThingWithoutPositionListener,
                           final String fullName, final String point) {
             RedditAPI api = retrofit.create(RedditAPI.class);
 
-            String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
             Map<String, String> params = new HashMap<>();
             params.put(RedditUtils.DIR_KEY, point);
             params.put(RedditUtils.ID_KEY, fullName);

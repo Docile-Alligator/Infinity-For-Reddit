@@ -6,5 +6,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="ml.docilealligator.infinityforreddit.MainActivity"
+    tools:application="ml.docilealligator.infinityforreddit.MainActivity"
     tools:showIn="@layout/app_bar_main" />

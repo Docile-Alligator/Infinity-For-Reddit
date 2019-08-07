@@ -1,16 +1,17 @@
 package User;
 
-import android.app.Application;
-import androidx.lifecycle.LiveData;
 import android.os.AsyncTask;
+
+import androidx.lifecycle.LiveData;
+
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class UserRepository {
     private UserDao mUserDao;
     private LiveData<UserData> mUserLiveData;
 
-    UserRepository(Application application, String userName) {
-        mUserDao = UserRoomDatabase.getDatabase(application).userDao();
-
+    UserRepository(RedditDataRoomDatabase redditDataRoomDatabase, String userName) {
+        mUserDao = redditDataRoomDatabase.userDao();
         mUserLiveData = mUserDao.getUserLiveData(userName);
     }
 

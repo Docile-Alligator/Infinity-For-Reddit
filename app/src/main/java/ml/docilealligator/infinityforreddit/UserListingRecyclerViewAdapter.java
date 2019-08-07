@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,21 +43,22 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
     private Context context;
     private Retrofit oauthRetrofit;
     private Retrofit retrofit;
-    private SharedPreferences authInfoSharedPreferences;
+    private String accessToken;
+    private String accountName;
     private SubscribedUserDao subscribedUserDao;
 
     private NetworkState networkState;
     private UserListingRecyclerViewAdapter.RetryLoadingMoreCallback retryLoadingMoreCallback;
 
     UserListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, Retrofit retrofit,
-                                        SharedPreferences authInfoSharedPreferences,
-                                        SubscribedUserDao subscribedUserDao,
+                                        String accessToken, String accountName, SubscribedUserDao subscribedUserDao,
                                         UserListingRecyclerViewAdapter.RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         this.context = context;
         this.oauthRetrofit = oauthRetrofit;
         this.retrofit = retrofit;
-        this.authInfoSharedPreferences = authInfoSharedPreferences;
+        this.accessToken = accessToken;
+        this.accountName = accountName;
         this.subscribedUserDao = subscribedUserDao;
         this.retryLoadingMoreCallback = retryLoadingMoreCallback;
         glide = Glide.with(context.getApplicationContext());
@@ -115,7 +115,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
 
             ((UserListingRecyclerViewAdapter.DataViewHolder) holder).UserNameTextView.setText(userData.getName());
 
-            new CheckIsFollowingUserAsyncTask(subscribedUserDao, userData.getName(),
+            new CheckIsFollowingUserAsyncTask(subscribedUserDao, userData.getName(), accountName,
                     new CheckIsFollowingUserAsyncTask.CheckIsFollowingUserListener() {
                         @Override
                         public void isSubscribed() {
@@ -127,7 +127,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
                             ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setVisibility(View.VISIBLE);
                             ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setOnClickListener(view -> {
                                 UserFollowing.followUser(oauthRetrofit, retrofit,
-                                        authInfoSharedPreferences, userData.getName(), subscribedUserDao,
+                                        accessToken, userData.getName(), accountName, subscribedUserDao,
                                         new UserFollowing.UserFollowingListener() {
                                             @Override
                                             public void onUserFollowingSuccess() {

@@ -1,19 +1,20 @@
 package SubscribedSubredditDatabase;
 
-import android.app.Application;
-import androidx.lifecycle.LiveData;
 import android.os.AsyncTask;
 
+import androidx.lifecycle.LiveData;
+
 import java.util.List;
+
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class SubscribedSubredditRepository {
     private SubscribedSubredditDao mSubscribedSubredditDao;
     private LiveData<List<SubscribedSubredditData>> mAllSubscribedSubreddits;
 
-    SubscribedSubredditRepository(Application application) {
-        SubscribedSubredditRoomDatabase db = SubscribedSubredditRoomDatabase.getDatabase(application);
-        mSubscribedSubredditDao = db.subscribedSubredditDao();
-        mAllSubscribedSubreddits = mSubscribedSubredditDao.getAllSubscribedSubreddits();
+    SubscribedSubredditRepository(RedditDataRoomDatabase redditDataRoomDatabase, String accountName) {
+        mSubscribedSubredditDao = redditDataRoomDatabase.subscribedSubredditDao();
+        mAllSubscribedSubreddits = mSubscribedSubredditDao.getAllSubscribedSubreddits(accountName);
     }
 
     LiveData<List<SubscribedSubredditData>> getAllSubscribedSubreddits() {

@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +36,7 @@ import retrofit2.Retrofit;
 public class CommentsListingFragment extends Fragment implements FragmentCommunicator {
 
     static final String EXTRA_USERNAME_KEY = "ENK";
+    static final String EXTRA_ACCESS_TOKEN = "EAT";
 
     @BindView(R.id.coordinator_layout_comments_listing_fragment) CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.recycler_view_comments_listing_fragment) RecyclerView mCommentRecyclerView;
@@ -60,9 +60,6 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     @Inject @Named("oauth")
     Retrofit mOauthRetrofit;
 
-    @Inject @Named("auth_info")
-    SharedPreferences mSharedPreferences;
-
     public CommentsListingFragment() {
         // Required empty public constructor
     }
@@ -83,7 +80,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
         CommentViewModel.Factory factory;
         mAdapter = new CommentsListingRecyclerViewAdapter(activity, mOauthRetrofit,
-                mSharedPreferences, () -> mCommentViewModel.retryLoadingMore());
+                getArguments().getString(EXTRA_ACCESS_TOKEN), () -> mCommentViewModel.retryLoadingMore());
 
         String username = getArguments().getString(EXTRA_USERNAME_KEY);
 

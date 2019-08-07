@@ -22,16 +22,18 @@ class ParseSubscribedThing {
         void onParseSubscribedSubredditsFail();
     }
 
-    static void parseSubscribedSubreddits(String response, ArrayList<SubscribedSubredditData> subscribedSubredditData,
-                                   ArrayList<SubscribedUserData> subscribedUserData,
-                                   ArrayList<SubredditData> subredditData,
-                                   ParseSubscribedSubredditsListener parseSubscribedSubredditsListener) {
-        new ParseSubscribedSubredditsAsyncTask(response, subscribedSubredditData, subscribedUserData, subredditData,
+    static void parseSubscribedSubreddits(String response, String accountName,
+                                          ArrayList<SubscribedSubredditData> subscribedSubredditData,
+                                          ArrayList<SubscribedUserData> subscribedUserData,
+                                          ArrayList<SubredditData> subredditData,
+                                          ParseSubscribedSubredditsListener parseSubscribedSubredditsListener) {
+        new ParseSubscribedSubredditsAsyncTask(response, accountName, subscribedSubredditData, subscribedUserData, subredditData,
                 parseSubscribedSubredditsListener).execute();
     }
 
     private static class ParseSubscribedSubredditsAsyncTask extends AsyncTask<Void, Void, Void> {
         private JSONObject jsonResponse;
+        private String accountName;
         private boolean parseFailed;
         private String lastItem;
         private ArrayList<SubscribedSubredditData> subscribedSubredditData;
@@ -42,12 +44,13 @@ class ParseSubscribedThing {
         private ArrayList<SubredditData> newSubredditData;
         private ParseSubscribedSubredditsListener parseSubscribedSubredditsListener;
 
-        ParseSubscribedSubredditsAsyncTask(String response, ArrayList<SubscribedSubredditData> subscribedSubredditData,
+        ParseSubscribedSubredditsAsyncTask(String response, String accountName, ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                            ArrayList<SubscribedUserData> subscribedUserData,
                                            ArrayList<SubredditData> subredditData,
                                            ParseSubscribedSubredditsListener parseSubscribedSubredditsListener){
             try {
                 jsonResponse = new JSONObject(response);
+                this.accountName = accountName;
                 parseFailed = false;
                 this.subscribedSubredditData = subscribedSubredditData;
                 this.subscribedUserData = subscribedUserData;
@@ -94,12 +97,12 @@ class ParseSubscribedThing {
                     if(data.getString(JSONUtils.SUBREDDIT_TYPE_KEY)
                             .equals(JSONUtils.SUBREDDIT_TYPE_VALUE_USER)) {
                         //It's a user
-                        newSubscribedUserData.add(new SubscribedUserData(name.substring(2), iconUrl));
+                        newSubscribedUserData.add(new SubscribedUserData(name.substring(2), iconUrl, accountName));
                     } else {
                         String subredditFullName = data.getString(JSONUtils.DISPLAY_NAME);
                         String description = data.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY).trim();
                         int nSubscribers = data.getInt(JSONUtils.SUBSCRIBERS_KEY);
-                        newSubscribedSubredditData.add(new SubscribedSubredditData(id, name, iconUrl));
+                        newSubscribedSubredditData.add(new SubscribedSubredditData(id, name, iconUrl, accountName));
                         newSubredditData.add(new SubredditData(id, subredditFullName, iconUrl, bannerImageUrl, description, nSubscribers));
                     }
                 }

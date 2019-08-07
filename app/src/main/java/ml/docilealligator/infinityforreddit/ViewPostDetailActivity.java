@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -60,6 +59,10 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private int postListPosition = -1;
 
     @State
+    boolean mNullAccessToken = false;
+    @State
+    String mAccessToken;
+    @State
     Post mPost;
     @State
     boolean isLoadingMoreChildren = false;
@@ -94,8 +97,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     @Inject @Named("oauth")
     Retrofit mOauthRetrofit;
 
-    @Inject @Named("auth_info")
-    SharedPreferences mSharedPreferences;
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +124,30 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
         orientation = getResources().getConfiguration().orientation;
 
+        if(!mNullAccessToken && mAccessToken == null) {
+            getCurrentAccountAndBindView();
+        } else {
+            bindView();
+        }
+
+        if(getIntent().hasExtra(EXTRA_POST_LIST_POSITION)) {
+            postListPosition = getIntent().getExtras().getInt(EXTRA_POST_LIST_POSITION);
+        }
+    }
+
+    private void getCurrentAccountAndBindView() {
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if(account == null) {
+                mNullAccessToken = true;
+            } else {
+                mAccessToken = account.getAccessToken();
+            }
+
+            bindView();
+        }).execute();
+    }
+
+    private void bindView() {
         if(mPost == null) {
             mPost = getIntent().getExtras().getParcelable(EXTRA_POST_DATA);
         }
@@ -130,7 +157,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             fetchPostAndCommentsById(getIntent().getExtras().getString(EXTRA_POST_ID));
         } else {
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
-                    mOauthRetrofit, mGlide, mSharedPreferences, mPost,
+                    mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mPost,
                     mPost.getSubredditNamePrefixed(), mLocale, mLoadSubredditIconAsyncTask,
                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                         @Override
@@ -163,11 +190,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 }
             }
         }
-
-        if(getIntent().hasExtra(EXTRA_POST_LIST_POSITION)) {
-            postListPosition = getIntent().getExtras().getInt(EXTRA_POST_LIST_POSITION);
-        }
     }
+
 
     private void fetchPostAndCommentsById(String subredditId) {
         mFetchPostInfoLinearLayout.setVisibility(View.GONE);
@@ -190,7 +214,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                             mPost = post;
 
                             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
-                                    mOauthRetrofit, mGlide, mSharedPreferences, mPost,
+                                    mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mPost,
                                     mPost.getSubredditNamePrefixed(), mLocale, mLoadSubredditIconAsyncTask,
                                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                                         @Override

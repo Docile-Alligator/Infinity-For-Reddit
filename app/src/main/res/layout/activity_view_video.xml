@@ -7,7 +7,7 @@
     android:background="@android:color/black"
     android:id="@+id/relative_layout_view_video_activity"
     android:keepScreenOn="true"
-    tools:context="ml.docilealligator.infinityforreddit.ViewVideoActivity">
+    tools:application="ml.docilealligator.infinityforreddit.ViewVideoActivity">
 
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/player_view_view_video_activity"

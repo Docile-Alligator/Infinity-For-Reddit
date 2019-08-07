@@ -8,13 +8,15 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+
 public class AccountViewModel extends AndroidViewModel {
     private AccountRepository mAccountRepository;
     private LiveData<Account> mAccountLiveData;
 
-    public AccountViewModel(Application application, String id) {
+    public AccountViewModel(Application application, RedditDataRoomDatabase redditDataRoomDatabase, String id) {
         super(application);
-        mAccountRepository = new AccountRepository(application, id);
+        mAccountRepository = new AccountRepository(redditDataRoomDatabase, id);
         mAccountLiveData = mAccountRepository.getAccountLiveData();
     }
 
@@ -30,18 +32,19 @@ public class AccountViewModel extends AndroidViewModel {
 
         @NonNull
         private final Application mApplication;
+        private final RedditDataRoomDatabase mRedditDataRoomDatabase;
+        private final String mUsername;
 
-        private final String userName;
-
-        public Factory(@NonNull Application application, String userName) {
+        public Factory(@NonNull Application application, RedditDataRoomDatabase redditDataRoomDatabase, String username) {
             mApplication = application;
-            this.userName = userName;
+            mRedditDataRoomDatabase = redditDataRoomDatabase;
+            mUsername = username;
         }
 
         @Override
         public <T extends ViewModel> T create(Class<T> modelClass) {
             //noinspection unchecked
-            return (T) new AccountViewModel(mApplication, userName);
+            return (T) new AccountViewModel(mApplication, mRedditDataRoomDatabase, mUsername);
         }
     }
 }

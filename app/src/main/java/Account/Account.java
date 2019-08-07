@@ -58,6 +58,10 @@ public class Account {
         return accessToken;
     }
 
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
     public String getRefreshToken() {
         return refreshToken;
     }

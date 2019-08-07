@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -43,9 +42,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import CustomView.AspectRatioGifImageView;
 import SubredditDatabase.SubredditDao;
-import SubredditDatabase.SubredditRoomDatabase;
 import User.UserDao;
-import User.UserRoomDatabase;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -60,20 +57,20 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     private Context mContext;
     private Retrofit mOauthRetrofit;
     private Retrofit mRetrofit;
-    private SharedPreferences mSharedPreferences;
-    private RequestManager glide;
-    private SubredditDao subredditDao;
-    private UserDao userDao;
+    private String mAccessToken;
+    private RequestManager mGlide;
+    private SubredditDao mSubredditDao;
+    private UserDao mUserDao;
     private boolean canStartActivity = true;
-    private int postType;
-    private boolean displaySubredditName;
+    private int mPostType;
+    private boolean mDisplaySubredditName;
 
     private static final int VIEW_TYPE_DATA = 0;
     private static final int VIEW_TYPE_ERROR = 1;
     private static final int VIEW_TYPE_LOADING = 2;
 
     private NetworkState networkState;
-    private Callback callback;
+    private Callback mCallback;
 
     interface Callback {
         void retryLoadingMore();
@@ -81,20 +78,21 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     }
 
     PostRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, Retrofit retrofit,
-                            SharedPreferences sharedPreferences, int postType,
+                            RedditDataRoomDatabase redditDataRoomDatabase,
+                            String accessToken, int postType,
                             boolean displaySubredditName, Callback callback) {
         super(DIFF_CALLBACK);
         if(context != null) {
             mContext = context;
             mOauthRetrofit = oauthRetrofit;
             mRetrofit = retrofit;
-            mSharedPreferences = sharedPreferences;
-            this.postType = postType;
-            this.displaySubredditName = displaySubredditName;
-            glide = Glide.with(mContext.getApplicationContext());
-            subredditDao = SubredditRoomDatabase.getDatabase(mContext.getApplicationContext()).subredditDao();
-            userDao = UserRoomDatabase.getDatabase(mContext.getApplicationContext()).userDao();
-            this.callback = callback;
+            mAccessToken = accessToken;
+            mPostType = postType;
+            mDisplaySubredditName = displaySubredditName;
+            mGlide = Glide.with(mContext.getApplicationContext());
+            mSubredditDao = redditDataRoomDatabase.subredditDao();
+            mUserDao = redditDataRoomDatabase.userDao();
+            mCallback = callback;
         }
     }
 
@@ -161,19 +159,19 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                     }
                 });
 
-                if(displaySubredditName) {
+                if(mDisplaySubredditName) {
                     if(authorPrefixed.equals(subredditNamePrefixed)) {
                         if(post.getAuthorIconUrl() == null) {
-                            new LoadUserDataAsyncTask(userDao, post.getAuthor(), mRetrofit, iconImageUrl -> {
+                            new LoadUserDataAsyncTask(mUserDao, post.getAuthor(), mRetrofit, iconImageUrl -> {
                                 if(mContext != null && getItemCount() > 0) {
                                     if(iconImageUrl == null || iconImageUrl.equals("")) {
-                                        glide.load(R.drawable.subreddit_default_icon)
+                                        mGlide.load(R.drawable.subreddit_default_icon)
                                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                                 .into(((DataViewHolder) holder).iconGifImageView);
                                     } else {
-                                        glide.load(iconImageUrl)
+                                        mGlide.load(iconImageUrl)
                                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                                .error(glide.load(R.drawable.subreddit_default_icon)
+                                                .error(mGlide.load(R.drawable.subreddit_default_icon)
                                                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                                                 .into(((DataViewHolder) holder).iconGifImageView);
                                     }
@@ -184,29 +182,29 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                                 }
                             }).execute();
                         } else if(!post.getAuthorIconUrl().equals("")) {
-                            glide.load(post.getAuthorIconUrl())
+                            mGlide.load(post.getAuthorIconUrl())
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                    .error(glide.load(R.drawable.subreddit_default_icon)
+                                    .error(mGlide.load(R.drawable.subreddit_default_icon)
                                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                                     .into(((DataViewHolder) holder).iconGifImageView);
                         } else {
-                            glide.load(R.drawable.subreddit_default_icon)
+                            mGlide.load(R.drawable.subreddit_default_icon)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                     .into(((DataViewHolder) holder).iconGifImageView);
                         }
                     } else {
                         if(post.getSubredditIconUrl() == null) {
-                            new LoadSubredditIconAsyncTask(subredditDao, subredditName, mRetrofit,
+                            new LoadSubredditIconAsyncTask(mSubredditDao, subredditName, mRetrofit,
                                     iconImageUrl -> {
                                         if(mContext != null && getItemCount() > 0) {
                                             if(iconImageUrl == null || iconImageUrl.equals("")) {
-                                                glide.load(R.drawable.subreddit_default_icon)
+                                                mGlide.load(R.drawable.subreddit_default_icon)
                                                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                                         .into(((DataViewHolder) holder).iconGifImageView);
                                             } else {
-                                                glide.load(iconImageUrl)
+                                                mGlide.load(iconImageUrl)
                                                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                                        .error(glide.load(R.drawable.subreddit_default_icon)
+                                                        .error(mGlide.load(R.drawable.subreddit_default_icon)
                                                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                                                         .into(((DataViewHolder) holder).iconGifImageView);
                                             }
@@ -217,13 +215,13 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                                         }
                                     }).execute();
                         } else if(!post.getSubredditIconUrl().equals("")) {
-                            glide.load(post.getSubredditIconUrl())
+                            mGlide.load(post.getSubredditIconUrl())
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                    .error(glide.load(R.drawable.subreddit_default_icon)
+                                    .error(mGlide.load(R.drawable.subreddit_default_icon)
                                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                                     .into(((DataViewHolder) holder).iconGifImageView);
                         } else {
-                            glide.load(R.drawable.subreddit_default_icon)
+                            mGlide.load(R.drawable.subreddit_default_icon)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                     .into(((DataViewHolder) holder).iconGifImageView);
                         }
@@ -250,16 +248,16 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                     });
                 } else {
                     if(post.getAuthorIconUrl() == null) {
-                        new LoadUserDataAsyncTask(userDao, post.getAuthor(), mRetrofit, iconImageUrl -> {
+                        new LoadUserDataAsyncTask(mUserDao, post.getAuthor(), mRetrofit, iconImageUrl -> {
                             if(mContext != null && getItemCount() > 0) {
                                 if(iconImageUrl == null || iconImageUrl.equals("")) {
-                                    glide.load(R.drawable.subreddit_default_icon)
+                                    mGlide.load(R.drawable.subreddit_default_icon)
                                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                             .into(((DataViewHolder) holder).iconGifImageView);
                                 } else {
-                                    glide.load(iconImageUrl)
+                                    mGlide.load(iconImageUrl)
                                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                            .error(glide.load(R.drawable.subreddit_default_icon)
+                                            .error(mGlide.load(R.drawable.subreddit_default_icon)
                                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                                             .into(((DataViewHolder) holder).iconGifImageView);
                                 }
@@ -270,13 +268,13 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                             }
                         }).execute();
                     } else if(!post.getAuthorIconUrl().equals("")) {
-                        glide.load(post.getAuthorIconUrl())
+                        mGlide.load(post.getAuthorIconUrl())
                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                .error(glide.load(R.drawable.subreddit_default_icon)
+                                .error(mGlide.load(R.drawable.subreddit_default_icon)
                                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                                 .into(((DataViewHolder) holder).iconGifImageView);
                     } else {
-                        glide.load(R.drawable.subreddit_default_icon)
+                        mGlide.load(R.drawable.subreddit_default_icon)
                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                 .into(((DataViewHolder) holder).iconGifImageView);
                     }
@@ -300,7 +298,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
 
                 if(gilded > 0) {
                     ((DataViewHolder) holder).gildedImageView.setVisibility(View.VISIBLE);
-                    glide.load(R.drawable.gold).into(((DataViewHolder) holder).gildedImageView);
+                    mGlide.load(R.drawable.gold).into(((DataViewHolder) holder).gildedImageView);
                     ((DataViewHolder) holder).gildedNumberTextView.setVisibility(View.VISIBLE);
                     String gildedNumber = mContext.getResources().getString(R.string.gilded, gilded);
                     ((DataViewHolder) holder).gildedNumberTextView.setText(gildedNumber);
@@ -345,9 +343,9 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                     loadImage(holder, post);
                 }
 
-                if(postType == PostDataSource.TYPE_SUBREDDIT && post.isStickied()) {
+                if(mPostType == PostDataSource.TYPE_SUBREDDIT && post.isStickied()) {
                     ((DataViewHolder) holder).stickiedPostImageView.setVisibility(View.VISIBLE);
-                    glide.load(R.drawable.thumbtack).into(((DataViewHolder) holder).stickiedPostImageView);
+                    mGlide.load(R.drawable.thumbtack).into(((DataViewHolder) holder).stickiedPostImageView);
                 }
 
                 if(isArchived) {
@@ -362,7 +360,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                 }
 
                 if(!(mContext instanceof FilteredPostsActivity)) {
-                    ((DataViewHolder) holder).typeChip.setOnClickListener(view -> callback.typeChipClicked(post.getPostType()));
+                    ((DataViewHolder) holder).typeChip.setOnClickListener(view -> mCallback.typeChipClicked(post.getPostType()));
                 }
 
                 switch (post.getPostType()) {
@@ -481,7 +479,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
 
                     ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
 
-                    VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
                             if(newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
@@ -541,7 +539,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
 
                     ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
 
-                    VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
                             if(newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {
@@ -584,7 +582,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     }
 
     private void loadImage(final RecyclerView.ViewHolder holder, final Post post) {
-        RequestBuilder imageRequestBuilder = glide.load(post.getPreviewUrl()).listener(new RequestListener<Drawable>() {
+        RequestBuilder imageRequestBuilder = mGlide.load(post.getPreviewUrl()).listener(new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 ((DataViewHolder) holder).progressBar.setVisibility(View.GONE);
@@ -699,7 +697,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
             super(itemView);
             ButterKnife.bind(this, itemView);
             errorTextView.setText(R.string.load_posts_error);
-            retryButton.setOnClickListener(view -> callback.retryLoadingMore());
+            retryButton.setOnClickListener(view -> mCallback.retryLoadingMore());
         }
     }
 
@@ -713,8 +711,8 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if(holder instanceof DataViewHolder) {
-            glide.clear(((DataViewHolder) holder).imageView);
-            glide.clear(((DataViewHolder) holder).iconGifImageView);
+            mGlide.clear(((DataViewHolder) holder).imageView);
+            mGlide.clear(((DataViewHolder) holder).iconGifImageView);
             ((DataViewHolder) holder).stickiedPostImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).relativeLayout.setVisibility(View.GONE);
             ((DataViewHolder) holder).gildedImageView.setVisibility(View.GONE);

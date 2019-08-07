@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -40,8 +39,6 @@ import java.util.Locale;
 
 import CustomView.AspectRatioGifImageView;
 import CustomView.CustomMarkwonView;
-import SubredditDatabase.SubredditRoomDatabase;
-import User.UserRoomDatabase;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -61,8 +58,9 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private Activity mActivity;
     private Retrofit mRetrofit;
     private Retrofit mOauthRetrofit;
+    private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private RequestManager mGlide;
-    private SharedPreferences mSharedPreferences;
+    private String mAccessToken;
     private Post mPost;
     private ArrayList<CommentData> mVisibleComments;
     private String mSubredditNamePrefixed;
@@ -79,15 +77,17 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         void retryFetchingMoreComments();
     }
 
-    CommentAndPostRecyclerViewAdapter(Activity activity, Retrofit retrofit, Retrofit oauthRetrofit, RequestManager glide,
-                                      SharedPreferences sharedPreferences, Post post, String subredditNamePrefixed,
+    CommentAndPostRecyclerViewAdapter(Activity activity, Retrofit retrofit, Retrofit oauthRetrofit,
+                                      RedditDataRoomDatabase redditDataRoomDatabase, RequestManager glide,
+                                      String accessToken, Post post, String subredditNamePrefixed,
                                       Locale locale, LoadSubredditIconAsyncTask loadSubredditIconAsyncTask,
                                       CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
         mActivity = activity;
         mRetrofit = retrofit;
         mOauthRetrofit = oauthRetrofit;
+        mRedditDataRoomDatabase = redditDataRoomDatabase;
         mGlide = glide;
-        mSharedPreferences = sharedPreferences;
+        mAccessToken = accessToken;
         mPost = post;
         mVisibleComments = new ArrayList<>();
         mSubredditNamePrefixed = subredditNamePrefixed;
@@ -164,7 +164,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
             if(mPost.getSubredditNamePrefixed().equals("u/" + mPost.getAuthor())) {
                 if(mPost.getAuthorIconUrl() == null) {
-                    new LoadUserDataAsyncTask(UserRoomDatabase.getDatabase(mActivity).userDao(), mPost.getAuthor(), mOauthRetrofit, iconImageUrl -> {
+                    new LoadUserDataAsyncTask(mRedditDataRoomDatabase.userDao(), mPost.getAuthor(), mOauthRetrofit, iconImageUrl -> {
                         if(mActivity != null && getItemCount() > 0) {
                             if(iconImageUrl == null || iconImageUrl.equals("")) {
                                 mGlide.load(R.drawable.subreddit_default_icon)
@@ -200,7 +200,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                         mLoadSubredditIconAsyncTask.cancel(true);
                     }
                     mLoadSubredditIconAsyncTask = new LoadSubredditIconAsyncTask(
-                            SubredditRoomDatabase.getDatabase(mActivity).subredditDao(), mPost.getSubredditNamePrefixed().substring(2),
+                            mRedditDataRoomDatabase.subredditDao(), mPost.getSubredditNamePrefixed().substring(2),
                             mRetrofit, iconImageUrl -> {
                                 if(iconImageUrl == null || iconImageUrl.equals("")) {
                                     mGlide.load(R.drawable.subreddit_default_icon)
@@ -749,7 +749,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
                 mCommentRecyclerViewAdapterCallback.updatePost(mPost);
 
-                VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingWithoutPositionListener() {
+                VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingWithoutPositionListener() {
                     @Override
                     public void onVoteThingSuccess() {
                         if(newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
@@ -808,7 +808,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
                 mCommentRecyclerViewAdapterCallback.updatePost(mPost);
 
-                VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingWithoutPositionListener() {
+                VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingWithoutPositionListener() {
                     @Override
                     public void onVoteThingSuccess() {
                         if(newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {
@@ -911,7 +911,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
                 scoreTextView.setText(Integer.toString(mVisibleComments.get(getAdapterPosition() - 1).getScore() + mVisibleComments.get(getAdapterPosition() - 1).getVoteType()));
 
-                VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
+                VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                     @Override
                     public void onVoteThingSuccess(int position) {
                         if(newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
@@ -951,7 +951,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
                 scoreTextView.setText(Integer.toString(mVisibleComments.get(getAdapterPosition() - 1).getScore() + mVisibleComments.get(getAdapterPosition() - 1).getVoteType()));
 
-                VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
+                VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                     @Override
                     public void onVoteThingSuccess(int position1) {
                         if(newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {

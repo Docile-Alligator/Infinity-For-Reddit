@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,7 +33,6 @@ import org.greenrobot.eventbus.Subscribe;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import SubredditDatabase.SubredditRoomDatabase;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -55,6 +53,8 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
     private static final String FLAIR_STATE = "FS";
     private static final String IS_SPOILER_STATE = "ISS";
     private static final String IS_NSFW_STATE = "INS";
+    private static final String NULL_ACCOUNT_NAME_STATE = "NATS";
+    private static final String ACCOUNT_NAME_STATE = "ANS";
 
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
     private static final int PICK_VIDEO_REQUEST_CODE = 1;
@@ -75,6 +75,8 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
     @BindView(R.id.select_again_text_view_post_video_activity) TextView selectAgainTextView;
     @BindView(R.id.video_view_post_video_activity) VideoView videoView;
 
+    private boolean mNullAccountName = false;
+    private String mAccountName;
     private String iconUrl;
     private String subredditName;
     private boolean subredditSelected = false;
@@ -109,12 +111,7 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
     Retrofit mUploadVideoRetrofit;
 
     @Inject
-    @Named("user_info")
-    SharedPreferences mUserInfoSharedPreferences;
-
-    @Inject
-    @Named("auth_info")
-    SharedPreferences sharedPreferences;
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +139,12 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
             flair = savedInstanceState.getString(FLAIR_STATE);
             isSpoiler = savedInstanceState.getBoolean(IS_SPOILER_STATE);
             isNSFW = savedInstanceState.getBoolean(IS_NSFW_STATE);
+            mNullAccountName = savedInstanceState.getBoolean(NULL_ACCOUNT_NAME_STATE);
+            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
+
+            if(!mNullAccountName && mAccountName == null) {
+                getCurrentAccountName();
+            }
 
             if(savedInstanceState.getString(VIDEO_URI_STATE) != null) {
                 videoUri = Uri.parse(savedInstanceState.getString(VIDEO_URI_STATE));
@@ -173,6 +176,8 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
                 nsfwTextView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             }
         } else {
+            getCurrentAccountName();
+
             isPosting = false;
 
             if(getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
@@ -272,6 +277,16 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
         });
     }
 
+    private void getCurrentAccountName() {
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if(account == null) {
+                mNullAccountName = true;
+            } else {
+                mAccountName = account.getUsername();
+            }
+        }).execute();
+    }
+
     private void loadVideo() {
         constraintLayout.setVisibility(View.GONE);
         videoView.setVisibility(View.VISIBLE);
@@ -295,7 +310,7 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
     }
 
     private void loadSubredditIcon() {
-        new LoadSubredditIconAsyncTask(SubredditRoomDatabase.getDatabase(this).subredditDao(),
+        new LoadSubredditIconAsyncTask(mRedditDataRoomDatabase.subredditDao(),
                 subredditName, mRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
@@ -387,6 +402,8 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
         outState.putString(FLAIR_STATE, flair);
         outState.putBoolean(IS_SPOILER_STATE, isSpoiler);
         outState.putBoolean(IS_NSFW_STATE, isNSFW);
+        outState.putBoolean(NULL_ACCOUNT_NAME_STATE, mNullAccountName);
+        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
     }
 
     @Override
@@ -444,7 +461,7 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
         if(submitVideoPostEvent.postSuccess) {
             Intent intent = new Intent(this, ViewUserDetailActivity.class);
             intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
-                    mUserInfoSharedPreferences.getString(SharedPreferencesUtils.USER_KEY, ""));
+                    mAccountName);
             startActivity(intent);
             finish();
         } else if(submitVideoPostEvent.errorProcessingVideo) {

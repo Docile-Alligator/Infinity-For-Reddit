@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -31,10 +30,8 @@ import javax.inject.Named;
 
 import SubredditDatabase.SubredditDao;
 import SubredditDatabase.SubredditData;
-import SubredditDatabase.SubredditRoomDatabase;
 import SubredditDatabase.SubredditViewModel;
 import SubscribedSubredditDatabase.SubscribedSubredditDao;
-import SubscribedSubredditDatabase.SubscribedSubredditRoomDatabase;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -48,6 +45,9 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
 
     private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
+    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
+    private static final String ACCESS_TOKEN_STATE = "ATS";
+    private static final String ACCOUNT_NAME_STATE = "ANS";
 
     @BindView(R.id.coordinator_layout_view_subreddit_detail_activity) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_view_subreddit_detail) AppBarLayout appBarLayout;
@@ -62,6 +62,9 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     @BindView(R.id.description_text_view_view_subreddit_detail_activity) TextView descriptionTextView;
     @BindView(R.id.fab_view_subreddit_detail_activity) FloatingActionButton fab;
 
+    private boolean mNullAccessToken = false;
+    private String mAccessToken;
+    private String mAccountName;
     private String subredditName;
     private boolean subscriptionReady = false;
     private boolean isInLazyMode = false;
@@ -85,8 +88,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     Retrofit mOauthRetrofit;
 
     @Inject
-    @Named("auth_info")
-    SharedPreferences sharedPreferences;
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +98,23 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         ButterKnife.bind(this);
 
         ((Infinity) getApplication()).getmAppComponent().inject(this);
+
+        if(savedInstanceState == null) {
+            getCurrentAccountAndBindView();
+        } else {
+            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
+            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
+            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
+            isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
+
+            if(!mNullAccessToken && mAccessToken == null) {
+                getCurrentAccountAndBindView();
+            } else {
+                bindView(false);
+                mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
+            }
+        }
 
         postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
 
@@ -123,10 +142,11 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
         params.topMargin = statusBarHeight;
 
-        subscribedSubredditDao = SubscribedSubredditRoomDatabase.getDatabase(this).subscribedSubredditDao();
+        subscribedSubredditDao = mRedditDataRoomDatabase.subscribedSubredditDao();
         glide = Glide.with(this);
 
-        mSubredditViewModel = ViewModelProviders.of(this, new SubredditViewModel.Factory(getApplication(), subredditName))
+        mSubredditViewModel = ViewModelProviders.of(this,
+                new SubredditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, subredditName))
                 .get(SubredditViewModel.class);
         mSubredditViewModel.getSubredditLiveData().observe(this, subredditData -> {
             if(subredditData != null) {
@@ -183,12 +203,44 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
             }
         });
 
+        FetchSubredditData.fetchSubredditData(mRetrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
+            @Override
+            public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
+                new InsertSubredditDataAsyncTask(mRedditDataRoomDatabase, subredditData)
+                        .execute();
+                String nOnlineSubscribers = getString(R.string.online_subscribers_number_detail, nCurrentOnlineSubscribers);
+                nOnlineSubscribersTextView.setText(nOnlineSubscribers);
+            }
+
+            @Override
+            public void onFetchSubredditDataFail() {
+
+            }
+        });
+
+        fab.setOnClickListener(view -> postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag()));
+    }
+
+    private void getCurrentAccountAndBindView() {
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if(account == null) {
+                mNullAccessToken = true;
+            } else {
+                mAccessToken = account.getAccessToken();
+                mAccountName = account.getUsername();
+            }
+            bindView(true);
+        }).execute();
+    }
+
+    private void bindView(boolean initializeFragment) {
         subscribeSubredditChip.setOnClickListener(view -> {
             if(subscriptionReady) {
                 subscriptionReady = false;
                 if(subscribeSubredditChip.getText().equals(getResources().getString(R.string.subscribe))) {
-                    SubredditSubscription.subscribeToSubreddit(mOauthRetrofit, mRetrofit, sharedPreferences,
-                            subredditName, subscribedSubredditDao, new SubredditSubscription.SubredditSubscriptionListener() {
+                    SubredditSubscription.subscribeToSubreddit(mOauthRetrofit, mRetrofit, mAccessToken,
+                            subredditName, mAccountName, subscribedSubredditDao,
+                            new SubredditSubscription.SubredditSubscriptionListener() {
                                 @Override
                                 public void onSubredditSubscriptionSuccess() {
                                     subscribeSubredditChip.setText(R.string.unsubscribe);
@@ -204,8 +256,9 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                                 }
                             });
                 } else {
-                    SubredditSubscription.unsubscribeToSubreddit(mOauthRetrofit, sharedPreferences,
-                            subredditName, subscribedSubredditDao, new SubredditSubscription.SubredditSubscriptionListener() {
+                    SubredditSubscription.unsubscribeToSubreddit(mOauthRetrofit, mAccessToken,
+                            subredditName, mAccountName, subscribedSubredditDao,
+                            new SubredditSubscription.SubredditSubscriptionListener() {
                                 @Override
                                 public void onSubredditSubscriptionSuccess() {
                                     subscribeSubredditChip.setText(R.string.subscribe);
@@ -224,63 +277,34 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
             }
         });
 
-        new CheckIsSubscribedToSubredditAsyncTask(subscribedSubredditDao, subredditName,
+        new CheckIsSubscribedToSubredditAsyncTask(subscribedSubredditDao, subredditName, mAccountName,
                 new CheckIsSubscribedToSubredditAsyncTask.CheckIsSubscribedToSubredditListener() {
-            @Override
-            public void isSubscribed() {
-                subscribeSubredditChip.setText(R.string.unsubscribe);
-                subscribeSubredditChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
-                subscriptionReady = true;
-            }
+                    @Override
+                    public void isSubscribed() {
+                        subscribeSubredditChip.setText(R.string.unsubscribe);
+                        subscribeSubredditChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+                        subscriptionReady = true;
+                    }
 
-            @Override
-            public void isNotSubscribed() {
-                subscribeSubredditChip.setText(R.string.subscribe);
-                subscribeSubredditChip.setChipBackgroundColor(getResources().getColorStateList(R.color.backgroundColorPrimaryDark));
-                subscriptionReady = true;
-            }
-        }).execute();
+                    @Override
+                    public void isNotSubscribed() {
+                        subscribeSubredditChip.setText(R.string.subscribe);
+                        subscribeSubredditChip.setChipBackgroundColor(getResources().getColorStateList(R.color.backgroundColorPrimaryDark));
+                        subscriptionReady = true;
+                    }
+                }).execute();
 
-        FetchSubredditData.fetchSubredditData(mRetrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
-            @Override
-            public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
-                new InsertSubredditDataAsyncTask(SubredditRoomDatabase.getDatabase(ViewSubredditDetailActivity.this), subredditData)
-                        .execute();
-                String nOnlineSubscribers = getString(R.string.online_subscribers_number_detail, nCurrentOnlineSubscribers);
-                nOnlineSubscribersTextView.setText(nOnlineSubscribers);
-            }
-
-            @Override
-            public void onFetchSubredditDataFail() {
-
-            }
-        });
-
-        if(savedInstanceState == null) {
+        if(initializeFragment) {
             mFragment = new PostFragment();
             Bundle bundle = new Bundle();
             bundle.putString(PostFragment.EXTRA_NAME, subredditName);
             bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
             bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_BEST);
             bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
+            bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
             mFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
-        } else {
-            mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
-            if(mFragment == null) {
-                mFragment = new PostFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString(PostFragment.EXTRA_NAME, subredditName);
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
-                bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_BEST);
-                bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
-                mFragment.setArguments(bundle);
-            }
-            isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
         }
-
-        fab.setOnClickListener(view -> postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag()));
     }
 
     @Override
@@ -347,6 +371,9 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
+        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
+        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
+        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
         getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE_KEY, mFragment);
     }
 
@@ -390,8 +417,8 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         private SubredditDao mSubredditDao;
         private SubredditData subredditData;
 
-        InsertSubredditDataAsyncTask(SubredditRoomDatabase subredditDb, SubredditData subredditData) {
-            mSubredditDao = subredditDb.subredditDao();
+        InsertSubredditDataAsyncTask(RedditDataRoomDatabase db, SubredditData subredditData) {
+            mSubredditDao = db.subredditDao();
             this.subredditData = subredditData;
         }
 

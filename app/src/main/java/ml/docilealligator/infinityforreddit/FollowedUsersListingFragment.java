@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
+import javax.inject.Inject;
+
 import SubscribedUserDatabase.SubscribedUserViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,6 +28,8 @@ import butterknife.ButterKnife;
  * A simple {@link Fragment} subclass.
  */
 public class FollowedUsersListingFragment extends Fragment {
+
+    static final String EXTRA_ACCOUNT_NAME = "EAN";
 
     @BindView(R.id.recycler_view_followed_users_listing_fragment) RecyclerView mRecyclerView;
     @BindView(R.id.no_subscriptions_linear_layout_followed_users_listing_fragment) LinearLayout mLinearLayout;
@@ -41,6 +45,8 @@ public class FollowedUsersListingFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,13 +57,17 @@ public class FollowedUsersListingFragment extends Fragment {
 
         mActivity = getActivity();
 
+        ((Infinity) mActivity.getApplication()).getmAppComponent().inject(this);
+
         mGlide = Glide.with(this);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         FollowedUsersRecyclerViewAdapter adapter = new FollowedUsersRecyclerViewAdapter(mActivity);
         mRecyclerView.setAdapter(adapter);
 
-        mSubscribedUserViewModel = ViewModelProviders.of(this).get(SubscribedUserViewModel.class);
+        mSubscribedUserViewModel = ViewModelProviders.of(this,
+                new SubscribedUserViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, getArguments().getString(EXTRA_ACCOUNT_NAME)))
+                .get(SubscribedUserViewModel.class);
         mSubscribedUserViewModel.getAllSubscribedUsers().observe(this, subscribedUserData -> {
             if (subscribedUserData == null || subscribedUserData.size() == 0) {
                 mRecyclerView.setVisibility(View.GONE);

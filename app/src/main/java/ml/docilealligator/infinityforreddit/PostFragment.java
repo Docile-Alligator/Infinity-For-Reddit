@@ -4,7 +4,6 @@ package ml.docilealligator.infinityforreddit;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -53,6 +52,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     static final String EXTRA_SORT_TYPE = "EST";
     static final String EXTRA_FILTER = "EF";
     static final int EXTRA_NO_FILTER = -1;
+    static final String EXTRA_ACCESS_TOKEN = "EAT";
 
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
@@ -87,8 +87,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Inject @Named("oauth")
     Retrofit mOauthRetrofit;
 
-    @Inject @Named("auth_info")
-    SharedPreferences mSharedPreferences;
+    @Inject
+    RedditDataRoomDatabase redditDataRoomDatabase;
 
     public PostFragment() {
         // Required empty public constructor
@@ -173,9 +173,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         int postType = getArguments().getInt(EXTRA_POST_TYPE);
         String sortType = getArguments().getString(EXTRA_SORT_TYPE);
         int filter = getArguments().getInt(EXTRA_FILTER);
-
-        String accessToken = activity.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
-                .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
+        String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
 
         PostViewModel.Factory factory;
 
@@ -183,8 +181,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             String subredditName = getArguments().getString(EXTRA_NAME);
             String query = getArguments().getString(EXTRA_QUERY);
 
-            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit,
-                    mSharedPreferences, postType, true, new PostRecyclerViewAdapter.Callback() {
+            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, redditDataRoomDatabase,
+                    accessToken, postType, true, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -221,8 +219,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             String subredditName = getArguments().getString(EXTRA_NAME);
 
             boolean displaySubredditName = subredditName.equals("popular") || subredditName.equals("all");
-            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit,
-                    mSharedPreferences, postType, displaySubredditName, new PostRecyclerViewAdapter.Callback() {
+            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, redditDataRoomDatabase,
+                    accessToken, postType, displaySubredditName, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -261,8 +259,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             String username = getArguments().getString(EXTRA_USER_NAME);
 
-            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit,
-                    mSharedPreferences, postType, true, new PostRecyclerViewAdapter.Callback() {
+            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, redditDataRoomDatabase,
+                    accessToken, postType, true, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -296,8 +294,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 }
             });
         } else {
-            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit,
-                    mSharedPreferences, postType, true, new PostRecyclerViewAdapter.Callback() {
+            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, redditDataRoomDatabase,
+                    accessToken, postType, true, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();

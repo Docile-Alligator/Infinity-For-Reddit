@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/coordinator_layout_comments_listing_fragment"
-    tools:context="ml.docilealligator.infinityforreddit.CommentsListingFragment">
+    tools:application="ml.docilealligator.infinityforreddit.CommentsListingFragment">
 
     <com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar
         android:id="@+id/progress_bar_comments_listing_fragment"

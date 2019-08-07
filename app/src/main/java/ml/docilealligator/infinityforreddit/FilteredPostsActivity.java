@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -21,10 +23,14 @@ public class FilteredPostsActivity extends AppCompatActivity implements SortType
     static final String EXTRA_POST_TYPE = "EPT";
     static final String EXTRA_SORT_TYPE = "EST";
 
+    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
+    private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String FRAGMENT_OUT_STATE = "FOS";
 
     @BindView(R.id.toolbar_filtered_posts_activity) Toolbar toolbar;
 
+    private boolean mNullAccessToken = false;
+    private String mAccessToken;
     private String name;
     private int postType;
 
@@ -35,6 +41,9 @@ public class FilteredPostsActivity extends AppCompatActivity implements SortType
     private SortTypeBottomSheetFragment subredditSortTypeBottomSheetFragment;
     private SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment;
 
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,14 +51,43 @@ public class FilteredPostsActivity extends AppCompatActivity implements SortType
 
         ButterKnife.bind(this);
 
+        ((Infinity) getApplication()).getmAppComponent().inject(this);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         name = getIntent().getExtras().getString(EXTRA_NAME);
-        int filter = getIntent().getExtras().getInt(EXTRA_FILTER);
         postType = getIntent().getExtras().getInt(EXTRA_POST_TYPE);
+        int filter = getIntent().getExtras().getInt(EXTRA_FILTER);
         String sortType = getIntent().getExtras().getString(EXTRA_SORT_TYPE);
 
+        if(savedInstanceState != null) {
+            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
+            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
+            if(!mNullAccessToken && mAccessToken == null) {
+                getCurrentAccountAndBindView(filter, sortType);
+            } else {
+                mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_filtered_posts_activity, mFragment).commit();
+                bindView(filter, sortType, false);
+            }
+        } else {
+            getCurrentAccountAndBindView(filter, sortType);
+        }
+    }
+
+    private void getCurrentAccountAndBindView(int filter, String sortType) {
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if(account == null) {
+                mNullAccessToken = true;
+            } else {
+                mAccessToken = account.getAccessToken();
+            }
+            bindView(filter, sortType, true);
+        }).execute();
+    }
+
+    private void bindView(int filter, String sortType, boolean initializeFragment) {
         switch (postType) {
             case PostDataSource.TYPE_FRONT_PAGE:
                 getSupportActionBar().setTitle(name);
@@ -108,20 +146,18 @@ public class FilteredPostsActivity extends AppCompatActivity implements SortType
                 toolbar.setSubtitle(R.string.gif);
         }
 
-        if(savedInstanceState == null) {
+        if(initializeFragment) {
             mFragment = new PostFragment();
             Bundle bundle = new Bundle();
             bundle.putString(PostFragment.EXTRA_NAME, name);
             bundle.putInt(PostFragment.EXTRA_POST_TYPE, postType);
             bundle.putString(PostFragment.EXTRA_SORT_TYPE, sortType);
             bundle.putInt(PostFragment.EXTRA_FILTER, filter);
+            bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
             if(postType == PostDataSource.TYPE_SEARCH) {
                 bundle.putString(PostFragment.EXTRA_QUERY, getIntent().getExtras().getString(EXTRA_QUERY));
             }
             mFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_filtered_posts_activity, mFragment).commit();
-        } else {
-            mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_filtered_posts_activity, mFragment).commit();
         }
     }
@@ -170,6 +206,7 @@ public class FilteredPostsActivity extends AppCompatActivity implements SortType
         if (mFragment != null) {
             getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE, mFragment);
         }
+        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
     }
 
     @Override

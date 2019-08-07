@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -33,10 +32,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import SubscribedUserDatabase.SubscribedUserDao;
-import SubscribedUserDatabase.SubscribedUserRoomDatabase;
 import User.UserDao;
 import User.UserData;
-import User.UserRoomDatabase;
 import User.UserViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +45,9 @@ public class ViewUserDetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_USER_NAME_KEY = "EUNK";
 
+    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
+    private static final String ACCESS_TOKEN_STATE = "ATS";
+    private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
     @BindView(R.id.coordinator_layout_view_user_detail_activity) CoordinatorLayout coordinatorLayout;
@@ -69,6 +69,9 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
 
+    private boolean mNullAccessToken = false;
+    private String mAccessToken;
+    private String mAccountName;
     private String username;
     private boolean subscriptionReady = false;
     private boolean isInLazyMode = false;
@@ -88,8 +91,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     Retrofit mOauthRetrofit;
 
     @Inject
-    @Named("auth_info")
-    SharedPreferences sharedPreferences;
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +101,23 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         ((Infinity) getApplication()).getmAppComponent().inject(this);
+
+        if(savedInstanceState == null) {
+            getCurrentAccountAndInitializeViewPager();
+        } else {
+            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
+            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
+            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
+            isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
+
+            if(!mNullAccessToken && mAccessToken == null) {
+                getCurrentAccountAndInitializeViewPager();
+            } else {
+                initializeViewPager();
+            }
+        }
+
+        getCurrentAccountAndInitializeViewPager();
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
@@ -119,11 +138,6 @@ public class ViewUserDetailActivity extends AppCompatActivity {
 
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
         params.topMargin = statusBarHeight;
-
-        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(sectionsPagerAdapter);
-        viewPager.setOffscreenPageLimit(2);
-        tabLayout.setupWithViewPager(viewPager);
 
         expandedTabTextColor = getResources().getColor(R.color.tabLayoutWithExpandedCollapsingToolbarTextColor);
         expandedTabBackgroundColor = getResources().getColor(R.color.tabLayoutWithExpandedCollapsingToolbarTabBackground);
@@ -148,10 +162,10 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             }
         });
 
-        subscribedUserDao = SubscribedUserRoomDatabase.getDatabase(this).subscribedUserDao();
+        subscribedUserDao = mRedditDataRoomDatabase.subscribedUserDao();
         glide = Glide.with(this);
 
-        userViewModel = ViewModelProviders.of(this, new UserViewModel.Factory(getApplication(), username))
+        userViewModel = ViewModelProviders.of(this, new UserViewModel.Factory(getApplication(), mRedditDataRoomDatabase, username))
                 .get(UserViewModel.class);
         userViewModel.getUserLiveData().observe(this, userData -> {
             if(userData != null) {
@@ -199,8 +213,8 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                         if(subscriptionReady) {
                             subscriptionReady = false;
                             if(subscribeUserChip.getText().equals(getResources().getString(R.string.follow))) {
-                                UserFollowing.followUser(mOauthRetrofit, mRetrofit, sharedPreferences,
-                                        username, subscribedUserDao, new UserFollowing.UserFollowingListener() {
+                                UserFollowing.followUser(mOauthRetrofit, mRetrofit, mAccessToken,
+                                        username, mAccountName, subscribedUserDao, new UserFollowing.UserFollowingListener() {
                                             @Override
                                             public void onUserFollowingSuccess() {
                                                 subscribeUserChip.setText(R.string.unfollow);
@@ -216,8 +230,8 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                                             }
                                         });
                             } else {
-                                UserFollowing.unfollowUser(mOauthRetrofit, mRetrofit, sharedPreferences,
-                                        username, subscribedUserDao, new UserFollowing.UserFollowingListener() {
+                                UserFollowing.unfollowUser(mOauthRetrofit, mRetrofit, mAccessToken,
+                                        username, mAccountName, subscribedUserDao, new UserFollowing.UserFollowingListener() {
                                             @Override
                                             public void onUserFollowingSuccess() {
                                                 subscribeUserChip.setText(R.string.follow);
@@ -236,7 +250,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                         }
                     });
 
-                    new CheckIsFollowingUserAsyncTask(subscribedUserDao, username, new CheckIsFollowingUserAsyncTask.CheckIsFollowingUserListener() {
+                    new CheckIsFollowingUserAsyncTask(subscribedUserDao, username, mAccountName, new CheckIsFollowingUserAsyncTask.CheckIsFollowingUserListener() {
                         @Override
                         public void isSubscribed() {
                             subscribeUserChip.setText(R.string.unfollow);
@@ -268,7 +282,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         FetchUserData.fetchUserData(mRetrofit, username, new FetchUserData.FetchUserDataListener() {
             @Override
             public void onFetchUserDataSuccess(UserData userData) {
-                new InsertUserDataAsyncTask(UserRoomDatabase.getDatabase(ViewUserDetailActivity.this).userDao(), userData).execute();
+                new InsertUserDataAsyncTask(mRedditDataRoomDatabase.userDao(), userData).execute();
             }
 
             @Override
@@ -276,26 +290,25 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                 makeSnackbar(R.string.cannot_fetch_user_info);
             }
         });
+    }
 
-        if(savedInstanceState == null) {
-            /*mFragment = new PostFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString(PostFragment.EXTRA_NAME, username);
-            bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_USER);
-            mFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_user_detail_activity, mFragment).commit();*/
-        } else {
-            /*mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
-            if(mFragment == null) {
-                mFragment = new PostFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString(PostFragment.EXTRA_NAME, username);
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_USER);
-                mFragment.setArguments(bundle);
-            }*/
-            isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
-            //getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_user_detail_activity, mFragment).commit();
-        }
+    private void getCurrentAccountAndInitializeViewPager() {
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if(account == null) {
+                mNullAccessToken = true;
+            } else {
+                mAccessToken = account.getAccessToken();
+                mAccountName = account.getUsername();
+            }
+            initializeViewPager();
+        }).execute();
+    }
+
+    private void initializeViewPager() {
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setOffscreenPageLimit(2);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
@@ -318,7 +331,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
@@ -359,7 +372,9 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
-        //getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE_KEY, mFragment);
+        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
+        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
+        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
     }
 
     private void makeSnackbar(int resId) {
@@ -438,12 +453,14 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_USER);
                 bundle.putString(PostFragment.EXTRA_USER_NAME, username);
                 bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
+                bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 fragment.setArguments(bundle);
                 return fragment;
             }
             CommentsListingFragment fragment = new CommentsListingFragment();
             Bundle bundle = new Bundle();
             bundle.putString(CommentsListingFragment.EXTRA_USERNAME_KEY, username);
+            bundle.putString(CommentsListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
             fragment.setArguments(bundle);
             return fragment;
         }

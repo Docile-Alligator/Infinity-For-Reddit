@@ -1,17 +1,17 @@
 package Account;
 
-import android.app.Application;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
+
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class AccountRepository {
     private AccountDao mAccountDao;
     private LiveData<Account> mAccountLiveData;
 
-    AccountRepository(Application application, String username) {
-        mAccountDao = AccountRoomDatabase.getDatabase(application).accountDao();
-
+    AccountRepository(RedditDataRoomDatabase redditDataRoomDatabase, String username) {
+        mAccountDao = redditDataRoomDatabase.accountDao();
         mAccountLiveData = mAccountDao.getAccountLiveData(username);
     }
 

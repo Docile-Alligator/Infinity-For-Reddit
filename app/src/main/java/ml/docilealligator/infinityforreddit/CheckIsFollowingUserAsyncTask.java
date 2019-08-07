@@ -7,7 +7,8 @@ import SubscribedUserDatabase.SubscribedUserData;
 
 public class CheckIsFollowingUserAsyncTask extends AsyncTask<Void, Void, Void> {
     private SubscribedUserDao subscribedUserDao;
-    private String userName;
+    private String username;
+    private String accountName;
     private SubscribedUserData subscribedUserData;
     private CheckIsFollowingUserListener checkIsFollowingUserListener;
 
@@ -16,16 +17,17 @@ public class CheckIsFollowingUserAsyncTask extends AsyncTask<Void, Void, Void> {
         void isNotSubscribed();
     }
 
-    CheckIsFollowingUserAsyncTask(SubscribedUserDao subscribedUserDao, String userName,
+    CheckIsFollowingUserAsyncTask(SubscribedUserDao subscribedUserDao, String username, String accountName,
                                   CheckIsFollowingUserListener checkIsFollowingUserListener) {
         this.subscribedUserDao = subscribedUserDao;
-        this.userName = userName;
+        this.username = username;
+        this.accountName = accountName;
         this.checkIsFollowingUserListener = checkIsFollowingUserListener;
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
-        subscribedUserData = subscribedUserDao.getSubscribedUser(userName);
+        subscribedUserData = subscribedUserDao.getSubscribedUser(username, accountName);
         return null;
     }
 

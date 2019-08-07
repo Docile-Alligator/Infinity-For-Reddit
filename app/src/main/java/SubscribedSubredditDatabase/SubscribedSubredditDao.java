@@ -16,12 +16,12 @@ public interface SubscribedSubredditDao {
     @Query("DELETE FROM subscribed_subreddits")
     void deleteAllSubscribedSubreddits();
 
-    @Query("SELECT * from subscribed_subreddits ORDER BY name COLLATE NOCASE ASC")
-    LiveData<List<SubscribedSubredditData>> getAllSubscribedSubreddits();
+    @Query("SELECT * from subscribed_subreddits WHERE username = :accountName ORDER BY name COLLATE NOCASE ASC")
+    LiveData<List<SubscribedSubredditData>> getAllSubscribedSubreddits(String accountName);
 
-    @Query("SELECT * from subscribed_subreddits WHERE name = :subredditName COLLATE NOCASE LIMIT 1")
-    SubscribedSubredditData getSubscribedSubreddit(String subredditName);
+    @Query("SELECT * from subscribed_subreddits WHERE name = :subredditName AND username = :accountName COLLATE NOCASE LIMIT 1")
+    SubscribedSubredditData getSubscribedSubreddit(String subredditName, String accountName);
 
-    @Query("DELETE FROM subscribed_subreddits WHERE name = :subredditName")
-    void deleteSubscribedSubreddit(String subredditName);
+    @Query("DELETE FROM subscribed_subreddits WHERE name = :subredditName AND username = :accountName")
+    void deleteSubscribedSubreddit(String subredditName, String accountName);
 }

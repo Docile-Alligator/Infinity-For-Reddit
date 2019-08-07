@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
@@ -24,7 +25,6 @@ import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import SubscribedSubredditDatabase.SubscribedSubredditRoomDatabase;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Retrofit;
@@ -35,8 +35,10 @@ import retrofit2.Retrofit;
  */
 public class SubredditListingFragment extends Fragment implements FragmentCommunicator {
 
-    static final String EXTRA_QUERY_KEY = "EQK";
+    static final String EXTRA_QUERY = "EQ";
     static final String EXTRA_IS_POSTING = "EIP";
+    static final String EXTRA_ACCESS_TOKEN = "EAT";
+    static final String EXTRA_ACCOUNT_NAME = "EAN";
 
     @BindView(R.id.coordinator_layout_subreddit_listing_fragment) CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.recycler_view_subreddit_listing_fragment) RecyclerView mSubredditListingRecyclerView;
@@ -60,13 +62,16 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
     @Inject @Named("oauth")
     Retrofit mOauthRetrofit;
 
+    @Inject
+    RedditDataRoomDatabase redditDataRoomDatabase;
+
     public SubredditListingFragment() {
         // Required empty public constructor
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_subreddit_listing, container, false);
@@ -80,8 +85,10 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mSubredditListingRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        String query = getArguments().getString(EXTRA_QUERY_KEY);
+        String query = getArguments().getString(EXTRA_QUERY);
         boolean isPosting = getArguments().getBoolean(EXTRA_IS_POSTING);
+        String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
+        String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
 
         SubredditListingViewModel.Factory factory = new SubredditListingViewModel.Factory(mRetrofit, query,
                 PostDataSource.SORT_TYPE_RELEVANCE, new SubredditListingDataSource.OnSubredditListingDataFetchedCallback() {
@@ -99,9 +106,8 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
             }
         });
 
-        mAdapter = new SubredditListingRecyclerViewAdapter(getActivity(), mOauthRetrofit, mRetrofit,
-                mAuthInfoSharedPreferences,
-                SubscribedSubredditRoomDatabase.getDatabase(getContext()).subscribedSubredditDao(),
+        mAdapter = new SubredditListingRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit,
+                accessToken, accountName, redditDataRoomDatabase.subscribedSubredditDao(),
                 new SubredditListingRecyclerViewAdapter.Callback() {
                     @Override
                     public void retryLoadingMore() {

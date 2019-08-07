@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,9 +27,9 @@ import retrofit2.Retrofit;
 class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, RecyclerView.ViewHolder> {
     private Context mContext;
     private Retrofit mOauthRetrofit;
-    private SharedPreferences mSharedPreferences;
-    private int textColorPrimaryDark;
-    private int colorAccent;
+    private String mAccessToken;
+    private int mTextColorPrimaryDark;
+    private int mColorAccent;
 
     private static final int VIEW_TYPE_DATA = 0;
     private static final int VIEW_TYPE_ERROR = 1;
@@ -43,15 +42,15 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
         void retryLoadingMore();
     }
 
-    protected CommentsListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, SharedPreferences sharedPreferences,
+    protected CommentsListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, String accessToken,
                                                  RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         mContext = context;
         mOauthRetrofit = oauthRetrofit;
-        mSharedPreferences = sharedPreferences;
+        mAccessToken = accessToken;
         mRetryLoadingMoreCallback = retryLoadingMoreCallback;
-        textColorPrimaryDark = mContext.getResources().getColor(R.color.textColorPrimaryDark);
-        colorAccent = mContext.getResources().getColor(R.color.colorAccent);
+        mTextColorPrimaryDark = mContext.getResources().getColor(R.color.textColorPrimaryDark);
+        mColorAccent = mContext.getResources().getColor(R.color.colorAccent);
     }
 
     private static final DiffUtil.ItemCallback<CommentData> DIFF_CALLBACK = new DiffUtil.ItemCallback<CommentData>() {
@@ -88,7 +87,7 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
 
             if(comment.getAuthor().equals(comment.getSubredditName().substring(2))) {
                 ((DataViewHolder) holder).authorTextView.setText("u/" + comment.getAuthor());
-                ((DataViewHolder) holder).authorTextView.setTextColor(textColorPrimaryDark);
+                ((DataViewHolder) holder).authorTextView.setTextColor(mTextColorPrimaryDark);
                 ((DataViewHolder) holder).authorTextView.setOnClickListener(view -> {
                     Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
                     intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, comment.getAuthor());
@@ -96,7 +95,7 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
                 });
             } else {
                 ((DataViewHolder) holder).authorTextView.setText("r/" + comment.getSubredditName());
-                ((DataViewHolder) holder).authorTextView.setTextColor(colorAccent);
+                ((DataViewHolder) holder).authorTextView.setTextColor(mColorAccent);
                 ((DataViewHolder) holder).authorTextView.setOnClickListener(view -> {
                     Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
                     intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, comment.getSubredditName());
@@ -225,7 +224,7 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
 
                 scoreTextView.setText(Integer.toString(getItem(getAdapterPosition()).getScore() + getItem(getAdapterPosition()).getVoteType()));
 
-                VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
+                VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                     @Override
                     public void onVoteThingSuccess(int position) {
                         if(newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
@@ -265,7 +264,7 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
 
                 scoreTextView.setText(Integer.toString(getItem(getAdapterPosition()).getScore() + getItem(getAdapterPosition()).getVoteType()));
 
-                VoteThing.voteThing(mOauthRetrofit, mSharedPreferences, new VoteThing.VoteThingListener() {
+                VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                     @Override
                     public void onVoteThingSuccess(int position1) {
                         if(newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {

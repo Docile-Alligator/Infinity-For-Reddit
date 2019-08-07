@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -48,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
     private static final String FETCH_USER_INFO_STATE = "FUIS";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
+    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
+    private static final String ACCESS_TOKEN_STATE = "ATS";
 
     private static final int LOGIN_ACTIVITY_REQUEST_CODE = 0;
 
@@ -73,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     private SortTypeBottomSheetFragment bestSortTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment popularAndAllSortTypeBottomSheetFragment;
 
+    private boolean mNullAccessToken = false;
+    private String mAccessToken;
     private String mName;
     private String mProfileImageUrl;
     private String mBannerImageUrl;
@@ -88,12 +91,11 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     SharedPreferences mUserInfoSharedPreferences;
 
     @Inject
-    @Named("auth_info")
-    SharedPreferences mAuthInfoSharedPreferences;
-
-    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
+
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,85 +129,105 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
-        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(sectionsPagerAdapter);
-        viewPager.setOffscreenPageLimit(2);
-        tabLayout.setupWithViewPager(viewPager);
-
-        String accessToken = getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE).getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
-        if (accessToken.equals("")) {
-            Intent loginIntent = new Intent(this, LoginActivity.class);
-            startActivityForResult(loginIntent, LOGIN_ACTIVITY_REQUEST_CODE);
+        if(savedInstanceState != null) {
+            mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
+            isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
+            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
+            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
+            if(!mNullAccessToken && mAccessToken == null) {
+                getCurrentAccountAndBindView();
+            } else {
+                bindView();
+            }
         } else {
-            if (savedInstanceState != null) {
-                mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
-                isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
-            } else {
-                if(getIntent().hasExtra(EXTRA_POST_TYPE)) {
-                    if(getIntent().getExtras().getString(EXTRA_POST_TYPE).equals("popular")) {
-                        viewPager.setCurrentItem(1);
-                    } else {
-                        viewPager.setCurrentItem(2);
-                    }
-                }
-            }
-
-            glide = Glide.with(this);
-
-            View header = findViewById(R.id.nav_header_main_activity);
-            mNameTextView = header.findViewById(R.id.name_text_view_nav_header_main);
-            mKarmaTextView = header.findViewById(R.id.karma_text_view_nav_header_main);
-            mProfileImageView = header.findViewById(R.id.profile_image_view_nav_header_main);
-            mBannerImageView = header.findViewById(R.id.banner_image_view_nav_header_main);
-
-            loadUserData();
-
-            mName = mUserInfoSharedPreferences.getString(SharedPreferencesUtils.USER_KEY, "");
-            mProfileImageUrl = mUserInfoSharedPreferences.getString(SharedPreferencesUtils.PROFILE_IMAGE_URL_KEY, "");
-            mBannerImageUrl = mUserInfoSharedPreferences.getString(SharedPreferencesUtils.BANNER_IMAGE_URL_KEY, "");
-            mKarma = mUserInfoSharedPreferences.getString(SharedPreferencesUtils.KARMA_KEY, "");
-
-            mNameTextView.setText(mName);
-            mKarmaTextView.setText(mKarma);
-
-            if (!mProfileImageUrl.equals("")) {
-                glide.load(mProfileImageUrl)
-                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0)))
-                        .error(glide.load(R.drawable.subreddit_default_icon)
-                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0))))
-                        .into(mProfileImageView);
-            } else {
-                glide.load(R.drawable.subreddit_default_icon)
-                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0)))
-                        .into(mProfileImageView);
-            }
-
-            if (!mBannerImageUrl.equals("")) {
-                glide.load(mBannerImageUrl).into(mBannerImageView);
-            }
-
-            profileLinearLayout.setOnClickListener(view -> {
-                Intent intent = new Intent(this, ViewUserDetailActivity.class);
-                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mName);
-                startActivity(intent);
-            });
-
-            subscriptionLinearLayout.setOnClickListener(view -> {
-                Intent intent = new Intent(this, SubscribedThingListingActivity.class);
-                startActivity(intent);
-            });
-
-            settingsLinearLayout.setOnClickListener(view -> {
-
-            });
+            getCurrentAccountAndBindView();
         }
 
         fab.setOnClickListener(view -> postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag()));
     }
 
-    private void loadUserData() {
+    private void getCurrentAccountAndBindView() {
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if(account == null) {
+                Intent loginIntent = new Intent(this, LoginActivity.class);
+                startActivityForResult(loginIntent, LOGIN_ACTIVITY_REQUEST_CODE);
+            } else {
+                mAccessToken = account.getAccessToken();
+                if(mAccessToken == null) {
+                    mNullAccessToken = true;
+                }
+                bindView();
+            }
+        }).execute();
+    }
+
+    private void bindView() {
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setOffscreenPageLimit(2);
+        tabLayout.setupWithViewPager(viewPager);
+
+        if(getIntent().hasExtra(EXTRA_POST_TYPE)) {
+            if(getIntent().getExtras().getString(EXTRA_POST_TYPE).equals("popular")) {
+                viewPager.setCurrentItem(1);
+            } else {
+                viewPager.setCurrentItem(2);
+            }
+        }
+
+        glide = Glide.with(this);
+
+        View header = findViewById(R.id.nav_header_main_activity);
+        mNameTextView = header.findViewById(R.id.name_text_view_nav_header_main);
+        mKarmaTextView = header.findViewById(R.id.karma_text_view_nav_header_main);
+        mProfileImageView = header.findViewById(R.id.profile_image_view_nav_header_main);
+        mBannerImageView = header.findViewById(R.id.banner_image_view_nav_header_main);
+
+        loadUserData(mAccessToken);
+
+        mName = mUserInfoSharedPreferences.getString(SharedPreferencesUtils.USER_KEY, "");
+        mProfileImageUrl = mUserInfoSharedPreferences.getString(SharedPreferencesUtils.PROFILE_IMAGE_URL_KEY, "");
+        mBannerImageUrl = mUserInfoSharedPreferences.getString(SharedPreferencesUtils.BANNER_IMAGE_URL_KEY, "");
+        mKarma = mUserInfoSharedPreferences.getString(SharedPreferencesUtils.KARMA_KEY, "");
+
+        mNameTextView.setText(mName);
+        mKarmaTextView.setText(mKarma);
+
+        if (!mProfileImageUrl.equals("")) {
+            glide.load(mProfileImageUrl)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0)))
+                    .error(glide.load(R.drawable.subreddit_default_icon)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0))))
+                    .into(mProfileImageView);
+        } else {
+            glide.load(R.drawable.subreddit_default_icon)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0)))
+                    .into(mProfileImageView);
+        }
+
+        if (!mBannerImageUrl.equals("")) {
+            glide.load(mBannerImageUrl).into(mBannerImageView);
+        }
+
+        profileLinearLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(this, ViewUserDetailActivity.class);
+            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mName);
+            startActivity(intent);
+        });
+
+        subscriptionLinearLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(this, SubscribedThingListingActivity.class);
+            startActivity(intent);
+        });
+
+        settingsLinearLayout.setOnClickListener(view -> {
+
+        });
+    }
+
+    private void loadUserData(String accessToken) {
         if (!mFetchUserInfoSuccess) {
-            FetchMyInfo.fetchMyInfo(mOauthRetrofit, mAuthInfoSharedPreferences, new FetchMyInfo.FetchUserMyListener() {
+            FetchMyInfo.fetchMyInfo(mOauthRetrofit, accessToken, new FetchMyInfo.FetchUserMyListener() {
                 @Override
                 public void onFetchMyInfoSuccess(String response) {
                     ParseMyInfo.parseMyInfo(response, new ParseMyInfo.ParseMyInfoListener() {
@@ -306,7 +328,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             case R.id.action_refresh_main_activity:
                 sectionsPagerAdapter.refresh(viewPager.getCurrentItem());
                 mFetchUserInfoSuccess = false;
-                loadUserData();
+                loadUserData(mAccessToken);
                 return true;
             case R.id.action_lazy_mode_main_activity:
                 /*MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);
@@ -343,6 +365,8 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         super.onSaveInstanceState(outState);
         outState.putBoolean(FETCH_USER_INFO_STATE, mFetchUserInfoSuccess);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
+        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
+        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
     }
 
     @Override
@@ -390,6 +414,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_FRONT_PAGE);
                 bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_BEST);
                 bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
+                bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 fragment.setArguments(bundle);
                 return fragment;
             } else if(position == 1) {
@@ -399,6 +424,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 bundle.putString(PostFragment.EXTRA_NAME, "popular");
                 bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_HOT);
                 bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
+                bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 fragment.setArguments(bundle);
                 return fragment;
             } else {
@@ -408,6 +434,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 bundle.putString(PostFragment.EXTRA_NAME, "all");
                 bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_HOT);
                 bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
+                bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 fragment.setArguments(bundle);
                 return fragment;
             }

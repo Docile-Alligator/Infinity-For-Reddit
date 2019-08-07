@@ -16,12 +16,12 @@ public interface SubscribedUserDao {
     @Query("DELETE FROM subscribed_users")
     void deleteAllSubscribedUsers();
 
-    @Query("SELECT * FROM subscribed_users ORDER BY name COLLATE NOCASE ASC")
-    LiveData<List<SubscribedUserData>> getAllSubscribedUsers();
+    @Query("SELECT * FROM subscribed_users WHERE username = :accountName ORDER BY name COLLATE NOCASE ASC")
+    LiveData<List<SubscribedUserData>> getAllSubscribedUsers(String accountName);
 
-    @Query("SELECT * FROM subscribed_users WHERE name = :userName COLLATE NOCASE LIMIT 1")
-    SubscribedUserData getSubscribedUser(String userName);
+    @Query("SELECT * FROM subscribed_users WHERE name = :name AND username = :accountName COLLATE NOCASE LIMIT 1")
+    SubscribedUserData getSubscribedUser(String name, String accountName);
 
-    @Query("DELETE FROM subscribed_users WHERE name = :userName")
-    void deleteSubscribedUser(String userName);
+    @Query("DELETE FROM subscribed_users WHERE name = :name AND username = :accountName")
+    void deleteSubscribedUser(String name, String accountName);
 }

@@ -9,6 +9,7 @@ class CheckIsSubscribedToSubredditAsyncTask extends AsyncTask<Void, Void, Void> 
 
     private SubscribedSubredditDao subscribedSubredditDao;
     private String subredditName;
+    private String accountName;
     private SubscribedSubredditData subscribedSubredditData;
     private CheckIsSubscribedToSubredditListener checkIsSubscribedToSubredditListener;
 
@@ -17,16 +18,18 @@ class CheckIsSubscribedToSubredditAsyncTask extends AsyncTask<Void, Void, Void> 
         void isNotSubscribed();
     }
 
-    CheckIsSubscribedToSubredditAsyncTask(SubscribedSubredditDao subscribedSubredditDao, String subredditName,
+    CheckIsSubscribedToSubredditAsyncTask(SubscribedSubredditDao subscribedSubredditDao,
+                                          String subredditName, String accountName,
                                           CheckIsSubscribedToSubredditListener checkIsSubscribedToSubredditListener) {
         this.subscribedSubredditDao = subscribedSubredditDao;
         this.subredditName =subredditName;
+        this.accountName = accountName;
         this.checkIsSubscribedToSubredditListener = checkIsSubscribedToSubredditListener;
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
-        subscribedSubredditData = subscribedSubredditDao.getSubscribedSubreddit(subredditName);
+        subscribedSubredditData = subscribedSubredditDao.getSubscribedSubreddit(subredditName, accountName);
         return null;
     }
 

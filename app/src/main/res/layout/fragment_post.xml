@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/coordinator_layout_post_fragment"
-    tools:context="ml.docilealligator.infinityforreddit.PostFragment">
+    tools:application="ml.docilealligator.infinityforreddit.PostFragment">
 
     <com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar
         android:id="@+id/progress_bar_post_fragment"

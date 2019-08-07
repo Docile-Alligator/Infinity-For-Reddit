@@ -1,17 +1,17 @@
 package SubredditDatabase;
 
-import android.app.Application;
-import androidx.lifecycle.LiveData;
 import android.os.AsyncTask;
+
+import androidx.lifecycle.LiveData;
+
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class SubredditRepository {
     private SubredditDao mSubredditDao;
     private LiveData<SubredditData> mSubredditLiveData;
 
-    SubredditRepository(Application application, String subredditName) {
-        SubredditRoomDatabase db = SubredditRoomDatabase.getDatabase(application);
-        mSubredditDao = db.subredditDao();
-
+    SubredditRepository(RedditDataRoomDatabase redditDataRoomDatabase, String subredditName) {
+        mSubredditDao = redditDataRoomDatabase.subredditDao();
         mSubredditLiveData = mSubredditDao.getSubredditLiveDataByName(subredditName);
     }
 

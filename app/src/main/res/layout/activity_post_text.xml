@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/coordinator_layout_post_text_activity"
-    tools:context=".PostTextActivity">
+    tools:application=".PostTextActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

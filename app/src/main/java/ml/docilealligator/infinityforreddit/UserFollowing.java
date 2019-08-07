@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -23,31 +22,29 @@ class UserFollowing {
     }
 
     static void followUser(Retrofit oauthRetrofit, Retrofit retrofit,
-                           SharedPreferences authInfoSharedPreferences, String userName,
+                           String accessToken, String username, String accountName,
                            SubscribedUserDao subscribedUserDao,
                            UserFollowingListener userFollowingListener) {
-        userFollowing(oauthRetrofit, retrofit, authInfoSharedPreferences, userName, "sub",
+        userFollowing(oauthRetrofit, retrofit, accessToken, username, accountName, "sub",
                 subscribedUserDao, userFollowingListener);
     }
 
     static void unfollowUser(Retrofit oauthRetrofit, Retrofit retrofit,
-                             SharedPreferences authInfoSharedPreferences, String userName,
+                             String accessToken, String username, String accountName,
                              SubscribedUserDao subscribedUserDao,
                              UserFollowingListener userFollowingListener) {
-        userFollowing(oauthRetrofit, retrofit, authInfoSharedPreferences, userName, "unsub",
+        userFollowing(oauthRetrofit, retrofit, accessToken, username, accountName, "unsub",
                 subscribedUserDao, userFollowingListener);
     }
 
-    private static void userFollowing(Retrofit oauthRetrofit, Retrofit retrofit, SharedPreferences authInfoSharedPreferences,
-                                      String userName, String action, SubscribedUserDao subscribedUserDao,
+    private static void userFollowing(Retrofit oauthRetrofit, Retrofit retrofit, String accessToken,
+                                      String username, String accountName, String action, SubscribedUserDao subscribedUserDao,
                                       UserFollowingListener userFollowingListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
-        String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
-
         Map<String, String> params = new HashMap<>();
         params.put(RedditUtils.ACTION_KEY, action);
-        params.put(RedditUtils.SR_NAME_KEY, "u_" + userName);
+        params.put(RedditUtils.SR_NAME_KEY, "u_" + username);
 
         Call<String> subredditSubscriptionCall = api.subredditSubscription(RedditUtils.getOAuthHeader(accessToken), params);
         subredditSubscriptionCall.enqueue(new Callback<String>() {
@@ -55,10 +52,10 @@ class UserFollowing {
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
                     if(action.equals("sub")) {
-                        FetchUserData.fetchUserData(retrofit, userName, new FetchUserData.FetchUserDataListener() {
+                        FetchUserData.fetchUserData(retrofit, username, new FetchUserData.FetchUserDataListener() {
                             @Override
                             public void onFetchUserDataSuccess(UserData userData) {
-                                new UpdateSubscriptionAsyncTask(subscribedUserDao, userData, true).execute();
+                                new UpdateSubscriptionAsyncTask(subscribedUserDao, userData, accountName, true).execute();
                             }
 
                             @Override
@@ -67,7 +64,7 @@ class UserFollowing {
                             }
                         });
                     } else {
-                        new UpdateSubscriptionAsyncTask(subscribedUserDao, userName, false).execute();
+                        new UpdateSubscriptionAsyncTask(subscribedUserDao, username, accountName, false).execute();
                     }
                     userFollowingListener.onUserFollowingSuccess();
                 } else {
@@ -87,21 +84,25 @@ class UserFollowing {
     private static class UpdateSubscriptionAsyncTask extends AsyncTask<Void, Void, Void> {
 
         private SubscribedUserDao subscribedUserDao;
-        private String userName;
+        private String username;
+        private String accountName;
         private SubscribedUserData subscribedUserData;
         private boolean isSubscribing;
 
-        UpdateSubscriptionAsyncTask(SubscribedUserDao subscribedUserDao, String userName,
-                                    boolean isSubscribing) {
+        UpdateSubscriptionAsyncTask(SubscribedUserDao subscribedUserDao, String username,
+                                    String accountName, boolean isSubscribing) {
             this.subscribedUserDao = subscribedUserDao;
-            this.userName = userName;
+            this.username = username;
+            this.accountName = accountName;
             this.isSubscribing = isSubscribing;
         }
 
-        UpdateSubscriptionAsyncTask(SubscribedUserDao subscribedUserDao, SubscribedUserData subscribedUserData,
-                                    boolean isSubscribing) {
+        UpdateSubscriptionAsyncTask(SubscribedUserDao subscribedUserDao, UserData userData,
+                                    String accountName, boolean isSubscribing) {
             this.subscribedUserDao = subscribedUserDao;
-            this.subscribedUserData = subscribedUserData;
+            this.subscribedUserData = new SubscribedUserData(userData.getName(), userData.getIconUrl(),
+                    userData.getName());
+            this.accountName = accountName;
             this.isSubscribing = isSubscribing;
         }
 
@@ -110,7 +111,7 @@ class UserFollowing {
             if(isSubscribing) {
                 subscribedUserDao.insert(subscribedUserData);
             } else {
-                subscribedUserDao.deleteSubscribedUser(userName);
+                subscribedUserDao.deleteSubscribedUser(username, accountName);
             }
             return null;
         }

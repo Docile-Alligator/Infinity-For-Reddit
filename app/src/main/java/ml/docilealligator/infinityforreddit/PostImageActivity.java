@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,7 +38,6 @@ import java.io.IOException;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import SubredditDatabase.SubredditRoomDatabase;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -110,12 +108,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
     Retrofit mUploadMediaRetrofit;
 
     @Inject
-    @Named("user_info")
-    SharedPreferences mUserInfoSharedPreferences;
-
-    @Inject
-    @Named("auth_info")
-    SharedPreferences sharedPreferences;
+    RedditDataRoomDatabase redditDataRoomDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -299,7 +292,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
     }
 
     private void loadSubredditIcon() {
-        new LoadSubredditIconAsyncTask(SubredditRoomDatabase.getDatabase(this).subredditDao(),
+        new LoadSubredditIconAsyncTask(redditDataRoomDatabase.subredditDao(),
                 subredditName, mRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
@@ -441,11 +434,13 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
     public void onSubmitImagePostEvent(SubmitImagePostEvent submitImagePostEvent) {
         isPosting = false;
         if(submitImagePostEvent.postSuccess) {
-            Intent intent = new Intent(this, ViewUserDetailActivity.class);
-            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
-                    mUserInfoSharedPreferences.getString(SharedPreferencesUtils.USER_KEY, ""));
-            startActivity(intent);
-            finish();
+            new GetCurrentAccountAsyncTask(redditDataRoomDatabase.accountDao(), account -> {
+                Intent intent = new Intent(PostImageActivity.this, ViewUserDetailActivity.class);
+                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
+                        account.getUsername());
+                startActivity(intent);
+                finish();
+            }).execute();
         } else {
             mPostingSnackbar.dismiss();
             mMemu.getItem(R.id.action_send_post_image_activity).setEnabled(true);

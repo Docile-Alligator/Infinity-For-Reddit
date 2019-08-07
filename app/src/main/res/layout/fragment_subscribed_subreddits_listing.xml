@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SubscribedSubredditsListingFragment">
+    tools:application=".SubscribedSubredditsListingFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_subscribed_subreddits_listing_fragment"

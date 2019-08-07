@@ -1,8 +1,8 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.content.SharedPreferences;
-import androidx.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
@@ -22,23 +22,20 @@ class FetchSubscribedThing {
         void onFetchSubscribedThingFail();
     }
 
-    static void fetchSubscribedThing(final Retrofit retrofit, final SharedPreferences sharedPreferences,
-                                     final String lastItem,
-                                     final ArrayList<SubscribedSubredditData> subscribedSubredditData,
+    static void fetchSubscribedThing(final Retrofit retrofit, String accessToken, String accountName,
+                                     final String lastItem, final ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                      final ArrayList<SubscribedUserData> subscribedUserData,
                                      final ArrayList<SubredditData> subredditData,
                                      final FetchSubscribedThingListener fetchSubscribedThingListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
-
-        String accessToken = sharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
         Call<String> subredditDataCall = api.getSubscribedThing(lastItem, RedditUtils.getOAuthHeader(accessToken));
         subredditDataCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParseSubscribedThing.parseSubscribedSubreddits(response.body(), subscribedSubredditData,
-                            subscribedUserData, subredditData,
+                    ParseSubscribedThing.parseSubscribedSubreddits(response.body(), accountName,
+                            subscribedSubredditData, subscribedUserData, subredditData,
                             new ParseSubscribedThing.ParseSubscribedSubredditsListener() {
 
                                 @Override
@@ -50,8 +47,8 @@ class FetchSubscribedThing {
                                         fetchSubscribedThingListener.onFetchSubscribedThingSuccess(
                                                 subscribedSubredditData, subscribedUserData, subredditData);
                                     } else {
-                                        fetchSubscribedThing(retrofit, sharedPreferences, lastItem, subscribedSubredditData,
-                                                subscribedUserData, subredditData,
+                                        fetchSubscribedThing(retrofit, accessToken, accountName, lastItem,
+                                                subscribedSubredditData, subscribedUserData, subredditData,
                                                 fetchSubscribedThingListener);
                                     }
                                 }

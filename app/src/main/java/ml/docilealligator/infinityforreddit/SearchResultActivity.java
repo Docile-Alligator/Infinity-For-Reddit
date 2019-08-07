@@ -16,6 +16,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -24,6 +26,13 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
     static final String EXTRA_QUERY = "QK";
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
 
+    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
+    private static final String ACCESS_TOKEN_STATE = "ATS";
+    private static final String ACCOUNT_NAME_STATE = "ANS";
+
+    private boolean mNullAccessToken = false;
+    private String mAccessToken;
+    private String mAccountName;
     private String mQuery;
     private String mSubredditName;
 
@@ -36,6 +45,9 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
     private SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment;
     private SearchUserAndSubredditSortTypeBottomSheetFragment searchUserAndSubredditSortTypeBottomSheetFragment;
 
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,14 +55,23 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
 
         ButterKnife.bind(this);
 
+        ((Infinity) getApplication()).getmAppComponent().inject(this);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(sectionsPagerAdapter);
-        viewPager.setOffscreenPageLimit(2);
-
-        tabLayout.setupWithViewPager(viewPager);
+        if(savedInstanceState == null) {
+            getCurrentAccountAndInitializeViewPager();
+        } else {
+            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
+            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
+            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
+            if(!mNullAccessToken && mAccessToken == null) {
+                getCurrentAccountAndInitializeViewPager();
+            } else {
+                initializeViewPager();
+            }
+        }
 
         searchPostSortTypeBottomSheetFragment = new SearchPostSortTypeBottomSheetFragment();
         Bundle bundle = new Bundle();
@@ -70,6 +91,25 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
             mQuery = query;
             setTitle(query);
         }
+    }
+
+    private void getCurrentAccountAndInitializeViewPager() {
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if(account == null) {
+                mNullAccessToken = true;
+            } else {
+                mAccessToken = account.getAccessToken();
+                mAccountName = account.getUsername();
+            }
+            initializeViewPager();
+        }).execute();
+    }
+
+    private void initializeViewPager() {
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setOffscreenPageLimit(2);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
@@ -113,6 +153,14 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
     }
 
     @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
+        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
+        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
+    }
+
+    @Override
     public void searchSortTypeSelected(String sortType) {
         sectionsPagerAdapter.changeSortType(sortType, 0);
     }
@@ -144,21 +192,26 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
                     bundle.putString(PostFragment.EXTRA_NAME, mSubredditName);
                     bundle.putString(PostFragment.EXTRA_QUERY, mQuery);
                     bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
+                    bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                     mFragment.setArguments(bundle);
                     return mFragment;
                 }
                 case 1: {
                     SubredditListingFragment mFragment = new SubredditListingFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString(SubredditListingFragment.EXTRA_QUERY_KEY, mQuery);
+                    bundle.putString(SubredditListingFragment.EXTRA_QUERY, mQuery);
                     bundle.putBoolean(SubredditListingFragment.EXTRA_IS_POSTING, false);
+                    bundle.putString(SubredditListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                    bundle.putString(SubredditListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                     mFragment.setArguments(bundle);
                     return mFragment;
                 }
                 default: {
                     UserListingFragment mFragment = new UserListingFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString(UserListingFragment.QUERY_KEY, mQuery);
+                    bundle.putString(UserListingFragment.EXTRA_QUERY, mQuery);
+                    bundle.putString(UserListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                    bundle.putString(UserListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                     mFragment.setArguments(bundle);
                     return mFragment;
                 }

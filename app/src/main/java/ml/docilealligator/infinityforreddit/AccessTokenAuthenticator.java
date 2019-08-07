@@ -1,7 +1,9 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.content.SharedPreferences;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,8 +12,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import Account.Account;
 import okhttp3.Authenticator;
 import okhttp3.Headers;
 import okhttp3.Request;
@@ -22,37 +23,38 @@ import retrofit2.Retrofit;
 
 class AccessTokenAuthenticator implements Authenticator {
     private Retrofit mRetrofit;
-    private SharedPreferences mAuthInfoSharedPreferences;
+    private RedditDataRoomDatabase mRedditDataRoomDatabase;
 
-    AccessTokenAuthenticator(Retrofit retrofit, SharedPreferences authInfoSharedPreferences) {
+    AccessTokenAuthenticator(Retrofit retrofit, RedditDataRoomDatabase accountRoomDatabase) {
         mRetrofit = retrofit;
-        mAuthInfoSharedPreferences = authInfoSharedPreferences;
+        mRedditDataRoomDatabase = accountRoomDatabase;
     }
 
     @Nullable
     @Override
-    public Request authenticate(@NonNull Route route, @NonNull Response response) {
+    public Request authenticate(Route route, @NonNull Response response) {
         if (response.code() == 401) {
             String accessToken = response.request().header(RedditUtils.AUTHORIZATION_KEY).substring(RedditUtils.AUTHORIZATION_BASE.length());
             synchronized (this) {
-                String accessTokenFromSharedPreferences = mAuthInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
-                if (accessToken.equals(accessTokenFromSharedPreferences)) {
-                    String newAccessToken = refreshAccessToken();
+                Account account = mRedditDataRoomDatabase.accountDao().getCurrentAccount();
+                String accessTokenFromDatabase = account.getAccessToken();
+                if (accessToken.equals(accessTokenFromDatabase)) {
+                    String newAccessToken = refreshAccessToken(account);
                     if (!newAccessToken.equals("")) {
                         return response.request().newBuilder().headers(Headers.of(RedditUtils.getOAuthHeader(newAccessToken))).build();
                     } else {
                         return null;
                     }
                 } else {
-                    return response.request().newBuilder().headers(Headers.of(RedditUtils.getOAuthHeader(accessTokenFromSharedPreferences))).build();
+                    return response.request().newBuilder().headers(Headers.of(RedditUtils.getOAuthHeader(accessTokenFromDatabase))).build();
                 }
             }
         }
         return null;
     }
 
-    private String refreshAccessToken() {
-        String refreshToken = mAuthInfoSharedPreferences.getString(SharedPreferencesUtils.REFRESH_TOKEN_KEY, "");
+    private String refreshAccessToken(Account account) {
+        String refreshToken = mRedditDataRoomDatabase.accountDao().getCurrentAccount().getRefreshToken();
 
         RedditAPI api = mRetrofit.create(RedditAPI.class);
 
@@ -63,11 +65,14 @@ class AccessTokenAuthenticator implements Authenticator {
         Call<String> accessTokenCall = api.getAccessToken(RedditUtils.getHttpBasicAuthHeader(), params);
         try {
             retrofit2.Response response = accessTokenCall.execute();
+            if(response.body() == null) {
+                return "";
+            }
+
             JSONObject jsonObject = new JSONObject((String) response.body());
-
             String newAccessToken = jsonObject.getString(RedditUtils.ACCESS_TOKEN_KEY);
-
-            mAuthInfoSharedPreferences.edit().putString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, newAccessToken).apply();
+            account.setAccessToken(newAccessToken);
+            mRedditDataRoomDatabase.accountDao().insert(account);
 
             Log.i("access token", newAccessToken);
             return newAccessToken;

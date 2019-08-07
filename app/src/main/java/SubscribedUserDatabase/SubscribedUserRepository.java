@@ -1,19 +1,20 @@
 package SubscribedUserDatabase;
 
-import android.app.Application;
-import androidx.lifecycle.LiveData;
 import android.os.AsyncTask;
 
+import androidx.lifecycle.LiveData;
+
 import java.util.List;
+
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class SubscribedUserRepository {
     private SubscribedUserDao mSubscribedUserDao;
     private LiveData<List<SubscribedUserData>> mAllSubscribedUsers;
 
-    SubscribedUserRepository(Application application) {
-        SubscribedUserRoomDatabase db = SubscribedUserRoomDatabase.getDatabase(application);
-        mSubscribedUserDao = db.subscribedUserDao();
-        mAllSubscribedUsers = mSubscribedUserDao.getAllSubscribedUsers();
+    SubscribedUserRepository(RedditDataRoomDatabase redditDataRoomDatabase, String accountName) {
+        mSubscribedUserDao = redditDataRoomDatabase.subscribedUserDao();
+        mAllSubscribedUsers = mSubscribedUserDao.getAllSubscribedUsers(accountName);
     }
 
     LiveData<List<SubscribedUserData>> getAllSubscribedSubreddits() {
