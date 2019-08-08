@@ -29,7 +29,6 @@ import retrofit2.Retrofit;
 public class SubscribedThingListingActivity extends AppCompatActivity {
 
     private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";
-
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";

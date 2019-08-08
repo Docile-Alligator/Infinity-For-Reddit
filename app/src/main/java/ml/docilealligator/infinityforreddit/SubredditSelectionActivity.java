@@ -12,10 +12,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import javax.inject.Inject;
+import java.util.ArrayList;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import SubredditDatabase.SubredditData;
+import SubscribedSubredditDatabase.SubscribedSubredditData;
+import SubscribedUserDatabase.SubscribedUserData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Retrofit;
 
 public class SubredditSelectionActivity extends AppCompatActivity {
 
@@ -25,18 +32,26 @@ public class SubredditSelectionActivity extends AppCompatActivity {
     static final String EXTRA_RETURN_SUBREDDIT_IS_USER = "ERSIU";
 
     private static final int SUBREDDIT_SEARCH_REQUEST_CODE = 0;
-    private static final String NULL_ACCOUNT_NAME_STATE = "NATS";
-    private static final String ACCOUNT_NAME_STATE = "ATS";
+    private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";
+    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
+    private static final String ACCESS_TOKEN_STATE = "ATS";
+    private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String ACCOUNT_PROFILE_IMAGE_URL = "APIU";
     private static final String FRAGMENT_OUT_STATE = "FOS";
 
     @BindView(R.id.toolbar_subreddit_selection_activity) Toolbar toolbar;
 
-    private boolean mNullAccountName = false;
+    private boolean mNullAccessToken = false;
+    private String mAccessToken;
     private String mAccountName;
     private String mAccountProfileImageUrl;
+    private boolean mInsertSuccess = false;
 
     private Fragment mFragment;
+
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
 
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
@@ -54,14 +69,16 @@ public class SubredditSelectionActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if(savedInstanceState == null) {
-            getCurrentAccountAndInitializeFragment();
+            getCurrentAccountAndBindView();
         } else {
-            mNullAccountName = savedInstanceState.getBoolean(NULL_ACCOUNT_NAME_STATE);
+            mInsertSuccess = savedInstanceState.getBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE);
+            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
+            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
             mAccountProfileImageUrl = savedInstanceState.getString(ACCOUNT_PROFILE_IMAGE_URL);
 
-            if(!mNullAccountName && mAccountName == null) {
-                getCurrentAccountAndInitializeFragment();
+            if(!mNullAccessToken && mAccountName == null) {
+                getCurrentAccountAndBindView();
             } else {
                 mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, mFragment).commit();
@@ -69,19 +86,22 @@ public class SubredditSelectionActivity extends AppCompatActivity {
         }
     }
 
-    private void getCurrentAccountAndInitializeFragment() {
+    private void getCurrentAccountAndBindView() {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
             if(account == null) {
-                mNullAccountName = true;
+                mNullAccessToken = true;
             } else {
+                mAccessToken = account.getAccessToken();
                 mAccountName = account.getUsername();
                 mAccountProfileImageUrl = account.getProfileImageUrl();
             }
-            initializeFragment();
+            bindView();
         }).execute();
     }
 
-    private void initializeFragment() {
+    private void bindView() {
+        loadSubscriptions();
+
         mFragment = new SubscribedSubredditsListingFragment();
         Bundle bundle = new Bundle();
         bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
@@ -93,6 +113,34 @@ public class SubredditSelectionActivity extends AppCompatActivity {
         }
         mFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, mFragment).commit();
+    }
+
+    private void loadSubscriptions() {
+        if (!mInsertSuccess) {
+            FetchSubscribedThing.fetchSubscribedThing(mOauthRetrofit, mAccessToken, mAccountName, null,
+                    new ArrayList<>(), new ArrayList<>(),
+                    new ArrayList<>(),
+                    new FetchSubscribedThing.FetchSubscribedThingListener() {
+                        @Override
+                        public void onFetchSubscribedThingSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
+                                                                  ArrayList<SubscribedUserData> subscribedUserData,
+                                                                  ArrayList<SubredditData> subredditData) {
+                            new InsertSubscribedThingsAsyncTask(
+                                    mRedditDataRoomDatabase.subscribedSubredditDao(),
+                                    mRedditDataRoomDatabase.subscribedUserDao(),
+                                    mRedditDataRoomDatabase.subredditDao(),
+                                    subscribedSubredditData,
+                                    subscribedUserData,
+                                    subredditData,
+                                    () -> mInsertSuccess = true).execute();
+                        }
+
+                        @Override
+                        public void onFetchSubscribedThingFail() {
+                            mInsertSuccess = false;
+                        }
+                    });
+        }
     }
 
     @Override
@@ -149,7 +197,9 @@ public class SubredditSelectionActivity extends AppCompatActivity {
         if (mFragment != null) {
             getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE, mFragment);
         }
-        outState.putBoolean(NULL_ACCOUNT_NAME_STATE, mNullAccountName);
+        outState.putBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE, mInsertSuccess);
+        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
+        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
         outState.putString(ACCOUNT_NAME_STATE, mAccountName);
         outState.putString(ACCOUNT_PROFILE_IMAGE_URL, mAccountProfileImageUrl);
     }

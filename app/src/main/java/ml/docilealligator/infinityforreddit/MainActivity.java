@@ -48,6 +48,10 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
+    private static final String ACCOUNT_NAME_STATE = "ANS";
+    private static final String ACCOUNT_PROFILE_IMAGE_URL_STATE = "APIUS";
+    private static final String ACCOUNT_BANNER_IMAGE_URL_STATE = "ABIUS";
+    private static final String ACCOUNT_KARMA_STATE = "AKS";
 
     private static final int LOGIN_ACTIVITY_REQUEST_CODE = 0;
 
@@ -129,6 +133,10 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
+            mName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
+            mProfileImageUrl = savedInstanceState.getString(ACCOUNT_PROFILE_IMAGE_URL_STATE);
+            mBannerImageUrl = savedInstanceState.getString(ACCOUNT_BANNER_IMAGE_URL_STATE);
+            mKarma = savedInstanceState.getString(ACCOUNT_KARMA_STATE);
             if(!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndBindView();
             } else {
@@ -353,6 +361,10 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
+        outState.putString(ACCOUNT_NAME_STATE, mName);
+        outState.putString(ACCOUNT_PROFILE_IMAGE_URL_STATE, mProfileImageUrl);
+        outState.putString(ACCOUNT_BANNER_IMAGE_URL_STATE, mBannerImageUrl);
+        outState.putString(ACCOUNT_KARMA_STATE, mKarma);
     }
 
     @Override
