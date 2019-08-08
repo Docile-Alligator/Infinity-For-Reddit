@@ -16,7 +16,7 @@ public class AccountRepository {
     AccountRepository(RedditDataRoomDatabase redditDataRoomDatabase, String username) {
         mAccountDao = redditDataRoomDatabase.accountDao();
         mAccountLiveData = mAccountDao.getAccountLiveData(username);
-        mAccountsExceptCurrentAccountLiveData = mAccountDao.getAccountsExceptCurrentAccountLiveData(username);
+        mAccountsExceptCurrentAccountLiveData = mAccountDao.getAccountsExceptCurrentAccountLiveData();
     }
 
     LiveData<Account> getAccountLiveData() {

@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 new AccountRecyclerViewAdapter.ItemSelectedListener() {
             @Override
             public void accountSelected(Account account) {
-
+                new SwitchAccountAsyncTask(mRedditDataRoomDatabase, account.getUsername(), () -> relaunchActivity()).execute();
             }
 
             @Override
@@ -349,13 +349,17 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         }
     }
 
+    private void relaunchActivity() {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+        overridePendingTransition(0, 0);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == LOGIN_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            Intent intent = getIntent();
-            finish();
-            startActivity(intent);
-            overridePendingTransition(0, 0);
+            relaunchActivity();
         }
 
         super.onActivityResult(requestCode, resultCode, data);
