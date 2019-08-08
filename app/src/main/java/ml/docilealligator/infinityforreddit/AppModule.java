@@ -1,8 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -64,17 +62,6 @@ class AppModule {
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
         okHttpClientBuilder.authenticator(new AccessTokenAuthenticator(retrofit, accountRoomDatabase));
         return okHttpClientBuilder.build();
-    }
-
-    @Provides @Named("auth_info")
-    @Singleton
-    SharedPreferences provideAuthInfoSharedPreferences() {
-        return mApplication.getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE);
-    }
-
-    @Provides @Named("user_info")
-    SharedPreferences provideUserInfoSharedPreferences() {
-        return mApplication.getSharedPreferences(SharedPreferencesUtils.USER_INFO_FILE_KEY, Context.MODE_PRIVATE);
     }
 
     @Provides

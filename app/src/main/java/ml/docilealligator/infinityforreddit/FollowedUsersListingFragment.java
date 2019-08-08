@@ -57,7 +57,7 @@ public class FollowedUsersListingFragment extends Fragment {
 
         mActivity = getActivity();
 
-        ((Infinity) mActivity.getApplication()).getmAppComponent().inject(this);
+        ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
         mGlide = Glide.with(this);
 

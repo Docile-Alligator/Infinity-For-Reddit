@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        ((Infinity) getApplication()).getmAppComponent().inject(this);
+        ((Infinity) getApplication()).getAppComponent().inject(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -100,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                                         FetchMyInfo.fetchMyInfo(mOauthRetrofit, accessToken, new FetchMyInfo.FetchUserMyListener() {
                                             @Override
                                             public void onFetchMyInfoSuccess(String response) {
-                                                ParseMyInfo.parseMyInfo(response, new ParseMyInfo.ParseMyInfoListener() {
+                                                ParseAndSaveAccountInfo.parseAndSaveAccountInfo(response, mRedditDataRoomDatabase, new ParseAndSaveAccountInfo.ParseAndSaveAccountInfoListener() {
                                                     @Override
                                                     public void onParseMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
                                                         new ParseAndInsertNewAccountAsyncTask(name, accessToken, refreshToken, profileImageUrl, bannerImageUrl,

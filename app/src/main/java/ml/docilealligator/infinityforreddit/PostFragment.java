@@ -108,7 +108,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_post, container, false);
 
-        ((Infinity) activity.getApplication()).getmAppComponent().inject(this);
+        ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
 

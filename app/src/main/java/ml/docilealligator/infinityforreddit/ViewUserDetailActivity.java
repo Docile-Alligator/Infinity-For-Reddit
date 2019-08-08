@@ -100,7 +100,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        ((Infinity) getApplication()).getmAppComponent().inject(this);
+        ((Infinity) getApplication()).getAppComponent().inject(this);
 
         if(savedInstanceState == null) {
             getCurrentAccountAndInitializeViewPager();

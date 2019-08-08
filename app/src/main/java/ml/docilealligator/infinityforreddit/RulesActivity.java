@@ -53,7 +53,7 @@ public class RulesActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        ((Infinity) getApplication()).getmAppComponent().inject(this);
+        ((Infinity) getApplication()).getAppComponent().inject(this);
 
         ActionBar actionBar = getSupportActionBar();
         Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);

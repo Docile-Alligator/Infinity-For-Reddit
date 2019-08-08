@@ -44,7 +44,7 @@ public class SearchSubredditsResultActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        ((Infinity) getApplication()).getmAppComponent().inject(this);
+        ((Infinity) getApplication()).getAppComponent().inject(this);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

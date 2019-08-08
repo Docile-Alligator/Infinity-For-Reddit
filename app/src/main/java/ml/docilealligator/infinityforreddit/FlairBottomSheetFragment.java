@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,18 +34,18 @@ public class FlairBottomSheetFragment extends BottomSheetDialogFragment {
         void flairSelected(String flair);
     }
 
+    static final String EXTRA_ACCESS_TOKEN = "EAT";
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
 
     @BindView(R.id.progress_bar_flair_bottom_sheet_fragment) ProgressBar progressBar;
     @BindView(R.id.error_text_view_flair_bottom_sheet_fragment) TextView errorTextView;
     @BindView(R.id.recycler_view_bottom_sheet_fragment) RecyclerView recyclerView;
 
+    private String mAccessToken;
+    private String mSubredditName;
+
     private Activity mAcitivity;
     private FlairBottomSheetRecyclerViewAdapter mAdapter;
-
-    @Inject
-    @Named("auth_info")
-    SharedPreferences mAuthInfoSharedPreferences;
 
     @Inject
     @Named("oauth")
@@ -66,21 +65,23 @@ public class FlairBottomSheetFragment extends BottomSheetDialogFragment {
 
         mAcitivity = getActivity();
 
-        ((Infinity) mAcitivity.getApplication()).getmAppComponent().inject(this);
+        ((Infinity) mAcitivity.getApplication()).getAppComponent().inject(this);
 
         mAdapter = new FlairBottomSheetRecyclerViewAdapter(flair -> ((FlairSelectionCallback) mAcitivity).flairSelected(flair));
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(mAdapter);
 
-        String subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
-        fetchFlairs(subredditName);
+        mAccessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
+        mSubredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
+
+        fetchFlairs();
 
         return rootView;
     }
 
-    private void fetchFlairs(String subredditName) {
-        FetchFlairsInSubreddit.fetchFlairs(mOauthRetrofit, mAuthInfoSharedPreferences,
-                subredditName, new FetchFlairsInSubreddit.FetchFlairsInSubredditListener() {
+    private void fetchFlairs() {
+        FetchFlairsInSubreddit.fetchFlairs(mOauthRetrofit, mAccessToken,
+                mSubredditName, new FetchFlairsInSubreddit.FetchFlairsInSubredditListener() {
             @Override
             public void fetchSuccessful(ArrayList<String> flairs) {
                 progressBar.setVisibility(View.GONE);
@@ -98,7 +99,7 @@ public class FlairBottomSheetFragment extends BottomSheetDialogFragment {
                 progressBar.setVisibility(View.GONE);
                 errorTextView.setVisibility(View.VISIBLE);
                 errorTextView.setText(R.string.error_loading_flairs);
-                errorTextView.setOnClickListener(view -> fetchFlairs(subredditName));
+                errorTextView.setOnClickListener(view -> fetchFlairs());
             }
         });
     }

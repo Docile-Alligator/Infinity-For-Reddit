@@ -111,7 +111,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
         EventBus.getDefault().register(this);
 
-        ((Infinity) getApplication()).getmAppComponent().inject(this);
+        ((Infinity) getApplication()).getAppComponent().inject(this);
 
         toolbar.setTitle("");
         setSupportActionBar(toolbar);

@@ -61,7 +61,7 @@ public class SubscribedSubredditsListingFragment extends Fragment {
 
         mActivity = getActivity();
 
-        ((Infinity) mActivity.getApplication()).getmAppComponent().inject(this);
+        ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
 

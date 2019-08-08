@@ -7,19 +7,21 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-class ParseMyInfo {
-    interface ParseMyInfoListener {
+class ParseAndSaveAccountInfo {
+    interface ParseAndSaveAccountInfoListener {
         void onParseMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma);
         void onParseMyInfoFail();
     }
 
-    static void parseMyInfo(String response, ParseMyInfoListener parseMyInfoListener) {
-        new ParseMyInfoAsyncTask(response, parseMyInfoListener).execute();
+    static void parseAndSaveAccountInfo(String response, RedditDataRoomDatabase redditDataRoomDatabase,
+                                        ParseAndSaveAccountInfoListener parseAndSaveAccountInfoListener) {
+        new ParseAndSaveAccountInfoAsyncTask(response, redditDataRoomDatabase, parseAndSaveAccountInfoListener).execute();
     }
 
-    private static class ParseMyInfoAsyncTask extends AsyncTask<Void, Void, Void> {
+    private static class ParseAndSaveAccountInfoAsyncTask extends AsyncTask<Void, Void, Void> {
         private JSONObject jsonResponse;
-        private ParseMyInfoListener parseMyInfoListener;
+        private RedditDataRoomDatabase redditDataRoomDatabase;
+        private ParseAndSaveAccountInfoListener parseAndSaveAccountInfoListener;
         private boolean parseFailed;
 
         private String name;
@@ -27,14 +29,16 @@ class ParseMyInfo {
         private String bannerImageUrl;
         private int karma;
 
-        ParseMyInfoAsyncTask(String response, ParseMyInfoListener parseMyInfoListener){
+        ParseAndSaveAccountInfoAsyncTask(String response, RedditDataRoomDatabase redditDataRoomDatabase,
+                                         ParseAndSaveAccountInfoListener parseAndSaveAccountInfoListener){
             try {
                 jsonResponse = new JSONObject(response);
-                this.parseMyInfoListener = parseMyInfoListener;
+                this.redditDataRoomDatabase = redditDataRoomDatabase;
+                this.parseAndSaveAccountInfoListener = parseAndSaveAccountInfoListener;
                 parseFailed = false;
             } catch (JSONException e) {
-                Log.i("user info json error", e.getMessage());
-                parseMyInfoListener.onParseMyInfoFail();
+                Log.i("user info json error", "message: " + e.getMessage());
+                parseAndSaveAccountInfoListener.onParseMyInfoFail();
             }
         }
 
@@ -49,9 +53,11 @@ class ParseMyInfo {
                 int linkKarma = jsonResponse.getInt(JSONUtils.LINK_KARMA_KEY);
                 int commentKarma = jsonResponse.getInt(JSONUtils.COMMENT_KARMA_KEY);
                 karma = linkKarma + commentKarma;
+
+                redditDataRoomDatabase.accountDao().updateAccountInfo(name, profileImageUrl, bannerImageUrl, karma);
             } catch (JSONException e) {
                 parseFailed = true;
-                Log.i("parse comment error", e.getMessage());
+                Log.i("parse comment error", "message: " + e.getMessage());
             }
             return null;
         }
@@ -59,9 +65,9 @@ class ParseMyInfo {
         @Override
         protected void onPostExecute(Void aVoid) {
             if(!parseFailed) {
-                parseMyInfoListener.onParseMyInfoSuccess(name, profileImageUrl, bannerImageUrl, karma);
+                parseAndSaveAccountInfoListener.onParseMyInfoSuccess(name, profileImageUrl, bannerImageUrl, karma);
             } else {
-                parseMyInfoListener.onParseMyInfoFail();
+                parseAndSaveAccountInfoListener.onParseMyInfoFail();
             }
         }
     }

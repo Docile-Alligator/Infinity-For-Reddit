@@ -97,7 +97,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
 
         ButterKnife.bind(this);
 
-        ((Infinity) getApplication()).getmAppComponent().inject(this);
+        ((Infinity) getApplication()).getAppComponent().inject(this);
 
         if(savedInstanceState == null) {
             getCurrentAccountAndBindView();

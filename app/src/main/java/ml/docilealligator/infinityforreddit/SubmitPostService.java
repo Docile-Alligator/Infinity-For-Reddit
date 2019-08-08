@@ -5,7 +5,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -33,6 +32,7 @@ import javax.inject.Named;
 import retrofit2.Retrofit;
 
 public class SubmitPostService extends Service {
+    static final String EXTRA_ACCESS_TOKEN = "EAT";
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
     static final String EXTRA_TITLE = "ET";
     static final String EXTRA_CONTENT = "EC";
@@ -44,6 +44,16 @@ public class SubmitPostService extends Service {
     static final int EXTRA_POST_TEXT_OR_LINK = 0;
     static final int EXTRA_POST_TYPE_IMAGE = 1;
     static final int EXTRA_POST_TYPE_VIDEO = 2;
+
+    private String mAccessToken;
+    private String subredditName;
+    private String title;
+    private String flair;
+    private boolean isSpoiler;
+    private boolean isNSFW;
+    private String content;
+    private String kind;
+    private Uri mediaUri;
 
     @Inject
     @Named("oauth")
@@ -57,14 +67,6 @@ public class SubmitPostService extends Service {
     @Named("upload_video")
     Retrofit mUploadVideoRetrofit;
 
-    @Inject
-    @Named("user_info")
-    SharedPreferences mUserInfoSharedPreferences;
-
-    @Inject
-    @Named("auth_info")
-    SharedPreferences sharedPreferences;
-
     public SubmitPostService() {
     }
 
@@ -75,13 +77,14 @@ public class SubmitPostService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        ((Infinity) getApplication()).getmAppComponent().inject(this);
+        ((Infinity) getApplication()).getAppComponent().inject(this);
 
-        String subredditName = intent.getExtras().getString(EXTRA_SUBREDDIT_NAME);
-        String title = intent.getExtras().getString(EXTRA_TITLE);
-        String flair = intent.getExtras().getString(EXTRA_FLAIR);
-        boolean isSpoiler = intent.getExtras().getBoolean(EXTRA_IS_SPOILER);
-        boolean isNSFW = intent.getExtras().getBoolean(EXTRA_IS_NSFW);
+        mAccessToken = intent.getExtras().getString(EXTRA_ACCESS_TOKEN);
+        subredditName = intent.getExtras().getString(EXTRA_SUBREDDIT_NAME);
+        title = intent.getExtras().getString(EXTRA_TITLE);
+        flair = intent.getExtras().getString(EXTRA_FLAIR);
+        isSpoiler = intent.getExtras().getBoolean(EXTRA_IS_SPOILER);
+        isNSFW = intent.getExtras().getBoolean(EXTRA_IS_NSFW);
         int postType = intent.getExtras().getInt(EXTRA_POST_TYPE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -96,18 +99,18 @@ public class SubmitPostService extends Service {
         }
 
         if(postType == EXTRA_POST_TEXT_OR_LINK) {
-            String content = intent.getExtras().getString(EXTRA_CONTENT);
-            String kind = intent.getExtras().getString(EXTRA_KIND);
+            content = intent.getExtras().getString(EXTRA_CONTENT);
+            kind = intent.getExtras().getString(EXTRA_KIND);
             startForeground(1, createNotification(R.string.posting));
-            submitTextOrLinkPost(subredditName, title, content, flair, isSpoiler, isNSFW, kind);
+            submitTextOrLinkPost();
         } else if(postType == EXTRA_POST_TYPE_IMAGE) {
-            Uri imageUri = intent.getData();
+            mediaUri = intent.getData();
             startForeground(1, createNotification(R.string.posting_image));
-            submitImagePost(imageUri, subredditName, title, flair, isSpoiler, isNSFW);
+            submitImagePost();
         } else {
-            Uri videoUri = intent.getData();
+            mediaUri = intent.getData();
             startForeground(1, createNotification(R.string.posting_video));
-            submitVideoPost(videoUri, subredditName, title, flair, isSpoiler, isNSFW);
+            submitVideoPost();
         }
 
         return START_NOT_STICKY;
@@ -121,9 +124,8 @@ public class SubmitPostService extends Service {
                 .build();
     }
 
-    private void submitTextOrLinkPost(String subredditName, String title, String content, String flair,
-                                      boolean isSpoiler, boolean isNSFW, String kind) {
-        SubmitPost.submitTextOrLinkPost(mOauthRetrofit, sharedPreferences, getResources().getConfiguration().locale,
+    private void submitTextOrLinkPost() {
+        SubmitPost.submitTextOrLinkPost(mOauthRetrofit, mAccessToken, getResources().getConfiguration().locale,
                 subredditName, title, content, flair, isSpoiler, isNSFW, kind, new SubmitPost.SubmitPostListener() {
                     @Override
                     public void submitSuccessful(Post post) {
@@ -143,16 +145,15 @@ public class SubmitPostService extends Service {
                 });
     }
 
-    private void submitImagePost(Uri imageUri, String subredditName, String title, String flair,
-                                 boolean isSpoiler, boolean isNSFW) {
+    private void submitImagePost() {
         Glide.with(this)
                 .asBitmap()
-                .load(imageUri)
+                .load(mediaUri)
                 .into(new CustomTarget<Bitmap>() {
 
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        SubmitPost.submitImagePost(mOauthRetrofit, mUploadMediaRetrofit, sharedPreferences,
+                        SubmitPost.submitImagePost(mOauthRetrofit, mUploadMediaRetrofit, mAccessToken,
                                 getResources().getConfiguration().locale, subredditName, title, resource,
                                 flair, isSpoiler, isNSFW, new SubmitPost.SubmitPostListener() {
                                     @Override
@@ -181,9 +182,8 @@ public class SubmitPostService extends Service {
                 });
     }
 
-    private void submitVideoPost(Uri videoUri, String subredditName, String title, String flair,
-                                 boolean isSpoiler, boolean isNSFW) {
-        try (ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(videoUri, "r")) {
+    private void submitVideoPost() {
+        try (ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(mediaUri, "r")) {
             FileInputStream in = new FileInputStream(pfd.getFileDescriptor());
             byte[] buffer;
             buffer = new byte[in.available()];
@@ -191,13 +191,13 @@ public class SubmitPostService extends Service {
 
             Glide.with(this)
                     .asBitmap()
-                    .load(videoUri)
+                    .load(mediaUri)
                     .into(new CustomTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                             SubmitPost.submitVideoPost(mOauthRetrofit, mUploadMediaRetrofit, mUploadVideoRetrofit,
-                                    sharedPreferences, getResources().getConfiguration().locale, subredditName, title,
-                                    buffer, getContentResolver().getType(videoUri), resource, flair, isSpoiler, isNSFW,
+                                    mAccessToken, getResources().getConfiguration().locale, subredditName, title,
+                                    buffer, getContentResolver().getType(mediaUri), resource, flair, isSpoiler, isNSFW,
                                     new SubmitPost.SubmitPostListener() {
                                         @Override
                                         public void submitSuccessful(Post post) {

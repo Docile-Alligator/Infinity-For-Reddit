@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -41,23 +40,23 @@ class SubmitPost {
         void uploadFailed(@Nullable String errorMessage);
     }
 
-    static void submitTextOrLinkPost(Retrofit oauthRetrofit, SharedPreferences authInfoSharedPreferences,
+    static void submitTextOrLinkPost(Retrofit oauthRetrofit, String accessToken,
                                      Locale locale, String subredditName, String title, String content,
                                      String flair, boolean isSpoiler, boolean isNSFW, String kind,
                                      SubmitPostListener submitPostListener) {
-        submitPost(oauthRetrofit, authInfoSharedPreferences, locale, subredditName, title, content,
+        submitPost(oauthRetrofit, accessToken, locale, subredditName, title, content,
                 flair, isSpoiler, isNSFW, kind, null, submitPostListener);
     }
 
     static void submitImagePost(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
-                                SharedPreferences authInfoSharedPreferences, Locale locale,
+                                String accessToken, Locale locale,
                                 String subredditName, String title, Bitmap image, String flair,
                                 boolean isSpoiler, boolean isNSFW, SubmitPostListener submitPostListener) {
-        uploadImage(oauthRetrofit, uploadMediaRetrofit, authInfoSharedPreferences, image,
+        uploadImage(oauthRetrofit, uploadMediaRetrofit, accessToken, image,
                 new UploadImageListener() {
                     @Override
                     public void uploaded(String imageUrl) {
-                        submitPost(oauthRetrofit, authInfoSharedPreferences, locale,
+                        submitPost(oauthRetrofit, accessToken, locale,
                                 subredditName, title, imageUrl, flair, isSpoiler, isNSFW,
                                 RedditUtils.KIND_IMAGE, null, submitPostListener);
                     }
@@ -70,12 +69,11 @@ class SubmitPost {
     }
 
     static void submitVideoPost(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
-                                Retrofit uploadVideoRetrofit, SharedPreferences authInfoSharedPreferences,
+                                Retrofit uploadVideoRetrofit, String accessToken,
                                 Locale locale, String subredditName, String title, byte[] buffer, String mimeType,
                                 Bitmap posterBitmap, String flair, boolean isSpoiler, boolean isNSFW,
                                 SubmitPostListener submitPostListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
-        String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
         String fileType = mimeType.substring(mimeType.indexOf("/") + 1);
 
@@ -110,16 +108,16 @@ class SubmitPost {
                                         new ParseXMLReponseFromAWSAsyncTask(response.body(), new ParseXMLReponseFromAWSAsyncTask.ParseXMLResponseFromAWSListener() {
                                             @Override
                                             public void parseSuccessful(String url) {
-                                                uploadImage(oauthRetrofit, uploadMediaRetrofit, authInfoSharedPreferences,
+                                                uploadImage(oauthRetrofit, uploadMediaRetrofit, accessToken,
                                                         posterBitmap, new UploadImageListener() {
                                                             @Override
                                                             public void uploaded(String imageUrl) {
                                                                 if(fileType.equals("gif")) {
-                                                                    submitPost(oauthRetrofit, authInfoSharedPreferences, locale,
+                                                                    submitPost(oauthRetrofit, accessToken, locale,
                                                                             subredditName, title, url, flair, isSpoiler, isNSFW,
                                                                             RedditUtils.KIND_VIDEOGIF, imageUrl, submitPostListener);
                                                                 } else {
-                                                                    submitPost(oauthRetrofit, authInfoSharedPreferences, locale,
+                                                                    submitPost(oauthRetrofit, accessToken, locale,
                                                                             subredditName, title, url, flair, isSpoiler, isNSFW,
                                                                             RedditUtils.KIND_VIDEO, imageUrl, submitPostListener);
                                                                 }
@@ -167,12 +165,11 @@ class SubmitPost {
         });
     }
 
-    private static void submitPost(Retrofit oauthRetrofit, SharedPreferences authInfoSharedPreferences,
+    private static void submitPost(Retrofit oauthRetrofit, String accessToken,
                                    Locale locale, String subredditName, String title, String content,
                                    String flair, boolean isSpoiler, boolean isNSFW, String kind,
                                    @Nullable String posterUrl, SubmitPostListener submitPostListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
-        String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
         Map<String, String> params = new HashMap<>();
         params.put(RedditUtils.API_TYPE_KEY, RedditUtils.API_TYPE_JSON);
@@ -211,7 +208,7 @@ class SubmitPost {
                 Log.i("code", "asfd" + response.body());
                 if(response.isSuccessful()) {
                     try {
-                        getSubmittedPost(response.body(), kind, oauthRetrofit, authInfoSharedPreferences,
+                        getSubmittedPost(response.body(), kind, oauthRetrofit, accessToken,
                                 locale, submitPostListener);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -232,10 +229,9 @@ class SubmitPost {
     }
 
     private static void uploadImage(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
-                                    SharedPreferences authInfoSharedPreferences, Bitmap image,
+                                    String accessToken, Bitmap image,
                                     UploadImageListener uploadImageListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
-        String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
         Map<String, String> uploadImageParams = new HashMap<>();
         uploadImageParams.put(RedditUtils.FILEPATH_KEY, "post_image.jpg");
@@ -414,7 +410,7 @@ class SubmitPost {
     }
 
     private static void getSubmittedPost(String response, String kind, Retrofit oauthRetrofit,
-                                         SharedPreferences authInfoSharedPreferences, Locale locale,
+                                         String accessToken, Locale locale,
                                          SubmitPostListener submitPostListener) throws JSONException {
         JSONObject responseObject = new JSONObject(response).getJSONObject(JSONUtils.JSON_KEY);
         if(responseObject.getJSONArray(JSONUtils.ERRORS_KEY).length() != 0) {
@@ -442,7 +438,6 @@ class SubmitPost {
             String postId = responseObject.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.ID_KEY);
 
             RedditAPI api = oauthRetrofit.create(RedditAPI.class);
-            String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
             Call<String> getPostCall = api.getPost(postId, RedditUtils.getOAuthHeader(accessToken));
             getPostCall.enqueue(new Callback<String>() {

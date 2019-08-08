@@ -34,7 +34,7 @@ public class Infinity extends Application {
         });
     }
 
-    public AppComponent getmAppComponent() {
+    public AppComponent getAppComponent() {
         return mAppComponent;
     }
 }

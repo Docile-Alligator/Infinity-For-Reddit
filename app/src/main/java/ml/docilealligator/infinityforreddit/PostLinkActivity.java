@@ -46,8 +46,8 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
     private static final String FLAIR_STATE = "FS";
     private static final String IS_SPOILER_STATE = "ISS";
     private static final String IS_NSFW_STATE = "INS";
-    private static final String NULL_ACCOUNT_NAME_STATE = "NATS";
-    private static final String ACCOUNT_NAME_STATE = "ANS";
+    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
+    private static final String ACCESS_TOKEN_STATE = "ATS";
 
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
 
@@ -62,8 +62,8 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
     @BindView(R.id.post_title_edit_text_post_link_activity) EditText titleEditText;
     @BindView(R.id.post_link_edit_text_post_link_activity) EditText contentEditText;
 
-    private boolean mNullAccountName = false;
-    private String mAccountName;
+    private boolean mNullAccessToken = false;
+    private String mAccessToken;
     private String iconUrl;
     private String subredditName;
     private boolean subredditSelected = false;
@@ -100,7 +100,7 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
 
         EventBus.getDefault().register(this);
 
-        ((Infinity) getApplication()).getmAppComponent().inject(this);
+        ((Infinity) getApplication()).getAppComponent().inject(this);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -108,6 +108,13 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
         mGlide = Glide.with(this);
 
         if(savedInstanceState != null) {
+            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
+            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
+
+            if(!mNullAccessToken && mAccessToken == null) {
+                getCurrentAccount();
+            }
+
             subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
             iconUrl = savedInstanceState.getString(SUBREDDIT_ICON_STATE);
             subredditSelected = savedInstanceState.getBoolean(SUBREDDIT_SELECTED_STATE);
@@ -143,6 +150,8 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
                 nsfwTextView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             }
         } else {
+            getCurrentAccount();
+
             isPosting = false;
 
             if(getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
@@ -185,6 +194,7 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
             if(flair == null) {
                 flairSelectionBottomSheetFragment = new FlairBottomSheetFragment();
                 Bundle bundle = new Bundle();
+                bundle.putString(FlairBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 bundle.putString(FlairBottomSheetFragment.EXTRA_SUBREDDIT_NAME, subredditName);
                 flairSelectionBottomSheetFragment.setArguments(bundle);
                 flairSelectionBottomSheetFragment.show(getSupportFragmentManager(), flairSelectionBottomSheetFragment.getTag());
@@ -216,12 +226,12 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
         });
     }
 
-    private void getCurrentAccountName() {
+    private void getCurrentAccount() {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
             if(account == null) {
-                mNullAccountName = true;
+                mNullAccessToken = true;
             } else {
-                mAccountName = account.getUsername();
+                mAccessToken = account.getAccessToken();
             }
         }).execute();
     }
@@ -287,6 +297,7 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
                 }
 
                 Intent intent = new Intent(this, SubmitPostService.class);
+                intent.putExtra(SubmitPostService.EXTRA_ACCESS_TOKEN, mAccessToken);
                 intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
                 intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
                 intent.putExtra(SubmitPostService.EXTRA_CONTENT, contentEditText.getText().toString());
@@ -315,8 +326,8 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
         outState.putString(FLAIR_STATE, flair);
         outState.putBoolean(IS_SPOILER_STATE, isSpoiler);
         outState.putBoolean(IS_NSFW_STATE, isNSFW);
-        outState.putBoolean(NULL_ACCOUNT_NAME_STATE, mNullAccountName);
-        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
+        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
+        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
     }
 
     @Override

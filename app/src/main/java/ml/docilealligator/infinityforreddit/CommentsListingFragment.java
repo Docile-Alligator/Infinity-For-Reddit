@@ -70,7 +70,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_comments_listing, container, false);
 
-        ((Infinity) activity.getApplication()).getmAppComponent().inject(this);
+        ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
 

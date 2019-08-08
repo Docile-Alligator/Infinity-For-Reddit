@@ -94,7 +94,7 @@ class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             });
         }
 
-        if(!iconUrl.equals("")) {
+        if(iconUrl != null && !iconUrl.equals("")) {
             glide.load(iconUrl)
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                     .error(glide.load(R.drawable.subreddit_default_icon)

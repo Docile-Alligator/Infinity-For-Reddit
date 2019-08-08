@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,9 +52,6 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
     SubredditListingViewModel mSubredditListingViewModel;
 
-    @Inject @Named("auth_info")
-    SharedPreferences mAuthInfoSharedPreferences;
-
     @Inject @Named("no_oauth")
     Retrofit mRetrofit;
 
@@ -78,7 +74,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
         Activity activity = getActivity();
 
-        ((Infinity) activity.getApplication()).getmAppComponent().inject(this);
+        ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
 

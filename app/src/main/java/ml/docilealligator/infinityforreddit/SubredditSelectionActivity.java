@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -23,11 +25,21 @@ public class SubredditSelectionActivity extends AppCompatActivity {
     static final String EXTRA_RETURN_SUBREDDIT_IS_USER = "ERSIU";
 
     private static final int SUBREDDIT_SEARCH_REQUEST_CODE = 0;
+    private static final String NULL_ACCOUNT_NAME_STATE = "NATS";
+    private static final String ACCOUNT_NAME_STATE = "ATS";
+    private static final String ACCOUNT_PROFILE_IMAGE_URL = "APIU";
     private static final String FRAGMENT_OUT_STATE = "FOS";
 
     @BindView(R.id.toolbar_subreddit_selection_activity) Toolbar toolbar;
 
+    private boolean mNullAccountName = false;
+    private String mAccountName;
+    private String mAccountProfileImageUrl;
+
     private Fragment mFragment;
+
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,23 +48,51 @@ public class SubredditSelectionActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        ((Infinity) getApplication()).getAppComponent().inject(this);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if(savedInstanceState == null) {
-            mFragment = new SubscribedSubredditsListingFragment();
-            Bundle bundle = new Bundle();
-            bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_IS_SUBREDDIT_SELECTION, true);
-            if(getIntent().hasExtra(EXTRA_EXTRA_CLEAR_SELECTION)) {
-                bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_EXTRA_CLEAR_SELECTION,
-                        getIntent().getExtras().getBoolean(EXTRA_EXTRA_CLEAR_SELECTION));
-            }
-            mFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, mFragment).commit();
+            getCurrentAccountAndInitializeFragment();
         } else {
-            mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, mFragment).commit();
+            mNullAccountName = savedInstanceState.getBoolean(NULL_ACCOUNT_NAME_STATE);
+            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
+            mAccountProfileImageUrl = savedInstanceState.getString(ACCOUNT_PROFILE_IMAGE_URL);
+
+            if(!mNullAccountName && mAccountName == null) {
+                getCurrentAccountAndInitializeFragment();
+            } else {
+                mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, mFragment).commit();
+            }
         }
+    }
+
+    private void getCurrentAccountAndInitializeFragment() {
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if(account == null) {
+                mNullAccountName = true;
+            } else {
+                mAccountName = account.getUsername();
+                mAccountProfileImageUrl = account.getProfileImageUrl();
+            }
+            initializeFragment();
+        }).execute();
+    }
+
+    private void initializeFragment() {
+        mFragment = new SubscribedSubredditsListingFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
+        bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCOUNT_PROFILE_IMAGE_URL, mAccountProfileImageUrl);
+        bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_IS_SUBREDDIT_SELECTION, true);
+        if(getIntent().hasExtra(EXTRA_EXTRA_CLEAR_SELECTION)) {
+            bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_EXTRA_CLEAR_SELECTION,
+                    getIntent().getExtras().getBoolean(EXTRA_EXTRA_CLEAR_SELECTION));
+        }
+        mFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, mFragment).commit();
     }
 
     @Override
@@ -109,5 +149,8 @@ public class SubredditSelectionActivity extends AppCompatActivity {
         if (mFragment != null) {
             getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE, mFragment);
         }
+        outState.putBoolean(NULL_ACCOUNT_NAME_STATE, mNullAccountName);
+        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
+        outState.putString(ACCOUNT_PROFILE_IMAGE_URL, mAccountProfileImageUrl);
     }
 }

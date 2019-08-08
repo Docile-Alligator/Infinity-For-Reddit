@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -87,10 +86,6 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     private boolean isInLazyMode = false;
 
     @Inject
-    @Named("user_info")
-    SharedPreferences mUserInfoSharedPreferences;
-
-    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
 
@@ -104,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
         ButterKnife.bind(this);
 
-        ((Infinity) getApplication()).getmAppComponent().inject(this);
+        ((Infinity) getApplication()).getAppComponent().inject(this);
 
         postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
 
@@ -149,13 +144,15 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     private void getCurrentAccountAndBindView() {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
             if(account == null) {
+                mNullAccessToken = true;
                 Intent loginIntent = new Intent(this, LoginActivity.class);
                 startActivityForResult(loginIntent, LOGIN_ACTIVITY_REQUEST_CODE);
             } else {
                 mAccessToken = account.getAccessToken();
-                if(mAccessToken == null) {
-                    mNullAccessToken = true;
-                }
+                mName = account.getUsername();
+                mProfileImageUrl = account.getProfileImageUrl();
+                mBannerImageUrl = account.getBannerImageUrl();
+                mKarma = Integer.toString(account.getKarma());
                 bindView();
             }
         }).execute();
@@ -183,12 +180,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         mProfileImageView = header.findViewById(R.id.profile_image_view_nav_header_main);
         mBannerImageView = header.findViewById(R.id.banner_image_view_nav_header_main);
 
-        loadUserData(mAccessToken);
-
-        mName = mUserInfoSharedPreferences.getString(SharedPreferencesUtils.USER_KEY, "");
-        mProfileImageUrl = mUserInfoSharedPreferences.getString(SharedPreferencesUtils.PROFILE_IMAGE_URL_KEY, "");
-        mBannerImageUrl = mUserInfoSharedPreferences.getString(SharedPreferencesUtils.BANNER_IMAGE_URL_KEY, "");
-        mKarma = mUserInfoSharedPreferences.getString(SharedPreferencesUtils.KARMA_KEY, "");
+        loadUserData();
 
         mNameTextView.setText(mName);
         mKarmaTextView.setText(mKarma);
@@ -225,12 +217,12 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         });
     }
 
-    private void loadUserData(String accessToken) {
+    private void loadUserData() {
         if (!mFetchUserInfoSuccess) {
-            FetchMyInfo.fetchMyInfo(mOauthRetrofit, accessToken, new FetchMyInfo.FetchUserMyListener() {
+            FetchMyInfo.fetchMyInfo(mOauthRetrofit, mAccessToken, new FetchMyInfo.FetchUserMyListener() {
                 @Override
                 public void onFetchMyInfoSuccess(String response) {
-                    ParseMyInfo.parseMyInfo(response, new ParseMyInfo.ParseMyInfoListener() {
+                    ParseAndSaveAccountInfo.parseAndSaveAccountInfo(response, mRedditDataRoomDatabase, new ParseAndSaveAccountInfo.ParseAndSaveAccountInfoListener() {
                         @Override
                         public void onParseMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
                             mNameTextView.setText(name);
@@ -256,12 +248,6 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
                             mKarmaTextView.setText(mKarma);
 
-                            SharedPreferences.Editor editor = mUserInfoSharedPreferences.edit();
-                            editor.putString(SharedPreferencesUtils.USER_KEY, name);
-                            editor.putString(SharedPreferencesUtils.PROFILE_IMAGE_URL_KEY, profileImageUrl);
-                            editor.putString(SharedPreferencesUtils.BANNER_IMAGE_URL_KEY, bannerImageUrl);
-                            editor.putString(SharedPreferencesUtils.KARMA_KEY, mKarma);
-                            editor.apply();
                             mFetchUserInfoSuccess = true;
                         }
 
@@ -328,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             case R.id.action_refresh_main_activity:
                 sectionsPagerAdapter.refresh(viewPager.getCurrentItem());
                 mFetchUserInfoSuccess = false;
-                loadUserData(mAccessToken);
+                loadUserData();
                 return true;
             case R.id.action_lazy_mode_main_activity:
                 /*MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);

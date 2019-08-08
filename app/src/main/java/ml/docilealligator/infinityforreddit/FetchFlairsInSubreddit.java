@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
@@ -21,10 +20,9 @@ class FetchFlairsInSubreddit {
         void fetchFailed();
     }
 
-    static void fetchFlairs(Retrofit oauthRetrofit, SharedPreferences authInfoSharedPreferences, String subredditName, FetchFlairsInSubredditListener fetchFlairsInSubredditListener) {
+    static void fetchFlairs(Retrofit oauthRetrofit, String accessToken, String subredditName, FetchFlairsInSubredditListener fetchFlairsInSubredditListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
-        String accessToken = authInfoSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
         Call<String> flairsCall = api.getFlairs(RedditUtils.getOAuthHeader(accessToken), subredditName);
         flairsCall.enqueue(new Callback<String>() {
             @Override

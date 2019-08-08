@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,8 +46,8 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
     private static final String FLAIR_STATE = "FS";
     private static final String IS_SPOILER_STATE = "ISS";
     private static final String IS_NSFW_STATE = "INS";
-    private static final String NULL_ACCOUNT_NAME_STATE = "NATS";
-    private static final String ACCOUNT_NAME_STATE = "ANS";
+    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
+    private static final String ACCESS_TOKEN_STATE = "ATS";
 
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
 
@@ -63,8 +62,8 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
     @BindView(R.id.post_title_edit_text_post_text_activity) EditText titleEditText;
     @BindView(R.id.post_text_content_edit_text_post_text_activity) EditText contentEditText;
 
-    private boolean mNullAccountName = false;
-    private String mAccountName;
+    private boolean mNullAccessToken = false;
+    private String mAccessToken;
     private String iconUrl;
     private String subredditName;
     private boolean subredditSelected = false;
@@ -90,10 +89,6 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
     Retrofit mOauthRetrofit;
 
     @Inject
-    @Named("auth_info")
-    SharedPreferences sharedPreferences;
-
-    @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
 
     @Override
@@ -105,7 +100,7 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
 
         EventBus.getDefault().register(this);
 
-        ((Infinity) getApplication()).getmAppComponent().inject(this);
+        ((Infinity) getApplication()).getAppComponent().inject(this);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -191,6 +186,7 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
             if(flair == null) {
                 flairSelectionBottomSheetFragment = new FlairBottomSheetFragment();
                 Bundle bundle = new Bundle();
+                bundle.putString(FlairBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 if(subredditIsUser) {
                     bundle.putString(FlairBottomSheetFragment.EXTRA_SUBREDDIT_NAME, "u_" + subredditName);
                 } else {
@@ -229,9 +225,9 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
     private void getCurrentAccountName() {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
             if(account == null) {
-                mNullAccountName = true;
+                mNullAccessToken = true;
             } else {
-                mAccountName = account.getUsername();
+                mAccessToken = account.getAccessToken();
             }
         }).execute();
     }
@@ -297,6 +293,7 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
                 }
 
                 Intent intent = new Intent(this, SubmitPostService.class);
+                intent.putExtra(SubmitPostService.EXTRA_ACCESS_TOKEN, mAccessToken);
                 intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
                 intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
                 intent.putExtra(SubmitPostService.EXTRA_CONTENT, contentEditText.getText().toString());
@@ -325,8 +322,8 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
         outState.putString(FLAIR_STATE, flair);
         outState.putBoolean(IS_SPOILER_STATE, isSpoiler);
         outState.putBoolean(IS_NSFW_STATE, isNSFW);
-        outState.putBoolean(NULL_ACCOUNT_NAME_STATE, mNullAccountName);
-        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
+        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
+        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
     }
 
     @Override

@@ -53,7 +53,8 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
     private static final String FLAIR_STATE = "FS";
     private static final String IS_SPOILER_STATE = "ISS";
     private static final String IS_NSFW_STATE = "INS";
-    private static final String NULL_ACCOUNT_NAME_STATE = "NATS";
+    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
+    private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
 
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
@@ -75,7 +76,8 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
     @BindView(R.id.select_again_text_view_post_video_activity) TextView selectAgainTextView;
     @BindView(R.id.video_view_post_video_activity) VideoView videoView;
 
-    private boolean mNullAccountName = false;
+    private boolean mNullAccessToken = false;
+    private String mAccessToken;
     private String mAccountName;
     private String iconUrl;
     private String subredditName;
@@ -122,7 +124,7 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
 
         EventBus.getDefault().register(this);
 
-        ((Infinity) getApplication()).getmAppComponent().inject(this);
+        ((Infinity) getApplication()).getAppComponent().inject(this);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -139,11 +141,12 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
             flair = savedInstanceState.getString(FLAIR_STATE);
             isSpoiler = savedInstanceState.getBoolean(IS_SPOILER_STATE);
             isNSFW = savedInstanceState.getBoolean(IS_NSFW_STATE);
-            mNullAccountName = savedInstanceState.getBoolean(NULL_ACCOUNT_NAME_STATE);
+            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
+            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
 
-            if(!mNullAccountName && mAccountName == null) {
-                getCurrentAccountName();
+            if(!mNullAccessToken && mAccessToken == null) {
+                getCurrentAccount();
             }
 
             if(savedInstanceState.getString(VIDEO_URI_STATE) != null) {
@@ -176,7 +179,7 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
                 nsfwTextView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             }
         } else {
-            getCurrentAccountName();
+            getCurrentAccount();
 
             isPosting = false;
 
@@ -219,6 +222,7 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
             if(flair == null) {
                 mFlairSelectionBottomSheetFragment = new FlairBottomSheetFragment();
                 Bundle bundle = new Bundle();
+                bundle.putString(FlairBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 bundle.putString(FlairBottomSheetFragment.EXTRA_SUBREDDIT_NAME, subredditName);
                 mFlairSelectionBottomSheetFragment.setArguments(bundle);
                 mFlairSelectionBottomSheetFragment.show(getSupportFragmentManager(), mFlairSelectionBottomSheetFragment.getTag());
@@ -277,11 +281,12 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
         });
     }
 
-    private void getCurrentAccountName() {
+    private void getCurrentAccount() {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
             if(account == null) {
-                mNullAccountName = true;
+                mNullAccessToken = true;
             } else {
+                mAccessToken = account.getAccessToken();
                 mAccountName = account.getUsername();
             }
         }).execute();
@@ -362,6 +367,7 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
 
                 Intent intent = new Intent(this, SubmitPostService.class);
                 intent.setData(videoUri);
+                intent.putExtra(SubmitPostService.EXTRA_ACCESS_TOKEN, mAccessToken);
                 intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
                 intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
                 intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
@@ -402,7 +408,8 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
         outState.putString(FLAIR_STATE, flair);
         outState.putBoolean(IS_SPOILER_STATE, isSpoiler);
         outState.putBoolean(IS_NSFW_STATE, isNSFW);
-        outState.putBoolean(NULL_ACCOUNT_NAME_STATE, mNullAccountName);
+        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
+        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
         outState.putString(ACCOUNT_NAME_STATE, mAccountName);
     }
 

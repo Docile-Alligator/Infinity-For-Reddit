@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,10 +50,6 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
 
     UserListingViewModel mUserListingViewModel;
 
-    @Inject
-    @Named("auth_info")
-    SharedPreferences mAuthInfoSharedPreferences;
-
     @Inject @Named("no_oauth")
     Retrofit mRetrofit;
 
@@ -75,7 +70,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_user_listing, container, false);
 
-        ((Infinity) getActivity().getApplication()).getmAppComponent().inject(this);
+        ((Infinity) getActivity().getApplication()).getAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
 

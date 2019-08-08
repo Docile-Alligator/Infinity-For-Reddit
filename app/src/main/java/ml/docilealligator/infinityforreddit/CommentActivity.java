@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,11 +31,16 @@ public class CommentActivity extends AppCompatActivity {
     static final String EXTRA_IS_REPLYING_KEY = "EIRK";
     static final int WRITE_COMMENT_REQUEST_CODE = 1;
 
+    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
+    private static final String ACCESS_TOKEN_STATE = "ATS";
+
     @BindView(R.id.coordinator_layout_comment_activity) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.toolbar_comment_activity) Toolbar toolbar;
     @BindView(R.id.comment_parent_markwon_view_comment_activity) MarkwonView commentParentMarkwonView;
     @BindView(R.id.comment_edit_text_comment_activity) EditText commentEditText;
 
+    private boolean mNullAccessToken = false;
+    private String mAccessToken;
     private String parentFullname;
     private int parentDepth;
     private int parentPosition;
@@ -47,8 +51,7 @@ public class CommentActivity extends AppCompatActivity {
     Retrofit mOauthRetrofit;
 
     @Inject
-    @Named("auth_info")
-    SharedPreferences sharedPreferences;
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +60,17 @@ public class CommentActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        ((Infinity) getApplication()).getmAppComponent().inject(this);
+        ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        if(savedInstanceState == null) {
+            getCurrentAccount();
+        } else {
+            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
+            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
+            if(!mNullAccessToken && mAccessToken == null) {
+                getCurrentAccount();
+            }
+        }
 
         Intent intent = getIntent();
         commentParentMarkwonView.setMarkdown(intent.getExtras().getString(EXTRA_COMMENT_PARENT_TEXT_KEY));
@@ -70,6 +83,16 @@ public class CommentActivity extends AppCompatActivity {
         }
 
         setSupportActionBar(toolbar);
+    }
+
+    private void getCurrentAccount() {
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if(account == null) {
+                mNullAccessToken = true;
+            } else {
+                mAccessToken = account.getAccessToken();
+            }
+        }).execute();
     }
 
     @Override
@@ -92,7 +115,7 @@ public class CommentActivity extends AppCompatActivity {
 
                 SendComment.sendComment(commentEditText.getText().toString(), parentFullname, parentDepth,
                         getResources().getConfiguration().locale, mOauthRetrofit,
-                        sharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, ""),
+                        mAccessToken,
                         new SendComment.SendCommentListener() {
                             @Override
                             public void sendCommentSuccess(CommentData commentData) {
@@ -125,5 +148,12 @@ public class CommentActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
+        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
     }
 }

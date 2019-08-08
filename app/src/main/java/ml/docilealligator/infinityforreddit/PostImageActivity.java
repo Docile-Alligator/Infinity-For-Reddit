@@ -58,6 +58,9 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
     private static final String FLAIR_STATE = "FS";
     private static final String IS_SPOILER_STATE = "ISS";
     private static final String IS_NSFW_STATE = "INS";
+    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
+    private static final String ACCESS_TOKEN_STATE = "ATS";
+    private static final String ACCOUNT_NAME_STATE = "ANS";
 
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
     private static final int PICK_IMAGE_REQUEST_CODE = 1;
@@ -78,6 +81,9 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
     @BindView(R.id.select_again_text_view_post_image_activity) TextView selectAgainTextView;
     @BindView(R.id.image_view_post_image_activity) ImageView imageView;
 
+    private boolean mNullAccessToken = false;
+    private String mAccessToken;
+    private String mAccountName;
     private String iconUrl;
     private String subredditName;
     private boolean subredditSelected = false;
@@ -108,7 +114,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
     Retrofit mUploadMediaRetrofit;
 
     @Inject
-    RedditDataRoomDatabase redditDataRoomDatabase;
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +125,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
 
         EventBus.getDefault().register(this);
 
-        ((Infinity) getApplication()).getmAppComponent().inject(this);
+        ((Infinity) getApplication()).getAppComponent().inject(this);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -127,6 +133,14 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
         mGlide = Glide.with(this);
 
         if(savedInstanceState != null) {
+            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
+            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
+            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
+
+            if(!mNullAccessToken && mAccessToken == null) {
+                getCurrentAccount();
+            }
+
             subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
             iconUrl = savedInstanceState.getString(SUBREDDIT_ICON_STATE);
             subredditSelected = savedInstanceState.getBoolean(SUBREDDIT_SELECTED_STATE);
@@ -167,6 +181,8 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
                 nsfwTextView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             }
         } else {
+            getCurrentAccount();
+
             isPosting = false;
 
             if(getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
@@ -208,6 +224,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
             if(flair == null) {
                 flairSelectionBottomSheetFragment = new FlairBottomSheetFragment();
                 Bundle bundle = new Bundle();
+                bundle.putString(FlairBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 bundle.putString(FlairBottomSheetFragment.EXTRA_SUBREDDIT_NAME, subredditName);
                 flairSelectionBottomSheetFragment.setArguments(bundle);
                 flairSelectionBottomSheetFragment.show(getSupportFragmentManager(), flairSelectionBottomSheetFragment.getTag());
@@ -270,6 +287,17 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
         });
     }
 
+    private void getCurrentAccount() {
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if(account == null) {
+                mNullAccessToken = true;
+            } else {
+                mAccessToken = account.getAccessToken();
+                mAccountName = account.getUsername();
+            }
+        }).execute();
+    }
+
     private void loadImage() {
         constraintLayout.setVisibility(View.GONE);
         imageView.setVisibility(View.VISIBLE);
@@ -292,7 +320,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
     }
 
     private void loadSubredditIcon() {
-        new LoadSubredditIconAsyncTask(redditDataRoomDatabase.subredditDao(),
+        new LoadSubredditIconAsyncTask(mRedditDataRoomDatabase.subredditDao(),
                 subredditName, mRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
@@ -344,6 +372,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
 
                 Intent intent = new Intent(this, SubmitPostService.class);
                 intent.setData(imageUri);
+                intent.putExtra(SubmitPostService.EXTRA_ACCESS_TOKEN, mAccessToken);
                 intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
                 intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
                 intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
@@ -378,6 +407,9 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
         outState.putString(FLAIR_STATE, flair);
         outState.putBoolean(IS_SPOILER_STATE, isSpoiler);
         outState.putBoolean(IS_NSFW_STATE, isNSFW);
+        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
+        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
+        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
     }
 
     @Override
@@ -434,13 +466,11 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
     public void onSubmitImagePostEvent(SubmitImagePostEvent submitImagePostEvent) {
         isPosting = false;
         if(submitImagePostEvent.postSuccess) {
-            new GetCurrentAccountAsyncTask(redditDataRoomDatabase.accountDao(), account -> {
-                Intent intent = new Intent(PostImageActivity.this, ViewUserDetailActivity.class);
-                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
-                        account.getUsername());
-                startActivity(intent);
-                finish();
-            }).execute();
+            Intent intent = new Intent(PostImageActivity.this, ViewUserDetailActivity.class);
+            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
+                    mAccountName);
+            startActivity(intent);
+            finish();
         } else {
             mPostingSnackbar.dismiss();
             mMemu.getItem(R.id.action_send_post_image_activity).setEnabled(true);
