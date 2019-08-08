@@ -117,8 +117,6 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             }
         }
 
-        getCurrentAccountAndInitializeViewPager();
-
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
         //Get status bar height
