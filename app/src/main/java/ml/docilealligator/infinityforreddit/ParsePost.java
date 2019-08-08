@@ -85,40 +85,44 @@ class ParsePost {
                 return null;
             }
 
-            try {
-                if(newPosts == null) {
-                    //Only one post
-                    if(allData.length() == 0) {
-                        parseFailed = true;
-                        return null;
-                    }
+            if (newPosts == null) {
+                //Only one post
+                if (allData.length() == 0) {
+                    parseFailed = true;
+                    return null;
+                }
 
+                try {
                     JSONObject data = allData.getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY);
                     post = parseBasicData(data, locale, -1);
+                } catch (JSONException e) {
+                    Log.e("parsing post error", "message: " + e.getMessage());
+                    parseFailed = true;
+                }
+            } else {
+                //Posts listing
+                int size;
+                if (nPosts < 0 || nPosts > allData.length()) {
+                    size = allData.length();
                 } else {
-                    //Posts listing
-                    int size;
-                    if(nPosts < 0 || nPosts > allData.length()) {
-                        size = allData.length();
-                    } else {
-                        size = nPosts;
-                    }
+                    size = nPosts;
+                }
 
-                    for(int i = 0; i < size; i++) {
+                for (int i = 0; i < size; i++) {
+                    try {
                         JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
                         Post post = parseBasicData(data, locale, i);
-                        if(filter == PostFragment.EXTRA_NO_FILTER) {
+                        if (filter == PostFragment.EXTRA_NO_FILTER) {
                             newPosts.add(post);
-                        } else if(filter == post.getPostType()) {
+                        } else if (filter == post.getPostType()) {
                             newPosts.add(post);
-                        } else if(filter == Post.LINK_TYPE && post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
+                        } else if (filter == Post.LINK_TYPE && post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
                             newPosts.add(post);
                         }
+                    } catch (JSONException e) {
+                        Log.e("parsing post error", "message: " + e.getMessage());
                     }
                 }
-            } catch (JSONException e) {
-                Log.e("parsing post error", e.getMessage());
-                parseFailed = true;
             }
             return null;
         }

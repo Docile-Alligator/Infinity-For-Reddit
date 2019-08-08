@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         mNameTextView.setText(mName);
         mKarmaTextView.setText(mKarma);
 
-        if (!mProfileImageUrl.equals("")) {
+        if (mProfileImageUrl != null && !mProfileImageUrl.equals("")) {
             glide.load(mProfileImageUrl)
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0)))
                     .error(glide.load(R.drawable.subreddit_default_icon)
@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                     .into(mProfileImageView);
         }
 
-        if (!mBannerImageUrl.equals("")) {
+        if (mBannerImageUrl != null && !mBannerImageUrl.equals("")) {
             glide.load(mBannerImageUrl).into(mBannerImageView);
         }
 
@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                         @Override
                         public void onParseMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
                             mNameTextView.setText(name);
-                            if (!profileImageUrl.equals("")) {
+                            if (profileImageUrl != null && !profileImageUrl.equals("")) {
                                 glide.load(profileImageUrl)
                                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
                                         .error(glide.load(R.drawable.subreddit_default_icon)
@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
                                         .into(mProfileImageView);
                             }
-                            if (!bannerImageUrl.equals("")) {
+                            if (bannerImageUrl != null && !bannerImageUrl.equals("")) {
                                 glide.load(bannerImageUrl).into(mBannerImageView);
                             }
 
