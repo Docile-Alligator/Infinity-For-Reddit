@@ -15,8 +15,8 @@ class FetchMyInfo {
         void onFetchMyInfoFail();
     }
 
-    static void fetchMyInfo(final Retrofit retrofit, String accessToken,
-                            final FetchUserMyListener fetchUserMyListener) {
+    static void fetchAccountInfo(final Retrofit retrofit, String accessToken,
+                                 final FetchUserMyListener fetchUserMyListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
         Call<String> userInfo = api.getMyInfo(RedditUtils.getOAuthHeader(accessToken));

@@ -4,19 +4,27 @@ import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
+import java.util.List;
+
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class AccountRepository {
     private AccountDao mAccountDao;
     private LiveData<Account> mAccountLiveData;
+    private LiveData<List<Account>> mAccountsExceptCurrentAccountLiveData;
 
     AccountRepository(RedditDataRoomDatabase redditDataRoomDatabase, String username) {
         mAccountDao = redditDataRoomDatabase.accountDao();
         mAccountLiveData = mAccountDao.getAccountLiveData(username);
+        mAccountsExceptCurrentAccountLiveData = mAccountDao.getAccountsExceptCurrentAccountLiveData(username);
     }
 
     LiveData<Account> getAccountLiveData() {
         return mAccountLiveData;
+    }
+
+    public LiveData<List<Account>> getAccountsExceptCurrentAccountLiveData() {
+        return mAccountsExceptCurrentAccountLiveData;
     }
 
     public void insert(Account Account) {

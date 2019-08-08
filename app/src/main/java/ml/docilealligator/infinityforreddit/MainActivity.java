@@ -20,6 +20,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
@@ -33,6 +36,8 @@ import com.google.android.material.tabs.TabLayout;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import Account.Account;
+import Account.AccountViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -45,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     static final String EXTRA_POST_TYPE = "EPT";
 
     private static final String FETCH_USER_INFO_STATE = "FUIS";
+    private static final String DRAWER_ON_ACCOUNT_SWITCH_STATE = "DOASS";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
@@ -58,18 +64,22 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     @BindView(R.id.drawer_layout) DrawerLayout drawer;
     @BindView(R.id.view_pager_main_activity) ViewPager viewPager;
     @BindView(R.id.collapsing_toolbar_layout_main_activity) CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.all_drawer_items_linear_layout_main_activity) LinearLayout allDrawerItemsLinearLayout;
     @BindView(R.id.profile_linear_layout_main_activity) LinearLayout profileLinearLayout;
     @BindView(R.id.subscriptions_linear_layout_main_activity) LinearLayout subscriptionLinearLayout;
     @BindView(R.id.settings_linear_layout_main_activity) LinearLayout settingsLinearLayout;
+    @BindView(R.id.account_recycler_view_main_activity) RecyclerView accountRecyclerView;
     @BindView(R.id.tab_layout_main_activity) TabLayout tabLayout;
     @BindView(R.id.fab_main_activity) FloatingActionButton fab;
 
     private SectionsPagerAdapter sectionsPagerAdapter;
 
-    private TextView mNameTextView;
+    private TextView mAccountNameTextView;
     private TextView mKarmaTextView;
     private GifImageView mProfileImageView;
     private ImageView mBannerImageView;
+    private ImageView mDropIconImageView;
 
     private RequestManager glide;
     private AppBarLayout.LayoutParams params;
@@ -79,15 +89,18 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
     private boolean mNullAccessToken = false;
     private String mAccessToken;
-    private String mName;
+    private String mAccountName;
     private String mProfileImageUrl;
     private String mBannerImageUrl;
-    private String mKarma;
+    private int mKarma;
     private boolean mFetchUserInfoSuccess = false;
+    private boolean mDrawerOnAccountSwitch = false;
 
     private Menu mMenu;
 
     private boolean isInLazyMode = false;
+
+    AccountViewModel accountViewModel;
 
     @Inject
     @Named("oauth")
@@ -117,7 +130,6 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         popularBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
         popularAndAllSortTypeBottomSheetFragment.setArguments(popularBundle);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
@@ -130,13 +142,14 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
         if(savedInstanceState != null) {
             mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
+            mDrawerOnAccountSwitch = savedInstanceState.getBoolean(DRAWER_ON_ACCOUNT_SWITCH_STATE);
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
-            mName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
+            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
             mProfileImageUrl = savedInstanceState.getString(ACCOUNT_PROFILE_IMAGE_URL_STATE);
             mBannerImageUrl = savedInstanceState.getString(ACCOUNT_BANNER_IMAGE_URL_STATE);
-            mKarma = savedInstanceState.getString(ACCOUNT_KARMA_STATE);
+            mKarma = savedInstanceState.getInt(ACCOUNT_KARMA_STATE);
             if(!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndBindView();
             } else {
@@ -157,10 +170,10 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 startActivityForResult(loginIntent, LOGIN_ACTIVITY_REQUEST_CODE);
             } else {
                 mAccessToken = account.getAccessToken();
-                mName = account.getUsername();
+                mAccountName = account.getUsername();
                 mProfileImageUrl = account.getProfileImageUrl();
                 mBannerImageUrl = account.getBannerImageUrl();
-                mKarma = Integer.toString(account.getKarma());
+                mKarma = account.getKarma();
                 bindView();
             }
         }).execute();
@@ -172,6 +185,45 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
 
+        glide = Glide.with(this);
+
+        AccountRecyclerViewAdapter adapter = new AccountRecyclerViewAdapter(this, glide, mAccountName,
+                new AccountRecyclerViewAdapter.ItemSelectedListener() {
+            @Override
+            public void accountSelected(Account account) {
+
+            }
+
+            @Override
+            public void addAccountSelected() {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivityForResult(intent, LOGIN_ACTIVITY_REQUEST_CODE);
+            }
+
+            @Override
+            public void anonymousSelected() {
+
+            }
+
+            @Override
+            public void logoutSelected() {
+
+            }
+
+            @Override
+            public void manageAccountSelected() {
+
+            }
+        });
+
+        accountRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        accountRecyclerView.setNestedScrollingEnabled(false);
+        accountRecyclerView.setAdapter(adapter);
+
+        accountViewModel = ViewModelProviders.of(this,
+                new AccountViewModel.Factory(getApplication(), mRedditDataRoomDatabase, mAccountName)).get(AccountViewModel.class);
+        accountViewModel.getAccountsExceptCurrentAccountLiveData().observe(this, adapter::changeAccountsDataset);
+
         if(getIntent().hasExtra(EXTRA_POST_TYPE)) {
             if(getIntent().getExtras().getString(EXTRA_POST_TYPE).equals("popular")) {
                 viewPager.setCurrentItem(1);
@@ -180,18 +232,41 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             }
         }
 
-        glide = Glide.with(this);
-
         View header = findViewById(R.id.nav_header_main_activity);
-        mNameTextView = header.findViewById(R.id.name_text_view_nav_header_main);
+        mAccountNameTextView = header.findViewById(R.id.name_text_view_nav_header_main);
         mKarmaTextView = header.findViewById(R.id.karma_text_view_nav_header_main);
         mProfileImageView = header.findViewById(R.id.profile_image_view_nav_header_main);
         mBannerImageView = header.findViewById(R.id.banner_image_view_nav_header_main);
+        mDropIconImageView = header.findViewById(R.id.account_switcher_image_view_nav_header_main);
+
+        if(mDrawerOnAccountSwitch) {
+            mDropIconImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_arrow_drop_up_24px));
+            accountRecyclerView.setVisibility(View.VISIBLE);
+            allDrawerItemsLinearLayout.setVisibility(View.GONE);
+        } else {
+            mDropIconImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_arrow_drop_down_24px));
+            accountRecyclerView.setVisibility(View.GONE);
+            allDrawerItemsLinearLayout.setVisibility(View.VISIBLE);
+        }
+
+        header.setOnClickListener(view -> {
+            if(mDrawerOnAccountSwitch) {
+                mDrawerOnAccountSwitch = false;
+                mDropIconImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_arrow_drop_down_24px));
+                accountRecyclerView.setVisibility(View.GONE);
+                allDrawerItemsLinearLayout.setVisibility(View.VISIBLE);
+            } else {
+                mDrawerOnAccountSwitch = true;
+                mDropIconImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_arrow_drop_up_24px));
+                accountRecyclerView.setVisibility(View.VISIBLE);
+                allDrawerItemsLinearLayout.setVisibility(View.GONE);
+            }
+        });
 
         loadUserData();
 
-        mNameTextView.setText(mName);
-        mKarmaTextView.setText(mKarma);
+        mAccountNameTextView.setText(mAccountName);
+        mKarmaTextView.setText(getString(R.string.karma_info, mKarma));
 
         if (mProfileImageUrl != null && !mProfileImageUrl.equals("")) {
             glide.load(mProfileImageUrl)
@@ -211,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
         profileLinearLayout.setOnClickListener(view -> {
             Intent intent = new Intent(this, ViewUserDetailActivity.class);
-            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mName);
+            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mAccountName);
             startActivity(intent);
         });
 
@@ -227,13 +302,13 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
     private void loadUserData() {
         if (!mFetchUserInfoSuccess) {
-            FetchMyInfo.fetchMyInfo(mOauthRetrofit, mAccessToken, new FetchMyInfo.FetchUserMyListener() {
+            FetchMyInfo.fetchAccountInfo(mOauthRetrofit, mAccessToken, new FetchMyInfo.FetchUserMyListener() {
                 @Override
                 public void onFetchMyInfoSuccess(String response) {
                     ParseAndSaveAccountInfo.parseAndSaveAccountInfo(response, mRedditDataRoomDatabase, new ParseAndSaveAccountInfo.ParseAndSaveAccountInfoListener() {
                         @Override
                         public void onParseMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
-                            mNameTextView.setText(name);
+                            mAccountNameTextView.setText(name);
                             if (profileImageUrl != null && !profileImageUrl.equals("")) {
                                 glide.load(profileImageUrl)
                                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
@@ -249,12 +324,12 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                                 glide.load(bannerImageUrl).into(mBannerImageView);
                             }
 
-                            mName = name;
+                            mAccountName = name;
                             mProfileImageUrl = profileImageUrl;
                             mBannerImageUrl = bannerImageUrl;
-                            mKarma = getString(R.string.karma_info, karma);
+                            mKarma = karma;
 
-                            mKarmaTextView.setText(mKarma);
+                            mKarmaTextView.setText(getString(R.string.karma_info, karma));
 
                             mFetchUserInfoSuccess = true;
                         }
@@ -358,13 +433,14 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(FETCH_USER_INFO_STATE, mFetchUserInfoSuccess);
+        outState.putBoolean(DRAWER_ON_ACCOUNT_SWITCH_STATE, mDrawerOnAccountSwitch);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
-        outState.putString(ACCOUNT_NAME_STATE, mName);
+        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
         outState.putString(ACCOUNT_PROFILE_IMAGE_URL_STATE, mProfileImageUrl);
         outState.putString(ACCOUNT_BANNER_IMAGE_URL_STATE, mBannerImageUrl);
-        outState.putString(ACCOUNT_KARMA_STATE, mKarma);
+        outState.putInt(ACCOUNT_KARMA_STATE, mKarma);
     }
 
     @Override

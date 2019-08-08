@@ -170,4 +170,9 @@
     <string name="posting_video">Posting video</string>
     <string name="posting_image">Posting image</string>
     <string name="please_wait">Please wait.</string>
+
+    <string name="add_account">Add account</string>
+    <string name="anonymous_account">Anonymous</string>
+    <string name="manage_accounts">Manage accounts</string>
+    <string name="log_out">Log out</string>
 </resources>

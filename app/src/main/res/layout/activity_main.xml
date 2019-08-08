@@ -33,87 +33,101 @@
                     layout="@layout/nav_header_main" />
 
                 <LinearLayout
-                    android:id="@+id/profile_linear_layout_main_activity"
+                    android:id="@+id/all_drawer_items_linear_layout_main_activity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:padding="16dp">
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="32dp"
-                        android:src="@drawable/ic_outline_account_circle_24px"
-                        android:tint="@color/primaryTextColor"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/profile_linear_layout_main_activity"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="@string/profile"
-                        android:textColor="@color/primaryTextColor" />
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="32dp"
+                            android:src="@drawable/ic_outline_account_circle_24px"
+                            android:tint="@color/primaryTextColor"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/profile"
+                            android:textColor="@color/primaryTextColor" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/subscriptions_linear_layout_main_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="32dp"
+                            android:src="@drawable/ic_outline_check_circle_outline_24px"
+                            android:tint="@color/primaryTextColor"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/subscriptions"
+                            android:textColor="@color/primaryTextColor" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/dividerColor" />
+
+                    <LinearLayout
+                        android:id="@+id/settings_linear_layout_main_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="32dp"
+                            android:src="@drawable/ic_outline_settings_24px"
+                            android:tint="@color/primaryTextColor"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/settings"
+                            android:textColor="@color/primaryTextColor" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/subscriptions_linear_layout_main_activity"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/account_recycler_view_main_activity"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:padding="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="32dp"
-                        android:src="@drawable/ic_outline_check_circle_outline_24px"
-                        android:tint="@color/primaryTextColor"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="@string/subscriptions"
-                        android:textColor="@color/primaryTextColor" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/dividerColor" />
-
-                <LinearLayout
-                    android:id="@+id/settings_linear_layout_main_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:padding="16dp">
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="32dp"
-                        android:src="@drawable/ic_outline_settings_24px"
-                        android:tint="@color/primaryTextColor"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="@string/settings"
-                        android:textColor="@color/primaryTextColor" />
-
-                </LinearLayout>
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
 
             </LinearLayout>
 

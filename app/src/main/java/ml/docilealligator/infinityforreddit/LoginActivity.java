@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
@@ -65,6 +66,8 @@ public class LoginActivity extends AppCompatActivity {
 
         String url = uriBuilder.toString();
 
+        CookieManager.getInstance().removeAllCookies(aBoolean -> {});
+
         webView.loadUrl(url);
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -97,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
                                         String accessToken = responseJSON.getString(RedditUtils.ACCESS_TOKEN_KEY);
                                         String refreshToken = responseJSON.getString(RedditUtils.REFRESH_TOKEN_KEY);
 
-                                        FetchMyInfo.fetchMyInfo(mOauthRetrofit, accessToken, new FetchMyInfo.FetchUserMyListener() {
+                                        FetchMyInfo.fetchAccountInfo(mOauthRetrofit, accessToken, new FetchMyInfo.FetchUserMyListener() {
                                             @Override
                                             public void onFetchMyInfoSuccess(String response) {
                                                 ParseAndSaveAccountInfo.parseAndSaveAccountInfo(response, mRedditDataRoomDatabase, new ParseAndSaveAccountInfo.ParseAndSaveAccountInfoListener() {
