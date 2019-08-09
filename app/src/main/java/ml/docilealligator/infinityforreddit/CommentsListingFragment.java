@@ -78,30 +78,14 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
         mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
 
-        CommentViewModel.Factory factory;
         mAdapter = new CommentsListingRecyclerViewAdapter(activity, mOauthRetrofit,
                 getArguments().getString(EXTRA_ACCESS_TOKEN), () -> mCommentViewModel.retryLoadingMore());
 
         String username = getArguments().getString(EXTRA_USERNAME_KEY);
 
-        factory = new CommentViewModel.Factory(mRetrofit, getResources().getConfiguration().locale,
-                username, new CommentDataSource.OnCommentFetchedCallback() {
-            @Override
-            public void hasComment() {
-                mFetchCommentInfoLinearLayout.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void noComment() {
-                mFetchCommentInfoLinearLayout.setOnClickListener(view -> {
-                    //Do nothing
-                });
-                showErrorView(R.string.no_posts);
-            }
-        });
-
         mCommentRecyclerView.setAdapter(mAdapter);
 
+        CommentViewModel.Factory factory = new CommentViewModel.Factory(mRetrofit, getResources().getConfiguration().locale, username);
         mCommentViewModel = ViewModelProviders.of(this, factory).get(CommentViewModel.class);
         mCommentViewModel.getComments().observe(this, comments -> mAdapter.submitList(comments));
 
@@ -114,6 +98,17 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
             } else {
                 mFetchCommentInfoLinearLayout.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.VISIBLE);
+            }
+        });
+
+        mCommentViewModel.hasComment().observe(this, hasComment -> {
+            if(hasComment) {
+                mFetchCommentInfoLinearLayout.setVisibility(View.GONE);
+            } else {
+                mFetchCommentInfoLinearLayout.setOnClickListener(view -> {
+                    //Do nothing
+                });
+                showErrorView(R.string.no_comments);
             }
         });
 

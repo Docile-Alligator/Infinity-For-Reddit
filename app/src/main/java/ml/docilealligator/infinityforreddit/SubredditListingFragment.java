@@ -86,24 +86,8 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
 
-        SubredditListingViewModel.Factory factory = new SubredditListingViewModel.Factory(mRetrofit, query,
-                PostDataSource.SORT_TYPE_RELEVANCE, new SubredditListingDataSource.OnSubredditListingDataFetchedCallback() {
-            @Override
-            public void hasSubreddit() {
-                mFetchSubredditListingInfoLinearLayout.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void noSubreddit() {
-                mFetchSubredditListingInfoLinearLayout.setOnClickListener(view -> {
-                    //Do nothing
-                });
-                showErrorView(R.string.no_subreddits);
-            }
-        });
-
         mAdapter = new SubredditListingRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit,
-                accessToken, accountName, redditDataRoomDatabase.subscribedSubredditDao(),
+                accessToken, accountName, redditDataRoomDatabase,
                 new SubredditListingRecyclerViewAdapter.Callback() {
                     @Override
                     public void retryLoadingMore() {
@@ -124,6 +108,8 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
         mSubredditListingRecyclerView.setAdapter(mAdapter);
 
+        SubredditListingViewModel.Factory factory = new SubredditListingViewModel.Factory(mRetrofit, query,
+                PostDataSource.SORT_TYPE_RELEVANCE);
         mSubredditListingViewModel = ViewModelProviders.of(this, factory).get(SubredditListingViewModel.class);
         mSubredditListingViewModel.getSubreddits().observe(this, subredditData -> mAdapter.submitList(subredditData));
 
@@ -136,6 +122,17 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
             } else {
                 mFetchSubredditListingInfoLinearLayout.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.VISIBLE);
+            }
+        });
+
+        mSubredditListingViewModel.hasSubredditLiveData().observe(this, hasSubreddit -> {
+            if(hasSubreddit) {
+                mFetchSubredditListingInfoLinearLayout.setVisibility(View.GONE);
+            } else {
+                mFetchSubredditListingInfoLinearLayout.setOnClickListener(view -> {
+                    //Do nothing
+                });
+                showErrorView(R.string.no_subreddits);
             }
         });
 

@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             mProfileImageUrl = savedInstanceState.getString(ACCOUNT_PROFILE_IMAGE_URL_STATE);
             mBannerImageUrl = savedInstanceState.getString(ACCOUNT_BANNER_IMAGE_URL_STATE);
             mKarma = savedInstanceState.getInt(ACCOUNT_KARMA_STATE);
+
             if(!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndBindView();
             } else {

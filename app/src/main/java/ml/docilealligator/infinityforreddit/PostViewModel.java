@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import androidx.annotation.NonNull;
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -18,17 +17,20 @@ public class PostViewModel extends ViewModel {
     private PostDataSourceFactory postDataSourceFactory;
     private LiveData<NetworkState> paginationNetworkState;
     private LiveData<NetworkState> initialLoadingState;
+    private LiveData<Boolean> hasPostLiveData;
     private LiveData<PagedList<Post>> posts;
     private MutableLiveData<String> sortTypeLiveData;
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, int postType, String sortType,
-                         int filter, PostDataSource.OnPostFetchedCallback onPostFetchedCallback) {
-        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, postType, sortType, filter, onPostFetchedCallback);
+                         int filter) {
+        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, postType, sortType, filter);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
-                (Function<PostDataSource, LiveData<NetworkState>>) PostDataSource::getInitialLoadStateLiveData);
+                PostDataSource::getInitialLoadStateLiveData);
         paginationNetworkState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
-                (Function<PostDataSource, LiveData<NetworkState>>) PostDataSource::getPaginationNetworkStateLiveData);
+                PostDataSource::getPaginationNetworkStateLiveData);
+        hasPostLiveData = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
+                PostDataSource::hasPostLiveData);
 
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
@@ -46,14 +48,16 @@ public class PostViewModel extends ViewModel {
     }
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
-                         String sortType, int filter, PostDataSource.OnPostFetchedCallback onPostFetchedCallback) {
+                         String sortType, int filter) {
         postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, subredditName,
-                postType, sortType, filter, onPostFetchedCallback);
+                postType, sortType, filter);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
-                (Function<PostDataSource, LiveData<NetworkState>>) PostDataSource::getInitialLoadStateLiveData);
+                PostDataSource::getInitialLoadStateLiveData);
         paginationNetworkState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
-                (Function<PostDataSource, LiveData<NetworkState>>) PostDataSource::getPaginationNetworkStateLiveData);
+                PostDataSource::getPaginationNetworkStateLiveData);
+        hasPostLiveData = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
+                PostDataSource::hasPostLiveData);
 
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
@@ -71,14 +75,16 @@ public class PostViewModel extends ViewModel {
     }
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
-                         int filter, PostDataSource.OnPostFetchedCallback onPostFetchedCallback) {
+                         int filter) {
         postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, subredditName,
-                postType, filter, onPostFetchedCallback);
+                postType, filter);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
-                dataSource -> dataSource.getInitialLoadStateLiveData());
+                PostDataSource::getInitialLoadStateLiveData);
         paginationNetworkState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
-                (Function<PostDataSource, LiveData<NetworkState>>) PostDataSource::getPaginationNetworkStateLiveData);
+                PostDataSource::getPaginationNetworkStateLiveData);
+        hasPostLiveData = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
+                PostDataSource::hasPostLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -90,14 +96,16 @@ public class PostViewModel extends ViewModel {
     }
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, String subredditName, String query,
-                         int postType, String sortType, int filter, PostDataSource.OnPostFetchedCallback onPostFetchedCallback) {
+                         int postType, String sortType, int filter) {
         postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, subredditName,
-                query, postType, sortType, filter, onPostFetchedCallback);
+                query, postType, sortType, filter);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
-                dataSource -> dataSource.getInitialLoadStateLiveData());
+                PostDataSource::getInitialLoadStateLiveData);
         paginationNetworkState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
-                dataSource -> dataSource.getPaginationNetworkStateLiveData());
+                PostDataSource::getPaginationNetworkStateLiveData);
+        hasPostLiveData = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
+                PostDataSource::hasPostLiveData);
 
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
@@ -126,6 +134,10 @@ public class PostViewModel extends ViewModel {
         return initialLoadingState;
     }
 
+    LiveData<Boolean> hasPost() {
+        return hasPostLiveData;
+    }
+
     void refresh() {
         postDataSourceFactory.getPostDataSource().invalidate();
     }
@@ -151,21 +163,19 @@ public class PostViewModel extends ViewModel {
         private int postType;
         private String sortType;
         private int filter;
-        private PostDataSource.OnPostFetchedCallback onPostFetchedCallback;
 
         public Factory(Retrofit retrofit, String accessToken, Locale locale, int postType, String sortType,
-                       int filter, PostDataSource.OnPostFetchedCallback onPostFetchedCallback) {
+                       int filter) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.locale = locale;
             this.postType = postType;
             this.sortType = sortType;
             this.filter = filter;
-            this.onPostFetchedCallback = onPostFetchedCallback;
         }
 
         public Factory(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
-                       String sortType, int filter, PostDataSource.OnPostFetchedCallback onPostFetchedCallback) {
+                       String sortType, int filter) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.locale = locale;
@@ -173,22 +183,20 @@ public class PostViewModel extends ViewModel {
             this.postType = postType;
             this.sortType = sortType;
             this.filter = filter;
-            this.onPostFetchedCallback = onPostFetchedCallback;
         }
 
         public Factory(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
-                       int filter, PostDataSource.OnPostFetchedCallback onPostFetchedCallback) {
+                       int filter) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.locale = locale;
             this.subredditName = subredditName;
             this.postType = postType;
             this.filter = filter;
-            this.onPostFetchedCallback = onPostFetchedCallback;
         }
 
         public Factory(Retrofit retrofit, String accessToken, Locale locale, String subredditName, String query,
-                       int postType, String sortType, int filter, PostDataSource.OnPostFetchedCallback onPostFetchedCallback) {
+                       int postType, String sortType, int filter) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.locale = locale;
@@ -197,20 +205,19 @@ public class PostViewModel extends ViewModel {
             this.postType = postType;
             this.sortType = sortType;
             this.filter = filter;
-            this.onPostFetchedCallback = onPostFetchedCallback;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             if(postType == PostDataSource.TYPE_FRONT_PAGE) {
-                return (T) new PostViewModel(retrofit, accessToken, locale, postType, sortType, filter, onPostFetchedCallback);
+                return (T) new PostViewModel(retrofit, accessToken, locale, postType, sortType, filter);
             } else if(postType == PostDataSource.TYPE_SEARCH){
-                return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, query, postType, sortType, filter, onPostFetchedCallback);
+                return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, query, postType, sortType, filter);
             } else if(postType == PostDataSource.TYPE_SUBREDDIT) {
-                return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, postType, sortType, filter, onPostFetchedCallback);
+                return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, postType, sortType, filter);
             } else {
-                return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, postType, filter, onPostFetchedCallback);
+                return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, postType, filter);
             }
         }
     }

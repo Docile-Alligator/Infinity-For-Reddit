@@ -9,25 +9,21 @@ public class SubredditListingDataSourceFactory extends DataSource.Factory {
     private Retrofit retrofit;
     private String query;
     private String sortType;
-    private SubredditListingDataSource.OnSubredditListingDataFetchedCallback onSubredditListingDataFetchedCallback;
 
     private SubredditListingDataSource subredditListingDataSource;
     private MutableLiveData<SubredditListingDataSource> subredditListingDataSourceMutableLiveData;
 
-    SubredditListingDataSourceFactory(Retrofit retrofit, String query, String sortType,
-                                      SubredditListingDataSource.OnSubredditListingDataFetchedCallback onSubredditListingDataFetchedCallback) {
+    SubredditListingDataSourceFactory(Retrofit retrofit, String query, String sortType) {
         this.retrofit = retrofit;
         this.query = query;
         this.sortType = sortType;
-        this.onSubredditListingDataFetchedCallback = onSubredditListingDataFetchedCallback;
         subredditListingDataSourceMutableLiveData = new MutableLiveData<>();
     }
 
     @NonNull
     @Override
     public DataSource create() {
-        subredditListingDataSource = new SubredditListingDataSource(retrofit,
-                query, sortType, onSubredditListingDataFetchedCallback);
+        subredditListingDataSource = new SubredditListingDataSource(retrofit, query, sortType);
         subredditListingDataSourceMutableLiveData.postValue(subredditListingDataSource);
         return subredditListingDataSource;
     }

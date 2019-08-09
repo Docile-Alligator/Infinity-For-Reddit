@@ -10,39 +10,39 @@ import SubredditDatabase.SubredditData;
 import retrofit2.Retrofit;
 
 public class SubredditListingDataSource extends PageKeyedDataSource<String, SubredditData> {
-    interface OnSubredditListingDataFetchedCallback {
-        void hasSubreddit();
-        void noSubreddit();
-    }
+
     private Retrofit retrofit;
     private String query;
     private String sortType;
-    private OnSubredditListingDataFetchedCallback onSubredditListingDataFetchedCallback;
 
     private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
     private MutableLiveData<NetworkState> initialLoadStateLiveData;
+    private MutableLiveData<Boolean> hasSubredditLiveData;
 
     private LoadInitialParams<String> initialParams;
     private LoadInitialCallback<String, SubredditData> initialCallback;
     private LoadParams<String> params;
     private LoadCallback<String, SubredditData> callback;
 
-    SubredditListingDataSource(Retrofit retrofit, String query, String sortType,
-                               OnSubredditListingDataFetchedCallback onSubredditListingDataFetchedCallback) {
+    SubredditListingDataSource(Retrofit retrofit, String query, String sortType) {
         this.retrofit = retrofit;
         this.query = query;
         this.sortType = sortType;
-        this.onSubredditListingDataFetchedCallback = onSubredditListingDataFetchedCallback;
-        paginationNetworkStateLiveData = new MutableLiveData();
-        initialLoadStateLiveData = new MutableLiveData();
+        paginationNetworkStateLiveData = new MutableLiveData<>();
+        initialLoadStateLiveData = new MutableLiveData<>();
+        hasSubredditLiveData = new MutableLiveData<>();
     }
 
-    MutableLiveData getPaginationNetworkStateLiveData() {
+    MutableLiveData<NetworkState> getPaginationNetworkStateLiveData() {
         return paginationNetworkStateLiveData;
     }
 
-    MutableLiveData getInitialLoadStateLiveData() {
+    MutableLiveData<NetworkState> getInitialLoadStateLiveData() {
         return initialLoadStateLiveData;
+    }
+
+    MutableLiveData<Boolean> hasSubredditLiveData() {
+        return hasSubredditLiveData;
     }
 
     @Override
@@ -56,9 +56,9 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
             @Override
             public void onFetchSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
                 if(subredditData.size() == 0) {
-                    onSubredditListingDataFetchedCallback.noSubreddit();
+                    hasSubredditLiveData.postValue(false);
                 } else {
-                    onSubredditListingDataFetchedCallback.hasSubreddit();
+                    hasSubredditLiveData.postValue(true);
                 }
 
                 callback.onResult(subredditData, null, after);
@@ -82,7 +82,7 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
         this.params = params;
         this.callback = callback;
 
-        if(params.key.equals("null")) {
+        if(params.key.equals("") || params.key.equals("null")) {
             return;
         }
 

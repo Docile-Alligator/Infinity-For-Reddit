@@ -2,12 +2,11 @@ package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
 
-import SubscribedSubredditDatabase.SubscribedSubredditDao;
 import SubscribedSubredditDatabase.SubscribedSubredditData;
 
 class CheckIsSubscribedToSubredditAsyncTask extends AsyncTask<Void, Void, Void> {
 
-    private SubscribedSubredditDao subscribedSubredditDao;
+    private RedditDataRoomDatabase redditDataRoomDatabase;
     private String subredditName;
     private String accountName;
     private SubscribedSubredditData subscribedSubredditData;
@@ -18,10 +17,10 @@ class CheckIsSubscribedToSubredditAsyncTask extends AsyncTask<Void, Void, Void> 
         void isNotSubscribed();
     }
 
-    CheckIsSubscribedToSubredditAsyncTask(SubscribedSubredditDao subscribedSubredditDao,
+    CheckIsSubscribedToSubredditAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase,
                                           String subredditName, String accountName,
                                           CheckIsSubscribedToSubredditListener checkIsSubscribedToSubredditListener) {
-        this.subscribedSubredditDao = subscribedSubredditDao;
+        this.redditDataRoomDatabase = redditDataRoomDatabase;
         this.subredditName =subredditName;
         this.accountName = accountName;
         this.checkIsSubscribedToSubredditListener = checkIsSubscribedToSubredditListener;
@@ -29,7 +28,7 @@ class CheckIsSubscribedToSubredditAsyncTask extends AsyncTask<Void, Void, Void> 
 
     @Override
     protected Void doInBackground(Void... voids) {
-        subscribedSubredditData = subscribedSubredditDao.getSubscribedSubreddit(subredditName, accountName);
+        subscribedSubredditData = redditDataRoomDatabase.subscribedSubredditDao().getSubscribedSubreddit(subredditName, accountName);
         return null;
     }
 

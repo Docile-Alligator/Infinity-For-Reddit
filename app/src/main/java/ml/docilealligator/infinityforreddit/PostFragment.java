@@ -201,20 +201,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             });
 
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, subredditName, query, postType, sortType, filter, new PostDataSource.OnPostFetchedCallback() {
-                @Override
-                public void hasPost() {
-                    mFetchPostInfoLinearLayout.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void noPost() {
-                    mFetchPostInfoLinearLayout.setOnClickListener(view -> {
-                        //Do nothing
-                    });
-                    showErrorView(R.string.no_posts);
-                }
-            });
+                    getResources().getConfiguration().locale, subredditName, query, postType, sortType, filter);
         } else if(postType == PostDataSource.TYPE_SUBREDDIT) {
             String subredditName = getArguments().getString(EXTRA_NAME);
 
@@ -238,20 +225,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             });
 
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, subredditName, postType, sortType, filter, new PostDataSource.OnPostFetchedCallback() {
-                @Override
-                public void hasPost() {
-                    mFetchPostInfoLinearLayout.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void noPost() {
-                    mFetchPostInfoLinearLayout.setOnClickListener(view -> {
-                        //Do nothing
-                    });
-                    showErrorView(R.string.no_posts);
-                }
-            });
+                    getResources().getConfiguration().locale, subredditName, postType, sortType, filter);
         } else if(postType == PostDataSource.TYPE_USER) {
             CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mFetchPostInfoLinearLayout.getLayoutParams();
             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -278,21 +252,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             });
 
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, username, postType, sortType, filter,
-                    new PostDataSource.OnPostFetchedCallback() {
-                @Override
-                public void hasPost() {
-                    mFetchPostInfoLinearLayout.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void noPost() {
-                    mFetchPostInfoLinearLayout.setOnClickListener(view -> {
-                        //Do nothing
-                    });
-                    showErrorView(R.string.no_posts);
-                }
-            });
+                    getResources().getConfiguration().locale, username, postType, sortType, filter);
         } else {
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, redditDataRoomDatabase,
                     accessToken, postType, true, new PostRecyclerViewAdapter.Callback() {
@@ -313,20 +273,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             });
 
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, postType, sortType, filter, new PostDataSource.OnPostFetchedCallback() {
-                @Override
-                public void hasPost() {
-                    mFetchPostInfoLinearLayout.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void noPost() {
-                    mFetchPostInfoLinearLayout.setOnClickListener(view -> {
-                        //Do nothing
-                    });
-                    showErrorView(R.string.no_posts);
-                }
-            });
+                    getResources().getConfiguration().locale, postType, sortType, filter);
         }
 
         mPostRecyclerView.setAdapter(mAdapter);
@@ -343,6 +290,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             } else {
                 mFetchPostInfoLinearLayout.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.VISIBLE);
+            }
+        });
+
+        mPostViewModel.hasPost().observe(this, hasPost -> {
+            if(hasPost) {
+                mFetchPostInfoLinearLayout.setVisibility(View.GONE);
+            } else {
+                showErrorView(R.string.no_posts);
             }
         });
 

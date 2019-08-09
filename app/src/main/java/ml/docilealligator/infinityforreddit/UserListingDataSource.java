@@ -10,40 +10,39 @@ import User.UserData;
 import retrofit2.Retrofit;
 
 public class UserListingDataSource extends PageKeyedDataSource<String, UserData> {
-    interface OnUserListingDataFetchedCallback {
-        void hasUser();
-        void noUser();
-    }
 
     private Retrofit retrofit;
     private String query;
     private String sortType;
-    private UserListingDataSource.OnUserListingDataFetchedCallback onUserListingDataFetchedCallback;
 
     private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
     private MutableLiveData<NetworkState> initialLoadStateLiveData;
+    private MutableLiveData<Boolean> hasUserLiveData;
 
     private PageKeyedDataSource.LoadInitialParams<String> initialParams;
     private PageKeyedDataSource.LoadInitialCallback<String, UserData> initialCallback;
     private PageKeyedDataSource.LoadParams<String> params;
     private PageKeyedDataSource.LoadCallback<String, UserData> callback;
 
-    UserListingDataSource(Retrofit retrofit, String query, String sortType,
-                               UserListingDataSource.OnUserListingDataFetchedCallback onUserListingDataFetchedCallback) {
+    UserListingDataSource(Retrofit retrofit, String query, String sortType) {
         this.retrofit = retrofit;
         this.query = query;
         this.sortType = sortType;
-        this.onUserListingDataFetchedCallback = onUserListingDataFetchedCallback;
-        paginationNetworkStateLiveData = new MutableLiveData();
-        initialLoadStateLiveData = new MutableLiveData();
+        paginationNetworkStateLiveData = new MutableLiveData<>();
+        initialLoadStateLiveData = new MutableLiveData<>();
+        hasUserLiveData = new MutableLiveData<>();
     }
 
-    MutableLiveData getPaginationNetworkStateLiveData() {
+    MutableLiveData<NetworkState> getPaginationNetworkStateLiveData() {
         return paginationNetworkStateLiveData;
     }
 
-    MutableLiveData getInitialLoadStateLiveData() {
+    MutableLiveData<NetworkState> getInitialLoadStateLiveData() {
         return initialLoadStateLiveData;
+    }
+
+    MutableLiveData<Boolean> hasUserLiveData() {
+        return hasUserLiveData;
     }
 
     @Override
@@ -57,9 +56,9 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
             @Override
             public void onFetchUserListingDataSuccess(ArrayList<UserData> UserData, String after) {
                 if(UserData.size() == 0) {
-                    onUserListingDataFetchedCallback.noUser();
+                    hasUserLiveData.postValue(false);
                 } else {
-                    onUserListingDataFetchedCallback.hasUser();
+                    hasUserLiveData.postValue(true);
                 }
 
                 callback.onResult(UserData, null, after);

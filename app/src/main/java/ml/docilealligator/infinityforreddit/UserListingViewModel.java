@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import androidx.annotation.NonNull;
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -14,20 +13,22 @@ import User.UserData;
 import retrofit2.Retrofit;
 
 public class UserListingViewModel extends ViewModel {
-    private UserListingDataSourceFactory UserListingDataSourceFactory;
+    private UserListingDataSourceFactory userListingDataSourceFactory;
     private LiveData<NetworkState> paginationNetworkState;
     private LiveData<NetworkState> initialLoadingState;
+    private LiveData<Boolean> hasUserLiveData;
     private LiveData<PagedList<UserData>> users;
     private MutableLiveData<String> sortTypeLiveData;
 
-    UserListingViewModel(Retrofit retrofit, String query, String sortType,
-                              UserListingDataSource.OnUserListingDataFetchedCallback onUserListingDataFetchedCallback) {
-        UserListingDataSourceFactory = new UserListingDataSourceFactory(retrofit, query, sortType, onUserListingDataFetchedCallback);
+    UserListingViewModel(Retrofit retrofit, String query, String sortType) {
+        userListingDataSourceFactory = new UserListingDataSourceFactory(retrofit, query, sortType);
 
-        initialLoadingState = Transformations.switchMap(UserListingDataSourceFactory.getUserListingDataSourceMutableLiveData(),
-                (Function<UserListingDataSource, LiveData<NetworkState>>) UserListingDataSource::getInitialLoadStateLiveData);
-        paginationNetworkState = Transformations.switchMap(UserListingDataSourceFactory.getUserListingDataSourceMutableLiveData(),
-                (Function<UserListingDataSource, LiveData<NetworkState>>) UserListingDataSource::getPaginationNetworkStateLiveData);
+        initialLoadingState = Transformations.switchMap(userListingDataSourceFactory.getUserListingDataSourceMutableLiveData(),
+                UserListingDataSource::getInitialLoadStateLiveData);
+        paginationNetworkState = Transformations.switchMap(userListingDataSourceFactory.getUserListingDataSourceMutableLiveData(),
+                UserListingDataSource::getPaginationNetworkStateLiveData);
+        hasUserLiveData = Transformations.switchMap(userListingDataSourceFactory.getUserListingDataSourceMutableLiveData(),
+                UserListingDataSource::hasUserLiveData);
 
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
@@ -39,8 +40,8 @@ public class UserListingViewModel extends ViewModel {
                         .build();
 
         users = Transformations.switchMap(sortTypeLiveData, sort -> {
-            UserListingDataSourceFactory.changeSortType(sortTypeLiveData.getValue());
-            return (new LivePagedListBuilder(UserListingDataSourceFactory, pagedListConfig)).build();
+            userListingDataSourceFactory.changeSortType(sortTypeLiveData.getValue());
+            return (new LivePagedListBuilder(userListingDataSourceFactory, pagedListConfig)).build();
         });
     }
 
@@ -56,16 +57,20 @@ public class UserListingViewModel extends ViewModel {
         return initialLoadingState;
     }
 
+    LiveData<Boolean> hasUser() {
+        return hasUserLiveData;
+    }
+
     void refresh() {
-        UserListingDataSourceFactory.getUserListingDataSource().invalidate();
+        userListingDataSourceFactory.getUserListingDataSource().invalidate();
     }
 
     void retry() {
-        UserListingDataSourceFactory.getUserListingDataSource().retry();
+        userListingDataSourceFactory.getUserListingDataSource().retry();
     }
 
     void retryLoadingMore() {
-        UserListingDataSourceFactory.getUserListingDataSource().retryLoadingMore();
+        userListingDataSourceFactory.getUserListingDataSource().retryLoadingMore();
     }
 
     void changeSortType(String sortType) {
@@ -76,20 +81,17 @@ public class UserListingViewModel extends ViewModel {
         private Retrofit retrofit;
         private String query;
         private String sortType;
-        private UserListingDataSource.OnUserListingDataFetchedCallback onUserListingDataFetchedCallback;
 
-        public Factory(Retrofit retrofit, String query, String sortType,
-                       UserListingDataSource.OnUserListingDataFetchedCallback onUserListingDataFetchedCallback) {
+        public Factory(Retrofit retrofit, String query, String sortType) {
             this.retrofit = retrofit;
             this.query = query;
             this.sortType = sortType;
-            this.onUserListingDataFetchedCallback = onUserListingDataFetchedCallback;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new UserListingViewModel(retrofit, query, sortType, onUserListingDataFetchedCallback);
+            return (T) new UserListingViewModel(retrofit, query, sortType);
         }
     }
 }

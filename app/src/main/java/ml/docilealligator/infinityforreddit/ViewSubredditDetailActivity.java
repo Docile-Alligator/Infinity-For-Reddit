@@ -31,7 +31,6 @@ import javax.inject.Named;
 import SubredditDatabase.SubredditDao;
 import SubredditDatabase.SubredditData;
 import SubredditDatabase.SubredditViewModel;
-import SubscribedSubredditDatabase.SubscribedSubredditDao;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -76,7 +75,6 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     private PostTypeBottomSheetFragment postTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment sortTypeBottomSheetFragment;
 
-    private SubscribedSubredditDao subscribedSubredditDao;
     private SubredditViewModel mSubredditViewModel;
 
     @Inject
@@ -142,7 +140,6 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
         params.topMargin = statusBarHeight;
 
-        subscribedSubredditDao = mRedditDataRoomDatabase.subscribedSubredditDao();
         glide = Glide.with(this);
 
         mSubredditViewModel = ViewModelProviders.of(this,
@@ -239,7 +236,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                 subscriptionReady = false;
                 if(subscribeSubredditChip.getText().equals(getResources().getString(R.string.subscribe))) {
                     SubredditSubscription.subscribeToSubreddit(mOauthRetrofit, mRetrofit, mAccessToken,
-                            subredditName, mAccountName, subscribedSubredditDao,
+                            subredditName, mAccountName, mRedditDataRoomDatabase,
                             new SubredditSubscription.SubredditSubscriptionListener() {
                                 @Override
                                 public void onSubredditSubscriptionSuccess() {
@@ -257,7 +254,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                             });
                 } else {
                     SubredditSubscription.unsubscribeToSubreddit(mOauthRetrofit, mAccessToken,
-                            subredditName, mAccountName, subscribedSubredditDao,
+                            subredditName, mAccountName, mRedditDataRoomDatabase,
                             new SubredditSubscription.SubredditSubscriptionListener() {
                                 @Override
                                 public void onSubredditSubscriptionSuccess() {
@@ -277,7 +274,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
             }
         });
 
-        new CheckIsSubscribedToSubredditAsyncTask(subscribedSubredditDao, subredditName, mAccountName,
+        new CheckIsSubscribedToSubredditAsyncTask(mRedditDataRoomDatabase, subredditName, mAccountName,
                 new CheckIsSubscribedToSubredditAsyncTask.CheckIsSubscribedToSubredditListener() {
                     @Override
                     public void isSubscribed() {

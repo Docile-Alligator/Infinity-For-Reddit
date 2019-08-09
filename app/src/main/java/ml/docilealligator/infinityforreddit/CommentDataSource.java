@@ -20,39 +20,39 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class CommentDataSource extends PageKeyedDataSource<String, CommentData> {
-    interface OnCommentFetchedCallback {
-        void hasComment();
-        void noComment();
-    }
 
     private Retrofit retrofit;
     private Locale locale;
     private String username;
-    private OnCommentFetchedCallback onCommentFetchedCallback;
 
     private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
     private MutableLiveData<NetworkState> initialLoadStateLiveData;
+    private MutableLiveData<Boolean> hasPostLiveData;
 
     private LoadInitialParams<String> initialParams;
     private LoadInitialCallback<String, CommentData> initialCallback;
     private LoadParams<String> params;
     private LoadCallback<String, CommentData> callback;
 
-    CommentDataSource(Retrofit retrofit, Locale locale, String username, OnCommentFetchedCallback onCommentFetchedCallback) {
+    CommentDataSource(Retrofit retrofit, Locale locale, String username) {
         this.retrofit = retrofit;
         this.locale = locale;
         this.username = username;
-        paginationNetworkStateLiveData = new MutableLiveData();
-        initialLoadStateLiveData = new MutableLiveData();
-        this.onCommentFetchedCallback = onCommentFetchedCallback;
+        paginationNetworkStateLiveData = new MutableLiveData<>();
+        initialLoadStateLiveData = new MutableLiveData<>();
+        hasPostLiveData = new MutableLiveData<>();
     }
 
-    MutableLiveData getPaginationNetworkStateLiveData() {
+    MutableLiveData<NetworkState> getPaginationNetworkStateLiveData() {
         return paginationNetworkStateLiveData;
     }
 
-    MutableLiveData getInitialLoadStateLiveData() {
+    MutableLiveData<NetworkState> getInitialLoadStateLiveData() {
         return initialLoadStateLiveData;
+    }
+
+    MutableLiveData<Boolean> hasPostLiveData() {
+        return hasPostLiveData;
     }
 
     void retry() {
@@ -80,9 +80,9 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
                         @Override
                         public void parseSuccessful(ArrayList<CommentData> comments, String after) {
                             if(comments.size() == 0) {
-                                onCommentFetchedCallback.noComment();
+                                hasPostLiveData.postValue(false);
                             } else {
-                                onCommentFetchedCallback.hasComment();
+                                hasPostLiveData.postValue(true);
                             }
 
                             callback.onResult(comments, null, after);

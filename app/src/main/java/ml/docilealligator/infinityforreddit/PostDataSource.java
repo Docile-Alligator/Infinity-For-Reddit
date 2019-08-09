@@ -14,10 +14,6 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 
 class PostDataSource extends PageKeyedDataSource<String, Post> {
-    interface OnPostFetchedCallback {
-        void hasPost();
-        void noPost();
-    }
 
     static final int TYPE_FRONT_PAGE = 0;
     static final int TYPE_SUBREDDIT = 1;
@@ -42,10 +38,10 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
     private int postType;
     private String sortType;
     private int filter;
-    private OnPostFetchedCallback onPostFetchedCallback;
 
     private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
     private MutableLiveData<NetworkState> initialLoadStateLiveData;
+    private MutableLiveData<Boolean> hasPostLiveData;
 
     private LoadInitialParams<String> initialParams;
     private LoadInitialCallback<String, Post> initialCallback;
@@ -53,66 +49,70 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
     private LoadCallback<String, Post> callback;
 
     PostDataSource(Retrofit retrofit, String accessToken, Locale locale, int postType, String sortType,
-                   int filter, OnPostFetchedCallback onPostFetchedCallback) {
+                   int filter) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
         paginationNetworkStateLiveData = new MutableLiveData();
         initialLoadStateLiveData = new MutableLiveData();
+        hasPostLiveData = new MutableLiveData<>();
         this.postType = postType;
         this.sortType = sortType;
         this.filter = filter;
-        this.onPostFetchedCallback = onPostFetchedCallback;
     }
 
     PostDataSource(Retrofit retrofit, String accessToken, Locale locale, String subredditOrUserName, int postType,
-                   String sortType, int filter, OnPostFetchedCallback onPostFetchedCallback) {
+                   String sortType, int filter) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
         this.subredditOrUserName = subredditOrUserName;
-        paginationNetworkStateLiveData = new MutableLiveData();
-        initialLoadStateLiveData = new MutableLiveData();
+        paginationNetworkStateLiveData = new MutableLiveData<>();
+        initialLoadStateLiveData = new MutableLiveData<>();
+        hasPostLiveData = new MutableLiveData<>();
         this.postType = postType;
         this.sortType = sortType;
         this.filter = filter;
-        this.onPostFetchedCallback = onPostFetchedCallback;
     }
 
     PostDataSource(Retrofit retrofit, String accessToken, Locale locale, String subredditOrUserName, int postType,
-                   int filter, OnPostFetchedCallback onPostFetchedCallback) {
+                   int filter) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
         this.subredditOrUserName = subredditOrUserName;
-        paginationNetworkStateLiveData = new MutableLiveData();
-        initialLoadStateLiveData = new MutableLiveData();
+        paginationNetworkStateLiveData = new MutableLiveData<>();
+        initialLoadStateLiveData = new MutableLiveData<>();
+        hasPostLiveData = new MutableLiveData<>();
         this.postType = postType;
         this.filter = filter;
-        this.onPostFetchedCallback = onPostFetchedCallback;
     }
 
     PostDataSource(Retrofit retrofit, String accessToken, Locale locale, String subredditOrUserName, String query,
-                   int postType, String sortType, int filter, OnPostFetchedCallback onPostFetchedCallback) {
+                   int postType, String sortType, int filter) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
         this.subredditOrUserName = subredditOrUserName;
         this.query = query;
-        paginationNetworkStateLiveData = new MutableLiveData();
-        initialLoadStateLiveData = new MutableLiveData();
+        paginationNetworkStateLiveData = new MutableLiveData<>();
+        initialLoadStateLiveData = new MutableLiveData<>();
+        hasPostLiveData = new MutableLiveData<>();
         this.postType = postType;
         this.sortType = sortType;
         this.filter = filter;
-        this.onPostFetchedCallback = onPostFetchedCallback;
     }
 
-    MutableLiveData getPaginationNetworkStateLiveData() {
+    MutableLiveData<NetworkState> getPaginationNetworkStateLiveData() {
         return paginationNetworkStateLiveData;
     }
 
-    MutableLiveData getInitialLoadStateLiveData() {
+    MutableLiveData<NetworkState> getInitialLoadStateLiveData() {
         return initialLoadStateLiveData;
+    }
+
+    MutableLiveData<Boolean> hasPostLiveData() {
+        return hasPostLiveData;
     }
 
     @Override
@@ -184,7 +184,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                             public void onParsePostSuccess(Post post) {
                                 ArrayList<Post> singlePostList = new ArrayList<>();
                                 singlePostList.add(post);
-                                onPostFetchedCallback.hasPost();
+                                hasPostLiveData.postValue(true);
                                 callback.onResult(singlePostList, null, null);
                                 initialLoadStateLiveData.postValue(NetworkState.LOADED);
                             }
@@ -208,12 +208,12 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                                         }
 
                                         if(newPosts.size() != 0) {
-                                            onPostFetchedCallback.hasPost();
+                                            hasPostLiveData.postValue(true);
                                         } else if(nextPageKey != null) {
                                             loadBestPostsInitial(callback, nextPageKey);
                                             return;
                                         } else {
-                                            onPostFetchedCallback.noPost();
+                                            hasPostLiveData.postValue(false);
                                         }
 
                                         callback.onResult(newPosts, null, nextPageKey);
@@ -295,7 +295,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                             public void onParsePostSuccess(Post post) {
                                 ArrayList<Post> singlePostList = new ArrayList<>();
                                 singlePostList.add(post);
-                                onPostFetchedCallback.hasPost();
+                                hasPostLiveData.postValue(true);
                                 callback.onResult(singlePostList, null, null);
                                 initialLoadStateLiveData.postValue(NetworkState.LOADED);
                             }
@@ -319,12 +319,12 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                                         }
 
                                         if(newPosts.size() != 0) {
-                                            onPostFetchedCallback.hasPost();
+                                            hasPostLiveData.postValue(true);
                                         } else if(nextPageKey != null) {
                                             loadSubredditPostsInitial(callback, nextPageKey);
                                             return;
                                         } else {
-                                            onPostFetchedCallback.noPost();
+                                            hasPostLiveData.postValue(false);
                                         }
 
                                         callback.onResult(newPosts, null, nextPageKey);
@@ -411,12 +411,12 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                                     }
 
                                     if(newPosts.size() != 0) {
-                                        onPostFetchedCallback.hasPost();
+                                        hasPostLiveData.postValue(true);
                                     } else if(nextPageKey != null) {
                                         loadUserPostsInitial(callback, nextPageKey);
                                         return;
                                     } else {
-                                        onPostFetchedCallback.noPost();
+                                        hasPostLiveData.postValue(false);
                                     }
 
                                     callback.onResult(newPosts, null, nextPageKey);
@@ -509,12 +509,12 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                                     }
 
                                     if(newPosts.size() != 0) {
-                                        onPostFetchedCallback.hasPost();
+                                        hasPostLiveData.postValue(true);
                                     } else if(nextPageKey != null) {
                                         loadSearchPostsInitial(callback, nextPageKey);
                                         return;
                                     } else {
-                                        onPostFetchedCallback.noPost();
+                                        hasPostLiveData.postValue(false);
                                     }
 
                                     callback.onResult(newPosts, null, nextPageKey);

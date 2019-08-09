@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import androidx.annotation.NonNull;
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -17,17 +16,19 @@ public class SubredditListingViewModel extends ViewModel {
     private SubredditListingDataSourceFactory subredditListingDataSourceFactory;
     private LiveData<NetworkState> paginationNetworkState;
     private LiveData<NetworkState> initialLoadingState;
+    private LiveData<Boolean> hasSubredditLiveData;
     private LiveData<PagedList<SubredditData>> subreddits;
     private MutableLiveData<String> sortTypeLiveData;
 
-    SubredditListingViewModel(Retrofit retrofit, String query, String sortType,
-                              SubredditListingDataSource.OnSubredditListingDataFetchedCallback onSubredditListingDataFetchedCallback) {
-        subredditListingDataSourceFactory = new SubredditListingDataSourceFactory(retrofit, query, sortType, onSubredditListingDataFetchedCallback);
+    SubredditListingViewModel(Retrofit retrofit, String query, String sortType) {
+        subredditListingDataSourceFactory = new SubredditListingDataSourceFactory(retrofit, query, sortType);
 
         initialLoadingState = Transformations.switchMap(subredditListingDataSourceFactory.getSubredditListingDataSourceMutableLiveData(),
-                (Function<SubredditListingDataSource, LiveData<NetworkState>>) SubredditListingDataSource::getInitialLoadStateLiveData);
+                SubredditListingDataSource::getInitialLoadStateLiveData);
         paginationNetworkState = Transformations.switchMap(subredditListingDataSourceFactory.getSubredditListingDataSourceMutableLiveData(),
-                (Function<SubredditListingDataSource, LiveData<NetworkState>>) SubredditListingDataSource::getPaginationNetworkStateLiveData);
+                SubredditListingDataSource::getPaginationNetworkStateLiveData);
+        hasSubredditLiveData = Transformations.switchMap(subredditListingDataSourceFactory.getSubredditListingDataSourceMutableLiveData(),
+                SubredditListingDataSource::hasSubredditLiveData);
 
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
@@ -56,6 +57,10 @@ public class SubredditListingViewModel extends ViewModel {
         return initialLoadingState;
     }
 
+    LiveData<Boolean> hasSubredditLiveData() {
+        return hasSubredditLiveData;
+    }
+
     void refresh() {
         subredditListingDataSourceFactory.getSubredditListingDataSource().invalidate();
     }
@@ -76,20 +81,17 @@ public class SubredditListingViewModel extends ViewModel {
         private Retrofit retrofit;
         private String query;
         private String sortType;
-        private SubredditListingDataSource.OnSubredditListingDataFetchedCallback onSubredditListingDataFetchedCallback;
 
-        public Factory(Retrofit retrofit, String query, String sortType,
-                       SubredditListingDataSource.OnSubredditListingDataFetchedCallback onSubredditListingDataFetchedCallback) {
+        public Factory(Retrofit retrofit, String query, String sortType) {
             this.retrofit = retrofit;
             this.query = query;
             this.sortType = sortType;
-            this.onSubredditListingDataFetchedCallback = onSubredditListingDataFetchedCallback;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new SubredditListingViewModel(retrofit, query, sortType, onSubredditListingDataFetchedCallback);
+            return (T) new SubredditListingViewModel(retrofit, query, sortType);
         }
     }
 }

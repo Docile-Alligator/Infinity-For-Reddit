@@ -9,25 +9,21 @@ public class UserListingDataSourceFactory extends DataSource.Factory {
     private Retrofit retrofit;
     private String query;
     private String sortType;
-    private UserListingDataSource.OnUserListingDataFetchedCallback onUserListingDataFetchedCallback;
 
     private UserListingDataSource userListingDataSource;
     private MutableLiveData<UserListingDataSource> userListingDataSourceMutableLiveData;
 
-    UserListingDataSourceFactory(Retrofit retrofit, String query, String sortType,
-                                      UserListingDataSource.OnUserListingDataFetchedCallback onUserListingDataFetchedCallback) {
+    UserListingDataSourceFactory(Retrofit retrofit, String query, String sortType) {
         this.retrofit = retrofit;
         this.query = query;
         this.sortType = sortType;
-        this.onUserListingDataFetchedCallback = onUserListingDataFetchedCallback;
         userListingDataSourceMutableLiveData = new MutableLiveData<>();
     }
 
     @NonNull
     @Override
     public DataSource create() {
-        userListingDataSource = new UserListingDataSource(retrofit,
-                query, sortType, onUserListingDataFetchedCallback);
+        userListingDataSource = new UserListingDataSource(retrofit, query, sortType);
         userListingDataSourceMutableLiveData.postValue(userListingDataSource);
         return userListingDataSource;
     }

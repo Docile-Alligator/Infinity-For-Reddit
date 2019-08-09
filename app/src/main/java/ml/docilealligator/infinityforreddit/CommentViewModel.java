@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import androidx.annotation.NonNull;
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
@@ -17,16 +16,18 @@ public class CommentViewModel extends ViewModel {
     private CommentDataSourceFactory commentDataSourceFactory;
     private LiveData<NetworkState> paginationNetworkState;
     private LiveData<NetworkState> initialLoadingState;
+    private LiveData<Boolean> hasCommentLiveData;
     private LiveData<PagedList<CommentData>> comments;
 
-    public CommentViewModel(Retrofit retrofit, Locale locale, String username,
-                         CommentDataSource.OnCommentFetchedCallback onCommentFetchedCallback) {
-        commentDataSourceFactory = new CommentDataSourceFactory(retrofit, locale, username, onCommentFetchedCallback);
+    public CommentViewModel(Retrofit retrofit, Locale locale, String username) {
+        commentDataSourceFactory = new CommentDataSourceFactory(retrofit, locale, username);
 
         initialLoadingState = Transformations.switchMap(commentDataSourceFactory.getCommentDataSourceLiveData(),
-                (Function<CommentDataSource, LiveData<NetworkState>>) CommentDataSource::getInitialLoadStateLiveData);
+                CommentDataSource::getInitialLoadStateLiveData);
         paginationNetworkState = Transformations.switchMap(commentDataSourceFactory.getCommentDataSourceLiveData(),
-                (Function<CommentDataSource, LiveData<NetworkState>>) CommentDataSource::getPaginationNetworkStateLiveData);
+                CommentDataSource::getPaginationNetworkStateLiveData);
+        hasCommentLiveData = Transformations.switchMap(commentDataSourceFactory.getCommentDataSourceLiveData(),
+                CommentDataSource::hasPostLiveData);
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
                         .setEnablePlaceholders(false)
@@ -48,6 +49,10 @@ public class CommentViewModel extends ViewModel {
         return initialLoadingState;
     }
 
+    LiveData<Boolean> hasComment() {
+        return hasCommentLiveData;
+    }
+
     void refresh() {
         commentDataSourceFactory.getCommentDataSource().invalidate();
     }
@@ -64,20 +69,17 @@ public class CommentViewModel extends ViewModel {
         private Retrofit retrofit;
         private Locale locale;
         private String username;
-        private CommentDataSource.OnCommentFetchedCallback onCommentFetchedCallback;
 
-        public Factory(Retrofit retrofit, Locale locale, String username,
-                       CommentDataSource.OnCommentFetchedCallback onCommentFetchedCallback) {
+        public Factory(Retrofit retrofit, Locale locale, String username) {
             this.retrofit = retrofit;
             this.locale = locale;
             this.username = username;
-            this.onCommentFetchedCallback = onCommentFetchedCallback;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new CommentViewModel(retrofit, locale, username, onCommentFetchedCallback);
+            return (T) new CommentViewModel(retrofit, locale, username);
         }
     }
 }

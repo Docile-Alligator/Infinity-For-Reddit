@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import SubredditDatabase.SubredditData;
-import SubscribedSubredditDatabase.SubscribedSubredditDao;
 import SubscribedSubredditDatabase.SubscribedSubredditData;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,23 +22,23 @@ class SubredditSubscription {
 
     static void subscribeToSubreddit(Retrofit oauthRetrofit, Retrofit retrofit,
                                      String accessToken, String subredditName, String accountName,
-                                     SubscribedSubredditDao subscribedSubredditDao,
+                                     RedditDataRoomDatabase redditDataRoomDatabase,
                                      SubredditSubscriptionListener subredditSubscriptionListener) {
         subredditSubscription(oauthRetrofit, retrofit, accessToken, subredditName, accountName, "sub",
-                subscribedSubredditDao, subredditSubscriptionListener);
+                redditDataRoomDatabase, subredditSubscriptionListener);
     }
 
     static void unsubscribeToSubreddit(Retrofit oauthRetrofit, String accessToken,
                                        String subredditName, String accountName,
-                                       SubscribedSubredditDao subscribedSubredditDao,
+                                       RedditDataRoomDatabase redditDataRoomDatabase,
                                        SubredditSubscriptionListener subredditSubscriptionListener) {
         subredditSubscription(oauthRetrofit, null, accessToken, subredditName, accountName, "unsub",
-                subscribedSubredditDao,subredditSubscriptionListener);
+                redditDataRoomDatabase,subredditSubscriptionListener);
     }
 
     private static void subredditSubscription(Retrofit oauthRetrofit, Retrofit retrofit, String accessToken,
                                               String subredditName, String accountName, String action,
-                                              SubscribedSubredditDao subscribedSubredditDao,
+                                              RedditDataRoomDatabase redditDataRoomDatabase,
                                               SubredditSubscriptionListener subredditSubscriptionListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
@@ -56,7 +55,7 @@ class SubredditSubscription {
                         FetchSubredditData.fetchSubredditData(retrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
                             @Override
                             public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
-                                new UpdateSubscriptionAsyncTask(subscribedSubredditDao,
+                                new UpdateSubscriptionAsyncTask(redditDataRoomDatabase,
                                         subredditData, accountName, true).execute();
                             }
 
@@ -66,7 +65,7 @@ class SubredditSubscription {
                             }
                         });
                     } else {
-                        new UpdateSubscriptionAsyncTask(subscribedSubredditDao, subredditName, accountName, false).execute();
+                        new UpdateSubscriptionAsyncTask(redditDataRoomDatabase, subredditName, accountName, false).execute();
                     }
                     subredditSubscriptionListener.onSubredditSubscriptionSuccess();
                 } else {
@@ -85,23 +84,23 @@ class SubredditSubscription {
 
     private static class UpdateSubscriptionAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        private SubscribedSubredditDao subscribedSubredditDao;
+        private RedditDataRoomDatabase redditDataRoomDatabase;
         private String subredditName;
         private String accountName;
         private SubscribedSubredditData subscribedSubredditData;
         private boolean isSubscribing;
 
-        UpdateSubscriptionAsyncTask(SubscribedSubredditDao subscribedSubredditDao, String subredditName,
+        UpdateSubscriptionAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase, String subredditName,
                                     String accountName, boolean isSubscribing) {
-            this.subscribedSubredditDao = subscribedSubredditDao;
+            this.redditDataRoomDatabase = redditDataRoomDatabase;
             this.subredditName = subredditName;
             this.accountName = accountName;
             this.isSubscribing = isSubscribing;
         }
 
-        UpdateSubscriptionAsyncTask(SubscribedSubredditDao subscribedSubredditDao, SubredditData subredditData,
+        UpdateSubscriptionAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase, SubredditData subredditData,
                                     String accountName, boolean isSubscribing) {
-            this.subscribedSubredditDao = subscribedSubredditDao;
+            this.redditDataRoomDatabase = redditDataRoomDatabase;
             this.subscribedSubredditData = new SubscribedSubredditData(subredditData.getId(), subredditData.getName(),
                     subredditData.getIconUrl(), accountName);
             this.accountName = accountName;
@@ -111,9 +110,9 @@ class SubredditSubscription {
         @Override
         protected Void doInBackground(Void... voids) {
             if(isSubscribing) {
-                subscribedSubredditDao.insert(subscribedSubredditData);
+                redditDataRoomDatabase.subscribedSubredditDao().insert(subscribedSubredditData);
             } else {
-                subscribedSubredditDao.deleteSubscribedSubreddit(subredditName, accountName);
+                redditDataRoomDatabase.subscribedSubredditDao().deleteSubscribedSubreddit(subredditName, accountName);
             }
             return null;
         }

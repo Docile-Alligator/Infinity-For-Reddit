@@ -489,7 +489,6 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                     break;
                 case 1:
                     commentsListingFragment = (CommentsListingFragment) fragment;
-                    break;
             }
             return fragment;
         }

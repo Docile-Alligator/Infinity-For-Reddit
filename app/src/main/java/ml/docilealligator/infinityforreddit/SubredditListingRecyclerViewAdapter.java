@@ -21,7 +21,6 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 
 import SubredditDatabase.SubredditData;
-import SubscribedSubredditDatabase.SubscribedSubredditDao;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -45,14 +44,14 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
     private Retrofit retrofit;
     private String accessToken;
     private String accountName;
-    private SubscribedSubredditDao subscribedSubredditDao;
+    private RedditDataRoomDatabase redditDataRoomDatabase;
 
     private NetworkState networkState;
     private Callback callback;
 
     SubredditListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, Retrofit retrofit,
                                         String accessToken, String accountName,
-                                        SubscribedSubredditDao subscribedSubredditDao,
+                                        RedditDataRoomDatabase redditDataRoomDatabase,
                                         Callback callback) {
         super(DIFF_CALLBACK);
         this.context = context;
@@ -60,7 +59,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
-        this.subscribedSubredditDao = subscribedSubredditDao;
+        this.redditDataRoomDatabase = redditDataRoomDatabase;
         this.callback = callback;
         glide = Glide.with(context.getApplicationContext());
     }
@@ -113,7 +112,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
 
             ((DataViewHolder) holder).subredditNameTextView.setText(subredditData.getName());
 
-            new CheckIsSubscribedToSubredditAsyncTask(subscribedSubredditDao, subredditData.getName(), accountName,
+            new CheckIsSubscribedToSubredditAsyncTask(redditDataRoomDatabase, subredditData.getName(), accountName,
                     new CheckIsSubscribedToSubredditAsyncTask.CheckIsSubscribedToSubredditListener() {
                         @Override
                         public void isSubscribed() {
@@ -125,7 +124,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
                             ((DataViewHolder) holder).subscribeButton.setVisibility(View.VISIBLE);
                             ((DataViewHolder) holder).subscribeButton.setOnClickListener(view -> {
                                 SubredditSubscription.subscribeToSubreddit(oauthRetrofit, retrofit,
-                                        accessToken, accountName, subredditData.getName(), subscribedSubredditDao,
+                                        accessToken, accountName, subredditData.getName(), redditDataRoomDatabase,
                                         new SubredditSubscription.SubredditSubscriptionListener() {
                                             @Override
                                             public void onSubredditSubscriptionSuccess() {

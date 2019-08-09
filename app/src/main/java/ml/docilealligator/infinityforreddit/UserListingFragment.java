@@ -81,28 +81,14 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
 
-        UserListingViewModel.Factory factory = new UserListingViewModel.Factory(mRetrofit, mQuery,
-                PostDataSource.SORT_TYPE_RELEVANCE, new UserListingDataSource.OnUserListingDataFetchedCallback() {
-                    @Override
-                    public void hasUser() {
-                        mFetchUserListingInfoLinearLayout.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void noUser() {
-                        mFetchUserListingInfoLinearLayout.setOnClickListener(view -> {
-                            //Do nothing
-                        });
-                        showErrorView(R.string.no_users);
-                    }
-                });
-
         mAdapter = new UserListingRecyclerViewAdapter(getActivity(), mOauthRetrofit, mRetrofit,
                 accessToken, accountName, redditDataRoomDatabase.subscribedUserDao(),
                 () -> mUserListingViewModel.retryLoadingMore());
 
         mUserListingRecyclerView.setAdapter(mAdapter);
 
+        UserListingViewModel.Factory factory = new UserListingViewModel.Factory(mRetrofit, mQuery,
+                PostDataSource.SORT_TYPE_RELEVANCE);
         mUserListingViewModel = ViewModelProviders.of(this, factory).get(UserListingViewModel.class);
         mUserListingViewModel.getUsers().observe(this, UserData -> mAdapter.submitList(UserData));
 
@@ -115,6 +101,17 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
             } else {
                 mFetchUserListingInfoLinearLayout.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.VISIBLE);
+            }
+        });
+
+        mUserListingViewModel.hasUser().observe(this, hasUser -> {
+            if(hasUser) {
+                mFetchUserListingInfoLinearLayout.setVisibility(View.GONE);
+            } else {
+                mFetchUserListingInfoLinearLayout.setOnClickListener(view -> {
+                    //Do nothing
+                });
+                showErrorView(R.string.no_users);
             }
         });
 
