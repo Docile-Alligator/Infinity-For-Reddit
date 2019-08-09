@@ -177,4 +177,5 @@
     <string name="manage_accounts">Manage accounts</string>
     <string name="log_out">Log out</string>
     <string name="press_here_to_login">Press here to login</string>
+    <string name="login_first">Login first</string>
 </resources>

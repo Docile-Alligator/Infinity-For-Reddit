@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     @BindView(R.id.all_drawer_items_linear_layout_main_activity) LinearLayout allDrawerItemsLinearLayout;
     @BindView(R.id.profile_linear_layout_main_activity) LinearLayout profileLinearLayout;
     @BindView(R.id.subscriptions_linear_layout_main_activity) LinearLayout subscriptionLinearLayout;
+    @BindView(R.id.divider_main_activity) View divider;
     @BindView(R.id.settings_linear_layout_main_activity) LinearLayout settingsLinearLayout;
     @BindView(R.id.account_recycler_view_main_activity) RecyclerView accountRecyclerView;
     @BindView(R.id.tab_layout_main_activity) TabLayout tabLayout;
@@ -168,11 +169,6 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
             if(account == null) {
                 mNullAccessToken = true;
-                mAccessToken = null;
-                mAccountName = null;
-                mProfileImageUrl = null;
-                mBannerImageUrl = null;
-                mKarma = 0;
             } else {
                 mNullAccessToken = false;
                 mAccessToken = account.getAccessToken();
@@ -303,6 +299,9 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         } else {
             mKarmaTextView.setText(R.string.press_here_to_login);
             mAccountNameTextView.setText(R.string.anonymous_account);
+            profileLinearLayout.setVisibility(View.GONE);
+            subscriptionLinearLayout.setVisibility(View.GONE);
+            divider.setVisibility(View.GONE);
         }
 
         if (mProfileImageUrl != null && !mProfileImageUrl.equals("")) {

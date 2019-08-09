@@ -452,6 +452,11 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                 }
 
                 ((DataViewHolder) holder).upvoteButton.setOnClickListener(view -> {
+                    if(mAccessToken == null) {
+                        Toast.makeText(mContext, R.string.login_first, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     if(isArchived) {
                         Toast.makeText(mContext, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
                         return;
@@ -511,6 +516,11 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                 });
 
                 ((DataViewHolder) holder).downvoteButton.setOnClickListener(view -> {
+                    if(mAccessToken == null) {
+                        Toast.makeText(mContext, R.string.login_first, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     if(isArchived) {
                         Toast.makeText(mContext, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
                         return;

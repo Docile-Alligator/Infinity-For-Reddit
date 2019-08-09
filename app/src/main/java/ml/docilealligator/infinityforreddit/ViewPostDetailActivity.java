@@ -415,6 +415,11 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 refresh();
                 return true;
             case R.id.action_comment_view_post_detail_activity:
+                if(mAccessToken == null) {
+                    Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+
                 Intent intent = new Intent(this, CommentActivity.class);
                 intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, mPost.getTitle());
                 intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, mPost.getFullName());

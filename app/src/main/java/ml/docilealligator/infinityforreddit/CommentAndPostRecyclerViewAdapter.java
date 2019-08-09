@@ -721,6 +721,11 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             });
 
             mUpvoteButton.setOnClickListener(view -> {
+                if(mAccessToken == null) {
+                    Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if(mPost.isArchived()) {
                     Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
                     return;
@@ -780,6 +785,11 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             });
 
             mDownvoteButton.setOnClickListener(view -> {
+                if(mAccessToken == null) {
+                    Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if(mPost.isArchived()) {
                     Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
                     return;
@@ -882,6 +892,11 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             });
 
             replyButton.setOnClickListener(view -> {
+                if(mAccessToken == null) {
+                    Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Intent intent = new Intent(mActivity, CommentActivity.class);
                 intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, mVisibleComments.get(getAdapterPosition() - 1).getDepth() + 1);
                 intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, mVisibleComments.get(getAdapterPosition() - 1).getCommentContent());
@@ -892,6 +907,11 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             });
 
             upvoteButton.setOnClickListener(view -> {
+                if(mAccessToken == null) {
+                    Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 int previousVoteType = mVisibleComments.get(getAdapterPosition() - 1).getVoteType();
                 String newVoteType;
 
@@ -932,6 +952,11 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             });
 
             downvoteButton.setOnClickListener(view -> {
+                if(mAccessToken == null) {
+                    Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 int previousVoteType = mVisibleComments.get(getAdapterPosition() - 1).getVoteType();
                 String newVoteType;
 

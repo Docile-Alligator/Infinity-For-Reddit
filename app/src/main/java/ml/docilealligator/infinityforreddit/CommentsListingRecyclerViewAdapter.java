@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -205,6 +206,11 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
             replyButton.setVisibility(View.GONE);
 
             upvoteButton.setOnClickListener(view -> {
+                if(mAccessToken == null) {
+                    Toast.makeText(mContext, R.string.login_first, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 int previousVoteType = getItem(getAdapterPosition()).getVoteType();
                 String newVoteType;
 
@@ -245,6 +251,11 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
             });
 
             downvoteButton.setOnClickListener(view -> {
+                if(mAccessToken == null) {
+                    Toast.makeText(mContext, R.string.login_first, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 int previousVoteType = getItem(getAdapterPosition()).getVoteType();
                 String newVoteType;
 
