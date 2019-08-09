@@ -39,18 +39,28 @@ public interface RedditAPI {
     Call<String> voteThing(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
     @GET("comments/{id}.json?raw_json=1")
-    Call<String> getPost(@Path("id") String id, @HeaderMap Map<String, String> headers);
+    Call<String> getPostOauth(@Path("id") String id, @HeaderMap Map<String, String> headers);
+
+    @GET("comments/{id}.json?raw_json=1")
+    Call<String> getPost(@Path("id") String id);
 
     @GET("{sortType}?raw_json=1")
     Call<String> getBestPosts(@Path("sortType") String sortType, @Query("after") String lastItem, @HeaderMap Map<String, String> headers);
 
     @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=25")
+    Call<String> getSubredditBestPostsOauth(@Path("subredditName") String subredditName, @Path("sortType") String sortType,
+                                            @Query("after") String lastItem, @HeaderMap Map<String, String> headers);
+
+    @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=25")
     Call<String> getSubredditBestPosts(@Path("subredditName") String subredditName, @Path("sortType") String sortType,
-                                       @Query("after") String lastItem, @HeaderMap Map<String, String> headers);
+                                            @Query("after") String lastItem);
 
     @GET("user/{username}/submitted.json?raw_json=1&limit=25")
-    Call<String> getUserBestPosts(@Path("username") String username, @Query("after") String lastItem,
-                                  @HeaderMap Map<String, String> headers);
+    Call<String> getUserBestPostsOauth(@Path("username") String username, @Query("after") String lastItem,
+                                       @HeaderMap Map<String, String> headers);
+
+    @GET("user/{username}/submitted.json?raw_json=1&limit=25")
+    Call<String> getUserBestPosts(@Path("username") String username, @Query("after") String lastItem);
 
     @GET("user/{username}/about.json?raw_json=1")
     Call<String> getUserData(@Path("username") String username);
@@ -72,12 +82,19 @@ public interface RedditAPI {
     Call<String> searchUsers(@Query("q") String profileName, @Query("after") String after, @Query("sort") String sort);
 
     @GET("search.json?raw_json=1&type=link&include_over_18=on")
-    Call<String> searchPosts(@Query("q") String query, @Query("after") String after, @Query("sort") String sort,
-                             @HeaderMap Map<String, String> headers);
+    Call<String> searchPostsOauth(@Query("q") String query, @Query("after") String after, @Query("sort") String sort,
+                                  @HeaderMap Map<String, String> headers);
+
+    @GET("search.json?raw_json=1&type=link&include_over_18=on")
+    Call<String> searchPosts(@Query("q") String query, @Query("after") String after, @Query("sort") String sort);
+
+    @GET("r/{subredditName}/search.json?raw_json=1&type=link&restrict_sr=true&include_over_18=on")
+    Call<String> searchPostsInSpecificSubredditOauth(@Path("subredditName") String subredditName, @Query("q") String query,
+                                                     @Query("after") String after, @HeaderMap Map<String, String> headers);
 
     @GET("r/{subredditName}/search.json?raw_json=1&type=link&restrict_sr=true&include_over_18=on")
     Call<String> searchPostsInSpecificSubreddit(@Path("subredditName") String subredditName, @Query("q") String query,
-                                                @Query("after") String after, @HeaderMap Map<String, String> headers);
+                                                     @Query("after") String after);
 
     @FormUrlEncoded
     @POST("api/comment")
@@ -102,7 +119,10 @@ public interface RedditAPI {
     Call<String> getRules(@Path("subredditName") String subredditName);
 
     @GET("/comments/{id}.json?raw_json=1")
-    Call<String> getPostAndCommentsById(@Path("id") String id, @HeaderMap Map<String, String> headers);
+    Call<String> getPostAndCommentsByIdOauth(@Path("id") String id, @HeaderMap Map<String, String> headers);
+
+    @GET("/comments/{id}.json?raw_json=1")
+    Call<String> getPostAndCommentsById(@Path("id") String id);
 
     @Multipart
     @POST(".")

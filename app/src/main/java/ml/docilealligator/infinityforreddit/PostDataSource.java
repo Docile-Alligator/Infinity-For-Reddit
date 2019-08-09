@@ -53,8 +53,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
-        paginationNetworkStateLiveData = new MutableLiveData();
-        initialLoadStateLiveData = new MutableLiveData();
+        paginationNetworkStateLiveData = new MutableLiveData<>();
+        initialLoadStateLiveData = new MutableLiveData<>();
         hasPostLiveData = new MutableLiveData<>();
         this.postType = postType;
         this.sortType = sortType;
@@ -284,7 +284,13 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
     private void loadSubredditPostsInitial(@NonNull final LoadInitialCallback<String, Post> callback, String lastItem) {
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> getPost = api.getSubredditBestPosts(subredditOrUserName, sortType, lastItem, RedditUtils.getOAuthHeader(accessToken));
+
+        Call<String> getPost;
+        if(accessToken == null) {
+            getPost = api.getSubredditBestPosts(subredditOrUserName, sortType, lastItem);
+        } else {
+            getPost = api.getSubredditBestPostsOauth(subredditOrUserName, sortType, lastItem, RedditUtils.getOAuthHeader(accessToken));
+        }
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
@@ -356,7 +362,14 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         String after = lastItem == null ? params.key : lastItem;
 
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> getPost = api.getSubredditBestPosts(subredditOrUserName, sortType, after, RedditUtils.getOAuthHeader(accessToken));
+
+        Call<String> getPost;
+        if(accessToken == null) {
+            getPost = api.getSubredditBestPosts(subredditOrUserName, sortType, after);
+        } else {
+            getPost = api.getSubredditBestPostsOauth(subredditOrUserName, sortType, after, RedditUtils.getOAuthHeader(accessToken));
+        }
+
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
@@ -394,7 +407,13 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
     private void loadUserPostsInitial(@NonNull final LoadInitialCallback<String, Post> callback, String lastItem) {
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> getPost = api.getUserBestPosts(subredditOrUserName, lastItem, RedditUtils.getOAuthHeader(accessToken));
+
+        Call<String> getPost;
+        if(accessToken == null) {
+            getPost = api.getUserBestPosts(subredditOrUserName, lastItem);
+        } else {
+            getPost = api.getUserBestPostsOauth(subredditOrUserName, lastItem, RedditUtils.getOAuthHeader(accessToken));
+        }
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
@@ -447,7 +466,13 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         String after = lastItem == null ? params.key : lastItem;
 
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> getPost = api.getUserBestPosts(subredditOrUserName, after, RedditUtils.getOAuthHeader(accessToken));
+
+        Call<String> getPost;
+        if(accessToken == null) {
+            getPost = api.getUserBestPosts(subredditOrUserName, after);
+        } else {
+            getPost = api.getUserBestPostsOauth(subredditOrUserName, after, RedditUtils.getOAuthHeader(accessToken));
+        }
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
@@ -488,9 +513,18 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         Call<String> getPost;
 
         if(subredditOrUserName == null) {
-            getPost = api.searchPosts(query, null, sortType, RedditUtils.getOAuthHeader(accessToken));
+            if(accessToken == null) {
+                getPost = api.searchPosts(query, lastItem, sortType);
+            } else {
+                getPost = api.searchPostsOauth(query, lastItem, sortType, RedditUtils.getOAuthHeader(accessToken));
+            }
         } else {
-            getPost = api.searchPostsInSpecificSubreddit(subredditOrUserName, query, null, RedditUtils.getOAuthHeader(accessToken));
+            if(accessToken == null) {
+                getPost = api.searchPostsInSpecificSubreddit(subredditOrUserName, query, lastItem);
+            } else {
+                getPost = api.searchPostsInSpecificSubredditOauth(subredditOrUserName, query, lastItem,
+                        RedditUtils.getOAuthHeader(accessToken));
+            }
         }
 
         getPost.enqueue(new Callback<String>() {
@@ -548,9 +582,17 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         Call<String> getPost;
 
         if(subredditOrUserName == null) {
-            getPost = api.searchPosts(query, after, sortType, RedditUtils.getOAuthHeader(accessToken));
+            if(accessToken == null) {
+                getPost = api.searchPosts(query, after, sortType);
+            } else {
+                getPost = api.searchPostsOauth(query, after, sortType, RedditUtils.getOAuthHeader(accessToken));
+            }
         } else {
-            getPost = api.searchPostsInSpecificSubreddit(subredditOrUserName, query, after, RedditUtils.getOAuthHeader(accessToken));
+            if(accessToken == null) {
+                getPost = api.searchPostsInSpecificSubreddit(subredditOrUserName, query, after);
+            } else {
+                getPost = api.searchPostsInSpecificSubredditOauth(subredditOrUserName, query, after, RedditUtils.getOAuthHeader(accessToken));
+            }
         }
 
         getPost.enqueue(new Callback<String>() {

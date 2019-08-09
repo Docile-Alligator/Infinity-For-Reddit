@@ -77,20 +77,29 @@ class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecyclerVie
                 holder.usernameTextView.setText(R.string.add_account);
                 holder.itemView.setOnClickListener(view -> mItemSelectedListener.addAccountSelected());
             } else if(position == mAccounts.size() + 1) {
-                holder.profileImageGifImageView.setColorFilter(ContextCompat.getColor(mContext, R.color.primaryTextColor), android.graphics.PorterDuff.Mode.SRC_IN);
-                mGlide.load(R.drawable.ic_outline_public_24px)
-                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
-                        .into(holder.profileImageGifImageView);
-                holder.usernameTextView.setText(R.string.anonymous_account);
-                holder.itemView.setOnClickListener(view -> mItemSelectedListener.anonymousSelected());
-            } else if(position == mAccounts.size() + 2){
+                if(mCurrentAccountName != null) {
+                    holder.profileImageGifImageView.setColorFilter(ContextCompat.getColor(mContext, R.color.primaryTextColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                    mGlide.load(R.drawable.ic_outline_public_24px)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
+                            .into(holder.profileImageGifImageView);
+                    holder.usernameTextView.setText(R.string.anonymous_account);
+                    holder.itemView.setOnClickListener(view -> mItemSelectedListener.anonymousSelected());
+                } else {
+                    holder.profileImageGifImageView.setColorFilter(ContextCompat.getColor(mContext, R.color.primaryTextColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                    mGlide.load(R.drawable.ic_outline_settings_24px)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
+                            .into(holder.profileImageGifImageView);
+                    holder.usernameTextView.setText(R.string.manage_accounts);
+                    holder.itemView.setOnClickListener(view -> mItemSelectedListener.manageAccountSelected());
+                }
+            } else if(position == mAccounts.size() + 2) {
                 holder.profileImageGifImageView.setColorFilter(ContextCompat.getColor(mContext, R.color.primaryTextColor), android.graphics.PorterDuff.Mode.SRC_IN);
                 mGlide.load(R.drawable.ic_outline_settings_24px)
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
                         .into(holder.profileImageGifImageView);
                 holder.usernameTextView.setText(R.string.manage_accounts);
                 holder.itemView.setOnClickListener(view -> mItemSelectedListener.manageAccountSelected());
-            } else if(mCurrentAccountName != null) {
+            } else {
                 holder.profileImageGifImageView.setColorFilter(ContextCompat.getColor(mContext, R.color.primaryTextColor), android.graphics.PorterDuff.Mode.SRC_IN);
                 mGlide.load(R.drawable.ic_outline_block_24px)
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
@@ -107,7 +116,7 @@ class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecyclerVie
             return 1;
         } else {
             if(mCurrentAccountName == null) {
-                return mAccounts.size() + 3;
+                return mAccounts.size() + 2;
             } else {
                 return mAccounts.size() + 4;
             }

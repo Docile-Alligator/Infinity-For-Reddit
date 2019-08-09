@@ -439,7 +439,7 @@ class SubmitPost {
 
             RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
-            Call<String> getPostCall = api.getPost(postId, RedditUtils.getOAuthHeader(accessToken));
+            Call<String> getPostCall = api.getPostOauth(postId, RedditUtils.getOAuthHeader(accessToken));
             getPostCall.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {

@@ -201,7 +201,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
 
         RedditAPI api = mOauthRetrofit.create(RedditAPI.class);
-        Call<String> postAndComments = api.getPostAndCommentsById(subredditId, RedditUtils.getOAuthHeader(accessToken));
+        Call<String> postAndComments = api.getPostAndCommentsByIdOauth(subredditId, RedditUtils.getOAuthHeader(accessToken));
         postAndComments.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

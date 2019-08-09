@@ -200,8 +200,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 }
             });
 
-            factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, subredditName, query, postType, sortType, filter);
+            if(accessToken == null) {
+                factory = new PostViewModel.Factory(mRetrofit, accessToken,
+                        getResources().getConfiguration().locale, subredditName, query, postType, sortType, filter);
+            } else {
+                factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
+                        getResources().getConfiguration().locale, subredditName, query, postType, sortType, filter);
+            }
         } else if(postType == PostDataSource.TYPE_SUBREDDIT) {
             String subredditName = getArguments().getString(EXTRA_NAME);
 
@@ -224,8 +229,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 }
             });
 
-            factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, subredditName, postType, sortType, filter);
+            if(accessToken == null) {
+                factory = new PostViewModel.Factory(mRetrofit, accessToken,
+                        getResources().getConfiguration().locale, subredditName, postType, sortType, filter);
+            } else {
+                factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
+                        getResources().getConfiguration().locale, subredditName, postType, sortType, filter);
+            }
         } else if(postType == PostDataSource.TYPE_USER) {
             CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mFetchPostInfoLinearLayout.getLayoutParams();
             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -251,8 +261,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 }
             });
 
-            factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, username, postType, sortType, filter);
+            if(accessToken == null) {
+                factory = new PostViewModel.Factory(mRetrofit, accessToken,
+                        getResources().getConfiguration().locale, username, postType, sortType, filter);
+            } else {
+                factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
+                        getResources().getConfiguration().locale, username, postType, sortType, filter);
+            }
         } else {
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, redditDataRoomDatabase,
                     accessToken, postType, true, new PostRecyclerViewAdapter.Callback() {

@@ -297,8 +297,13 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
         loadUserData();
 
-        mAccountNameTextView.setText(mAccountName);
-        mKarmaTextView.setText(getString(R.string.karma_info, mKarma));
+        if(mAccessToken != null) {
+            mKarmaTextView.setText(getString(R.string.karma_info, mKarma));
+            mAccountNameTextView.setText(mAccountName);
+        } else {
+            mKarmaTextView.setText(R.string.press_here_to_login);
+            mAccountNameTextView.setText(R.string.anonymous_account);
+        }
 
         if (mProfileImageUrl != null && !mProfileImageUrl.equals("")) {
             glide.load(mProfileImageUrl)
@@ -516,6 +521,30 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         @NonNull
         @Override
         public Fragment getItem(int position) {
+            if(mAccessToken == null) {
+                if(position == 0) {
+                    PostFragment fragment = new PostFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+                    bundle.putString(PostFragment.EXTRA_NAME, "popular");
+                    bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_HOT);
+                    bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
+                    bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                    fragment.setArguments(bundle);
+                    return fragment;
+                } else {
+                    PostFragment fragment = new PostFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+                    bundle.putString(PostFragment.EXTRA_NAME, "all");
+                    bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_HOT);
+                    bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
+                    bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                    fragment.setArguments(bundle);
+                    return fragment;
+                }
+            }
+
             if (position == 0) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
@@ -619,34 +648,54 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         }
 
         void changeSortType(String sortType) {
-            switch (viewPager.getCurrentItem()) {
-                case 0:
-                    frontPagePostFragment.changeSortType(sortType);
-                    break;
-                case 1:
+            if(mAccessToken == null) {
+                if(viewPager.getCurrentItem() == 0) {
                     popularPostFragment.changeSortType(sortType);
-                    break;
-                case 2:
+                } else {
                     allPostFragment.changeSortType(sortType);
+                }
+            } else {
+                switch (viewPager.getCurrentItem()) {
+                    case 0:
+                        frontPagePostFragment.changeSortType(sortType);
+                        break;
+                    case 1:
+                        popularPostFragment.changeSortType(sortType);
+                        break;
+                    case 2:
+                        allPostFragment.changeSortType(sortType);
+                }
             }
         }
 
         public void refresh() {
-            switch (viewPager.getCurrentItem()) {
-                case 0:
-                    if(frontPagePostFragment != null) {
-                        ((FragmentCommunicator) frontPagePostFragment).refresh();
-                    }
-                    break;
-                case 1:
+            if(mAccessToken == null) {
+                if(viewPager.getCurrentItem() == 0) {
                     if(popularPostFragment != null) {
                         ((FragmentCommunicator) popularPostFragment).refresh();
                     }
-                    break;
-                case 2:
+                } else {
                     if(allPostFragment != null) {
                         ((FragmentCommunicator) allPostFragment).refresh();
                     }
+                }
+            } else {
+                switch (viewPager.getCurrentItem()) {
+                    case 0:
+                        if(frontPagePostFragment != null) {
+                            ((FragmentCommunicator) frontPagePostFragment).refresh();
+                        }
+                        break;
+                    case 1:
+                        if(popularPostFragment != null) {
+                            ((FragmentCommunicator) popularPostFragment).refresh();
+                        }
+                        break;
+                    case 2:
+                        if(allPostFragment != null) {
+                            ((FragmentCommunicator) allPostFragment).refresh();
+                        }
+                }
             }
         }
     }

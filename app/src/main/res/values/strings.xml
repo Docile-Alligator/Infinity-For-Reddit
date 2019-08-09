@@ -176,4 +176,5 @@
     <string name="anonymous_account">Anonymous</string>
     <string name="manage_accounts">Manage accounts</string>
     <string name="log_out">Log out</string>
+    <string name="press_here_to_login">Press here to login</string>
 </resources>
