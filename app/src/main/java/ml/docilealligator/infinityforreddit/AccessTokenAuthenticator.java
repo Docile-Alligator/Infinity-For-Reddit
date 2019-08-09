@@ -37,6 +37,9 @@ class AccessTokenAuthenticator implements Authenticator {
             String accessToken = response.request().header(RedditUtils.AUTHORIZATION_KEY).substring(RedditUtils.AUTHORIZATION_BASE.length());
             synchronized (this) {
                 Account account = mRedditDataRoomDatabase.accountDao().getCurrentAccount();
+                if(account == null) {
+                    return null;
+                }
                 String accessTokenFromDatabase = account.getAccessToken();
                 if (accessToken.equals(accessTokenFromDatabase)) {
                     String newAccessToken = refreshAccessToken(account);

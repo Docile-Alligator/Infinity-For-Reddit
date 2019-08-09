@@ -19,6 +19,9 @@ public interface AccountDao {
     @Query("UPDATE accounts SET is_current_user = 0 WHERE is_current_user = 1")
     void markAllAccountsNonCurrent();
 
+    @Query("DELETE FROM accounts WHERE is_current_user = 1")
+    void deleteCurrentAccount();
+
     @Query("DELETE FROM accounts")
     void deleteAllAccounts();
 

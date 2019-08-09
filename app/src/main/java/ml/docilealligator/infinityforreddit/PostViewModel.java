@@ -1,7 +1,9 @@
 package ml.docilealligator.infinityforreddit;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
@@ -19,7 +21,9 @@ public class PostViewModel extends ViewModel {
     private LiveData<NetworkState> initialLoadingState;
     private LiveData<Boolean> hasPostLiveData;
     private LiveData<PagedList<Post>> posts;
+    private MutableLiveData<String> accessTokenLiveData;
     private MutableLiveData<String> sortTypeLiveData;
+    private AccessTokenAndSortTypeLiveData accessTokenAndSortTypeLiveData;
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, int postType, String sortType,
                          int filter) {
@@ -32,8 +36,12 @@ public class PostViewModel extends ViewModel {
         hasPostLiveData = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 PostDataSource::hasPostLiveData);
 
+        accessTokenLiveData = new MutableLiveData<>();
+        accessTokenLiveData.postValue(accessToken);
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
+
+        accessTokenAndSortTypeLiveData = new AccessTokenAndSortTypeLiveData(accessTokenLiveData, sortTypeLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -41,8 +49,8 @@ public class PostViewModel extends ViewModel {
                         .setPageSize(25)
                         .build();
 
-        posts = Transformations.switchMap(sortTypeLiveData, sort -> {
-            postDataSourceFactory.changeSortType(sortTypeLiveData.getValue());
+        posts = Transformations.switchMap(accessTokenAndSortTypeLiveData, sort -> {
+            postDataSourceFactory.changeAccessTokenAndSortType(accessTokenLiveData.getValue(), sortTypeLiveData.getValue());
             return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
         });
     }
@@ -59,8 +67,12 @@ public class PostViewModel extends ViewModel {
         hasPostLiveData = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 PostDataSource::hasPostLiveData);
 
+        accessTokenLiveData = new MutableLiveData<>();
+        accessTokenLiveData.postValue(accessToken);
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
+
+        accessTokenAndSortTypeLiveData = new AccessTokenAndSortTypeLiveData(accessTokenLiveData, sortTypeLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -68,8 +80,8 @@ public class PostViewModel extends ViewModel {
                         .setPageSize(25)
                         .build();
 
-        posts = Transformations.switchMap(sortTypeLiveData, sort -> {
-            postDataSourceFactory.changeSortType(sortTypeLiveData.getValue());
+        posts = Transformations.switchMap(accessTokenAndSortTypeLiveData, sort -> {
+            postDataSourceFactory.changeAccessTokenAndSortType(accessTokenLiveData.getValue(), sortTypeLiveData.getValue());
             return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
         });
     }
@@ -86,6 +98,9 @@ public class PostViewModel extends ViewModel {
         hasPostLiveData = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 PostDataSource::hasPostLiveData);
 
+        accessTokenLiveData = new MutableLiveData<>();
+        accessTokenLiveData.postValue(accessToken);
+
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
                         .setEnablePlaceholders(false)
@@ -93,6 +108,11 @@ public class PostViewModel extends ViewModel {
                         .build();
 
         posts = (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
+
+        posts = Transformations.switchMap(accessTokenLiveData, newAccessToken -> {
+            postDataSourceFactory.changeAccessToken(accessTokenLiveData.getValue());
+            return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
+        });
     }
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, String subredditName, String query,
@@ -107,8 +127,12 @@ public class PostViewModel extends ViewModel {
         hasPostLiveData = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 PostDataSource::hasPostLiveData);
 
+        accessTokenLiveData = new MutableLiveData<>();
+        accessTokenLiveData.postValue(accessToken);
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
+
+        accessTokenAndSortTypeLiveData = new AccessTokenAndSortTypeLiveData(accessTokenLiveData, sortTypeLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -117,7 +141,7 @@ public class PostViewModel extends ViewModel {
                         .build();
 
         posts = Transformations.switchMap(sortTypeLiveData, sort -> {
-            postDataSourceFactory.changeSortType(sortTypeLiveData.getValue());
+            postDataSourceFactory.changeAccessTokenAndSortType(accessTokenLiveData.getValue(), sortTypeLiveData.getValue());
             return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
         });
     }
@@ -152,6 +176,10 @@ public class PostViewModel extends ViewModel {
 
     void changeSortType(String sortType) {
         sortTypeLiveData.postValue(sortType);
+    }
+
+    void changeAccessToken(String accessToken) {
+        accessTokenLiveData.postValue(accessToken);
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
@@ -219,6 +247,13 @@ public class PostViewModel extends ViewModel {
             } else {
                 return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, postType, filter);
             }
+        }
+    }
+
+    private static class AccessTokenAndSortTypeLiveData extends MediatorLiveData<Pair<String, String>> {
+        public AccessTokenAndSortTypeLiveData(LiveData<String> accessToken, LiveData<String> sortType) {
+            addSource(accessToken, accessToken1 -> setValue(Pair.create(accessToken1, sortType.getValue())));
+            addSource(sortType, sortType1 -> setValue(Pair.create(accessToken.getValue(), sortType1)));
         }
     }
 }
