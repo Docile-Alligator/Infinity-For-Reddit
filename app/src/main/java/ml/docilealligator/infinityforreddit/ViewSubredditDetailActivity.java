@@ -42,6 +42,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
 
     public static final String EXTRA_SUBREDDIT_NAME_KEY = "ESN";
 
+    private static final String FETCH_SUBREDDIT_INFO_STATE = "FSIS";
     private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
@@ -65,6 +66,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     private String mAccessToken;
     private String mAccountName;
     private String subredditName;
+    private boolean mFetchSubredditInfoSuccess = false;
     private boolean subscriptionReady = false;
     private boolean isInLazyMode = false;
 
@@ -97,9 +99,12 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
+        subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME_KEY);
+
         if(savedInstanceState == null) {
             getCurrentAccountAndBindView();
         } else {
+            mFetchSubredditInfoSuccess = savedInstanceState.getBoolean(FETCH_SUBREDDIT_INFO_STATE);
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
@@ -113,6 +118,8 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
             }
         }
+
+        fetchSubredditData();
 
         postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
 
@@ -130,7 +137,6 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
             statusBarHeight = getResources().getDimensionPixelSize(resourceId);
         }
 
-        subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME_KEY);
         String title = "r/" + subredditName;
         subredditNameTextView.setText(title);
 
@@ -200,21 +206,6 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
             }
         });
 
-        FetchSubredditData.fetchSubredditData(mRetrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
-            @Override
-            public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
-                new InsertSubredditDataAsyncTask(mRedditDataRoomDatabase, subredditData)
-                        .execute();
-                String nOnlineSubscribers = getString(R.string.online_subscribers_number_detail, nCurrentOnlineSubscribers);
-                nOnlineSubscribersTextView.setText(nOnlineSubscribers);
-            }
-
-            @Override
-            public void onFetchSubredditDataFail() {
-
-            }
-        });
-
         fab.setOnClickListener(view -> postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag()));
     }
 
@@ -230,6 +221,26 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         }).execute();
     }
 
+    private void fetchSubredditData() {
+        if(!mFetchSubredditInfoSuccess) {
+            FetchSubredditData.fetchSubredditData(mRetrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
+                @Override
+                public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
+                    new InsertSubredditDataAsyncTask(mRedditDataRoomDatabase, subredditData, () -> {
+                        nOnlineSubscribersTextView.setText(getString(R.string.online_subscribers_number_detail, nCurrentOnlineSubscribers));
+                        mFetchSubredditInfoSuccess = true;
+                    }).execute();
+                }
+
+                @Override
+                public void onFetchSubredditDataFail() {
+                    makeSnackbar(R.string.cannot_fetch_subreddit_info, true);
+                    mFetchSubredditInfoSuccess = false;
+                }
+            });
+        }
+    }
+
     private void bindView(boolean initializeFragment) {
         subscribeSubredditChip.setOnClickListener(view -> {
             if(subscriptionReady) {
@@ -242,13 +253,13 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                                 public void onSubredditSubscriptionSuccess() {
                                     subscribeSubredditChip.setText(R.string.unsubscribe);
                                     subscribeSubredditChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
-                                    makeSnackbar(R.string.subscribed);
+                                    makeSnackbar(R.string.subscribed, false);
                                     subscriptionReady = true;
                                 }
 
                                 @Override
                                 public void onSubredditSubscriptionFail() {
-                                    makeSnackbar(R.string.subscribe_failed);
+                                    makeSnackbar(R.string.subscribe_failed, false);
                                     subscriptionReady = true;
                                 }
                             });
@@ -260,13 +271,13 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                                 public void onSubredditSubscriptionSuccess() {
                                     subscribeSubredditChip.setText(R.string.subscribe);
                                     subscribeSubredditChip.setChipBackgroundColor(getResources().getColorStateList(R.color.backgroundColorPrimaryDark));
-                                    makeSnackbar(R.string.unsubscribed);
+                                    makeSnackbar(R.string.unsubscribed, false);
                                     subscriptionReady = true;
                                 }
 
                                 @Override
                                 public void onSubredditSubscriptionFail() {
-                                    makeSnackbar(R.string.unsubscribe_failed);
+                                    makeSnackbar(R.string.unsubscribe_failed, false);
                                     subscriptionReady = true;
                                 }
                             });
@@ -367,6 +378,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putBoolean(FETCH_SUBREDDIT_INFO_STATE, mFetchSubredditInfoSuccess);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
@@ -374,8 +386,13 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE_KEY, mFragment);
     }
 
-    private void makeSnackbar(int resId) {
-        Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).show();
+    private void makeSnackbar(int resId, boolean retry) {
+        if(retry) {
+            Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).setAction(R.string.retry,
+                    view -> fetchSubredditData()).show();
+        } else {
+            Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -411,18 +428,30 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
 
     private static class InsertSubredditDataAsyncTask extends AsyncTask<Void, Void, Void> {
 
+        interface InsertSubredditDataAsyncTaskListener {
+            void insertSuccess();
+        }
+
         private SubredditDao mSubredditDao;
         private SubredditData subredditData;
+        private InsertSubredditDataAsyncTaskListener insertSubredditDataAsyncTaskListener;
 
-        InsertSubredditDataAsyncTask(RedditDataRoomDatabase db, SubredditData subredditData) {
+        InsertSubredditDataAsyncTask(RedditDataRoomDatabase db, SubredditData subredditData,
+                                     InsertSubredditDataAsyncTaskListener insertSubredditDataAsyncTaskListener) {
             mSubredditDao = db.subredditDao();
             this.subredditData = subredditData;
+            this.insertSubredditDataAsyncTaskListener = insertSubredditDataAsyncTaskListener;
         }
 
         @Override
         protected Void doInBackground(final Void... params) {
             mSubredditDao.insert(subredditData);
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            insertSubredditDataAsyncTaskListener.insertSuccess();
         }
     }
 }

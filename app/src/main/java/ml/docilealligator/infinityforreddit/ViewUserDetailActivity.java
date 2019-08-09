@@ -45,6 +45,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_USER_NAME_KEY = "EUNK";
 
+    private static final String FETCH_USER_INFO_STATE = "FSIS";
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
@@ -74,6 +75,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     private String mAccountName;
     private String username;
     private boolean subscriptionReady = false;
+    private boolean mFetchUserInfoSuccess = false;
     private boolean isInLazyMode = false;
     private int expandedTabTextColor;
     private int expandedTabBackgroundColor;
@@ -102,9 +104,12 @@ public class ViewUserDetailActivity extends AppCompatActivity {
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
+        username = getIntent().getExtras().getString(EXTRA_USER_NAME_KEY);
+
         if(savedInstanceState == null) {
             getCurrentAccountAndInitializeViewPager();
         } else {
+            mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
@@ -117,6 +122,8 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             }
         }
 
+        fetchUserInfo();
+
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
         //Get status bar height
@@ -126,7 +133,6 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             statusBarHeight = getResources().getDimensionPixelSize(resourceId);
         }
 
-        username = getIntent().getExtras().getString(EXTRA_USER_NAME_KEY);
         String title = "u/" + username;
         userNameTextView.setText(title);
 
@@ -217,13 +223,13 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                                             public void onUserFollowingSuccess() {
                                                 subscribeUserChip.setText(R.string.unfollow);
                                                 subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
-                                                makeSnackbar(R.string.followed);
+                                                makeSnackbar(R.string.followed, false);
                                                 subscriptionReady = true;
                                             }
 
                                             @Override
                                             public void onUserFollowingFail() {
-                                                makeSnackbar(R.string.follow_failed);
+                                                makeSnackbar(R.string.follow_failed, false);
                                                 subscriptionReady = true;
                                             }
                                         });
@@ -234,13 +240,13 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                                             public void onUserFollowingSuccess() {
                                                 subscribeUserChip.setText(R.string.follow);
                                                 subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.backgroundColorPrimaryDark));
-                                                makeSnackbar(R.string.unfollowed);
+                                                makeSnackbar(R.string.unfollowed, false);
                                                 subscriptionReady = true;
                                             }
 
                                             @Override
                                             public void onUserFollowingFail() {
-                                                makeSnackbar(R.string.unfollow_failed);
+                                                makeSnackbar(R.string.unfollow_failed, false);
                                                 subscriptionReady = true;
                                             }
                                         });
@@ -276,18 +282,6 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                 karmaTextView.setText(karma);
             }
         });
-
-        FetchUserData.fetchUserData(mRetrofit, username, new FetchUserData.FetchUserDataListener() {
-            @Override
-            public void onFetchUserDataSuccess(UserData userData) {
-                new InsertUserDataAsyncTask(mRedditDataRoomDatabase.userDao(), userData).execute();
-            }
-
-            @Override
-            public void onFetchUserDataFailed() {
-                makeSnackbar(R.string.cannot_fetch_user_info);
-            }
-        });
     }
 
     private void getCurrentAccountAndInitializeViewPager() {
@@ -307,6 +301,24 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private void fetchUserInfo() {
+        if(!mFetchUserInfoSuccess) {
+            FetchUserData.fetchUserData(mRetrofit, username, new FetchUserData.FetchUserDataListener() {
+                @Override
+                public void onFetchUserDataSuccess(UserData userData) {
+                    new InsertUserDataAsyncTask(mRedditDataRoomDatabase.userDao(), userData,
+                            () -> mFetchUserInfoSuccess = true).execute();
+                }
+
+                @Override
+                public void onFetchUserDataFailed() {
+                    makeSnackbar(R.string.cannot_fetch_user_info, true);
+                    mFetchUserInfoSuccess = false;
+                }
+            });
+        }
     }
 
     @Override
@@ -369,14 +381,20 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putBoolean(FETCH_USER_INFO_STATE, mFetchUserInfoSuccess);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
         outState.putString(ACCOUNT_NAME_STATE, mAccountName);
     }
 
-    private void makeSnackbar(int resId) {
-        Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).show();
+    private void makeSnackbar(int resId, boolean retry) {
+        if(retry) {
+            Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).setAction(R.string.retry,
+                    view -> fetchUserInfo()).show();
+        } else {
+            Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     public abstract static class AppBarStateChangeListener implements AppBarLayout.OnOffsetChangedListener {
@@ -419,18 +437,30 @@ public class ViewUserDetailActivity extends AppCompatActivity {
 
     private static class InsertUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
 
+        interface InsertUserDataAsyncTaskListener {
+            void insertSuccess();
+        }
+
         private UserDao userDao;
         private UserData subredditData;
+        private InsertUserDataAsyncTaskListener insertUserDataAsyncTaskListener;
 
-        InsertUserDataAsyncTask(UserDao userDao, UserData userData) {
+        InsertUserDataAsyncTask(UserDao userDao, UserData userData,
+                                InsertUserDataAsyncTaskListener insertUserDataAsyncTaskListener) {
             this.userDao = userDao;
             this.subredditData = userData;
+            this.insertUserDataAsyncTaskListener = insertUserDataAsyncTaskListener;
         }
 
         @Override
         protected Void doInBackground(final Void... params) {
             userDao.insert(subredditData);
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            insertUserDataAsyncTaskListener.insertSuccess();
         }
     }
 

@@ -268,14 +268,16 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
         }
 
         public void refresh() {
-            if(postFragment != null) {
-                ((FragmentCommunicator) postFragment).refresh();
-            }
-            if(subredditListingFragment != null) {
-                ((FragmentCommunicator) subredditListingFragment).refresh();
-            }
-            if (userListingFragment != null) {
-                ((FragmentCommunicator) userListingFragment).refresh();
+            switch (viewPager.getCurrentItem()) {
+                case 0:
+                    ((FragmentCommunicator) postFragment).refresh();
+                    break;
+                case 1:
+                    ((FragmentCommunicator) subredditListingFragment).refresh();
+                    break;
+                case 2:
+                    ((FragmentCommunicator) userListingFragment).refresh();
+                    break;
             }
         }
 
