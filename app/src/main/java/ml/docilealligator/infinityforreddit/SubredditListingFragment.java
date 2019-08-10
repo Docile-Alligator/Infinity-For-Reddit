@@ -3,6 +3,9 @@ package ml.docilealligator.infinityforreddit;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,6 +80,17 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
+
+        Resources resources = getResources();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
+                int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+                if (navBarResourceId > 0) {
+                    mSubredditListingRecyclerView.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
+                }
+            }
+        }
 
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mSubredditListingRecyclerView.setLayoutManager(mLinearLayoutManager);

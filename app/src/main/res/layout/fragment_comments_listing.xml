@@ -21,7 +21,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_comments_listing_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:clipToPadding="false" />
 
     <LinearLayout
         android:id="@+id/fetch_comments_info_linear_layout_comments_listing_fragment"

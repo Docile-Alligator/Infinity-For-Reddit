@@ -1,12 +1,17 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -51,16 +56,26 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
-    @BindView(R.id.coordinator_layout_view_user_detail_activity) CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.view_pager_view_user_detail_activity) ViewPager viewPager;
-    @BindView(R.id.appbar_layout_view_user_detail) AppBarLayout appBarLayout;
-    @BindView(R.id.tab_layout_view_user_detail_activity) TabLayout tabLayout;
-    @BindView(R.id.collapsing_toolbar_layout_view_user_detail_activity) CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.banner_image_view_view_user_detail_activity) GifImageView bannerImageView;
-    @BindView(R.id.icon_gif_image_view_view_user_detail_activity) GifImageView iconGifImageView;
-    @BindView(R.id.user_name_text_view_view_user_detail_activity) TextView userNameTextView;
-    @BindView(R.id.subscribe_user_chip_view_user_detail_activity) Chip subscribeUserChip;
-    @BindView(R.id.karma_text_view_view_user_detail_activity) TextView karmaTextView;
+    @BindView(R.id.coordinator_layout_view_user_detail_activity)
+    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.view_pager_view_user_detail_activity)
+    ViewPager viewPager;
+    @BindView(R.id.appbar_layout_view_user_detail)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.tab_layout_view_user_detail_activity)
+    TabLayout tabLayout;
+    @BindView(R.id.collapsing_toolbar_layout_view_user_detail_activity)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.banner_image_view_view_user_detail_activity)
+    GifImageView bannerImageView;
+    @BindView(R.id.icon_gif_image_view_view_user_detail_activity)
+    GifImageView iconGifImageView;
+    @BindView(R.id.user_name_text_view_view_user_detail_activity)
+    TextView userNameTextView;
+    @BindView(R.id.subscribe_user_chip_view_user_detail_activity)
+    Chip subscribeUserChip;
+    @BindView(R.id.karma_text_view_view_user_detail_activity)
+    TextView karmaTextView;
 
     private SectionsPagerAdapter sectionsPagerAdapter;
 
@@ -106,7 +121,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
 
         username = getIntent().getExtras().getString(EXTRA_USER_NAME_KEY);
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             getCurrentAccountAndInitializeViewPager();
         } else {
             mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
@@ -115,7 +130,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
 
-            if(!mNullAccessToken && mAccessToken == null) {
+            if (!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndInitializeViewPager();
             } else {
                 initializeViewPager();
@@ -140,8 +155,8 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         toolbar.setTitle(title);
         setSupportActionBar(toolbar);
 
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
-        params.topMargin = statusBarHeight;
+        ViewGroup.MarginLayoutParams toolbarLayoutParams = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
+        toolbarLayoutParams.topMargin = statusBarHeight;
 
         expandedTabTextColor = getResources().getColor(R.color.tabLayoutWithExpandedCollapsingToolbarTextColor);
         expandedTabBackgroundColor = getResources().getColor(R.color.tabLayoutWithExpandedCollapsingToolbarTabBackground);
@@ -151,20 +166,54 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         collapsedTabBackgroundColor = getResources().getColor(R.color.tabLayoutWithCollapsedCollapsingToolbarTabBackground);
         collapsedTabIndicatorColor = getResources().getColor(R.color.tabLayoutWithCollapsedCollapsingToolbarTabIndicator);
 
-        appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
-            @Override
-            void onStateChanged(AppBarLayout appBarLayout, State state) {
-                if(state == State.EXPANDED) {
-                    tabLayout.setTabTextColors(expandedTabTextColor, expandedTabTextColor);
-                    tabLayout.setSelectedTabIndicatorColor(expandedTabIndicatorColor);
-                    tabLayout.setBackgroundColor(expandedTabBackgroundColor);
-                } else if(state == State.COLLAPSED) {
-                    tabLayout.setTabTextColors(collapsedTabTextColor, collapsedTabTextColor);
-                    tabLayout.setSelectedTabIndicatorColor(collapsedTabIndicatorColor);
-                    tabLayout.setBackgroundColor(collapsedTabBackgroundColor);
+        Resources resources = getResources();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1
+                && (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
+                || resources.getBoolean(R.bool.isTablet))) {
+            Window window = getWindow();
+            window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
+            View decorView = window.getDecorView();
+            appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                @Override
+                void onStateChanged(AppBarLayout appBarLayout, State state) {
+                    if (state == State.COLLAPSED) {
+                        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                        tabLayout.setTabTextColors(collapsedTabTextColor, collapsedTabTextColor);
+                        tabLayout.setSelectedTabIndicatorColor(collapsedTabIndicatorColor);
+                        tabLayout.setBackgroundColor(collapsedTabBackgroundColor);
+                    } else if (state == State.EXPANDED) {
+                        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                        tabLayout.setTabTextColors(expandedTabTextColor, expandedTabTextColor);
+                        tabLayout.setSelectedTabIndicatorColor(expandedTabIndicatorColor);
+                        tabLayout.setBackgroundColor(expandedTabBackgroundColor);
+                    }
                 }
+            });
+
+            int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if (statusBarResourceId > 0) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
+                params.topMargin = getResources().getDimensionPixelSize(statusBarResourceId);
+                toolbar.setLayoutParams(params);
             }
-        });
+        } else {
+            appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                @Override
+                void onStateChanged(AppBarLayout appBarLayout, State state) {
+                    if (state == State.EXPANDED) {
+                        tabLayout.setTabTextColors(expandedTabTextColor, expandedTabTextColor);
+                        tabLayout.setSelectedTabIndicatorColor(expandedTabIndicatorColor);
+                        tabLayout.setBackgroundColor(expandedTabBackgroundColor);
+                    } else if (state == State.COLLAPSED) {
+                        tabLayout.setTabTextColors(collapsedTabTextColor, collapsedTabTextColor);
+                        tabLayout.setSelectedTabIndicatorColor(collapsedTabIndicatorColor);
+                        tabLayout.setBackgroundColor(collapsedTabBackgroundColor);
+                    }
+                }
+            });
+        }
 
         subscribedUserDao = mRedditDataRoomDatabase.subscribedUserDao();
         glide = Glide.with(this);
@@ -172,8 +221,8 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         userViewModel = ViewModelProviders.of(this, new UserViewModel.Factory(getApplication(), mRedditDataRoomDatabase, username))
                 .get(UserViewModel.class);
         userViewModel.getUserLiveData().observe(this, userData -> {
-            if(userData != null) {
-                if(userData.getBanner().equals("")) {
+            if (userData != null) {
+                if (userData.getBanner().equals("")) {
                     bannerImageView.setOnClickListener(view -> {
                         //Do nothing since the user has no banner image
                     });
@@ -188,7 +237,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                     });
                 }
 
-                if(userData.getIconUrl().equals("")) {
+                if (userData.getIconUrl().equals("")) {
                     glide.load(getDrawable(R.drawable.subreddit_default_icon))
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0)))
                             .into(iconGifImageView);
@@ -211,12 +260,12 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                     });
                 }
 
-                if(userData.isCanBeFollowed()) {
+                if (userData.isCanBeFollowed()) {
                     subscribeUserChip.setVisibility(View.VISIBLE);
                     subscribeUserChip.setOnClickListener(view -> {
-                        if(subscriptionReady) {
+                        if (subscriptionReady) {
                             subscriptionReady = false;
-                            if(subscribeUserChip.getText().equals(getResources().getString(R.string.follow))) {
+                            if (subscribeUserChip.getText().equals(getResources().getString(R.string.follow))) {
                                 UserFollowing.followUser(mOauthRetrofit, mRetrofit, mAccessToken,
                                         username, mAccountName, subscribedUserDao, new UserFollowing.UserFollowingListener() {
                                             @Override
@@ -275,7 +324,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
 
                 String userFullName = "u/" + userData.getName();
                 userNameTextView.setText(userFullName);
-                if(!title.equals(userFullName)) {
+                if (!title.equals(userFullName)) {
                     getSupportActionBar().setTitle(userFullName);
                 }
                 String karma = getString(R.string.karma_info, userData.getKarma());
@@ -286,7 +335,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
 
     private void getCurrentAccountAndInitializeViewPager() {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-            if(account == null) {
+            if (account == null) {
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
@@ -304,7 +353,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     }
 
     private void fetchUserInfo() {
-        if(!mFetchUserInfoSuccess) {
+        if (!mFetchUserInfoSuccess) {
             FetchUserData.fetchUserData(mRetrofit, username, new FetchUserData.FetchUserDataListener() {
                 @Override
                 public void onFetchUserDataSuccess(UserData userData) {
@@ -326,7 +375,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.view_user_detail_activity, menu);
         mMenu = menu;
         MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity);
-        if(isInLazyMode) {
+        if (isInLazyMode) {
             lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
             params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
             collapsingToolbarLayout.setLayoutParams(params);
@@ -389,50 +438,12 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     }
 
     private void makeSnackbar(int resId, boolean retry) {
-        if(retry) {
+        if (retry) {
             Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).setAction(R.string.retry,
                     view -> fetchUserInfo()).show();
         } else {
             Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).show();
         }
-    }
-
-    public abstract static class AppBarStateChangeListener implements AppBarLayout.OnOffsetChangedListener {
-        // State
-        public enum State {
-            EXPANDED,
-            COLLAPSED,
-            IDLE
-        }
-
-        private State mCurrentState = State.IDLE;
-
-        @Override
-        public final void onOffsetChanged(AppBarLayout appBarLayout, int i) {
-            if (i == 0) {
-                if (mCurrentState != State.EXPANDED) {
-                    onStateChanged(appBarLayout, State.EXPANDED);
-                }
-                mCurrentState = State.EXPANDED;
-            } else if (Math.abs(i) >= appBarLayout.getTotalScrollRange()) {
-                if (mCurrentState != State.COLLAPSED) {
-                    onStateChanged(appBarLayout, State.COLLAPSED);
-                }
-                mCurrentState = State.COLLAPSED;
-            } else {
-                if (mCurrentState != State.IDLE) {
-                    onStateChanged(appBarLayout, State.IDLE);
-                }
-                mCurrentState = State.IDLE;
-            }
-        }
-
-        /**
-         * Notifies on state change
-         * @param appBarLayout Layout
-         * @param state Collapse state
-         */
-        abstract void onStateChanged(AppBarLayout appBarLayout, State state);
     }
 
     private static class InsertUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -524,7 +535,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         }
 
         public void refresh() {
-            if(viewPager.getCurrentItem() == 0) {
+            if (viewPager.getCurrentItem() == 0) {
                 postFragment.refresh();
             } else {
                 commentsListingFragment.refresh();

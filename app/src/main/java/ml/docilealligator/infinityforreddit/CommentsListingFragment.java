@@ -3,6 +3,9 @@ package ml.docilealligator.infinityforreddit;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,6 +79,17 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
         mGlide = Glide.with(activity);
 
+        Resources resources = getResources();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
+                int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+                if (navBarResourceId > 0) {
+                    mCommentRecyclerView.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
+                }
+            }
+        }
+
         mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
 
         mAdapter = new CommentsListingRecyclerViewAdapter(activity, mOauthRetrofit,
@@ -85,7 +99,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
         mCommentRecyclerView.setAdapter(mAdapter);
 
-        CommentViewModel.Factory factory = new CommentViewModel.Factory(mRetrofit, getResources().getConfiguration().locale, username);
+        CommentViewModel.Factory factory = new CommentViewModel.Factory(mRetrofit, resources.getConfiguration().locale, username);
         mCommentViewModel = ViewModelProviders.of(this, factory).get(CommentViewModel.class);
         mCommentViewModel.getComments().observe(this, comments -> mAdapter.submitList(comments));
 

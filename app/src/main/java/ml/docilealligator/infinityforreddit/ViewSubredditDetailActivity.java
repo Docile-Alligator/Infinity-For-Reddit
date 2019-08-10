@@ -1,12 +1,17 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -98,6 +103,41 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         ButterKnife.bind(this);
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            Resources resources = getResources();
+
+            if(resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
+                Window window = getWindow();
+                window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
+                View decorView = window.getDecorView();
+                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                    @Override
+                    void onStateChanged(AppBarLayout appBarLayout, State state) {
+                        if (state == State.COLLAPSED) {
+                            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                        } else if (state == State.EXPANDED) {
+                            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                        }
+                    }
+                });
+
+                int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+                if (statusBarResourceId > 0) {
+                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
+                    params.topMargin = getResources().getDimensionPixelSize(statusBarResourceId);
+                    toolbar.setLayoutParams(params);
+                }
+
+                int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+                if (navBarResourceId > 0) {
+                    CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+                    params.bottomMargin = resources.getDimensionPixelSize(navBarResourceId);
+                    fab.setLayoutParams(params);
+                }
+            }
+        }
 
         subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME_KEY);
 

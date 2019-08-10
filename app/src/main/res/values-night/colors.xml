@@ -26,7 +26,7 @@
 
     <color name="roundedBottomSheetPrimaryBackground">#242424</color>
 
-    <color name="roundedBottomSheetPrimaryNavigationBarColor">#000000</color>
+    <color name="roundedBottomSheetPrimaryNavigationBarColor">@color/roundedBottomSheetPrimaryBackground</color>
 
     <color name="voteUnavailableVoteButtonColor">#3C3C3C</color>
 

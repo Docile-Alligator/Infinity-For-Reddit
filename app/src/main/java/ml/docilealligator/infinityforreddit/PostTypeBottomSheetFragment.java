@@ -2,6 +2,8 @@ package ml.docilealligator.infinityforreddit;
 
 
 import android.app.Activity;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +49,11 @@ public class PostTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
         ButterKnife.bind(this, rootView);
 
         Activity activity = getActivity();
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+                && (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+            rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        }
 
         textTypeLinearLayout.setOnClickListener(view -> {
             ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_TEXT);

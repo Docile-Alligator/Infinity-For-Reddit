@@ -4,6 +4,9 @@ package ml.docilealligator.infinityforreddit;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -124,6 +127,17 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         };
 
         window = activity.getWindow();
+
+        Resources resources = getResources();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
+                int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+                if (navBarResourceId > 0) {
+                    mPostRecyclerView.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
+                }
+            }
+        }
 
         mGlide = Glide.with(activity);
 

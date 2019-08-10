@@ -2,6 +2,9 @@ package ml.docilealligator.infinityforreddit;
 
 
 import android.app.Activity;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,6 +65,17 @@ public class SubscribedSubredditsListingFragment extends Fragment {
         mActivity = getActivity();
 
         ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
+
+        Resources resources = getResources();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
+                int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+                if (navBarResourceId > 0) {
+                    mRecyclerView.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
+                }
+            }
+        }
 
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
 
