@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -98,6 +99,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     private int collapsedTabTextColor;
     private int collapsedTabBackgroundColor;
     private int collapsedTabIndicatorColor;
+    private boolean showToast = false;
 
     @Inject
     @Named("no_oauth")
@@ -141,11 +143,13 @@ public class ViewUserDetailActivity extends AppCompatActivity {
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
+        Resources resources = getResources();
+
         //Get status bar height
         int statusBarHeight = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
-            statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+            statusBarHeight = resources.getDimensionPixelSize(resourceId);
         }
 
         String title = "u/" + username;
@@ -158,15 +162,13 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         ViewGroup.MarginLayoutParams toolbarLayoutParams = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
         toolbarLayoutParams.topMargin = statusBarHeight;
 
-        expandedTabTextColor = getResources().getColor(R.color.tabLayoutWithExpandedCollapsingToolbarTextColor);
-        expandedTabBackgroundColor = getResources().getColor(R.color.tabLayoutWithExpandedCollapsingToolbarTabBackground);
-        expandedTabIndicatorColor = getResources().getColor(R.color.tabLayoutWithExpandedCollapsingToolbarTabIndicator);
+        expandedTabTextColor = resources.getColor(R.color.tabLayoutWithExpandedCollapsingToolbarTextColor);
+        expandedTabBackgroundColor = resources.getColor(R.color.tabLayoutWithExpandedCollapsingToolbarTabBackground);
+        expandedTabIndicatorColor = resources.getColor(R.color.tabLayoutWithExpandedCollapsingToolbarTabIndicator);
 
-        collapsedTabTextColor = getResources().getColor(R.color.tabLayoutWithCollapsedCollapsingToolbarTextColor);
-        collapsedTabBackgroundColor = getResources().getColor(R.color.tabLayoutWithCollapsedCollapsingToolbarTabBackground);
-        collapsedTabIndicatorColor = getResources().getColor(R.color.tabLayoutWithCollapsedCollapsingToolbarTabIndicator);
-
-        Resources resources = getResources();
+        collapsedTabTextColor = resources.getColor(R.color.tabLayoutWithCollapsedCollapsingToolbarTextColor);
+        collapsedTabBackgroundColor = resources.getColor(R.color.tabLayoutWithCollapsedCollapsingToolbarTabBackground);
+        collapsedTabIndicatorColor = resources.getColor(R.color.tabLayoutWithCollapsedCollapsingToolbarTabIndicator);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1
                 && (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
@@ -192,11 +194,14 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                 }
             });
 
-            int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+            int statusBarResourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
             if (statusBarResourceId > 0) {
+                int navBarHeight = resources.getDimensionPixelSize(statusBarResourceId);
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
-                params.topMargin = getResources().getDimensionPixelSize(statusBarResourceId);
+                params.topMargin = navBarHeight;
                 toolbar.setLayoutParams(params);
+
+                showToast = true;
             }
         } else {
             appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
@@ -265,13 +270,13 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                     subscribeUserChip.setOnClickListener(view -> {
                         if (subscriptionReady) {
                             subscriptionReady = false;
-                            if (subscribeUserChip.getText().equals(getResources().getString(R.string.follow))) {
+                            if (subscribeUserChip.getText().equals(resources.getString(R.string.follow))) {
                                 UserFollowing.followUser(mOauthRetrofit, mRetrofit, mAccessToken,
                                         username, mAccountName, subscribedUserDao, new UserFollowing.UserFollowingListener() {
                                             @Override
                                             public void onUserFollowingSuccess() {
                                                 subscribeUserChip.setText(R.string.unfollow);
-                                                subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+                                                subscribeUserChip.setChipBackgroundColor(resources.getColorStateList(R.color.colorAccent));
                                                 makeSnackbar(R.string.followed, false);
                                                 subscriptionReady = true;
                                             }
@@ -288,7 +293,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                                             @Override
                                             public void onUserFollowingSuccess() {
                                                 subscribeUserChip.setText(R.string.follow);
-                                                subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.backgroundColorPrimaryDark));
+                                                subscribeUserChip.setChipBackgroundColor(resources.getColorStateList(R.color.backgroundColorPrimaryDark));
                                                 makeSnackbar(R.string.unfollowed, false);
                                                 subscriptionReady = true;
                                             }
@@ -307,14 +312,14 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                         @Override
                         public void isSubscribed() {
                             subscribeUserChip.setText(R.string.unfollow);
-                            subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+                            subscribeUserChip.setChipBackgroundColor(resources.getColorStateList(R.color.colorAccent));
                             subscriptionReady = true;
                         }
 
                         @Override
                         public void isNotSubscribed() {
                             subscribeUserChip.setText(R.string.follow);
-                            subscribeUserChip.setChipBackgroundColor(getResources().getColorStateList(R.color.backgroundColorPrimaryDark));
+                            subscribeUserChip.setChipBackgroundColor(resources.getColorStateList(R.color.backgroundColorPrimaryDark));
                             subscriptionReady = true;
                         }
                     }).execute();
@@ -438,11 +443,15 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     }
 
     private void makeSnackbar(int resId, boolean retry) {
-        if (retry) {
-            Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).setAction(R.string.retry,
-                    view -> fetchUserInfo()).show();
+        if(showToast) {
+            Toast.makeText(this, resId, Toast.LENGTH_SHORT).show();
         } else {
-            Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).show();
+            if (retry) {
+                Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).setAction(R.string.retry,
+                        view -> fetchUserInfo()).show();
+            } else {
+                Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).show();
+            }
         }
     }
 

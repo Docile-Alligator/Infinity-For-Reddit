@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -74,6 +75,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     private boolean mFetchSubredditInfoSuccess = false;
     private boolean subscriptionReady = false;
     private boolean isInLazyMode = false;
+    private boolean showToast = false;
 
     private RequestManager glide;
     private Fragment mFragment;
@@ -135,6 +137,8 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                     CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
                     params.bottomMargin = resources.getDimensionPixelSize(navBarResourceId);
                     fab.setLayoutParams(params);
+
+                    showToast = true;
                 }
             }
         }
@@ -427,11 +431,15 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     }
 
     private void makeSnackbar(int resId, boolean retry) {
-        if(retry) {
-            Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).setAction(R.string.retry,
-                    view -> fetchSubredditData()).show();
+        if(showToast) {
+            Toast.makeText(this, resId, Toast.LENGTH_SHORT).show();
         } else {
-            Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).show();
+            if(retry) {
+                Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).setAction(R.string.retry,
+                        view -> fetchSubredditData()).show();
+            } else {
+                Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).show();
+            }
         }
     }
 

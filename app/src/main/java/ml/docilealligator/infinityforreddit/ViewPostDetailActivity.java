@@ -86,6 +86,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     @State
     boolean hasMoreChildren;
 
+    private boolean showToast = false;
+
     private LinearLayoutManager mLinearLayoutManager;
     private CommentAndPostRecyclerViewAdapter mAdapter;
     private LoadSubredditIconAsyncTask mLoadSubredditIconAsyncTask;
@@ -151,6 +153,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
             if (navBarResourceId > 0) {
                 mRecyclerView.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
+
+                showToast = true;
             }
         }
 
@@ -420,7 +424,11 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
                         @Override
                         public void fetchPostFailed() {
-                            Snackbar.make(mCoordinatorLayout, R.string.refresh_post_failed, Snackbar.LENGTH_SHORT);
+                            if(showToast) {
+                                Toast.makeText(ViewPostDetailActivity.this, R.string.refresh_post_failed, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Snackbar.make(mCoordinatorLayout, R.string.refresh_post_failed, Snackbar.LENGTH_SHORT);
+                            }
                             isRefreshing = false;
                         }
                     });
