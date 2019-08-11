@@ -2,11 +2,17 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -24,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.evernote.android.state.State;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
 import com.livefront.bridge.Bridge;
 
@@ -84,6 +91,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     private LoadSubredditIconAsyncTask mLoadSubredditIconAsyncTask;
 
     @BindView(R.id.coordinator_layout_view_post_detail) CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.appbar_layout_view_post_detail_activity) AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_view_post_detail_activity) Toolbar toolbar;
     @BindView(R.id.progress_bar_view_post_detail_activity) ProgressBar mProgressBar;
     @BindView(R.id.recycler_view_view_post_detail) RecyclerView mRecyclerView;
@@ -112,6 +120,39 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         EventBus.getDefault().register(this);
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        Resources resources = getResources();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1
+                && (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
+                || resources.getBoolean(R.bool.isTablet))) {
+            Window window = getWindow();
+            window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
+            View decorView = window.getDecorView();
+            appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                @Override
+                void onStateChanged(AppBarLayout appBarLayout, State state) {
+                    if (state == State.COLLAPSED) {
+                        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                    } else if (state == State.EXPANDED) {
+                        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                    }
+                }
+            });
+
+            int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if (statusBarResourceId > 0) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
+                params.topMargin = getResources().getDimensionPixelSize(statusBarResourceId);
+                toolbar.setLayoutParams(params);
+            }
+
+            int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+            if (navBarResourceId > 0) {
+                mRecyclerView.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
+            }
+        }
 
         toolbar.setTitle("");
         setSupportActionBar(toolbar);

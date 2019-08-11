@@ -8,16 +8,26 @@
     tools:application=".ViewPostDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout_view_post_detail_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_view_post_detail_activity"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:navigationIcon="?attr/homeAsUpIndicator" />
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:titleEnabled="false"
+            app:toolbarId="@+id/toolbar_view_post_detail_activity">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_view_post_detail_activity"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:navigationIcon="?attr/homeAsUpIndicator" />
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -32,6 +42,7 @@
         android:id="@+id/recycler_view_view_post_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <LinearLayout
