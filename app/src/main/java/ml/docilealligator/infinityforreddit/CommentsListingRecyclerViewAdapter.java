@@ -7,18 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.card.MaterialCardView;
 
 import CustomView.CustomMarkwonView;
 import butterknife.BindView;
@@ -70,14 +68,11 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if(viewType == VIEW_TYPE_DATA) {
-            CardView cardView = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false);
-            return new DataViewHolder(cardView);
+            return new DataViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false));
         } else if(viewType == VIEW_TYPE_ERROR) {
-            RelativeLayout relativeLayout = (RelativeLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_error, parent, false);
-            return new ErrorViewHolder(relativeLayout);
+            return new ErrorViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_error, parent, false));
         } else {
-            RelativeLayout relativeLayout = (RelativeLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_loading, parent, false);
-            return new LoadingViewHolder(relativeLayout);
+            return new LoadingViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_loading, parent, false));
         }
     }
 
@@ -165,7 +160,7 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
     }
 
     class DataViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.card_view_item_comment) MaterialCardView cardView;
+        @BindView(R.id.linear_layout_item_comment) LinearLayout linearLayout;
         @BindView(R.id.vertical_block_item_post_comment) View verticalBlock;
         @BindView(R.id.author_text_view_item_post_comment) TextView authorTextView;
         @BindView(R.id.comment_time_text_view_item_post_comment) TextView commentTimeTextView;
@@ -180,7 +175,7 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            cardView.setOnClickListener(view -> {
+            linearLayout.setOnClickListener(view -> {
                 Intent intent = new Intent(mContext, ViewPostDetailActivity.class);
                 intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, getItem(getAdapterPosition()).getLinkId());
                 mContext.startActivity(intent);
@@ -188,7 +183,7 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
 
             verticalBlock.setVisibility(View.GONE);
 
-            commentMarkdownView.setOnClickListener(view -> cardView.callOnClick());
+            commentMarkdownView.setOnClickListener(view -> linearLayout.callOnClick());
 
             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) shareButton.getLayoutParams();
             lp.addRule(RelativeLayout.ALIGN_PARENT_END);

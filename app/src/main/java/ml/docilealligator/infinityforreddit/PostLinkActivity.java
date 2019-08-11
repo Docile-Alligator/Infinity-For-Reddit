@@ -1,10 +1,13 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -101,6 +105,14 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
         EventBus.getDefault().register(this);
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Window window = getWindow();
+            if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+            }
+            window.setNavigationBarColor(ContextCompat.getColor(this, R.color.navBarColor));
+        }
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

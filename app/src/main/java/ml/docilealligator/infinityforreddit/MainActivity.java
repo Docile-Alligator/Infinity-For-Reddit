@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
                 if (statusBarResourceId > 0) {
                     ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
-                    params.topMargin = getResources().getDimensionPixelSize(statusBarResourceId);
+                    params.topMargin = resources.getDimensionPixelSize(statusBarResourceId);
                     toolbar.setLayoutParams(params);
                 }
 

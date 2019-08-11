@@ -2,10 +2,13 @@ package ml.docilealligator.infinityforreddit;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -14,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import com.ferfalk.simplesearchview.SimpleSearchView;
 
@@ -48,6 +52,14 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         ButterKnife.bind(this);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Window window = getWindow();
+            if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+            }
+            window.setNavigationBarColor(ContextCompat.getColor(this, R.color.navBarColor));
+        }
 
         setSupportActionBar(toolbar);
 

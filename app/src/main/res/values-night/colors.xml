@@ -41,4 +41,6 @@
     <color name="tabLayoutWithCollapsedCollapsingToolbarTabBackground">@color/colorPrimary</color>
 
     <color name="tabLayoutWithCollapsedCollapsingToolbarTabIndicator">@color/tabLayoutWithCollapsedCollapsingToolbarTextColor</color>
+
+    <color name="navBarColor">@color/backgroundColor</color>
 </resources>
