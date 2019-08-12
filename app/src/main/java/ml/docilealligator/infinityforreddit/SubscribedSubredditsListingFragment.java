@@ -104,6 +104,7 @@ public class SubscribedSubredditsListingFragment extends Fragment {
             } else {
                 mLinearLayout.setVisibility(View.GONE);
                 mRecyclerView.setVisibility(View.VISIBLE);
+                mGlide.clear(mImageView);
             }
 
             adapter.addUser(accountName, getArguments().getString(EXTRA_ACCOUNT_PROFILE_IMAGE_URL));

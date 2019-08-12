@@ -1,13 +1,22 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.appbar.AppBarLayout;
 
 import javax.inject.Inject;
 
@@ -27,6 +36,7 @@ public class FilteredPostsActivity extends AppCompatActivity implements SortType
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String FRAGMENT_OUT_STATE = "FOS";
 
+    @BindView(R.id.appbar_layout_filtered_posts_activity) AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_filtered_posts_activity) Toolbar toolbar;
 
     private boolean mNullAccessToken = false;
@@ -52,6 +62,47 @@ public class FilteredPostsActivity extends AppCompatActivity implements SortType
         ButterKnife.bind(this);
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        Resources resources = getResources();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1
+                && (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
+                || resources.getBoolean(R.bool.isTablet))) {
+            Window window = getWindow();
+            window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
+            boolean lightNavBar = false;
+            if((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+                lightNavBar = true;
+            }
+            boolean finalLightNavBar = lightNavBar;
+
+            View decorView = window.getDecorView();
+            if(finalLightNavBar) {
+                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+            }
+            appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                @Override
+                void onStateChanged(AppBarLayout appBarLayout, State state) {
+                    if (state == State.COLLAPSED) {
+                        if(finalLightNavBar) {
+                            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                        }
+                    } else if (state == State.EXPANDED) {
+                        if(finalLightNavBar) {
+                            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                        }
+                    }
+                }
+            });
+
+            int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if (statusBarResourceId > 0) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
+                params.topMargin = getResources().getDimensionPixelSize(statusBarResourceId);
+                toolbar.setLayoutParams(params);
+            }
+        }
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
