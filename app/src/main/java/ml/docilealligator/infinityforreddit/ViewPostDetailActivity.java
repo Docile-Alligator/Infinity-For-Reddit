@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -252,13 +251,15 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
     private void fetchPostAndCommentsById(String subredditId) {
         mFetchPostInfoLinearLayout.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE);
         mGlide.clear(mFetchPostInfoImageView);
 
-        String accessToken = getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
-                .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
-
-        RedditAPI api = mOauthRetrofit.create(RedditAPI.class);
-        Call<String> postAndComments = api.getPostAndCommentsByIdOauth(subredditId, RedditUtils.getOAuthHeader(accessToken));
+        Call<String> postAndComments;
+        if(mAccessToken == null) {
+            postAndComments = mRetrofit.create(RedditAPI.class).getPostAndCommentsById(subredditId);
+        } else {
+            postAndComments = mOauthRetrofit.create(RedditAPI.class).getPostAndCommentsByIdOauth(subredditId, RedditUtils.getOAuthHeader(mAccessToken));
+        }
         postAndComments.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -419,9 +420,13 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
             fetchComments();
 
-            String accessToken = getSharedPreferences(SharedPreferencesUtils.AUTH_CODE_FILE_KEY, Context.MODE_PRIVATE)
-                    .getString(SharedPreferencesUtils.ACCESS_TOKEN_KEY, "");
-            FetchPost.fetchPost(mOauthRetrofit, mPost.getId(), accessToken, mLocale,
+            Retrofit retrofit;
+            if(mAccessToken == null) {
+                retrofit = mRetrofit;
+            } else {
+                retrofit = mOauthRetrofit;
+            }
+            FetchPost.fetchPost(retrofit, mPost.getId(), mAccessToken, mLocale,
                     new FetchPost.FetchPostListener() {
                         @Override
                         public void fetchPostSuccess(Post post) {

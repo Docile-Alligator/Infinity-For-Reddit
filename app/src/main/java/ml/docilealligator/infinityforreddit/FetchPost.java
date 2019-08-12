@@ -17,9 +17,13 @@ class FetchPost {
         void fetchPostFailed();
     }
 
-    static void fetchPost(Retrofit oauthRetrofit, String id, String accessToken, Locale locale, FetchPostListener fetchPostListener) {
-        RedditAPI api = oauthRetrofit.create(RedditAPI.class);
-        Call<String> postCall = api.getPostOauth(id, RedditUtils.getOAuthHeader(accessToken));
+    static void fetchPost(Retrofit retrofit, String id, String accessToken, Locale locale, FetchPostListener fetchPostListener) {
+        Call<String> postCall;
+        if(accessToken == null) {
+            postCall = retrofit.create(RedditAPI.class).getPost(id);
+        } else {
+            postCall = retrofit.create(RedditAPI.class).getPostOauth(id, RedditUtils.getOAuthHeader(accessToken));
+        }
         postCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

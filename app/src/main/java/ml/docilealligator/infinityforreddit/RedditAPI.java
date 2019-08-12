@@ -127,4 +127,8 @@ public interface RedditAPI {
     @Multipart
     @POST(".")
     Call<String> uploadMediaToAWS(@PartMap()Map<String, RequestBody> params, @Part() MultipartBody.Part file);
+
+    @FormUrlEncoded
+    @POST("/api/editusertext")
+    Call<String> editPostOrComment(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }
