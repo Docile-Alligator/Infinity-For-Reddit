@@ -48,7 +48,7 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
         mOauthRetrofit = oauthRetrofit;
         mAccessToken = accessToken;
         mRetryLoadingMoreCallback = retryLoadingMoreCallback;
-        mTextColorPrimaryDark = mContext.getResources().getColor(R.color.textColorPrimaryDark);
+        mTextColorPrimaryDark = mContext.getResources().getColor(R.color.colorPrimaryDarkDayNightTheme);
         mColorAccent = mContext.getResources().getColor(R.color.colorAccent);
     }
 

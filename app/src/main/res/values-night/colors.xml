@@ -12,7 +12,7 @@
 
     <color name="primaryTextColor">#FFFFFF</color>
 
-    <color name="textColorPrimaryDark">#1E88E5</color>
+    <color name="colorPrimaryDarkDayNightTheme">#1E88E5</color>
 
     <color name="circularProgressBarBackground">#242424</color>
 

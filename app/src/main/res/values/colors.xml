@@ -12,7 +12,7 @@
 
     <color name="primaryTextColor">#000000</color>
 
-    <color name="textColorPrimaryDark">@color/colorPrimaryDark</color>
+    <color name="colorPrimaryDarkDayNightTheme">@color/colorPrimaryDark</color>
 
     <color name="circularProgressBarBackground">#FFFFFF</color>
 

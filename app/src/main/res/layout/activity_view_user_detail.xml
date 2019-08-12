@@ -64,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:textSize="18sp"
-                        android:textColor="@color/textColorPrimaryDark"
+                        android:textColor="@color/colorPrimaryDarkDayNightTheme"
                         android:layout_gravity="center_horizontal"/>
 
                     <TextView

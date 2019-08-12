@@ -9,7 +9,7 @@
         android:id="@+id/vertical_block_item_post_comment"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="@color/textColorPrimaryDark"/>
+        android:background="@color/colorPrimaryDarkDayNightTheme"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="16dp"
-                android:textColor="@color/textColorPrimaryDark"/>
+                android:textColor="@color/colorPrimaryDarkDayNightTheme"/>
 
             <TextView
                 android:id="@+id/comment_time_text_view_item_post_comment"

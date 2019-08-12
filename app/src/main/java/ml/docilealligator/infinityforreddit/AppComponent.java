@@ -31,4 +31,5 @@ interface AppComponent {
     void inject(SearchSubredditsResultActivity searchSubredditsResultActivity);
     void inject(FollowedUsersListingFragment followedUsersListingFragment);
     void inject(SubredditSelectionActivity subredditSelectionActivity);
+    void inject(EditPostActivity editPostActivity);
 }

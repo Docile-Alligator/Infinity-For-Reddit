@@ -45,7 +45,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_below="@id/subreddit_text_view_item_post_detail"
                 android:layout_toEndOf="@id/icon_gif_image_view_item_post_detail"
-                android:textColor="@color/textColorPrimaryDark" />
+                android:textColor="@color/colorPrimaryDarkDayNightTheme" />
 
         </RelativeLayout>
 
@@ -161,7 +161,7 @@
             android:padding="4dp"
             android:visibility="gone"
             app:lib_setRadius="3dp"
-            app:lib_setRoundedBorderColor="@color/textColorPrimaryDark"
+            app:lib_setRoundedBorderColor="@color/colorPrimaryDarkDayNightTheme"
             app:lib_setRoundedView="true"
             app:lib_setShape="rectangle" />
 
@@ -176,7 +176,7 @@
             android:padding="4dp"
             android:visibility="gone"
             app:lib_setRadius="3dp"
-            app:lib_setRoundedBorderColor="@color/textColorPrimaryDark"
+            app:lib_setRoundedBorderColor="@color/colorPrimaryDarkDayNightTheme"
             app:lib_setRoundedView="true"
             app:lib_setShape="rectangle" />
 

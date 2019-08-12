@@ -87,7 +87,7 @@
                     android:textColor="@color/primaryTextColor"
                     android:visibility="gone"
                     app:lib_setRadius="3dp"
-                    app:lib_setRoundedBorderColor="@color/textColorPrimaryDark"
+                    app:lib_setRoundedBorderColor="@color/colorPrimaryDarkDayNightTheme"
                     app:lib_setRoundedView="true"
                     app:lib_setShape="rectangle" />
 
@@ -100,7 +100,7 @@
                     android:text="@string/spoiler"
                     android:textColor="@color/primaryTextColor"
                     app:lib_setRadius="3dp"
-                    app:lib_setRoundedBorderColor="@color/textColorPrimaryDark"
+                    app:lib_setRoundedBorderColor="@color/colorPrimaryDarkDayNightTheme"
                     app:lib_setRoundedView="true"
                     app:lib_setShape="rectangle" />
 

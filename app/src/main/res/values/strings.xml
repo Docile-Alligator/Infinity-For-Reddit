@@ -24,6 +24,8 @@
     <string name="action_stop_lazy_mode">Stop Lazy Mode</string>
     <string name="action_send">Send</string>
     <string name="action_sort">Sort</string>
+    <string name="action_edit_post">Edit Post</string>
+    <string name="action_delete_post">Delete Post</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -178,4 +180,13 @@
     <string name="log_out">Log out</string>
     <string name="press_here_to_login">Press here to login</string>
     <string name="login_first">Login first</string>
+
+    <string name="delete_this_post">Delete This Post</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_post_success">Delete successfully</string>
+    <string name="delete_post_failed">Delete failed</string>
+
+    <string name="edit_success">Edit Successful</string>
 </resources>

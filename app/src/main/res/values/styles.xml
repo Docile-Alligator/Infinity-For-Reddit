@@ -46,5 +46,18 @@
         <item name="tabBackground">?attr/selectableItemBackground</item>
         <item name="tabSelectedTextColor">@android:color/white</item>
     </style>
+    
+    <style name="MaterialAlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/MaterialAlertDialogPositiveButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/MaterialAlertDialogNegativeButtonStyle</item>
+    </style>
+
+    <style name="MaterialAlertDialogPositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="MaterialAlertDialogNegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/primaryTextColor</item>
+    </style>
 
 </resources>

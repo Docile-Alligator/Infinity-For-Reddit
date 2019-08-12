@@ -29,6 +29,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.evernote.android.state.State;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.livefront.bridge.Bridge;
 
@@ -57,8 +58,11 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     static final String EXTRA_POST_LIST_POSITION = "EPLI";
     static final String EXTRA_POST_ID = "EPI";
 
+    private static final int EDIT_POST_REQUEST_CODE = 2;
+
     private RequestManager mGlide;
     private Locale mLocale;
+    private Menu mMenu;
 
     private int orientation;
     private int postListPosition = -1;
@@ -67,6 +71,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     boolean mNullAccessToken = false;
     @State
     String mAccessToken;
+    @State
+    String mAccountName;
     @State
     Post mPost;
     @State
@@ -164,7 +170,6 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
             if (navBarResourceId > 0) {
                 mRecyclerView.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
-
                 showToast = true;
             }
         }
@@ -197,6 +202,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
+                mAccountName = account.getUsername();
             }
 
             bindView();
@@ -209,9 +215,14 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         }
 
         if(mPost == null) {
-            mProgressBar.setVisibility(View.VISIBLE);
             fetchPostAndCommentsById(getIntent().getExtras().getString(EXTRA_POST_ID));
         } else {
+            if(mMenu != null && mPost.getAuthor().equals(mAccountName)) {
+                if(mPost.getPostType() == Post.TEXT_TYPE) {
+                    mMenu.findItem(R.id.action_edit_view_post_detail_activity).setVisible(true);
+                }
+                mMenu.findItem(R.id.action_delete_view_post_detail_activity).setVisible(true);
+            }
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
                     mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mPost,
                     mPost.getSubredditNamePrefixed(), mLocale, mLoadSubredditIconAsyncTask,
@@ -236,7 +247,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             } else {
                 if(isRefreshing) {
                     isRefreshing = false;
-                    refresh();
+                    refresh(false);
                 } else {
                     mAdapter.addComments(comments, hasMoreChildren);
                     if(isLoadingMoreChildren) {
@@ -270,6 +281,13 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                         @Override
                         public void onParsePostSuccess(Post post) {
                             mPost = post;
+
+                            if(mMenu != null && mPost.getAuthor().equals(mAccountName)) {
+                                if(mPost.getPostType() == Post.TEXT_TYPE) {
+                                    mMenu.findItem(R.id.action_edit_view_post_detail_activity).setVisible(true);
+                                }
+                                mMenu.findItem(R.id.action_delete_view_post_detail_activity).setVisible(true);
+                            }
 
                             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
                                     mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mPost,
@@ -410,7 +428,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 });
     }
 
-    private void refresh() {
+    private void refresh(boolean onlyRefreshPost) {
         if(!isRefreshing) {
             isRefreshing = true;
             mChildrenStartingIndex = 0;
@@ -418,7 +436,9 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             mFetchPostInfoLinearLayout.setVisibility(View.GONE);
             mGlide.clear(mFetchPostInfoImageView);
 
-            fetchComments();
+            if(!onlyRefreshPost) {
+                fetchComments();
+            }
 
             Retrofit retrofit;
             if(mAccessToken == null) {
@@ -438,11 +458,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
                         @Override
                         public void fetchPostFailed() {
-                            if(showToast) {
-                                Toast.makeText(ViewPostDetailActivity.this, R.string.refresh_post_failed, Toast.LENGTH_SHORT).show();
-                            } else {
-                                Snackbar.make(mCoordinatorLayout, R.string.refresh_post_failed, Snackbar.LENGTH_SHORT);
-                            }
+                            showErrorMessage(R.string.refresh_post_failed);
                             isRefreshing = false;
                         }
                     });
@@ -457,6 +473,14 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         mGlide.load(R.drawable.load_post_error_indicator).into(mFetchPostInfoImageView);
     }
 
+    private void showErrorMessage(int resId) {
+        if(showToast) {
+            Toast.makeText(ViewPostDetailActivity.this, resId, Toast.LENGTH_SHORT).show();
+        } else {
+            Snackbar.make(mCoordinatorLayout, resId, Snackbar.LENGTH_SHORT);
+        }
+    }
+
     @Subscribe
     public void onPostUpdateEvent(PostUpdateEventToDetailActivity event) {
         if(mPost.getId().equals(event.postId)) {
@@ -468,6 +492,13 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_post_detail_activity, menu);
+        mMenu = menu;
+        if(mPost != null && mPost.getAuthor().equals(mAccountName)) {
+            if(mPost.getPostType() == Post.TEXT_TYPE) {
+                menu.findItem(R.id.action_edit_view_post_detail_activity).setVisible(true);
+            }
+            menu.findItem(R.id.action_delete_view_post_detail_activity).setVisible(true);
+        }
         return true;
     }
 
@@ -475,7 +506,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh_view_post_detail_activity:
-                refresh();
+                refresh(false);
                 return true;
             case R.id.action_comment_view_post_detail_activity:
                 if(mAccessToken == null) {
@@ -490,6 +521,34 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, false);
                 startActivityForResult(intent, WRITE_COMMENT_REQUEST_CODE);
                 return true;
+            case R.id.action_edit_view_post_detail_activity:
+                Intent editPostItent = new Intent(this, EditPostActivity.class);
+                editPostItent.putExtra(EditPostActivity.EXTRA_ACCESS_TOKEN, mAccessToken);
+                editPostItent.putExtra(EditPostActivity.EXTRA_FULLNAME, mPost.getFullName());
+                editPostItent.putExtra(EditPostActivity.EXTRA_TITLE, mPost.getTitle());
+                editPostItent.putExtra(EditPostActivity.EXTRA_CONTENT, mPost.getSelfText());
+                startActivityForResult(editPostItent, EDIT_POST_REQUEST_CODE);
+                return true;
+            case R.id.action_delete_view_post_detail_activity:
+                new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                        .setTitle(R.string.delete_this_post)
+                        .setMessage(R.string.are_you_sure)
+                        .setPositiveButton(R.string.delete, (dialogInterface, i)
+                                -> DeleteThing.delete(mOauthRetrofit, mPost.getFullName(), mAccessToken, new DeleteThing.DeleteThingListener() {
+                            @Override
+                            public void deleteSuccess() {
+                                Toast.makeText(ViewPostDetailActivity.this, R.string.delete_post_success, Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+
+                            @Override
+                            public void deleteFailed() {
+                                showErrorMessage(R.string.delete_post_failed);
+                            }
+                        }))
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
+                return true;
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -500,18 +559,24 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(data != null && resultCode == RESULT_OK && requestCode == WRITE_COMMENT_REQUEST_CODE) {
-            if(data.hasExtra(EXTRA_COMMENT_DATA_KEY)) {
-                CommentData comment = data.getExtras().getParcelable(EXTRA_COMMENT_DATA_KEY);
-                if(comment.getDepth() == 0) {
-                    mAdapter.addComment(comment);
+        if(requestCode == WRITE_COMMENT_REQUEST_CODE) {
+            if(data != null && resultCode == RESULT_OK) {
+                if(data.hasExtra(EXTRA_COMMENT_DATA_KEY)) {
+                    CommentData comment = data.getExtras().getParcelable(EXTRA_COMMENT_DATA_KEY);
+                    if(comment.getDepth() == 0) {
+                        mAdapter.addComment(comment);
+                    } else {
+                        String parentFullname = data.getExtras().getString(CommentActivity.EXTRA_PARENT_FULLNAME_KEY);
+                        int parentPosition = data.getExtras().getInt(CommentActivity.EXTRA_PARENT_POSITION_KEY);
+                        mAdapter.addChildComment(comment, parentFullname, parentPosition);
+                    }
                 } else {
-                    String parentFullname = data.getExtras().getString(CommentActivity.EXTRA_PARENT_FULLNAME_KEY);
-                    int parentPosition = data.getExtras().getInt(CommentActivity.EXTRA_PARENT_POSITION_KEY);
-                    mAdapter.addChildComment(comment, parentFullname, parentPosition);
+                    Toast.makeText(this, R.string.send_comment_failed, Toast.LENGTH_SHORT).show();
                 }
-            } else {
-                Toast.makeText(this, R.string.send_comment_failed, Toast.LENGTH_SHORT).show();
+            }
+        } else if(requestCode == EDIT_POST_REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                refresh(true);
             }
         }
     }
