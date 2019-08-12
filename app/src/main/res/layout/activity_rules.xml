@@ -6,22 +6,50 @@
     android:layout_height="match_parent"
     tools:application=".RulesActivity">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_rules_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:titleEnabled="false"
+            app:toolbarId="@+id/toolbar_rules_activity">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_rules_activity"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <ProgressBar
         android:id="@+id/progress_bar_rules_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_rules_activity"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <TextView
         android:id="@+id/error_text_view_rules_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

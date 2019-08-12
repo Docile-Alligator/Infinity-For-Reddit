@@ -131,14 +131,27 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             Window window = getWindow();
             window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
+            boolean lightNavBar = false;
+            if((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+                lightNavBar = true;
+            }
+            boolean finalLightNavBar = lightNavBar;
+
             View decorView = window.getDecorView();
+            if(finalLightNavBar) {
+                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+            }
             appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
                 @Override
                 void onStateChanged(AppBarLayout appBarLayout, State state) {
                     if (state == State.COLLAPSED) {
-                        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                        if(finalLightNavBar) {
+                            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                        }
                     } else if (state == State.EXPANDED) {
-                        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                        if(finalLightNavBar) {
+                            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                        }
                     }
                 }
             });

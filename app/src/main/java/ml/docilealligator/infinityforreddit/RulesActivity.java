@@ -1,18 +1,25 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.graphics.drawable.Drawable;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.appbar.AppBarLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +41,8 @@ public class RulesActivity extends AppCompatActivity {
 
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
 
+    @BindView(R.id.appbar_rules_activity) AppBarLayout appBarLayout;
+    @BindView(R.id.toolbar_rules_activity) Toolbar toolbar;
     @BindView(R.id.progress_bar_rules_activity) ProgressBar progressBar;
     @BindView(R.id.recycler_view_rules_activity) RecyclerView recyclerView;
     @BindView(R.id.error_text_view_rules_activity) TextView errorTextView;
@@ -55,9 +64,49 @@ public class RulesActivity extends AppCompatActivity {
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
-        ActionBar actionBar = getSupportActionBar();
-        Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
-        actionBar.setHomeAsUpIndicator(upArrow);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            Resources resources = getResources();
+
+            if(resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
+                Window window = getWindow();
+                window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
+                boolean lightNavBar = false;
+                if((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+                    lightNavBar = true;
+                }
+                boolean finalLightNavBar = lightNavBar;
+
+                View decorView = window.getDecorView();
+                if(finalLightNavBar) {
+                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                }
+                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                    @Override
+                    void onStateChanged(AppBarLayout appBarLayout, State state) {
+                        if(state == State.COLLAPSED) {
+                            if(finalLightNavBar) {
+                                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                            }
+                        } else if(state == State.EXPANDED) {
+                            if(finalLightNavBar) {
+                                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                            }
+                        }
+                    }
+                });
+
+                int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+                if (statusBarResourceId > 0) {
+                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
+                    params.topMargin = getResources().getDimensionPixelSize(statusBarResourceId);
+                    toolbar.setLayoutParams(params);
+                }
+            }
+        }
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mSubredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
 

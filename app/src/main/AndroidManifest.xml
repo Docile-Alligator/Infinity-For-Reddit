@@ -64,7 +64,8 @@
         <activity
             android:name=".RulesActivity"
             android:label="@string/rules_activity_label"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".PostVideoActivity"
             android:label="@string/post_video_activity_label"
