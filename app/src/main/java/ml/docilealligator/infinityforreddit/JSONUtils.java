@@ -12,7 +12,7 @@ public class JSONUtils {
     static final String TITLE_KEY = "title";
     static final String NAME_KEY = "name";
     static final String SUBREDDIT_NAME_PREFIX_KEY = "subreddit_name_prefixed";
-    static final String SELFTEXT_HTML_KEY = "selftext_html";
+    static final String SELFTEXT_KEY = "selftext";
     static final String AUTHOR_KEY = "author";
     static final String LINK_FLAIR_TEXT_KEY = "link_flair_text";
     static final String SCORE_KEY = "score";
@@ -37,7 +37,7 @@ public class JSONUtils {
     static final String CROSSPOST_PARENT_LIST = "crosspost_parent_list";
     static final String REDDIT_VIDEO_PREVIEW_KEY = "reddit_video_preview";
     static final String STICKIED_KEY = "stickied";
-    static final String BODY_HTML_KEY = "body_html";
+    static final String BODY_KEY = "body";
     static final String COLLAPSED_KEY = "collapsed";
     static final String IS_SUBMITTER_KEY = "is_submitter";
     static final String REPLIES_KEY = "replies";

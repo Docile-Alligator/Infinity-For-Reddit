@@ -220,10 +220,10 @@ class ParsePost {
                 post = new Post(id, fullName, subredditNamePrefixed, author, formattedPostTime,
                         title, permalink, score, postType, voteType, gilded, flair, spoiler, nsfw,
                         stickied, archived, isCrosspost);
-                if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
+                if(data.isNull(JSONUtils.SELFTEXT_KEY)) {
                     post.setSelfText("");
                 } else {
-                    post.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
+                    post.setSelfText(data.getString(JSONUtils.SELFTEXT_KEY).trim());
                 }
             } else {
                 //No preview link post
@@ -232,10 +232,10 @@ class ParsePost {
                 post = new Post(id, fullName, subredditNamePrefixed, author, formattedPostTime,
                         title, previewUrl, url, permalink, score, postType,
                         voteType, gilded, flair, spoiler, nsfw, stickied, archived, isCrosspost);
-                if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
+                if(data.isNull(JSONUtils.SELFTEXT_KEY)) {
                     post.setSelfText("");
                 } else {
-                    post.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
+                    post.setSelfText(data.getString(JSONUtils.SELFTEXT_KEY).trim());
                 }
             }
         } else {
@@ -315,10 +315,10 @@ class ParsePost {
                             post.setPreviewWidth(previewWidth);
                             post.setPreviewHeight(previewHeight);
 
-                            if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
+                            if(data.isNull(JSONUtils.SELFTEXT_KEY)) {
                                 post.setSelfText("");
                             } else {
-                                post.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
+                                post.setSelfText(data.getString(JSONUtils.SELFTEXT_KEY).trim());
                             }
                         } else {
                             //Link post
@@ -328,10 +328,10 @@ class ParsePost {
                             post = new Post(id, fullName, subredditNamePrefixed, author, formattedPostTime,
                                     title, previewUrl, url, permalink, score, postType, voteType, gilded,
                                     flair, spoiler, nsfw, stickied, archived, isCrosspost);
-                            if(data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
+                            if(data.isNull(JSONUtils.SELFTEXT_KEY)) {
                                 post.setSelfText("");
                             } else {
-                                post.setSelfText(data.getString(JSONUtils.SELFTEXT_HTML_KEY).trim());
+                                post.setSelfText(data.getString(JSONUtils.SELFTEXT_KEY).trim());
                             }
 
                             post.setPreviewWidth(previewWidth);

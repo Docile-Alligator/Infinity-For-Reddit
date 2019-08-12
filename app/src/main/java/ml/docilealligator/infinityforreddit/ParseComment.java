@@ -221,8 +221,8 @@ class ParseComment {
         String parentId = singleCommentData.getString(JSONUtils.PARENT_ID_KEY);
         boolean isSubmitter = singleCommentData.getBoolean(JSONUtils.IS_SUBMITTER_KEY);
         String commentContent = "";
-        if(!singleCommentData.isNull(JSONUtils.BODY_HTML_KEY)) {
-            commentContent = singleCommentData.getString(JSONUtils.BODY_HTML_KEY).trim();
+        if(!singleCommentData.isNull(JSONUtils.BODY_KEY)) {
+            commentContent = singleCommentData.getString(JSONUtils.BODY_KEY).trim();
         }
         String permalink = Html.fromHtml(singleCommentData.getString(JSONUtils.PERMALINK_KEY)).toString();
         int score = singleCommentData.getInt(JSONUtils.SCORE_KEY);
