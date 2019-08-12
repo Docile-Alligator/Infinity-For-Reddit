@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/cardViewBackgroundColor">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/relative_layout_item_post_detail"

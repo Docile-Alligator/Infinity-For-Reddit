@@ -6,7 +6,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -354,9 +353,6 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                         ViewPostDetailActivity.this.children = children;
 
                         comments = expandedComments;
-                        if(comments != null) {
-                            Log.i("thisis ", "not null");
-                        }
                         hasMoreChildren = children.size() != 0;
                         mAdapter.addComments(expandedComments, hasMoreChildren);
 

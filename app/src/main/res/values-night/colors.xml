@@ -43,4 +43,6 @@
     <color name="tabLayoutWithCollapsedCollapsingToolbarTabIndicator">@color/tabLayoutWithCollapsedCollapsingToolbarTextColor</color>
 
     <color name="navBarColor">@color/backgroundColor</color>
+
+    <color name="cardViewBackgroundColor">#242424</color>
 </resources>
