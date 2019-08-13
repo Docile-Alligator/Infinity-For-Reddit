@@ -131,4 +131,20 @@ public interface RedditAPI {
     @FormUrlEncoded
     @POST("/api/editusertext")
     Call<String> editPostOrComment(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("/api/marknsfw")
+    Call<String> markNSFW(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("/api/unmarknsfw")
+    Call<String> unmarkNSFW(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("/api/spoiler")
+    Call<String> markSpoiler(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("/api/unspoiler")
+    Call<String> unmarkSpoiler(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }

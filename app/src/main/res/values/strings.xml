@@ -11,6 +11,8 @@
     <string name="post_video_activity_label">Video Post</string>
     <string name="rules_activity_label">Rules</string>
     <string name="search_subreddits_activity_label">Subreddits</string>
+    <string name="edit_post_activity_label">Edit Post</string>
+    <string name="edit_comment_activity_label">Edit Comment</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -26,6 +28,10 @@
     <string name="action_sort">Sort</string>
     <string name="action_edit_post">Edit Post</string>
     <string name="action_delete_post">Delete Post</string>
+    <string name="action_mark_nsfw">Mark NSFW</string>
+    <string name="action_unmark_nsfw">Unmark NSFW</string>
+    <string name="action_mark_spoiler">Mark Spoiler</string>
+    <string name="action_unmark_spoiler">Unmark Spoiler</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -187,8 +193,15 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
+    <string name="edit_success">Edit successful</string>
     <string name="delete_post_success">Delete successfully</string>
     <string name="delete_post_failed">Delete failed</string>
-
-    <string name="edit_success">Edit Successful</string>
+    <string name="mark_nsfw_success">Mark NSFW successful</string>
+    <string name="mark_nsfw_failed">Mark NSFW failed</string>
+    <string name="unmark_nsfw_success">Unmark NSFW successful</string>
+    <string name="unmark_nsfw_failed">Unmark NSFW failed</string>
+    <string name="mark_spoiler_success">Mark spoiler successful</string>
+    <string name="mark_spoiler_failed">Mark spoiler failed</string>
+    <string name="unmark_spoiler_success">Unmark spoiler successful</string>
+    <string name="unmark_spoiler_failed">Unmark spoiler failed</string>
 </resources>

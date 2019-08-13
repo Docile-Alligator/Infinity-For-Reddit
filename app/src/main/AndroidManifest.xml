@@ -22,11 +22,13 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".EditCommentActivity"
+            android:label="@string/edit_comment_activity_label"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".EditPostActivity"
+            android:label="@string/edit_post_activity_label"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />

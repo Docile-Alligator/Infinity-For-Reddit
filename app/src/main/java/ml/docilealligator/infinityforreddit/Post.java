@@ -252,6 +252,10 @@ class Post implements Parcelable {
         return flair;
     }
 
+    void setFlair(String flair) {
+        this.flair = flair;
+    }
+
     void setScore(int score) {
         this.score = score;
     }
@@ -296,8 +300,16 @@ class Post implements Parcelable {
         return spoiler;
     }
 
+    void setSpoiler(boolean spoiler) {
+        this.spoiler = spoiler;
+    }
+
     boolean isNSFW() {
         return nsfw;
+    }
+
+    void setNSFW(boolean nsfw) {
+        this.nsfw = nsfw;
     }
 
     @Override

@@ -37,7 +37,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -223,6 +225,22 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     mMenu.findItem(R.id.action_edit_view_post_detail_activity).setVisible(true);
                 }
                 mMenu.findItem(R.id.action_delete_view_post_detail_activity).setVisible(true);
+
+                MenuItem nsfwItem = mMenu.findItem(R.id.action_nsfw_view_post_detail_activity);
+                nsfwItem.setVisible(true);
+                if(mPost.isNSFW()) {
+                    nsfwItem.setTitle(R.string.action_unmark_nsfw);
+                } else {
+                    nsfwItem.setTitle(R.string.action_mark_nsfw);
+                }
+
+                MenuItem spoilerItem = mMenu.findItem(R.id.action_spoiler_view_post_detail_activity);
+                spoilerItem.setVisible(true);
+                if(mPost.isSpoiler()) {
+                    spoilerItem.setTitle(R.string.action_unmark_spoiler);
+                } else {
+                    spoilerItem.setTitle(R.string.action_mark_spoiler);
+                }
             }
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
                     mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mAccountName, mPost,
@@ -459,7 +477,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
                         @Override
                         public void fetchPostFailed() {
-                            showErrorMessage(R.string.refresh_post_failed);
+                            showMessage(R.string.refresh_post_failed);
                             isRefreshing = false;
                         }
                     });
@@ -474,12 +492,100 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         mGlide.load(R.drawable.load_post_error_indicator).into(mFetchPostInfoImageView);
     }
 
-    private void showErrorMessage(int resId) {
+    private void showMessage(int resId) {
         if(showToast) {
             Toast.makeText(ViewPostDetailActivity.this, resId, Toast.LENGTH_SHORT).show();
         } else {
             Snackbar.make(mCoordinatorLayout, resId, Snackbar.LENGTH_SHORT);
         }
+    }
+
+    private void markNSFW() {
+        Map<String, String> params = new HashMap<>();
+        params.put(RedditUtils.ID_KEY, mPost.getFullName());
+        mOauthRetrofit.create(RedditAPI.class).markNSFW(RedditUtils.getOAuthHeader(mAccessToken), params)
+                .enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if(response.isSuccessful()) {
+                    refresh(true);
+                    showMessage(R.string.mark_nsfw_success);
+                } else {
+                    showMessage(R.string.mark_nsfw_failed);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                showMessage(R.string.mark_nsfw_failed);
+            }
+        });
+    }
+
+    private void unmarkNSFW() {
+        Map<String, String> params = new HashMap<>();
+        params.put(RedditUtils.ID_KEY, mPost.getFullName());
+        mOauthRetrofit.create(RedditAPI.class).unmarkNSFW(RedditUtils.getOAuthHeader(mAccessToken), params)
+                .enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                        if(response.isSuccessful()) {
+                            refresh(true);
+                            showMessage(R.string.unmark_nsfw_success);
+                        } else {
+                            showMessage(R.string.unmark_nsfw_failed);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                        showMessage(R.string.unmark_nsfw_failed);
+                    }
+                });
+    }
+
+    private void markSpoiler() {
+        Map<String, String> params = new HashMap<>();
+        params.put(RedditUtils.ID_KEY, mPost.getFullName());
+        mOauthRetrofit.create(RedditAPI.class).markSpoiler(RedditUtils.getOAuthHeader(mAccessToken), params)
+                .enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                        if(response.isSuccessful()) {
+                            refresh(true);
+                            showMessage(R.string.mark_spoiler_success);
+                        } else {
+                            showMessage(R.string.mark_spoiler_failed);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                        showMessage(R.string.mark_spoiler_failed);
+                    }
+                });
+    }
+
+    private void unmarkSpoiler() {
+        Map<String, String> params = new HashMap<>();
+        params.put(RedditUtils.ID_KEY, mPost.getFullName());
+        mOauthRetrofit.create(RedditAPI.class).unmarkSpoiler(RedditUtils.getOAuthHeader(mAccessToken), params)
+                .enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                        if(response.isSuccessful()) {
+                            refresh(true);
+                            showMessage(R.string.unmark_spoiler_success);
+                        } else {
+                            showMessage(R.string.unmark_spoiler_failed);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                        showMessage(R.string.unmark_spoiler_failed);
+                    }
+                });
     }
 
     void deleteComment(String fullName, int position) {
@@ -520,6 +626,22 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 menu.findItem(R.id.action_edit_view_post_detail_activity).setVisible(true);
             }
             menu.findItem(R.id.action_delete_view_post_detail_activity).setVisible(true);
+
+            MenuItem nsfwItem = menu.findItem(R.id.action_nsfw_view_post_detail_activity);
+            nsfwItem.setVisible(true);
+            if(mPost.isNSFW()) {
+                nsfwItem.setTitle(R.string.action_unmark_nsfw);
+            } else {
+                nsfwItem.setTitle(R.string.action_mark_nsfw);
+            }
+
+            MenuItem spoilerItem = menu.findItem(R.id.action_spoiler_view_post_detail_activity);
+            spoilerItem.setVisible(true);
+            if(mPost.isSpoiler()) {
+                spoilerItem.setTitle(R.string.action_unmark_spoiler);
+            } else {
+                spoilerItem.setTitle(R.string.action_mark_spoiler);
+            }
         }
         return true;
     }
@@ -565,11 +687,25 @@ public class ViewPostDetailActivity extends AppCompatActivity {
 
                             @Override
                             public void deleteFailed() {
-                                showErrorMessage(R.string.delete_post_failed);
+                                showMessage(R.string.delete_post_failed);
                             }
                         }))
                         .setNegativeButton(R.string.cancel, null)
                         .show();
+                return true;
+            case R.id.action_nsfw_view_post_detail_activity:
+                if(mPost.isNSFW()) {
+                    unmarkNSFW();
+                } else {
+                    markNSFW();
+                }
+                return true;
+            case R.id.action_spoiler_view_post_detail_activity:
+                if(mPost.isSpoiler()) {
+                    unmarkSpoiler();
+                } else {
+                    markSpoiler();
+                }
                 return true;
             case android.R.id.home:
                 onBackPressed();
