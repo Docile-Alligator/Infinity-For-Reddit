@@ -116,12 +116,20 @@ class CommentData implements Parcelable {
         return author;
     }
 
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
     public String getCommentTime() {
         return commentTime;
     }
 
     public String getCommentContent() {
         return commentContent;
+    }
+
+    public void setCommentContent(String commentContent) {
+        this.commentContent = commentContent;
     }
 
     public String getLinkId() {

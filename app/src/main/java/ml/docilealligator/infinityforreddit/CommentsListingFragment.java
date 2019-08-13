@@ -40,6 +40,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
     static final String EXTRA_USERNAME_KEY = "ENK";
     static final String EXTRA_ACCESS_TOKEN = "EAT";
+    static final String EXTRA_ACCOUNT_NAME = "EAN";
 
     @BindView(R.id.coordinator_layout_comments_listing_fragment) CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.recycler_view_comments_listing_fragment) RecyclerView mCommentRecyclerView;
@@ -93,7 +94,8 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
 
         mAdapter = new CommentsListingRecyclerViewAdapter(activity, mOauthRetrofit,
-                getArguments().getString(EXTRA_ACCESS_TOKEN), () -> mCommentViewModel.retryLoadingMore());
+                getArguments().getString(EXTRA_ACCESS_TOKEN), getArguments().getString(EXTRA_ACCOUNT_NAME),
+                () -> mCommentViewModel.retryLoadingMore());
 
         String username = getArguments().getString(EXTRA_USERNAME_KEY);
 

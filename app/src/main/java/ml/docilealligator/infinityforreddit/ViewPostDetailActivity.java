@@ -59,6 +59,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
     static final String EXTRA_POST_ID = "EPI";
 
     private static final int EDIT_POST_REQUEST_CODE = 2;
+    static final int EDIT_COMMENT_REQUEST_CODE = 3;
 
     private RequestManager mGlide;
     private Locale mLocale;
@@ -224,7 +225,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 mMenu.findItem(R.id.action_delete_view_post_detail_activity).setVisible(true);
             }
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
-                    mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mPost,
+                    mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mAccountName, mPost,
                     mPost.getSubredditNamePrefixed(), mLocale, mLoadSubredditIconAsyncTask,
                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                         @Override
@@ -290,7 +291,7 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                             }
 
                             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
-                                    mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mPost,
+                                    mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mAccountName, mPost,
                                     mPost.getSubredditNamePrefixed(), mLocale, mLoadSubredditIconAsyncTask,
                                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                                         @Override
@@ -481,6 +482,27 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         }
     }
 
+    void deleteComment(String fullName, int position) {
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                .setTitle(R.string.delete_this_comment)
+                .setMessage(R.string.are_you_sure)
+                .setPositiveButton(R.string.delete, (dialogInterface, i)
+                        -> DeleteThing.delete(mOauthRetrofit, fullName, mAccessToken, new DeleteThing.DeleteThingListener() {
+                    @Override
+                    public void deleteSuccess() {
+                        Toast.makeText(ViewPostDetailActivity.this, R.string.delete_post_success, Toast.LENGTH_SHORT).show();
+                        mAdapter.deleteComment(position);
+                    }
+
+                    @Override
+                    public void deleteFailed() {
+                        Toast.makeText(ViewPostDetailActivity.this, R.string.delete_post_failed, Toast.LENGTH_SHORT).show();
+                    }
+                }))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
     @Subscribe
     public void onPostUpdateEvent(PostUpdateEventToDetailActivity event) {
         if(mPost.getId().equals(event.postId)) {
@@ -577,6 +599,11 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         } else if(requestCode == EDIT_POST_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
                 refresh(true);
+            }
+        } else if(requestCode == EDIT_COMMENT_REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                mAdapter.editComment(data.getExtras().getString(EditCommentActivity.EXTRA_EDITED_COMMENT_CONTENT),
+                        data.getExtras().getInt(EditCommentActivity.EXTRA_EDITED_COMMENT_POSITION));
             }
         }
     }

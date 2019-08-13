@@ -96,7 +96,6 @@
         android:id="@+id/video_type_linear_layout_post_type_bottom_sheet_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
         android:paddingStart="32dp"

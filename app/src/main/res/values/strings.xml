@@ -182,7 +182,9 @@
     <string name="login_first">Login first</string>
 
     <string name="delete_this_post">Delete This Post</string>
+    <string name="delete_this_comment">Delete This Comment</string>
     <string name="are_you_sure">Are you sure?</string>
+    <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="delete_post_success">Delete successfully</string>

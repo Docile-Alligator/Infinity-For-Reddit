@@ -2,17 +2,18 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
@@ -27,6 +28,7 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
     private Context mContext;
     private Retrofit mOauthRetrofit;
     private String mAccessToken;
+    private String mAccountName;
     private int mTextColorPrimaryDark;
     private int mColorAccent;
 
@@ -42,11 +44,12 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
     }
 
     protected CommentsListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, String accessToken,
-                                                 RetryLoadingMoreCallback retryLoadingMoreCallback) {
+                                                 String accountName, RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         mContext = context;
         mOauthRetrofit = oauthRetrofit;
         mAccessToken = accessToken;
+        mAccountName = accountName;
         mRetryLoadingMoreCallback = retryLoadingMoreCallback;
         mTextColorPrimaryDark = mContext.getResources().getColor(R.color.colorPrimaryDarkDayNightTheme);
         mColorAccent = mContext.getResources().getColor(R.color.colorAccent);
@@ -114,6 +117,20 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
                             .setColorFilter(ContextCompat.getColor(mContext, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
                     break;
             }
+
+            if(comment.getAuthor().equals(mAccountName)) {
+                ((DataViewHolder) holder).moreButton.setVisibility(View.VISIBLE);
+                ((DataViewHolder) holder).moreButton.setOnClickListener(view -> {
+                    ModifyCommentBottomSheetFragment modifyCommentBottomSheetFragment = new ModifyCommentBottomSheetFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(ModifyCommentBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                    bundle.putString(ModifyCommentBottomSheetFragment.EXTRA_COMMENT_CONTENT, comment.getCommentContent());
+                    bundle.putString(ModifyCommentBottomSheetFragment.EXTRA_COMMENT_FULLNAME, comment.getFullName());
+                    bundle.putInt(ModifyCommentBottomSheetFragment.EXTRA_POSITION, holder.getAdapterPosition() - 1);
+                    modifyCommentBottomSheetFragment.setArguments(bundle);
+                    modifyCommentBottomSheetFragment.show(((AppCompatActivity) mContext).getSupportFragmentManager(), modifyCommentBottomSheetFragment.getTag());
+                });
+            }
         }
     }
 
@@ -165,9 +182,10 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
         @BindView(R.id.author_text_view_item_post_comment) TextView authorTextView;
         @BindView(R.id.comment_time_text_view_item_post_comment) TextView commentTimeTextView;
         @BindView(R.id.comment_markdown_view_item_post_comment) CustomMarkwonView commentMarkdownView;
-        @BindView(R.id.plus_button_item_post_comment) ImageView upvoteButton;
+        @BindView(R.id.up_vote_button_item_post_comment) ImageView upvoteButton;
         @BindView(R.id.score_text_view_item_post_comment) TextView scoreTextView;
-        @BindView(R.id.minus_button_item_post_comment) ImageView downvoteButton;
+        @BindView(R.id.down_vote_button_item_post_comment) ImageView downvoteButton;
+        @BindView(R.id.more_button_item_post_comment) ImageView moreButton;
         @BindView(R.id.share_button_item_post_comment) ImageView shareButton;
         @BindView(R.id.reply_button_item_post_comment) ImageView replyButton;
 
@@ -184,11 +202,6 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
             verticalBlock.setVisibility(View.GONE);
 
             commentMarkdownView.setOnClickListener(view -> linearLayout.callOnClick());
-
-            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) shareButton.getLayoutParams();
-            lp.addRule(RelativeLayout.ALIGN_PARENT_END);
-            lp.setMarginEnd(0);
-            shareButton.setLayoutParams(lp);
 
             shareButton.setOnClickListener(view -> {
                 Intent intent = new Intent(Intent.ACTION_SEND);

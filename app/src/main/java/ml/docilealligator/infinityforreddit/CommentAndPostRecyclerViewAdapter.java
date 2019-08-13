@@ -6,6 +6,7 @@ import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -61,6 +63,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private RequestManager mGlide;
     private String mAccessToken;
+    private String mAccountName;
     private Post mPost;
     private ArrayList<CommentData> mVisibleComments;
     private String mSubredditNamePrefixed;
@@ -79,7 +82,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     CommentAndPostRecyclerViewAdapter(Activity activity, Retrofit retrofit, Retrofit oauthRetrofit,
                                       RedditDataRoomDatabase redditDataRoomDatabase, RequestManager glide,
-                                      String accessToken, Post post, String subredditNamePrefixed,
+                                      String accessToken, String accountName, Post post, String subredditNamePrefixed,
                                       Locale locale, LoadSubredditIconAsyncTask loadSubredditIconAsyncTask,
                                       CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
         mActivity = activity;
@@ -88,6 +91,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mGlide = glide;
         mAccessToken = accessToken;
+        mAccountName = accountName;
         mPost = post;
         mVisibleComments = new ArrayList<>();
         mSubredditNamePrefixed = subredditNamePrefixed;
@@ -425,6 +429,20 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             params.width = comment.getDepth() * 16;
             ((CommentViewHolder) holder).verticalBlock.setLayoutParams(params);
 
+            if(comment.getAuthor().equals(mAccountName)) {
+                ((CommentViewHolder) holder).moreButton.setVisibility(View.VISIBLE);
+                ((CommentViewHolder) holder).moreButton.setOnClickListener(view -> {
+                    ModifyCommentBottomSheetFragment modifyCommentBottomSheetFragment = new ModifyCommentBottomSheetFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(ModifyCommentBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                    bundle.putString(ModifyCommentBottomSheetFragment.EXTRA_COMMENT_CONTENT, comment.getCommentContent());
+                    bundle.putString(ModifyCommentBottomSheetFragment.EXTRA_COMMENT_FULLNAME, comment.getFullName());
+                    bundle.putInt(ModifyCommentBottomSheetFragment.EXTRA_POSITION, holder.getAdapterPosition() - 1);
+                    modifyCommentBottomSheetFragment.setArguments(bundle);
+                    modifyCommentBottomSheetFragment.show(((AppCompatActivity) mActivity).getSupportFragmentManager(), modifyCommentBottomSheetFragment.getTag());
+                });
+            }
+
             if (comment.hasReply()) {
                 if(comment.isExpanded()) {
                     ((CommentViewHolder) holder).expandButton.setImageResource(R.drawable.ic_expand_less_black_20dp);
@@ -436,11 +454,11 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
             switch (comment.getVoteType()) {
                 case 1:
-                    ((CommentViewHolder) holder).upvoteButton
+                    ((CommentViewHolder) holder).upVoteButton
                             .setColorFilter(ContextCompat.getColor(mActivity, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
                     break;
                 case 2:
-                    ((CommentViewHolder) holder).downvoteButton
+                    ((CommentViewHolder) holder).downVoteButton
                             .setColorFilter(ContextCompat.getColor(mActivity, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
                     break;
             }
@@ -638,12 +656,29 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         return mVisibleComments;
     }
 
+    void editComment(String commentContent, int position) {
+        mVisibleComments.get(position).setCommentContent(commentContent);
+        notifyItemChanged(position + 1);
+    }
+
+    void deleteComment(int position) {
+        if(mVisibleComments.get(position).hasReply()) {
+            mVisibleComments.get(position).setAuthor("[deleted]");
+            mVisibleComments.get(position).setCommentContent("[deleted]");
+            notifyItemChanged(position + 1);
+        } else {
+            mVisibleComments.remove(position);
+            notifyItemRemoved(position + 1);
+        }
+    }
+
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof CommentViewHolder) {
+            ((CommentViewHolder) holder).moreButton.setVisibility(View.GONE);
             ((CommentViewHolder) holder).expandButton.setVisibility(View.GONE);
-            ((CommentViewHolder) holder).upvoteButton.clearColorFilter();
-            ((CommentViewHolder) holder).downvoteButton.clearColorFilter();
+            ((CommentViewHolder) holder).upVoteButton.clearColorFilter();
+            ((CommentViewHolder) holder).downVoteButton.clearColorFilter();
         }
     }
 
@@ -854,9 +889,10 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         @BindView(R.id.author_text_view_item_post_comment) TextView authorTextView;
         @BindView(R.id.comment_time_text_view_item_post_comment) TextView commentTimeTextView;
         @BindView(R.id.comment_markdown_view_item_post_comment) CustomMarkwonView commentMarkdownView;
-        @BindView(R.id.plus_button_item_post_comment) ImageView upvoteButton;
+        @BindView(R.id.up_vote_button_item_post_comment) ImageView upVoteButton;
         @BindView(R.id.score_text_view_item_post_comment) TextView scoreTextView;
-        @BindView(R.id.minus_button_item_post_comment) ImageView downvoteButton;
+        @BindView(R.id.down_vote_button_item_post_comment) ImageView downVoteButton;
+        @BindView(R.id.more_button_item_post_comment) ImageView moreButton;
         @BindView(R.id.expand_button_item_post_comment) ImageView expandButton;
         @BindView(R.id.share_button_item_post_comment) ImageView shareButton;
         @BindView(R.id.reply_button_item_post_comment) ImageView replyButton;
@@ -906,7 +942,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 mActivity.startActivityForResult(intent, CommentActivity.WRITE_COMMENT_REQUEST_CODE);
             });
 
-            upvoteButton.setOnClickListener(view -> {
+            upVoteButton.setOnClickListener(view -> {
                 if(mAccessToken == null) {
                     Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                     return;
@@ -915,18 +951,18 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 int previousVoteType = mVisibleComments.get(getAdapterPosition() - 1).getVoteType();
                 String newVoteType;
 
-                downvoteButton.clearColorFilter();
+                downVoteButton.clearColorFilter();
 
                 if(previousVoteType != CommentData.VOTE_TYPE_UPVOTE) {
                     //Not upvoted before
                     mVisibleComments.get(getAdapterPosition() - 1).setVoteType(CommentData.VOTE_TYPE_UPVOTE);
                     newVoteType = RedditUtils.DIR_UPVOTE;
-                    upvoteButton.setColorFilter(ContextCompat.getColor(mActivity, R.color.backgroundColorPrimaryDark), android.graphics.PorterDuff.Mode.SRC_IN);
+                    upVoteButton.setColorFilter(ContextCompat.getColor(mActivity, R.color.backgroundColorPrimaryDark), android.graphics.PorterDuff.Mode.SRC_IN);
                 } else {
                     //Upvoted before
                     mVisibleComments.get(getAdapterPosition() - 1).setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
                     newVoteType = RedditUtils.DIR_UNVOTE;
-                    upvoteButton.clearColorFilter();
+                    upVoteButton.clearColorFilter();
                 }
 
                 scoreTextView.setText(Integer.toString(mVisibleComments.get(getAdapterPosition() - 1).getScore() + mVisibleComments.get(getAdapterPosition() - 1).getVoteType()));
@@ -936,13 +972,13 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     public void onVoteThingSuccess(int position) {
                         if(newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
                             mVisibleComments.get(getAdapterPosition() - 1).setVoteType(CommentData.VOTE_TYPE_UPVOTE);
-                            upvoteButton.setColorFilter(ContextCompat.getColor(mActivity, R.color.backgroundColorPrimaryDark), android.graphics.PorterDuff.Mode.SRC_IN);
+                            upVoteButton.setColorFilter(ContextCompat.getColor(mActivity, R.color.backgroundColorPrimaryDark), android.graphics.PorterDuff.Mode.SRC_IN);
                         } else {
                             mVisibleComments.get(getAdapterPosition() - 1).setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
-                            upvoteButton.clearColorFilter();
+                            upVoteButton.clearColorFilter();
                         }
 
-                        downvoteButton.clearColorFilter();
+                        downVoteButton.clearColorFilter();
                         scoreTextView.setText(Integer.toString(mVisibleComments.get(getAdapterPosition() - 1).getScore() + mVisibleComments.get(getAdapterPosition() - 1).getVoteType()));
                     }
 
@@ -951,7 +987,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 }, mVisibleComments.get(getAdapterPosition() - 1).getFullName(), newVoteType, getAdapterPosition());
             });
 
-            downvoteButton.setOnClickListener(view -> {
+            downVoteButton.setOnClickListener(view -> {
                 if(mAccessToken == null) {
                     Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                     return;
@@ -960,18 +996,18 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 int previousVoteType = mVisibleComments.get(getAdapterPosition() - 1).getVoteType();
                 String newVoteType;
 
-                upvoteButton.clearColorFilter();
+                upVoteButton.clearColorFilter();
 
                 if(previousVoteType != CommentData.VOTE_TYPE_DOWNVOTE) {
                     //Not downvoted before
                     mVisibleComments.get(getAdapterPosition() - 1).setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
                     newVoteType = RedditUtils.DIR_DOWNVOTE;
-                    downvoteButton.setColorFilter(ContextCompat.getColor(mActivity, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+                    downVoteButton.setColorFilter(ContextCompat.getColor(mActivity, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
                 } else {
                     //Downvoted before
                     mVisibleComments.get(getAdapterPosition() - 1).setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
                     newVoteType = RedditUtils.DIR_UNVOTE;
-                    downvoteButton.clearColorFilter();
+                    downVoteButton.clearColorFilter();
                 }
 
                 scoreTextView.setText(Integer.toString(mVisibleComments.get(getAdapterPosition() - 1).getScore() + mVisibleComments.get(getAdapterPosition() - 1).getVoteType()));
@@ -981,13 +1017,13 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     public void onVoteThingSuccess(int position1) {
                         if(newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {
                             mVisibleComments.get(getAdapterPosition() - 1).setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
-                            downvoteButton.setColorFilter(ContextCompat.getColor(mActivity, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+                            downVoteButton.setColorFilter(ContextCompat.getColor(mActivity, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
                         } else {
                             mVisibleComments.get(getAdapterPosition() - 1).setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
-                            downvoteButton.clearColorFilter();
+                            downVoteButton.clearColorFilter();
                         }
 
-                        upvoteButton.clearColorFilter();
+                        upVoteButton.clearColorFilter();
                         scoreTextView.setText(Integer.toString(mVisibleComments.get(getAdapterPosition() - 1).getScore() + mVisibleComments.get(getAdapterPosition() - 1).getVoteType()));
                     }
 

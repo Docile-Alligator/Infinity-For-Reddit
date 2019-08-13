@@ -31,6 +31,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
@@ -385,6 +386,26 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         }
     }
 
+    void deleteComment(String fullName) {
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                .setTitle(R.string.delete_this_comment)
+                .setMessage(R.string.are_you_sure)
+                .setPositiveButton(R.string.delete, (dialogInterface, i)
+                        -> DeleteThing.delete(mOauthRetrofit, fullName, mAccessToken, new DeleteThing.DeleteThingListener() {
+                    @Override
+                    public void deleteSuccess() {
+                        Toast.makeText(ViewUserDetailActivity.this, R.string.delete_post_success, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void deleteFailed() {
+                        Toast.makeText(ViewUserDetailActivity.this, R.string.delete_post_failed, Toast.LENGTH_SHORT).show();
+                    }
+                }))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_user_detail_activity, menu);
@@ -519,6 +540,7 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             Bundle bundle = new Bundle();
             bundle.putString(CommentsListingFragment.EXTRA_USERNAME_KEY, username);
             bundle.putString(CommentsListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+            bundle.putString(CommentsListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
             fragment.setArguments(bundle);
             return fragment;
         }
@@ -557,6 +579,12 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             if (viewPager.getCurrentItem() == 0) {
                 postFragment.refresh();
             } else {
+                commentsListingFragment.refresh();
+            }
+        }
+
+        public void refreshComments() {
+            if(commentsListingFragment != null) {
                 commentsListingFragment.refresh();
             }
         }
