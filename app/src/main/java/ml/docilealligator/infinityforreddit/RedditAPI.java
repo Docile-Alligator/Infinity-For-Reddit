@@ -67,7 +67,8 @@ public interface RedditAPI {
     Call<String> getUserData(@Path("username") String username);
 
     @GET("user/{username}/comments.json?raw_json=1")
-    Call<String> getUserComments(@Path("username") String username, @Query("after") String after);
+    Call<String> getUserComments(@Path("username") String username, @Query("after") String after,
+                                 @Query("sort") String sortType);
 
     @FormUrlEncoded
     @POST("api/subscribe")

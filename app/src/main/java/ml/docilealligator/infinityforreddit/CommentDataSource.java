@@ -24,6 +24,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
     private Retrofit retrofit;
     private Locale locale;
     private String username;
+    private String sortType;
 
     private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
     private MutableLiveData<NetworkState> initialLoadStateLiveData;
@@ -34,10 +35,11 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
     private LoadParams<String> params;
     private LoadCallback<String, CommentData> callback;
 
-    CommentDataSource(Retrofit retrofit, Locale locale, String username) {
+    CommentDataSource(Retrofit retrofit, Locale locale, String username, String sortType) {
         this.retrofit = retrofit;
         this.locale = locale;
         this.username = username;
+        this.sortType = sortType;
         paginationNetworkStateLiveData = new MutableLiveData<>();
         initialLoadStateLiveData = new MutableLiveData<>();
         hasPostLiveData = new MutableLiveData<>();
@@ -71,7 +73,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> commentsCall = api.getUserComments(username, null);
+        Call<String> commentsCall = api.getUserComments(username, null, sortType);
         commentsCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -122,7 +124,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
         paginationNetworkStateLiveData.postValue(NetworkState.LOADING);
 
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> bestPost = api.getUserComments(username, params.key);
+        Call<String> bestPost = api.getUserComments(username, params.key, sortType);
         bestPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

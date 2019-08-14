@@ -581,21 +581,25 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
 
         public void refresh() {
             if (viewPager.getCurrentItem() == 0) {
-                postFragment.refresh();
+                if(postFragment != null) {
+                    postFragment.refresh();
+                }
             } else {
-                commentsListingFragment.refresh();
-            }
-        }
-
-        public void refreshComments() {
-            if(commentsListingFragment != null) {
-                commentsListingFragment.refresh();
+                if(commentsListingFragment != null) {
+                    commentsListingFragment.refresh();
+                }
             }
         }
 
         public void changeSortType(String sortType) {
-            if(postFragment != null) {
-                postFragment.changeSortType(sortType);
+            if(viewPager.getCurrentItem() == 0) {
+                if(postFragment != null) {
+                    postFragment.changeSortType(sortType);
+                }
+            } else {
+                if(commentsListingFragment != null) {
+                    commentsListingFragment.changeSortType(sortType);
+                }
             }
         }
     }

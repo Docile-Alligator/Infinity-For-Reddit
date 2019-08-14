@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -18,9 +19,10 @@ public class CommentViewModel extends ViewModel {
     private LiveData<NetworkState> initialLoadingState;
     private LiveData<Boolean> hasCommentLiveData;
     private LiveData<PagedList<CommentData>> comments;
+    private MutableLiveData<String> sortTypeLiveData;
 
-    public CommentViewModel(Retrofit retrofit, Locale locale, String username) {
-        commentDataSourceFactory = new CommentDataSourceFactory(retrofit, locale, username);
+    public CommentViewModel(Retrofit retrofit, Locale locale, String username, String sortType) {
+        commentDataSourceFactory = new CommentDataSourceFactory(retrofit, locale, username, sortType);
 
         initialLoadingState = Transformations.switchMap(commentDataSourceFactory.getCommentDataSourceLiveData(),
                 CommentDataSource::getInitialLoadStateLiveData);
@@ -28,13 +30,20 @@ public class CommentViewModel extends ViewModel {
                 CommentDataSource::getPaginationNetworkStateLiveData);
         hasCommentLiveData = Transformations.switchMap(commentDataSourceFactory.getCommentDataSourceLiveData(),
                 CommentDataSource::hasPostLiveData);
+
+        sortTypeLiveData = new MutableLiveData<>();
+        sortTypeLiveData.postValue(sortType);
+
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
                         .setEnablePlaceholders(false)
                         .setPageSize(25)
                         .build();
 
-        comments = (new LivePagedListBuilder(commentDataSourceFactory, pagedListConfig)).build();
+        comments = Transformations.switchMap(sortTypeLiveData, sort -> {
+            commentDataSourceFactory.changeSortType(sortTypeLiveData.getValue());
+            return (new LivePagedListBuilder(commentDataSourceFactory, pagedListConfig)).build();
+        });
     }
 
     LiveData<PagedList<CommentData>> getComments() {
@@ -65,21 +74,27 @@ public class CommentViewModel extends ViewModel {
         commentDataSourceFactory.getCommentDataSource().retryLoadingMore();
     }
 
+    void changeSortType(String sortType) {
+        sortTypeLiveData.postValue(sortType);
+    }
+
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
         private Retrofit retrofit;
         private Locale locale;
         private String username;
+        private String sortType;
 
-        public Factory(Retrofit retrofit, Locale locale, String username) {
+        public Factory(Retrofit retrofit, Locale locale, String username, String sortType) {
             this.retrofit = retrofit;
             this.locale = locale;
             this.username = username;
+            this.sortType = sortType;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new CommentViewModel(retrofit, locale, username);
+            return (T) new CommentViewModel(retrofit, locale, username, sortType);
         }
     }
 }

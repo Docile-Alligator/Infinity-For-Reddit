@@ -101,7 +101,8 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
         mCommentRecyclerView.setAdapter(mAdapter);
 
-        CommentViewModel.Factory factory = new CommentViewModel.Factory(mRetrofit, resources.getConfiguration().locale, username);
+        CommentViewModel.Factory factory = new CommentViewModel.Factory(mRetrofit,
+                resources.getConfiguration().locale, username, PostDataSource.SORT_TYPE_NEW);
         mCommentViewModel = new ViewModelProvider(this, factory).get(CommentViewModel.class);
         mCommentViewModel.getComments().observe(this, comments -> mAdapter.submitList(comments));
 
@@ -133,6 +134,10 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         });
 
         return rootView;
+    }
+
+    void changeSortType(String sortType) {
+        mCommentViewModel.changeSortType(sortType);
     }
 
     @Override
