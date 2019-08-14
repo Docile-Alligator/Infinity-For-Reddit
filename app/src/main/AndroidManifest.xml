@@ -20,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".AccountPostsActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".EditCommentActivity"
             android:label="@string/edit_comment_activity_label"

@@ -30,6 +30,13 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
     static final String SORT_TYPE_RELEVANCE = "relevance";
     static final String SORT_TYPE_COMMENTS = "comments";
 
+    static final String USER_WHERE_SUBMITTED = "submitted";
+    static final String USER_WHERE_UPVOTED = "upvoted";
+    static final String USER_WHERE_DOWNVOTED = "downvoted";
+    static final String USER_WHERE_HIDDEN = "hidden";
+    static final String USER_WHERE_SAVED = "saved";
+    static final String USER_WHERE_GILDED = "gilded";
+
     private Retrofit retrofit;
     private String accessToken;
     private Locale locale;
@@ -38,6 +45,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
     private int postType;
     private String sortType;
     private int filter;
+    private String userWhere;
 
     private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
     private MutableLiveData<NetworkState> initialLoadStateLiveData;
@@ -76,7 +84,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
     }
 
     PostDataSource(Retrofit retrofit, String accessToken, Locale locale, String subredditOrUserName, int postType,
-                   int filter) {
+                   String sortType, String where, int filter) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
@@ -85,6 +93,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         initialLoadStateLiveData = new MutableLiveData<>();
         hasPostLiveData = new MutableLiveData<>();
         this.postType = postType;
+        this.sortType = sortType;
+        userWhere = where;
         this.filter = filter;
     }
 
@@ -410,9 +420,10 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
         Call<String> getPost;
         if(accessToken == null) {
-            getPost = api.getUserBestPosts(subredditOrUserName, lastItem);
+            getPost = api.getUserBestPosts(subredditOrUserName, lastItem, sortType);
         } else {
-            getPost = api.getUserBestPostsOauth(subredditOrUserName, lastItem, RedditUtils.getOAuthHeader(accessToken));
+            getPost = api.getUserBestPostsOauth(subredditOrUserName, userWhere, lastItem, sortType,
+                    RedditUtils.getOAuthHeader(accessToken));
         }
         getPost.enqueue(new Callback<String>() {
             @Override
@@ -469,9 +480,10 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
         Call<String> getPost;
         if(accessToken == null) {
-            getPost = api.getUserBestPosts(subredditOrUserName, after);
+            getPost = api.getUserBestPosts(subredditOrUserName, after, sortType);
         } else {
-            getPost = api.getUserBestPostsOauth(subredditOrUserName, after, RedditUtils.getOAuthHeader(accessToken));
+            getPost = api.getUserBestPostsOauth(subredditOrUserName, userWhere, after, sortType,
+                    RedditUtils.getOAuthHeader(accessToken));
         }
         getPost.enqueue(new Callback<String>() {
             @Override

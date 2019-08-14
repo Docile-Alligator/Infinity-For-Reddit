@@ -15,6 +15,7 @@ class PostDataSourceFactory extends DataSource.Factory {
     private String query;
     private int postType;
     private String sortType;
+    private String userWhere;
     private int filter;
 
     private PostDataSource postDataSource;
@@ -44,13 +45,15 @@ class PostDataSourceFactory extends DataSource.Factory {
     }
 
     PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, String subredditName,
-                          int postType, int filter) {
+                          int postType, String sortType, String where, int filter) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
         this.subredditName = subredditName;
         postDataSourceLiveData = new MutableLiveData<>();
         this.postType = postType;
+        this.sortType = sortType;
+        userWhere = where;
         this.filter = filter;
     }
 
@@ -80,7 +83,7 @@ class PostDataSourceFactory extends DataSource.Factory {
                     sortType, filter);
         } else {
             postDataSource = new PostDataSource(retrofit, accessToken, locale, subredditName, postType,
-                    filter);
+                    sortType, userWhere, filter);
         }
 
         postDataSourceLiveData.postValue(postDataSource);

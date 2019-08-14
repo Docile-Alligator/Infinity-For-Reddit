@@ -87,9 +87,9 @@ public class PostViewModel extends ViewModel {
     }
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
-                         int filter) {
+                         String sortType, String where, int filter) {
         postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, subredditName,
-                postType, filter);
+                postType, sortType, where, filter);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 PostDataSource::getInitialLoadStateLiveData);
@@ -190,6 +190,7 @@ public class PostViewModel extends ViewModel {
         private String query;
         private int postType;
         private String sortType;
+        private String userWhere;
         private int filter;
 
         public Factory(Retrofit retrofit, String accessToken, Locale locale, int postType, String sortType,
@@ -214,12 +215,14 @@ public class PostViewModel extends ViewModel {
         }
 
         public Factory(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
-                       int filter) {
+                       String sortType, String where, int filter) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.locale = locale;
             this.subredditName = subredditName;
             this.postType = postType;
+            this.sortType = sortType;
+            userWhere = where;
             this.filter = filter;
         }
 
@@ -245,7 +248,7 @@ public class PostViewModel extends ViewModel {
             } else if(postType == PostDataSource.TYPE_SUBREDDIT) {
                 return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, postType, sortType, filter);
             } else {
-                return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, postType, filter);
+                return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, postType, sortType, userWhere, filter);
             }
         }
     }

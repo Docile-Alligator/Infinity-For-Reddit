@@ -23,7 +23,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,6 +50,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     static final String EXTRA_NAME = "EN";
     static final String EXTRA_USER_NAME = "EN";
+    static final String EXTRA_USER_WHERE = "EUW";
     static final String EXTRA_QUERY = "EQ";
     static final String EXTRA_POST_TYPE = "EPT";
     static final String EXTRA_SORT_TYPE = "EST";
@@ -256,6 +257,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mFetchPostInfoLinearLayout.setLayoutParams(params);
 
             String username = getArguments().getString(EXTRA_USER_NAME);
+            String where = getArguments().getString(EXTRA_USER_WHERE);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, redditDataRoomDatabase,
                     accessToken, postType, true, new PostRecyclerViewAdapter.Callback() {
@@ -277,10 +279,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             if(accessToken == null) {
                 factory = new PostViewModel.Factory(mRetrofit, accessToken,
-                        getResources().getConfiguration().locale, username, postType, sortType, filter);
+                        getResources().getConfiguration().locale, username, postType, sortType, where, filter);
             } else {
                 factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                        getResources().getConfiguration().locale, username, postType, sortType, filter);
+                        getResources().getConfiguration().locale, username, postType, sortType, where, filter);
             }
         } else {
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, redditDataRoomDatabase,
@@ -307,7 +309,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         mPostRecyclerView.setAdapter(mAdapter);
 
-        mPostViewModel = ViewModelProviders.of(this, factory).get(PostViewModel.class);
+        mPostViewModel = new ViewModelProvider(this, factory).get(PostViewModel.class);
         mPostViewModel.getPosts().observe(this, posts -> mAdapter.submitList(posts));
 
         mPostViewModel.getInitialLoadingState().observe(this, networkState -> {

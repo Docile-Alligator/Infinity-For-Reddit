@@ -279,7 +279,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 ((PostDetailViewHolder) holder).mGildedImageView.setVisibility(View.VISIBLE);
                 mGlide.load(R.drawable.gold).into(((PostDetailViewHolder) holder).mGildedImageView);
                 ((PostDetailViewHolder) holder).mGildedNumberTextView.setVisibility(View.VISIBLE);
-                String gildedNumber = mActivity.getResources().getString(R.string.gilded, mPost.getGilded());
+                String gildedNumber = mActivity.getResources().getString(R.string.gilded_count, mPost.getGilded());
                 ((PostDetailViewHolder) holder).mGildedNumberTextView.setText(gildedNumber);
             }
 

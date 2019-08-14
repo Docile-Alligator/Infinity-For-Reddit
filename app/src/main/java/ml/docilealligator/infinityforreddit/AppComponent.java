@@ -33,4 +33,5 @@ interface AppComponent {
     void inject(SubredditSelectionActivity subredditSelectionActivity);
     void inject(EditPostActivity editPostActivity);
     void inject(EditCommentActivity editCommentActivity);
+    void inject(AccountPostsActivity accountPostsActivity);
 }

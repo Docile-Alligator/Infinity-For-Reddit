@@ -63,13 +63,18 @@
     <string name="profile">Profile</string>
     <string name="following">Following</string>
     <string name="subscriptions">Subscriptions</string>
+    <string name="upvoted">Upvoted</string>
+    <string name="downvoted">Downvoted</string>
+    <string name="hidden">Hidden</string>
+    <string name="saved">Saved</string>
+    <string name="gilded">Gilded</string>
     <string name="settings">Settings</string>
     <string name="subscribers_number_detail">Subscribers: %1$d</string>
     <string name="online_subscribers_number_detail">Online: %1$d</string>
     <string name="cannot_fetch_subreddit_info">Cannot fetch subreddit info</string>
     <string name="cannot_fetch_user_info">Cannot fetch user info</string>
 
-    <string name="gilded">x%1$d</string>
+    <string name="gilded_count">x%1$d</string>
     <string name="title_activity_view_user_detail">ViewUserDetailActivity</string>
 
     <string name="subscribe">Subscribe</string>

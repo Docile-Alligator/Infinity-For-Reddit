@@ -531,6 +531,8 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_USER);
                 bundle.putString(PostFragment.EXTRA_USER_NAME, username);
+                bundle.putString(PostFragment.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_SUBMITTED);
+                bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_NEW);
                 bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 fragment.setArguments(bundle);

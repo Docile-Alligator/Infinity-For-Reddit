@@ -258,6 +258,7 @@ public class FilteredPostsActivity extends AppCompatActivity implements SortType
             getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE, mFragment);
         }
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
+        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
     }
 
     @Override

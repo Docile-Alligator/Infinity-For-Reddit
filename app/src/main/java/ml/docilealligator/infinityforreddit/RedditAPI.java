@@ -55,12 +55,13 @@ public interface RedditAPI {
     Call<String> getSubredditBestPosts(@Path("subredditName") String subredditName, @Path("sortType") String sortType,
                                             @Query("after") String lastItem);
 
-    @GET("user/{username}/submitted.json?raw_json=1&limit=25")
-    Call<String> getUserBestPostsOauth(@Path("username") String username, @Query("after") String lastItem,
-                                       @HeaderMap Map<String, String> headers);
+    @GET("user/{username}/{where}.json?&raw_json=1&limit=25")
+    Call<String> getUserBestPostsOauth(@Path("username") String username, @Path("where") String where,
+                                       @Query("after") String lastItem, @Query("sort") String sortType, @HeaderMap Map<String, String> headers);
 
     @GET("user/{username}/submitted.json?raw_json=1&limit=25")
-    Call<String> getUserBestPosts(@Path("username") String username, @Query("after") String lastItem);
+    Call<String> getUserBestPosts(@Path("username") String username, @Query("after") String lastItem,
+                                  @Query("sort") String sortType);
 
     @GET("user/{username}/about.json?raw_json=1")
     Call<String> getUserData(@Path("username") String username);

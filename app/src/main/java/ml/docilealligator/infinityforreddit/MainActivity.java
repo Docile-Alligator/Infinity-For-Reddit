@@ -76,6 +76,11 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     @BindView(R.id.all_drawer_items_linear_layout_main_activity) LinearLayout allDrawerItemsLinearLayout;
     @BindView(R.id.profile_linear_layout_main_activity) LinearLayout profileLinearLayout;
     @BindView(R.id.subscriptions_linear_layout_main_activity) LinearLayout subscriptionLinearLayout;
+    @BindView(R.id.upvoted_linear_layout_main_activity) LinearLayout upvotedLinearLayout;
+    @BindView(R.id.downvoted_linear_layout_main_activity) LinearLayout downvotedLinearLayout;
+    @BindView(R.id.hidden_linear_layout_main_activity) LinearLayout hiddenLinearLayout;
+    @BindView(R.id.saved_linear_layout_main_activity) LinearLayout savedLinearLayout;
+    @BindView(R.id.gilded_linear_layout_main_activity) LinearLayout gildedLinearLayout;
     @BindView(R.id.divider_main_activity) View divider;
     @BindView(R.id.settings_linear_layout_main_activity) LinearLayout settingsLinearLayout;
     @BindView(R.id.account_recycler_view_main_activity) RecyclerView accountRecyclerView;
@@ -382,6 +387,41 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
         subscriptionLinearLayout.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubscribedThingListingActivity.class);
+            startActivity(intent);
+            drawer.closeDrawers();
+        });
+
+        upvotedLinearLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_UPVOTED);
+            startActivity(intent);
+            drawer.closeDrawers();
+        });
+
+        downvotedLinearLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_DOWNVOTED);
+            startActivity(intent);
+            drawer.closeDrawers();
+        });
+
+        hiddenLinearLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_HIDDEN);
+            startActivity(intent);
+            drawer.closeDrawers();
+        });
+
+        savedLinearLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_SAVED);
+            startActivity(intent);
+            drawer.closeDrawers();
+        });
+
+        gildedLinearLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_GILDED);
             startActivity(intent);
             drawer.closeDrawers();
         });
