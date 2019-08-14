@@ -54,7 +54,7 @@ import retrofit2.Retrofit;
 import static ml.docilealligator.infinityforreddit.CommentActivity.EXTRA_COMMENT_DATA_KEY;
 import static ml.docilealligator.infinityforreddit.CommentActivity.WRITE_COMMENT_REQUEST_CODE;
 
-public class ViewPostDetailActivity extends AppCompatActivity {
+public class ViewPostDetailActivity extends AppCompatActivity implements FlairBottomSheetFragment.FlairSelectionCallback {
 
     static final String EXTRA_POST_DATA = "EPD";
     static final String EXTRA_POST_LIST_POSITION = "EPLI";
@@ -241,6 +241,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                 } else {
                     spoilerItem.setTitle(R.string.action_mark_spoiler);
                 }
+
+                mMenu.findItem(R.id.action_edit_flair_view_post_detail_activity).setVisible(true);
             }
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
                     mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mAccountName, mPost,
@@ -642,6 +644,8 @@ public class ViewPostDetailActivity extends AppCompatActivity {
             } else {
                 spoilerItem.setTitle(R.string.action_mark_spoiler);
             }
+
+            menu.findItem(R.id.action_edit_flair_view_post_detail_activity).setVisible(true);
         }
         return true;
     }
@@ -707,6 +711,14 @@ public class ViewPostDetailActivity extends AppCompatActivity {
                     markSpoiler();
                 }
                 return true;
+            case R.id.action_edit_flair_view_post_detail_activity:
+                FlairBottomSheetFragment flairBottomSheetFragment = new FlairBottomSheetFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(FlairBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                bundle.putString(FlairBottomSheetFragment.EXTRA_SUBREDDIT_NAME, mPost.getSubredditName());
+                flairBottomSheetFragment.setArguments(bundle);
+                flairBottomSheetFragment.show(getSupportFragmentManager(), flairBottomSheetFragment.getTag());
+                return true;
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -767,5 +779,32 @@ public class ViewPostDetailActivity extends AppCompatActivity {
         if(mLoadSubredditIconAsyncTask != null) {
             mLoadSubredditIconAsyncTask.cancel(true);
         }
+    }
+
+    @Override
+    public void flairSelected(Flair flair) {
+        Map<String, String> params = new HashMap<>();
+        params.put(RedditUtils.API_TYPE_KEY, RedditUtils.API_TYPE_JSON);
+        params.put(RedditUtils.FLAIR_TEMPLATE_ID_KEY, flair.getId());
+        params.put(RedditUtils.LINK_KEY, mPost.getFullName());
+        params.put(RedditUtils.TEXT_KEY, flair.getText());
+
+        mOauthRetrofit.create(RedditAPI.class).selectFlair(mPost.getSubredditNamePrefixed(),
+                RedditUtils.getOAuthHeader(mAccessToken), params).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if(response.isSuccessful()) {
+                    refresh(true);
+                    showMessage(R.string.update_flair_success);
+                } else {
+                    showMessage(R.string.update_flair_failed);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                showMessage(R.string.update_flair_failed);
+            }
+        });
     }
 }

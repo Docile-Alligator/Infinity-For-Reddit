@@ -147,4 +147,8 @@ public interface RedditAPI {
     @FormUrlEncoded
     @POST("/api/unspoiler")
     Call<String> unmarkSpoiler(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("{subredditNamePrefixed}/api/selectflair")
+    Call<String> selectFlair(@Path("subredditNamePrefixed") String subredditName, @HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }

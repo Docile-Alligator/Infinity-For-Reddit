@@ -39,4 +39,11 @@
         android:orderInCategory="6"
         app:showAsAction="never"
         android:visible="false" />
+
+    <item
+        android:id="@+id/action_edit_flair_view_post_detail_activity"
+        android:orderInCategory="7"
+        android:title="@string/action_edit_flair"
+        app:showAsAction="never"
+        android:visible="false" />
 </menu>

@@ -17,6 +17,7 @@ class Post implements Parcelable {
 
     private String id;
     private String fullName;
+    private String subredditName;
     private String subredditNamePrefixed;
     private String subredditIconUrl;
     private String author;
@@ -45,12 +46,13 @@ class Post implements Parcelable {
     private boolean isDashVideo;
     private boolean isDownloadableGifOrVideo;
 
-    Post(String id, String fullName, String subredditNamePrefixed, String author, String postTime,
-         String title, String previewUrl, String permalink, int score, int postType, int voteType,
-         int gilded, String flair, boolean spoiler, boolean nsfw, boolean stickied, boolean archived,
-         boolean isCrosspost, boolean isDashVideo) {
+    Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
+         String postTime, String title, String previewUrl, String permalink, int score, int postType,
+         int voteType, int gilded, String flair, boolean spoiler, boolean nsfw, boolean stickied,
+         boolean archived, boolean isCrosspost, boolean isDashVideo) {
         this.id = id;
         this.fullName = fullName;
+        this.subredditName = subredditName;
         this.subredditNamePrefixed = subredditNamePrefixed;
         this.author = author;
         this.authorNamePrefixed = "u/" + author;
@@ -71,12 +73,13 @@ class Post implements Parcelable {
         this.isDashVideo = isDashVideo;
     }
 
-    Post(String id, String fullName, String subredditNamePrefixed, String author, String postTime,
-         String title, String previewUrl, String url, String permalink, int score, int postType,
-         int voteType, int gilded, String flair, boolean spoiler, boolean nsfw, boolean stickied,
+    Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
+         String postTime, String title, String previewUrl, String url, String permalink, int score,
+         int postType, int voteType, int gilded, String flair, boolean spoiler, boolean nsfw, boolean stickied,
          boolean archived, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
+        this.subredditName = subredditName;
         this.subredditNamePrefixed = subredditNamePrefixed;
         this.author = author;
         this.authorNamePrefixed = "u/" + author;
@@ -97,11 +100,12 @@ class Post implements Parcelable {
         this.isCrosspost = isCrosspost;
     }
 
-    Post(String id, String fullName, String subredditNamePrefixed, String author, String postTime,
-         String title, String permalink, int score, int postType, int voteType, int gilded, String flair,
-         boolean spoiler, boolean nsfw, boolean stickied, boolean archived, boolean isCrosspost) {
+    Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
+         String postTime, String title, String permalink, int score, int postType, int voteType, int gilded,
+         String flair, boolean spoiler, boolean nsfw, boolean stickied, boolean archived, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
+        this.subredditName = subredditName;
         this.subredditNamePrefixed = subredditNamePrefixed;
         this.author = author;
         this.authorNamePrefixed = "u/" + author;
@@ -123,6 +127,7 @@ class Post implements Parcelable {
     protected Post(Parcel in) {
         id = in.readString();
         fullName = in.readString();
+        subredditName = in.readString();
         subredditNamePrefixed = in.readString();
         subredditIconUrl = in.readString();
         author = in.readString();
@@ -170,6 +175,10 @@ class Post implements Parcelable {
 
     String getFullName() {
         return fullName;
+    }
+
+    String getSubredditName() {
+        return subredditName;
     }
 
     String getSubredditNamePrefixed() {
@@ -345,6 +354,7 @@ class Post implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(id);
         parcel.writeString(fullName);
+        parcel.writeString(subredditName);
         parcel.writeString(subredditNamePrefixed);
         parcel.writeString(subredditIconUrl);
         parcel.writeString(author);

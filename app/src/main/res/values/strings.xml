@@ -32,6 +32,7 @@
     <string name="action_unmark_nsfw">Unmark NSFW</string>
     <string name="action_mark_spoiler">Mark Spoiler</string>
     <string name="action_unmark_spoiler">Unmark Spoiler</string>
+    <string name="action_edit_flair">Edit Flair</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -204,4 +205,6 @@
     <string name="mark_spoiler_failed">Mark spoiler failed</string>
     <string name="unmark_spoiler_success">Unmark spoiler successful</string>
     <string name="unmark_spoiler_failed">Unmark spoiler failed</string>
+    <string name="update_flair_success">Update flair successful</string>
+    <string name="update_flair_failed">Update flair failed</string>
 </resources>

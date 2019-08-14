@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,7 +34,7 @@ import retrofit2.Retrofit;
 public class FlairBottomSheetFragment extends BottomSheetDialogFragment {
 
     interface FlairSelectionCallback {
-        void flairSelected(String flair);
+        void flairSelected(Flair flair);
     }
 
     static final String EXTRA_ACCESS_TOKEN = "EAT";
@@ -53,13 +54,17 @@ public class FlairBottomSheetFragment extends BottomSheetDialogFragment {
     @Named("oauth")
     Retrofit mOauthRetrofit;
 
+    @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+
     public FlairBottomSheetFragment() {
         // Required empty public constructor
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_flair_bottom_sheet, container, false);
 
@@ -74,7 +79,11 @@ public class FlairBottomSheetFragment extends BottomSheetDialogFragment {
             rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
 
-        mAdapter = new FlairBottomSheetRecyclerViewAdapter(flair -> ((FlairSelectionCallback) mAcitivity).flairSelected(flair));
+        mAdapter = new FlairBottomSheetRecyclerViewAdapter(flair -> {
+            ((FlairSelectionCallback) mAcitivity).flairSelected(flair);
+            dismiss();
+        });
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(mAdapter);
 
@@ -87,10 +96,10 @@ public class FlairBottomSheetFragment extends BottomSheetDialogFragment {
     }
 
     private void fetchFlairs() {
-        FetchFlairsInSubreddit.fetchFlairs(mOauthRetrofit, mAccessToken,
-                mSubredditName, new FetchFlairsInSubreddit.FetchFlairsInSubredditListener() {
+        FetchFlairs.fetchFlairsInSubreddit(mOauthRetrofit, mAccessToken,
+                mSubredditName, new FetchFlairs.FetchFlairsInSubredditListener() {
             @Override
-            public void fetchSuccessful(ArrayList<String> flairs) {
+            public void fetchSuccessful(ArrayList<Flair> flairs) {
                 progressBar.setVisibility(View.GONE);
                 if(flairs == null || flairs.size() == 0) {
                     errorTextView.setVisibility(View.VISIBLE);
@@ -110,5 +119,4 @@ public class FlairBottomSheetFragment extends BottomSheetDialogFragment {
             }
         });
     }
-
 }

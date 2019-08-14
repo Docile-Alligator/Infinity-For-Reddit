@@ -15,10 +15,10 @@ import butterknife.ButterKnife;
 
 class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<FlairBottomSheetRecyclerViewAdapter.FlairViewHolder> {
     interface ItemClickListener {
-        void onClick(String flair);
+        void onClick(Flair flair);
     }
 
-    private ArrayList<String> flairs;
+    private ArrayList<Flair> flairs;
     private ItemClickListener itemClickListener;
 
     FlairBottomSheetRecyclerViewAdapter(ItemClickListener itemClickListener) {
@@ -33,7 +33,7 @@ class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<FlairBott
 
     @Override
     public void onBindViewHolder(@NonNull FlairViewHolder holder, int position) {
-        holder.flairTextView.setText(flairs.get(holder.getAdapterPosition()));
+        holder.flairTextView.setText(flairs.get(holder.getAdapterPosition()).getText());
     }
 
     @Override
@@ -41,7 +41,7 @@ class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<FlairBott
         return flairs == null ? 0 : flairs.size();
     }
 
-    void changeDataset(ArrayList<String> flairs) {
+    void changeDataset(ArrayList<Flair> flairs) {
         this.flairs = flairs;
         notifyDataSetChanged();
     }

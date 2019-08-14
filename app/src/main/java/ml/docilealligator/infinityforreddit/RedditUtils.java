@@ -76,6 +76,9 @@ public class RedditUtils {
     static final String FILEPATH_KEY = "filepath";
     static final String MIMETYPE_KEY = "mimetype";
 
+    static final String LINK_KEY = "link";
+    static final String FLAIR_TEMPLATE_ID_KEY = "flair_template_id";
+
     static Map<String, String> getHttpBasicAuthHeader() {
         Map<String, String> params = new HashMap<>();
         String credentials = String.format("%s:%s", RedditUtils.CLIENT_ID, "");

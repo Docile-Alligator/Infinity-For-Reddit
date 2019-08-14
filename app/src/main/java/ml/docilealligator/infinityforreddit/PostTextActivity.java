@@ -75,7 +75,7 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
     private boolean loadSubredditIconSuccessful = true;
     private boolean isPosting;
 
-    private String flair = null;
+    private Flair flair;
     private boolean isSpoiler = false;
     private boolean isNSFW = false;
 
@@ -126,7 +126,7 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
             subredditIsUser = savedInstanceState.getBoolean(SUBREDDIT_IS_USER_STATE);
             loadSubredditIconSuccessful = savedInstanceState.getBoolean(LOAD_SUBREDDIT_ICON_STATE);
             isPosting = savedInstanceState.getBoolean(IS_POSTING_STATE);
-            flair = savedInstanceState.getString(FLAIR_STATE);
+            flair = savedInstanceState.getParcelable(FLAIR_STATE);
             isSpoiler = savedInstanceState.getBoolean(IS_SPOILER_STATE);
             isNSFW = savedInstanceState.getBoolean(IS_NSFW_STATE);
 
@@ -145,7 +145,7 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
             }
 
             if(flair != null) {
-                flairTextView.setText(flair);
+                flairTextView.setText(flair.getText());
                 flairTextView.setBackgroundColor(getResources().getColor(R.color.backgroundColorPrimaryDark));
             }
             if(isSpoiler) {
@@ -331,7 +331,7 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
         outState.putBoolean(SUBREDDIT_IS_USER_STATE, subredditIsUser);
         outState.putBoolean(LOAD_SUBREDDIT_ICON_STATE, loadSubredditIconSuccessful);
         outState.putBoolean(IS_POSTING_STATE, isPosting);
-        outState.putString(FLAIR_STATE, flair);
+        outState.putParcelable(FLAIR_STATE, flair);
         outState.putBoolean(IS_SPOILER_STATE, isSpoiler);
         outState.putBoolean(IS_NSFW_STATE, isNSFW);
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
@@ -367,11 +367,10 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
     }
 
     @Override
-    public void flairSelected(String flair) {
+    public void flairSelected(Flair flair) {
         this.flair = flair;
-        flairTextView.setText(flair);
+        flairTextView.setText(flair.getText());
         flairTextView.setBackgroundColor(getResources().getColor(R.color.backgroundColorPrimaryDark));
-        flairSelectionBottomSheetFragment.dismiss();
     }
 
     @Subscribe

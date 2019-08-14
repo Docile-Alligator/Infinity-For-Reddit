@@ -95,7 +95,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
     private boolean isPosting;
     private Uri imageUri;
 
-    private String flair = null;
+    private Flair flair;
     private boolean isSpoiler = false;
     private boolean isNSFW = false;
 
@@ -158,7 +158,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
             subredditIsUser = savedInstanceState.getBoolean(SUBREDDIT_IS_USER_STATE);
             loadSubredditIconSuccessful = savedInstanceState.getBoolean(LOAD_SUBREDDIT_ICON_STATE);
             isPosting = savedInstanceState.getBoolean(IS_POSTING_STATE);
-            flair = savedInstanceState.getString(FLAIR_STATE);
+            flair = savedInstanceState.getParcelable(FLAIR_STATE);
             isSpoiler = savedInstanceState.getBoolean(IS_SPOILER_STATE);
             isNSFW = savedInstanceState.getBoolean(IS_NSFW_STATE);
 
@@ -182,7 +182,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
             }
 
             if(flair != null) {
-                flairTextView.setText(flair);
+                flairTextView.setText(flair.getText());
                 flairTextView.setBackgroundColor(getResources().getColor(R.color.backgroundColorPrimaryDark));
             }
             if(isSpoiler) {
@@ -415,7 +415,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
         }
         outState.putBoolean(LOAD_SUBREDDIT_ICON_STATE, loadSubredditIconSuccessful);
         outState.putBoolean(IS_POSTING_STATE, isPosting);
-        outState.putString(FLAIR_STATE, flair);
+        outState.putParcelable(FLAIR_STATE, flair);
         outState.putBoolean(IS_SPOILER_STATE, isSpoiler);
         outState.putBoolean(IS_NSFW_STATE, isNSFW);
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
@@ -466,11 +466,10 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
     }
 
     @Override
-    public void flairSelected(String flair) {
+    public void flairSelected(Flair flair) {
         this.flair = flair;
-        flairTextView.setText(flair);
+        flairTextView.setText(flair.getText());
         flairTextView.setBackgroundColor(getResources().getColor(R.color.backgroundColorPrimaryDark));
-        flairSelectionBottomSheetFragment.dismiss();
     }
 
     @Subscribe

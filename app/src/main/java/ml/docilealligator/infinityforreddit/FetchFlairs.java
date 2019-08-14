@@ -14,13 +14,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-class FetchFlairsInSubreddit {
+class FetchFlairs {
     interface FetchFlairsInSubredditListener {
-        void fetchSuccessful(ArrayList<String> flairs);
+        void fetchSuccessful(ArrayList<Flair> flairs);
         void fetchFailed();
     }
 
-    static void fetchFlairs(Retrofit oauthRetrofit, String accessToken, String subredditName, FetchFlairsInSubredditListener fetchFlairsInSubredditListener) {
+    static void fetchFlairsInSubreddit(Retrofit oauthRetrofit, String accessToken, String subredditName, FetchFlairsInSubredditListener fetchFlairsInSubredditListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
         Call<String> flairsCall = api.getFlairs(RedditUtils.getOAuthHeader(accessToken), subredditName);
@@ -30,7 +30,7 @@ class FetchFlairsInSubreddit {
                 if (response.isSuccessful()) {
                     new ParseFlairsAsyncTask(response.body(), new ParseFlairsAsyncTask.ParseFlairsAsyncTaskListener() {
                         @Override
-                        public void parseSuccessful(ArrayList<String> flairs) {
+                        public void parseSuccessful(ArrayList<Flair> flairs) {
                             fetchFlairsInSubredditListener.fetchSuccessful(flairs);
                         }
 
@@ -54,9 +54,9 @@ class FetchFlairsInSubreddit {
         });
     }
 
-    private static class ParseFlairsAsyncTask extends AsyncTask<Void, ArrayList<String>, ArrayList<String>> {
+    private static class ParseFlairsAsyncTask extends AsyncTask<Void, ArrayList<Flair>, ArrayList<Flair>> {
         interface ParseFlairsAsyncTaskListener {
-            void parseSuccessful(ArrayList<String> flairs);
+            void parseSuccessful(ArrayList<Flair> flairs);
             void parseFailed();
         }
 
@@ -69,12 +69,16 @@ class FetchFlairsInSubreddit {
         }
 
         @Override
-        protected ArrayList<String> doInBackground(Void... voids) {
+        protected ArrayList<Flair> doInBackground(Void... voids) {
             try {
                 JSONArray jsonArray = new JSONArray(response);
-                ArrayList<String> flairs = new ArrayList<>();
+                ArrayList<Flair> flairs = new ArrayList<>();
                 for(int i  = 0; i < jsonArray.length(); i++) {
-                    flairs.add(jsonArray.getJSONObject(i).getString(JSONUtils.TEXT_KEY));
+                    String id = jsonArray.getJSONObject(i).getString(JSONUtils.ID_KEY);
+                    String text = jsonArray.getJSONObject(i).getString(JSONUtils.TEXT_KEY);
+                    boolean editable = jsonArray.getJSONObject(i).getBoolean(JSONUtils.TEXT_EDITABLE_KEY);
+
+                    flairs.add(new Flair(id, text, editable));
                 }
                 return flairs;
             } catch (JSONException e) {
@@ -84,7 +88,7 @@ class FetchFlairsInSubreddit {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<String> strings) {
+        protected void onPostExecute(ArrayList<Flair> strings) {
             if(strings != null) {
                 parseFlairsAsyncTaskListener.parseSuccessful(strings);
             } else {
