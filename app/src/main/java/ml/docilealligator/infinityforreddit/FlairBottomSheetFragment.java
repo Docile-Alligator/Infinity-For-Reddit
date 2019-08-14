@@ -2,8 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 
 import android.app.Activity;
-import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +45,7 @@ public class FlairBottomSheetFragment extends BottomSheetDialogFragment {
     private String mAccessToken;
     private String mSubredditName;
 
-    private Activity mAcitivity;
+    private Activity mActivity;
     private FlairBottomSheetRecyclerViewAdapter mAdapter;
 
     @Inject
@@ -70,17 +68,17 @@ public class FlairBottomSheetFragment extends BottomSheetDialogFragment {
 
         ButterKnife.bind(this, rootView);
 
-        mAcitivity = getActivity();
+        mActivity = getActivity();
 
-        ((Infinity) mAcitivity.getApplication()).getAppComponent().inject(this);
+        ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+        /*if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
             rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-        }
+        }*/
 
-        mAdapter = new FlairBottomSheetRecyclerViewAdapter(flair -> {
-            ((FlairSelectionCallback) mAcitivity).flairSelected(flair);
+        mAdapter = new FlairBottomSheetRecyclerViewAdapter(mActivity, flair -> {
+            ((FlairSelectionCallback) mActivity).flairSelected(flair);
             dismiss();
         });
 

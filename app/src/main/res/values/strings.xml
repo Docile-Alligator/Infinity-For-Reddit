@@ -194,6 +194,7 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
     <string name="edit_success">Edit successful</string>
     <string name="delete_post_success">Delete successfully</string>
     <string name="delete_post_failed">Delete failed</string>
@@ -207,4 +208,7 @@
     <string name="unmark_spoiler_failed">Unmark spoiler failed</string>
     <string name="update_flair_success">Update flair successful</string>
     <string name="update_flair_failed">Update flair failed</string>
+
+    <string name="edit_flair">Edit Flair</string>
+    <string name="only_allow_64_chars">Only allow less than 64 characters</string>
 </resources>

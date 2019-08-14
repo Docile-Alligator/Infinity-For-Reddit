@@ -138,6 +138,7 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
             isNSFW = savedInstanceState.getBoolean(IS_NSFW_STATE);
 
             if(subredditName != null) {
+                subredditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
                 subredditNameTextView.setText(subredditName);
                 flairTextView.setVisibility(View.VISIBLE);
                 if(!loadSubredditIconSuccessful) {
@@ -168,6 +169,7 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
 
             if(getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
                 subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
+                subredditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
                 subredditNameTextView.setText(subredditName);
                 flairTextView.setVisibility(View.VISIBLE);
                 loadSubredditIcon();

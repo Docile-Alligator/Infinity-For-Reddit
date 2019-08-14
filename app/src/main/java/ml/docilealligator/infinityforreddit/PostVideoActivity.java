@@ -67,7 +67,7 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
     @BindView(R.id.coordinator_layout_post_video_activity) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.toolbar_post_video_activity) Toolbar toolbar;
     @BindView(R.id.subreddit_icon_gif_image_view_post_video_activity) GifImageView iconGifImageView;
-    @BindView(R.id.subreddit_name_text_view_post_video_activity) TextView subreditNameTextView;
+    @BindView(R.id.subreddit_name_text_view_post_video_activity) TextView subredditNameTextView;
     @BindView(R.id.rules_button_post_video_activity) Button rulesButton;
     @BindView(R.id.flair_custom_text_view_post_video_activity) CustomTextView flairTextView;
     @BindView(R.id.spoiler_custom_text_view_post_video_activity) CustomTextView spoilerTextView;
@@ -166,7 +166,8 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
             }
 
             if(subredditName != null) {
-                subreditNameTextView.setText(subredditName);
+                subredditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
+                subredditNameTextView.setText(subredditName);
                 flairTextView.setVisibility(View.VISIBLE);
                 if(!loadSubredditIconSuccessful) {
                     loadSubredditIcon();
@@ -196,7 +197,8 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
 
             if(getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
                 subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
-                subreditNameTextView.setText(subredditName);
+                subredditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
+                subredditNameTextView.setText(subredditName);
                 loadSubredditIcon();
             } else {
                 mGlide.load(R.drawable.subreddit_default_icon)
@@ -210,7 +212,7 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
             startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
         });
 
-        subreditNameTextView.setOnClickListener(view -> {
+        subredditNameTextView.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubredditSelectionActivity.class);
             startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
         });
@@ -371,9 +373,9 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
 
                 String subredditName;
                 if(subredditIsUser) {
-                    subredditName = "u_" + subreditNameTextView.getText().toString();
+                    subredditName = "u_" + subredditNameTextView.getText().toString();
                 } else {
-                    subredditName = subreditNameTextView.getText().toString();
+                    subredditName = subredditNameTextView.getText().toString();
                 }
 
                 Intent intent = new Intent(this, SubmitPostService.class);
@@ -434,8 +436,8 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
                 subredditSelected = true;
                 subredditIsUser = data.getExtras().getBoolean(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_IS_USER);
 
-                subreditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
-                subreditNameTextView.setText(subredditName);
+                subredditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
+                subredditNameTextView.setText(subredditName);
                 displaySubredditIcon();
 
                 flairTextView.setVisibility(View.VISIBLE);
