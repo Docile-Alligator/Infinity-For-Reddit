@@ -272,6 +272,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, username);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_SORT_TYPE, sortType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_USER_WHERE, where);
                     intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
                     startActivity(intent);
                 }

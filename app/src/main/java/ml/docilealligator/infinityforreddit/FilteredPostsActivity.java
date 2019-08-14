@@ -24,13 +24,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class FilteredPostsActivity extends AppCompatActivity implements SortTypeBottomSheetFragment.SortTypeSelectionCallback,
-        SearchPostSortTypeBottomSheetFragment.SearchSortTypeSelectionCallback {
+        SearchPostSortTypeBottomSheetFragment.SearchSortTypeSelectionCallback, UserThingSortTypeBottomSheetFragment.UserPostsSortTypeSelectionCallback {
 
     static final String EXTRA_NAME = "ESN";
     static final String EXTRA_QUERY = "EQ";
     static final String EXTRA_FILTER = "EF";
     static final String EXTRA_POST_TYPE = "EPT";
     static final String EXTRA_SORT_TYPE = "EST";
+    static final String EXTRA_USER_WHERE = "EUW";
 
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
@@ -49,6 +50,7 @@ public class FilteredPostsActivity extends AppCompatActivity implements SortType
     private SortTypeBottomSheetFragment bestSortTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment popularAndAllSortTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment subredditSortTypeBottomSheetFragment;
+    private UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment;
     private SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment;
 
     @Inject
@@ -176,6 +178,8 @@ public class FilteredPostsActivity extends AppCompatActivity implements SortType
             case PostDataSource.TYPE_USER:
                 String usernamePrefixed = "u/" + name;
                 getSupportActionBar().setTitle(usernamePrefixed);
+
+                userThingSortTypeBottomSheetFragment = new UserThingSortTypeBottomSheetFragment();
                 break;
         }
 
@@ -205,6 +209,9 @@ public class FilteredPostsActivity extends AppCompatActivity implements SortType
             bundle.putString(PostFragment.EXTRA_SORT_TYPE, sortType);
             bundle.putInt(PostFragment.EXTRA_FILTER, filter);
             bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+            if(postType == PostDataSource.TYPE_USER) {
+                bundle.putString(PostFragment.EXTRA_USER_WHERE, getIntent().getExtras().getString(EXTRA_USER_WHERE));
+            }
             if(postType == PostDataSource.TYPE_SEARCH) {
                 bundle.putString(PostFragment.EXTRA_QUERY, getIntent().getExtras().getString(EXTRA_QUERY));
             }
@@ -216,9 +223,6 @@ public class FilteredPostsActivity extends AppCompatActivity implements SortType
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.filtered_posts_activity, menu);
-        if(postType == PostDataSource.TYPE_USER) {
-            menu.findItem(R.id.action_sort_filtered_posts_activity).setVisible(false);
-        }
         return true;
     }
 
@@ -242,6 +246,9 @@ public class FilteredPostsActivity extends AppCompatActivity implements SortType
                         } else {
                             subredditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), subredditSortTypeBottomSheetFragment.getTag());
                         }
+                        break;
+                    case PostDataSource.TYPE_USER:
+                        userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
                 }
                 return true;
             case R.id.action_refresh_filtered_posts_activity:
@@ -268,6 +275,11 @@ public class FilteredPostsActivity extends AppCompatActivity implements SortType
 
     @Override
     public void sortTypeSelected(String sortType) {
+        ((PostFragment)mFragment).changeSortType(sortType);
+    }
+
+    @Override
+    public void userThingSortTypeSelected(String sortType) {
         ((PostFragment)mFragment).changeSortType(sortType);
     }
 }

@@ -48,7 +48,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-public class ViewUserDetailActivity extends AppCompatActivity {
+public class ViewUserDetailActivity extends AppCompatActivity implements UserThingSortTypeBottomSheetFragment.UserPostsSortTypeSelectionCallback {
 
     public static final String EXTRA_USER_NAME_KEY = "EUNK";
 
@@ -58,26 +58,16 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
-    @BindView(R.id.coordinator_layout_view_user_detail_activity)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.view_pager_view_user_detail_activity)
-    ViewPager viewPager;
-    @BindView(R.id.appbar_layout_view_user_detail)
-    AppBarLayout appBarLayout;
-    @BindView(R.id.tab_layout_view_user_detail_activity)
-    TabLayout tabLayout;
-    @BindView(R.id.collapsing_toolbar_layout_view_user_detail_activity)
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.banner_image_view_view_user_detail_activity)
-    GifImageView bannerImageView;
-    @BindView(R.id.icon_gif_image_view_view_user_detail_activity)
-    GifImageView iconGifImageView;
-    @BindView(R.id.user_name_text_view_view_user_detail_activity)
-    TextView userNameTextView;
-    @BindView(R.id.subscribe_user_chip_view_user_detail_activity)
-    Chip subscribeUserChip;
-    @BindView(R.id.karma_text_view_view_user_detail_activity)
-    TextView karmaTextView;
+    @BindView(R.id.coordinator_layout_view_user_detail_activity) CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.view_pager_view_user_detail_activity) ViewPager viewPager;
+    @BindView(R.id.appbar_layout_view_user_detail) AppBarLayout appBarLayout;
+    @BindView(R.id.tab_layout_view_user_detail_activity) TabLayout tabLayout;
+    @BindView(R.id.collapsing_toolbar_layout_view_user_detail_activity) CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.banner_image_view_view_user_detail_activity) GifImageView bannerImageView;
+    @BindView(R.id.icon_gif_image_view_view_user_detail_activity) GifImageView iconGifImageView;
+    @BindView(R.id.user_name_text_view_view_user_detail_activity) TextView userNameTextView;
+    @BindView(R.id.subscribe_user_chip_view_user_detail_activity) Chip subscribeUserChip;
+    @BindView(R.id.karma_text_view_view_user_detail_activity) TextView karmaTextView;
 
     private SectionsPagerAdapter sectionsPagerAdapter;
 
@@ -86,6 +76,8 @@ public class ViewUserDetailActivity extends AppCompatActivity {
     private UserViewModel userViewModel;
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
+
+    private UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment;
 
     private boolean mNullAccessToken = false;
     private String mAccessToken;
@@ -347,6 +339,8 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                 karmaTextView.setText(karma);
             }
         });
+
+        userThingSortTypeBottomSheetFragment = new UserThingSortTypeBottomSheetFragment();
     }
 
     private void getCurrentAccountAndInitializeViewPager() {
@@ -431,6 +425,9 @@ public class ViewUserDetailActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.action_sort_view_user_detail_activity:
+                userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
+                return true;
             case R.id.action_search_view_user_detail_activity:
                 Intent intent = new Intent(this, SearchActivity.class);
                 intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, username);
@@ -484,6 +481,11 @@ public class ViewUserDetailActivity extends AppCompatActivity {
                 Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    public void userThingSortTypeSelected(String sortType) {
+        sectionsPagerAdapter.changeSortType(sortType);
     }
 
     private static class InsertUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -588,6 +590,12 @@ public class ViewUserDetailActivity extends AppCompatActivity {
         public void refreshComments() {
             if(commentsListingFragment != null) {
                 commentsListingFragment.refresh();
+            }
+        }
+
+        public void changeSortType(String sortType) {
+            if(postFragment != null) {
+                postFragment.changeSortType(sortType);
             }
         }
     }

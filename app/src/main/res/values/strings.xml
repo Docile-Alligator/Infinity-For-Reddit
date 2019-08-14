@@ -216,4 +216,7 @@
 
     <string name="edit_flair">Edit Flair</string>
     <string name="only_allow_64_chars">Only allow less than 64 characters</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

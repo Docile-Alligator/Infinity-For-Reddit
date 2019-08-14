@@ -98,10 +98,6 @@ class PostDataSourceFactory extends DataSource.Factory {
         return postDataSource;
     }
 
-    void changeAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
     void changeSortType(String sortType) {
         this.sortType = sortType;
     }

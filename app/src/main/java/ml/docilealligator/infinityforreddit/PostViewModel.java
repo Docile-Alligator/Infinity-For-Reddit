@@ -100,6 +100,10 @@ public class PostViewModel extends ViewModel {
 
         accessTokenLiveData = new MutableLiveData<>();
         accessTokenLiveData.postValue(accessToken);
+        sortTypeLiveData = new MutableLiveData<>();
+        sortTypeLiveData.postValue(sortType);
+
+        accessTokenAndSortTypeLiveData = new AccessTokenAndSortTypeLiveData(accessTokenLiveData, sortTypeLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -107,10 +111,8 @@ public class PostViewModel extends ViewModel {
                         .setPageSize(25)
                         .build();
 
-        posts = (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
-
-        posts = Transformations.switchMap(accessTokenLiveData, newAccessToken -> {
-            postDataSourceFactory.changeAccessToken(accessTokenLiveData.getValue());
+        posts = Transformations.switchMap(accessTokenAndSortTypeLiveData, sort -> {
+            postDataSourceFactory.changeAccessTokenAndSortType(accessTokenLiveData.getValue(), sortTypeLiveData.getValue());
             return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
         });
     }
