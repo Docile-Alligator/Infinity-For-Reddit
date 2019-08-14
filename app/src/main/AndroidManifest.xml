@@ -42,7 +42,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".FilteredPostsActivity"
+            android:name=".FilteredThingActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

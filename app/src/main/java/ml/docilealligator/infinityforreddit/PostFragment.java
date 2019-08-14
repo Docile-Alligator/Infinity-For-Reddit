@@ -205,12 +205,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
                 @Override
                 public void typeChipClicked(int filter) {
-                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_QUERY, query);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_SORT_TYPE, sortType);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
+                    Intent intent = new Intent(activity, FilteredThingActivity.class);
+                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, subredditName);
+                    intent.putExtra(FilteredThingActivity.EXTRA_QUERY, query);
+                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredThingActivity.EXTRA_SORT_TYPE, sortType);
+                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
                     startActivity(intent);
                 }
             });
@@ -235,11 +235,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
                 @Override
                 public void typeChipClicked(int filter) {
-                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_SORT_TYPE, sortType);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
+                    Intent intent = new Intent(activity, FilteredThingActivity.class);
+                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, subredditName);
+                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredThingActivity.EXTRA_SORT_TYPE, sortType);
+                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
                     startActivity(intent);
                 }
             });
@@ -268,12 +268,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
                 @Override
                 public void typeChipClicked(int filter) {
-                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, username);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_SORT_TYPE, sortType);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_USER_WHERE, where);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
+                    Intent intent = new Intent(activity, FilteredThingActivity.class);
+                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, username);
+                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredThingActivity.EXTRA_SORT_TYPE, sortType);
+                    intent.putExtra(FilteredThingActivity.EXTRA_USER_WHERE, where);
+                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
                     startActivity(intent);
                 }
             });
@@ -295,11 +295,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
                 @Override
                 public void typeChipClicked(int filter) {
-                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, activity.getString(R.string.best));
-                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_SORT_TYPE, sortType);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
+                    Intent intent = new Intent(activity, FilteredThingActivity.class);
+                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, activity.getString(R.string.best));
+                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredThingActivity.EXTRA_SORT_TYPE, sortType);
+                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
                     startActivity(intent);
                 }
             });

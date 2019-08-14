@@ -17,7 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -102,7 +102,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         mCommentRecyclerView.setAdapter(mAdapter);
 
         CommentViewModel.Factory factory = new CommentViewModel.Factory(mRetrofit, resources.getConfiguration().locale, username);
-        mCommentViewModel = ViewModelProviders.of(this, factory).get(CommentViewModel.class);
+        mCommentViewModel = new ViewModelProvider(this, factory).get(CommentViewModel.class);
         mCommentViewModel.getComments().observe(this, comments -> mAdapter.submitList(comments));
 
         mCommentViewModel.getInitialLoadingState().observe(this, networkState -> {

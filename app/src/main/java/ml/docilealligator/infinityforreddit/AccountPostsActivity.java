@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AccountPostsActivity extends AppCompatActivity {
+public class AccountPostsActivity extends AppCompatActivity implements UserThingSortTypeBottomSheetFragment.UserThingSortTypeSelectionCallback {
 
     static final String EXTRA_USER_WHERE = "EUW";
 
@@ -40,6 +41,9 @@ public class AccountPostsActivity extends AppCompatActivity {
     private String mUserWhere;
 
     private Fragment mFragment;
+    private Menu mMenu;
+
+    private UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment;
 
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
@@ -104,6 +108,9 @@ public class AccountPostsActivity extends AppCompatActivity {
         } else if(mUserWhere.equals(PostDataSource.USER_WHERE_HIDDEN)) {
             toolbar.setTitle(R.string.hidden);
         } else if(mUserWhere.equals(PostDataSource.USER_WHERE_GILDED)){
+            if(mMenu != null) {
+                mMenu.findItem(R.id.action_sort_account_posts_activity).setVisible(true);
+            }
             toolbar.setTitle(R.string.gilded);
         }
 
@@ -124,6 +131,8 @@ public class AccountPostsActivity extends AppCompatActivity {
         } else {
             getCurrentAccountAndBindView();
         }
+
+        userThingSortTypeBottomSheetFragment = new UserThingSortTypeBottomSheetFragment();
     }
 
     private void getCurrentAccountAndBindView() {
@@ -152,10 +161,31 @@ public class AccountPostsActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.account_posts_activity, menu);
+        mMenu = menu;
+        if(mUserWhere != null && mUserWhere.equals(PostDataSource.USER_WHERE_GILDED)) {
+            menu.findItem(R.id.action_sort_account_posts_activity).setVisible(true);
+        }
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_sort_account_posts_activity:
+                userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
+                return true;
+            case R.id.action_refresh_account_posts_activity:
+                if(mFragment != null) {
+                    ((PostFragment) mFragment).refresh();
+                }
+                return true;
+            case R.id.action_lazy_mode_account_posts_activity:
+                return true;
+            case android.R.id.home:
+                finish();
+                return true;
         }
         return false;
     }
@@ -169,5 +199,12 @@ public class AccountPostsActivity extends AppCompatActivity {
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
         outState.putString(ACCOUNT_NAME_STATE, mAccountName);
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
+    }
+
+    @Override
+    public void userThingSortTypeSelected(String sortType) {
+        if(mFragment != null) {
+            ((PostFragment) mFragment).changeSortType(sortType);
+        }
     }
 }

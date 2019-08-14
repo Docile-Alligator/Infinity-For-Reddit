@@ -26,7 +26,7 @@ interface AppComponent {
     void inject(RulesActivity rulesActivity);
     void inject(CommentsListingFragment commentsListingFragment);
     void inject(SubmitPostService submitPostService);
-    void inject(FilteredPostsActivity filteredPostsActivity);
+    void inject(FilteredThingActivity filteredPostsActivity);
     void inject(SearchResultActivity searchResultActivity);
     void inject(SearchSubredditsResultActivity searchSubredditsResultActivity);
     void inject(FollowedUsersListingFragment followedUsersListingFragment);

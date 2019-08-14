@@ -23,8 +23,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class FilteredPostsActivity extends AppCompatActivity implements SortTypeBottomSheetFragment.SortTypeSelectionCallback,
-        SearchPostSortTypeBottomSheetFragment.SearchSortTypeSelectionCallback, UserThingSortTypeBottomSheetFragment.UserPostsSortTypeSelectionCallback {
+public class FilteredThingActivity extends AppCompatActivity implements SortTypeBottomSheetFragment.SortTypeSelectionCallback,
+        SearchPostSortTypeBottomSheetFragment.SearchSortTypeSelectionCallback, UserThingSortTypeBottomSheetFragment.UserThingSortTypeSelectionCallback {
 
     static final String EXTRA_NAME = "ESN";
     static final String EXTRA_QUERY = "EQ";

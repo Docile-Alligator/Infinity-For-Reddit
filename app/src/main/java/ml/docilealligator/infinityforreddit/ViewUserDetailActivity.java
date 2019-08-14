@@ -48,7 +48,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-public class ViewUserDetailActivity extends AppCompatActivity implements UserThingSortTypeBottomSheetFragment.UserPostsSortTypeSelectionCallback {
+public class ViewUserDetailActivity extends AppCompatActivity implements UserThingSortTypeBottomSheetFragment.UserThingSortTypeSelectionCallback {
 
     public static final String EXTRA_USER_NAME_KEY = "EUNK";
 

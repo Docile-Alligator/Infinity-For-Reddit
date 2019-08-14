@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
  */
 public class UserThingSortTypeBottomSheetFragment extends RoundedBottomSheetDialogFragment {
 
-    interface UserPostsSortTypeSelectionCallback {
+    interface UserThingSortTypeSelectionCallback {
         void userThingSortTypeSelected(String sortType);
     }
 
@@ -56,28 +56,28 @@ public class UserThingSortTypeBottomSheetFragment extends RoundedBottomSheetDial
 
         newTypeTextView.setOnClickListener(view -> {
             if(activity != null) {
-                ((UserPostsSortTypeSelectionCallback) activity).userThingSortTypeSelected(PostDataSource.SORT_TYPE_NEW);
+                ((UserThingSortTypeSelectionCallback) activity).userThingSortTypeSelected(PostDataSource.SORT_TYPE_NEW);
             }
             dismiss();
         });
 
         hotTypeTextView.setOnClickListener(view -> {
             if(activity != null) {
-                ((UserPostsSortTypeSelectionCallback) activity).userThingSortTypeSelected(PostDataSource.SORT_TYPE_HOT);
+                ((UserThingSortTypeSelectionCallback) activity).userThingSortTypeSelected(PostDataSource.SORT_TYPE_HOT);
             }
             dismiss();
         });
 
         topTypeTextView.setOnClickListener(view -> {
             if(activity != null) {
-                ((UserPostsSortTypeSelectionCallback) activity).userThingSortTypeSelected(PostDataSource.SORT_TYPE_TOP);
+                ((UserThingSortTypeSelectionCallback) activity).userThingSortTypeSelected(PostDataSource.SORT_TYPE_TOP);
             }
             dismiss();
         });
 
         controversialTypeTextView.setOnClickListener(view -> {
             if(activity != null) {
-                ((UserPostsSortTypeSelectionCallback) activity).userThingSortTypeSelected(PostDataSource.SORT_TYPE_CONTROVERSIAL);
+                ((UserThingSortTypeSelectionCallback) activity).userThingSortTypeSelected(PostDataSource.SORT_TYPE_CONTROVERSIAL);
             }
             dismiss();
         });

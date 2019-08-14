@@ -359,7 +359,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                     ((DataViewHolder) holder).crosspostImageView.setVisibility(View.VISIBLE);
                 }
 
-                if(!(mContext instanceof FilteredPostsActivity)) {
+                if(!(mContext instanceof FilteredThingActivity)) {
                     ((DataViewHolder) holder).typeChip.setOnClickListener(view -> mCallback.typeChipClicked(post.getPostType()));
                 }
 
