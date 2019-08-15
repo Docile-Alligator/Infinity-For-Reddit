@@ -6,4 +6,7 @@ interface FragmentCommunicator {
     default void stopLazyMode() {}
     default void resumeLazyMode(boolean resumeNow) {}
     default void pauseLazyMode(boolean startTimer) {}
+    default boolean isInLazyMode() {
+        return false;
+    }
 }

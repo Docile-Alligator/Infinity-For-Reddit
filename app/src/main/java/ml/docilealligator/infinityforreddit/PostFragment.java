@@ -340,10 +340,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         return rootView;
     }
 
-    void changeAccessToken(String accessToken) {
-        mPostViewModel.changeAccessToken(accessToken);
-    }
-
     void changeSortType(String sortType) {
         mPostViewModel.changeSortType(sortType);
     }
@@ -417,6 +413,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if(startTimer) {
             resumeLazyModeCountDownTimer.start();
         }
+    }
+
+    @Override
+    public boolean isInLazyMode() {
+        return isInLazyMode;
     }
 
     @Subscribe

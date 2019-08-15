@@ -211,18 +211,18 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             mKarma = savedInstanceState.getInt(ACCOUNT_KARMA_STATE);
 
             if(!mNullAccessToken && mAccessToken == null) {
-                getCurrentAccountAndBindView(false);
+                getCurrentAccountAndBindView();
             } else {
-                bindView(false);
+                bindView();
             }
         } else {
-            getCurrentAccountAndBindView(false);
+            getCurrentAccountAndBindView();
         }
 
         fab.setOnClickListener(view -> postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag()));
     }
 
-    private void getCurrentAccountAndBindView(boolean afterAccountSwitch) {
+    private void getCurrentAccountAndBindView() {
         mNullAccessToken = true;
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
             if(account == null) {
@@ -235,17 +235,34 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 mBannerImageUrl = account.getBannerImageUrl();
                 mKarma = account.getKarma();
             }
-            bindView(afterAccountSwitch);
+            bindView();
         }).execute();
     }
 
-    private void bindView(boolean afterAccountSwitch) {
-        if(!afterAccountSwitch) {
-            sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-            viewPager.setAdapter(sectionsPagerAdapter);
-            viewPager.setOffscreenPageLimit(2);
-            tabLayout.setupWithViewPager(viewPager);
-        }
+    private void bindView() {
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setOffscreenPageLimit(2);
+        tabLayout.setupWithViewPager(viewPager);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+            @Override
+            public void onPageSelected(int position) {
+                if(isInLazyMode) {
+                    if(position == sectionsPagerAdapter.getCurrentLazyModeFragmentPosition()) {
+                        sectionsPagerAdapter.resumeLazyMode();
+                    } else {
+                        sectionsPagerAdapter.pauseLazyMode();
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
 
         glide = Glide.with(this);
 
@@ -254,19 +271,9 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             @Override
             public void accountSelected(Account account) {
                 new SwitchAccountAsyncTask(mRedditDataRoomDatabase, account.getUsername(), () -> {
-                    if(mAccessToken == null) {
-                        Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        getCurrentAccountAndBindView(true);
-                        sectionsPagerAdapter.changeAccessToken(account.getAccessToken());
-                        drawer.closeDrawers();
-                        mDrawerOnAccountSwitch = false;
-                        mDropIconImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_arrow_drop_down_24px));
-                        accountRecyclerView.setVisibility(View.GONE);
-                        allDrawerItemsLinearLayout.setVisibility(View.VISIBLE);
-                    }
+                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
                 }).execute();
             }
 
@@ -530,20 +537,20 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 loadUserData();
                 return true;
             case R.id.action_lazy_mode_main_activity:
-                /*MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);
+                MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);
                 if(isInLazyMode) {
+                    sectionsPagerAdapter.stopLazyMode();
                     isInLazyMode = false;
-                    ((FragmentCommunicator) mFragment).stopLazyMode();
                     lazyModeItem.setTitle(R.string.action_start_lazy_mode);
                     params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
                     collapsingToolbarLayout.setLayoutParams(params);
                 } else {
+                    sectionsPagerAdapter.startLazyMode();
                     isInLazyMode = true;
-                    ((FragmentCommunicator) mFragment).startLazyMode();
                     lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
                     params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
                     collapsingToolbarLayout.setLayoutParams(params);
-                }*/
+                }
                 return true;
         }
         return false;
@@ -726,15 +733,71 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             return fragment;
         }
 
-        void changeAccessToken(String accessToken) {
-            if(frontPagePostFragment != null) {
-                frontPagePostFragment.changeAccessToken(accessToken);
+        void startLazyMode() {
+            switch (viewPager.getCurrentItem()) {
+                case 0:
+                    ((FragmentCommunicator) frontPagePostFragment).startLazyMode();
+                    break;
+                case 1:
+                    ((FragmentCommunicator) popularPostFragment).startLazyMode();
+                    break;
+                case 2:
+                    ((FragmentCommunicator) allPostFragment).startLazyMode();
             }
-            if(popularPostFragment != null) {
-                popularPostFragment.changeAccessToken(accessToken);
+        }
+
+        void stopLazyMode() {
+            switch (getCurrentLazyModeFragmentPosition()) {
+                case 0:
+                    ((FragmentCommunicator) frontPagePostFragment).stopLazyMode();
+                    break;
+                case 1:
+                    ((FragmentCommunicator) popularPostFragment).stopLazyMode();
+                    break;
+                case 2:
+                    ((FragmentCommunicator) allPostFragment).stopLazyMode();
+                    break;
             }
-            if(allPostFragment != null) {
-                allPostFragment.changeAccessToken(accessToken);
+        }
+
+        void resumeLazyMode() {
+            switch (getCurrentLazyModeFragmentPosition()) {
+                case 0:
+                    ((FragmentCommunicator) frontPagePostFragment).resumeLazyMode(false);
+                    break;
+                case 1:
+                    ((FragmentCommunicator) popularPostFragment).resumeLazyMode(false);
+                    break;
+                case 2:
+                    ((FragmentCommunicator) allPostFragment).resumeLazyMode(false);
+                    break;
+            }
+        }
+
+        void pauseLazyMode() {
+            switch (getCurrentLazyModeFragmentPosition()) {
+                case 0:
+                    ((FragmentCommunicator) frontPagePostFragment).pauseLazyMode(false);
+                    break;
+                case 1:
+                    ((FragmentCommunicator) popularPostFragment).pauseLazyMode(false);
+                    break;
+                case 2:
+                    ((FragmentCommunicator) allPostFragment).pauseLazyMode(false);
+            }
+        }
+
+        int getCurrentLazyModeFragmentPosition() {
+            if(!isInLazyMode) {
+                return -1;
+            } else if(frontPagePostFragment != null && ((FragmentCommunicator) frontPagePostFragment).isInLazyMode()) {
+                return 0;
+            } else if(popularPostFragment != null && ((FragmentCommunicator) popularPostFragment).isInLazyMode()) {
+                return 1;
+            } else if(allPostFragment != null && ((FragmentCommunicator) allPostFragment).isInLazyMode()) {
+                return 2;
+            } else {
+                return -1;
             }
         }
 

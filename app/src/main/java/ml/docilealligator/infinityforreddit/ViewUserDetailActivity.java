@@ -360,6 +360,29 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(isInLazyMode) {
+                    if(viewPager.getCurrentItem() == 0) {
+                        sectionsPagerAdapter.resumeLazyMode();
+                    } else {
+                        sectionsPagerAdapter.pauseLazyMode();
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     private void fetchUserInfo() {
@@ -439,23 +462,23 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
                 sectionsPagerAdapter.refresh();
                 return true;
             case R.id.action_lazy_mode_view_user_detail_activity:
-                /*MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity);
+                MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity);
                 if(isInLazyMode) {
                     isInLazyMode = false;
-                    ((FragmentCommunicator) mFragment).stopLazyMode();
+                    sectionsPagerAdapter.stopLazyMode();
                     lazyModeItem.setTitle(R.string.action_start_lazy_mode);
                     params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
                             AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
                     collapsingToolbarLayout.setLayoutParams(params);
                 } else {
                     isInLazyMode = true;
-                    ((FragmentCommunicator) mFragment).startLazyMode();
+                    sectionsPagerAdapter.startLazyMode();
                     lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
                     appBarLayout.setExpanded(false);
                     params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
                     collapsingToolbarLayout.setLayoutParams(params);
                 }
-                return true;*/
+                return true;
         }
         return false;
     }
@@ -588,6 +611,30 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
                 if(commentsListingFragment != null) {
                     commentsListingFragment.refresh();
                 }
+            }
+        }
+
+        void startLazyMode() {
+            if(postFragment != null) {
+                ((FragmentCommunicator) postFragment).startLazyMode();
+            }
+        }
+
+        void stopLazyMode() {
+            if(postFragment != null) {
+                ((FragmentCommunicator) postFragment).stopLazyMode();
+            }
+        }
+
+        void resumeLazyMode() {
+            if(postFragment != null) {
+                ((FragmentCommunicator) postFragment).resumeLazyMode(false);
+            }
+        }
+
+        void pauseLazyMode() {
+            if(postFragment != null) {
+                ((FragmentCommunicator) postFragment).pauseLazyMode(false);
             }
         }
 
