@@ -56,6 +56,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private static final int VIEW_TYPE_LOAD_MORE_CHILD_COMMENTS = 5;
     private static final int VIEW_TYPE_IS_LOADING_MORE_COMMENTS = 6;
     private static final int VIEW_TYPE_LOAD_MORE_COMMENTS_FAILED = 7;
+    private static final int VIEW_TYPE_VIEW_ALL_COMMENTS = 8;
 
     private Activity mActivity;
     private Retrofit mRetrofit;
@@ -68,6 +69,8 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private ArrayList<CommentData> mVisibleComments;
     private String mSubredditNamePrefixed;
     private Locale mLocale;
+    private String mSingleCommentId;
+    private boolean mIsSingleCommentThreadMode;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private LoadSubredditIconAsyncTask mLoadSubredditIconAsyncTask;
     private boolean isInitiallyLoading;
@@ -82,8 +85,9 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     CommentAndPostRecyclerViewAdapter(Activity activity, Retrofit retrofit, Retrofit oauthRetrofit,
                                       RedditDataRoomDatabase redditDataRoomDatabase, RequestManager glide,
-                                      String accessToken, String accountName, Post post, String subredditNamePrefixed,
-                                      Locale locale, LoadSubredditIconAsyncTask loadSubredditIconAsyncTask,
+                                      String accessToken, String accountName, Post post, Locale locale,
+                                      String singleCommentId, boolean isSingleCommentThreadMode,
+                                      LoadSubredditIconAsyncTask loadSubredditIconAsyncTask,
                                       CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
         mActivity = activity;
         mRetrofit = retrofit;
@@ -94,8 +98,10 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         mAccountName = accountName;
         mPost = post;
         mVisibleComments = new ArrayList<>();
-        mSubredditNamePrefixed = subredditNamePrefixed;
+        mSubredditNamePrefixed = post.getSubredditNamePrefixed();
         mLocale = locale;
+        mSingleCommentId = singleCommentId;
+        mIsSingleCommentThreadMode = isSingleCommentThreadMode;
         mLoadSubredditIconAsyncTask = loadSubredditIconAsyncTask;
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
@@ -122,19 +128,40 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             }
         }
 
-        if(position == mVisibleComments.size() + 1) {
-            if(mHasMoreComments) {
-                return VIEW_TYPE_IS_LOADING_MORE_COMMENTS;
-            } else {
-                return VIEW_TYPE_LOAD_MORE_COMMENTS_FAILED;
+        if(mIsSingleCommentThreadMode) {
+            if(position == 1) {
+                return VIEW_TYPE_VIEW_ALL_COMMENTS;
             }
-        }
 
-        CommentData comment = mVisibleComments.get(position - 1);
-        if(!comment.isPlaceHolder()) {
-            return VIEW_TYPE_COMMENT;
+            if(position == mVisibleComments.size() + 2) {
+                if(mHasMoreComments) {
+                    return VIEW_TYPE_IS_LOADING_MORE_COMMENTS;
+                } else {
+                    return VIEW_TYPE_LOAD_MORE_COMMENTS_FAILED;
+                }
+            }
+
+            CommentData comment = mVisibleComments.get(position - 2);
+            if(!comment.isPlaceHolder()) {
+                return VIEW_TYPE_COMMENT;
+            } else {
+                return VIEW_TYPE_LOAD_MORE_CHILD_COMMENTS;
+            }
         } else {
-            return VIEW_TYPE_LOAD_MORE_CHILD_COMMENTS;
+            if(position == mVisibleComments.size() + 1) {
+                if(mHasMoreComments) {
+                    return VIEW_TYPE_IS_LOADING_MORE_COMMENTS;
+                } else {
+                    return VIEW_TYPE_LOAD_MORE_COMMENTS_FAILED;
+                }
+            }
+
+            CommentData comment = mVisibleComments.get(position - 1);
+            if(!comment.isPlaceHolder()) {
+                return VIEW_TYPE_COMMENT;
+            } else {
+                return VIEW_TYPE_LOAD_MORE_CHILD_COMMENTS;
+            }
         }
     }
 
@@ -156,8 +183,10 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 return new LoadMoreChildCommentsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_load_more_comments_placeholder, parent, false));
             case VIEW_TYPE_IS_LOADING_MORE_COMMENTS:
                 return new IsLoadingMoreCommentsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment_footer_loading, parent, false));
-            default:
+            case VIEW_TYPE_LOAD_MORE_COMMENTS_FAILED:
                 return new LoadMoreCommentsFailedViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment_footer_error, parent, false));
+            default:
+                return new ViewAllCommentsViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_view_all_comments, parent, false));
         }
     }
 
@@ -415,7 +444,12 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     break;
             }
         } else if(holder.getItemViewType() == VIEW_TYPE_COMMENT) {
-            CommentData comment = mVisibleComments.get(holder.getAdapterPosition() - 1);
+            CommentData comment;
+            if(mIsSingleCommentThreadMode) {
+                comment = mVisibleComments.get(holder.getAdapterPosition() - 2);
+            } else {
+                comment = mVisibleComments.get(holder.getAdapterPosition() - 1);
+            }
 
             String authorPrefixed = "u/" + comment.getAuthor();
             ((CommentViewHolder) holder).authorTextView.setText(authorPrefixed);
@@ -619,6 +653,11 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
+    void setSingleComment(String singleCommentId, boolean isSingleCommentThreadMode) {
+        mSingleCommentId = singleCommentId;
+        mIsSingleCommentThreadMode = isSingleCommentThreadMode;
+    }
+
     void initiallyLoading() {
         if(mLoadSubredditIconAsyncTask != null) {
             mLoadSubredditIconAsyncTask.cancel(true);
@@ -627,7 +666,11 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         if(mVisibleComments.size() != 0) {
             int previousSize = mVisibleComments.size();
             mVisibleComments.clear();
-            notifyItemRangeRemoved(1, previousSize);
+            if(mIsSingleCommentThreadMode) {
+                notifyItemRangeRemoved(1, previousSize + 1);
+            } else {
+                notifyItemRangeRemoved(1, previousSize);
+            }
         }
 
         if(isInitiallyLoading || isInitiallyLoadingFailed || mVisibleComments.size() == 0) {
@@ -689,10 +732,18 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         }
 
         if(mHasMoreComments || loadMoreCommentsFailed) {
-            return mVisibleComments.size() + 2;
+            if(mIsSingleCommentThreadMode) {
+                return mVisibleComments.size() + 3;
+            } else {
+                return mVisibleComments.size() + 2;
+            }
         }
 
-        return mVisibleComments.size() + 1;
+        if(mIsSingleCommentThreadMode) {
+            return mVisibleComments.size() + 2;
+        } else {
+            return mVisibleComments.size() + 1;
+        }
     }
 
     class PostDetailViewHolder extends RecyclerView.ViewHolder {
@@ -1050,7 +1101,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 mVisibleComments.get(getAdapterPosition() - 1).setLoadMoreChildrenFailed(false);
                 placeholderTextView.setText(R.string.loading);
 
-                FetchComment.fetchMoreComment(mRetrofit, mSubredditNamePrefixed, parentComment.getMoreChildrenFullnames(),
+                FetchComment.fetchMoreComment(mRetrofit, parentComment.getMoreChildrenFullnames(),
                         parentComment.getMoreChildrenStartingIndex(), parentComment.getDepth() + 1, mLocale,
                         new FetchComment.FetchMoreCommentListener() {
                             @Override
@@ -1236,6 +1287,19 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             ButterKnife.bind(this, itemView);
 
             retryButton.setOnClickListener(view -> mCommentRecyclerViewAdapterCallback.retryFetchingMoreComments());
+        }
+    }
+
+    class ViewAllCommentsViewHolder extends RecyclerView.ViewHolder {
+
+        ViewAllCommentsViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            itemView.setOnClickListener(view -> {
+                if(mActivity != null && mActivity instanceof ViewPostDetailActivity) {
+                    ((ViewPostDetailActivity) mActivity).changeToSingleThreadMode();
+                }
+            });
         }
     }
 }

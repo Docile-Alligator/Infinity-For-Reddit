@@ -196,6 +196,7 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
             linearLayout.setOnClickListener(view -> {
                 Intent intent = new Intent(mContext, ViewPostDetailActivity.class);
                 intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, getItem(getAdapterPosition()).getLinkId());
+                intent.putExtra(ViewPostDetailActivity.EXTRA_SINGLE_COMMENT_ID, getItem(getAdapterPosition()).getId());
                 mContext.startActivity(intent);
             });
 

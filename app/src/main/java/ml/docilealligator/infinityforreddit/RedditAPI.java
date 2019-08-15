@@ -21,10 +21,6 @@ public interface RedditAPI {
     @POST("api/v1/access_token")
     Call<String> getAccessToken(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
-    @GET("{subredditNamePrefixed}/comments/{article}.json?&raw_json=1")
-    Call<String> getComments(@Path("subredditNamePrefixed") String subredditNamePrefixed,
-                             @Path("article") String article);
-
     @GET("r/{subredditName}/about.json?raw_json=1")
     Call<String> getSubredditData(@Path("subredditName") String subredditName);
 
@@ -74,8 +70,8 @@ public interface RedditAPI {
     @POST("api/subscribe")
     Call<String> subredditSubscription(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
-    @GET("{subredditNamePrefixed}/api/info.json?raw_json=1")
-    Call<String> getInfo(@Path("subredditNamePrefixed") String subredditNamePrefixed, @Query("id") String id);
+    @GET("/api/info.json?raw_json=1")
+    Call<String> getInfo(@Query("id") String id);
 
     @GET("subreddits/search.json?raw_json=1&include_over_18=on")
     Call<String> searchSubreddits(@Query("q") String subredditName, @Query("after") String after, @Query("sort") String sort);
@@ -120,8 +116,15 @@ public interface RedditAPI {
     @GET("/r/{subredditName}/about/rules.json?raw_json=1")
     Call<String> getRules(@Path("subredditName") String subredditName);
 
+    @GET("/comments/{id}/placeholder/{singleCommentId}.json?context=8&raw_json=1")
+    Call<String> getPostAndCommentsSingleThreadByIdOauth(@Path("id") String id, @Path("singleCommentId") String singleCommentId,
+                                             @HeaderMap Map<String, String> headers);
+
     @GET("/comments/{id}.json?raw_json=1")
     Call<String> getPostAndCommentsByIdOauth(@Path("id") String id, @HeaderMap Map<String, String> headers);
+
+    @GET("/comments/{id}/placeholder/{singleCommentId}.json?context=8&raw_json=1")
+    Call<String> getPostAndCommentsSingleThreadById(@Path("id") String id, @Path("singleCommentId") String singleCommentId);
 
     @GET("/comments/{id}.json?raw_json=1")
     Call<String> getPostAndCommentsById(@Path("id") String id);

@@ -59,6 +59,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     static final String EXTRA_POST_DATA = "EPD";
     static final String EXTRA_POST_LIST_POSITION = "EPLI";
     static final String EXTRA_POST_ID = "EPI";
+    static final String EXTRA_SINGLE_COMMENT_ID = "ESCI";
 
     private static final int EDIT_POST_REQUEST_CODE = 2;
     static final int EDIT_COMMENT_REQUEST_CODE = 3;
@@ -69,6 +70,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
     private int orientation;
     private int postListPosition = -1;
+    private String mSingleCommentId;
 
     @State
     boolean mNullAccessToken = false;
@@ -82,6 +84,8 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     boolean isLoadingMoreChildren = false;
     @State
     boolean isRefreshing = false;
+    @State
+    boolean isSingleCommentThreadMode = false;
     @State
     ArrayList<CommentData> comments;
     @State
@@ -186,6 +190,11 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
+        mSingleCommentId = getIntent().hasExtra(EXTRA_SINGLE_COMMENT_ID) ? getIntent().getExtras().getString(EXTRA_SINGLE_COMMENT_ID) : null;
+        if(savedInstanceState == null && mSingleCommentId != null) {
+            isSingleCommentThreadMode = true;
+        }
+
         orientation = getResources().getConfiguration().orientation;
 
         if(!mNullAccessToken && mAccessToken == null) {
@@ -246,7 +255,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
             }
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
                     mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mAccountName, mPost,
-                    mPost.getSubredditNamePrefixed(), mLocale, mLoadSubredditIconAsyncTask,
+                    mLocale, mSingleCommentId, isSingleCommentThreadMode, mLoadSubredditIconAsyncTask,
                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                         @Override
                         public void updatePost(Post post) {
@@ -264,11 +273,11 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
             mRecyclerView.setAdapter(mAdapter);
 
             if(comments == null) {
-                fetchComments();
+                fetchComments(false);
             } else {
                 if(isRefreshing) {
                     isRefreshing = false;
-                    refresh(false);
+                    refresh(true, true);
                 } else {
                     mAdapter.addComments(comments, hasMoreChildren);
                     if(isLoadingMoreChildren) {
@@ -288,9 +297,19 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
         Call<String> postAndComments;
         if(mAccessToken == null) {
-            postAndComments = mRetrofit.create(RedditAPI.class).getPostAndCommentsById(subredditId);
+            if(isSingleCommentThreadMode && mSingleCommentId != null) {
+                postAndComments = mRetrofit.create(RedditAPI.class).getPostAndCommentsSingleThreadById(subredditId, mSingleCommentId);
+            } else {
+                postAndComments = mRetrofit.create(RedditAPI.class).getPostAndCommentsById(subredditId);
+            }
         } else {
-            postAndComments = mOauthRetrofit.create(RedditAPI.class).getPostAndCommentsByIdOauth(subredditId, RedditUtils.getOAuthHeader(mAccessToken));
+            if(isSingleCommentThreadMode && mSingleCommentId != null) {
+                postAndComments = mOauthRetrofit.create(RedditAPI.class).getPostAndCommentsSingleThreadByIdOauth(subredditId,
+                        mSingleCommentId, RedditUtils.getOAuthHeader(mAccessToken));
+            } else {
+                postAndComments = mOauthRetrofit.create(RedditAPI.class).getPostAndCommentsByIdOauth(subredditId,
+                        RedditUtils.getOAuthHeader(mAccessToken));
+            }
         }
         postAndComments.enqueue(new Callback<String>() {
             @Override
@@ -312,7 +331,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
                             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
                                     mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mAccountName, mPost,
-                                    mPost.getSubredditNamePrefixed(), mLocale, mLoadSubredditIconAsyncTask,
+                                    mLocale, mSingleCommentId, isSingleCommentThreadMode, mLoadSubredditIconAsyncTask,
                                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                                         @Override
                                         public void updatePost(Post post) {
@@ -382,11 +401,15 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         });
     }
 
-    private void fetchComments() {
+    private void fetchComments(boolean changeRefreshState) {
+        mAdapter.setSingleComment(mSingleCommentId, isSingleCommentThreadMode);
         mAdapter.initiallyLoading();
+        String commentId = null;
+        if(isSingleCommentThreadMode) {
+            commentId = mSingleCommentId;
+        }
 
-        FetchComment.fetchComments(mRetrofit, mPost.getSubredditNamePrefixed(), mPost.getId(),
-                mLocale, new FetchComment.FetchCommentListener() {
+        FetchComment.fetchComments(mRetrofit, mPost.getId(), commentId, mLocale, new FetchComment.FetchCommentListener() {
                     @Override
                     public void onFetchCommentSuccess(ArrayList<CommentData> expandedComments,
                                                       String parentId, ArrayList<String> children) {
@@ -414,11 +437,17 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                                 }
                             });
                         }
+                        if(changeRefreshState) {
+                            isRefreshing = false;
+                        }
                     }
 
                     @Override
                     public void onFetchCommentFailed() {
                         mAdapter.initiallyLoadCommentsFailed();
+                        if(changeRefreshState) {
+                            isRefreshing = false;
+                        }
                     }
                 });
     }
@@ -429,7 +458,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         }
 
         isLoadingMoreChildren = true;
-        FetchComment.fetchMoreComment(mRetrofit, mPost.getSubredditNamePrefixed(), children, mChildrenStartingIndex,
+        FetchComment.fetchMoreComment(mRetrofit, children, mChildrenStartingIndex,
                 0, mLocale, new FetchComment.FetchMoreCommentListener() {
                     @Override
                     public void onFetchMoreCommentSuccess(ArrayList<CommentData> expandedComments, int childrenStartingIndex) {
@@ -449,7 +478,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                 });
     }
 
-    private void refresh(boolean onlyRefreshPost) {
+    private void refresh(boolean fetchPost, boolean fetchComments) {
         if(!isRefreshing) {
             isRefreshing = true;
             mChildrenStartingIndex = 0;
@@ -457,32 +486,38 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
             mFetchPostInfoLinearLayout.setVisibility(View.GONE);
             mGlide.clear(mFetchPostInfoImageView);
 
-            if(!onlyRefreshPost) {
-                fetchComments();
+            if(fetchComments) {
+                if(!fetchPost) {
+                    fetchComments(true);
+                } else {
+                    fetchComments(false);
+                }
             }
 
-            Retrofit retrofit;
-            if(mAccessToken == null) {
-                retrofit = mRetrofit;
-            } else {
-                retrofit = mOauthRetrofit;
-            }
-            FetchPost.fetchPost(retrofit, mPost.getId(), mAccessToken, mLocale,
-                    new FetchPost.FetchPostListener() {
-                        @Override
-                        public void fetchPostSuccess(Post post) {
-                            mPost = post;
-                            mAdapter.updatePost(mPost);
-                            EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                            isRefreshing = false;
-                        }
+            if(fetchPost) {
+                Retrofit retrofit;
+                if(mAccessToken == null) {
+                    retrofit = mRetrofit;
+                } else {
+                    retrofit = mOauthRetrofit;
+                }
+                FetchPost.fetchPost(retrofit, mPost.getId(), mAccessToken, mLocale,
+                        new FetchPost.FetchPostListener() {
+                            @Override
+                            public void fetchPostSuccess(Post post) {
+                                mPost = post;
+                                mAdapter.updatePost(mPost);
+                                EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                                isRefreshing = false;
+                            }
 
-                        @Override
-                        public void fetchPostFailed() {
-                            showMessage(R.string.refresh_post_failed);
-                            isRefreshing = false;
-                        }
-                    });
+                            @Override
+                            public void fetchPostFailed() {
+                                showMessage(R.string.refresh_post_failed);
+                                isRefreshing = false;
+                            }
+                        });
+            }
         }
     }
 
@@ -510,7 +545,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if(response.isSuccessful()) {
-                    refresh(true);
+                    refresh(true, false);
                     showMessage(R.string.mark_nsfw_success);
                 } else {
                     showMessage(R.string.mark_nsfw_failed);
@@ -532,7 +567,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                         if(response.isSuccessful()) {
-                            refresh(true);
+                            refresh(true, false);
                             showMessage(R.string.unmark_nsfw_success);
                         } else {
                             showMessage(R.string.unmark_nsfw_failed);
@@ -554,7 +589,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                         if(response.isSuccessful()) {
-                            refresh(true);
+                            refresh(true, false);
                             showMessage(R.string.mark_spoiler_success);
                         } else {
                             showMessage(R.string.mark_spoiler_failed);
@@ -576,7 +611,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                         if(response.isSuccessful()) {
-                            refresh(true);
+                            refresh(true, false);
                             showMessage(R.string.unmark_spoiler_success);
                         } else {
                             showMessage(R.string.unmark_spoiler_failed);
@@ -609,6 +644,12 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                 }))
                 .setNegativeButton(R.string.cancel, null)
                 .show();
+    }
+
+    void changeToSingleThreadMode() {
+        isSingleCommentThreadMode = false;
+        mSingleCommentId = null;
+        refresh(false, true);
     }
 
     @Subscribe
@@ -654,7 +695,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh_view_post_detail_activity:
-                refresh(false);
+                refresh(true, true);
                 return true;
             case R.id.action_comment_view_post_detail_activity:
                 if(mAccessToken == null) {
@@ -746,7 +787,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
             }
         } else if(requestCode == EDIT_POST_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
-                refresh(true);
+                refresh(true, false);
             }
         } else if(requestCode == EDIT_COMMENT_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
@@ -794,7 +835,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if(response.isSuccessful()) {
-                    refresh(true);
+                    refresh(true, false);
                     showMessage(R.string.update_flair_success);
                 } else {
                     showMessage(R.string.update_flair_failed);

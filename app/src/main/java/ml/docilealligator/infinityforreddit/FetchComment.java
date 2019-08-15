@@ -23,10 +23,15 @@ class FetchComment {
         void onFetchMoreCommentFailed();
     }
 
-    static void fetchComments(Retrofit retrofit, String subredditNamePrefixed, String article,
+    static void fetchComments(Retrofit retrofit, String article, String commentId,
                               Locale locale, FetchCommentListener fetchCommentListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> comments = api.getComments(subredditNamePrefixed, article);
+        Call<String> comments;
+        if(commentId == null) {
+            comments = api.getPostAndCommentsById(article);
+        } else {
+            comments = api.getPostAndCommentsSingleThreadById(article, commentId);
+        }
         comments.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -60,9 +65,8 @@ class FetchComment {
         });
     }
 
-    static void fetchMoreComment(Retrofit retrofit, String subredditNamePrefixed,
-                                 ArrayList<String> allChildren, int startingIndex, int depth,
-                                 Locale locale, FetchMoreCommentListener fetchMoreCommentListener) {
+    static void fetchMoreComment(Retrofit retrofit, ArrayList<String> allChildren, int startingIndex,
+                                 int depth, Locale locale, FetchMoreCommentListener fetchMoreCommentListener) {
         StringBuilder stringBuilder = new StringBuilder();
         for(int i = 0; i < 100; i++) {
             if(allChildren.size() <= startingIndex + i) {
@@ -79,10 +83,10 @@ class FetchComment {
 
         RedditAPI api = retrofit.create(RedditAPI.class);
 
-        Call<String> moreComments = api.getInfo(subredditNamePrefixed, stringBuilder.toString());
+        Call<String> moreComments = api.getInfo(stringBuilder.toString());
         moreComments.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if(response.isSuccessful()) {
                     ParseComment.parseMoreComment(response.body(), new ArrayList<>(), locale,
                             depth, new ParseComment.ParseCommentListener() {
