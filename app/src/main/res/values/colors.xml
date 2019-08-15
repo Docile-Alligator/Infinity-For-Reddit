@@ -45,4 +45,6 @@
     <color name="navBarColor">#FFFFFF</color>
 
     <color name="cardViewBackgroundColor">#FFFFFF</color>
+
+    <color name="singleCommentThreadBackgroundColor">#B3E5F9</color>
 </resources>

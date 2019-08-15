@@ -17,7 +17,8 @@ import static androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_C
 
 public class LinkResolverActivity extends AppCompatActivity {
 
-    private static final String POST_PATTERN = "/r/\\w+/comments/\\w+/*[\\w+]*/*";
+    private static final String POST_PATTERN = "/r/\\w+/comments/\\w+/{0,1}\\w+/{0,1}";
+    private static final String COMMENT_PATTERN = "/r/\\w+/comments/\\w+/{0,1}\\w+/\\w+/{0,1}";
     private static final String SUBREDDIT_PATTERN = "/r/\\w+/*";
     private static final String USER_PATTERN = "/user/\\w+/*";
 
@@ -37,6 +38,17 @@ public class LinkResolverActivity extends AppCompatActivity {
             if(commentsIndex >=0 && commentsIndex < segments.size() - 1) {
                 Intent intent = new Intent(this, ViewPostDetailActivity.class);
                 intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, segments.get(commentsIndex + 1));
+                startActivity(intent);
+            } else {
+                deepLinkError(uri);
+            }
+        } else if(path.matches(COMMENT_PATTERN)) {
+            List<String> segments = uri.getPathSegments();
+            int commentsIndex = segments.lastIndexOf("comments");
+            if(commentsIndex >=0 && commentsIndex < segments.size() - 1) {
+                Intent intent = new Intent(this, ViewPostDetailActivity.class);
+                intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, segments.get(commentsIndex + 1));
+                intent.putExtra(ViewPostDetailActivity.EXTRA_SINGLE_COMMENT_ID, segments.get(segments.size() - 1));
                 startActivity(intent);
             } else {
                 deepLinkError(uri);
@@ -73,7 +85,11 @@ public class LinkResolverActivity extends AppCompatActivity {
             builder.setToolbarColor(getResources().getColor(R.color.colorPrimary));
             CustomTabsIntent customTabsIntent = builder.build();
             customTabsIntent.intent.setPackage(resolveInfos.get(0).activityInfo.packageName);
-            customTabsIntent.launchUrl(this, uri);
+            String uriString = uri.toString();
+            if(!uriString.startsWith("http://") || (!uriString.startsWith("https://"))) {
+                uriString = "http://" + uriString;
+            }
+            customTabsIntent.launchUrl(this, Uri.parse(uriString));
         } else {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(uri);

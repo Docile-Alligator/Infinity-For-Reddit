@@ -390,7 +390,15 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                             builder.addDefaultShareMenuItem();
                             builder.setToolbarColor(mContext.getResources().getColor(R.color.colorPrimary));
                             CustomTabsIntent customTabsIntent = builder.build();
-                            customTabsIntent.launchUrl(mContext, Uri.parse(post.getUrl()));
+                            Uri uri = Uri.parse(post.getUrl());
+                            if(uri.getHost() != null && uri.getHost().contains("reddit.com")) {
+                                customTabsIntent.intent.setPackage(mContext.getPackageName());
+                            }
+                            String uriString = post.getUrl();
+                            if(!uriString.startsWith("http://") && !uriString.startsWith("https://")) {
+                                uriString = "http://" + uriString;
+                            }
+                            customTabsIntent.launchUrl(mContext, Uri.parse(uriString));
                         });
                         break;
                     case Post.GIF_VIDEO_TYPE:
@@ -443,7 +451,15 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                             builder.addDefaultShareMenuItem();
                             builder.setToolbarColor(mContext.getResources().getColor(R.color.colorPrimary));
                             CustomTabsIntent customTabsIntent = builder.build();
-                            customTabsIntent.launchUrl(mContext, Uri.parse(noPreviewLinkUrl));
+                            Uri uri = Uri.parse(post.getUrl());
+                            if(uri.getHost() != null && uri.getHost().contains("reddit.com")) {
+                                customTabsIntent.intent.setPackage(mContext.getPackageName());
+                            }
+                            String uriString = noPreviewLinkUrl;
+                            if(!uriString.startsWith("http://") && !uriString.startsWith("https://")) {
+                                uriString = "http://" + uriString;
+                            }
+                            customTabsIntent.launchUrl(mContext, Uri.parse(uriString));
                         });
                         break;
                     case Post.TEXT_TYPE:

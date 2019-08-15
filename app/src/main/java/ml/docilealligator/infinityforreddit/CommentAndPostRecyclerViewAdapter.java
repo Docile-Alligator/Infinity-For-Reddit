@@ -374,7 +374,15 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                         builder.addDefaultShareMenuItem();
                         builder.setToolbarColor(mActivity.getResources().getColor(R.color.colorPrimary));
                         CustomTabsIntent customTabsIntent = builder.build();
-                        customTabsIntent.launchUrl(mActivity, Uri.parse(mPost.getUrl()));
+                        Uri uri = Uri.parse(mPost.getUrl());
+                        if(uri.getHost() != null && uri.getHost().contains("reddit.com")) {
+                            customTabsIntent.intent.setPackage(mActivity.getPackageName());
+                        }
+                        String uriString = mPost.getUrl();
+                        if(!uriString.startsWith("http://") && !uriString.startsWith("https://")) {
+                            uriString = "http://" + uriString;
+                        }
+                        customTabsIntent.launchUrl(mActivity, Uri.parse(uriString));
                     });
                     break;
                 case Post.GIF_VIDEO_TYPE:
@@ -431,7 +439,15 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                         builder.addDefaultShareMenuItem();
                         builder.setToolbarColor(mActivity.getResources().getColor(R.color.colorPrimary));
                         CustomTabsIntent customTabsIntent = builder.build();
-                        customTabsIntent.launchUrl(mActivity, Uri.parse(mPost.getUrl()));
+                        Uri uri = Uri.parse(mPost.getUrl());
+                        if(uri.getHost() != null && uri.getHost().contains("reddit.com")) {
+                            customTabsIntent.intent.setPackage(mActivity.getPackageName());
+                        }
+                        String uriString = mPost.getUrl();
+                        if(!uriString.startsWith("http://") && !uriString.startsWith("https://")) {
+                            uriString = "http://" + uriString;
+                        }
+                        customTabsIntent.launchUrl(mActivity, Uri.parse(uriString));
                     });
                     break;
                 case Post.TEXT_TYPE:
@@ -449,6 +465,11 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 comment = mVisibleComments.get(holder.getAdapterPosition() - 2);
             } else {
                 comment = mVisibleComments.get(holder.getAdapterPosition() - 1);
+            }
+
+            if(mIsSingleCommentThreadMode && comment.getId().equals(mSingleCommentId)) {
+                ((CommentViewHolder) holder).itemView.setBackgroundColor(
+                        mActivity.getResources().getColor(R.color.singleCommentThreadBackgroundColor));
             }
 
             String authorPrefixed = "u/" + comment.getAuthor();
@@ -722,6 +743,8 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             ((CommentViewHolder) holder).expandButton.setVisibility(View.GONE);
             ((CommentViewHolder) holder).upVoteButton.clearColorFilter();
             ((CommentViewHolder) holder).downVoteButton.clearColorFilter();
+            ((CommentViewHolder) holder).itemView.setBackgroundColor(
+                    mActivity.getResources().getColor(R.color.cardViewBackgroundColor));
         }
     }
 
@@ -1297,6 +1320,8 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
             itemView.setOnClickListener(view -> {
                 if(mActivity != null && mActivity instanceof ViewPostDetailActivity) {
+                    mIsSingleCommentThreadMode = false;
+                    mSingleCommentId = null;
                     ((ViewPostDetailActivity) mActivity).changeToSingleThreadMode();
                 }
             });

@@ -44,7 +44,11 @@ public class CustomMarkwonView extends MarkwonView {
                 if(uri.getHost() != null && uri.getHost().contains("reddit.com")) {
                     customTabsIntent.intent.setPackage(context.getPackageName());
                 }
-                customTabsIntent.launchUrl(context, uri);
+                String uriString = uri.toString();
+                if(!uriString.startsWith("http://") && (!uriString.startsWith("https://"))) {
+                    uriString = "http://" + uriString;
+                }
+                customTabsIntent.launchUrl(context, Uri.parse(uriString));
             }
         }).build();
 
