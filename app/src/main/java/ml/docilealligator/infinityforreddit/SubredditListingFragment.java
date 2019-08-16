@@ -17,7 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -124,7 +124,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
         SubredditListingViewModel.Factory factory = new SubredditListingViewModel.Factory(mRetrofit, query,
                 PostDataSource.SORT_TYPE_RELEVANCE);
-        mSubredditListingViewModel = ViewModelProviders.of(this, factory).get(SubredditListingViewModel.class);
+        mSubredditListingViewModel = new ViewModelProvider(this, factory).get(SubredditListingViewModel.class);
         mSubredditListingViewModel.getSubreddits().observe(this, subredditData -> mAdapter.submitList(subredditData));
 
         mSubredditListingViewModel.getInitialLoadingState().observe(this, networkState -> {

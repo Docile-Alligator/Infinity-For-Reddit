@@ -26,7 +26,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -313,7 +313,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         accountRecyclerView.setNestedScrollingEnabled(false);
         accountRecyclerView.setAdapter(adapter);
 
-        accountViewModel = ViewModelProviders.of(this,
+        accountViewModel = new ViewModelProvider(this,
                 new AccountViewModel.Factory(getApplication(), mRedditDataRoomDatabase, mAccountName)).get(AccountViewModel.class);
         accountViewModel.getAccountsExceptCurrentAccountLiveData().observe(this, adapter::changeAccountsDataset);
 

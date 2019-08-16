@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -79,7 +79,7 @@ public class FollowedUsersListingFragment extends Fragment {
         FollowedUsersRecyclerViewAdapter adapter = new FollowedUsersRecyclerViewAdapter(mActivity);
         mRecyclerView.setAdapter(adapter);
 
-        mSubscribedUserViewModel = ViewModelProviders.of(this,
+        mSubscribedUserViewModel = new ViewModelProvider(this,
                 new SubscribedUserViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, getArguments().getString(EXTRA_ACCOUNT_NAME)))
                 .get(SubscribedUserViewModel.class);
         mSubscribedUserViewModel.getAllSubscribedUsers().observe(this, subscribedUserData -> {

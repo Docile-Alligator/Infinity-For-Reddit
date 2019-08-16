@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -93,7 +93,7 @@ public class SubscribedSubredditsListingFragment extends Fragment {
 
         mRecyclerView.setAdapter(adapter);
 
-        mSubscribedSubredditViewModel = ViewModelProviders.of(this,
+        mSubscribedSubredditViewModel = new ViewModelProvider(this,
                 new SubscribedSubredditViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, accountName))
                 .get(SubscribedSubredditViewModel.class);
         mSubscribedSubredditViewModel.getAllSubscribedSubreddits().observe(this, subscribedSubredditData -> {

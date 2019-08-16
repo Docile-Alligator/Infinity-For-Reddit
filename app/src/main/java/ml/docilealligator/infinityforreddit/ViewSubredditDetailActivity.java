@@ -20,7 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -135,13 +135,6 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                     }
                 });
 
-                int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-                if (statusBarResourceId > 0) {
-                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
-                    params.topMargin = getResources().getDimensionPixelSize(statusBarResourceId);
-                    toolbar.setLayoutParams(params);
-                }
-
                 int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
                 if (navBarResourceId > 0) {
                     CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
@@ -195,14 +188,14 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         subredditNameTextView.setText(title);
 
         toolbar.setTitle(title);
+        ViewGroup.MarginLayoutParams toolbarParams = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
+        toolbarParams.topMargin = statusBarHeight;
+        toolbar.setLayoutParams(toolbarParams);
         setSupportActionBar(toolbar);
-
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
-        params.topMargin = statusBarHeight;
 
         glide = Glide.with(this);
 
-        mSubredditViewModel = ViewModelProviders.of(this,
+        mSubredditViewModel = new ViewModelProvider(this,
                 new SubredditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, subredditName))
                 .get(SubredditViewModel.class);
         mSubredditViewModel.getSubredditLiveData().observe(this, subredditData -> {

@@ -22,7 +22,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
@@ -145,15 +145,16 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
             statusBarHeight = resources.getDimensionPixelSize(resourceId);
         }
 
-        String title = "u/" + username;
-        userNameTextView.setText(title);
-
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle(title);
-        setSupportActionBar(toolbar);
-
         ViewGroup.MarginLayoutParams toolbarLayoutParams = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
         toolbarLayoutParams.topMargin = statusBarHeight;
+        toolbar.setLayoutParams(toolbarLayoutParams);
+
+        String title = "u/" + username;
+        userNameTextView.setText(title);
+        toolbar.setTitle(title);
+
+        setSupportActionBar(toolbar);
 
         expandedTabTextColor = resources.getColor(R.color.tabLayoutWithExpandedCollapsingToolbarTextColor);
         expandedTabBackgroundColor = resources.getColor(R.color.tabLayoutWithExpandedCollapsingToolbarTabBackground);
@@ -197,15 +198,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
                 }
             });
 
-            int statusBarResourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
-            if (statusBarResourceId > 0) {
-                int navBarHeight = resources.getDimensionPixelSize(statusBarResourceId);
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
-                params.topMargin = navBarHeight;
-                toolbar.setLayoutParams(params);
-
-                showToast = true;
-            }
+            showToast = true;
         } else {
             appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
                 @Override
@@ -226,7 +219,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
         subscribedUserDao = mRedditDataRoomDatabase.subscribedUserDao();
         glide = Glide.with(this);
 
-        userViewModel = ViewModelProviders.of(this, new UserViewModel.Factory(getApplication(), mRedditDataRoomDatabase, username))
+        userViewModel = new ViewModelProvider(this, new UserViewModel.Factory(getApplication(), mRedditDataRoomDatabase, username))
                 .get(UserViewModel.class);
         userViewModel.getUserLiveData().observe(this, userData -> {
             if (userData != null) {
@@ -280,13 +273,13 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
                                             public void onUserFollowingSuccess() {
                                                 subscribeUserChip.setText(R.string.unfollow);
                                                 subscribeUserChip.setChipBackgroundColor(resources.getColorStateList(R.color.colorAccent));
-                                                makeSnackbar(R.string.followed, false);
+                                                showMessage(R.string.followed, false);
                                                 subscriptionReady = true;
                                             }
 
                                             @Override
                                             public void onUserFollowingFail() {
-                                                makeSnackbar(R.string.follow_failed, false);
+                                                showMessage(R.string.follow_failed, false);
                                                 subscriptionReady = true;
                                             }
                                         });
@@ -297,13 +290,13 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
                                             public void onUserFollowingSuccess() {
                                                 subscribeUserChip.setText(R.string.follow);
                                                 subscribeUserChip.setChipBackgroundColor(resources.getColorStateList(R.color.backgroundColorPrimaryDark));
-                                                makeSnackbar(R.string.unfollowed, false);
+                                                showMessage(R.string.unfollowed, false);
                                                 subscriptionReady = true;
                                             }
 
                                             @Override
                                             public void onUserFollowingFail() {
-                                                makeSnackbar(R.string.unfollow_failed, false);
+                                                showMessage(R.string.unfollow_failed, false);
                                                 subscriptionReady = true;
                                             }
                                         });
@@ -396,7 +389,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
 
                 @Override
                 public void onFetchUserDataFailed() {
-                    makeSnackbar(R.string.cannot_fetch_user_info, true);
+                    showMessage(R.string.cannot_fetch_user_info, true);
                     mFetchUserInfoSuccess = false;
                 }
             });
@@ -493,7 +486,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
         outState.putString(ACCOUNT_NAME_STATE, mAccountName);
     }
 
-    private void makeSnackbar(int resId, boolean retry) {
+    private void showMessage(int resId, boolean retry) {
         if(showToast) {
             Toast.makeText(this, resId, Toast.LENGTH_SHORT).show();
         } else {

@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -103,7 +103,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
 
         UserListingViewModel.Factory factory = new UserListingViewModel.Factory(mRetrofit, mQuery,
                 PostDataSource.SORT_TYPE_RELEVANCE);
-        mUserListingViewModel = ViewModelProviders.of(this, factory).get(UserListingViewModel.class);
+        mUserListingViewModel = new ViewModelProvider(this, factory).get(UserListingViewModel.class);
         mUserListingViewModel.getUsers().observe(this, UserData -> mAdapter.submitList(UserData));
 
         mUserListingViewModel.getInitialLoadingState().observe(this, networkState -> {
