@@ -34,4 +34,5 @@ interface AppComponent {
     void inject(EditPostActivity editPostActivity);
     void inject(EditCommentActivity editCommentActivity);
     void inject(AccountPostsActivity accountPostsActivity);
+    void inject(PullNotificationWorker pullNotificationWorker);
 }

@@ -5,6 +5,7 @@ package ml.docilealligator.infinityforreddit;
  */
 
 public class JSONUtils {
+    static final String KIND_KEY = "kind";
     static final String DATA_KEY = "data";
     static final String AFTER_KEY = "after";
     static final String CHILDREN_KEY = "children";
@@ -62,6 +63,7 @@ public class JSONUtils {
     static final String JSON_KEY = "json";
     static final String PARENT_ID_KEY = "parent_id";
     static final String LINK_ID_KEY = "link_id";
+    static final String LINK_TITLE_KEY = "link_title";
     static final String ERRORS_KEY = "errors";
     static final String ARGS_KEY = "args";
     static final String FIELDS_KEY = "fields";
@@ -73,4 +75,10 @@ public class JSONUtils {
     static final String DESCRIPTION_HTML_KEY = "description_html";
     static final String ARCHIVED_KEY = "archived";
     static final String TEXT_EDITABLE_KEY = "text_editable";
+    static final String SUBJECT_KEY = "subject";
+    static final String CONTEXT_KEY = "context";
+    static final String DISTINGUISHED_KEY = "distinguished";
+    static final String WAS_COMMENT_KEY = "was_comment";
+    static final String NEW_KEY = "new";
+    static final String NUM_COMMENTS_KEY = "num_comments";
 }

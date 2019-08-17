@@ -30,6 +30,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
+import androidx.work.Constraints;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -38,6 +42,8 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -234,6 +240,17 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 mProfileImageUrl = account.getProfileImageUrl();
                 mBannerImageUrl = account.getBannerImageUrl();
                 mKarma = account.getKarma();
+
+                Constraints constraints = new Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build();
+
+                PeriodicWorkRequest pullNotificationRequest =
+                        new PeriodicWorkRequest.Builder(PullNotificationWorker.class, 15, TimeUnit.MINUTES)
+                                .setConstraints(constraints)
+                                .build();
+
+                WorkManager.getInstance(this).enqueue(pullNotificationRequest);
             }
             bindView();
         }).execute();

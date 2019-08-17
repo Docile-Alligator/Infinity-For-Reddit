@@ -132,4 +132,8 @@ public class LinkResolverActivity extends AppCompatActivity {
         }
         return packagesSupportingCustomTabs;
     }
+
+    static Uri getRedditUriByPath(String path) {
+        return Uri.parse("https://www.reddit.com" + path);
+    }
 }
