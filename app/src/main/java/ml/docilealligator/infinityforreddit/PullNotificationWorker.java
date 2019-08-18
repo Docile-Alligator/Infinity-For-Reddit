@@ -75,15 +75,13 @@ public class PullNotificationWorker extends Worker {
                         String kind = message.getKind();
                         String title;
                         String summary;
-                        if(kind.equals(Message.TYPE_COMMENT)) {
+                        if(kind.equals(Message.TYPE_COMMENT) || kind.equals(Message.TYPE_LINK)) {
                             title = message.getAuthor();
                             summary = context.getString(R.string.notification_summary_comment);
                         } else {
                             title = message.getTitle();
                             if(kind.equals(Message.TYPE_ACCOUNT)) {
                                 summary = context.getString(R.string.notification_summary_account);
-                            } else if(kind.equals(Message.TYPE_LINK)) {
-                                summary = context.getString(R.string.notification_summary_post);
                             } else if(kind.equals(Message.TYPE_MESSAGE)) {
                                 summary = context.getString(R.string.notification_summary_message);
                             } else if(kind.equals(Message.TYPE_SUBREDDIT)) {
@@ -104,24 +102,40 @@ public class PullNotificationWorker extends Worker {
                             intent.setData(uri);
                             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
                             builder.setContentIntent(pendingIntent);
-                            notificationManager.notify(NotificationUtils.BASE_ID_COMMENT + i, builder.build());
                         } else if(kind.equals(Message.TYPE_ACCOUNT)) {
-                            notificationManager.notify(NotificationUtils.BASE_ID_ACCOUNT + i, builder.build());
+                            Intent intent = new Intent(context, ViewMessageActivity.class);
+                            PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+                            builder.setContentIntent(summaryPendingIntent);
                         } else if(kind.equals(Message.TYPE_LINK)) {
-                            notificationManager.notify(NotificationUtils.BASE_ID_POST + i, builder.build());
+                            Intent intent = new Intent(context, LinkResolverActivity.class);
+                            Uri uri = LinkResolverActivity.getRedditUriByPath(message.getContext());
+                            intent.setData(uri);
+                            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+                            builder.setContentIntent(pendingIntent);
                         } else if(kind.equals(Message.TYPE_MESSAGE)) {
-                            notificationManager.notify(NotificationUtils.BASE_ID_MESSAGE + i, builder.build());
+                            Intent intent = new Intent(context, ViewMessageActivity.class);
+                            PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+                            builder.setContentIntent(summaryPendingIntent);
                         } else if(kind.equals(Message.TYPE_SUBREDDIT)) {
-                            notificationManager.notify(NotificationUtils.BASE_ID_SUBREDDIT + i, builder.build());
+                            Intent intent = new Intent(context, ViewMessageActivity.class);
+                            PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+                            builder.setContentIntent(summaryPendingIntent);
                         } else {
-                            notificationManager.notify(NotificationUtils.BASE_ID_AWARD + i, builder.build());
+                            Intent intent = new Intent(context, ViewMessageActivity.class);
+                            PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+                            builder.setContentIntent(summaryPendingIntent);
                         }
+                        notificationManager.notify(NotificationUtils.BASE_ID_UNREAD_MESSAGE + i, builder.build());
                     }
 
                     inboxStyle.setBigContentTitle(messages.size() + " New Messages")
                             .setSummaryText(currentAccount.getUsername());
 
                     summaryBuilder.setStyle(inboxStyle);
+
+                    Intent summaryIntent = new Intent(context, ViewMessageActivity.class);
+                    PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, 0, summaryIntent, 0);
+                    summaryBuilder.setContentIntent(summaryPendingIntent);
 
                     notificationManager.notify(NotificationUtils.SUMMARY_ID_NEW_COMMENTS, summaryBuilder.build());
 

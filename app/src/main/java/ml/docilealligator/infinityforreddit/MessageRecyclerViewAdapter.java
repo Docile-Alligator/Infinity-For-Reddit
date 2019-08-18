@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import CustomView.CustomMarkwonView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Retrofit;
 
 class MessageRecyclerViewAdapter extends PagedListAdapter<Message, RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_DATA = 0;
@@ -25,7 +26,9 @@ class MessageRecyclerViewAdapter extends PagedListAdapter<Message, RecyclerView.
     private static final int VIEW_TYPE_LOADING = 2;
 
     private Context mContext;
-    private Resources resources;
+    private Retrofit mOauthRetrofit;
+    private String mAccessToken;
+    private Resources mResources;
 
     private NetworkState networkState;
     private CommentsListingRecyclerViewAdapter.RetryLoadingMoreCallback mRetryLoadingMoreCallback;
@@ -34,10 +37,12 @@ class MessageRecyclerViewAdapter extends PagedListAdapter<Message, RecyclerView.
         void retryLoadingMore();
     }
 
-    MessageRecyclerViewAdapter(Context context) {
+    MessageRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, String accessToken) {
         super(DIFF_CALLBACK);
         mContext = context;
-        resources = context.getResources();
+        mOauthRetrofit = oauthRetrofit;
+        mAccessToken = accessToken;
+        mResources = context.getResources();
     }
 
     private static final DiffUtil.ItemCallback<Message> DIFF_CALLBACK = new DiffUtil.ItemCallback<Message>() {
@@ -71,11 +76,11 @@ class MessageRecyclerViewAdapter extends PagedListAdapter<Message, RecyclerView.
             if(message != null) {
                 if(message.isNew()) {
                     ((DataViewHolder) holder).itemView.setBackgroundColor(
-                            resources.getColor(R.color.unreadMessageBackgroundColor));
+                            mResources.getColor(R.color.unreadMessageBackgroundColor));
                 }
 
                 if(message.wasComment()) {
-                    ((DataViewHolder) holder).authorTextView.setTextColor(resources.getColor(R.color.colorPrimaryDarkDayNightTheme));
+                    ((DataViewHolder) holder).authorTextView.setTextColor(mResources.getColor(R.color.colorPrimaryDarkDayNightTheme));
                     ((DataViewHolder) holder).titleTextView.setText(message.getTitle());
                 } else {
                     ((DataViewHolder) holder).titleTextView.setVisibility(View.GONE);
@@ -92,6 +97,21 @@ class MessageRecyclerViewAdapter extends PagedListAdapter<Message, RecyclerView.
                         Intent intent = new Intent(mContext, LinkResolverActivity.class);
                         intent.setData(uri);
                         mContext.startActivity(intent);
+                    }
+
+                    if(message.isNew()) {
+                        ((DataViewHolder) holder).itemView.setBackgroundColor(mResources.getColor(android.R.color.white));
+
+                        ReadMessage.readMessage(mOauthRetrofit, mAccessToken, message.getFullname(),
+                                new ReadMessage.ReadMessageListener() {
+                            @Override
+                            public void readSuccess() {}
+
+                            @Override
+                            public void readFailed() {
+                                ((DataViewHolder) holder).itemView.setBackgroundColor(mResources.getColor(R.color.unreadMessageBackgroundColor));
+                            }
+                        });
                     }
                 });
 
@@ -134,9 +154,9 @@ class MessageRecyclerViewAdapter extends PagedListAdapter<Message, RecyclerView.
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
         if(holder instanceof DataViewHolder) {
-            ((DataViewHolder) holder).itemView.setBackgroundColor(resources.getColor(android.R.color.white));
+            ((DataViewHolder) holder).itemView.setBackgroundColor(mResources.getColor(android.R.color.white));
             ((DataViewHolder) holder).titleTextView.setVisibility(View.VISIBLE);
-            ((DataViewHolder) holder).authorTextView.setTextColor(resources.getColor(R.color.primaryTextColor));
+            ((DataViewHolder) holder).authorTextView.setTextColor(mResources.getColor(R.color.primaryTextColor));
         }
     }
 

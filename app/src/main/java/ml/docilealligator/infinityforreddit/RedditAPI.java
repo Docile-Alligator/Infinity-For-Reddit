@@ -159,4 +159,8 @@ public interface RedditAPI {
 
     @GET("/message/{where}.json?raw_json=1")
     Call<String> getMessages(@HeaderMap Map<String, String> headers, @Path("where") String where, @Query("after") String after);
+
+    @FormUrlEncoded
+    @POST("/api/read_message")
+    Call<String> readMessage(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> ids);
 }

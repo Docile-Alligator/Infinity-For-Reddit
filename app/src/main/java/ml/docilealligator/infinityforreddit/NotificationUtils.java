@@ -14,12 +14,7 @@ class NotificationUtils {
     static final String GROUP_NEW_COMMENTS = "ml.docilealligator.infinityforreddit.NEW_COMMENTS";
     static final int SUMMARY_ID_NEW_COMMENTS = 0;
 
-    static final int BASE_ID_COMMENT = 1;
-    static final int BASE_ID_ACCOUNT = 1000;
-    static final int BASE_ID_POST = 2000;
-    static final int BASE_ID_MESSAGE = 3000;
-    static final int BASE_ID_SUBREDDIT = 4000;
-    static final int BASE_ID_AWARD = 5000;
+    static final int BASE_ID_UNREAD_MESSAGE = 1;
 
     static NotificationCompat.Builder buildNotification(NotificationManagerCompat notificationManager,
                                                         Context context, String title, String content,
