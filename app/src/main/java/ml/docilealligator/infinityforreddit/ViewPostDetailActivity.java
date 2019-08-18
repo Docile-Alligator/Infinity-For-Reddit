@@ -101,7 +101,6 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
     private LinearLayoutManager mLinearLayoutManager;
     private CommentAndPostRecyclerViewAdapter mAdapter;
-    private LoadSubredditIconAsyncTask mLoadSubredditIconAsyncTask;
 
     @BindView(R.id.coordinator_layout_view_post_detail) CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.appbar_layout_view_post_detail_activity) AppBarLayout appBarLayout;
@@ -255,7 +254,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
             }
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
                     mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mAccountName, mPost,
-                    mLocale, mSingleCommentId, isSingleCommentThreadMode, mLoadSubredditIconAsyncTask,
+                    mLocale, mSingleCommentId, isSingleCommentThreadMode,
                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                         @Override
                         public void updatePost(Post post) {
@@ -331,7 +330,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
                             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
                                     mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mAccountName, mPost,
-                                    mLocale, mSingleCommentId, isSingleCommentThreadMode, mLoadSubredditIconAsyncTask,
+                                    mLocale, mSingleCommentId, isSingleCommentThreadMode,
                                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                                         @Override
                                         public void updatePost(Post post) {
@@ -817,9 +816,6 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         EventBus.getDefault().unregister(this);
         super.onDestroy();
         Bridge.clear(this);
-        if(mLoadSubredditIconAsyncTask != null) {
-            mLoadSubredditIconAsyncTask.cancel(true);
-        }
     }
 
     @Override

@@ -13,6 +13,7 @@
     <string name="search_subreddits_activity_label">Subreddits</string>
     <string name="edit_post_activity_label">Edit Post</string>
     <string name="edit_comment_activity_label">Edit Comment</string>
+    <string name="view_message_activity">Inbox</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -50,12 +51,15 @@
     <string name="no_users">No users found</string>
     <string name="no_storage_permission">No storage permission to save this file</string>
 
-    <string name="load_comments_failed">Error loading comments.</string>
+    <string name="load_comments_failed">Error loading comments</string>
     <string name="retry">Retry</string>
     <string name="comments">Comments</string>
     <string name="no_comments_yet">No comments yet. Write a comment?</string>
     <string name="vote_failed">Vote failed</string>
     <string name="refresh_post_failed">Error refreshing the post</string>
+
+    <string name="load_messages_failed">Error loading messages</string>
+    <string name="no_messages">Empty</string>
 
     <string name="nsfw">NSFW</string>
     <string name="karma_info">Karma: %1$d</string>
@@ -63,6 +67,7 @@
     <string name="profile">Profile</string>
     <string name="following">Following</string>
     <string name="subscriptions">Subscriptions</string>
+    <string name="inbox">Inbox</string>
     <string name="upvoted">Upvoted</string>
     <string name="downvoted">Downvoted</string>
     <string name="hidden">Hidden</string>

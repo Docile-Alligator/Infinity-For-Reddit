@@ -72,7 +72,6 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private String mSingleCommentId;
     private boolean mIsSingleCommentThreadMode;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
-    private LoadSubredditIconAsyncTask mLoadSubredditIconAsyncTask;
     private boolean isInitiallyLoading;
     private boolean isInitiallyLoadingFailed;
     private boolean mHasMoreComments;
@@ -87,7 +86,6 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                                       RedditDataRoomDatabase redditDataRoomDatabase, RequestManager glide,
                                       String accessToken, String accountName, Post post, Locale locale,
                                       String singleCommentId, boolean isSingleCommentThreadMode,
-                                      LoadSubredditIconAsyncTask loadSubredditIconAsyncTask,
                                       CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
         mActivity = activity;
         mRetrofit = retrofit;
@@ -102,7 +100,6 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         mLocale = locale;
         mSingleCommentId = singleCommentId;
         mIsSingleCommentThreadMode = isSingleCommentThreadMode;
-        mLoadSubredditIconAsyncTask = loadSubredditIconAsyncTask;
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
         isInitiallyLoadingFailed = false;
@@ -194,10 +191,10 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if(holder.getItemViewType() == VIEW_TYPE_POST_DETAIL) {
             ((PostDetailViewHolder) holder).mTitleTextView.setText(mPost.getTitle());
-
-            if(mPost.getSubredditNamePrefixed().equals("u/" + mPost.getAuthor())) {
+            if(mPost.getSubredditNamePrefixed().startsWith("u/")) {
                 if(mPost.getAuthorIconUrl() == null) {
-                    new LoadUserDataAsyncTask(mRedditDataRoomDatabase.userDao(), mPost.getAuthor(), mOauthRetrofit, iconImageUrl -> {
+                    String authorName = mPost.getAuthor().equals("[deleted]") ? mPost.getSubredditNamePrefixed().substring(2) : mPost.getAuthor();
+                    new LoadUserDataAsyncTask(mRedditDataRoomDatabase.userDao(), authorName, mOauthRetrofit, iconImageUrl -> {
                         if(mActivity != null && getItemCount() > 0) {
                             if(iconImageUrl == null || iconImageUrl.equals("")) {
                                 mGlide.load(R.drawable.subreddit_default_icon)
@@ -229,10 +226,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 }
             } else {
                 if(mPost.getSubredditIconUrl() == null) {
-                    if(mLoadSubredditIconAsyncTask != null) {
-                        mLoadSubredditIconAsyncTask.cancel(true);
-                    }
-                    mLoadSubredditIconAsyncTask = new LoadSubredditIconAsyncTask(
+                    new LoadSubredditIconAsyncTask(
                             mRedditDataRoomDatabase.subredditDao(), mPost.getSubredditNamePrefixed().substring(2),
                             mRetrofit, iconImageUrl -> {
                                 if(iconImageUrl == null || iconImageUrl.equals("")) {
@@ -248,9 +242,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                                 }
 
                                 mPost.setSubredditIconUrl(iconImageUrl);
-                            });
-
-                    mLoadSubredditIconAsyncTask.execute();
+                            }).execute();
                 } else if(!mPost.getSubredditIconUrl().equals("")) {
                     mGlide.load(mPost.getSubredditIconUrl())
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -713,10 +705,6 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     void initiallyLoading() {
-        if(mLoadSubredditIconAsyncTask != null) {
-            mLoadSubredditIconAsyncTask.cancel(true);
-        }
-
         if(mVisibleComments.size() != 0) {
             int previousSize = mVisibleComments.size();
             mVisibleComments.clear();

@@ -158,5 +158,5 @@ public interface RedditAPI {
     Call<String> selectFlair(@Path("subredditNamePrefixed") String subredditName, @HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
     @GET("/message/{where}.json?raw_json=1")
-    Call<String> getMessages(@HeaderMap Map<String, String> headers, @Path("where") String where);
+    Call<String> getMessages(@HeaderMap Map<String, String> headers, @Path("where") String where, @Query("after") String after);
 }

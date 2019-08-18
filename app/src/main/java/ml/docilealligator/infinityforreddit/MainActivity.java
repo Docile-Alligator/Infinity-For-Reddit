@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     @BindView(R.id.all_drawer_items_linear_layout_main_activity) LinearLayout allDrawerItemsLinearLayout;
     @BindView(R.id.profile_linear_layout_main_activity) LinearLayout profileLinearLayout;
     @BindView(R.id.subscriptions_linear_layout_main_activity) LinearLayout subscriptionLinearLayout;
+    @BindView(R.id.inbox_linear_layout_main_activity) LinearLayout inboxLinearLayout;
     @BindView(R.id.upvoted_linear_layout_main_activity) LinearLayout upvotedLinearLayout;
     @BindView(R.id.downvoted_linear_layout_main_activity) LinearLayout downvotedLinearLayout;
     @BindView(R.id.hidden_linear_layout_main_activity) LinearLayout hiddenLinearLayout;
@@ -385,6 +386,12 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             mAccountNameTextView.setText(R.string.anonymous_account);
             profileLinearLayout.setVisibility(View.GONE);
             subscriptionLinearLayout.setVisibility(View.GONE);
+            inboxLinearLayout.setVisibility(View.GONE);
+            upvotedLinearLayout.setVisibility(View.GONE);
+            downvotedLinearLayout.setVisibility(View.GONE);
+            hiddenLinearLayout.setVisibility(View.GONE);
+            savedLinearLayout.setVisibility(View.GONE);
+            gildedLinearLayout.setVisibility(View.GONE);
             divider.setVisibility(View.GONE);
         }
 
@@ -413,6 +420,12 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
         subscriptionLinearLayout.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubscribedThingListingActivity.class);
+            startActivity(intent);
+            drawer.closeDrawers();
+        });
+
+        inboxLinearLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(this, ViewMessageActivity.class);
             startActivity(intent);
             drawer.closeDrawers();
         });

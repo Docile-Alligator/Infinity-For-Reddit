@@ -87,7 +87,11 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
                                 hasPostLiveData.postValue(true);
                             }
 
-                            callback.onResult(comments, null, after);
+                            if(after == null || after.equals("") || after.equals("null")) {
+                                callback.onResult(comments, null, null);
+                            } else {
+                                callback.onResult(comments, null, after);
+                            }
                             initialLoadStateLiveData.postValue(NetworkState.LOADED);
                         }
 
@@ -147,13 +151,15 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
                         }
                     }).execute();
                 } else {
-                    paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
+                    Log.i("Comments fetch error", "Error fetching data");
+                    paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error fetching data"));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
+                Log.i("Comments fetch error", "Error fetchin data");
+                paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error fetching data"));
             }
         });
     }

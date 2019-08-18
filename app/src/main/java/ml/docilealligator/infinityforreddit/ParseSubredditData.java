@@ -43,7 +43,7 @@ class ParseSubredditData {
                 jsonResponse = new JSONObject(response);
                 parseFailed = false;
             } catch (JSONException e) {
-                Log.i("subreddit json error", e.getMessage());
+                Log.i("subreddit json error", "message: " + e.getMessage());
                 parseSubredditDataListener.onParseSubredditDataFail();
             }
         }
@@ -54,38 +54,9 @@ class ParseSubredditData {
                 JSONObject data = jsonResponse.getJSONObject(JSONUtils.DATA_KEY);
                 mNCurrentOnlineSubscribers = data.getInt(JSONUtils.ACTIVE_USER_COUNT_KEY);
                 subredditData = parseSubredditData(data);
-                /*String id = data.getString(JSONUtils.EXTRA_NAME);
-                String subredditFullName = data.getString(JSONUtils.DISPLAY_NAME);
-                String description = data.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY).trim();
-
-                String bannerImageUrl;
-                if(data.isNull(JSONUtils.BANNER_BACKGROUND_IMAGE_KEY)) {
-                    bannerImageUrl = "";
-                } else {
-                    bannerImageUrl = data.getString(JSONUtils.BANNER_BACKGROUND_IMAGE_KEY);
-                }
-                if(bannerImageUrl.equals("") && !data.isNull(JSONUtils.BANNER_IMG_KEY)) {
-                    bannerImageUrl= data.getString(JSONUtils.BANNER_IMG_KEY);
-                }
-
-                String iconUrl;
-                if(data.isNull(JSONUtils.COMMUNITY_ICON_KEY)) {
-                    iconUrl = "";
-                } else {
-                    iconUrl = data.getString(JSONUtils.COMMUNITY_ICON_KEY);
-                }
-                if(iconUrl.equals("") && !data.isNull(JSONUtils.ICON_IMG_KEY)) {
-                    iconUrl = data.getString(JSONUtils.ICON_IMG_KEY);
-                }
-
-                int nSubscribers = data.getInt(JSONUtils.SUBSCRIBERS_KEY);
-                int nCurrentOnlineSubscribers = data.getInt(JSONUtils.ACTIVE_USER_COUNT_KEY);
-                subredditData = new SubredditData(id, subredditFullName, iconUrl, bannerImageUrl, description, nSubscribers);
-                mNCurrentOnlineSubscribers = nCurrentOnlineSubscribers;*/
             } catch (JSONException e) {
                 parseFailed = true;
                 Log.i("parse", "SubredditData error");
-                parseSubredditDataListener.onParseSubredditDataFail();
             }
             return null;
         }
@@ -114,7 +85,7 @@ class ParseSubredditData {
                 parseFailed = false;
                 subredditListingData = new ArrayList<>();
             } catch (JSONException e) {
-                Log.i("subreddit json error", e.getMessage());
+                Log.i("subreddit json error", "message: " + e.getMessage());
                 parseFailed = true;
             }
         }

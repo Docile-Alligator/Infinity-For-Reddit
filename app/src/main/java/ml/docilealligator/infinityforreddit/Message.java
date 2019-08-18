@@ -104,7 +104,7 @@ class Message {
         return formattedTime;
     }
 
-    public boolean isWasComment() {
+    public boolean wasComment() {
         return wasComment;
     }
 

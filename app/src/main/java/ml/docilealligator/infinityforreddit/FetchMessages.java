@@ -22,8 +22,8 @@ import retrofit2.Retrofit;
 class FetchMessages {
 
     interface FetchMessagesListener {
-        void fetchSuccess(@Nullable ArrayList<Message> messages);
-        void fetchFailed(boolean shouldRetry);
+        void fetchSuccess(ArrayList<Message> messages, @Nullable String after);
+        void fetchFailed();
     }
 
     static final String WHERE_INBOX = "inbox";
@@ -32,22 +32,21 @@ class FetchMessages {
     static final String WHERE_COMMENTS = "comments";
 
     static void fetchMessagesAsync(Retrofit oauthRetrofit, Locale locale, String accessToken, String where,
-                                   FetchMessagesListener fetchMessagesListener) {
-        oauthRetrofit.create(RedditAPI.class).getMessages(RedditUtils.getOAuthHeader(accessToken), where)
+                                   String after, FetchMessagesListener fetchMessagesListener) {
+        oauthRetrofit.create(RedditAPI.class).getMessages(RedditUtils.getOAuthHeader(accessToken), where, after)
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                         if(response.isSuccessful()) {
-                            new ParseMessageAsnycTask(response.body(), locale,
-                                    fetchMessagesListener::fetchSuccess).execute();
+                            new ParseMessageAsnycTask(response.body(), locale, fetchMessagesListener::fetchSuccess).execute();
                         } else {
-                            fetchMessagesListener.fetchFailed(true);
+                            fetchMessagesListener.fetchFailed();
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                        fetchMessagesListener.fetchFailed(true);
+                        fetchMessagesListener.fetchFailed();
                     }
                 });
     }
@@ -104,12 +103,13 @@ class FetchMessages {
     private static class ParseMessageAsnycTask extends AsyncTask<Void, Void, Void> {
 
         interface ParseMessageAsyncTaskListener {
-            void parseSuccess(ArrayList<Message> messages);
+            void parseSuccess(ArrayList<Message> messages, @Nullable String after);
         }
 
         private String response;
         private Locale locale;
         private ArrayList<Message> messages;
+        private String after;
         private ParseMessageAsyncTaskListener parseMessageAsyncTaskListener;
 
         ParseMessageAsnycTask(String response, Locale locale, ParseMessageAsyncTaskListener parseMessageAsnycTaskListener) {
@@ -122,13 +122,18 @@ class FetchMessages {
         @Override
         protected Void doInBackground(Void... voids) {
             messages = parseMessage(response, locale);
+            try {
+                after = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            parseMessageAsyncTaskListener.parseSuccess(messages);
+            parseMessageAsyncTaskListener.parseSuccess(messages, after);
         }
     }
 }

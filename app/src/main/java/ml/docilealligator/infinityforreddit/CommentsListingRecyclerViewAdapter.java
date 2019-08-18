@@ -57,13 +57,13 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
 
     private static final DiffUtil.ItemCallback<CommentData> DIFF_CALLBACK = new DiffUtil.ItemCallback<CommentData>() {
         @Override
-        public boolean areItemsTheSame(@NonNull CommentData CommentData, @NonNull CommentData t1) {
-            return CommentData.getId().equals(t1.getId());
+        public boolean areItemsTheSame(@NonNull CommentData commentData, @NonNull CommentData t1) {
+            return commentData.getId().equals(t1.getId());
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull CommentData CommentData, @NonNull CommentData t1) {
-            return CommentData.getCommentContent().equals(t1.getCommentContent());
+        public boolean areContentsTheSame(@NonNull CommentData commentData, @NonNull CommentData t1) {
+            return commentData.getCommentContent().equals(t1.getCommentContent());
         }
     };
 

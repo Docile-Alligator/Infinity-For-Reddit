@@ -49,13 +49,13 @@ public class PullNotificationWorker extends Worker {
             Account currentAccount = redditDataRoomDatabase.accountDao().getCurrentAccount();
             Response<String> response = mOauthRetrofit.create(RedditAPI.class).getMessages(
                     RedditUtils.getOAuthHeader(currentAccount.getAccessToken()),
-                    FetchMessages.WHERE_COMMENTS).execute();
+                    FetchMessages.WHERE_UNREAD, null).execute();
             Log.i("workmanager", "has response");
             if(response.isSuccessful()) {
                 String responseBody = response.body();
                 ArrayList<Message> messages = FetchMessages.parseMessage(responseBody, context.getResources().getConfiguration().locale);
 
-                if(messages != null) {
+                if(messages != null && !messages.isEmpty()) {
                     NotificationManagerCompat notificationManager = NotificationUtils.getNotificationManager(context);
 
                     NotificationCompat.Builder summaryBuilder = NotificationUtils.buildSummaryNotification(context,

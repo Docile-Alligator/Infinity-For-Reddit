@@ -85,11 +85,10 @@ public class LinkResolverActivity extends AppCompatActivity {
             builder.setToolbarColor(getResources().getColor(R.color.colorPrimary));
             CustomTabsIntent customTabsIntent = builder.build();
             customTabsIntent.intent.setPackage(resolveInfos.get(0).activityInfo.packageName);
-            String uriString = uri.toString();
-            if(!uriString.startsWith("http://") || (!uriString.startsWith("https://"))) {
-                uriString = "http://" + uriString;
+            if(uri.getScheme() == null) {
+                uri = Uri.parse("http://" + uri.toString());
             }
-            customTabsIntent.launchUrl(this, Uri.parse(uriString));
+            customTabsIntent.launchUrl(this, uri);
         } else {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             intent.setData(uri);
@@ -133,7 +132,7 @@ public class LinkResolverActivity extends AppCompatActivity {
         return packagesSupportingCustomTabs;
     }
 
-    static Uri getRedditUriByPath(String path) {
+    public static Uri getRedditUriByPath(String path) {
         return Uri.parse("https://www.reddit.com" + path);
     }
 }
