@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
@@ -246,11 +247,12 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                         .build();
 
                 PeriodicWorkRequest pullNotificationRequest =
-                        new PeriodicWorkRequest.Builder(PullNotificationWorker.class, 15, TimeUnit.MINUTES)
+                        new PeriodicWorkRequest.Builder(PullNotificationWorker.class, 1, TimeUnit.HOURS)
                                 .setConstraints(constraints)
                                 .build();
 
-                WorkManager.getInstance(this).enqueue(pullNotificationRequest);
+                WorkManager.getInstance(this).enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
+                        ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
             }
             bindView();
         }).execute();

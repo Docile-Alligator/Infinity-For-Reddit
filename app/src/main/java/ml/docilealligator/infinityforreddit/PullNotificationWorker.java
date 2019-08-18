@@ -23,6 +23,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class PullNotificationWorker extends Worker {
+    static final String WORKER_TAG = "PNWT";
+
     private Context context;
 
     @Inject
