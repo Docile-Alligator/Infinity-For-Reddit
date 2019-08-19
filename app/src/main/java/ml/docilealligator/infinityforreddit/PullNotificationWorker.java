@@ -55,8 +55,6 @@ public class PullNotificationWorker extends Worker {
         try {
             Log.i("workmanager", "before response");
 
-            String currentAccountName = redditDataRoomDatabase.accountDao().getCurrentAccount().getUsername();
-
             List<Account> accounts = redditDataRoomDatabase.accountDao().getAllAccounts();
             for(int accountIndex = 0; accountIndex < accounts.size(); accountIndex++) {
                 Account account = accounts.get(accountIndex);
@@ -119,6 +117,7 @@ public class PullNotificationWorker extends Worker {
                                 Uri uri = LinkResolverActivity.getRedditUriByPath(message.getContext());
                                 intent.setData(uri);
                                 intent.putExtra(LinkResolverActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
+                                intent.putExtra(LinkResolverActivity.EXTRA_MESSAGE_FULLNAME, message.getFullname());
                                 PendingIntent pendingIntent = PendingIntent.getActivity(context, accountIndex * 6, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 builder.setContentIntent(pendingIntent);
                             } else if(kind.equals(Message.TYPE_ACCOUNT)) {
@@ -131,6 +130,7 @@ public class PullNotificationWorker extends Worker {
                                 Uri uri = LinkResolverActivity.getRedditUriByPath(message.getContext());
                                 intent.setData(uri);
                                 intent.putExtra(LinkResolverActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
+                                intent.putExtra(LinkResolverActivity.EXTRA_MESSAGE_FULLNAME, message.getFullname());
                                 PendingIntent pendingIntent = PendingIntent.getActivity(context, accountIndex * 6 + 2, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 builder.setContentIntent(pendingIntent);
                             } else if(kind.equals(Message.TYPE_MESSAGE)) {
