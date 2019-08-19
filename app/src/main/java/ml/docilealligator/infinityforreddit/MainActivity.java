@@ -252,6 +252,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             if(mNewAccountName != null) {
                 if(account == null || !account.getUsername().equals(mNewAccountName)) {
                     new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
+                        EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
                         mNewAccountName = null;
                         if(newAccount == null) {
                             mNullAccessToken = true;
@@ -272,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                                             .build();
 
                             WorkManager.getInstance(this).enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
-                                    ExistingPeriodicWorkPolicy.REPLACE, pullNotificationRequest);
+                                    ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
                         }
 
                         bindView();
@@ -294,7 +295,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                                     .build();
 
                     WorkManager.getInstance(this).enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
-                            ExistingPeriodicWorkPolicy.REPLACE, pullNotificationRequest);
+                            ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
 
                     bindView();
                 }
@@ -318,7 +319,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                                     .build();
 
                     WorkManager.getInstance(this).enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
-                            ExistingPeriodicWorkPolicy.REPLACE, pullNotificationRequest);
+                            ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
                 }
 
                 bindView();
@@ -327,7 +328,6 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     }
 
     private void bindView() {
-
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(2);
@@ -733,7 +733,9 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
     @Subscribe
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
-        finish();
+        if(!getClass().getName().equals(event.excludeActivityClassName)) {
+            finish();
+        }
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {

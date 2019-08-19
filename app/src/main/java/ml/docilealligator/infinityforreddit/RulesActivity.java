@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,6 +65,8 @@ public class RulesActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        EventBus.getDefault().register(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             Resources resources = getResources();
@@ -171,6 +175,17 @@ public class RulesActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onAccountSwitchEvent(SwitchAccountEvent event) {
+        finish();
     }
 
     private static class ParseRulesAsyncTask extends AsyncTask<Void, ArrayList<Rule>, ArrayList<Rule>> {

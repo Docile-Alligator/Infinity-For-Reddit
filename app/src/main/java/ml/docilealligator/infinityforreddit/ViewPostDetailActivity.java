@@ -222,7 +222,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
             if(mNewAccountName != null) {
                 if(account == null || !account.getUsername().equals(mNewAccountName)) {
                     new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
-                        EventBus.getDefault().post(new SwitchAccountEvent());
+                        EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
                         mNewAccountName = null;
                         if(newAccount == null) {
                             mNullAccessToken = true;
@@ -701,6 +701,13 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         if(mPost.getId().equals(event.postId)) {
             mPost.setVoteType(event.voteType);
             mAdapter.updatePost(mPost);
+        }
+    }
+
+    @Subscribe
+    public void onAccountSwitchEvent(SwitchAccountEvent event) {
+        if(!getClass().getName().equals(event.excludeActivityClassName)) {
+            finish();
         }
     }
 

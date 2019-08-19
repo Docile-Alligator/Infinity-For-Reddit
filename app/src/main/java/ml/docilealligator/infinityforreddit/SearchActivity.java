@@ -21,6 +21,9 @@ import androidx.core.content.ContextCompat;
 
 import com.ferfalk.simplesearchview.SimpleSearchView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -52,6 +55,8 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         ButterKnife.bind(this);
+
+        EventBus.getDefault().register(this);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Window window = getWindow();
@@ -212,5 +217,16 @@ public class SearchActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putString(SUBREDDIT_NAME_STATE, subredditName);
         outState.putBoolean(SUBREDDIT_IS_USER_STATE, subredditIsUser);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onAccountSwitchEvent(SwitchAccountEvent event) {
+        finish();
     }
 }

@@ -36,6 +36,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -121,6 +122,8 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
         ButterKnife.bind(this);
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        EventBus.getDefault().register(this);
 
         username = getIntent().getStringExtra(EXTRA_USER_NAME_KEY);
 
@@ -353,7 +356,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
             if(mNewAccountName != null) {
                 if(account == null || !account.getUsername().equals(mNewAccountName)) {
                     new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
-                        EventBus.getDefault().post(new SwitchAccountEvent());
+                        EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
                         mNewAccountName = null;
                         if(newAccount == null) {
                             mNullAccessToken = true;
@@ -536,6 +539,12 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
         outState.putString(NEW_ACCOUNT_NAME_STATE, mNewAccountName);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     private void showMessage(int resId, boolean retry) {
         if(showToast) {
             Toast.makeText(this, resId, Toast.LENGTH_SHORT).show();
@@ -552,6 +561,13 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
     @Override
     public void userThingSortTypeSelected(String sortType) {
         sectionsPagerAdapter.changeSortType(sortType);
+    }
+
+    @Subscribe
+    public void onAccountSwitchEvent(SwitchAccountEvent event) {
+        if(!getClass().getName().equals(event.excludeActivityClassName)) {
+            finish();
+        }
     }
 
     private static class InsertUserDataAsyncTask extends AsyncTask<Void, Void, Void> {

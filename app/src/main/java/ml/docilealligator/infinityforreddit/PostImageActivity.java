@@ -475,6 +475,11 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
     }
 
     @Subscribe
+    public void onAccountSwitchEvent(SwitchAccountEvent event) {
+        finish();
+    }
+
+    @Subscribe
     public void onSubmitImagePostEvent(SubmitImagePostEvent submitImagePostEvent) {
         isPosting = false;
         if(submitImagePostEvent.postSuccess) {

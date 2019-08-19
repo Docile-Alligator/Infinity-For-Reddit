@@ -29,6 +29,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -79,6 +80,8 @@ public class ViewMessageActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        EventBus.getDefault().register(this);
 
         mGlide = Glide.with(this);
 
@@ -152,7 +155,7 @@ public class ViewMessageActivity extends AppCompatActivity {
             if(mNewAccountName != null) {
                 if(account == null || !account.getUsername().equals(mNewAccountName)) {
                     new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
-                        EventBus.getDefault().post(new SwitchAccountEvent());
+                        EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
                         mNewAccountName = null;
                         if(newAccount == null) {
                             mNullAccessToken = true;
@@ -250,5 +253,18 @@ public class ViewMessageActivity extends AppCompatActivity {
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
         outState.putString(NEW_ACCOUNT_NAME_STATE, mNewAccountName);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onAccountSwitchEvent(SwitchAccountEvent event) {
+        if(!getClass().getName().equals(event.excludeActivityClassName)) {
+            finish();
+        }
     }
 }

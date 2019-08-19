@@ -23,6 +23,9 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -64,6 +67,8 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
         ButterKnife.bind(this);
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        EventBus.getDefault().register(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             Resources resources = getResources();
@@ -207,6 +212,12 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public void searchSortTypeSelected(String sortType) {
         sectionsPagerAdapter.changeSortType(sortType, 0);
     }
@@ -214,6 +225,11 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
     @Override
     public void searchUserAndSubredditSortTypeSelected(String sortType, int fragmentPosition) {
         sectionsPagerAdapter.changeSortType(sortType, fragmentPosition);
+    }
+
+    @Subscribe
+    public void onAccountSwitchEvent(SwitchAccountEvent event) {
+        finish();
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {

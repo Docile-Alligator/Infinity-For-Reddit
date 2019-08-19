@@ -21,6 +21,9 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -67,6 +70,8 @@ public class SubscribedThingListingActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        EventBus.getDefault().register(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             Resources resources = getResources();
@@ -167,6 +172,12 @@ public class SubscribedThingListingActivity extends AppCompatActivity {
         outState.putString(ACCOUNT_NAME_STATE, mAccountName);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     private void loadSubscriptions() {
         if (!mInsertSuccess) {
             FetchSubscribedThing.fetchSubscribedThing(mOauthRetrofit, mAccessToken, mAccountName, null,
@@ -193,6 +204,11 @@ public class SubscribedThingListingActivity extends AppCompatActivity {
                         }
                     });
         }
+    }
+
+    @Subscribe
+    public void onAccountSwitchEvent(SwitchAccountEvent event) {
+        finish();
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {

@@ -21,6 +21,9 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.AppBarLayout;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -74,6 +77,8 @@ public class SubredditSelectionActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        EventBus.getDefault().register(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             Resources resources = getResources();
@@ -253,5 +258,16 @@ public class SubredditSelectionActivity extends AppCompatActivity {
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
         outState.putString(ACCOUNT_NAME_STATE, mAccountName);
         outState.putString(ACCOUNT_PROFILE_IMAGE_URL, mAccountProfileImageUrl);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onAccountSwitchEvent(SwitchAccountEvent event) {
+        finish();
     }
 }

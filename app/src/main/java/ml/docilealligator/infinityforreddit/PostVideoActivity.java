@@ -475,6 +475,11 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
     }
 
     @Subscribe
+    public void onAccountSwitchEvent(SwitchAccountEvent event) {
+        finish();
+    }
+
+    @Subscribe
     public void onSubmitVideoPostEvent(SubmitVideoPostEvent submitVideoPostEvent) {
         isPosting = false;
         if(submitVideoPostEvent.postSuccess) {

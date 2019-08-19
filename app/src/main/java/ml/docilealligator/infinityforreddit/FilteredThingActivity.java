@@ -18,6 +18,9 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.AppBarLayout;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -64,6 +67,8 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
         ButterKnife.bind(this);
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        EventBus.getDefault().register(this);
 
         Resources resources = getResources();
 
@@ -269,6 +274,12 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public void searchSortTypeSelected(String sortType) {
         ((PostFragment)mFragment).changeSortType(sortType);
     }
@@ -281,5 +292,10 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
     @Override
     public void userThingSortTypeSelected(String sortType) {
         ((PostFragment)mFragment).changeSortType(sortType);
+    }
+
+    @Subscribe
+    public void onAccountSwitchEvent(SwitchAccountEvent event) {
+        finish();
     }
 }

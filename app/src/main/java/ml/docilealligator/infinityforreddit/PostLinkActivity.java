@@ -380,6 +380,11 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
     }
 
     @Subscribe
+    public void onAccountSwitchEvent(SwitchAccountEvent event) {
+        finish();
+    }
+
+    @Subscribe
     public void onSubmitLinkPostEvent(SubmitTextOrLinkPostEvent submitTextOrLinkPostEvent) {
         isPosting = false;
         if(submitTextOrLinkPostEvent.postSuccess) {

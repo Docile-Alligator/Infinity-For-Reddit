@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -45,6 +48,8 @@ public class SearchSubredditsResultActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        EventBus.getDefault().register(this);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -112,5 +117,16 @@ public class SearchSubredditsResultActivity extends AppCompatActivity {
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
         outState.putString(ACCOUNT_NAME_STATE, mAccountName);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onAccountSwitchEvent(SwitchAccountEvent event) {
+        finish();
     }
 }

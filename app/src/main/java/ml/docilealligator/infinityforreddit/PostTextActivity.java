@@ -376,6 +376,11 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
     }
 
     @Subscribe
+    public void onAccountSwitchEvent(SwitchAccountEvent event) {
+        finish();
+    }
+
+    @Subscribe
     public void onSubmitTextPostEvent(SubmitTextOrLinkPostEvent submitTextOrLinkPostEvent) {
         isPosting = false;
         if(submitTextOrLinkPostEvent.postSuccess) {

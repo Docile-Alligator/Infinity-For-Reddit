@@ -32,6 +32,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -113,6 +114,8 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         ButterKnife.bind(this);
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        EventBus.getDefault().register(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             Resources resources = getResources();
@@ -273,7 +276,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
             if(mNewAccountName != null) {
                 if(account == null || !account.getUsername().equals(mNewAccountName)) {
                     new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
-                        EventBus.getDefault().post(new SwitchAccountEvent());
+                        EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
                         mNewAccountName = null;
                         if(newAccount == null) {
                             mNullAccessToken = true;
@@ -483,6 +486,12 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE_KEY, mFragment);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     private void makeSnackbar(int resId, boolean retry) {
         if(showToast) {
             Toast.makeText(this, resId, Toast.LENGTH_SHORT).show();
@@ -524,6 +533,13 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                 intent = new Intent(this, PostVideoActivity.class);
                 intent.putExtra(PostTextActivity.EXTRA_SUBREDDIT_NAME, subredditName);
                 startActivity(intent);
+        }
+    }
+
+    @Subscribe
+    public void onAccountSwitchEvent(SwitchAccountEvent event) {
+        if(!getClass().getName().equals(event.excludeActivityClassName)) {
+            finish();
         }
     }
 

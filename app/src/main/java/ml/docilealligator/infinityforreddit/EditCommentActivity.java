@@ -19,6 +19,9 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,6 +65,8 @@ public class EditCommentActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        EventBus.getDefault().register(this);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Window window = getWindow();
@@ -133,5 +138,16 @@ public class EditCommentActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onAccountSwitchEvent(SwitchAccountEvent event) {
+        finish();
     }
 }
