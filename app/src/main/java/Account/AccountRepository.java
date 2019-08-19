@@ -10,17 +10,11 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class AccountRepository {
     private AccountDao mAccountDao;
-    private LiveData<Account> mAccountLiveData;
     private LiveData<List<Account>> mAccountsExceptCurrentAccountLiveData;
 
     AccountRepository(RedditDataRoomDatabase redditDataRoomDatabase, String username) {
         mAccountDao = redditDataRoomDatabase.accountDao();
-        mAccountLiveData = mAccountDao.getAccountLiveData(username);
         mAccountsExceptCurrentAccountLiveData = mAccountDao.getAccountsExceptCurrentAccountLiveData();
-    }
-
-    LiveData<Account> getAccountLiveData() {
-        return mAccountLiveData;
     }
 
     public LiveData<List<Account>> getAccountsExceptCurrentAccountLiveData() {

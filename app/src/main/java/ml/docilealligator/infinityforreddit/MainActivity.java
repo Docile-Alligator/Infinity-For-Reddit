@@ -44,6 +44,9 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -85,9 +88,11 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     @BindView(R.id.collapsing_toolbar_layout_main_activity) CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.all_drawer_items_linear_layout_main_activity) LinearLayout allDrawerItemsLinearLayout;
+    @BindView(R.id.account_label_main_activity) TextView accountLabelTextView;
     @BindView(R.id.profile_linear_layout_main_activity) LinearLayout profileLinearLayout;
     @BindView(R.id.subscriptions_linear_layout_main_activity) LinearLayout subscriptionLinearLayout;
     @BindView(R.id.inbox_linear_layout_main_activity) LinearLayout inboxLinearLayout;
+    @BindView(R.id.post_label_main_activity) TextView postLabelTextView;
     @BindView(R.id.upvoted_linear_layout_main_activity) LinearLayout upvotedLinearLayout;
     @BindView(R.id.downvoted_linear_layout_main_activity) LinearLayout downvotedLinearLayout;
     @BindView(R.id.hidden_linear_layout_main_activity) LinearLayout hiddenLinearLayout;
@@ -145,6 +150,8 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         ButterKnife.bind(this);
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        EventBus.getDefault().register(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             Resources resources = getResources();
@@ -241,36 +248,57 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     }
 
     private void getCurrentAccountAndBindView() {
-        if(mNewAccountName != null) {
-            new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, () -> {
-                mNewAccountName = null;
-                new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-                    if(account == null) {
-                        mNullAccessToken = true;
-                    } else {
-                        mAccessToken = account.getAccessToken();
-                        mAccountName = account.getUsername();
-                        mProfileImageUrl = account.getProfileImageUrl();
-                        mBannerImageUrl = account.getBannerImageUrl();
-                        mKarma = account.getKarma();
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if(mNewAccountName != null) {
+                if(account == null || !account.getUsername().equals(mNewAccountName)) {
+                    new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
+                        mNewAccountName = null;
+                        if(newAccount == null) {
+                            mNullAccessToken = true;
+                        } else {
+                            mAccessToken = newAccount.getAccessToken();
+                            mAccountName = newAccount.getUsername();
+                            mProfileImageUrl = newAccount.getProfileImageUrl();
+                            mBannerImageUrl = newAccount.getBannerImageUrl();
+                            mKarma = newAccount.getKarma();
 
-                        Constraints constraints = new Constraints.Builder()
-                                .setRequiredNetworkType(NetworkType.CONNECTED)
-                                .build();
+                            Constraints constraints = new Constraints.Builder()
+                                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                                    .build();
 
-                        PeriodicWorkRequest pullNotificationRequest =
-                                new PeriodicWorkRequest.Builder(PullNotificationWorker.class, 1, TimeUnit.HOURS)
-                                        .setConstraints(constraints)
-                                        .build();
+                            PeriodicWorkRequest pullNotificationRequest =
+                                    new PeriodicWorkRequest.Builder(PullNotificationWorker.class, 1, TimeUnit.HOURS)
+                                            .setConstraints(constraints)
+                                            .build();
 
-                        WorkManager.getInstance(this).enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
-                                ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
-                    }
+                            WorkManager.getInstance(this).enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
+                                    ExistingPeriodicWorkPolicy.REPLACE, pullNotificationRequest);
+                        }
+
+                        bindView();
+                    }).execute();
+                } else {
+                    mAccessToken = account.getAccessToken();
+                    mAccountName = account.getUsername();
+                    mProfileImageUrl = account.getProfileImageUrl();
+                    mBannerImageUrl = account.getBannerImageUrl();
+                    mKarma = account.getKarma();
+
+                    Constraints constraints = new Constraints.Builder()
+                            .setRequiredNetworkType(NetworkType.CONNECTED)
+                            .build();
+
+                    PeriodicWorkRequest pullNotificationRequest =
+                            new PeriodicWorkRequest.Builder(PullNotificationWorker.class, 1, TimeUnit.HOURS)
+                                    .setConstraints(constraints)
+                                    .build();
+
+                    WorkManager.getInstance(this).enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
+                            ExistingPeriodicWorkPolicy.REPLACE, pullNotificationRequest);
+
                     bindView();
-                }).execute();
-            }).execute();
-        } else {
-            new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+                }
+            } else {
                 if(account == null) {
                     mNullAccessToken = true;
                 } else {
@@ -292,12 +320,14 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                     WorkManager.getInstance(this).enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
                             ExistingPeriodicWorkPolicy.REPLACE, pullNotificationRequest);
                 }
+
                 bindView();
-            }).execute();
-        }
+            }
+        }).execute();
     }
 
     private void bindView() {
+
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(2);
@@ -328,7 +358,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 new AccountRecyclerViewAdapter.ItemSelectedListener() {
             @Override
             public void accountSelected(Account account) {
-                new SwitchAccountAsyncTask(mRedditDataRoomDatabase, account.getUsername(), () -> {
+                new SwitchAccountAsyncTask(mRedditDataRoomDatabase, account.getUsername(), newAccount -> {
                     Intent intent = new Intent(MainActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
@@ -436,9 +466,11 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         } else {
             mKarmaTextView.setText(R.string.press_here_to_login);
             mAccountNameTextView.setText(R.string.anonymous_account);
+            accountLabelTextView.setVisibility(View.GONE);
             profileLinearLayout.setVisibility(View.GONE);
             subscriptionLinearLayout.setVisibility(View.GONE);
             inboxLinearLayout.setVisibility(View.GONE);
+            postLabelTextView.setVisibility(View.GONE);
             upvotedLinearLayout.setVisibility(View.GONE);
             downvotedLinearLayout.setVisibility(View.GONE);
             hiddenLinearLayout.setVisibility(View.GONE);
@@ -667,6 +699,12 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public void sortTypeSelected(String sortType) {
         sectionsPagerAdapter.changeSortType(sortType);
     }
@@ -691,6 +729,11 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 intent = new Intent(MainActivity.this, PostVideoActivity.class);
                 startActivity(intent);
         }
+    }
+
+    @Subscribe
+    public void onAccountSwitchEvent(SwitchAccountEvent event) {
+        finish();
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {

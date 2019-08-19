@@ -38,6 +38,13 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <TextView
+                        android:id="@+id/account_label_main_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="@string/label_account" />
+
                     <LinearLayout
                         android:id="@+id/profile_linear_layout_main_activity"
                         android:layout_width="match_parent"
@@ -115,6 +122,13 @@
                             android:textColor="@color/primaryTextColor" />
 
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/post_label_main_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="@string/label_post" />
 
                     <LinearLayout
                         android:id="@+id/upvoted_linear_layout_main_activity"

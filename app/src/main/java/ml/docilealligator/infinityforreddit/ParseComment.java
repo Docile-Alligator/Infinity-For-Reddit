@@ -213,6 +213,7 @@ class ParseComment {
     }
 
     static CommentData parseSingleComment(JSONObject singleCommentData, int depth, Locale locale) throws JSONException {
+        Log.i("adfasdf", singleCommentData.toString());
         String id = singleCommentData.getString(JSONUtils.ID_KEY);
         String fullName = singleCommentData.getString(JSONUtils.NAME_KEY);
         String author = singleCommentData.getString(JSONUtils.AUTHOR_KEY);

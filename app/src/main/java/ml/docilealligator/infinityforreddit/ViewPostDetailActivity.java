@@ -218,22 +218,27 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     }
 
     private void getCurrentAccountAndBindView() {
-        if(mNewAccountName != null) {
-            new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, () -> {
-                mNewAccountName = null;
-                new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-                    if(account == null) {
-                        mNullAccessToken = true;
-                    } else {
-                        mAccessToken = account.getAccessToken();
-                        mAccountName = account.getUsername();
-                    }
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if(mNewAccountName != null) {
+                if(account == null || !account.getUsername().equals(mNewAccountName)) {
+                    new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
+                        EventBus.getDefault().post(new SwitchAccountEvent());
+                        mNewAccountName = null;
+                        if(newAccount == null) {
+                            mNullAccessToken = true;
+                        } else {
+                            mAccessToken = newAccount.getAccessToken();
+                            mAccountName = newAccount.getUsername();
+                        }
 
+                        bindView();
+                    }).execute();
+                } else {
+                    mAccessToken = account.getAccessToken();
+                    mAccountName = account.getUsername();
                     bindView();
-                }).execute();
-            }).execute();
-        } else {
-            new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+                }
+            } else {
                 if(account == null) {
                     mNullAccessToken = true;
                 } else {
@@ -242,8 +247,8 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                 }
 
                 bindView();
-            }).execute();
-        }
+            }
+        }).execute();
     }
 
     private void bindView() {

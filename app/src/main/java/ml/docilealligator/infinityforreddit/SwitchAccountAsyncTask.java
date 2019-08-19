@@ -2,13 +2,16 @@ package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
 
+import Account.Account;
+
 class SwitchAccountAsyncTask extends AsyncTask<Void, Void, Void> {
     interface SwitchAccountAsyncTaskListener {
-        void switched();
+        void switched(Account account);
     }
 
     private RedditDataRoomDatabase redditDataRoomDatabase;
     private String newAccountName;
+    private Account account;
     private SwitchAccountAsyncTaskListener switchAccountAsyncTaskListener;
 
     SwitchAccountAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase, String newAccountName,
@@ -22,11 +25,12 @@ class SwitchAccountAsyncTask extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... voids) {
         redditDataRoomDatabase.accountDao().markAllAccountsNonCurrent();
         redditDataRoomDatabase.accountDao().markAccountCurrent(newAccountName);
+        account = redditDataRoomDatabase.accountDao().getCurrentAccount();
         return null;
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        switchAccountAsyncTaskListener.switched();
+        switchAccountAsyncTaskListener.switched(account);
     }
 }

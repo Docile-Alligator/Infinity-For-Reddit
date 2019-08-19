@@ -14,18 +14,12 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class AccountViewModel extends AndroidViewModel {
     private AccountRepository mAccountRepository;
-    private LiveData<Account> mAccountLiveData;
     private LiveData<List<Account>> mAccountsExceptCurrentAccountLiveData;
 
     public AccountViewModel(Application application, RedditDataRoomDatabase redditDataRoomDatabase, String id) {
         super(application);
         mAccountRepository = new AccountRepository(redditDataRoomDatabase, id);
-        mAccountLiveData = mAccountRepository.getAccountLiveData();
         mAccountsExceptCurrentAccountLiveData = mAccountRepository.getAccountsExceptCurrentAccountLiveData();
-    }
-
-    public LiveData<Account> getAccountLiveData() {
-        return mAccountLiveData;
     }
 
     public LiveData<List<Account>> getAccountsExceptCurrentAccountLiveData() {

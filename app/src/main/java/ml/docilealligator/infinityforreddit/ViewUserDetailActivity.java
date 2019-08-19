@@ -35,6 +35,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import org.greenrobot.eventbus.EventBus;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -347,30 +349,37 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
     }
 
     private void getCurrentAccountAndInitializeViewPager() {
-        if(mNewAccountName != null) {
-            new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, () -> {
-                mNewAccountName = null;
-                new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-                    if (account == null) {
-                        mNullAccessToken = true;
-                    } else {
-                        mAccessToken = account.getAccessToken();
-                        mAccountName = account.getUsername();
-                    }
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if(mNewAccountName != null) {
+                if(account == null || !account.getUsername().equals(mNewAccountName)) {
+                    new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
+                        EventBus.getDefault().post(new SwitchAccountEvent());
+                        mNewAccountName = null;
+                        if(newAccount == null) {
+                            mNullAccessToken = true;
+                        } else {
+                            mAccessToken = newAccount.getAccessToken();
+                            mAccountName = newAccount.getUsername();
+                        }
+
+                        initializeViewPager();
+                    }).execute();
+                } else {
+                    mAccessToken = account.getAccessToken();
+                    mAccountName = account.getUsername();
                     initializeViewPager();
-                }).execute();
-            }).execute();
-        } else {
-            new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-                if (account == null) {
+                }
+            } else {
+                if(account == null) {
                     mNullAccessToken = true;
                 } else {
                     mAccessToken = account.getAccessToken();
                     mAccountName = account.getUsername();
                 }
+
                 initializeViewPager();
-            }).execute();
-        }
+            }
+        }).execute();
     }
 
     private void initializeViewPager() {

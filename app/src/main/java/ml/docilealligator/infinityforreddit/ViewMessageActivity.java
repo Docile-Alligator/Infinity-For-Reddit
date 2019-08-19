@@ -28,6 +28,8 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 
+import org.greenrobot.eventbus.EventBus;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -146,30 +148,34 @@ public class ViewMessageActivity extends AppCompatActivity {
     }
 
     private void getCurrentAccountAndFetchMessage() {
-        if(mNewAccountName != null) {
-            new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, () -> {
-                mNewAccountName = null;
-                new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-                    if(account == null) {
-                        mNullAccessToken = true;
-                    } else {
-                        mAccessToken = account.getAccessToken();
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if(mNewAccountName != null) {
+                if(account == null || !account.getUsername().equals(mNewAccountName)) {
+                    new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
+                        EventBus.getDefault().post(new SwitchAccountEvent());
+                        mNewAccountName = null;
+                        if(newAccount == null) {
+                            mNullAccessToken = true;
+                        } else {
+                            mAccessToken = newAccount.getAccessToken();
+                        }
 
                         bindView();
-                    }
-                }).execute();
-            }).execute();
-        } else {
-            new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+                    }).execute();
+                } else {
+                    mAccessToken = account.getAccessToken();
+                    bindView();
+                }
+            } else {
                 if(account == null) {
                     mNullAccessToken = true;
                 } else {
                     mAccessToken = account.getAccessToken();
-
-                    bindView();
                 }
-            }).execute();
-        }
+
+                bindView();
+            }
+        }).execute();
     }
 
     private void bindView() {

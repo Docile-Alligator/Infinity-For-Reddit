@@ -60,8 +60,6 @@ public class PullNotificationWorker extends Worker {
                 Account account = accounts.get(accountIndex);
                 String accountName = account.getUsername();
 
-                Log.i("workmanager", accountName + " " + account.getAccessToken());
-
                 Response<String> response = fetchMessages(account);
 
                 if(response != null && response.isSuccessful()) {

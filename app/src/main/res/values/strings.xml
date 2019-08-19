@@ -231,4 +231,7 @@
     <string name="notification_summary_subreddit">Subreddit</string>
     <string name="notification_summary_award">Award</string>
     <string name="notification_new_messages">%1$d New Messages</string>
+
+    <string name="label_account">Account</string>
+    <string name="label_post">Post</string>
 </resources>
