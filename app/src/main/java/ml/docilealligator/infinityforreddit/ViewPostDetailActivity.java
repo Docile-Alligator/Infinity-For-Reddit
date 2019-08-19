@@ -60,6 +60,8 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     static final String EXTRA_POST_LIST_POSITION = "EPLI";
     static final String EXTRA_POST_ID = "EPI";
     static final String EXTRA_SINGLE_COMMENT_ID = "ESCI";
+    static final String EXTRA_NOTIFICATION_FULLNAME = "ENI";
+    static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
 
     private static final int EDIT_POST_REQUEST_CODE = 2;
     static final int EDIT_COMMENT_REQUEST_CODE = 3;
@@ -96,6 +98,8 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     boolean loadMoreChildrenSuccess = true;
     @State
     boolean hasMoreChildren;
+    @State
+    String mNewAccountName;
 
     private boolean showToast = false;
 
@@ -190,8 +194,11 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         mSingleCommentId = getIntent().hasExtra(EXTRA_SINGLE_COMMENT_ID) ? getIntent().getExtras().getString(EXTRA_SINGLE_COMMENT_ID) : null;
-        if(savedInstanceState == null && mSingleCommentId != null) {
-            isSingleCommentThreadMode = true;
+        if(savedInstanceState == null) {
+            if(mSingleCommentId != null) {
+                isSingleCommentThreadMode = true;
+            }
+            mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
         }
 
         orientation = getResources().getConfiguration().orientation;
@@ -208,16 +215,32 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     }
 
     private void getCurrentAccountAndBindView() {
-        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-            if(account == null) {
-                mNullAccessToken = true;
-            } else {
-                mAccessToken = account.getAccessToken();
-                mAccountName = account.getUsername();
-            }
+        if(mNewAccountName != null) {
+            new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, () -> {
+                mNewAccountName = null;
+                new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+                    if(account == null) {
+                        mNullAccessToken = true;
+                    } else {
+                        mAccessToken = account.getAccessToken();
+                        mAccountName = account.getUsername();
+                    }
 
-            bindView();
-        }).execute();
+                    bindView();
+                }).execute();
+            }).execute();
+        } else {
+            new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+                if(account == null) {
+                    mNullAccessToken = true;
+                } else {
+                    mAccessToken = account.getAccessToken();
+                    mAccountName = account.getUsername();
+                }
+
+                bindView();
+            }).execute();
+        }
     }
 
     private void bindView() {

@@ -46,7 +46,9 @@ import retrofit2.Retrofit;
 public class ViewSubredditDetailActivity extends AppCompatActivity implements SortTypeBottomSheetFragment.SortTypeSelectionCallback,
         PostTypeBottomSheetFragment.PostTypeSelectionCallback {
 
-    public static final String EXTRA_SUBREDDIT_NAME_KEY = "ESN";
+    static final String EXTRA_SUBREDDIT_NAME_KEY = "ESN";
+    static final String EXTRA_NOTIFICATION_FULLNAME = "ENF";
+    static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
 
     private static final String FETCH_SUBREDDIT_INFO_STATE = "FSIS";
     private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
@@ -54,6 +56,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
+    private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
 
     @BindView(R.id.coordinator_layout_view_subreddit_detail_activity) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_view_subreddit_detail) AppBarLayout appBarLayout;
@@ -76,6 +79,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     private boolean subscriptionReady = false;
     private boolean isInLazyMode = false;
     private boolean showToast = false;
+    private String mNewAccountName;
 
     private RequestManager glide;
     private Fragment mFragment;
@@ -149,6 +153,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME_KEY);
 
         if(savedInstanceState == null) {
+            mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
             getCurrentAccountAndBindView();
         } else {
             mFetchSubredditInfoSuccess = savedInstanceState.getBoolean(FETCH_SUBREDDIT_INFO_STATE);
@@ -156,6 +161,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
+            mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
 
             if(!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndBindView();
@@ -257,15 +263,30 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     }
 
     private void getCurrentAccountAndBindView() {
-        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-            if(account == null) {
-                mNullAccessToken = true;
-            } else {
-                mAccessToken = account.getAccessToken();
-                mAccountName = account.getUsername();
-            }
-            bindView(true);
-        }).execute();
+        if(mNewAccountName != null) {
+            new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, () -> {
+                mNewAccountName = null;
+                new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+                    if(account == null) {
+                        mNullAccessToken = true;
+                    } else {
+                        mAccessToken = account.getAccessToken();
+                        mAccountName = account.getUsername();
+                    }
+                    bindView(true);
+                }).execute();
+            }).execute();
+        } else {
+            new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+                if(account == null) {
+                    mNullAccessToken = true;
+                } else {
+                    mAccessToken = account.getAccessToken();
+                    mAccountName = account.getUsername();
+                }
+                bindView(true);
+            }).execute();
+        }
     }
 
     private void fetchSubredditData() {
@@ -430,6 +451,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
         outState.putString(ACCOUNT_NAME_STATE, mAccountName);
+        outState.putString(NEW_ACCOUNT_NAME_STATE, mNewAccountName);
         getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE_KEY, mFragment);
     }
 

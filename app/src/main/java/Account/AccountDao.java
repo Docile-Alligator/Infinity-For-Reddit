@@ -13,6 +13,9 @@ public interface AccountDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Account account);
 
+    @Query("SELECT * FROM accounts")
+    List<Account> getAllAccounts();
+
     @Query("SELECT * FROM accounts WHERE is_current_user = 0")
     List<Account> getAllNonCurrentAccounts();
 
@@ -43,4 +46,7 @@ public interface AccountDao {
 
     @Query("UPDATE accounts SET is_current_user = 1 WHERE username = :username")
     void markAccountCurrent(String username);
+
+    @Query("UPDATE accounts SET access_token = :accessToken WHERE username = :username")
+    void changeAccessToken(String username, String accessToken);
 }

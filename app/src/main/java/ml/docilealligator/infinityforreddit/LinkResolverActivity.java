@@ -17,6 +17,10 @@ import static androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_C
 
 public class LinkResolverActivity extends AppCompatActivity {
 
+    static final String EXTRA_NOTIFICATION_FULLNAME = "ENF";
+    static final String EXTRA_SWITCH_ACCOUNT = "ESA";
+    static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
+
     private static final String POST_PATTERN = "/r/\\w+/comments/\\w+/{0,1}\\w+/{0,1}";
     private static final String COMMENT_PATTERN = "/r/\\w+/comments/\\w+/{0,1}\\w+/\\w+/{0,1}";
     private static final String SUBREDDIT_PATTERN = "/r/\\w+/*";
@@ -32,12 +36,18 @@ public class LinkResolverActivity extends AppCompatActivity {
             path = path.substring(0, path.length() - 1);
         }
 
+        String notificationFullname = getIntent().getStringExtra(EXTRA_NOTIFICATION_FULLNAME);
+        boolean switchAccount = getIntent().getBooleanExtra(EXTRA_SWITCH_ACCOUNT, false);
+        String newAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
+
         if(path.matches(POST_PATTERN)) {
             List<String> segments = uri.getPathSegments();
             int commentsIndex = segments.lastIndexOf("comments");
             if(commentsIndex >=0 && commentsIndex < segments.size() - 1) {
                 Intent intent = new Intent(this, ViewPostDetailActivity.class);
                 intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, segments.get(commentsIndex + 1));
+                intent.putExtra(ViewPostDetailActivity.EXTRA_NOTIFICATION_FULLNAME, notificationFullname);
+                intent.putExtra(ViewPostDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
                 startActivity(intent);
             } else {
                 deepLinkError(uri);
@@ -49,6 +59,8 @@ public class LinkResolverActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, ViewPostDetailActivity.class);
                 intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, segments.get(commentsIndex + 1));
                 intent.putExtra(ViewPostDetailActivity.EXTRA_SINGLE_COMMENT_ID, segments.get(segments.size() - 1));
+                intent.putExtra(ViewPostDetailActivity.EXTRA_NOTIFICATION_FULLNAME, notificationFullname);
+                intent.putExtra(ViewPostDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
                 startActivity(intent);
             } else {
                 deepLinkError(uri);
@@ -58,15 +70,21 @@ public class LinkResolverActivity extends AppCompatActivity {
             if(subredditName.equals("popular") || subredditName.equals("all")) {
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.putExtra(MainActivity.EXTRA_POST_TYPE, subredditName);
+                intent.putExtra(MainActivity.EXTRA_NOTIFICATION_FULLNAME, notificationFullname);
+                intent.putExtra(MainActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(this, ViewSubredditDetailActivity.class);
                 intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, path.substring(3));
+                intent.putExtra(ViewSubredditDetailActivity.EXTRA_NOTIFICATION_FULLNAME, notificationFullname);
+                intent.putExtra(ViewSubredditDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
                 startActivity(intent);
             }
         } else if(path.matches(USER_PATTERN)) {
             Intent intent = new Intent(this, ViewUserDetailActivity.class);
             intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, path.substring(6));
+            intent.putExtra(ViewUserDetailActivity.EXTRA_NOTIFICATION_FULLNAME, notificationFullname);
+            intent.putExtra(ViewUserDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
             startActivity(intent);
         } else {
             deepLinkError(uri);

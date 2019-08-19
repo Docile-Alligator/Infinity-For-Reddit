@@ -12,8 +12,14 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -26,10 +32,11 @@ public class PullNotificationWorker extends Worker {
     static final String WORKER_TAG = "PNWT";
 
     private Context context;
+    private RedditAPI api;
 
     @Inject
-    @Named("oauth")
-    Retrofit mOauthRetrofit;
+    @Named("oauth_without_authenticator")
+    Retrofit mOauthWithoutAuthenticatorRetrofit;
 
     @Inject
     RedditDataRoomDatabase redditDataRoomDatabase;
@@ -38,6 +45,7 @@ public class PullNotificationWorker extends Worker {
         super(context, workerParams);
         this.context = context;
         ((Infinity) context.getApplicationContext()).getAppComponent().inject(this);
+        api = mOauthWithoutAuthenticatorRetrofit.create(RedditAPI.class);
     }
 
     @NonNull
@@ -46,109 +54,127 @@ public class PullNotificationWorker extends Worker {
         Log.i("workmanager", "do");
         try {
             Log.i("workmanager", "before response");
-            Account currentAccount = redditDataRoomDatabase.accountDao().getCurrentAccount();
-            Response<String> response = mOauthRetrofit.create(RedditAPI.class).getMessages(
-                    RedditUtils.getOAuthHeader(currentAccount.getAccessToken()),
-                    FetchMessages.WHERE_UNREAD, null).execute();
-            Log.i("workmanager", "has response");
-            if(response.isSuccessful()) {
-                String responseBody = response.body();
-                ArrayList<Message> messages = FetchMessages.parseMessage(responseBody, context.getResources().getConfiguration().locale);
 
-                if(messages != null && !messages.isEmpty()) {
-                    NotificationManagerCompat notificationManager = NotificationUtils.getNotificationManager(context);
+            String currentAccountName = redditDataRoomDatabase.accountDao().getCurrentAccount().getUsername();
 
-                    NotificationCompat.Builder summaryBuilder = NotificationUtils.buildSummaryNotification(context,
-                            notificationManager, currentAccount.getUsername(), messages.size() + " new comment replies",
-                            NotificationUtils.CHANNEL_ID_NEW_COMMENTS, NotificationUtils.CHANNEL_NEW_COMMENTS,
-                            NotificationUtils.GROUP_NEW_COMMENTS);
+            List<Account> accounts = redditDataRoomDatabase.accountDao().getAllAccounts();
+            for(int accountIndex = 0; accountIndex < accounts.size(); accountIndex++) {
+                Account account = accounts.get(accountIndex);
+                Log.i("workmanager", account.getUsername() + " " + account.getAccessToken());
 
-                    NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+                Response<String> response = fetchMessages(account);
 
-                    int messageSize = messages.size() >= 5 ? 5 : messages.size();
+                if(response != null && response.isSuccessful()) {
+                    Log.i("workmanager", "has response");
+                    String responseBody = response.body();
+                    ArrayList<Message> messages = FetchMessages.parseMessage(responseBody, context.getResources().getConfiguration().locale);
 
-                    for(int i = messageSize - 1; i >= 0; i--) {
-                        Message message = messages.get(i);
+                    if(messages != null && !messages.isEmpty()) {
+                        NotificationManagerCompat notificationManager = NotificationUtils.getNotificationManager(context);
 
-                        inboxStyle.addLine(message.getAuthor() + " " + message.getBody());
+                        NotificationCompat.Builder summaryBuilder = NotificationUtils.buildSummaryNotification(context,
+                                notificationManager, account.getUsername(),
+                                context.getString(R.string.notification_new_messages, messages.size()),
+                                NotificationUtils.CHANNEL_ID_NEW_COMMENTS, NotificationUtils.CHANNEL_NEW_COMMENTS,
+                                NotificationUtils.getAccountGroupName(account.getUsername()));
 
-                        String kind = message.getKind();
-                        String title;
-                        String summary;
-                        if(kind.equals(Message.TYPE_COMMENT) || kind.equals(Message.TYPE_LINK)) {
-                            title = message.getAuthor();
-                            summary = context.getString(R.string.notification_summary_comment);
-                        } else {
-                            title = message.getTitle();
-                            if(kind.equals(Message.TYPE_ACCOUNT)) {
-                                summary = context.getString(R.string.notification_summary_account);
-                            } else if(kind.equals(Message.TYPE_MESSAGE)) {
-                                summary = context.getString(R.string.notification_summary_message);
-                            } else if(kind.equals(Message.TYPE_SUBREDDIT)) {
-                                summary = context.getString(R.string.notification_summary_subreddit);
+                        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+
+                        int messageSize = messages.size() >= 5 ? 5 : messages.size();
+
+                        for(int messageIndex = messageSize - 1; messageIndex >= 0; messageIndex--) {
+                            Message message = messages.get(messageIndex);
+
+                            inboxStyle.addLine(message.getAuthor() + " " + message.getBody());
+
+                            String kind = message.getKind();
+                            Log.i("workmanager", kind);
+                            String title;
+                            String summary;
+                            if(kind.equals(Message.TYPE_COMMENT) || kind.equals(Message.TYPE_LINK)) {
+                                title = message.getAuthor();
+                                summary = message.getSubject().substring(0, 1).toUpperCase() + message.getSubject().substring(1);
                             } else {
-                                summary = context.getString(R.string.notification_summary_award);
+                                title = message.getTitle() == null || message.getTitle().equals("") ? message.getSubject() : message.getTitle();
+                                if(kind.equals(Message.TYPE_ACCOUNT)) {
+                                    summary = context.getString(R.string.notification_summary_account);
+                                } else if(kind.equals(Message.TYPE_MESSAGE)) {
+                                    summary = context.getString(R.string.notification_summary_message);
+                                } else if(kind.equals(Message.TYPE_SUBREDDIT)) {
+                                    summary = context.getString(R.string.notification_summary_subreddit);
+                                } else {
+                                    summary = context.getString(R.string.notification_summary_award);
+                                }
                             }
+
+                            NotificationCompat.Builder builder = NotificationUtils.buildNotification(notificationManager,
+                                    context, title, message.getBody(), summary,
+                                    NotificationUtils.CHANNEL_ID_NEW_COMMENTS,
+                                    NotificationUtils.CHANNEL_NEW_COMMENTS,
+                                    NotificationUtils.getAccountGroupName(account.getUsername()));
+
+                            if(kind.equals(Message.TYPE_COMMENT)) {
+                                Intent intent = new Intent(context, LinkResolverActivity.class);
+                                Uri uri = LinkResolverActivity.getRedditUriByPath(message.getContext());
+                                intent.setData(uri);
+                                if(!account.getUsername().equals(currentAccountName)) {
+                                    intent.putExtra(LinkResolverActivity.EXTRA_SWITCH_ACCOUNT, true);
+                                    intent.putExtra(LinkResolverActivity.EXTRA_NEW_ACCOUNT_NAME, account.getUsername());
+                                }
+                                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+                                builder.setContentIntent(pendingIntent);
+                            } else if(kind.equals(Message.TYPE_ACCOUNT)) {
+                                Intent intent = new Intent(context, ViewMessageActivity.class);
+                                PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+                                builder.setContentIntent(summaryPendingIntent);
+                            } else if(kind.equals(Message.TYPE_LINK)) {
+                                Intent intent = new Intent(context, LinkResolverActivity.class);
+                                Uri uri = LinkResolverActivity.getRedditUriByPath(message.getContext());
+                                intent.setData(uri);
+                                if(!account.getUsername().equals(currentAccountName)) {
+                                    intent.putExtra(LinkResolverActivity.EXTRA_SWITCH_ACCOUNT, true);
+                                    intent.putExtra(LinkResolverActivity.EXTRA_NEW_ACCOUNT_NAME, account.getUsername());
+                                }
+                                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+                                builder.setContentIntent(pendingIntent);
+                            } else if(kind.equals(Message.TYPE_MESSAGE)) {
+                                Intent intent = new Intent(context, ViewMessageActivity.class);
+                                PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+                                builder.setContentIntent(summaryPendingIntent);
+                            } else if(kind.equals(Message.TYPE_SUBREDDIT)) {
+                                Intent intent = new Intent(context, ViewMessageActivity.class);
+                                PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+                                builder.setContentIntent(summaryPendingIntent);
+                            } else {
+                                Intent intent = new Intent(context, ViewMessageActivity.class);
+                                PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+                                builder.setContentIntent(summaryPendingIntent);
+                            }
+                            notificationManager.notify(NotificationUtils.getNotificationIdUnreadMessage(accountIndex, messageIndex), builder.build());
                         }
 
-                        NotificationCompat.Builder builder = NotificationUtils.buildNotification(notificationManager,
-                                context, title, message.getBody(), summary,
-                                NotificationUtils.CHANNEL_ID_NEW_COMMENTS,
-                                NotificationUtils.CHANNEL_NEW_COMMENTS, NotificationUtils.GROUP_NEW_COMMENTS);
+                        inboxStyle.setBigContentTitle(context.getString(R.string.notification_new_messages, messages.size()))
+                                .setSummaryText(account.getUsername());
 
-                        if(kind.equals(Message.TYPE_COMMENT)) {
-                            Intent intent = new Intent(context, LinkResolverActivity.class);
-                            Uri uri = LinkResolverActivity.getRedditUriByPath(message.getContext());
-                            intent.setData(uri);
-                            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-                            builder.setContentIntent(pendingIntent);
-                        } else if(kind.equals(Message.TYPE_ACCOUNT)) {
-                            Intent intent = new Intent(context, ViewMessageActivity.class);
-                            PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-                            builder.setContentIntent(summaryPendingIntent);
-                        } else if(kind.equals(Message.TYPE_LINK)) {
-                            Intent intent = new Intent(context, LinkResolverActivity.class);
-                            Uri uri = LinkResolverActivity.getRedditUriByPath(message.getContext());
-                            intent.setData(uri);
-                            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-                            builder.setContentIntent(pendingIntent);
-                        } else if(kind.equals(Message.TYPE_MESSAGE)) {
-                            Intent intent = new Intent(context, ViewMessageActivity.class);
-                            PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-                            builder.setContentIntent(summaryPendingIntent);
-                        } else if(kind.equals(Message.TYPE_SUBREDDIT)) {
-                            Intent intent = new Intent(context, ViewMessageActivity.class);
-                            PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-                            builder.setContentIntent(summaryPendingIntent);
-                        } else {
-                            Intent intent = new Intent(context, ViewMessageActivity.class);
-                            PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-                            builder.setContentIntent(summaryPendingIntent);
-                        }
-                        notificationManager.notify(NotificationUtils.BASE_ID_UNREAD_MESSAGE + i, builder.build());
+                        summaryBuilder.setStyle(inboxStyle);
+
+                        Intent summaryIntent = new Intent(context, ViewMessageActivity.class);
+                        PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, 0, summaryIntent, 0);
+                        summaryBuilder.setContentIntent(summaryPendingIntent);
+
+                        notificationManager.notify(NotificationUtils.getSummaryIdUnreadMessage(accountIndex), summaryBuilder.build());
+
+                        Log.i("workmanager", "message size " + messages.size());
+                    } else {
+                        Log.i("workmanager", "retry1");
+                        return Result.retry();
                     }
-
-                    inboxStyle.setBigContentTitle(messages.size() + " New Messages")
-                            .setSummaryText(currentAccount.getUsername());
-
-                    summaryBuilder.setStyle(inboxStyle);
-
-                    Intent summaryIntent = new Intent(context, ViewMessageActivity.class);
-                    PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, 0, summaryIntent, 0);
-                    summaryBuilder.setContentIntent(summaryPendingIntent);
-
-                    notificationManager.notify(NotificationUtils.SUMMARY_ID_NEW_COMMENTS, summaryBuilder.build());
-
-                    Log.i("workmanager", "message size " + messages.size());
                 } else {
-                    Log.i("workmanager", "retry1");
+                    Log.i("workmanager", "retry2 " + response.code());
                     return Result.retry();
                 }
-            } else {
-                Log.i("workmanager", "retry2 " + response.code());
-                return Result.retry();
             }
-        } catch (IOException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
             Log.i("workmanager", "retry3");
             return Result.retry();
@@ -156,5 +182,36 @@ public class PullNotificationWorker extends Worker {
 
         Log.i("workmanager", "success");
         return Result.success();
+    }
+
+    private Response<String> fetchMessages(Account account) throws IOException, JSONException {
+        Response<String> response = api.getMessages(
+                RedditUtils.getOAuthHeader(account.getAccessToken()),
+                FetchMessages.WHERE_INBOX, null).execute();
+        if(response.isSuccessful()) {
+            return response;
+        } else {
+            if(response.code() == 401) {
+                String refreshToken = account.getRefreshToken();
+
+                Map<String, String> params = new HashMap<>();
+                params.put(RedditUtils.GRANT_TYPE_KEY, RedditUtils.GRANT_TYPE_REFRESH_TOKEN);
+                params.put(RedditUtils.REFRESH_TOKEN_KEY, refreshToken);
+
+                Response accessTokenResponse = api.getAccessToken(RedditUtils.getHttpBasicAuthHeader(), params).execute();
+                if(accessTokenResponse.isSuccessful() && accessTokenResponse.body() != null) {
+                    JSONObject jsonObject = new JSONObject((String) accessTokenResponse.body());
+                    String newAccessToken = jsonObject.getString(RedditUtils.ACCESS_TOKEN_KEY);
+                    account.setAccessToken(newAccessToken);
+                    redditDataRoomDatabase.accountDao().changeAccessToken(account.getUsername(), newAccessToken);
+
+                    return fetchMessages(account);
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        }
     }
 }

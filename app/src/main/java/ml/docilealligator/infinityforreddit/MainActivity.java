@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         PostTypeBottomSheetFragment.PostTypeSelectionCallback {
 
     static final String EXTRA_POST_TYPE = "EPT";
+    static final String EXTRA_NOTIFICATION_FULLNAME = "ENF";
+    static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
 
     private static final String FETCH_USER_INFO_STATE = "FUIS";
     private static final String DRAWER_ON_ACCOUNT_SWITCH_STATE = "DOASS";
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     private static final String ACCOUNT_PROFILE_IMAGE_URL_STATE = "APIUS";
     private static final String ACCOUNT_BANNER_IMAGE_URL_STATE = "ABIUS";
     private static final String ACCOUNT_KARMA_STATE = "AKS";
+    private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
 
     private static final int LOGIN_ACTIVITY_REQUEST_CODE = 0;
 
@@ -117,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     private int mKarma;
     private boolean mFetchUserInfoSuccess = false;
     private boolean mDrawerOnAccountSwitch = false;
+    private String mNewAccountName;
 
     private Menu mMenu;
 
@@ -217,6 +221,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             mProfileImageUrl = savedInstanceState.getString(ACCOUNT_PROFILE_IMAGE_URL_STATE);
             mBannerImageUrl = savedInstanceState.getString(ACCOUNT_BANNER_IMAGE_URL_STATE);
             mKarma = savedInstanceState.getInt(ACCOUNT_KARMA_STATE);
+            mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
 
             if(!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndBindView();
@@ -224,6 +229,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 bindView();
             }
         } else {
+            mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
             getCurrentAccountAndBindView();
         }
 
@@ -231,32 +237,60 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     }
 
     private void getCurrentAccountAndBindView() {
-        mNullAccessToken = true;
-        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-            if(account == null) {
-                mNullAccessToken = true;
-            } else {
-                mNullAccessToken = false;
-                mAccessToken = account.getAccessToken();
-                mAccountName = account.getUsername();
-                mProfileImageUrl = account.getProfileImageUrl();
-                mBannerImageUrl = account.getBannerImageUrl();
-                mKarma = account.getKarma();
+        if(mNewAccountName != null) {
+            new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, () -> {
+                mNewAccountName = null;
+                new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+                    if(account == null) {
+                        mNullAccessToken = true;
+                    } else {
+                        mAccessToken = account.getAccessToken();
+                        mAccountName = account.getUsername();
+                        mProfileImageUrl = account.getProfileImageUrl();
+                        mBannerImageUrl = account.getBannerImageUrl();
+                        mKarma = account.getKarma();
 
-                Constraints constraints = new Constraints.Builder()
-                        .setRequiredNetworkType(NetworkType.CONNECTED)
-                        .build();
-
-                PeriodicWorkRequest pullNotificationRequest =
-                        new PeriodicWorkRequest.Builder(PullNotificationWorker.class, 1, TimeUnit.HOURS)
-                                .setConstraints(constraints)
+                        Constraints constraints = new Constraints.Builder()
+                                .setRequiredNetworkType(NetworkType.CONNECTED)
                                 .build();
 
-                WorkManager.getInstance(this).enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
-                        ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
-            }
-            bindView();
-        }).execute();
+                        PeriodicWorkRequest pullNotificationRequest =
+                                new PeriodicWorkRequest.Builder(PullNotificationWorker.class, 1, TimeUnit.HOURS)
+                                        .setConstraints(constraints)
+                                        .build();
+
+                        WorkManager.getInstance(this).enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
+                                ExistingPeriodicWorkPolicy.REPLACE, pullNotificationRequest);
+                    }
+                    bindView();
+                }).execute();
+            }).execute();
+        } else {
+            new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+                if(account == null) {
+                    mNullAccessToken = true;
+                } else {
+                    mAccessToken = account.getAccessToken();
+                    mAccountName = account.getUsername();
+                    mProfileImageUrl = account.getProfileImageUrl();
+                    mBannerImageUrl = account.getBannerImageUrl();
+                    mKarma = account.getKarma();
+
+                    Constraints constraints = new Constraints.Builder()
+                            .setRequiredNetworkType(NetworkType.CONNECTED)
+                            .build();
+
+                    PeriodicWorkRequest pullNotificationRequest =
+                            new PeriodicWorkRequest.Builder(PullNotificationWorker.class, 1, TimeUnit.HOURS)
+                                    .setConstraints(constraints)
+                                    .build();
+
+                    WorkManager.getInstance(this).enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
+                            ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
+                }
+                bindView();
+            }).execute();
+        }
     }
 
     private void bindView() {
@@ -338,7 +372,8 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         accountViewModel.getAccountsExceptCurrentAccountLiveData().observe(this, adapter::changeAccountsDataset);
 
         if(getIntent().hasExtra(EXTRA_POST_TYPE)) {
-            if(getIntent().getExtras().getString(EXTRA_POST_TYPE).equals("popular")) {
+            String type = getIntent().getStringExtra(EXTRA_POST_TYPE);
+            if(type != null && type.equals("popular")) {
                 viewPager.setCurrentItem(1);
             } else {
                 viewPager.setCurrentItem(2);
@@ -610,6 +645,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         outState.putString(ACCOUNT_PROFILE_IMAGE_URL_STATE, mProfileImageUrl);
         outState.putString(ACCOUNT_BANNER_IMAGE_URL_STATE, mBannerImageUrl);
         outState.putInt(ACCOUNT_KARMA_STATE, mKarma);
+        outState.putString(NEW_ACCOUNT_NAME_STATE, mNewAccountName);
     }
 
     @Override

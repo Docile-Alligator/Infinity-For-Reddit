@@ -11,10 +11,10 @@ class NotificationUtils {
     static final String CHANNEL_POST_MEDIA = "Post Media";
     static final String CHANNEL_ID_NEW_COMMENTS = "new_comments";
     static final String CHANNEL_NEW_COMMENTS = "New Comments";
-    static final String GROUP_NEW_COMMENTS = "ml.docilealligator.infinityforreddit.NEW_COMMENTS";
-    static final int SUMMARY_ID_NEW_COMMENTS = 0;
+    static final int SUMMARY_BASE_ID_UNREAD_MESSAGE = 0;
+    static final int NOTIFICATION_BASE_ID_UNREAD_MESSAGE = 1;
 
-    static final int BASE_ID_UNREAD_MESSAGE = 1;
+    private static final String GROUP_USER_BASE = "ml.docilealligator.infinityforreddit.";
 
     static NotificationCompat.Builder buildNotification(NotificationManagerCompat notificationManager,
                                                         Context context, String title, String content,
@@ -56,5 +56,17 @@ class NotificationUtils {
 
     static NotificationManagerCompat getNotificationManager(Context context) {
         return NotificationManagerCompat.from(context);
+    }
+
+    static String getAccountGroupName(String accountName) {
+        return GROUP_USER_BASE + accountName;
+    }
+
+    static int getSummaryIdUnreadMessage(int accountIndex) {
+        return SUMMARY_BASE_ID_UNREAD_MESSAGE + accountIndex * 1000;
+    }
+
+    static int getNotificationIdUnreadMessage(int accountIndex, int messageIndex) {
+        return NOTIFICATION_BASE_ID_UNREAD_MESSAGE + accountIndex * 1000 + messageIndex;
     }
 }

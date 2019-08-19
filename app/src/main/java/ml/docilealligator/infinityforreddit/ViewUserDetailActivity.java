@@ -50,13 +50,16 @@ import retrofit2.Retrofit;
 
 public class ViewUserDetailActivity extends AppCompatActivity implements UserThingSortTypeBottomSheetFragment.UserThingSortTypeSelectionCallback {
 
-    public static final String EXTRA_USER_NAME_KEY = "EUNK";
+    static final String EXTRA_USER_NAME_KEY = "EUNK";
+    static final String EXTRA_NOTIFICATION_FULLNAME = "ENF";
+    static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
 
     private static final String FETCH_USER_INFO_STATE = "FSIS";
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
+    private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
 
     @BindView(R.id.coordinator_layout_view_user_detail_activity) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.view_pager_view_user_detail_activity) ViewPager viewPager;
@@ -93,6 +96,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
     private int collapsedTabBackgroundColor;
     private int collapsedTabIndicatorColor;
     private boolean showToast = false;
+    private String mNewAccountName;
 
     @Inject
     @Named("no_oauth")
@@ -114,9 +118,10 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
-        username = getIntent().getExtras().getString(EXTRA_USER_NAME_KEY);
+        username = getIntent().getStringExtra(EXTRA_USER_NAME_KEY);
 
         if (savedInstanceState == null) {
+            mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
             getCurrentAccountAndInitializeViewPager();
         } else {
             mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
@@ -124,6 +129,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
+            mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
 
             if (!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndInitializeViewPager();
@@ -337,15 +343,30 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
     }
 
     private void getCurrentAccountAndInitializeViewPager() {
-        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-            if (account == null) {
-                mNullAccessToken = true;
-            } else {
-                mAccessToken = account.getAccessToken();
-                mAccountName = account.getUsername();
-            }
-            initializeViewPager();
-        }).execute();
+        if(mNewAccountName != null) {
+            new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, () -> {
+                mNewAccountName = null;
+                new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+                    if (account == null) {
+                        mNullAccessToken = true;
+                    } else {
+                        mAccessToken = account.getAccessToken();
+                        mAccountName = account.getUsername();
+                    }
+                    initializeViewPager();
+                }).execute();
+            }).execute();
+        } else {
+            new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+                if (account == null) {
+                    mNullAccessToken = true;
+                } else {
+                    mAccessToken = account.getAccessToken();
+                    mAccountName = account.getUsername();
+                }
+                initializeViewPager();
+            }).execute();
+        }
     }
 
     private void initializeViewPager() {
@@ -484,6 +505,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
         outState.putString(ACCOUNT_NAME_STATE, mAccountName);
+        outState.putString(NEW_ACCOUNT_NAME_STATE, mNewAccountName);
     }
 
     private void showMessage(int resId, boolean retry) {
