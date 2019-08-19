@@ -51,7 +51,7 @@ import retrofit2.Retrofit;
 public class ViewUserDetailActivity extends AppCompatActivity implements UserThingSortTypeBottomSheetFragment.UserThingSortTypeSelectionCallback {
 
     static final String EXTRA_USER_NAME_KEY = "EUNK";
-    static final String EXTRA_NOTIFICATION_FULLNAME = "ENF";
+    static final String EXTRA_MESSAGE_FULLNAME = "ENF";
     static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
 
     private static final String FETCH_USER_INFO_STATE = "FSIS";
@@ -59,6 +59,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
+    private static final String MESSAGE_FULLNAME_STATE = "MFS";
     private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
 
     @BindView(R.id.coordinator_layout_view_user_detail_activity) CoordinatorLayout coordinatorLayout;
@@ -96,6 +97,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
     private int collapsedTabBackgroundColor;
     private int collapsedTabIndicatorColor;
     private boolean showToast = false;
+    private String mMessageFullname;
     private String mNewAccountName;
 
     @Inject
@@ -121,6 +123,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
         username = getIntent().getStringExtra(EXTRA_USER_NAME_KEY);
 
         if (savedInstanceState == null) {
+            mMessageFullname = getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME);
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
             getCurrentAccountAndInitializeViewPager();
         } else {
@@ -129,6 +132,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
+            mMessageFullname = savedInstanceState.getString(MESSAGE_FULLNAME_STATE);
             mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
 
             if (!mNullAccessToken && mAccessToken == null) {
@@ -397,6 +401,20 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
 
             }
         });
+
+        if(mAccessToken != null && mMessageFullname != null) {
+            ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
+                @Override
+                public void readSuccess() {
+                    mMessageFullname = null;
+                }
+
+                @Override
+                public void readFailed() {
+
+                }
+            });
+        }
     }
 
     private void fetchUserInfo() {
@@ -505,6 +523,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
         outState.putString(ACCOUNT_NAME_STATE, mAccountName);
+        outState.putString(MESSAGE_FULLNAME_STATE, mMessageFullname);
         outState.putString(NEW_ACCOUNT_NAME_STATE, mNewAccountName);
     }
 

@@ -60,7 +60,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     static final String EXTRA_POST_LIST_POSITION = "EPLI";
     static final String EXTRA_POST_ID = "EPI";
     static final String EXTRA_SINGLE_COMMENT_ID = "ESCI";
-    static final String EXTRA_NOTIFICATION_FULLNAME = "ENI";
+    static final String EXTRA_MESSAGE_FULLNAME = "ENI";
     static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
 
     private static final int EDIT_POST_REQUEST_CODE = 2;
@@ -98,6 +98,8 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     boolean loadMoreChildrenSuccess = true;
     @State
     boolean hasMoreChildren;
+    @State
+    String mMessageFullname;
     @State
     String mNewAccountName;
 
@@ -198,6 +200,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
             if(mSingleCommentId != null) {
                 isSingleCommentThreadMode = true;
             }
+            mMessageFullname = getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME);
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
         }
 
@@ -210,7 +213,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         }
 
         if(getIntent().hasExtra(EXTRA_POST_LIST_POSITION)) {
-            postListPosition = getIntent().getExtras().getInt(EXTRA_POST_LIST_POSITION);
+            postListPosition = getIntent().getIntExtra(EXTRA_POST_LIST_POSITION, -1);
         }
     }
 
@@ -244,6 +247,20 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     }
 
     private void bindView() {
+        if(mAccessToken != null && mMessageFullname != null) {
+            ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
+                @Override
+                public void readSuccess() {
+                    mMessageFullname = null;
+                }
+
+                @Override
+                public void readFailed() {
+
+                }
+            });
+        }
+
         if(mPost == null) {
             mPost = getIntent().getExtras().getParcelable(EXTRA_POST_DATA);
         }

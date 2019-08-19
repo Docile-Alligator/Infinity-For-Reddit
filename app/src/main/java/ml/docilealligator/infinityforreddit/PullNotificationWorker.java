@@ -60,7 +60,9 @@ public class PullNotificationWorker extends Worker {
             List<Account> accounts = redditDataRoomDatabase.accountDao().getAllAccounts();
             for(int accountIndex = 0; accountIndex < accounts.size(); accountIndex++) {
                 Account account = accounts.get(accountIndex);
-                Log.i("workmanager", account.getUsername() + " " + account.getAccessToken());
+                String accountName = account.getUsername();
+
+                Log.i("workmanager", accountName + " " + account.getAccessToken());
 
                 Response<String> response = fetchMessages(account);
 
@@ -73,10 +75,10 @@ public class PullNotificationWorker extends Worker {
                         NotificationManagerCompat notificationManager = NotificationUtils.getNotificationManager(context);
 
                         NotificationCompat.Builder summaryBuilder = NotificationUtils.buildSummaryNotification(context,
-                                notificationManager, account.getUsername(),
+                                notificationManager, accountName,
                                 context.getString(R.string.notification_new_messages, messages.size()),
                                 NotificationUtils.CHANNEL_ID_NEW_COMMENTS, NotificationUtils.CHANNEL_NEW_COMMENTS,
-                                NotificationUtils.getAccountGroupName(account.getUsername()));
+                                NotificationUtils.getAccountGroupName(accountName));
 
                         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
@@ -88,7 +90,6 @@ public class PullNotificationWorker extends Worker {
                             inboxStyle.addLine(message.getAuthor() + " " + message.getBody());
 
                             String kind = message.getKind();
-                            Log.i("workmanager", kind);
                             String title;
                             String summary;
                             if(kind.equals(Message.TYPE_COMMENT) || kind.equals(Message.TYPE_LINK)) {
@@ -111,55 +112,54 @@ public class PullNotificationWorker extends Worker {
                                     context, title, message.getBody(), summary,
                                     NotificationUtils.CHANNEL_ID_NEW_COMMENTS,
                                     NotificationUtils.CHANNEL_NEW_COMMENTS,
-                                    NotificationUtils.getAccountGroupName(account.getUsername()));
+                                    NotificationUtils.getAccountGroupName(accountName));
 
                             if(kind.equals(Message.TYPE_COMMENT)) {
                                 Intent intent = new Intent(context, LinkResolverActivity.class);
                                 Uri uri = LinkResolverActivity.getRedditUriByPath(message.getContext());
                                 intent.setData(uri);
-                                if(!account.getUsername().equals(currentAccountName)) {
-                                    intent.putExtra(LinkResolverActivity.EXTRA_SWITCH_ACCOUNT, true);
-                                    intent.putExtra(LinkResolverActivity.EXTRA_NEW_ACCOUNT_NAME, account.getUsername());
-                                }
-                                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+                                intent.putExtra(LinkResolverActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
+                                PendingIntent pendingIntent = PendingIntent.getActivity(context, accountIndex * 6, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 builder.setContentIntent(pendingIntent);
                             } else if(kind.equals(Message.TYPE_ACCOUNT)) {
                                 Intent intent = new Intent(context, ViewMessageActivity.class);
-                                PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+                                intent.putExtra(ViewMessageActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
+                                PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, accountIndex * 6 + 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 builder.setContentIntent(summaryPendingIntent);
                             } else if(kind.equals(Message.TYPE_LINK)) {
                                 Intent intent = new Intent(context, LinkResolverActivity.class);
                                 Uri uri = LinkResolverActivity.getRedditUriByPath(message.getContext());
                                 intent.setData(uri);
-                                if(!account.getUsername().equals(currentAccountName)) {
-                                    intent.putExtra(LinkResolverActivity.EXTRA_SWITCH_ACCOUNT, true);
-                                    intent.putExtra(LinkResolverActivity.EXTRA_NEW_ACCOUNT_NAME, account.getUsername());
-                                }
-                                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+                                intent.putExtra(LinkResolverActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
+                                PendingIntent pendingIntent = PendingIntent.getActivity(context, accountIndex * 6 + 2, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 builder.setContentIntent(pendingIntent);
                             } else if(kind.equals(Message.TYPE_MESSAGE)) {
                                 Intent intent = new Intent(context, ViewMessageActivity.class);
-                                PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+                                intent.putExtra(ViewMessageActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
+                                PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, accountIndex * 6 + 3, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 builder.setContentIntent(summaryPendingIntent);
                             } else if(kind.equals(Message.TYPE_SUBREDDIT)) {
                                 Intent intent = new Intent(context, ViewMessageActivity.class);
-                                PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+                                intent.putExtra(ViewMessageActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
+                                PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, accountIndex * 6 + 4, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 builder.setContentIntent(summaryPendingIntent);
                             } else {
                                 Intent intent = new Intent(context, ViewMessageActivity.class);
-                                PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+                                intent.putExtra(ViewMessageActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
+                                PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, accountIndex * 6 + 5, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 builder.setContentIntent(summaryPendingIntent);
                             }
                             notificationManager.notify(NotificationUtils.getNotificationIdUnreadMessage(accountIndex, messageIndex), builder.build());
                         }
 
                         inboxStyle.setBigContentTitle(context.getString(R.string.notification_new_messages, messages.size()))
-                                .setSummaryText(account.getUsername());
+                                .setSummaryText(accountName);
 
                         summaryBuilder.setStyle(inboxStyle);
 
                         Intent summaryIntent = new Intent(context, ViewMessageActivity.class);
-                        PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, 0, summaryIntent, 0);
+                        summaryIntent.putExtra(ViewMessageActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
+                        PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, accountIndex * 6 + 6, summaryIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                         summaryBuilder.setContentIntent(summaryPendingIntent);
 
                         notificationManager.notify(NotificationUtils.getSummaryIdUnreadMessage(accountIndex), summaryBuilder.build());
@@ -170,7 +170,9 @@ public class PullNotificationWorker extends Worker {
                         return Result.retry();
                     }
                 } else {
-                    Log.i("workmanager", "retry2 " + response.code());
+                    if(response != null) {
+                        Log.i("workmanager", "retry2 " + response.code());
+                    }
                     return Result.retry();
                 }
             }

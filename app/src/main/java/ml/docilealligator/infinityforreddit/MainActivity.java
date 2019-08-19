@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         PostTypeBottomSheetFragment.PostTypeSelectionCallback {
 
     static final String EXTRA_POST_TYPE = "EPT";
-    static final String EXTRA_NOTIFICATION_FULLNAME = "ENF";
+    static final String EXTRA_MESSSAGE_FULLNAME = "ENF";
     static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
 
     private static final String FETCH_USER_INFO_STATE = "FUIS";
@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     private static final String ACCOUNT_PROFILE_IMAGE_URL_STATE = "APIUS";
     private static final String ACCOUNT_BANNER_IMAGE_URL_STATE = "ABIUS";
     private static final String ACCOUNT_KARMA_STATE = "AKS";
+    private static final String MESSAGE_FULLNAME_STATE = "MFS";
     private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
 
     private static final int LOGIN_ACTIVITY_REQUEST_CODE = 0;
@@ -120,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     private int mKarma;
     private boolean mFetchUserInfoSuccess = false;
     private boolean mDrawerOnAccountSwitch = false;
+    private String mMessageFullname;
     private String mNewAccountName;
 
     private Menu mMenu;
@@ -221,6 +223,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             mProfileImageUrl = savedInstanceState.getString(ACCOUNT_PROFILE_IMAGE_URL_STATE);
             mBannerImageUrl = savedInstanceState.getString(ACCOUNT_BANNER_IMAGE_URL_STATE);
             mKarma = savedInstanceState.getInt(ACCOUNT_KARMA_STATE);
+            mMessageFullname = savedInstanceState.getString(MESSAGE_FULLNAME_STATE);
             mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
 
             if(!mNullAccessToken && mAccessToken == null) {
@@ -229,6 +232,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 bindView();
             }
         } else {
+            mMessageFullname = getIntent().getStringExtra(EXTRA_MESSSAGE_FULLNAME);
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
             getCurrentAccountAndBindView();
         }
@@ -260,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                                         .build();
 
                         WorkManager.getInstance(this).enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
-                                ExistingPeriodicWorkPolicy.REPLACE, pullNotificationRequest);
+                                ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
                     }
                     bindView();
                 }).execute();
@@ -286,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                                     .build();
 
                     WorkManager.getInstance(this).enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
-                            ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
+                            ExistingPeriodicWorkPolicy.REPLACE, pullNotificationRequest);
                 }
                 bindView();
             }).execute();
@@ -416,6 +420,19 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         if(mAccessToken != null) {
             mKarmaTextView.setText(getString(R.string.karma_info, mKarma));
             mAccountNameTextView.setText(mAccountName);
+            if(mMessageFullname != null) {
+                ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
+                    @Override
+                    public void readSuccess() {
+                        mMessageFullname = null;
+                    }
+
+                    @Override
+                    public void readFailed() {
+
+                    }
+                });
+            }
         } else {
             mKarmaTextView.setText(R.string.press_here_to_login);
             mAccountNameTextView.setText(R.string.anonymous_account);
@@ -645,6 +662,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         outState.putString(ACCOUNT_PROFILE_IMAGE_URL_STATE, mProfileImageUrl);
         outState.putString(ACCOUNT_BANNER_IMAGE_URL_STATE, mBannerImageUrl);
         outState.putInt(ACCOUNT_KARMA_STATE, mKarma);
+        outState.putString(MESSAGE_FULLNAME_STATE, mMessageFullname);
         outState.putString(NEW_ACCOUNT_NAME_STATE, mNewAccountName);
     }
 

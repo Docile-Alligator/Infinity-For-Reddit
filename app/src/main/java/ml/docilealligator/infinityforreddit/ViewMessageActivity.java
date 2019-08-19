@@ -31,15 +31,17 @@ import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import Account.Account;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Retrofit;
 
 public class ViewMessageActivity extends AppCompatActivity {
 
+    static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
+
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
+    private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
 
     @BindView(R.id.collapsing_toolbar_layout_view_message_activity) CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.appbar_layout_view_message_activity) AppBarLayout appBarLayout;
@@ -52,6 +54,7 @@ public class ViewMessageActivity extends AppCompatActivity {
 
     private boolean mNullAccessToken = false;
     private String mAccessToken;
+    private String mNewAccountName;
 
     private MessageRecyclerViewAdapter mAdapter;
 
@@ -129,6 +132,7 @@ public class ViewMessageActivity extends AppCompatActivity {
         if(savedInstanceState != null) {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
+            mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
 
             if(!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndFetchMessage();
@@ -136,14 +140,27 @@ public class ViewMessageActivity extends AppCompatActivity {
                 bindView();
             }
         } else {
+            mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
             getCurrentAccountAndFetchMessage();
         }
     }
 
     private void getCurrentAccountAndFetchMessage() {
-        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), new GetCurrentAccountAsyncTask.GetCurrentAccountAsyncTaskListener() {
-            @Override
-            public void success(Account account) {
+        if(mNewAccountName != null) {
+            new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, () -> {
+                mNewAccountName = null;
+                new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+                    if(account == null) {
+                        mNullAccessToken = true;
+                    } else {
+                        mAccessToken = account.getAccessToken();
+
+                        bindView();
+                    }
+                }).execute();
+            }).execute();
+        } else {
+            new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
                 if(account == null) {
                     mNullAccessToken = true;
                 } else {
@@ -151,8 +168,8 @@ public class ViewMessageActivity extends AppCompatActivity {
 
                     bindView();
                 }
-            }
-        }).execute();
+            }).execute();
+        }
     }
 
     private void bindView() {
@@ -226,5 +243,6 @@ public class ViewMessageActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
+        outState.putString(NEW_ACCOUNT_NAME_STATE, mNewAccountName);
     }
 }
