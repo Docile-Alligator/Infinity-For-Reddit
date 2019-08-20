@@ -13,6 +13,7 @@ class CommentData implements Parcelable {
     private String id;
     private String fullName;
     private String author;
+    private String linkAuthor;
     private String commentTime;
     private String commentContent;
     private String linkId;
@@ -35,12 +36,13 @@ class CommentData implements Parcelable {
     private boolean isLoadingMoreChildren;
     private boolean loadMoreChildrenFailed;
 
-    CommentData(String id, String fullName, String author, String commentTime, String commentContent,
+    CommentData(String id, String fullName, String author, String linkAuthor, String commentTime, String commentContent,
                 String linkId, String subredditName, String parentId, int score, boolean isSubmitter, String permalink,
                 int depth, boolean collapsed, boolean hasReply, boolean scoreHidden) {
         this.id = id;
         this.fullName = fullName;
         this.author = author;
+        this.linkAuthor = linkAuthor;
         this.commentTime = commentTime;
         this.commentContent = commentContent;
         this.linkId = linkId;
@@ -70,6 +72,7 @@ class CommentData implements Parcelable {
         id = in.readString();
         fullName = in.readString();
         author = in.readString();
+        linkAuthor = in.readString();
         commentTime = in.readString();
         commentContent = in.readString();
         linkId = in.readString();
@@ -118,6 +121,10 @@ class CommentData implements Parcelable {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getLinkAuthor() {
+        return linkAuthor;
     }
 
     public String getCommentTime() {
@@ -285,6 +292,7 @@ class CommentData implements Parcelable {
         parcel.writeString(id);
         parcel.writeString(fullName);
         parcel.writeString(author);
+        parcel.writeString(linkAuthor);
         parcel.writeString(commentTime);
         parcel.writeString(commentContent);
         parcel.writeString(linkId);

@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -8,10 +9,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -104,7 +106,10 @@ public class CommentActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         commentEditText.requestFocus();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(imm != null) {
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
     }
 
     private void getCurrentAccount() {
@@ -115,6 +120,15 @@ public class CommentActivity extends AppCompatActivity {
                 mAccessToken = account.getAccessToken();
             }
         }).execute();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(imm != null) {
+            imm.hideSoftInputFromWindow(commentEditText.getWindowToken(), 0);
+        }
     }
 
     @Override
@@ -130,6 +144,11 @@ public class CommentActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_send_comment_activity:
+                if(commentEditText.getText() == null || commentEditText.getText().toString().equals("")) {
+                    Snackbar.make(coordinatorLayout, R.string.comment_content_required, Snackbar.LENGTH_SHORT).show();
+                    return true;
+                }
+
                 item.setEnabled(false);
                 item.getIcon().setAlpha(130);
                 Snackbar sendingSnackbar = Snackbar.make(coordinatorLayout, R.string.sending_comment, Snackbar.LENGTH_INDEFINITE);
@@ -152,18 +171,16 @@ public class CommentActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void sendCommentFailed() {
+                            public void sendCommentFailed(@Nullable String errorMessage) {
                                 sendingSnackbar.dismiss();
                                 item.setEnabled(true);
                                 item.getIcon().setAlpha(255);
-                                Snackbar.make(coordinatorLayout, R.string.send_comment_failed, Snackbar.LENGTH_SHORT).show();
-                            }
 
-                            @Override
-                            public void parseSentCommentFailed() {
-                                Intent returnIntent = new Intent();
-                                setResult(RESULT_OK, returnIntent);
-                                finish();
+                                if(errorMessage == null) {
+                                    Snackbar.make(coordinatorLayout, R.string.send_comment_failed, Snackbar.LENGTH_SHORT).show();
+                                } else {
+                                    Snackbar.make(coordinatorLayout, errorMessage, Snackbar.LENGTH_SHORT).show();
+                                }
                             }
                         });
                 return true;

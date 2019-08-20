@@ -83,53 +83,54 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof DataViewHolder) {
             CommentData comment = getItem(holder.getAdapterPosition());
+            if(comment != null) {
+                if(comment.getSubredditName().substring(2).equals(comment.getLinkAuthor())) {
+                    ((DataViewHolder) holder).authorTextView.setText("u/" + comment.getLinkAuthor());
+                    ((DataViewHolder) holder).authorTextView.setTextColor(mTextColorPrimaryDark);
+                    ((DataViewHolder) holder).authorTextView.setOnClickListener(view -> {
+                        Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
+                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, comment.getAuthor());
+                        mContext.startActivity(intent);
+                    });
+                } else {
+                    ((DataViewHolder) holder).authorTextView.setText("r/" + comment.getSubredditName());
+                    ((DataViewHolder) holder).authorTextView.setTextColor(mColorAccent);
+                    ((DataViewHolder) holder).authorTextView.setOnClickListener(view -> {
+                        Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
+                        intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, comment.getSubredditName());
+                        mContext.startActivity(intent);
+                    });
+                }
 
-            if(comment.getAuthor().equals(comment.getSubredditName().substring(2))) {
-                ((DataViewHolder) holder).authorTextView.setText("u/" + comment.getAuthor());
-                ((DataViewHolder) holder).authorTextView.setTextColor(mTextColorPrimaryDark);
-                ((DataViewHolder) holder).authorTextView.setOnClickListener(view -> {
-                    Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, comment.getAuthor());
-                    mContext.startActivity(intent);
-                });
-            } else {
-                ((DataViewHolder) holder).authorTextView.setText("r/" + comment.getSubredditName());
-                ((DataViewHolder) holder).authorTextView.setTextColor(mColorAccent);
-                ((DataViewHolder) holder).authorTextView.setOnClickListener(view -> {
-                    Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
-                    intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, comment.getSubredditName());
-                    mContext.startActivity(intent);
-                });
-            }
+                ((DataViewHolder) holder).commentTimeTextView.setText(comment.getCommentTime());
 
-            ((DataViewHolder) holder).commentTimeTextView.setText(comment.getCommentTime());
+                ((DataViewHolder) holder).commentMarkdownView.setMarkdown(comment.getCommentContent(), mContext);
+                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore()));
 
-            ((DataViewHolder) holder).commentMarkdownView.setMarkdown(comment.getCommentContent(), mContext);
-            ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore()));
+                switch (comment.getVoteType()) {
+                    case 1:
+                        ((DataViewHolder) holder).upvoteButton
+                                .setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+                        break;
+                    case 2:
+                        ((DataViewHolder) holder).downvoteButton
+                                .setColorFilter(ContextCompat.getColor(mContext, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                        break;
+                }
 
-            switch (comment.getVoteType()) {
-                case 1:
-                    ((DataViewHolder) holder).upvoteButton
-                            .setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
-                    break;
-                case 2:
-                    ((DataViewHolder) holder).downvoteButton
-                            .setColorFilter(ContextCompat.getColor(mContext, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
-                    break;
-            }
-
-            if(comment.getAuthor().equals(mAccountName)) {
-                ((DataViewHolder) holder).moreButton.setVisibility(View.VISIBLE);
-                ((DataViewHolder) holder).moreButton.setOnClickListener(view -> {
-                    ModifyCommentBottomSheetFragment modifyCommentBottomSheetFragment = new ModifyCommentBottomSheetFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString(ModifyCommentBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
-                    bundle.putString(ModifyCommentBottomSheetFragment.EXTRA_COMMENT_CONTENT, comment.getCommentContent());
-                    bundle.putString(ModifyCommentBottomSheetFragment.EXTRA_COMMENT_FULLNAME, comment.getFullName());
-                    bundle.putInt(ModifyCommentBottomSheetFragment.EXTRA_POSITION, holder.getAdapterPosition() - 1);
-                    modifyCommentBottomSheetFragment.setArguments(bundle);
-                    modifyCommentBottomSheetFragment.show(((AppCompatActivity) mContext).getSupportFragmentManager(), modifyCommentBottomSheetFragment.getTag());
-                });
+                if(comment.getAuthor().equals(mAccountName)) {
+                    ((DataViewHolder) holder).moreButton.setVisibility(View.VISIBLE);
+                    ((DataViewHolder) holder).moreButton.setOnClickListener(view -> {
+                        ModifyCommentBottomSheetFragment modifyCommentBottomSheetFragment = new ModifyCommentBottomSheetFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString(ModifyCommentBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                        bundle.putString(ModifyCommentBottomSheetFragment.EXTRA_COMMENT_CONTENT, comment.getCommentContent());
+                        bundle.putString(ModifyCommentBottomSheetFragment.EXTRA_COMMENT_FULLNAME, comment.getFullName());
+                        bundle.putInt(ModifyCommentBottomSheetFragment.EXTRA_POSITION, holder.getAdapterPosition() - 1);
+                        modifyCommentBottomSheetFragment.setArguments(bundle);
+                        modifyCommentBottomSheetFragment.show(((AppCompatActivity) mContext).getSupportFragmentManager(), modifyCommentBottomSheetFragment.getTag());
+                    });
+                }
             }
         }
     }

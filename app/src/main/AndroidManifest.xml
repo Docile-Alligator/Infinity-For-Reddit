@@ -124,6 +124,7 @@
         <activity
             android:name=".CommentActivity"
             android:label="@string/comment_activity_label"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity

@@ -24,7 +24,7 @@ class ParseComment {
 
     interface ParseSentCommentListener {
         void onParseSentCommentSuccess(CommentData commentData);
-        void onParseSentCommentFailed();
+        void onParseSentCommentFailed(@Nullable String errorMessage);
     }
 
     static void parseComment(String response, ArrayList<CommentData> commentData, Locale locale,
@@ -179,6 +179,7 @@ class ParseComment {
         private Locale locale;
         private ParseSentCommentListener parseSentCommentListener;
         private boolean parseFailed;
+        private String errorMessage;
         private CommentData commentData;
 
         ParseSentCommentAsyncTask(String response, int depth, Locale locale, ParseSentCommentListener parseSentCommentListener) {
@@ -196,6 +197,7 @@ class ParseComment {
                 commentData = parseSingleComment(sentCommentData, depth, locale);
             } catch (JSONException e) {
                 e.printStackTrace();
+                errorMessage = parseSentCommentErrorMessage(response);
                 parseFailed = true;
             }
             return null;
@@ -205,7 +207,7 @@ class ParseComment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             if(parseFailed) {
-                parseSentCommentListener.onParseSentCommentFailed();
+                parseSentCommentListener.onParseSentCommentFailed(errorMessage);
             } else {
                 parseSentCommentListener.onParseSentCommentSuccess(commentData);
             }
@@ -213,10 +215,10 @@ class ParseComment {
     }
 
     static CommentData parseSingleComment(JSONObject singleCommentData, int depth, Locale locale) throws JSONException {
-        Log.i("adfasdf", singleCommentData.toString());
         String id = singleCommentData.getString(JSONUtils.ID_KEY);
         String fullName = singleCommentData.getString(JSONUtils.NAME_KEY);
         String author = singleCommentData.getString(JSONUtils.AUTHOR_KEY);
+        String linkAuthor = singleCommentData.has(JSONUtils.LINK_AUTHOR_KEY) ? singleCommentData.getString(JSONUtils.LINK_AUTHOR_KEY) : null;
         String linkId = singleCommentData.getString(JSONUtils.LINK_ID_KEY).substring(3);
         String subredditName = singleCommentData.getString(JSONUtils.SUBREDDIT_KEY);
         String parentId = singleCommentData.getString(JSONUtils.PARENT_ID_KEY);
@@ -242,7 +244,37 @@ class ParseComment {
         boolean collapsed = singleCommentData.getBoolean(JSONUtils.COLLAPSED_KEY);
         boolean hasReply = !(singleCommentData.get(JSONUtils.REPLIES_KEY) instanceof String);
 
-        return new CommentData(id, fullName, author, formattedSubmitTime, commentContent, linkId,
-                subredditName, parentId, score, isSubmitter, permalink, depth, collapsed, hasReply, scoreHidden);
+        return new CommentData(id, fullName, author, linkAuthor, formattedSubmitTime, commentContent,
+                linkId, subredditName, parentId, score, isSubmitter, permalink, depth, collapsed,
+                hasReply, scoreHidden);
+    }
+
+    @Nullable
+    private static String parseSentCommentErrorMessage(String response) {
+        try {
+            JSONObject responseObject = new JSONObject(response).getJSONObject(JSONUtils.JSON_KEY);
+
+            if(responseObject.getJSONArray(JSONUtils.ERRORS_KEY).length() != 0) {
+                JSONArray error = responseObject.getJSONArray(JSONUtils.ERRORS_KEY)
+                        .getJSONArray(responseObject.getJSONArray(JSONUtils.ERRORS_KEY).length() - 1);
+                if(error.length() != 0) {
+                    String errorString;
+                    if(error.length() >= 2) {
+                        errorString = error.getString(1);
+                    } else {
+                        errorString = error.getString(0);
+                    }
+                    return errorString.substring(0, 1).toUpperCase() + errorString.substring(1);
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

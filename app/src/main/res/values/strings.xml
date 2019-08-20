@@ -2,7 +2,7 @@
     <string name="app_name">Infinity</string>
     <string name="login_activity_label">Login</string>
     <string name="search_activity_label">Search</string>
-    <string name="comment_activity_label">Add Comment</string>
+    <string name="comment_activity_label">Send Comment</string>
     <string name="comment_activity_label_is_replying">Reply</string>
     <string name="post_text_activity_label">Text Post</string>
     <string name="subreddit_selection_activity_label">Select a Subreddit</string>
@@ -104,7 +104,8 @@
     <string name="lazy_mode_start">Lazy Mode starts in %1$.1fs</string>
     <string name="lazy_mode_stop">Lazy Mode stopped</string>
 
-    <string name="write_comment_hint">Your interesting thoughts here</string>
+    <string name="write_comment_hint">Your interesting thought here</string>
+    <string name="comment_content_required">Where is your interesting thought</string>
     <string name="sending_comment">Sending</string>
     <string name="send_comment_failed">Could not send this comment</string>
     <string name="parse_sent_comment_failed">The comment is sent but unable to get the sent comment</string>

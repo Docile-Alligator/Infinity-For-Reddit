@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -15,8 +16,7 @@ class SendComment {
 
     interface SendCommentListener {
         void sendCommentSuccess(CommentData commentData);
-        void sendCommentFailed();
-        void parseSentCommentFailed();
+        void sendCommentFailed(String errorMessage);
     }
 
     static void sendComment(String commentMarkdown, String thingFullname, int parentDepth,
@@ -43,18 +43,18 @@ class SendComment {
                         }
 
                         @Override
-                        public void onParseSentCommentFailed() {
-
+                        public void onParseSentCommentFailed(@Nullable String errorMessage) {
+                            sendCommentListener.sendCommentFailed(errorMessage);
                         }
                     });
                 } else {
-                    sendCommentListener.sendCommentFailed();
+                    sendCommentListener.sendCommentFailed(response.message());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                sendCommentListener.sendCommentFailed();
+                sendCommentListener.sendCommentFailed(t.getMessage());
             }
         });
     }

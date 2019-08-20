@@ -204,6 +204,7 @@ class SubmitPost {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
+                    Log.i("afasdfadsfasdfasdfasdf", "a " + response.body());
                     try {
                         getSubmittedPost(response.body(), kind, oauthRetrofit, accessToken,
                                 locale, submitPostListener);
@@ -219,8 +220,7 @@ class SubmitPost {
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.i("call_failed", call.request().url().toString());
-                submitPostListener.submitFailed(null);
+                submitPostListener.submitFailed(t.getMessage());
             }
         });
     }
@@ -414,13 +414,11 @@ class SubmitPost {
                 String errorString;
                 if(error.length() >= 2) {
                     errorString = error.getString(1);
-                    errorString = errorString.substring(0, 1).toUpperCase() + errorString.substring(1);
-                    submitPostListener.submitFailed(errorString);
                 } else {
                     errorString = error.getString(0);
-                    errorString = errorString.substring(0, 1).toUpperCase() + errorString.substring(1);
-                    submitPostListener.submitFailed(errorString);
                 }
+                errorString = errorString.substring(0, 1).toUpperCase() + errorString.substring(1);
+                submitPostListener.submitFailed(errorString);
             } else {
                 submitPostListener.submitFailed(null);
             }

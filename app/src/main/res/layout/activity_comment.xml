@@ -21,31 +21,37 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <ru.noties.markwon.view.MarkwonView
-            android:id="@+id/comment_parent_markwon_view_comment_activity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:textSize="16sp" />
-
-        <EditText
-            android:id="@+id/comment_edit_text_comment_activity"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="top"
-            android:hint="@string/write_comment_hint"
-            android:inputType="textCapSentences|textMultiLine"
-            android:textSize="18sp"
-            android:background="#00000000"
-            android:textColor="@color/primaryTextColor" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
-    </LinearLayout>
+            <ru.noties.markwon.view.MarkwonView
+                android:id="@+id/comment_parent_markwon_view_comment_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/comment_edit_text_comment_activity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:hint="@string/write_comment_hint"
+                android:inputType="textCapSentences|textMultiLine"
+                android:textSize="18sp"
+                android:background="#00000000"
+                android:textColor="@color/primaryTextColor" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

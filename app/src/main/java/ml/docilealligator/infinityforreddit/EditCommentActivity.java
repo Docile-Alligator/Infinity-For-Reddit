@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -8,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -85,7 +86,19 @@ public class EditCommentActivity extends AppCompatActivity {
         contentEditText.setText(getIntent().getExtras().getString(EXTRA_CONTENT));
 
         contentEditText.requestFocus();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(imm != null) {
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(imm != null) {
+            imm.hideSoftInputFromWindow(contentEditText.getWindowToken(), 0);
+        }
     }
 
     @Override
