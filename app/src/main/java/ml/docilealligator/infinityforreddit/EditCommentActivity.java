@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -82,6 +83,9 @@ public class EditCommentActivity extends AppCompatActivity {
         mFullName = getIntent().getExtras().getString(EXTRA_FULLNAME);
         mAccessToken = getIntent().getExtras().getString(EXTRA_ACCESS_TOKEN);
         contentEditText.setText(getIntent().getExtras().getString(EXTRA_CONTENT));
+
+        contentEditText.requestFocus();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
     @Override

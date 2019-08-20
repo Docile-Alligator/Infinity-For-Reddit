@@ -143,6 +143,8 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
 
         mGlide = Glide.with(this);
 
+        mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
+
         if(savedInstanceState != null) {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
@@ -178,7 +180,6 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
             displaySubredditIcon();
 
             if(isPosting) {
-                mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
                 mPostingSnackbar.show();
             }
 
@@ -364,6 +365,11 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
                     return true;
                 }
 
+                if(titleEditText.getText() == null || titleEditText.getText().toString().equals("")) {
+                    Snackbar.make(coordinatorLayout, R.string.title_required, Snackbar.LENGTH_SHORT).show();
+                    return true;
+                }
+
                 if(imageUri == null) {
                     Snackbar.make(coordinatorLayout, R.string.select_an_image, Snackbar.LENGTH_SHORT).show();
                     return true;
@@ -373,7 +379,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
 
                 item.setEnabled(false);
                 item.getIcon().setAlpha(130);
-                mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
+
                 mPostingSnackbar.show();
 
                 String subredditName;
@@ -482,6 +488,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
     @Subscribe
     public void onSubmitImagePostEvent(SubmitImagePostEvent submitImagePostEvent) {
         isPosting = false;
+        mPostingSnackbar.dismiss();
         if(submitImagePostEvent.postSuccess) {
             Intent intent = new Intent(PostImageActivity.this, ViewUserDetailActivity.class);
             intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
@@ -489,7 +496,6 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
             startActivity(intent);
             finish();
         } else {
-            mPostingSnackbar.dismiss();
             mMemu.getItem(R.id.action_send_post_image_activity).setEnabled(true);
             mMemu.getItem(R.id.action_send_post_image_activity).getIcon().setAlpha(255);
             if (submitImagePostEvent.errorMessage == null || submitImagePostEvent.errorMessage.equals("")) {

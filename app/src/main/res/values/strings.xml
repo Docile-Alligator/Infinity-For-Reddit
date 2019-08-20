@@ -110,6 +110,8 @@
     <string name="parse_sent_comment_failed">The comment is sent but unable to get the sent comment</string>
 
     <string name="select_a_subreddit">Please select a subreddit first</string>
+    <string name="title_required">The post need a good title</string>
+    <string name="link_required">Hey where is the link?</string>
     <string name="select_an_image">Please select an image first</string>
     <string name="posting">Posting</string>
     <string name="post_failed">Could not post it</string>

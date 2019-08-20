@@ -119,6 +119,8 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
 
         mGlide = Glide.with(this);
 
+        mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
+
         if(savedInstanceState != null) {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
@@ -148,7 +150,6 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
             displaySubredditIcon();
 
             if(isPosting) {
-                mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
                 mPostingSnackbar.show();
             }
 
@@ -296,12 +297,22 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
                     return true;
                 }
 
+                if(titleEditText.getText() == null || titleEditText.getText().toString().equals("")) {
+                    Snackbar.make(coordinatorLayout, R.string.title_required, Snackbar.LENGTH_SHORT).show();
+                    return true;
+                }
+
+                if(contentEditText.getText() == null || contentEditText.getText().toString().equals("")) {
+                    Snackbar.make(coordinatorLayout, R.string.link_required, Snackbar.LENGTH_SHORT).show();
+                    return true;
+                }
+
                 isPosting = true;
 
                 item.setEnabled(false);
                 item.getIcon().setAlpha(130);
-                Snackbar postingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
-                postingSnackbar.show();
+
+                mPostingSnackbar.show();
 
                 String subredditName;
                 if(subredditIsUser) {
@@ -387,13 +398,13 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
     @Subscribe
     public void onSubmitLinkPostEvent(SubmitTextOrLinkPostEvent submitTextOrLinkPostEvent) {
         isPosting = false;
+        mPostingSnackbar.dismiss();
         if(submitTextOrLinkPostEvent.postSuccess) {
             Intent intent = new Intent(PostLinkActivity.this, ViewPostDetailActivity.class);
             intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, submitTextOrLinkPostEvent.post);
             startActivity(intent);
             finish();
         } else {
-            mPostingSnackbar.dismiss();
             mMemu.findItem(R.id.action_send_post_link_activity).setEnabled(true);
             mMemu.findItem(R.id.action_send_post_link_activity).getIcon().setAlpha(255);
             if(submitTextOrLinkPostEvent.errorMessage == null) {

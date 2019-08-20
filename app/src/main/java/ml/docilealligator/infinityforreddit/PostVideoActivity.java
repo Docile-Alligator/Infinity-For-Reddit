@@ -142,6 +142,8 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
 
         mGlide = Glide.with(this);
 
+        mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
+
         if(savedInstanceState != null) {
             subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
             iconUrl = savedInstanceState.getString(SUBREDDIT_ICON_STATE);
@@ -176,7 +178,6 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
             displaySubredditIcon();
 
             if(isPosting) {
-                mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
                 mPostingSnackbar.show();
             }
 
@@ -359,6 +360,11 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
                     return true;
                 }
 
+                if(titleEditText.getText() == null || titleEditText.getText().toString().equals("")) {
+                    Snackbar.make(coordinatorLayout, R.string.title_required, Snackbar.LENGTH_SHORT).show();
+                    return true;
+                }
+
                 if(videoUri == null) {
                     Snackbar.make(coordinatorLayout, R.string.select_an_image, Snackbar.LENGTH_SHORT).show();
                     return true;
@@ -368,7 +374,7 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
 
                 item.setEnabled(false);
                 item.getIcon().setAlpha(130);
-                mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
+
                 mPostingSnackbar.show();
 
                 String subredditName;
@@ -482,6 +488,7 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
     @Subscribe
     public void onSubmitVideoPostEvent(SubmitVideoPostEvent submitVideoPostEvent) {
         isPosting = false;
+        mPostingSnackbar.dismiss();
         if(submitVideoPostEvent.postSuccess) {
             Intent intent = new Intent(this, ViewUserDetailActivity.class);
             intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
@@ -491,7 +498,6 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
         } else if(submitVideoPostEvent.errorProcessingVideo) {
             Snackbar.make(coordinatorLayout, R.string.error_processing_video, Snackbar.LENGTH_SHORT).show();
         } else {
-            mPostingSnackbar.dismiss();
             mMemu.getItem(R.id.action_send_post_video_activity).setEnabled(true);
             mMemu.getItem(R.id.action_send_post_video_activity).getIcon().setAlpha(255);
             if (submitVideoPostEvent.errorMessage == null || submitVideoPostEvent.errorMessage.equals("")) {

@@ -103,7 +103,6 @@ class SubmitPost {
                             uploadMediaToAWS.enqueue(new Callback<String>() {
                                 @Override
                                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                                    Log.i("responsesese", "aws" + response.body());
                                     if(response.isSuccessful()) {
                                         new ParseXMLReponseFromAWSAsyncTask(response.body(), new ParseXMLReponseFromAWSAsyncTask.ParseXMLResponseFromAWSListener() {
                                             @Override
@@ -142,7 +141,6 @@ class SubmitPost {
 
                                 @Override
                                 public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                                    Log.i("asfasdfsd", "failedddddddddd" + t.getMessage());
                                     submitPostListener.submitFailed(t.getMessage());
                                 }
                             });
@@ -150,7 +148,7 @@ class SubmitPost {
 
                         @Override
                         public void parseFailed() {
-                            submitPostListener.submitFailed("Parse from aws failed");
+                            submitPostListener.submitFailed(null);
                         }
                     }).execute();
                 } else {
@@ -205,7 +203,6 @@ class SubmitPost {
         submitPostCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                Log.i("code", "asfd" + response.body());
                 if(response.isSuccessful()) {
                     try {
                         getSubmittedPost(response.body(), kind, oauthRetrofit, accessToken,
@@ -216,7 +213,7 @@ class SubmitPost {
                     }
                 } else {
                     Log.i("call_failed", response.message());
-                    submitPostListener.submitFailed(null);
+                    submitPostListener.submitFailed(response.message());
                 }
             }
 
@@ -259,7 +256,6 @@ class SubmitPost {
                             uploadMediaToAWS.enqueue(new Callback<String>() {
                                 @Override
                                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                                    Log.i("responsesese", "aws" + response.body());
                                     if(response.isSuccessful()) {
                                         new ParseXMLReponseFromAWSAsyncTask(response.body(), new ParseXMLReponseFromAWSAsyncTask.ParseXMLResponseFromAWSListener() {
                                             @Override
@@ -273,14 +269,12 @@ class SubmitPost {
                                             }
                                         }).execute();
                                     } else {
-                                        Log.i("asfasdfsd", "failedddddddddd" + response.code());
                                         uploadImageListener.uploadFailed("Error: " + response.code());
                                     }
                                 }
 
                                 @Override
                                 public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                                    Log.i("asfasdfsd", "failedddddddddd" + t.getMessage());
                                     uploadImageListener.uploadFailed(t.getMessage());
                                 }
                             });
@@ -288,7 +282,7 @@ class SubmitPost {
 
                         @Override
                         public void parseFailed() {
-                            uploadImageListener.uploadFailed("Parse from aws failed");
+                            uploadImageListener.uploadFailed(null);
                         }
                     }).execute();
                 } else {
@@ -456,14 +450,12 @@ class SubmitPost {
                             }
                         });
                     } else {
-                        Log.i("call_failed", response.message());
                         submitPostListener.submitFailed(response.message());
                     }
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                    Log.i("call_failed", call.request().url().toString());
                     submitPostListener.submitFailed(t.getMessage());
                 }
             });

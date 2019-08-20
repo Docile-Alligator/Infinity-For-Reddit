@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     @BindView(R.id.view_pager_main_activity) ViewPager viewPager;
     @BindView(R.id.collapsing_toolbar_layout_main_activity) CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.nested_scroll_view_main_activity) NestedScrollView nestedScrollView;
     @BindView(R.id.all_drawer_items_linear_layout_main_activity) LinearLayout allDrawerItemsLinearLayout;
     @BindView(R.id.account_label_main_activity) TextView accountLabelTextView;
     @BindView(R.id.profile_linear_layout_main_activity) LinearLayout profileLinearLayout;
@@ -192,9 +194,12 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
                 int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
                 if (navBarResourceId > 0) {
+                    int navBarHeight = resources.getDimensionPixelSize(navBarResourceId);
                     CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
-                    params.bottomMargin = resources.getDimensionPixelSize(navBarResourceId);
+                    params.bottomMargin = navBarHeight;
                     fab.setLayoutParams(params);
+
+                    nestedScrollView.setPadding(0, 0, 0, navBarHeight);
                 }
             }
         }

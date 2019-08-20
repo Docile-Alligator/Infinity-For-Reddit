@@ -29,6 +29,7 @@ import butterknife.ButterKnife;
 
 public class SearchActivity extends AppCompatActivity {
 
+    static final String EXTRA_QUERY = "EQ";
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
     static final String EXTRA_SUBREDDIT_IS_USER = "ESIU";
     static final String EXTRA_SEARCH_ONLY_SUBREDDITS = "ESOS";
@@ -46,6 +47,7 @@ public class SearchActivity extends AppCompatActivity {
     @BindView(R.id.subreddit_name_relative_layout_search_activity) RelativeLayout subredditNameRelativeLayout;
     @BindView(R.id.subreddit_name_text_view_search_activity) TextView subredditNameTextView;
 
+    private String query;
     private String subredditName;
     private boolean subredditIsUser;
 
@@ -135,6 +137,8 @@ public class SearchActivity extends AppCompatActivity {
             } else {
                 subredditNameTextView.setText(subredditName);
             }
+        } else {
+            query = getIntent().getStringExtra(EXTRA_QUERY);
         }
 
         if(searchOnlySubreddits) {
@@ -160,6 +164,13 @@ public class SearchActivity extends AppCompatActivity {
         super.onStart();
         simpleSearchView.showSearch(false);
         simpleSearchView.getSearchEditText().requestFocus();
+
+        if(query != null) {
+            simpleSearchView.getSearchEditText().setText(query);
+            simpleSearchView.getSearchEditText().setSelection(query.length());
+            query = null;
+        }
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
     }
 
