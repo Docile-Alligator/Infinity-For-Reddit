@@ -223,6 +223,8 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                 if(account == null || !account.getUsername().equals(mNewAccountName)) {
                     new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
                         EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
+                        Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
+
                         mNewAccountName = null;
                         if(newAccount == null) {
                             mNullAccessToken = true;

@@ -234,4 +234,6 @@
 
     <string name="label_account">Account</string>
     <string name="label_post">Post</string>
+
+    <string name="account_switched">Account Switched. So all other pages are gone.</string>
 </resources>

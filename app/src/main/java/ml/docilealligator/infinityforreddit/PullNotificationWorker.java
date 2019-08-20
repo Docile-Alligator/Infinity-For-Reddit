@@ -32,7 +32,6 @@ public class PullNotificationWorker extends Worker {
     static final String WORKER_TAG = "PNWT";
 
     private Context context;
-    private RedditAPI api;
 
     @Inject
     @Named("oauth_without_authenticator")
@@ -45,7 +44,6 @@ public class PullNotificationWorker extends Worker {
         super(context, workerParams);
         this.context = context;
         ((Infinity) context.getApplicationContext()).getAppComponent().inject(this);
-        api = mOauthWithoutAuthenticatorRetrofit.create(RedditAPI.class);
     }
 
     @NonNull
@@ -185,9 +183,10 @@ public class PullNotificationWorker extends Worker {
     }
 
     private Response<String> fetchMessages(Account account) throws IOException, JSONException {
-        Response<String> response = api.getMessages(
-                RedditUtils.getOAuthHeader(account.getAccessToken()),
-                FetchMessages.WHERE_INBOX, null).execute();
+        Response<String> response = mOauthWithoutAuthenticatorRetrofit.create(RedditAPI.class)
+                .getMessages(RedditUtils.getOAuthHeader(account.getAccessToken()),
+                        FetchMessages.WHERE_UNREAD, null).execute();
+
         if(response.isSuccessful()) {
             return response;
         } else {
@@ -198,7 +197,8 @@ public class PullNotificationWorker extends Worker {
                 params.put(RedditUtils.GRANT_TYPE_KEY, RedditUtils.GRANT_TYPE_REFRESH_TOKEN);
                 params.put(RedditUtils.REFRESH_TOKEN_KEY, refreshToken);
 
-                Response accessTokenResponse = api.getAccessToken(RedditUtils.getHttpBasicAuthHeader(), params).execute();
+                Response accessTokenResponse = mOauthWithoutAuthenticatorRetrofit.create(RedditAPI.class)
+                        .getAccessToken(RedditUtils.getHttpBasicAuthHeader(), params).execute();
                 if(accessTokenResponse.isSuccessful() && accessTokenResponse.body() != null) {
                     JSONObject jsonObject = new JSONObject((String) accessTokenResponse.body());
                     String newAccessToken = jsonObject.getString(RedditUtils.ACCESS_TOKEN_KEY);

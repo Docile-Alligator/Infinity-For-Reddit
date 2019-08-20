@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -156,6 +157,8 @@ public class ViewMessageActivity extends AppCompatActivity {
                 if(account == null || !account.getUsername().equals(mNewAccountName)) {
                     new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
                         EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
+                        Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
+
                         mNewAccountName = null;
                         if(newAccount == null) {
                             mNullAccessToken = true;
