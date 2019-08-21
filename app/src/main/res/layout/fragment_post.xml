@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinator_layout_post_fragment"
     tools:application="ml.docilealligator.infinityforreddit.PostFragment">
 
     <com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar

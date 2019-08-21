@@ -559,6 +559,8 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
         settingsLinearLayout.setOnClickListener(view -> {
             drawer.closeDrawers();
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
         });
     }
 

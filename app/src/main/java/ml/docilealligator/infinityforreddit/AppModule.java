@@ -31,10 +31,9 @@ class AppModule {
 
     @Provides @Named("oauth_without_authenticator")
     @Singleton
-    Retrofit provideOauthWithoutAuthenticatorRetrofit(OkHttpClient okHttpClient) {
+    Retrofit provideOauthWithoutAuthenticatorRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(RedditUtils.OAUTH_API_BASE_URI)
-                .client(okHttpClient)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
     }

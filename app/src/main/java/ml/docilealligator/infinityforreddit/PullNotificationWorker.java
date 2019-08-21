@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import Account.Account;
+import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
@@ -36,6 +37,10 @@ public class PullNotificationWorker extends Worker {
     @Inject
     @Named("oauth_without_authenticator")
     Retrofit mOauthWithoutAuthenticatorRetrofit;
+
+    @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
 
     @Inject
     RedditDataRoomDatabase redditDataRoomDatabase;
@@ -56,9 +61,10 @@ public class PullNotificationWorker extends Worker {
             List<Account> accounts = redditDataRoomDatabase.accountDao().getAllAccounts();
             for(int accountIndex = 0; accountIndex < accounts.size(); accountIndex++) {
                 Account account = accounts.get(accountIndex);
+
                 String accountName = account.getUsername();
 
-                Response<String> response = fetchMessages(account);
+                Response<String> response = fetchMessages(account, 1);
 
                 if(response != null && response.isSuccessful()) {
                     Log.i("workmanager", "has response");
@@ -162,56 +168,81 @@ public class PullNotificationWorker extends Worker {
 
                         Log.i("workmanager", "message size " + messages.size());
                     } else {
-                        Log.i("workmanager", "retry1");
-                        return Result.retry();
+                        Log.i("workmanager", "no message");
+                        return Result.success();
                     }
                 } else {
                     if(response != null) {
-                        Log.i("workmanager", "retry2 " + response.code());
+                        Log.i("workmanager", "retry1 " + response.code());
                     }
                     return Result.retry();
                 }
             }
-        } catch (IOException | JSONException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-            Log.i("workmanager", "retry3");
+            Log.i("workmanager", "retry2");
             return Result.retry();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.i("workmanager", "json failure");
+            return Result.failure();
         }
 
         Log.i("workmanager", "success");
         return Result.success();
     }
 
-    private Response<String> fetchMessages(Account account) throws IOException, JSONException {
-        Response<String> response = mOauthWithoutAuthenticatorRetrofit.create(RedditAPI.class)
+    private Response<String> fetchMessages(Account account, int retryCount) throws IOException, JSONException {
+        if(retryCount < 0) {
+            return null;
+        }
+
+        Call<String> call = mOauthWithoutAuthenticatorRetrofit.create(RedditAPI.class)
                 .getMessages(RedditUtils.getOAuthHeader(account.getAccessToken()),
-                        FetchMessages.WHERE_UNREAD, null).execute();
+                        FetchMessages.WHERE_INBOX, null);
+        Response<String> response = call.execute();
 
         if(response.isSuccessful()) {
             return response;
         } else {
             if(response.code() == 401) {
-                String refreshToken = account.getRefreshToken();
-
-                Map<String, String> params = new HashMap<>();
-                params.put(RedditUtils.GRANT_TYPE_KEY, RedditUtils.GRANT_TYPE_REFRESH_TOKEN);
-                params.put(RedditUtils.REFRESH_TOKEN_KEY, refreshToken);
-
-                Response accessTokenResponse = mOauthWithoutAuthenticatorRetrofit.create(RedditAPI.class)
-                        .getAccessToken(RedditUtils.getHttpBasicAuthHeader(), params).execute();
-                if(accessTokenResponse.isSuccessful() && accessTokenResponse.body() != null) {
-                    JSONObject jsonObject = new JSONObject((String) accessTokenResponse.body());
-                    String newAccessToken = jsonObject.getString(RedditUtils.ACCESS_TOKEN_KEY);
-                    account.setAccessToken(newAccessToken);
-                    redditDataRoomDatabase.accountDao().changeAccessToken(account.getUsername(), newAccessToken);
-
-                    return fetchMessages(account);
-                } else {
-                    return null;
+                String accessToken = refreshAccessToken(account);
+                if(!accessToken.equals("")) {
+                    return fetchMessages(account, retryCount - 1);
                 }
+
+                return null;
             } else {
                 return null;
             }
         }
+    }
+
+    private String refreshAccessToken(Account account) {
+        String refreshToken = account.getRefreshToken();
+
+        RedditAPI api = mRetrofit.create(RedditAPI.class);
+
+        Map<String, String> params = new HashMap<>();
+        params.put(RedditUtils.GRANT_TYPE_KEY, RedditUtils.GRANT_TYPE_REFRESH_TOKEN);
+        params.put(RedditUtils.REFRESH_TOKEN_KEY, refreshToken);
+
+        Call<String> accessTokenCall = api.getAccessToken(RedditUtils.getHttpBasicAuthHeader(), params);
+        try {
+            Response response = accessTokenCall.execute();
+            if(response.isSuccessful() && response.body() != null) {
+                JSONObject jsonObject = new JSONObject(response.body().toString());
+                String newAccessToken = jsonObject.getString(RedditUtils.ACCESS_TOKEN_KEY);
+                redditDataRoomDatabase.accountDao().changeAccessToken(account.getUsername(), newAccessToken);
+
+                Log.i("access token", newAccessToken);
+                return newAccessToken;
+            }
+            return "";
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+
+        return "";
     }
 }

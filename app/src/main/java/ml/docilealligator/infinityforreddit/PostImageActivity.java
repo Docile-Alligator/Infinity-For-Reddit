@@ -496,8 +496,8 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
             startActivity(intent);
             finish();
         } else {
-            mMemu.getItem(R.id.action_send_post_image_activity).setEnabled(true);
-            mMemu.getItem(R.id.action_send_post_image_activity).getIcon().setAlpha(255);
+            mMemu.findItem(R.id.action_send_post_image_activity).setEnabled(true);
+            mMemu.findItem(R.id.action_send_post_image_activity).getIcon().setAlpha(255);
             if (submitImagePostEvent.errorMessage == null || submitImagePostEvent.errorMessage.equals("")) {
                 Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
             } else {

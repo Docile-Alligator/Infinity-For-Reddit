@@ -489,6 +489,9 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
     public void onSubmitVideoPostEvent(SubmitVideoPostEvent submitVideoPostEvent) {
         isPosting = false;
         mPostingSnackbar.dismiss();
+        mMemu.findItem(R.id.action_send_post_video_activity).setEnabled(true);
+        mMemu.findItem(R.id.action_send_post_video_activity).getIcon().setAlpha(255);
+
         if(submitVideoPostEvent.postSuccess) {
             Intent intent = new Intent(this, ViewUserDetailActivity.class);
             intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
@@ -498,8 +501,6 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
         } else if(submitVideoPostEvent.errorProcessingVideo) {
             Snackbar.make(coordinatorLayout, R.string.error_processing_video, Snackbar.LENGTH_SHORT).show();
         } else {
-            mMemu.getItem(R.id.action_send_post_video_activity).setEnabled(true);
-            mMemu.getItem(R.id.action_send_post_video_activity).getIcon().setAlpha(255);
             if (submitVideoPostEvent.errorMessage == null || submitVideoPostEvent.errorMessage.equals("")) {
                 Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
             } else {

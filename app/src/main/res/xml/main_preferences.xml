@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        app:key="notification_master"
+        app:icon="@drawable/ic_outline_notifications_24px"
+        app:title="@string/settings_notification_master_title"
+        app:fragment="Settings.NotificationPreferenceFragment" />
+
+    <ListPreference
+        app:defaultValue="0"
+        app:entries="@array/settings_theme"
+        app:entryValues="@array/settings_theme_values"
+        app:key="theme"
+        app:icon="@drawable/ic_outline_color_lens_24px"
+        app:title="@string/settings_theme_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="nsfw"
+        app:title="@string/settings_enable_nsfw_title"/>
+
+</androidx.preference.PreferenceScreen>

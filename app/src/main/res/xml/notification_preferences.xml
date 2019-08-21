@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="enable_notification"
+        app:icon="@drawable/ic_outline_notifications_24px"
+        app:title="@string/settings_notification_enable_notification_title"/>
+
+    <ListPreference
+        app:defaultValue="2"
+        app:entries="@array/settings_notification_interval"
+        app:entryValues="@array/settings_notification_interval_values"
+        app:key="notificaiton_interval"
+        app:icon="@drawable/ic_outline_access_time_24px"
+        app:title="@string/settings_notification_interval_title"
+        app:useSimpleSummaryProvider="true" />
+
+</androidx.preference.PreferenceScreen>

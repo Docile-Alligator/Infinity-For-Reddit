@@ -60,4 +60,8 @@
         <item name="android:textColor">@color/primaryTextColor</item>
     </style>
 
+    <style name="PreferenceActivityTheme" parent="AppTheme.NoActionBar">
+        <item name="android:textColorPrimary">@color/primaryTextColor</item>
+    </style>
+
 </resources>

@@ -13,7 +13,8 @@
     <string name="search_subreddits_activity_label">Subreddits</string>
     <string name="edit_post_activity_label">Edit Post</string>
     <string name="edit_comment_activity_label">Edit Comment</string>
-    <string name="view_message_activity">Inbox</string>
+    <string name="view_message_activity_label">Inbox</string>
+    <string name="settings_activity_label">Settings</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -239,4 +240,14 @@
     <string name="label_post">Post</string>
 
     <string name="account_switched">Account Switched. So all other pages are gone.</string>
+
+    <string name="settings_account_master_title">Account</string>
+    <string name="settings_notification_master_title">Notification</string>
+    <string name="settings_notification_enable_notification_title">Enable Notifications</string>
+    <string name="settings_notification_interval_title">Check Notifications Interval</string>
+    <string name="settings_theme_title">Theme</string>
+    <string name="settings_theme_light__theme_summary">Light Theme</string>
+    <string name="settings_theme_dark_theme_summary">Dark Theme</string>
+    <string name="settings_theme_system_default_summary">Device default</string>
+    <string name="settings_enable_nsfw_title">Enable NSFW</string>
 </resources>

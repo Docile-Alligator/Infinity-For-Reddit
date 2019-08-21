@@ -21,8 +21,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".SettingsActivity"
+            android:label="@string/search_activity_label"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/PreferenceActivityTheme" />
+        <activity
             android:name=".ViewMessageActivity"
-            android:label="@string/view_message_activity"
+            android:label="@string/view_message_activity_label"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

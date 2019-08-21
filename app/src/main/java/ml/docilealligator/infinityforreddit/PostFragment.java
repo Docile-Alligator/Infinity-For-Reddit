@@ -60,7 +60,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
-    @BindView(R.id.coordinator_layout_post_fragment) CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.recycler_view_post_fragment) RecyclerView mPostRecyclerView;
     @BindView(R.id.progress_bar_post_fragment) CircleProgressBar mProgressBar;
     @BindView(R.id.fetch_post_info_linear_layout_post_fragment) LinearLayout mFetchPostInfoLinearLayout;
