@@ -37,7 +37,6 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
     static final String EXTRA_QUERY = "EQ";
     static final String EXTRA_ACCESS_TOKEN = "EAT";
     static final String EXTRA_ACCOUNT_NAME = "EAN";
-    static final String EXTRA_NSFW = "EN";
 
     @BindView(R.id.coordinator_layout_user_listing_fragment) CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.recycler_view_user_listing_fragment) RecyclerView mUserListingRecyclerView;
@@ -103,7 +102,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         mUserListingRecyclerView.setAdapter(mAdapter);
 
         UserListingViewModel.Factory factory = new UserListingViewModel.Factory(mRetrofit, mQuery,
-                PostDataSource.SORT_TYPE_RELEVANCE, getArguments().getBoolean(EXTRA_NSFW));
+                PostDataSource.SORT_TYPE_RELEVANCE);
         mUserListingViewModel = new ViewModelProvider(this, factory).get(UserListingViewModel.class);
         mUserListingViewModel.getUsers().observe(this, UserData -> mAdapter.submitList(UserData));
 

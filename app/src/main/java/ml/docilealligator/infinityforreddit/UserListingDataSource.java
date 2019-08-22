@@ -14,7 +14,6 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
     private Retrofit retrofit;
     private String query;
     private String sortType;
-    private boolean nsfw;
 
     private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
     private MutableLiveData<NetworkState> initialLoadStateLiveData;
@@ -25,11 +24,10 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
     private PageKeyedDataSource.LoadParams<String> params;
     private PageKeyedDataSource.LoadCallback<String, UserData> callback;
 
-    UserListingDataSource(Retrofit retrofit, String query, String sortType, boolean nsfw) {
+    UserListingDataSource(Retrofit retrofit, String query, String sortType) {
         this.retrofit = retrofit;
         this.query = query;
         this.sortType = sortType;
-        this.nsfw = nsfw;
         paginationNetworkStateLiveData = new MutableLiveData<>();
         initialLoadStateLiveData = new MutableLiveData<>();
         hasUserLiveData = new MutableLiveData<>();
@@ -54,7 +52,7 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
 
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
-        FetchUserData.fetchUserListingData(retrofit, query, null, sortType, nsfw,
+        FetchUserData.fetchUserListingData(retrofit, query, null, sortType,
                 new FetchUserData.FetchUserListingDataListener() {
             @Override
             public void onFetchUserListingDataSuccess(ArrayList<UserData> UserData, String after) {
@@ -89,7 +87,7 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
             return;
         }
 
-        FetchUserData.fetchUserListingData(retrofit, query, params.key, sortType, nsfw,
+        FetchUserData.fetchUserListingData(retrofit, query, params.key, sortType,
                 new FetchUserData.FetchUserListingDataListener() {
             @Override
             public void onFetchUserListingDataSuccess(ArrayList<UserData> UserData, String after) {

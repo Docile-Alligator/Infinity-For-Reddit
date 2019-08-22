@@ -38,4 +38,5 @@ public interface AppComponent {
     void inject(PullNotificationWorker pullNotificationWorker);
     void inject(ViewMessageActivity viewMessageActivity);
     void inject(NotificationPreferenceFragment notificationPreferenceFragment);
+    void inject(LinkResolverActivity linkResolverActivity);
 }

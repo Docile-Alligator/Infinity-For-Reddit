@@ -41,7 +41,6 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
     static final String EXTRA_IS_POSTING = "EIP";
     static final String EXTRA_ACCESS_TOKEN = "EAT";
     static final String EXTRA_ACCOUNT_NAME = "EAN";
-    static final String EXTRA_NSFW = "EN";
 
     @BindView(R.id.coordinator_layout_subreddit_listing_fragment) CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.recycler_view_subreddit_listing_fragment) RecyclerView mSubredditListingRecyclerView;
@@ -100,7 +99,6 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         boolean isPosting = getArguments().getBoolean(EXTRA_IS_POSTING);
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
-        boolean nsfw = getArguments().getBoolean(EXTRA_NSFW);
 
         mAdapter = new SubredditListingRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit,
                 accessToken, accountName, redditDataRoomDatabase,
@@ -125,7 +123,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         mSubredditListingRecyclerView.setAdapter(mAdapter);
 
         SubredditListingViewModel.Factory factory = new SubredditListingViewModel.Factory(mRetrofit, query,
-                PostDataSource.SORT_TYPE_RELEVANCE, nsfw);
+                PostDataSource.SORT_TYPE_RELEVANCE);
         mSubredditListingViewModel = new ViewModelProvider(this, factory).get(SubredditListingViewModel.class);
         mSubredditListingViewModel.getSubreddits().observe(this, subredditData -> mAdapter.submitList(subredditData));
 

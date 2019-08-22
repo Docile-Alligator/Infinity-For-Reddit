@@ -534,16 +534,16 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
         if(subredditOrUserName == null) {
             if(accessToken == null) {
-                getPost = api.searchPosts(query, lastItem, sortType, nsfw);
+                getPost = api.searchPosts(query, lastItem, sortType);
             } else {
-                getPost = api.searchPostsOauth(query, lastItem, sortType, nsfw, RedditUtils.getOAuthHeader(accessToken));
+                getPost = api.searchPostsOauth(query, lastItem, sortType, RedditUtils.getOAuthHeader(accessToken));
             }
         } else {
             if(accessToken == null) {
-                getPost = api.searchPostsInSpecificSubreddit(subredditOrUserName, query, lastItem, nsfw);
+                getPost = api.searchPostsInSpecificSubreddit(subredditOrUserName, query, lastItem);
             } else {
                 getPost = api.searchPostsInSpecificSubredditOauth(subredditOrUserName, query, lastItem,
-                        nsfw, RedditUtils.getOAuthHeader(accessToken));
+                        RedditUtils.getOAuthHeader(accessToken));
             }
         }
 
@@ -603,16 +603,16 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
         if(subredditOrUserName == null) {
             if(accessToken == null) {
-                getPost = api.searchPosts(query, after, sortType, nsfw);
+                getPost = api.searchPosts(query, after, sortType);
             } else {
-                getPost = api.searchPostsOauth(query, after, sortType, nsfw, RedditUtils.getOAuthHeader(accessToken));
+                getPost = api.searchPostsOauth(query, after, sortType, RedditUtils.getOAuthHeader(accessToken));
             }
         } else {
             if(accessToken == null) {
-                getPost = api.searchPostsInSpecificSubreddit(subredditOrUserName, query, after, nsfw);
+                getPost = api.searchPostsInSpecificSubreddit(subredditOrUserName, query, after);
             } else {
                 getPost = api.searchPostsInSpecificSubredditOauth(subredditOrUserName, query, after,
-                        nsfw, RedditUtils.getOAuthHeader(accessToken));
+                        RedditUtils.getOAuthHeader(accessToken));
             }
         }
 

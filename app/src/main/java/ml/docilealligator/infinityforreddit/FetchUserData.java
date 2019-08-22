@@ -56,11 +56,10 @@ public class FetchUserData {
     }
 
     public static void fetchUserListingData(Retrofit retrofit, String query, String after, String sortType,
-                                            boolean nsfw,
                                             FetchUserListingDataListener fetchUserListingDataListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
-        Call<String> userInfo = api.searchUsers(query, after, sortType, nsfw);
+        Call<String> userInfo = api.searchUsers(query, after, sortType);
         userInfo.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {

@@ -19,10 +19,16 @@
         <item>24</item>
     </string-array>
 
-    <string-array name="settings_theme">
+    <string-array name="settings_theme_q">
         <item>Light Theme</item>
         <item>Dark Theme</item>
         <item>Device Default</item>
+    </string-array>
+
+    <string-array name="settings_theme">
+        <item>Light Theme</item>
+        <item>Dark Theme</item>
+        <item>Set by Battery Saver</item>
     </string-array>
 
     <string-array name="settings_theme_values">

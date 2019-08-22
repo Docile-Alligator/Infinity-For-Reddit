@@ -9,8 +9,7 @@
         app:fragment="Settings.NotificationPreferenceFragment" />
 
     <ListPreference
-        app:defaultValue="0"
-        app:entries="@array/settings_theme"
+        app:defaultValue="2"
         app:entryValues="@array/settings_theme_values"
         app:key="theme"
         app:icon="@drawable/ic_outline_color_lens_24px"

@@ -58,7 +58,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     static final String EXTRA_FILTER = "EF";
     static final int EXTRA_NO_FILTER = -1;
     static final String EXTRA_ACCESS_TOKEN = "EAT";
-    static final String EXTRA_NSFW = "ENSFW";
 
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 

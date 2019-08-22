@@ -75,31 +75,29 @@ public interface RedditAPI {
 
     @GET("subreddits/search.json?raw_json=1")
     Call<String> searchSubreddits(@Query("q") String subredditName, @Query("after") String after,
-                                  @Query("sort") String sort, @Query("include_over_18") boolean nsfw);
+                                  @Query("sort") String sort);
 
     @GET("search.json?raw_json=1&type=user")
     Call<String> searchUsers(@Query("q") String profileName, @Query("after") String after,
-                             @Query("sort") String sort, @Query("include_over_18") boolean nsfw);
+                             @Query("sort") String sort);
 
     @GET("search.json?raw_json=1&type=link")
     Call<String> searchPostsOauth(@Query("q") String query, @Query("after") String after,
-                                  @Query("sort") String sort, @Query("include_over_18") boolean nsfw,
+                                  @Query("sort") String sort,
                                   @HeaderMap Map<String, String> headers);
 
     @GET("search.json?raw_json=1&type=link")
     Call<String> searchPosts(@Query("q") String query, @Query("after") String after,
-                             @Query("sort") String sort, @Query("include_over_18") boolean nsfw);
+                             @Query("sort") String sort);
 
     @GET("r/{subredditName}/search.json?raw_json=1&type=link&restrict_sr=true")
     Call<String> searchPostsInSpecificSubredditOauth(@Path("subredditName") String subredditName,
                                                      @Query("q") String query, @Query("after") String after,
-                                                     @Query("include_over_18") boolean nsfw,
                                                      @HeaderMap Map<String, String> headers);
 
     @GET("r/{subredditName}/search.json?raw_json=1&type=link&restrict_sr=true")
     Call<String> searchPostsInSpecificSubreddit(@Path("subredditName") String subredditName,
-                                                @Query("q") String query, @Query("after") String after,
-                                                @Query("include_over_18") boolean nsfw);
+                                                @Query("q") String query, @Query("after") String after);
 
     @FormUrlEncoded
     @POST("api/comment")

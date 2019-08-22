@@ -250,4 +250,6 @@
     <string name="settings_theme_dark_theme_summary">Dark Theme</string>
     <string name="settings_theme_system_default_summary">Device default</string>
     <string name="settings_enable_nsfw_title">Enable NSFW</string>
+
+    <string name="no_link_available">Cannot get the link</string>
 </resources>
