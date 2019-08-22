@@ -566,6 +566,14 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         }
     }
 
+    public void postScrollUp() {
+        fab.show();
+    }
+
+    public void postScrollDown() {
+        fab.hide();
+    }
+
     @Subscribe
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
         if(!getClass().getName().equals(event.excludeActivityClassName)) {

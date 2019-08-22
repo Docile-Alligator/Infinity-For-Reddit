@@ -399,6 +399,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
             @Override
             public void onPageSelected(int position) {
+                fab.show();
                 if(isInLazyMode) {
                     if(position == sectionsPagerAdapter.getCurrentLazyModeFragmentPosition()) {
                         sectionsPagerAdapter.resumeLazyMode();
@@ -791,6 +792,14 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 intent = new Intent(MainActivity.this, PostVideoActivity.class);
                 startActivity(intent);
         }
+    }
+
+    public void postScrollUp() {
+        fab.show();
+    }
+
+    public void postScrollDown() {
+        fab.hide();
     }
 
     @Subscribe

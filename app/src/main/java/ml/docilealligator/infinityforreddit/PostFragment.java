@@ -189,11 +189,37 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             return false;
         });
 
+        if(activity instanceof MainActivity) {
+            mPostRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    if (dy > 0) {
+                        ((MainActivity) activity).postScrollDown();
+                    } else if (dy < 0) {
+                        ((MainActivity) activity).postScrollUp();
+                    }
+
+                }
+            });
+        } else if(activity instanceof ViewSubredditDetailActivity) {
+            mPostRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    if (dy > 0) {
+                        ((ViewSubredditDetailActivity) activity).postScrollDown();
+                    } else if (dy < 0) {
+                        ((ViewSubredditDetailActivity) activity).postScrollUp();
+                    }
+
+                }
+            });
+        }
+
         int postType = getArguments().getInt(EXTRA_POST_TYPE);
         String sortType = getArguments().getString(EXTRA_SORT_TYPE);
         int filter = getArguments().getInt(EXTRA_FILTER);
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
-        boolean nsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_KEY, true);
+        boolean nsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_KEY, false);
 
         PostViewModel.Factory factory;
 
