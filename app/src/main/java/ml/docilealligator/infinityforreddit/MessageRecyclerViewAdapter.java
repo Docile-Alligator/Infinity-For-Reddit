@@ -154,7 +154,7 @@ class MessageRecyclerViewAdapter extends PagedListAdapter<Message, RecyclerView.
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
         if(holder instanceof DataViewHolder) {
-            ((DataViewHolder) holder).itemView.setBackgroundColor(mResources.getColor(android.R.color.white));
+            ((DataViewHolder) holder).itemView.setBackgroundColor(mResources.getColor(R.color.backgroundColor));
             ((DataViewHolder) holder).titleTextView.setVisibility(View.VISIBLE);
             ((DataViewHolder) holder).authorTextView.setTextColor(mResources.getColor(R.color.primaryTextColor));
         }
