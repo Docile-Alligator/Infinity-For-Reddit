@@ -351,9 +351,9 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
 
                 if(isArchived) {
                     ((DataViewHolder) holder).upvoteButton
-                            .setColorFilter(ContextCompat.getColor(mContext, R.color.voteUnavailableVoteButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                            .setColorFilter(ContextCompat.getColor(mContext, R.color.voteAndReplyUnavailableVoteButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
                     ((DataViewHolder) holder).downvoteButton
-                            .setColorFilter(ContextCompat.getColor(mContext, R.color.voteUnavailableVoteButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                            .setColorFilter(ContextCompat.getColor(mContext, R.color.voteAndReplyUnavailableVoteButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
                 }
 
                 if(post.isCrosspost()) {

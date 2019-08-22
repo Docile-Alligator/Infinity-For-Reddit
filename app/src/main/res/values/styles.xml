@@ -62,6 +62,8 @@
 
     <style name="PreferenceActivityTheme" parent="AppTheme.NoActionBar">
         <item name="android:textColorPrimary">@color/primaryTextColor</item>
+        <item name="buttonBarPositiveButtonStyle">@style/MaterialAlertDialogPositiveButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/MaterialAlertDialogNegativeButtonStyle</item>
     </style>
 
 </resources>

@@ -39,4 +39,6 @@ public interface AppComponent {
     void inject(ViewMessageActivity viewMessageActivity);
     void inject(NotificationPreferenceFragment notificationPreferenceFragment);
     void inject(LinkResolverActivity linkResolverActivity);
+    void inject(SearchActivity searchActivity);
+    void inject(SettingsActivity settingsActivity);
 }

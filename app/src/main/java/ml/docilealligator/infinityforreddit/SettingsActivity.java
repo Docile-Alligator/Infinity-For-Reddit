@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,15 +10,23 @@ import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import javax.inject.Inject;
+
 import Settings.MainPreferenceFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public class SettingsActivity extends AppCompatActivity implements
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
@@ -26,6 +35,9 @@ public class SettingsActivity extends AppCompatActivity implements
 
     @BindView(R.id.toolbar_settings_activity) Toolbar toolbar;
 
+    @Inject
+    SharedPreferences mSharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,12 +45,32 @@ public class SettingsActivity extends AppCompatActivity implements
 
         ButterKnife.bind(this);
 
+        ((Infinity) getApplication()).getAppComponent().inject(this);
+
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Window window = getWindow();
             if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
                 window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
             }
             window.setNavigationBarColor(ContextCompat.getColor(this, R.color.navBarColor));
+        }
+
+        boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
+        int themeType = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
+        switch (themeType) {
+            case 0:
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                break;
+            case 1:
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                break;
+            case 2:
+                if(systemDefault) {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
+                }
+
         }
 
         setSupportActionBar(toolbar);

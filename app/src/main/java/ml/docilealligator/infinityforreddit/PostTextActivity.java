@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
@@ -36,6 +38,11 @@ import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
+
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public class PostTextActivity extends AppCompatActivity implements FlairBottomSheetFragment.FlairSelectionCallback {
 
@@ -95,6 +102,9 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
 
+    @Inject
+    SharedPreferences mSharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,6 +124,24 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
             window.setNavigationBarColor(ContextCompat.getColor(this, R.color.navBarColor));
         }
 
+        boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
+        int themeType = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
+        switch (themeType) {
+            case 0:
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                break;
+            case 1:
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                break;
+            case 2:
+                if(systemDefault) {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
+                }
+
+        }
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -122,6 +150,13 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
         mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
 
         if(savedInstanceState != null) {
+            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
+            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
+
+            if(!mNullAccessToken && mAccessToken == null) {
+                getCurrentAccount();
+            }
+
             subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
             iconUrl = savedInstanceState.getString(SUBREDDIT_ICON_STATE);
             subredditSelected = savedInstanceState.getBoolean(SUBREDDIT_SELECTED_STATE);
@@ -157,6 +192,8 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
                 nsfwTextView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             }
         } else {
+            getCurrentAccount();
+
             isPosting = false;
 
             if(getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
@@ -235,6 +272,16 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
                 isNSFW = false;
             }
         });
+    }
+
+    private void getCurrentAccount() {
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if(account == null) {
+                mNullAccessToken = true;
+            } else {
+                mAccessToken = account.getAccessToken();
+            }
+        }).execute();
     }
 
     private void displaySubredditIcon() {

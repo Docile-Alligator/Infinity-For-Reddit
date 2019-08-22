@@ -2,13 +2,24 @@ package ml.docilealligator.infinityforreddit;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.appbar.AppBarLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -17,6 +28,11 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public class SearchSubredditsResultActivity extends AppCompatActivity {
 
@@ -29,6 +45,7 @@ public class SearchSubredditsResultActivity extends AppCompatActivity {
     private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String FRAGMENT_OUT_STATE = "FOS";
 
+    @BindView(R.id.appbar_layout_search_subreddits_result_activity) AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_search_subreddits_result_activity) Toolbar toolbar;
 
     private boolean mNullAccessToken = false;
@@ -40,6 +57,9 @@ public class SearchSubredditsResultActivity extends AppCompatActivity {
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
 
+    @Inject
+    SharedPreferences mSharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +70,62 @@ public class SearchSubredditsResultActivity extends AppCompatActivity {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
         EventBus.getDefault().register(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            Resources resources = getResources();
+
+            if(resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
+                Window window = getWindow();
+                window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
+                boolean lightNavBar = false;
+                if((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+                    lightNavBar = true;
+                }
+                boolean finalLightNavBar = lightNavBar;
+
+                View decorView = window.getDecorView();
+                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                    @Override
+                    void onStateChanged(AppBarLayout appBarLayout, State state) {
+                        if(state == State.COLLAPSED) {
+                            if(finalLightNavBar) {
+                                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                            }
+                        } else if(state == State.EXPANDED) {
+                            if(finalLightNavBar) {
+                                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                            }
+                        }
+                    }
+                });
+
+                int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+                if (statusBarResourceId > 0) {
+                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
+                    params.topMargin = getResources().getDimensionPixelSize(statusBarResourceId);
+                    toolbar.setLayoutParams(params);
+                }
+            }
+        }
+
+        boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
+        int themeType = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
+        switch (themeType) {
+            case 0:
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                break;
+            case 1:
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                break;
+            case 2:
+                if(systemDefault) {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
+                }
+
+        }
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

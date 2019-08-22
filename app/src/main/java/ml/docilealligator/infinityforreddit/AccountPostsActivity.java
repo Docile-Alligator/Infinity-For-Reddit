@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
@@ -13,6 +14,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
@@ -26,6 +28,11 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public class AccountPostsActivity extends AppCompatActivity implements UserThingSortTypeBottomSheetFragment.UserThingSortTypeSelectionCallback {
 
@@ -55,6 +62,9 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
 
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
+
+    @Inject
+    SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +116,24 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
                 params.topMargin = getResources().getDimensionPixelSize(statusBarResourceId);
                 toolbar.setLayoutParams(params);
             }
+        }
+
+        boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
+        int themeType = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
+        switch (themeType) {
+            case 0:
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                break;
+            case 1:
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                break;
+            case 2:
+                if(systemDefault) {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
+                }
+
         }
 
         mUserWhere = getIntent().getExtras().getString(EXTRA_USER_WHERE);

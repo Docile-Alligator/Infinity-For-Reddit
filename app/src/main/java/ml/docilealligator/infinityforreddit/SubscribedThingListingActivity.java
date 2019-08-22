@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
@@ -12,6 +13,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -36,6 +38,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Retrofit;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
 public class SubscribedThingListingActivity extends AppCompatActivity {
 
     private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";
@@ -43,7 +50,7 @@ public class SubscribedThingListingActivity extends AppCompatActivity {
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
 
-    @BindView(R.id.appbar_subscribed_thing_listing_activity) AppBarLayout appBarLayout;
+    @BindView(R.id.appbar_layout_subscribed_thing_listing_activity) AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_subscribed_thing_listing_activity) Toolbar toolbar;
     @BindView(R.id.tab_layout_subscribed_thing_listing_activity) TabLayout tabLayout;
     @BindView(R.id.view_pager_subscribed_thing_listing_activity) ViewPager viewPager;
@@ -61,6 +68,9 @@ public class SubscribedThingListingActivity extends AppCompatActivity {
 
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
+
+    @Inject
+    SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +122,24 @@ public class SubscribedThingListingActivity extends AppCompatActivity {
                     toolbar.setLayoutParams(params);
                 }
             }
+        }
+
+        boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
+        int themeType = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
+        switch (themeType) {
+            case 0:
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                break;
+            case 1:
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                break;
+            case 2:
+                if(systemDefault) {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
+                }
+
         }
 
         setSupportActionBar(toolbar);

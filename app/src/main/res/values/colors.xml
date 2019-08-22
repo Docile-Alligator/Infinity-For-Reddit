@@ -28,7 +28,7 @@
 
     <color name="roundedBottomSheetPrimaryNavigationBarColor">@color/roundedBottomSheetPrimaryBackground</color>
 
-    <color name="voteUnavailableVoteButtonColor">#F0F0F0</color>
+    <color name="voteAndReplyUnavailableVoteButtonColor">#F0F0F0</color>
 
     <color name="tabLayoutWithExpandedCollapsingToolbarTextColor">@color/colorPrimary</color>
 

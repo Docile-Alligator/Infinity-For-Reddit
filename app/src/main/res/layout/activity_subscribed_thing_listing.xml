@@ -7,7 +7,7 @@
     tools:application=".SubscribedThingListingActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar_subscribed_thing_listing_activity"
+        android:id="@+id/appbar_layout_subscribed_thing_listing_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">

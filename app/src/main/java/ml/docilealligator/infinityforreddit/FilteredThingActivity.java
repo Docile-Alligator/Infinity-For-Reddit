@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
@@ -13,6 +14,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
@@ -25,6 +27,11 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public class FilteredThingActivity extends AppCompatActivity implements SortTypeBottomSheetFragment.SortTypeSelectionCallback,
         SearchPostSortTypeBottomSheetFragment.SearchSortTypeSelectionCallback, UserThingSortTypeBottomSheetFragment.UserThingSortTypeSelectionCallback {
@@ -58,6 +65,9 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
 
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
+
+    @Inject
+    SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,13 +121,31 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
             }
         }
 
+        boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
+        int themeType = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
+        switch (themeType) {
+            case 0:
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                break;
+            case 1:
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                break;
+            case 2:
+                if(systemDefault) {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
+                }
+
+        }
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        name = getIntent().getExtras().getString(EXTRA_NAME);
-        postType = getIntent().getExtras().getInt(EXTRA_POST_TYPE);
-        int filter = getIntent().getExtras().getInt(EXTRA_FILTER);
-        String sortType = getIntent().getExtras().getString(EXTRA_SORT_TYPE);
+        name = getIntent().getStringExtra(EXTRA_NAME);
+        postType = getIntent().getIntExtra(EXTRA_POST_TYPE, PostDataSource.TYPE_FRONT_PAGE);
+        int filter = getIntent().getIntExtra(EXTRA_FILTER, Post.TEXT_TYPE);
+        String sortType = getIntent().getStringExtra(EXTRA_SORT_TYPE);
 
         if(savedInstanceState != null) {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);

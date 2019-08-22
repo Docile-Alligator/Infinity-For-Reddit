@@ -182,6 +182,10 @@
     <string name="no_browser_found">No browser found</string>
 
     <string name="archived_post_vote_unavailable">Archived post. Vote unavailable.</string>
+    <string name="archived_post_comment_unavailable">Archived post. Comment unavailable.</string>
+    <string name="archived_post_reply_unavailable">Archived post. Reply unavailable.</string>
+    <string name="locked_post_comment_unavailable">Locked post. Comment unavailable.</string>
+    <string name="locked_post_reply_unavailable">Locked post. Reply unavailable.</string>
 
     <string name="text">TEXT</string>
     <string name="link">LINK</string>

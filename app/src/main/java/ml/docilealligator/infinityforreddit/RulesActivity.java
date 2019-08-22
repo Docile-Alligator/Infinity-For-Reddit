@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.AsyncTask;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,11 +41,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
 public class RulesActivity extends AppCompatActivity {
 
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
 
-    @BindView(R.id.appbar_rules_activity) AppBarLayout appBarLayout;
+    @BindView(R.id.appbar_layout_rules_activity) AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_rules_activity) Toolbar toolbar;
     @BindView(R.id.progress_bar_rules_activity) ProgressBar progressBar;
     @BindView(R.id.recycler_view_rules_activity) RecyclerView recyclerView;
@@ -56,6 +63,9 @@ public class RulesActivity extends AppCompatActivity {
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
+
+    @Inject
+    SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +117,24 @@ public class RulesActivity extends AppCompatActivity {
                     toolbar.setLayoutParams(params);
                 }
             }
+        }
+
+        boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
+        int themeType = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
+        switch (themeType) {
+            case 0:
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                break;
+            case 1:
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                break;
+            case 2:
+                if(systemDefault) {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
+                }
+
         }
 
         setSupportActionBar(toolbar);
