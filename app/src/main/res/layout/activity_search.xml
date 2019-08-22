@@ -59,10 +59,10 @@
             android:id="@+id/subreddit_name_relative_layout_search_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
-            android:background="?attr/selectableItemBackground">
+            android:padding="16dp">
 
             <TextView
                 android:id="@+id/search_in_text_view_search_activity"

@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
@@ -36,6 +37,7 @@ import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 import com.bumptech.glide.Glide;
@@ -45,10 +47,13 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.common.util.concurrent.ListenableFuture;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -144,6 +149,9 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
+
+    @Inject
+    SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -255,6 +263,11 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
     private void getCurrentAccountAndBindView() {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            boolean enableNotification = mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_NOTIFICATION_KEY, true);
+            String notificationInterval = mSharedPreferences.getString(SharedPreferencesUtils.NOTIFICATION_INTERVAL_KEY, "1");
+
+            WorkManager workManager = WorkManager.getInstance(this);
+
             if(mNewAccountName != null) {
                 if(account == null || !account.getUsername().equals(mNewAccountName)) {
                     new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
@@ -270,18 +283,31 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                             mProfileImageUrl = newAccount.getProfileImageUrl();
                             mBannerImageUrl = newAccount.getBannerImageUrl();
                             mKarma = newAccount.getKarma();
+                        }
 
+                        if(enableNotification) {
                             Constraints constraints = new Constraints.Builder()
                                     .setRequiredNetworkType(NetworkType.CONNECTED)
                                     .build();
 
                             PeriodicWorkRequest pullNotificationRequest =
-                                    new PeriodicWorkRequest.Builder(PullNotificationWorker.class, 1, TimeUnit.HOURS)
+                                    new PeriodicWorkRequest.Builder(PullNotificationWorker.class,
+                                            Long.parseLong(notificationInterval), TimeUnit.HOURS)
                                             .setConstraints(constraints)
                                             .build();
 
-                            WorkManager.getInstance(this).enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
+                            workManager.enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
                                     ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
+                        } else {
+                            ListenableFuture<List<WorkInfo>> workInfo = workManager.getWorkInfosByTag(PullNotificationWorker.WORKER_TAG);
+                            try {
+                                List<WorkInfo> list = workInfo.get();
+                                if(list != null && list.size() != 0) {
+                                    workManager.cancelAllWorkByTag(PullNotificationWorker.WORKER_TAG);
+                                }
+                            } catch (InterruptedException | ExecutionException e) {
+                                e.printStackTrace();
+                            }
                         }
 
                         bindView();
@@ -293,17 +319,30 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                     mBannerImageUrl = account.getBannerImageUrl();
                     mKarma = account.getKarma();
 
-                    Constraints constraints = new Constraints.Builder()
-                            .setRequiredNetworkType(NetworkType.CONNECTED)
-                            .build();
+                    if(enableNotification) {
+                        Constraints constraints = new Constraints.Builder()
+                                .setRequiredNetworkType(NetworkType.CONNECTED)
+                                .build();
 
-                    PeriodicWorkRequest pullNotificationRequest =
-                            new PeriodicWorkRequest.Builder(PullNotificationWorker.class, 1, TimeUnit.HOURS)
-                                    .setConstraints(constraints)
-                                    .build();
+                        PeriodicWorkRequest pullNotificationRequest =
+                                new PeriodicWorkRequest.Builder(PullNotificationWorker.class,
+                                        Long.parseLong(notificationInterval), TimeUnit.HOURS)
+                                        .setConstraints(constraints)
+                                        .build();
 
-                    WorkManager.getInstance(this).enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
-                            ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
+                        workManager.enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
+                                ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
+                    } else {
+                        ListenableFuture<List<WorkInfo>> workInfo = workManager.getWorkInfosByTag(PullNotificationWorker.WORKER_TAG);
+                        try {
+                            List<WorkInfo> list = workInfo.get();
+                            if(list != null && list.size() != 0) {
+                                workManager.cancelAllWorkByTag(PullNotificationWorker.WORKER_TAG);
+                            }
+                        } catch (InterruptedException | ExecutionException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
                     bindView();
                 }
@@ -316,18 +355,31 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                     mProfileImageUrl = account.getProfileImageUrl();
                     mBannerImageUrl = account.getBannerImageUrl();
                     mKarma = account.getKarma();
+                }
 
+                if(enableNotification) {
                     Constraints constraints = new Constraints.Builder()
                             .setRequiredNetworkType(NetworkType.CONNECTED)
                             .build();
 
                     PeriodicWorkRequest pullNotificationRequest =
-                            new PeriodicWorkRequest.Builder(PullNotificationWorker.class, 1, TimeUnit.HOURS)
+                            new PeriodicWorkRequest.Builder(PullNotificationWorker.class,
+                                    Long.parseLong(notificationInterval), TimeUnit.HOURS)
                                     .setConstraints(constraints)
                                     .build();
 
-                    WorkManager.getInstance(this).enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
+                    workManager.enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
                             ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
+                } else {
+                    ListenableFuture<List<WorkInfo>> workInfo = workManager.getWorkInfosByTag(PullNotificationWorker.WORKER_TAG);
+                    try {
+                        List<WorkInfo> list = workInfo.get();
+                        if(list != null && list.size() != 0) {
+                            workManager.cancelAllWorkByTag(PullNotificationWorker.WORKER_TAG);
+                        }
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 bindView();
@@ -748,6 +800,11 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         }
     }
 
+    @Subscribe
+    public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
+        sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
+    }
+
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
         private PostFragment frontPagePostFragment;
         private PostFragment popularPostFragment;
@@ -991,6 +1048,18 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                             ((FragmentCommunicator) allPostFragment).refresh();
                         }
                 }
+            }
+        }
+
+        public void changeNSFW(boolean nsfw) {
+            if(frontPagePostFragment != null) {
+                frontPagePostFragment.changeNSFW(nsfw);
+            }
+            if(popularPostFragment != null) {
+                popularPostFragment.changeNSFW(nsfw);
+            }
+            if(allPostFragment != null) {
+                allPostFragment.changeNSFW(nsfw);
             }
         }
     }

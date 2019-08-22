@@ -73,26 +73,33 @@ public interface RedditAPI {
     @GET("/api/info.json?raw_json=1")
     Call<String> getInfo(@Query("id") String id);
 
-    @GET("subreddits/search.json?raw_json=1&include_over_18=on")
-    Call<String> searchSubreddits(@Query("q") String subredditName, @Query("after") String after, @Query("sort") String sort);
+    @GET("subreddits/search.json?raw_json=1")
+    Call<String> searchSubreddits(@Query("q") String subredditName, @Query("after") String after,
+                                  @Query("sort") String sort, @Query("include_over_18") boolean nsfw);
 
-    @GET("search.json?raw_json=1&type=user&include_over_18=on")
-    Call<String> searchUsers(@Query("q") String profileName, @Query("after") String after, @Query("sort") String sort);
+    @GET("search.json?raw_json=1&type=user")
+    Call<String> searchUsers(@Query("q") String profileName, @Query("after") String after,
+                             @Query("sort") String sort, @Query("include_over_18") boolean nsfw);
 
-    @GET("search.json?raw_json=1&type=link&include_over_18=on")
-    Call<String> searchPostsOauth(@Query("q") String query, @Query("after") String after, @Query("sort") String sort,
+    @GET("search.json?raw_json=1&type=link")
+    Call<String> searchPostsOauth(@Query("q") String query, @Query("after") String after,
+                                  @Query("sort") String sort, @Query("include_over_18") boolean nsfw,
                                   @HeaderMap Map<String, String> headers);
 
-    @GET("search.json?raw_json=1&type=link&include_over_18=on")
-    Call<String> searchPosts(@Query("q") String query, @Query("after") String after, @Query("sort") String sort);
+    @GET("search.json?raw_json=1&type=link")
+    Call<String> searchPosts(@Query("q") String query, @Query("after") String after,
+                             @Query("sort") String sort, @Query("include_over_18") boolean nsfw);
 
-    @GET("r/{subredditName}/search.json?raw_json=1&type=link&restrict_sr=true&include_over_18=on")
-    Call<String> searchPostsInSpecificSubredditOauth(@Path("subredditName") String subredditName, @Query("q") String query,
-                                                     @Query("after") String after, @HeaderMap Map<String, String> headers);
+    @GET("r/{subredditName}/search.json?raw_json=1&type=link&restrict_sr=true")
+    Call<String> searchPostsInSpecificSubredditOauth(@Path("subredditName") String subredditName,
+                                                     @Query("q") String query, @Query("after") String after,
+                                                     @Query("include_over_18") boolean nsfw,
+                                                     @HeaderMap Map<String, String> headers);
 
-    @GET("r/{subredditName}/search.json?raw_json=1&type=link&restrict_sr=true&include_over_18=on")
-    Call<String> searchPostsInSpecificSubreddit(@Path("subredditName") String subredditName, @Query("q") String query,
-                                                     @Query("after") String after);
+    @GET("r/{subredditName}/search.json?raw_json=1&type=link&restrict_sr=true")
+    Call<String> searchPostsInSpecificSubreddit(@Path("subredditName") String subredditName,
+                                                @Query("q") String query, @Query("after") String after,
+                                                @Query("include_over_18") boolean nsfw);
 
     @FormUrlEncoded
     @POST("api/comment")

@@ -545,6 +545,12 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         }
     }
 
+    @Subscribe
+    public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
+        ((FragmentCommunicator) mFragment).changeNSFW(changeNSFWEvent.nsfw);
+    }
+
+
     private static class InsertSubredditDataAsyncTask extends AsyncTask<Void, Void, Void> {
 
         interface InsertSubredditDataAsyncTaskListener {

@@ -21,13 +21,14 @@ public class PostViewModel extends ViewModel {
     private LiveData<NetworkState> initialLoadingState;
     private LiveData<Boolean> hasPostLiveData;
     private LiveData<PagedList<Post>> posts;
-    private MutableLiveData<String> accessTokenLiveData;
+    private MutableLiveData<Boolean> nsfwLiveData;
     private MutableLiveData<String> sortTypeLiveData;
-    private AccessTokenAndSortTypeLiveData accessTokenAndSortTypeLiveData;
+    private nsfwAndSortTypeLiveData NSFWAndSortTypeLiveData;
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, int postType, String sortType,
-                         int filter) {
-        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, postType, sortType, filter);
+                         int filter, boolean nsfw) {
+        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, postType,
+                sortType, filter, nsfw);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 PostDataSource::getInitialLoadStateLiveData);
@@ -36,12 +37,12 @@ public class PostViewModel extends ViewModel {
         hasPostLiveData = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 PostDataSource::hasPostLiveData);
 
-        accessTokenLiveData = new MutableLiveData<>();
-        accessTokenLiveData.postValue(accessToken);
+        nsfwLiveData = new MutableLiveData<>();
+        nsfwLiveData.postValue(nsfw);
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
 
-        accessTokenAndSortTypeLiveData = new AccessTokenAndSortTypeLiveData(accessTokenLiveData, sortTypeLiveData);
+        NSFWAndSortTypeLiveData = new nsfwAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -49,16 +50,16 @@ public class PostViewModel extends ViewModel {
                         .setPageSize(25)
                         .build();
 
-        posts = Transformations.switchMap(accessTokenAndSortTypeLiveData, sort -> {
-            postDataSourceFactory.changeAccessTokenAndSortType(accessTokenLiveData.getValue(), sortTypeLiveData.getValue());
+        posts = Transformations.switchMap(NSFWAndSortTypeLiveData, sort -> {
+            postDataSourceFactory.changeNSFWAndSortType(nsfwLiveData.getValue(), sortTypeLiveData.getValue());
             return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
         });
     }
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
-                         String sortType, int filter) {
+                         String sortType, int filter, boolean nsfw) {
         postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, subredditName,
-                postType, sortType, filter);
+                postType, sortType, filter, nsfw);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 PostDataSource::getInitialLoadStateLiveData);
@@ -67,12 +68,12 @@ public class PostViewModel extends ViewModel {
         hasPostLiveData = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 PostDataSource::hasPostLiveData);
 
-        accessTokenLiveData = new MutableLiveData<>();
-        accessTokenLiveData.postValue(accessToken);
+        nsfwLiveData = new MutableLiveData<>();
+        nsfwLiveData.postValue(nsfw);
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
 
-        accessTokenAndSortTypeLiveData = new AccessTokenAndSortTypeLiveData(accessTokenLiveData, sortTypeLiveData);
+        NSFWAndSortTypeLiveData = new nsfwAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -80,16 +81,16 @@ public class PostViewModel extends ViewModel {
                         .setPageSize(25)
                         .build();
 
-        posts = Transformations.switchMap(accessTokenAndSortTypeLiveData, sort -> {
-            postDataSourceFactory.changeAccessTokenAndSortType(accessTokenLiveData.getValue(), sortTypeLiveData.getValue());
+        posts = Transformations.switchMap(NSFWAndSortTypeLiveData, sort -> {
+            postDataSourceFactory.changeNSFWAndSortType(nsfwLiveData.getValue(), sortTypeLiveData.getValue());
             return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
         });
     }
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
-                         String sortType, String where, int filter) {
+                         String sortType, String where, int filter, boolean nsfw) {
         postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, subredditName,
-                postType, sortType, where, filter);
+                postType, sortType, where, filter, nsfw);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 PostDataSource::getInitialLoadStateLiveData);
@@ -98,12 +99,12 @@ public class PostViewModel extends ViewModel {
         hasPostLiveData = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 PostDataSource::hasPostLiveData);
 
-        accessTokenLiveData = new MutableLiveData<>();
-        accessTokenLiveData.postValue(accessToken);
+        nsfwLiveData = new MutableLiveData<>();
+        nsfwLiveData.postValue(nsfw);
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
 
-        accessTokenAndSortTypeLiveData = new AccessTokenAndSortTypeLiveData(accessTokenLiveData, sortTypeLiveData);
+        NSFWAndSortTypeLiveData = new nsfwAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -111,16 +112,16 @@ public class PostViewModel extends ViewModel {
                         .setPageSize(25)
                         .build();
 
-        posts = Transformations.switchMap(accessTokenAndSortTypeLiveData, sort -> {
-            postDataSourceFactory.changeAccessTokenAndSortType(accessTokenLiveData.getValue(), sortTypeLiveData.getValue());
+        posts = Transformations.switchMap(NSFWAndSortTypeLiveData, sort -> {
+            postDataSourceFactory.changeNSFWAndSortType(nsfwLiveData.getValue(), sortTypeLiveData.getValue());
             return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
         });
     }
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, String subredditName, String query,
-                         int postType, String sortType, int filter) {
+                         int postType, String sortType, int filter, boolean nsfw) {
         postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, subredditName,
-                query, postType, sortType, filter);
+                query, postType, sortType, filter, nsfw);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 PostDataSource::getInitialLoadStateLiveData);
@@ -129,12 +130,12 @@ public class PostViewModel extends ViewModel {
         hasPostLiveData = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 PostDataSource::hasPostLiveData);
 
-        accessTokenLiveData = new MutableLiveData<>();
-        accessTokenLiveData.postValue(accessToken);
+        nsfwLiveData = new MutableLiveData<>();
+        nsfwLiveData.postValue(nsfw);
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
 
-        accessTokenAndSortTypeLiveData = new AccessTokenAndSortTypeLiveData(accessTokenLiveData, sortTypeLiveData);
+        NSFWAndSortTypeLiveData = new nsfwAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -143,7 +144,7 @@ public class PostViewModel extends ViewModel {
                         .build();
 
         posts = Transformations.switchMap(sortTypeLiveData, sort -> {
-            postDataSourceFactory.changeAccessTokenAndSortType(accessTokenLiveData.getValue(), sortTypeLiveData.getValue());
+            postDataSourceFactory.changeNSFWAndSortType(nsfwLiveData.getValue(), sortTypeLiveData.getValue());
             return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
         });
     }
@@ -180,8 +181,8 @@ public class PostViewModel extends ViewModel {
         sortTypeLiveData.postValue(sortType);
     }
 
-    void changeAccessToken(String accessToken) {
-        accessTokenLiveData.postValue(accessToken);
+    void changeNSFW(boolean nsfw) {
+        nsfwLiveData.postValue(nsfw);
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
@@ -194,19 +195,21 @@ public class PostViewModel extends ViewModel {
         private String sortType;
         private String userWhere;
         private int filter;
+        private boolean nsfw;
 
         public Factory(Retrofit retrofit, String accessToken, Locale locale, int postType, String sortType,
-                       int filter) {
+                       int filter, boolean nsfw) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.locale = locale;
             this.postType = postType;
             this.sortType = sortType;
             this.filter = filter;
+            this.nsfw = nsfw;
         }
 
         public Factory(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
-                       String sortType, int filter) {
+                       String sortType, int filter, boolean nsfw) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.locale = locale;
@@ -214,10 +217,11 @@ public class PostViewModel extends ViewModel {
             this.postType = postType;
             this.sortType = sortType;
             this.filter = filter;
+            this.nsfw = nsfw;
         }
 
         public Factory(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
-                       String sortType, String where, int filter) {
+                       String sortType, String where, int filter, boolean nsfw) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.locale = locale;
@@ -226,10 +230,11 @@ public class PostViewModel extends ViewModel {
             this.sortType = sortType;
             userWhere = where;
             this.filter = filter;
+            this.nsfw = nsfw;
         }
 
         public Factory(Retrofit retrofit, String accessToken, Locale locale, String subredditName, String query,
-                       int postType, String sortType, int filter) {
+                       int postType, String sortType, int filter, boolean nsfw) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.locale = locale;
@@ -238,27 +243,32 @@ public class PostViewModel extends ViewModel {
             this.postType = postType;
             this.sortType = sortType;
             this.filter = filter;
+            this.nsfw = nsfw;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             if(postType == PostDataSource.TYPE_FRONT_PAGE) {
-                return (T) new PostViewModel(retrofit, accessToken, locale, postType, sortType, filter);
+                return (T) new PostViewModel(retrofit, accessToken, locale, postType, sortType, filter,
+                        nsfw);
             } else if(postType == PostDataSource.TYPE_SEARCH){
-                return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, query, postType, sortType, filter);
+                return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, query,
+                        postType, sortType, filter, nsfw);
             } else if(postType == PostDataSource.TYPE_SUBREDDIT) {
-                return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, postType, sortType, filter);
+                return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, postType,
+                        sortType, filter, nsfw);
             } else {
-                return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, postType, sortType, userWhere, filter);
+                return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, postType,
+                        sortType, userWhere, filter, nsfw);
             }
         }
     }
 
-    private static class AccessTokenAndSortTypeLiveData extends MediatorLiveData<Pair<String, String>> {
-        public AccessTokenAndSortTypeLiveData(LiveData<String> accessToken, LiveData<String> sortType) {
-            addSource(accessToken, accessToken1 -> setValue(Pair.create(accessToken1, sortType.getValue())));
-            addSource(sortType, sortType1 -> setValue(Pair.create(accessToken.getValue(), sortType1)));
+    private static class nsfwAndSortTypeLiveData extends MediatorLiveData<Pair<Boolean, String>> {
+        public nsfwAndSortTypeLiveData(LiveData<Boolean> nsfw, LiveData<String> sortType) {
+            addSource(nsfw, accessToken1 -> setValue(Pair.create(accessToken1, sortType.getValue())));
+            addSource(sortType, sortType1 -> setValue(Pair.create(nsfw.getValue(), sortType1)));
         }
     }
 }

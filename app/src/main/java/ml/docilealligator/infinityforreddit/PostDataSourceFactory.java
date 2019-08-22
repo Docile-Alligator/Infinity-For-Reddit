@@ -17,12 +17,13 @@ class PostDataSourceFactory extends DataSource.Factory {
     private String sortType;
     private String userWhere;
     private int filter;
+    private boolean nsfw;
 
     private PostDataSource postDataSource;
     private MutableLiveData<PostDataSource> postDataSourceLiveData;
 
     PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, int postType, String sortType,
-                          int filter) {
+                          int filter, boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
@@ -30,10 +31,11 @@ class PostDataSourceFactory extends DataSource.Factory {
         this.postType = postType;
         this.sortType = sortType;
         this.filter = filter;
+        this.nsfw = nsfw;
     }
 
     PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, String subredditName,
-                          int postType, String sortType, int filter) {
+                          int postType, String sortType, int filter, boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
@@ -42,10 +44,11 @@ class PostDataSourceFactory extends DataSource.Factory {
         this.postType = postType;
         this.sortType = sortType;
         this.filter = filter;
+        this.nsfw = nsfw;
     }
 
     PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, String subredditName,
-                          int postType, String sortType, String where, int filter) {
+                          int postType, String sortType, String where, int filter, boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
@@ -55,10 +58,11 @@ class PostDataSourceFactory extends DataSource.Factory {
         this.sortType = sortType;
         userWhere = where;
         this.filter = filter;
+        this.nsfw = nsfw;
     }
 
     PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, String subredditName,
-                          String query, int postType, String sortType, int filter) {
+                          String query, int postType, String sortType, int filter, boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
@@ -68,22 +72,23 @@ class PostDataSourceFactory extends DataSource.Factory {
         this.postType = postType;
         this.sortType = sortType;
         this.filter = filter;
+        this.nsfw = nsfw;
     }
 
     @Override
     public DataSource create() {
         if(postType == PostDataSource.TYPE_FRONT_PAGE) {
             postDataSource = new PostDataSource(retrofit, accessToken, locale, postType, sortType,
-                    filter);
+                    filter, nsfw);
         } else if(postType == PostDataSource.TYPE_SEARCH) {
             postDataSource = new PostDataSource(retrofit, accessToken, locale, subredditName, query,
-                    postType, sortType, filter);
+                    postType, sortType, filter, nsfw);
         } else if(postType == PostDataSource.TYPE_SUBREDDIT) {
             postDataSource = new PostDataSource(retrofit, accessToken, locale, subredditName, postType,
-                    sortType, filter);
+                    sortType, filter, nsfw);
         } else {
             postDataSource = new PostDataSource(retrofit, accessToken, locale, subredditName, postType,
-                    sortType, userWhere, filter);
+                    sortType, userWhere, filter, nsfw);
         }
 
         postDataSourceLiveData.postValue(postDataSource);
@@ -102,8 +107,8 @@ class PostDataSourceFactory extends DataSource.Factory {
         this.sortType = sortType;
     }
 
-    void changeAccessTokenAndSortType(String accessToken, String sortType) {
-        this.accessToken = accessToken;
+    void changeNSFWAndSortType(boolean nsfw, String sortType) {
+        this.nsfw = nsfw;
         this.sortType = sortType;
     }
 }

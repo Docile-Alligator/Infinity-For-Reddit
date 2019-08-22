@@ -132,11 +132,9 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
 
         // Get the intent, verify the action and get the query
         Intent intent = getIntent();
-        String query = intent.getExtras().getString(EXTRA_QUERY);
+        String query = intent.getStringExtra(EXTRA_QUERY);
 
-        if(intent.hasExtra(EXTRA_SUBREDDIT_NAME)) {
-            mSubredditName = intent.getExtras().getString(EXTRA_SUBREDDIT_NAME);
-        }
+        mSubredditName = intent.getStringExtra(EXTRA_SUBREDDIT_NAME);
 
         if(query != null) {
             mQuery = query;
@@ -231,6 +229,11 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
     @Subscribe
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
         finish();
+    }
+
+    @Subscribe
+    public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
+        sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -348,6 +351,12 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
             getItem(0);
             getItem(1);
             getItem(2);
+        }
+
+        public void changeNSFW(boolean nsfw) {
+            if(postFragment != null) {
+                postFragment.changeNSFW(nsfw);
+            }
         }
     }
 }

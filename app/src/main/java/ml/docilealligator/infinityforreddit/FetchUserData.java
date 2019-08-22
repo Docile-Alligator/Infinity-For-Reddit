@@ -49,17 +49,18 @@ public class FetchUserData {
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.i("call failed", t.getMessage());
+                Log.i("call failed", "message " + t.getMessage());
                 fetchUserDataListener.onFetchUserDataFailed();
             }
         });
     }
 
     public static void fetchUserListingData(Retrofit retrofit, String query, String after, String sortType,
+                                            boolean nsfw,
                                             FetchUserListingDataListener fetchUserListingDataListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
-        Call<String> userInfo = api.searchUsers(query, after, sortType);
+        Call<String> userInfo = api.searchUsers(query, after, sortType, nsfw);
         userInfo.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
@@ -83,7 +84,7 @@ public class FetchUserData {
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.i("call failed", t.getMessage());
+                Log.i("call failed", "message " + t.getMessage());
                 fetchUserListingDataListener.onFetchUserListingDataFailed();
             }
         });

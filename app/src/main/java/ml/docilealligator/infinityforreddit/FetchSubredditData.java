@@ -51,16 +51,18 @@ class FetchSubredditData {
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.i("call failed", t.getMessage());
+                Log.i("call failed", "message " + t.getMessage());
                 fetchSubredditDataListener.onFetchSubredditDataFail();
             }
         });
     }
 
-    static void fetchSubredditListingData(Retrofit retrofit, String query, String after, String sortType, final FetchSubredditListingDataListener fetchSubredditListingDataListener) {
+    static void fetchSubredditListingData(Retrofit retrofit, String query, String after, String sortType,
+                                          boolean nsfw,
+                                          final FetchSubredditListingDataListener fetchSubredditListingDataListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
-        Call<String> subredditDataCall = api.searchSubreddits(query, after, sortType);
+        Call<String> subredditDataCall = api.searchSubreddits(query, after, sortType, nsfw);
         subredditDataCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -85,7 +87,7 @@ class FetchSubredditData {
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.i("call failed", t.getMessage());
+                Log.i("call failed", "message " + t.getMessage());
                 fetchSubredditListingDataListener.onFetchSubredditListingDataFail();
             }
         });

@@ -20,8 +20,8 @@ public class UserListingViewModel extends ViewModel {
     private LiveData<PagedList<UserData>> users;
     private MutableLiveData<String> sortTypeLiveData;
 
-    UserListingViewModel(Retrofit retrofit, String query, String sortType) {
-        userListingDataSourceFactory = new UserListingDataSourceFactory(retrofit, query, sortType);
+    UserListingViewModel(Retrofit retrofit, String query, String sortType, boolean nsfw) {
+        userListingDataSourceFactory = new UserListingDataSourceFactory(retrofit, query, sortType, nsfw);
 
         initialLoadingState = Transformations.switchMap(userListingDataSourceFactory.getUserListingDataSourceMutableLiveData(),
                 UserListingDataSource::getInitialLoadStateLiveData);
@@ -81,17 +81,19 @@ public class UserListingViewModel extends ViewModel {
         private Retrofit retrofit;
         private String query;
         private String sortType;
+        private boolean nsfw;
 
-        public Factory(Retrofit retrofit, String query, String sortType) {
+        public Factory(Retrofit retrofit, String query, String sortType, boolean nsfw) {
             this.retrofit = retrofit;
             this.query = query;
             this.sortType = sortType;
+            this.nsfw = nsfw;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new UserListingViewModel(retrofit, query, sortType);
+            return (T) new UserListingViewModel(retrofit, query, sortType, nsfw);
         }
     }
 }

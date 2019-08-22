@@ -9,12 +9,13 @@
         app:title="@string/settings_notification_enable_notification_title"/>
 
     <ListPreference
-        app:defaultValue="2"
+        app:defaultValue="1"
         app:entries="@array/settings_notification_interval"
         app:entryValues="@array/settings_notification_interval_values"
         app:key="notificaiton_interval"
         app:icon="@drawable/ic_outline_access_time_24px"
         app:title="@string/settings_notification_interval_title"
-        app:useSimpleSummaryProvider="true" />
+        app:useSimpleSummaryProvider="true"
+        app:isPreferenceVisible="false" />
 
 </androidx.preference.PreferenceScreen>

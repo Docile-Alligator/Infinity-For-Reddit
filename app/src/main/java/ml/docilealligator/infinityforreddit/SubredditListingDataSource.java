@@ -14,6 +14,7 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
     private Retrofit retrofit;
     private String query;
     private String sortType;
+    private boolean nsfw;
 
     private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
     private MutableLiveData<NetworkState> initialLoadStateLiveData;
@@ -24,10 +25,11 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
     private LoadParams<String> params;
     private LoadCallback<String, SubredditData> callback;
 
-    SubredditListingDataSource(Retrofit retrofit, String query, String sortType) {
+    SubredditListingDataSource(Retrofit retrofit, String query, String sortType, boolean nsfw) {
         this.retrofit = retrofit;
         this.query = query;
         this.sortType = sortType;
+        this.nsfw = nsfw;
         paginationNetworkStateLiveData = new MutableLiveData<>();
         initialLoadStateLiveData = new MutableLiveData<>();
         hasSubredditLiveData = new MutableLiveData<>();
@@ -52,7 +54,8 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
 
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
-        FetchSubredditData.fetchSubredditListingData(retrofit, query, null, sortType, new FetchSubredditData.FetchSubredditListingDataListener() {
+        FetchSubredditData.fetchSubredditListingData(retrofit, query, null, sortType, nsfw,
+                new FetchSubredditData.FetchSubredditListingDataListener() {
             @Override
             public void onFetchSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
                 if(subredditData.size() == 0) {
@@ -86,7 +89,8 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
             return;
         }
 
-        FetchSubredditData.fetchSubredditListingData(retrofit, query, params.key, sortType, new FetchSubredditData.FetchSubredditListingDataListener() {
+        FetchSubredditData.fetchSubredditListingData(retrofit, query, params.key, sortType, nsfw,
+                new FetchSubredditData.FetchSubredditListingDataListener() {
             @Override
             public void onFetchSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
                 callback.onResult(subredditData, after);

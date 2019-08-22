@@ -572,6 +572,11 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
         }
     }
 
+    @Subscribe
+    public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
+        sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
+    }
+
     private static class InsertUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
 
         interface InsertUserDataAsyncTaskListener {
@@ -708,6 +713,12 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
                 if(commentsListingFragment != null) {
                     commentsListingFragment.changeSortType(sortType);
                 }
+            }
+        }
+
+        public void changeNSFW(boolean nsfw) {
+            if(postFragment != null) {
+                postFragment.changeNSFW(nsfw);
             }
         }
     }

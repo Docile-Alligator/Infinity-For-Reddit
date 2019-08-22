@@ -255,4 +255,9 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
         finish();
     }
+
+    @Subscribe
+    public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
+        ((FragmentCommunicator) mFragment).changeNSFW(changeNSFWEvent.nsfw);
+    }
 }

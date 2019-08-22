@@ -4,6 +4,7 @@ package ml.docilealligator.infinityforreddit;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
@@ -49,7 +50,7 @@ import retrofit2.Retrofit;
 public class PostFragment extends Fragment implements FragmentCommunicator {
 
     static final String EXTRA_NAME = "EN";
-    static final String EXTRA_USER_NAME = "EN";
+    static final String EXTRA_USER_NAME = "EUN";
     static final String EXTRA_USER_WHERE = "EUW";
     static final String EXTRA_QUERY = "EQ";
     static final String EXTRA_POST_TYPE = "EPT";
@@ -57,6 +58,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     static final String EXTRA_FILTER = "EF";
     static final int EXTRA_NO_FILTER = -1;
     static final String EXTRA_ACCESS_TOKEN = "EAT";
+    static final String EXTRA_NSFW = "ENSFW";
 
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
@@ -91,7 +93,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     Retrofit mOauthRetrofit;
 
     @Inject
-    RedditDataRoomDatabase redditDataRoomDatabase;
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
+
+    @Inject
+    SharedPreferences mSharedPreferences;
 
     public PostFragment() {
         // Required empty public constructor
@@ -188,6 +193,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         String sortType = getArguments().getString(EXTRA_SORT_TYPE);
         int filter = getArguments().getInt(EXTRA_FILTER);
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
+        boolean nsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_KEY, true);
 
         PostViewModel.Factory factory;
 
@@ -195,7 +201,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             String subredditName = getArguments().getString(EXTRA_NAME);
             String query = getArguments().getString(EXTRA_QUERY);
 
-            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, redditDataRoomDatabase,
+            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, true, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
@@ -216,16 +222,18 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             if(accessToken == null) {
                 factory = new PostViewModel.Factory(mRetrofit, accessToken,
-                        getResources().getConfiguration().locale, subredditName, query, postType, sortType, filter);
+                        getResources().getConfiguration().locale, subredditName, query, postType,
+                        sortType, filter, nsfw);
             } else {
                 factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                        getResources().getConfiguration().locale, subredditName, query, postType, sortType, filter);
+                        getResources().getConfiguration().locale, subredditName, query, postType,
+                        sortType, filter, nsfw);
             }
         } else if(postType == PostDataSource.TYPE_SUBREDDIT) {
             String subredditName = getArguments().getString(EXTRA_NAME);
 
             boolean displaySubredditName = subredditName.equals("popular") || subredditName.equals("all");
-            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, redditDataRoomDatabase,
+            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, displaySubredditName, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
@@ -245,10 +253,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             if(accessToken == null) {
                 factory = new PostViewModel.Factory(mRetrofit, accessToken,
-                        getResources().getConfiguration().locale, subredditName, postType, sortType, filter);
+                        getResources().getConfiguration().locale, subredditName, postType, sortType,
+                        filter, nsfw);
             } else {
                 factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                        getResources().getConfiguration().locale, subredditName, postType, sortType, filter);
+                        getResources().getConfiguration().locale, subredditName, postType, sortType,
+                        filter, nsfw);
             }
         } else if(postType == PostDataSource.TYPE_USER) {
             CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mFetchPostInfoLinearLayout.getLayoutParams();
@@ -258,7 +268,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             String username = getArguments().getString(EXTRA_USER_NAME);
             String where = getArguments().getString(EXTRA_USER_WHERE);
 
-            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, redditDataRoomDatabase,
+            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, true, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
@@ -279,13 +289,15 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             if(accessToken == null) {
                 factory = new PostViewModel.Factory(mRetrofit, accessToken,
-                        getResources().getConfiguration().locale, username, postType, sortType, where, filter);
+                        getResources().getConfiguration().locale, username, postType, sortType, where,
+                        filter, nsfw);
             } else {
                 factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                        getResources().getConfiguration().locale, username, postType, sortType, where, filter);
+                        getResources().getConfiguration().locale, username, postType, sortType, where,
+                        filter, nsfw);
             }
         } else {
-            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, redditDataRoomDatabase,
+            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, true, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
@@ -304,7 +316,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             });
 
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, postType, sortType, filter);
+                    getResources().getConfiguration().locale, postType, sortType, filter, nsfw);
         }
 
         mPostRecyclerView.setAdapter(mAdapter);
@@ -367,6 +379,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mFetchPostInfoTextView.setText(stringResId);
             mGlide.load(R.drawable.load_post_error_indicator).into(mFetchPostInfoImageView);
         }
+    }
+
+    @Override
+    public void changeNSFW(boolean nsfw) {
+        mPostViewModel.changeNSFW(nsfw);
     }
 
     @Override

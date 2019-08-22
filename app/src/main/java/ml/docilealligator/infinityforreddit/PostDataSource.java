@@ -44,6 +44,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
     private String query;
     private int postType;
     private String sortType;
+    private boolean nsfw;
     private int filter;
     private String userWhere;
 
@@ -57,7 +58,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
     private LoadCallback<String, Post> callback;
 
     PostDataSource(Retrofit retrofit, String accessToken, Locale locale, int postType, String sortType,
-                   int filter) {
+                   int filter, boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
@@ -67,10 +68,11 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         this.postType = postType;
         this.sortType = sortType;
         this.filter = filter;
+        this.nsfw = nsfw;
     }
 
     PostDataSource(Retrofit retrofit, String accessToken, Locale locale, String subredditOrUserName, int postType,
-                   String sortType, int filter) {
+                   String sortType, int filter, boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
@@ -81,10 +83,11 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         this.postType = postType;
         this.sortType = sortType;
         this.filter = filter;
+        this.nsfw = nsfw;
     }
 
     PostDataSource(Retrofit retrofit, String accessToken, Locale locale, String subredditOrUserName, int postType,
-                   String sortType, String where, int filter) {
+                   String sortType, String where, int filter, boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
@@ -96,10 +99,11 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         this.sortType = sortType;
         userWhere = where;
         this.filter = filter;
+        this.nsfw = nsfw;
     }
 
     PostDataSource(Retrofit retrofit, String accessToken, Locale locale, String subredditOrUserName, String query,
-                   int postType, String sortType, int filter) {
+                   int postType, String sortType, int filter, boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
@@ -111,6 +115,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         this.postType = postType;
         this.sortType = sortType;
         this.filter = filter;
+        this.nsfw = nsfw;
     }
 
     MutableLiveData<NetworkState> getPaginationNetworkStateLiveData() {
@@ -206,7 +211,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                             }
                         });
                     } else {
-                        ParsePost.parsePosts(response.body(), locale, -1, filter,
+                        ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
                                 new ParsePost.ParsePostsListingListener() {
                                     @Override
                                     public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
@@ -261,7 +266,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale, -1, filter, new ParsePost.ParsePostsListingListener() {
+                    ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
+                            new ParsePost.ParsePostsListingListener() {
                         @Override
                         public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                             if(newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
@@ -323,7 +329,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                             }
                         });
                     } else {
-                        ParsePost.parsePosts(response.body(), locale, -1, filter,
+                        ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
                                 new ParsePost.ParsePostsListingListener() {
                                     @Override
                                     public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
@@ -384,7 +390,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale, -1, filter, new ParsePost.ParsePostsListingListener() {
+                    ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
+                            new ParsePost.ParsePostsListingListener() {
                         @Override
                         public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                             if(newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
@@ -429,7 +436,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale, -1, filter,
+                    ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
@@ -489,7 +496,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale, -1, filter, new ParsePost.ParsePostsListingListener() {
+                    ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
+                            new ParsePost.ParsePostsListingListener() {
                         @Override
                         public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                             if(newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
@@ -526,16 +534,16 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
         if(subredditOrUserName == null) {
             if(accessToken == null) {
-                getPost = api.searchPosts(query, lastItem, sortType);
+                getPost = api.searchPosts(query, lastItem, sortType, nsfw);
             } else {
-                getPost = api.searchPostsOauth(query, lastItem, sortType, RedditUtils.getOAuthHeader(accessToken));
+                getPost = api.searchPostsOauth(query, lastItem, sortType, nsfw, RedditUtils.getOAuthHeader(accessToken));
             }
         } else {
             if(accessToken == null) {
-                getPost = api.searchPostsInSpecificSubreddit(subredditOrUserName, query, lastItem);
+                getPost = api.searchPostsInSpecificSubreddit(subredditOrUserName, query, lastItem, nsfw);
             } else {
                 getPost = api.searchPostsInSpecificSubredditOauth(subredditOrUserName, query, lastItem,
-                        RedditUtils.getOAuthHeader(accessToken));
+                        nsfw, RedditUtils.getOAuthHeader(accessToken));
             }
         }
 
@@ -543,7 +551,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale, -1, filter,
+                    ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
@@ -595,15 +603,16 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
         if(subredditOrUserName == null) {
             if(accessToken == null) {
-                getPost = api.searchPosts(query, after, sortType);
+                getPost = api.searchPosts(query, after, sortType, nsfw);
             } else {
-                getPost = api.searchPostsOauth(query, after, sortType, RedditUtils.getOAuthHeader(accessToken));
+                getPost = api.searchPostsOauth(query, after, sortType, nsfw, RedditUtils.getOAuthHeader(accessToken));
             }
         } else {
             if(accessToken == null) {
-                getPost = api.searchPostsInSpecificSubreddit(subredditOrUserName, query, after);
+                getPost = api.searchPostsInSpecificSubreddit(subredditOrUserName, query, after, nsfw);
             } else {
-                getPost = api.searchPostsInSpecificSubredditOauth(subredditOrUserName, query, after, RedditUtils.getOAuthHeader(accessToken));
+                getPost = api.searchPostsInSpecificSubredditOauth(subredditOrUserName, query, after,
+                        nsfw, RedditUtils.getOAuthHeader(accessToken));
             }
         }
 
@@ -611,7 +620,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale, -1, filter, new ParsePost.ParsePostsListingListener() {
+                    ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
+                            new ParsePost.ParsePostsListingListener() {
                         @Override
                         public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                             if(newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {

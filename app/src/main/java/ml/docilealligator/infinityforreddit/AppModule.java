@@ -1,6 +1,9 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.app.Application;
+import android.content.SharedPreferences;
+
+import androidx.preference.PreferenceManager;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -77,5 +80,11 @@ class AppModule {
     @Singleton
     RedditDataRoomDatabase provideRedditDataRoomDatabase() {
         return RedditDataRoomDatabase.getDatabase(mApplication);
+    }
+
+    @Provides
+    @Singleton
+    SharedPreferences provideSharedPreferences() {
+        return PreferenceManager.getDefaultSharedPreferences(mApplication);
     }
 }

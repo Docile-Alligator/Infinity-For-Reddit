@@ -28,12 +28,13 @@ class ParsePost {
         void onParsePostFail();
     }
 
-    static void parsePosts(String response, Locale locale, int nPosts, int filter, ParsePostsListingListener parsePostsListingListener) {
-        new ParsePostDataAsyncTask(response, locale, nPosts, filter, parsePostsListingListener).execute();
+    static void parsePosts(String response, Locale locale, int nPosts, int filter, boolean nsfw,
+                           ParsePostsListingListener parsePostsListingListener) {
+        new ParsePostDataAsyncTask(response, locale, nPosts, filter, nsfw, parsePostsListingListener).execute();
     }
 
     static void parsePost(String response, Locale locale, ParsePostListener parsePostListener) {
-        new ParsePostDataAsyncTask(response, locale, parsePostListener).execute();
+        new ParsePostDataAsyncTask(response, locale, true, parsePostListener).execute();
     }
 
     private static class ParsePostDataAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -41,6 +42,7 @@ class ParsePost {
         private Locale locale;
         private int nPosts;
         private int filter;
+        private boolean nsfw;
         private ParsePostsListingListener parsePostsListingListener;
         private ParsePostListener parsePostListener;
         private ArrayList<Post> newPosts;
@@ -48,7 +50,7 @@ class ParsePost {
         private String lastItem;
         private boolean parseFailed;
 
-        ParsePostDataAsyncTask(String response, Locale locale, int nPosts, int filter,
+        ParsePostDataAsyncTask(String response, Locale locale, int nPosts, int filter, boolean nsfw,
                                ParsePostsListingListener parsePostsListingListener) {
             this.parsePostsListingListener = parsePostsListingListener;
             try {
@@ -58,6 +60,7 @@ class ParsePost {
                 this.locale = locale;
                 this.nPosts = nPosts;
                 this.filter = filter;
+                this.nsfw = nsfw;
                 newPosts = new ArrayList<>();
                 parseFailed = false;
             } catch (JSONException e) {
@@ -66,12 +69,13 @@ class ParsePost {
             }
         }
 
-        ParsePostDataAsyncTask(String response, Locale locale,
+        ParsePostDataAsyncTask(String response, Locale locale, boolean nsfw,
                                ParsePostListener parsePostListener) {
             this.parsePostListener = parsePostListener;
             try {
                 allData = new JSONArray(response).getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
                 this.locale = locale;
+                this.nsfw = nsfw;
                 parseFailed = false;
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -112,12 +116,14 @@ class ParsePost {
                     try {
                         JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
                         Post post = parseBasicData(data, locale, i);
-                        if (filter == PostFragment.EXTRA_NO_FILTER) {
-                            newPosts.add(post);
-                        } else if (filter == post.getPostType()) {
-                            newPosts.add(post);
-                        } else if (filter == Post.LINK_TYPE && post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
-                            newPosts.add(post);
+                        if(!(!nsfw && post.isNSFW())) {
+                            if (filter == PostFragment.EXTRA_NO_FILTER) {
+                                newPosts.add(post);
+                            } else if (filter == post.getPostType()) {
+                                newPosts.add(post);
+                            } else if (filter == Post.LINK_TYPE && post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
+                                newPosts.add(post);
+                            }
                         }
                     } catch (JSONException e) {
                         Log.e("parsing post error", "message: " + e.getMessage());

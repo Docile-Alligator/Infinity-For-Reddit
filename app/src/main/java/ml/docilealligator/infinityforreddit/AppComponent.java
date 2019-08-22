@@ -2,11 +2,12 @@ package ml.docilealligator.infinityforreddit;
 
 import javax.inject.Singleton;
 
+import Settings.NotificationPreferenceFragment;
 import dagger.Component;
 
 @Singleton
 @Component(modules = AppModule.class)
-interface AppComponent {
+public interface AppComponent {
     void inject(MainActivity mainActivity);
     void inject(LoginActivity loginActivity);
     void inject(PostFragment postFragment);
@@ -36,4 +37,5 @@ interface AppComponent {
     void inject(AccountPostsActivity accountPostsActivity);
     void inject(PullNotificationWorker pullNotificationWorker);
     void inject(ViewMessageActivity viewMessageActivity);
+    void inject(NotificationPreferenceFragment notificationPreferenceFragment);
 }
