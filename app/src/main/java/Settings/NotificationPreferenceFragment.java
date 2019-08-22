@@ -76,12 +76,13 @@ public class NotificationPreferenceFragment extends PreferenceFragmentCompat {
                                 new PeriodicWorkRequest.Builder(PullNotificationWorker.class,
                                         notificationInterval, TimeUnit.HOURS)
                                         .setConstraints(constraints)
+                                        .setInitialDelay(notificationInterval, TimeUnit.HOURS)
                                         .build();
 
                         workManager.enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
-                                ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
+                                ExistingPeriodicWorkPolicy.REPLACE, pullNotificationRequest);
                     } else {
-                        workManager.cancelAllWorkByTag(PullNotificationWorker.WORKER_TAG);
+                        workManager.cancelUniqueWork(PullNotificationWorker.WORKER_TAG);
                     }
                     return true;
                 });
@@ -100,12 +101,13 @@ public class NotificationPreferenceFragment extends PreferenceFragmentCompat {
                                 new PeriodicWorkRequest.Builder(PullNotificationWorker.class,
                                         notificationInterval, TimeUnit.HOURS)
                                         .setConstraints(constraints)
+                                        .setInitialDelay(notificationInterval, TimeUnit.HOURS)
                                         .build();
 
                         workManager.enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
-                                ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
+                                ExistingPeriodicWorkPolicy.REPLACE, pullNotificationRequest);
                     } else {
-                        workManager.cancelAllWorkByTag(PullNotificationWorker.WORKER_TAG);
+                        workManager.cancelUniqueWork(PullNotificationWorker.WORKER_TAG);
                     }
 
                     return true;

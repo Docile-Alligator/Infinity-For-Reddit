@@ -319,7 +319,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                             workManager.enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
                                     ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
                         } else {
-                            workManager.cancelAllWorkByTag(PullNotificationWorker.WORKER_TAG);
+                            workManager.cancelUniqueWork(PullNotificationWorker.WORKER_TAG);
                         }
 
                         bindView();
@@ -345,7 +345,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                         workManager.enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
                                 ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
                     } else {
-                        workManager.cancelAllWorkByTag(PullNotificationWorker.WORKER_TAG);
+                        workManager.cancelUniqueWork(PullNotificationWorker.WORKER_TAG);
                     }
 
                     bindView();
@@ -375,7 +375,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                     workManager.enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
                             ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
                 } else {
-                    workManager.cancelAllWorkByTag(PullNotificationWorker.WORKER_TAG);
+                    workManager.cancelUniqueWork(PullNotificationWorker.WORKER_TAG);
                 }
 
                 bindView();
