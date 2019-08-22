@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -296,36 +297,53 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         }
 
         if(mPost == null) {
-            mPost = getIntent().getExtras().getParcelable(EXTRA_POST_DATA);
+            mPost = getIntent().getParcelableExtra(EXTRA_POST_DATA);
         }
 
+        Log.i("asdfasdfadfadf", "" + mPost.isSaved());
         if(mPost == null) {
-            fetchPostAndCommentsById(getIntent().getExtras().getString(EXTRA_POST_ID));
+            fetchPostAndCommentsById(getIntent().getStringExtra(EXTRA_POST_ID));
         } else {
-            if(mMenu != null && mPost.getAuthor().equals(mAccountName)) {
-                if(mPost.getPostType() == Post.TEXT_TYPE) {
-                    mMenu.findItem(R.id.action_edit_view_post_detail_activity).setVisible(true);
-                }
-                mMenu.findItem(R.id.action_delete_view_post_detail_activity).setVisible(true);
-
-                MenuItem nsfwItem = mMenu.findItem(R.id.action_nsfw_view_post_detail_activity);
-                nsfwItem.setVisible(true);
-                if(mPost.isNSFW()) {
-                    nsfwItem.setTitle(R.string.action_unmark_nsfw);
+            if(mMenu != null) {
+                MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
+                if(mAccessToken != null) {
+                    if(mPost.isSaved()) {
+                        saveItem.setVisible(true);
+                        saveItem.setIcon(R.drawable.ic_baseline_bookmark_24px);
+                    } else {
+                        saveItem.setVisible(true);
+                        saveItem.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
+                    }
                 } else {
-                    nsfwItem.setTitle(R.string.action_mark_nsfw);
+                    saveItem.setVisible(false);
                 }
 
-                MenuItem spoilerItem = mMenu.findItem(R.id.action_spoiler_view_post_detail_activity);
-                spoilerItem.setVisible(true);
-                if(mPost.isSpoiler()) {
-                    spoilerItem.setTitle(R.string.action_unmark_spoiler);
-                } else {
-                    spoilerItem.setTitle(R.string.action_mark_spoiler);
-                }
+                if(mPost.getAuthor().equals(mAccountName)) {
+                    if(mPost.getPostType() == Post.TEXT_TYPE) {
+                        mMenu.findItem(R.id.action_edit_view_post_detail_activity).setVisible(true);
+                    }
+                    mMenu.findItem(R.id.action_delete_view_post_detail_activity).setVisible(true);
 
-                mMenu.findItem(R.id.action_edit_flair_view_post_detail_activity).setVisible(true);
+                    MenuItem nsfwItem = mMenu.findItem(R.id.action_nsfw_view_post_detail_activity);
+                    nsfwItem.setVisible(true);
+                    if(mPost.isNSFW()) {
+                        nsfwItem.setTitle(R.string.action_unmark_nsfw);
+                    } else {
+                        nsfwItem.setTitle(R.string.action_mark_nsfw);
+                    }
+
+                    MenuItem spoilerItem = mMenu.findItem(R.id.action_spoiler_view_post_detail_activity);
+                    spoilerItem.setVisible(true);
+                    if(mPost.isSpoiler()) {
+                        spoilerItem.setTitle(R.string.action_unmark_spoiler);
+                    } else {
+                        spoilerItem.setTitle(R.string.action_mark_spoiler);
+                    }
+
+                    mMenu.findItem(R.id.action_edit_flair_view_post_detail_activity).setVisible(true);
+                }
             }
+
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
                     mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mAccountName, mPost,
                     mLocale, mSingleCommentId, isSingleCommentThreadMode,
@@ -394,6 +412,21 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                         @Override
                         public void onParsePostSuccess(Post post) {
                             mPost = post;
+
+                            if(mMenu != null) {
+                                MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
+                                if(mAccessToken != null) {
+                                    if(post.isSaved()) {
+                                        saveItem.setVisible(true);
+                                        saveItem.setIcon(R.drawable.ic_baseline_bookmark_24px);
+                                    } else {
+                                        saveItem.setVisible(true);
+                                        saveItem.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
+                                    }
+                                } else {
+                                    saveItem.setVisible(false);
+                                }
+                            }
 
                             if(mMenu != null && mPost.getAuthor().equals(mAccountName)) {
                                 if(mPost.getPostType() == Post.TEXT_TYPE) {
@@ -582,6 +615,20 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                                 mAdapter.updatePost(mPost);
                                 EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                 isRefreshing = false;
+                                if(mMenu != null) {
+                                    MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
+                                    if(mAccessToken != null) {
+                                        if(post.isSaved()) {
+                                            saveItem.setVisible(true);
+                                            saveItem.setIcon(R.drawable.ic_baseline_bookmark_24px);
+                                        } else {
+                                            saveItem.setVisible(true);
+                                            saveItem.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
+                                        }
+                                    } else {
+                                        saveItem.setVisible(false);
+                                    }
+                                }
                             }
 
                             @Override
@@ -744,29 +791,44 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_post_detail_activity, menu);
         mMenu = menu;
-        if(mPost != null && mPost.getAuthor().equals(mAccountName)) {
-            if(mPost.getPostType() == Post.TEXT_TYPE) {
-                menu.findItem(R.id.action_edit_view_post_detail_activity).setVisible(true);
-            }
-            menu.findItem(R.id.action_delete_view_post_detail_activity).setVisible(true);
-
-            MenuItem nsfwItem = menu.findItem(R.id.action_nsfw_view_post_detail_activity);
-            nsfwItem.setVisible(true);
-            if(mPost.isNSFW()) {
-                nsfwItem.setTitle(R.string.action_unmark_nsfw);
+        if(mPost != null) {
+            MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
+            if(mAccessToken != null) {
+                if(mPost.isSaved()) {
+                    saveItem.setVisible(true);
+                    saveItem.setIcon(R.drawable.ic_baseline_bookmark_24px);
+                } else {
+                    saveItem.setVisible(true);
+                    saveItem.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
+                }
             } else {
-                nsfwItem.setTitle(R.string.action_mark_nsfw);
+                saveItem.setVisible(false);
             }
 
-            MenuItem spoilerItem = menu.findItem(R.id.action_spoiler_view_post_detail_activity);
-            spoilerItem.setVisible(true);
-            if(mPost.isSpoiler()) {
-                spoilerItem.setTitle(R.string.action_unmark_spoiler);
-            } else {
-                spoilerItem.setTitle(R.string.action_mark_spoiler);
-            }
+            if(mPost.getAuthor().equals(mAccountName)) {
+                if(mPost.getPostType() == Post.TEXT_TYPE) {
+                    menu.findItem(R.id.action_edit_view_post_detail_activity).setVisible(true);
+                }
+                menu.findItem(R.id.action_delete_view_post_detail_activity).setVisible(true);
 
-            menu.findItem(R.id.action_edit_flair_view_post_detail_activity).setVisible(true);
+                MenuItem nsfwItem = menu.findItem(R.id.action_nsfw_view_post_detail_activity);
+                nsfwItem.setVisible(true);
+                if(mPost.isNSFW()) {
+                    nsfwItem.setTitle(R.string.action_unmark_nsfw);
+                } else {
+                    nsfwItem.setTitle(R.string.action_mark_nsfw);
+                }
+
+                MenuItem spoilerItem = menu.findItem(R.id.action_spoiler_view_post_detail_activity);
+                spoilerItem.setVisible(true);
+                if(mPost.isSpoiler()) {
+                    spoilerItem.setTitle(R.string.action_unmark_spoiler);
+                } else {
+                    spoilerItem.setTitle(R.string.action_mark_spoiler);
+                }
+
+                menu.findItem(R.id.action_edit_flair_view_post_detail_activity).setVisible(true);
+            }
         }
         return true;
     }
@@ -800,6 +862,51 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                 intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, false);
                 startActivityForResult(intent, WRITE_COMMENT_REQUEST_CODE);
                 return true;
+            case R.id.action_save_view_post_detail_activity:
+                if(mPost != null && mAccessToken != null) {
+                    if(mPost.isSaved()) {
+                        item.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
+                        SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
+                                new SaveThing.SaveThingListener() {
+                                    @Override
+                                    public void success() {
+                                        mPost.setSaved(false);
+                                        item.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
+                                        showMessage(R.string.post_unsaved_success);
+                                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                                    }
+
+                                    @Override
+                                    public void failed() {
+                                        mPost.setSaved(true);
+                                        item.setIcon(R.drawable.ic_baseline_bookmark_24px);
+                                        showMessage(R.string.post_unsaved_failed);
+                                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                                    }
+                                });
+                    } else {
+                        item.setIcon(R.drawable.ic_baseline_bookmark_24px);
+                        SaveThing.saveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
+                                new SaveThing.SaveThingListener() {
+                                    @Override
+                                    public void success() {
+                                        mPost.setSaved(true);
+                                        item.setIcon(R.drawable.ic_baseline_bookmark_24px);
+                                        showMessage(R.string.post_saved_success);
+                                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                                    }
+
+                                    @Override
+                                    public void failed() {
+                                        mPost.setSaved(false);
+                                        item.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
+                                        showMessage(R.string.post_saved_failed);
+                                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                                    }
+                                });
+                    }
+                }
+                break;
             case R.id.action_edit_view_post_detail_activity:
                 Intent editPostItent = new Intent(this, EditPostActivity.class);
                 editPostItent.putExtra(EditPostActivity.EXTRA_ACCESS_TOKEN, mAccessToken);

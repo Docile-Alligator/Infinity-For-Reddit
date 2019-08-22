@@ -168,4 +168,12 @@ public interface RedditAPI {
     @FormUrlEncoded
     @POST("/api/read_message")
     Call<String> readMessage(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> ids);
+
+    @FormUrlEncoded
+    @POST("/api/save")
+    Call<String> save(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("/api/unsave")
+    Call<String> unsave(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }

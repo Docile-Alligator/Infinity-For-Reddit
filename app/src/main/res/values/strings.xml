@@ -206,6 +206,10 @@
     <string name="press_here_to_login">Press here to login</string>
     <string name="login_first">Login first</string>
 
+    <string name="post_saved_success">Post saved</string>
+    <string name="post_saved_failed">Unable to save post</string>
+    <string name="post_unsaved_success">Post unsaved</string>
+    <string name="post_unsaved_failed">Unable to unsave post</string>
     <string name="delete_this_post">Delete This Post</string>
     <string name="delete_this_comment">Delete This Comment</string>
     <string name="are_you_sure">Are you sure?</string>

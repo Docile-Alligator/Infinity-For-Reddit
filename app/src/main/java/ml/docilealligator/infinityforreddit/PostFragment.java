@@ -445,6 +445,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             post.setNSFW(event.post.isNSFW());
             post.setSpoiler(event.post.isSpoiler());
             post.setFlair(event.post.getFlair());
+            post.setSaved(event.post.isSaved());
             mAdapter.notifyItemChanged(event.positionInList);
         }
     }
