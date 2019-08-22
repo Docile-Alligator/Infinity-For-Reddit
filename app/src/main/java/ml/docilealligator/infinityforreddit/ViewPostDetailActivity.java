@@ -6,7 +6,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -300,7 +299,6 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
             mPost = getIntent().getParcelableExtra(EXTRA_POST_DATA);
         }
 
-        Log.i("asdfasdfadfadf", "" + mPost.isSaved());
         if(mPost == null) {
             fetchPostAndCommentsById(getIntent().getStringExtra(EXTRA_POST_ID));
         } else {

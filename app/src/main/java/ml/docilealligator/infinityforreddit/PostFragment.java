@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
@@ -437,16 +438,19 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Subscribe
     public void onPostUpdateEvent(PostUpdateEventToPostList event) {
-        Post post = mAdapter.getCurrentList().get(event.positionInList);
-        if(post != null) {
-            post.setTitle(event.post.getTitle());
-            post.setVoteType(event.post.getVoteType());
-            post.setScore(event.post.getScore());
-            post.setNSFW(event.post.isNSFW());
-            post.setSpoiler(event.post.isSpoiler());
-            post.setFlair(event.post.getFlair());
-            post.setSaved(event.post.isSaved());
-            mAdapter.notifyItemChanged(event.positionInList);
+        PagedList<Post> posts = mAdapter.getCurrentList();
+        if (posts != null && event.positionInList >= 0 && event.positionInList < posts.size()) {
+            Post post = posts.get(event.positionInList);
+            if (post != null && post.getFullName().equals(event.post.getFullName())) {
+                post.setTitle(event.post.getTitle());
+                post.setVoteType(event.post.getVoteType());
+                post.setScore(event.post.getScore());
+                post.setNSFW(event.post.isNSFW());
+                post.setSpoiler(event.post.isSpoiler());
+                post.setFlair(event.post.getFlair());
+                post.setSaved(event.post.isSaved());
+                mAdapter.notifyItemChanged(event.positionInList);
+            }
         }
     }
 
