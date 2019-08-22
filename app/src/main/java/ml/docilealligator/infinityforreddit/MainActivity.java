@@ -451,11 +451,6 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                             finish();
                         }).execute();
             }
-
-            @Override
-            public void manageAccountSelected() {
-
-            }
         });
 
         accountRecyclerView.setLayoutManager(new LinearLayoutManager(this));
