@@ -21,4 +21,9 @@
         app:key="nsfw"
         app:title="@string/settings_enable_nsfw_title"/>
 
+    <Preference
+        app:key="acknowledgement_master"
+        app:title="@string/settings_acknowledgement_master_title"
+        app:fragment="Settings.AcknowledgementFragment" />
+
 </androidx.preference.PreferenceScreen>

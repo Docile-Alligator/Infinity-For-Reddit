@@ -465,24 +465,26 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == SUBREDDIT_SELECTION_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
-                subredditName = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME);
-                iconUrl = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_ICON_URL);
-                subredditSelected = true;
-                subredditIsUser = data.getExtras().getBoolean(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_IS_USER);
+                if(data != null) {
+                    subredditName = data.getStringExtra(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME);
+                    iconUrl = data.getStringExtra(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_ICON_URL);
+                    subredditSelected = true;
+                    subredditIsUser = data.getBooleanExtra(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_IS_USER, false);
 
-                subredditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
-                subredditNameTextView.setText(subredditName);
-                displaySubredditIcon();
+                    subredditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
+                    subredditNameTextView.setText(subredditName);
+                    displaySubredditIcon();
 
-                flairTextView.setVisibility(View.VISIBLE);
-                flairTextView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-                flairTextView.setText(getString(R.string.flair));
-                flair = null;
+                    flairTextView.setVisibility(View.VISIBLE);
+                    flairTextView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                    flairTextView.setText(getString(R.string.flair));
+                    flair = null;
+                }
             }
         } else if(requestCode == PICK_VIDEO_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
                 if(data == null) {
-                    Snackbar.make(coordinatorLayout, R.string.error_getting_image, Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(coordinatorLayout, R.string.error_getting_video, Snackbar.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -490,8 +492,12 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
                 loadVideo();
             }
         } else if (requestCode == CAPTURE_VIDEO_REQUEST_CODE) {
-            videoUri = data.getData();
-            loadVideo();
+            if(data != null) {
+                videoUri = data.getData();
+                loadVideo();
+            } else {
+                Snackbar.make(coordinatorLayout, R.string.error_getting_video, Snackbar.LENGTH_SHORT).show();
+            }
         }
     }
 

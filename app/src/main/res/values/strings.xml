@@ -146,6 +146,7 @@
     <string name="select_from_gallery">Select a picture</string>
     <string name="select_again">Select again</string>
     <string name="error_getting_image">Error getting the image</string>
+    <string name="error_getting_video">Error getting the video</string>
     <string name="no_camera_available">No camera app available</string>
     <string name="error_creating_temp_file">Error creating temp file</string>
 
@@ -258,6 +259,7 @@
     <string name="settings_theme_dark_theme_summary">Dark Theme</string>
     <string name="settings_theme_system_default_summary">Device default</string>
     <string name="settings_enable_nsfw_title">Enable NSFW</string>
+    <string name="settings_acknowledgement_master_title">Acknowledgement</string>
 
     <string name="no_link_available">Cannot get the link</string>
 </resources>
