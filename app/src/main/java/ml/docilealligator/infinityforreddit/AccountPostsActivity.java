@@ -240,11 +240,12 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
                     params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
                     collapsingToolbarLayout.setLayoutParams(params);
                 } else {
-                    ((FragmentCommunicator) mFragment).startLazyMode();
-                    isInLazyMode = true;
-                    lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
-                    collapsingToolbarLayout.setLayoutParams(params);
+                    if(((FragmentCommunicator) mFragment).startLazyMode()) {
+                        isInLazyMode = true;
+                        lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
+                        collapsingToolbarLayout.setLayoutParams(params);
+                    }
                 }
                 return true;
             case android.R.id.home:

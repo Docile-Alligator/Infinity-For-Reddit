@@ -493,11 +493,14 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                     collapsingToolbarLayout.setLayoutParams(params);
                 } else {
                     isInLazyMode = true;
-                    ((FragmentCommunicator) mFragment).startLazyMode();
-                    lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-                    appBarLayout.setExpanded(false);
-                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
-                    collapsingToolbarLayout.setLayoutParams(params);
+                    if(((FragmentCommunicator) mFragment).startLazyMode()) {
+                        lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+                        appBarLayout.setExpanded(false);
+                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                        collapsingToolbarLayout.setLayoutParams(params);
+                    } else {
+                        isInLazyMode = false;
+                    }
                 }
         }
         return false;

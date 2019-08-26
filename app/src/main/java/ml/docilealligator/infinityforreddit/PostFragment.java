@@ -75,6 +75,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     private boolean isInLazyMode = false;
     private boolean isLazyModePaused = false;
+    private boolean hasPost = false;
 
     private PostRecyclerViewAdapter mAdapter;
     private RecyclerView.SmoothScroller smoothScroller;
@@ -367,16 +368,19 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         });
 
         mPostViewModel.hasPost().observe(this, hasPost -> {
+            this.hasPost = hasPost;
             if(hasPost) {
                 mFetchPostInfoLinearLayout.setVisibility(View.GONE);
             } else {
+                if(isInLazyMode) {
+                    stopLazyMode();
+                }
+
                 showErrorView(R.string.no_posts);
             }
         });
 
-        mPostViewModel.getPaginationNetworkState().observe(this, networkState -> {
-            mAdapter.setNetworkState(networkState);
-        });
+        mPostViewModel.getPaginationNetworkState().observe(this, networkState -> mAdapter.setNetworkState(networkState));
 
         return rootView;
     }
@@ -399,6 +403,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void refresh() {
+        if(isInLazyMode) {
+            stopLazyMode();
+        }
         mPostViewModel.refresh();
     }
 
@@ -417,7 +424,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     }
 
     @Override
-    public void startLazyMode() {
+    public boolean startLazyMode() {
+        if(!hasPost) {
+            Toast.makeText(activity, R.string.no_posts_no_lazy_mode, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         isInLazyMode = true;
         isLazyModePaused = false;
 
@@ -426,6 +438,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         Toast.makeText(activity, getString(R.string.lazy_mode_start, lazyModeInterval),
                 Toast.LENGTH_SHORT).show();
+
+        return true;
     }
 
     @Override

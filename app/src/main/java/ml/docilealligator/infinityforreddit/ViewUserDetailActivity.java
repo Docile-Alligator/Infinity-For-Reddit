@@ -546,11 +546,14 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
                     collapsingToolbarLayout.setLayoutParams(params);
                 } else {
                     isInLazyMode = true;
-                    sectionsPagerAdapter.startLazyMode();
-                    lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-                    appBarLayout.setExpanded(false);
-                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
-                    collapsingToolbarLayout.setLayoutParams(params);
+                    if(sectionsPagerAdapter.startLazyMode()) {
+                        lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+                        appBarLayout.setExpanded(false);
+                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                        collapsingToolbarLayout.setLayoutParams(params);
+                    } else {
+                        isInLazyMode = false;
+                    }
                 }
                 return true;
         }
@@ -708,10 +711,11 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
             }
         }
 
-        void startLazyMode() {
+        boolean startLazyMode() {
             if(postFragment != null) {
-                ((FragmentCommunicator) postFragment).startLazyMode();
+                return ((FragmentCommunicator) postFragment).startLazyMode();
             }
+            return false;
         }
 
         void stopLazyMode() {

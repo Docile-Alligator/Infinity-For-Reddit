@@ -719,11 +719,12 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                     params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
                     collapsingToolbarLayout.setLayoutParams(params);
                 } else {
-                    sectionsPagerAdapter.startLazyMode();
-                    isInLazyMode = true;
-                    lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
-                    collapsingToolbarLayout.setLayoutParams(params);
+                    if(sectionsPagerAdapter.startLazyMode()) {
+                        isInLazyMode = true;
+                        lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
+                        collapsingToolbarLayout.setLayoutParams(params);
+                    }
                 }
                 return true;
         }
@@ -935,17 +936,17 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             return fragment;
         }
 
-        void startLazyMode() {
+        boolean startLazyMode() {
             switch (viewPager.getCurrentItem()) {
                 case 0:
-                    ((FragmentCommunicator) frontPagePostFragment).startLazyMode();
-                    break;
+                    return ((FragmentCommunicator) frontPagePostFragment).startLazyMode();
                 case 1:
-                    ((FragmentCommunicator) popularPostFragment).startLazyMode();
-                    break;
+                    return ((FragmentCommunicator) popularPostFragment).startLazyMode();
                 case 2:
-                    ((FragmentCommunicator) allPostFragment).startLazyMode();
+                    return ((FragmentCommunicator) allPostFragment).startLazyMode();
             }
+
+            return false;
         }
 
         void stopLazyMode() {
