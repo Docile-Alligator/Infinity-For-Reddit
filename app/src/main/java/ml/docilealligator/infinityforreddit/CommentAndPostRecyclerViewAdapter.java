@@ -86,6 +86,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     interface CommentRecyclerViewAdapterCallback {
         void updatePost(Post post);
+        void retryFetchingComments();
         void retryFetchingMoreComments();
     }
 
@@ -1413,6 +1414,9 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     class LoadCommentsFailedViewHolder extends RecyclerView.ViewHolder {
         LoadCommentsFailedViewHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.setOnClickListener(view -> {
+                mCommentRecyclerViewAdapterCallback.retryFetchingComments();
+            });
         }
     }
 

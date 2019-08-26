@@ -64,7 +64,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:text="@string/rules"
-                    android:textColor="@color/colorAccent" />
+                    android:textColor="@android:color/white" />
 
             </RelativeLayout>
 
@@ -156,7 +156,9 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/select_from_library_fab_post_video_activity"
-                    app:layout_constraintHorizontal_chainStyle="spread" />
+                    app:layout_constraintHorizontal_chainStyle="spread"
+                    app:backgroundTint="@color/backgroundColorPrimary"
+                    app:tint="@android:color/white" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/select_from_library_fab_post_video_activity"
@@ -167,7 +169,9 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/capture_fab_post_video_activity"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_chainStyle="spread" />
+                    app:layout_constraintHorizontal_chainStyle="spread"
+                    app:backgroundTint="@color/backgroundColorPrimary"
+                    app:tint="@android:color/white" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -22,6 +22,8 @@
 
     <color name="backgroundColor">#FFFFFF</color>
 
+    <color name="backgroundColorPrimary">@color/colorPrimary</color>
+
     <color name="backgroundColorPrimaryDark">@color/colorPrimaryDark</color>
 
     <color name="roundedBottomSheetPrimaryBackground">#FFFFFF</color>

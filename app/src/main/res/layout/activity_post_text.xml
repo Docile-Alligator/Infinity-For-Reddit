@@ -64,7 +64,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:text="@string/rules"
-                    android:textColor="@color/colorAccent" />
+                    android:textColor="@android:color/white" />
 
             </RelativeLayout>
 

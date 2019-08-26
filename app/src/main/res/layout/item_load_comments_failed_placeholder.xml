@@ -9,12 +9,13 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/load_post_error_indicator"/>
+        android:src="@drawable/load_post_error_indicator" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/load_comments_failed"/>
+        android:gravity="center"
+        android:text="@string/load_comments_failed" />
 
 </LinearLayout>

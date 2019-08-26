@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,6 +115,13 @@ public class RulesActivity extends AppCompatActivity {
                     ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
                     params.topMargin = getResources().getDimensionPixelSize(statusBarResourceId);
                     toolbar.setLayoutParams(params);
+                }
+
+                if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
+                    int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+                    if (navBarResourceId > 0) {
+                        recyclerView.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
+                    }
                 }
             }
         }
@@ -240,7 +246,6 @@ public class RulesActivity extends AppCompatActivity {
                     String shortName = rulesArray.getJSONObject(i).getString(JSONUtils.SHORT_NAME_KEY);
                     String description = null;
                     if(rulesArray.getJSONObject(i).has(JSONUtils.DESCRIPTION_KEY)) {
-                        Log.i("asdfasdf", "" + rulesArray.getJSONObject(i).getString(JSONUtils.DESCRIPTION_KEY));
                         description = Utils.addSubredditAndUserLink(rulesArray.getJSONObject(i).getString(JSONUtils.DESCRIPTION_KEY));
                     }
                     rules.add(new Rule(shortName, description));

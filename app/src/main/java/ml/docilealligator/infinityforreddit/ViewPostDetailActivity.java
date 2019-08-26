@@ -352,6 +352,11 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                         }
 
                         @Override
+                        public void retryFetchingComments() {
+                            fetchComments(false);
+                        }
+
+                        @Override
                         public void retryFetchingMoreComments() {
                             isLoadingMoreChildren = false;
                             loadMoreChildrenSuccess = true;
@@ -441,6 +446,11 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                                         @Override
                                         public void updatePost(Post post) {
                                             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                                        }
+
+                                        @Override
+                                        public void retryFetchingComments() {
+                                            fetchComments(false);
                                         }
 
                                         @Override

@@ -22,6 +22,8 @@
 
     <color name="backgroundColor">#121212</color>
 
+    <color name="backgroundColorPrimary">#1565C0</color>
+
     <color name="backgroundColorPrimaryDark">#1565C0</color>
 
     <color name="roundedBottomSheetPrimaryBackground">#242424</color>
