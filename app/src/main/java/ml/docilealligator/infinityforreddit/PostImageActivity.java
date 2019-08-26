@@ -227,7 +227,9 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
             isPosting = false;
 
             if(getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
-                subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
+                loadSubredditIconSuccessful = false;
+                subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME);
+                subredditSelected = true;
                 subredditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
                 subredditNameTextView.setText(subredditName);
                 loadSubredditIcon();

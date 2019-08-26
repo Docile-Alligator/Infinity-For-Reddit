@@ -197,7 +197,9 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
             isPosting = false;
 
             if(getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
-                subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
+                loadSubredditIconSuccessful = false;
+                subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME);
+                subredditSelected = true;
                 subredditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
                 subredditNameTextView.setText(subredditName);
                 flairTextView.setVisibility(View.VISIBLE);

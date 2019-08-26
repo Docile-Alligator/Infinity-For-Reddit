@@ -406,6 +406,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if(isInLazyMode) {
             stopLazyMode();
         }
+
+        hasPost = false;
         mPostViewModel.refresh();
     }
 

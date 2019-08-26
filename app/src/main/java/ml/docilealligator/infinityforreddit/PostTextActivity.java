@@ -198,7 +198,8 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
 
             if(getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
                 loadSubredditIconSuccessful = false;
-                subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
+                subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME);
+                subredditSelected = true;
                 subredditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
                 subredditNameTextView.setText(subredditName);
                 flairTextView.setVisibility(View.VISIBLE);

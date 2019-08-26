@@ -554,17 +554,17 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                 break;
             case PostTypeBottomSheetFragment.TYPE_LINK:
                 intent = new Intent(this, PostLinkActivity.class);
-                intent.putExtra(PostTextActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                intent.putExtra(PostLinkActivity.EXTRA_SUBREDDIT_NAME, subredditName);
                 startActivity(intent);
                 break;
             case PostTypeBottomSheetFragment.TYPE_IMAGE:
                 intent = new Intent(this, PostImageActivity.class);
-                intent.putExtra(PostTextActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                intent.putExtra(PostImageActivity.EXTRA_SUBREDDIT_NAME, subredditName);
                 startActivity(intent);
                 break;
             case PostTypeBottomSheetFragment.TYPE_VIDEO:
                 intent = new Intent(this, PostVideoActivity.class);
-                intent.putExtra(PostTextActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                intent.putExtra(PostVideoActivity.EXTRA_SUBREDDIT_NAME, subredditName);
                 startActivity(intent);
         }
     }
