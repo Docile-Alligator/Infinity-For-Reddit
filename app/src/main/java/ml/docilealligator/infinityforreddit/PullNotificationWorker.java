@@ -77,7 +77,7 @@ public class PullNotificationWorker extends Worker {
                         NotificationCompat.Builder summaryBuilder = NotificationUtils.buildSummaryNotification(context,
                                 notificationManager, accountName,
                                 context.getString(R.string.notification_new_messages, messages.size()),
-                                NotificationUtils.CHANNEL_ID_NEW_COMMENTS, NotificationUtils.CHANNEL_NEW_COMMENTS,
+                                NotificationUtils.CHANNEL_ID_NEW_MESSAGES, NotificationUtils.CHANNEL_NEW_MESSAGES,
                                 NotificationUtils.getAccountGroupName(accountName));
 
                         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
@@ -110,8 +110,8 @@ public class PullNotificationWorker extends Worker {
 
                             NotificationCompat.Builder builder = NotificationUtils.buildNotification(notificationManager,
                                     context, title, message.getBody(), summary,
-                                    NotificationUtils.CHANNEL_ID_NEW_COMMENTS,
-                                    NotificationUtils.CHANNEL_NEW_COMMENTS,
+                                    NotificationUtils.CHANNEL_ID_NEW_MESSAGES,
+                                    NotificationUtils.CHANNEL_NEW_MESSAGES,
                                     NotificationUtils.getAccountGroupName(accountName));
 
                             if(kind.equals(Message.TYPE_COMMENT)) {

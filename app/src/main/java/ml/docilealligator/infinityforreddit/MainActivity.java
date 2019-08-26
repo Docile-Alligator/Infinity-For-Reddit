@@ -1055,7 +1055,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             }
         }
 
-        public void changeNSFW(boolean nsfw) {
+        void changeNSFW(boolean nsfw) {
             if(frontPagePostFragment != null) {
                 frontPagePostFragment.changeNSFW(nsfw);
             }

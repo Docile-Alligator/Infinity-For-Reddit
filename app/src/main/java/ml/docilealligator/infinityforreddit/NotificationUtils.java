@@ -9,10 +9,11 @@ import androidx.core.app.NotificationManagerCompat;
 
 class NotificationUtils {
     static final String CHANNEL_POST_MEDIA = "Post Media";
-    static final String CHANNEL_ID_NEW_COMMENTS = "new_comments";
-    static final String CHANNEL_NEW_COMMENTS = "New Comments";
-    static final int SUMMARY_BASE_ID_UNREAD_MESSAGE = 0;
-    static final int NOTIFICATION_BASE_ID_UNREAD_MESSAGE = 1;
+    static final String CHANNEL_ID_NEW_MESSAGES = "new_messages";
+    static final String CHANNEL_NEW_MESSAGES = "New Messages";
+
+    private static final int SUMMARY_BASE_ID_UNREAD_MESSAGE = 0;
+    private static final int NOTIFICATION_BASE_ID_UNREAD_MESSAGE = 1;
 
     private static final String GROUP_USER_BASE = "ml.docilealligator.infinityforreddit.";
 

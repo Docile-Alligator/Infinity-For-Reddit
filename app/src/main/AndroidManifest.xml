@@ -150,7 +150,8 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/login_activity_label"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ViewImageActivity"
             android:parentActivityName=".MainActivity"

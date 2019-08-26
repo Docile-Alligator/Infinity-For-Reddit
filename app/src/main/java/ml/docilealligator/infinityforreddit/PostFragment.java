@@ -86,6 +86,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private Runnable lazyModeRunnable;
     private CountDownTimer resumeLazyModeCountDownTimer;
 
+    private float lazyModeInterval;
+
     @Inject @Named("no_oauth")
     Retrofit mRetrofit;
 
@@ -124,6 +126,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         lazyModeHandler = new Handler();
 
+        lazyModeInterval = Float.parseFloat(mSharedPreferences.getString(SharedPreferencesUtils.LAZY_MODE_INTERVAL_KEY, "2.5"));
+
         smoothScroller = new LinearSmoothScroller(activity) {
             @Override
             protected int getVerticalSnapPreference() {
@@ -157,11 +161,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                         mLinearLayoutManager.startSmoothScroll(smoothScroller);
                     }
                 }
-                lazyModeHandler.postDelayed(this, 2500);
+                lazyModeHandler.postDelayed(this, (long) (lazyModeInterval * 1000));
             }
         };
 
-        resumeLazyModeCountDownTimer = new CountDownTimer(2500, 2500) {
+        resumeLazyModeCountDownTimer = new CountDownTimer((long) (lazyModeInterval * 1000), (long) (lazyModeInterval * 1000)) {
             @Override
             public void onTick(long l) {
 
@@ -416,9 +420,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void startLazyMode() {
         isInLazyMode = true;
         isLazyModePaused = false;
-        lazyModeHandler.postDelayed(lazyModeRunnable, 2500);
+
+        lazyModeInterval = Float.parseFloat(mSharedPreferences.getString(SharedPreferencesUtils.LAZY_MODE_INTERVAL_KEY, "2.5"));
+        lazyModeHandler.postDelayed(lazyModeRunnable, (long) (lazyModeInterval * 1000));
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        Toast.makeText(activity, getString(R.string.lazy_mode_start, 2.5), Toast.LENGTH_SHORT).show();
+        Toast.makeText(activity, getString(R.string.lazy_mode_start, lazyModeInterval),
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -439,7 +446,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             if(resumeNow) {
                 lazyModeHandler.post(lazyModeRunnable);
             } else {
-                lazyModeHandler.postDelayed(lazyModeRunnable, 2500);
+                lazyModeHandler.postDelayed(lazyModeRunnable, (long) (lazyModeInterval * 1000));
             }
         }
     }

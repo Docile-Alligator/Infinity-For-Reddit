@@ -258,6 +258,7 @@
     <string name="settings_theme_light__theme_summary">Light Theme</string>
     <string name="settings_theme_dark_theme_summary">Dark Theme</string>
     <string name="settings_theme_system_default_summary">Device default</string>
+    <string name="settings_lazy_mode_interval_title">Lazy Mode Interval</string>
     <string name="settings_enable_nsfw_title">Enable NSFW</string>
     <string name="settings_acknowledgement_master_title">Acknowledgement</string>
 
