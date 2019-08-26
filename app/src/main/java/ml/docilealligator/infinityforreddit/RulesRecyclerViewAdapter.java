@@ -1,6 +1,9 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +14,38 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import CustomView.CustomMarkwonView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.noties.markwon.AbstractMarkwonPlugin;
+import io.noties.markwon.Markwon;
+import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
+import io.noties.markwon.linkify.LinkifyPlugin;
 
 class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecyclerViewAdapter.RuleViewHolder> {
-    private Context context;
+    private Markwon markwon;
     private ArrayList<Rule> rules;
 
     RulesRecyclerViewAdapter(Context context) {
-        this.context = context;
+        markwon = Markwon.builder(context)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                        builder.linkResolver((view, link) -> {
+                            Intent intent = new Intent(context, LinkResolverActivity.class);
+                            Uri uri = Uri.parse(link);
+                            if(uri.getScheme() == null && uri.getHost() == null) {
+                                intent.setData(LinkResolverActivity.getRedditUriByPath(link));
+                            } else {
+                                intent.setData(uri);
+                            }
+                            context.startActivity(intent);
+                        });
+                    }
+                })
+                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .usePlugin(StrikethroughPlugin.create())
+                .build();
     }
 
     @NonNull
@@ -35,7 +60,7 @@ class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecyclerViewAda
         if(rules.get(holder.getAdapterPosition()).getDescriptionHtml() == null) {
             holder.descriptionMarkwonView.setVisibility(View.GONE);
         } else {
-            holder.descriptionMarkwonView.setMarkdown(rules.get(holder.getAdapterPosition()).getDescriptionHtml(), context);
+            markwon.setMarkdown(holder.descriptionMarkwonView, rules.get(holder.getAdapterPosition()).getDescriptionHtml());
         }
     }
 
@@ -57,7 +82,7 @@ class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecyclerViewAda
 
     class RuleViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.short_name_text_view_item_rule) TextView shortNameTextView;
-        @BindView(R.id.description_markwon_view_item_rule) CustomMarkwonView descriptionMarkwonView;
+        @BindView(R.id.description_markwon_view_item_rule) TextView descriptionMarkwonView;
 
         RuleViewHolder(@NonNull View itemView) {
             super(itemView);

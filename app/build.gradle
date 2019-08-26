@@ -67,10 +67,10 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
     implementation 'com.github.santalu:aspect-ratio-imageview:1.0.6'
     implementation 'androidx.paging:paging-runtime:2.1.0'
-    implementation "com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE"
-    implementation "ru.noties:markwon:2.0.1"
-    implementation "ru.noties:markwon-syntax-highlight:2.0.1"
-    implementation "ru.noties:markwon-view:2.0.1"
+    implementation 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
+    implementation 'io.noties.markwon:core:4.1.0'
+    implementation 'io.noties.markwon:linkify:4.1.0'
+    implementation 'io.noties.markwon:ext-strikethrough:4.1.0'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.16'
     implementation 'com.github.Ferfalk:SimpleSearchView:0.1.3'
     implementation 'org.greenrobot:eventbus:3.1.1'
@@ -79,6 +79,7 @@ dependencies {
     implementation 'com.github.livefront:bridge:v1.2.0'
     implementation 'com.evernote:android-state:1.4.1'
     annotationProcessor 'com.evernote:android-state-processor:1.4.1'
-    implementation "androidx.work:work-runtime:2.2.0"
-    implementation "androidx.preference:preference:1.1.0-rc01"
+    implementation 'androidx.work:work-runtime:2.2.0'
+    implementation 'androidx.preference:preference:1.1.0-rc01'
+    implementation 'org.sufficientlysecure:html-textview:3.6'
 }

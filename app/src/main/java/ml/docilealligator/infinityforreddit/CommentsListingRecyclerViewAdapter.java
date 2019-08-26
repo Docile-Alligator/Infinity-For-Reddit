@@ -2,7 +2,9 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +21,19 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import CustomView.CustomMarkwonView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.noties.markwon.AbstractMarkwonPlugin;
+import io.noties.markwon.Markwon;
+import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
+import io.noties.markwon.linkify.LinkifyPlugin;
 import retrofit2.Retrofit;
 
 class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, RecyclerView.ViewHolder> {
     private Context mContext;
     private Retrofit mOauthRetrofit;
+    private Markwon mMarkwon;
     private String mAccessToken;
     private String mAccountName;
     private int mTextColorPrimaryDark;
@@ -43,11 +50,31 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
         void retryLoadingMore();
     }
 
-    protected CommentsListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, String accessToken,
-                                                 String accountName, RetryLoadingMoreCallback retryLoadingMoreCallback) {
+    protected CommentsListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
+                                                 String accessToken, String accountName,
+                                                 RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         mContext = context;
         mOauthRetrofit = oauthRetrofit;
+        mMarkwon = Markwon.builder(mContext)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                        builder.linkResolver((view, link) -> {
+                            Intent intent = new Intent(mContext, LinkResolverActivity.class);
+                            Uri uri = Uri.parse(link);
+                            if(uri.getScheme() == null && uri.getHost() == null) {
+                                intent.setData(LinkResolverActivity.getRedditUriByPath(link));
+                            } else {
+                                intent.setData(uri);
+                            }
+                            mContext.startActivity(intent);
+                        });
+                    }
+                })
+                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .usePlugin(StrikethroughPlugin.create())
+                .build();
         mAccessToken = accessToken;
         mAccountName = accountName;
         mRetryLoadingMoreCallback = retryLoadingMoreCallback;
@@ -104,7 +131,8 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
 
                 ((DataViewHolder) holder).commentTimeTextView.setText(comment.getCommentTime());
 
-                ((DataViewHolder) holder).commentMarkdownView.setMarkdown(comment.getCommentContent(), mContext);
+                mMarkwon.setMarkdown(((DataViewHolder) holder).commentMarkdownView, comment.getCommentContent());
+
                 ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore()));
 
                 switch (comment.getVoteType()) {
@@ -182,7 +210,7 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
         @BindView(R.id.vertical_block_item_post_comment) View verticalBlock;
         @BindView(R.id.author_text_view_item_post_comment) TextView authorTextView;
         @BindView(R.id.comment_time_text_view_item_post_comment) TextView commentTimeTextView;
-        @BindView(R.id.comment_markdown_view_item_post_comment) CustomMarkwonView commentMarkdownView;
+        @BindView(R.id.comment_markdown_view_item_post_comment) TextView commentMarkdownView;
         @BindView(R.id.up_vote_button_item_post_comment) ImageView upvoteButton;
         @BindView(R.id.score_text_view_item_post_comment) TextView scoreTextView;
         @BindView(R.id.down_vote_button_item_post_comment) ImageView downvoteButton;

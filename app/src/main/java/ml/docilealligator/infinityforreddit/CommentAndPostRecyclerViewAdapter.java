@@ -7,6 +7,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,9 +41,14 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import CustomView.AspectRatioGifImageView;
-import CustomView.CustomMarkwonView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.noties.markwon.AbstractMarkwonPlugin;
+import io.noties.markwon.Markwon;
+import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
+import io.noties.markwon.linkify.LinkifyPlugin;
+import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import retrofit2.Retrofit;
@@ -63,6 +69,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private Retrofit mOauthRetrofit;
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private RequestManager mGlide;
+    private Markwon mMarkwon;
     private String mAccessToken;
     private String mAccountName;
     private Post mPost;
@@ -84,14 +91,33 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     CommentAndPostRecyclerViewAdapter(Activity activity, Retrofit retrofit, Retrofit oauthRetrofit,
                                       RedditDataRoomDatabase redditDataRoomDatabase, RequestManager glide,
-                                      String accessToken, String accountName, Post post, Locale locale,
-                                      String singleCommentId, boolean isSingleCommentThreadMode,
+                                      String accessToken, String accountName, Post post,
+                                      Locale locale, String singleCommentId, boolean isSingleCommentThreadMode,
                                       CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
         mActivity = activity;
         mRetrofit = retrofit;
         mOauthRetrofit = oauthRetrofit;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mGlide = glide;
+        mMarkwon = Markwon.builder(mActivity)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                        builder.linkResolver((view, link) -> {
+                            Intent intent = new Intent(mActivity, LinkResolverActivity.class);
+                            Uri uri = Uri.parse(link);
+                            if(uri.getScheme() == null && uri.getHost() == null) {
+                                intent.setData(LinkResolverActivity.getRedditUriByPath(link));
+                            } else {
+                                intent.setData(uri);
+                            }
+                            mActivity.startActivity(intent);
+                        }).urlProcessor(new UrlProcessorRelativeToAbsolute("https://www.reddit.com"));
+                    }
+                })
+                .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .build();
         mAccessToken = accessToken;
         mAccountName = accountName;
         mPost = post;
@@ -422,8 +448,9 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
                     if(!mPost.getSelfText().equals("")) {
                         ((PostDetailViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
-                        ((PostDetailViewHolder) holder).mContentMarkdownView.setMarkdown(mPost.getSelfText(), mActivity);
+                        mMarkwon.setMarkdown(((PostDetailViewHolder) holder).mContentMarkdownView, mPost.getSelfText());
                     }
+
                     ((PostDetailViewHolder) holder).mNoPreviewLinkImageView.setVisibility(View.VISIBLE);
                     ((PostDetailViewHolder) holder).mNoPreviewLinkImageView.setOnClickListener(view -> {
                         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
@@ -447,7 +474,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
                     if(!mPost.getSelfText().equals("")) {
                         ((PostDetailViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
-                        ((PostDetailViewHolder) holder).mContentMarkdownView.setMarkdown(mPost.getSelfText(), mActivity);
+                        mMarkwon.setMarkdown(((PostDetailViewHolder) holder).mContentMarkdownView, mPost.getSelfText());
                     }
                     break;
             }
@@ -469,7 +496,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
             ((CommentViewHolder) holder).commentTimeTextView.setText(comment.getCommentTime());
 
-            ((CommentViewHolder) holder).commentMarkdownView.setMarkdown(comment.getCommentContent(), mActivity);
+            mMarkwon.setMarkdown(((CommentViewHolder) holder).commentMarkdownView, comment.getCommentContent());
             ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore()));
 
             ViewGroup.LayoutParams params = ((CommentViewHolder) holder).verticalBlock.getLayoutParams();
@@ -956,7 +983,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         @BindView(R.id.user_text_view_item_post_detail) TextView mUserTextView;
         @BindView(R.id.post_time_text_view_item_post_detail) TextView mPostTimeTextView;
         @BindView(R.id.title_text_view_item_post_detail) TextView mTitleTextView;
-        @BindView(R.id.content_markdown_view_item_post_detail) CustomMarkwonView mContentMarkdownView;
+        @BindView(R.id.content_markdown_view_item_post_detail) TextView mContentMarkdownView;
         @BindView(R.id.type_text_view_item_post_detail) Chip mTypeChip;
         @BindView(R.id.gilded_image_view_item_post_detail) ImageView mGildedImageView;
         @BindView(R.id.gilded_number_text_view_item_post_detail) TextView mGildedNumberTextView;
@@ -1143,7 +1170,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     class CommentViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.author_text_view_item_post_comment) TextView authorTextView;
         @BindView(R.id.comment_time_text_view_item_post_comment) TextView commentTimeTextView;
-        @BindView(R.id.comment_markdown_view_item_post_comment) CustomMarkwonView commentMarkdownView;
+        @BindView(R.id.comment_markdown_view_item_post_comment) TextView commentMarkdownView;
         @BindView(R.id.up_vote_button_item_post_comment) ImageView upVoteButton;
         @BindView(R.id.score_text_view_item_post_comment) TextView scoreTextView;
         @BindView(R.id.down_vote_button_item_post_comment) ImageView downVoteButton;

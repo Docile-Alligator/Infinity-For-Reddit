@@ -213,7 +213,8 @@ public class ViewMessageActivity extends AppCompatActivity {
     }
 
     private void bindView() {
-        mAdapter = new MessageRecyclerViewAdapter(this, mOauthRetrofit, mAccessToken);
+        mAdapter = new MessageRecyclerViewAdapter(this, mOauthRetrofit, mAccessToken,
+                () -> mMessageViewModel.retryLoadingMore());
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mAdapter);

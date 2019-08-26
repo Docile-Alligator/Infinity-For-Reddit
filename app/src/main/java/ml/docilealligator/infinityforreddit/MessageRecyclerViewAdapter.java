@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,13 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import CustomView.CustomMarkwonView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.noties.markwon.AbstractMarkwonPlugin;
+import io.noties.markwon.Markwon;
+import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
+import io.noties.markwon.linkify.LinkifyPlugin;
 import retrofit2.Retrofit;
 
 class MessageRecyclerViewAdapter extends PagedListAdapter<Message, RecyclerView.ViewHolder> {
@@ -27,20 +32,42 @@ class MessageRecyclerViewAdapter extends PagedListAdapter<Message, RecyclerView.
 
     private Context mContext;
     private Retrofit mOauthRetrofit;
+    private Markwon mMarkwon;
     private String mAccessToken;
     private Resources mResources;
 
     private NetworkState networkState;
-    private CommentsListingRecyclerViewAdapter.RetryLoadingMoreCallback mRetryLoadingMoreCallback;
+    private RetryLoadingMoreCallback mRetryLoadingMoreCallback;
 
     interface RetryLoadingMoreCallback {
         void retryLoadingMore();
     }
 
-    MessageRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, String accessToken) {
+    MessageRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, String accessToken,
+                               RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         mContext = context;
         mOauthRetrofit = oauthRetrofit;
+        mRetryLoadingMoreCallback = retryLoadingMoreCallback;
+        mMarkwon = Markwon.builder(mContext)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                        builder.linkResolver((view, link) -> {
+                            Intent intent = new Intent(mContext, LinkResolverActivity.class);
+                            Uri uri = Uri.parse(link);
+                            if(uri.getScheme() == null && uri.getHost() == null) {
+                                intent.setData(LinkResolverActivity.getRedditUriByPath(link));
+                            } else {
+                                intent.setData(uri);
+                            }
+                            mContext.startActivity(intent);
+                        });
+                    }
+                })
+                .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .build();
         mAccessToken = accessToken;
         mResources = context.getResources();
     }
@@ -89,7 +116,7 @@ class MessageRecyclerViewAdapter extends PagedListAdapter<Message, RecyclerView.
                 ((DataViewHolder) holder).authorTextView.setText(message.getAuthor());
                 String subject = message.getSubject().substring(0, 1).toUpperCase() + message.getSubject().substring(1);
                 ((DataViewHolder) holder).subjectTextView.setText(subject);
-                ((DataViewHolder) holder).contentCustomMarkwonView.setMarkdown(message.getBody(), mContext);
+                mMarkwon.setMarkdown(((DataViewHolder) holder).contentCustomMarkwonView, message.getBody());
 
                 ((DataViewHolder) holder).itemView.setOnClickListener(view -> {
                     if(message.getContext() != null && !message.getContext().equals("")) {
@@ -185,7 +212,7 @@ class MessageRecyclerViewAdapter extends PagedListAdapter<Message, RecyclerView.
         @BindView(R.id.author_text_view_item_message) TextView authorTextView;
         @BindView(R.id.subject_text_view_item_message) TextView subjectTextView;
         @BindView(R.id.title_text_view_item_message) TextView titleTextView;
-        @BindView(R.id.content_custom_markwon_view_item_message) CustomMarkwonView contentCustomMarkwonView;
+        @BindView(R.id.content_custom_markwon_view_item_message) TextView contentCustomMarkwonView;
 
         DataViewHolder(View itemView) {
             super(itemView);

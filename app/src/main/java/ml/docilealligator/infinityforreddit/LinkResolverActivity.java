@@ -32,7 +32,8 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String POST_PATTERN = "/r/\\w+/comments/\\w+/{0,1}\\w+/{0,1}";
     private static final String COMMENT_PATTERN = "/r/\\w+/comments/\\w+/{0,1}\\w+/\\w+/{0,1}";
     private static final String SUBREDDIT_PATTERN = "/r/\\w+/*";
-    private static final String USER_PATTERN = "/user/\\w+/*";
+    private static final String USER_PATTERN_1 = "/user/\\w+/*";
+    private static final String USER_PATTERN_2 = "/u/\\w+/*";
 
     @Inject
     SharedPreferences mSharedPreferences;
@@ -117,9 +118,15 @@ public class LinkResolverActivity extends AppCompatActivity {
                         intent.putExtra(ViewSubredditDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
                         startActivity(intent);
                     }
-                } else if(path.matches(USER_PATTERN)) {
+                } else if(path.matches(USER_PATTERN_1)) {
                     Intent intent = new Intent(this, ViewUserDetailActivity.class);
                     intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, path.substring(6));
+                    intent.putExtra(ViewUserDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
+                    intent.putExtra(ViewUserDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
+                    startActivity(intent);
+                } else if(path.matches(USER_PATTERN_2)) {
+                    Intent intent = new Intent(this, ViewUserDetailActivity.class);
+                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, path.substring(3));
                     intent.putExtra(ViewUserDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
                     intent.putExtra(ViewUserDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
                     startActivity(intent);

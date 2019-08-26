@@ -234,7 +234,7 @@ class ParsePost {
                 if(data.isNull(JSONUtils.SELFTEXT_KEY)) {
                     post.setSelfText("");
                 } else {
-                    post.setSelfText(data.getString(JSONUtils.SELFTEXT_KEY).trim());
+                    post.setSelfText(Utils.addSubredditAndUserLink(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
                 }
             } else {
                 //No preview link post
@@ -246,7 +246,7 @@ class ParsePost {
                 if(data.isNull(JSONUtils.SELFTEXT_KEY)) {
                     post.setSelfText("");
                 } else {
-                    post.setSelfText(data.getString(JSONUtils.SELFTEXT_KEY).trim());
+                    post.setSelfText(Utils.addSubredditAndUserLink(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
                 }
             }
         } else {
@@ -329,7 +329,7 @@ class ParsePost {
                             if(data.isNull(JSONUtils.SELFTEXT_KEY)) {
                                 post.setSelfText("");
                             } else {
-                                post.setSelfText(data.getString(JSONUtils.SELFTEXT_KEY).trim());
+                                post.setSelfText(Utils.addSubredditAndUserLink(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
                             }
                         } else {
                             //Link post
@@ -342,7 +342,7 @@ class ParsePost {
                             if(data.isNull(JSONUtils.SELFTEXT_KEY)) {
                                 post.setSelfText("");
                             } else {
-                                post.setSelfText(data.getString(JSONUtils.SELFTEXT_KEY).trim());
+                                post.setSelfText(Utils.addSubredditAndUserLink(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
                             }
 
                             post.setPreviewWidth(previewWidth);

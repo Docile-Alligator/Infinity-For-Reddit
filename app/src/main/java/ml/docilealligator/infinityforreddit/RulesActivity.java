@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -237,11 +238,12 @@ public class RulesActivity extends AppCompatActivity {
                 ArrayList<Rule> rules = new ArrayList<>();
                 for(int i = 0; i < rulesArray.length(); i++) {
                     String shortName = rulesArray.getJSONObject(i).getString(JSONUtils.SHORT_NAME_KEY);
-                    String descriptionHtml = null;
-                    if(rulesArray.getJSONObject(i).has(JSONUtils.DESCRIPTION_HTML_KEY)) {
-                        descriptionHtml = rulesArray.getJSONObject(i).getString(JSONUtils.DESCRIPTION_HTML_KEY);
+                    String description = null;
+                    if(rulesArray.getJSONObject(i).has(JSONUtils.DESCRIPTION_KEY)) {
+                        Log.i("asdfasdf", "" + rulesArray.getJSONObject(i).getString(JSONUtils.DESCRIPTION_KEY));
+                        description = Utils.addSubredditAndUserLink(rulesArray.getJSONObject(i).getString(JSONUtils.DESCRIPTION_KEY));
                     }
-                    rules.add(new Rule(shortName, descriptionHtml));
+                    rules.add(new Rule(shortName, description));
                 }
                 return rules;
             } catch (JSONException e) {

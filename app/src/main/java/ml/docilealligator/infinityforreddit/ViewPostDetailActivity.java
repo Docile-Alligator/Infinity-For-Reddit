@@ -433,9 +433,10 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                                 mMenu.findItem(R.id.action_delete_view_post_detail_activity).setVisible(true);
                             }
 
-                            mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
-                                    mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mAccountName, mPost,
-                                    mLocale, mSingleCommentId, isSingleCommentThreadMode,
+                            mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this,
+                                    mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mGlide,
+                                    mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId,
+                                    isSingleCommentThreadMode,
                                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                                         @Override
                                         public void updatePost(Post post) {

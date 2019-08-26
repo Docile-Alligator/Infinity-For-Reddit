@@ -1,38 +1,73 @@
 package CustomView;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.util.AttributeSet;
+import android.text.Spanned;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import ml.docilealligator.infinityforreddit.LinkResolverActivity;
-import ru.noties.markwon.SpannableConfiguration;
-import ru.noties.markwon.view.MarkwonView;
+import org.commonmark.node.Node;
 
-public class CustomMarkwonView extends MarkwonView {
+import java.util.List;
 
-    public CustomMarkwonView(Context context) {
-        super(context);
-    }
+import io.noties.markwon.Markwon;
+import io.noties.markwon.MarkwonPlugin;
 
-    public CustomMarkwonView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+public class CustomMarkwonView extends Markwon {
 
     public void setMarkdown(@Nullable String markdown, Context context) {
-        SpannableConfiguration configuration = SpannableConfiguration.builder(context).linkResolver((view, link) -> {
-            Intent intent = new Intent(context, LinkResolverActivity.class);
-            Uri uri = Uri.parse(link);
-            if(uri.getScheme() == null && uri.getHost() == null) {
-                intent.setData(LinkResolverActivity.getRedditUriByPath(link));
-            } else {
-                intent.setData(uri);
-            }
-            context.startActivity(intent);
-        }).build();
 
-        super.setMarkdown(configuration, markdown);
+    }
+
+    @NonNull
+    @Override
+    public Node parse(@NonNull String input) {
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public Spanned render(@NonNull Node node) {
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public Spanned toMarkdown(@NonNull String input) {
+        return null;
+    }
+
+    @Override
+    public void setMarkdown(@NonNull TextView textView, @NonNull String markdown) {
+
+    }
+
+    @Override
+    public void setParsedMarkdown(@NonNull TextView textView, @NonNull Spanned markdown) {
+
+    }
+
+    @Override
+    public boolean hasPlugin(@NonNull Class<? extends MarkwonPlugin> plugin) {
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public <P extends MarkwonPlugin> P getPlugin(@NonNull Class<P> type) {
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public <P extends MarkwonPlugin> P requirePlugin(@NonNull Class<P> type) {
+        return null;
+    }
+
+    @NonNull
+    @Override
+    public List<? extends MarkwonPlugin> getPlugins() {
+        return null;
     }
 }

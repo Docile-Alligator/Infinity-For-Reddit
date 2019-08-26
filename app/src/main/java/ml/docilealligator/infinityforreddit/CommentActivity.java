@@ -4,14 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,8 +34,11 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.noties.markwon.AbstractMarkwonPlugin;
+import io.noties.markwon.Markwon;
+import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.linkify.LinkifyPlugin;
 import retrofit2.Retrofit;
-import ru.noties.markwon.view.MarkwonView;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
@@ -54,7 +60,7 @@ public class CommentActivity extends AppCompatActivity {
 
     @BindView(R.id.coordinator_layout_comment_activity) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.toolbar_comment_activity) Toolbar toolbar;
-    @BindView(R.id.comment_parent_markwon_view_comment_activity) MarkwonView commentParentMarkwonView;
+    @BindView(R.id.comment_parent_markwon_view_comment_activity) TextView commentParentMarkwonView;
     @BindView(R.id.comment_edit_text_comment_activity) EditText commentEditText;
 
     private boolean mNullAccessToken = false;
@@ -122,7 +128,25 @@ public class CommentActivity extends AppCompatActivity {
         }
 
         Intent intent = getIntent();
-        commentParentMarkwonView.setMarkdown(intent.getExtras().getString(EXTRA_COMMENT_PARENT_TEXT_KEY));
+        Markwon markwon = Markwon.builder(this)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                        builder.linkResolver((view, link) -> {
+                            Intent intent = new Intent(CommentActivity.this, LinkResolverActivity.class);
+                            Uri uri = Uri.parse(link);
+                            if(uri.getScheme() == null && uri.getHost() == null) {
+                                intent.setData(LinkResolverActivity.getRedditUriByPath(link));
+                            } else {
+                                intent.setData(uri);
+                            }
+                            startActivity(intent);
+                        });
+                    }
+                })
+                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .build();
+        markwon.setMarkdown(commentParentMarkwonView, intent.getExtras().getString(EXTRA_COMMENT_PARENT_TEXT_KEY));
         parentFullname = intent.getExtras().getString(EXTRA_PARENT_FULLNAME_KEY);
         parentDepth = intent.getExtras().getInt(EXTRA_PARENT_DEPTH_KEY);
         parentPosition = intent.getExtras().getInt(EXTRA_PARENT_POSITION_KEY);

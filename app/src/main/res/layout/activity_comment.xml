@@ -32,7 +32,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <ru.noties.markwon.view.MarkwonView
+            <TextView
                 android:id="@+id/comment_parent_markwon_view_comment_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

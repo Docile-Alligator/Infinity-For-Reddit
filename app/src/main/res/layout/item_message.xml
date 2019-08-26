@@ -26,7 +26,7 @@
         android:layout_marginBottom="8dp"
         android:textColor="@color/primaryTextColor" />
 
-    <CustomView.CustomMarkwonView
+    <TextView
         android:id="@+id/content_custom_markwon_view_item_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

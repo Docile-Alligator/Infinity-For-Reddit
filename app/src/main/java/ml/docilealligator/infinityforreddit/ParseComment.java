@@ -225,7 +225,7 @@ class ParseComment {
         boolean isSubmitter = singleCommentData.getBoolean(JSONUtils.IS_SUBMITTER_KEY);
         String commentContent = "";
         if(!singleCommentData.isNull(JSONUtils.BODY_KEY)) {
-            commentContent = singleCommentData.getString(JSONUtils.BODY_KEY).trim();
+            commentContent = Utils.addSubredditAndUserLink(singleCommentData.getString(JSONUtils.BODY_KEY).trim());
         }
         String permalink = Html.fromHtml(singleCommentData.getString(JSONUtils.PERMALINK_KEY)).toString();
         int score = singleCommentData.getInt(JSONUtils.SCORE_KEY);
