@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
@@ -80,67 +81,94 @@
             android:textSize="18sp"
             android:textColor="@color/primaryTextColor"/>
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="16dp">
+            android:padding="16dp">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/type_text_view_item_post"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
                 android:textColor="@android:color/white"
-                android:layout_centerVertical="true"
-                app:chipBackgroundColor="@color/backgroundColorPrimaryDark" />
+                app:chipBackgroundColor="@color/backgroundColorPrimaryDark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/gilded_image_view_item_post"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_toEndOf="@id/type_text_view_item_post"
-                android:layout_centerVertical="true"
-                android:visibility="gone" />
+                android:layout_marginStart="16dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/type_text_view_item_post"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/gilded_number_text_view_item_post"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:layout_marginEnd="8dp"
-                android:layout_toEndOf="@id/gilded_image_view_item_post"
-                android:visibility="gone"
-                android:textSize="20sp"
                 android:textColor="@color/gold"
-                android:layout_centerVertical="true"/>
+                android:textSize="20sp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/gilded_image_view_item_post"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/archived_image_view_item_post"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_archive_outline_24dp"
+                android:tint="@color/archivedTint"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/crosspost_image_view_item_post"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/locked_image_view_item_post"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_outline_lock_24px"
+                android:tint="@color/lockedIconTint"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/nsfw_text_view_item_post"
+                app:layout_constraintStart_toEndOf="@+id/archived_image_view_item_post"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_bias="0" />
 
             <ImageView
                 android:id="@+id/crosspost_image_view_item_post"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_toEndOf="@id/gilded_number_text_view_item_post"
+                android:layout_marginStart="16dp"
                 android:src="@drawable/crosspost"
                 android:tint="@color/colorAccent"
-                android:layout_centerVertical="true"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/gilded_number_text_view_item_post"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/nsfw_text_view_item_post"
-                android:text="@string/nsfw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginStart="8dp"
+                android:text="@string/nsfw"
                 android:textColor="@android:color/white"
                 android:visibility="gone"
-                android:layout_centerVertical="true"
-                app:chipBackgroundColor="@color/colorAccent"/>
+                app:chipBackgroundColor="@color/colorAccent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:id="@+id/spoiler_flair_linear_layout_item_post"

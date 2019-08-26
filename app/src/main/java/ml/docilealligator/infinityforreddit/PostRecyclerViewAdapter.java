@@ -305,6 +305,10 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                     ((DataViewHolder) holder).gildedNumberTextView.setText(gildedNumber);
                 }
 
+                if(post.isLocked()) {
+                    ((DataViewHolder) holder).lockedImageView.setVisibility(View.VISIBLE);
+                }
+
                 if(nsfw) {
                     ((DataViewHolder) holder).nsfwChip.setVisibility(View.VISIBLE);
                 }
@@ -350,6 +354,8 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                 }
 
                 if(isArchived) {
+                    ((DataViewHolder) holder).archivedImageView.setVisibility(View.VISIBLE);
+
                     ((DataViewHolder) holder).upvoteButton
                             .setColorFilter(ContextCompat.getColor(mContext, R.color.voteAndReplyUnavailableVoteButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
                     ((DataViewHolder) holder).downvoteButton
@@ -691,6 +697,8 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
         @BindView(R.id.type_text_view_item_post) Chip typeChip;
         @BindView(R.id.gilded_image_view_item_post) ImageView gildedImageView;
         @BindView(R.id.gilded_number_text_view_item_post) TextView gildedNumberTextView;
+        @BindView(R.id.archived_image_view_item_post) ImageView archivedImageView;
+        @BindView(R.id.locked_image_view_item_post) ImageView lockedImageView;
         @BindView(R.id.crosspost_image_view_item_post) ImageView crosspostImageView;
         @BindView(R.id.nsfw_text_view_item_post) Chip nsfwChip;
         @BindView(R.id.spoiler_flair_linear_layout_item_post) LinearLayout spoilerFlairLinearLayout;
@@ -745,6 +753,8 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
             ((DataViewHolder) holder).gildedImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).gildedNumberTextView.setVisibility(View.GONE);
             ((DataViewHolder) holder).crosspostImageView.setVisibility(View.GONE);
+            ((DataViewHolder) holder).archivedImageView.setVisibility(View.GONE);
+            ((DataViewHolder) holder).lockedImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).nsfwChip.setVisibility(View.GONE);
             ((DataViewHolder) holder).spoilerFlairLinearLayout.setVisibility(View.GONE);
             ((DataViewHolder) holder).spoilerTextView.setVisibility(View.GONE);

@@ -92,8 +92,10 @@
                 android:src="@drawable/ic_arrow_downward_black_20dp"
                 android:tint="@android:color/tab_indicator_text"
                 app:layout_constraintStart_toEndOf="@+id/score_text_view_item_post_comment"
+                app:layout_constraintEnd_toStartOf="@id/more_button_item_post_comment"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0" />
 
             <ImageView
                 android:id="@+id/more_button_item_post_comment"

@@ -331,6 +331,14 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 ((PostDetailViewHolder) holder).mGildedNumberTextView.setText(gildedNumber);
             }
 
+            if(mPost.isArchived()) {
+                ((PostDetailViewHolder) holder).mArchivedImageView.setVisibility(View.VISIBLE);
+            }
+
+            if(mPost.isLocked()) {
+                ((PostDetailViewHolder) holder).mLockedImageView.setVisibility(View.VISIBLE);
+            }
+
             if(mPost.isSpoiler() || mPost.getFlair() != null) {
                 ((PostDetailViewHolder) holder).spoilerFlairlinearLayout.setVisibility(View.VISIBLE);
             }
@@ -551,6 +559,12 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                         .setColorFilter(ContextCompat.getColor(mActivity, R.color.voteAndReplyUnavailableVoteButtonColor),
                                 android.graphics.PorterDuff.Mode.SRC_IN);
                 ((CommentViewHolder) holder).downVoteButton
+                        .setColorFilter(ContextCompat.getColor(mActivity, R.color.voteAndReplyUnavailableVoteButtonColor),
+                                android.graphics.PorterDuff.Mode.SRC_IN);
+            }
+
+            if(mPost.isLocked()) {
+                ((CommentViewHolder) holder).replyButton
                         .setColorFilter(ContextCompat.getColor(mActivity, R.color.voteAndReplyUnavailableVoteButtonColor),
                                 android.graphics.PorterDuff.Mode.SRC_IN);
             }
@@ -989,6 +1003,8 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         @BindView(R.id.gilded_image_view_item_post_detail) ImageView mGildedImageView;
         @BindView(R.id.gilded_number_text_view_item_post_detail) TextView mGildedNumberTextView;
         @BindView(R.id.crosspost_image_view_item_post_detail) ImageView mCrosspostImageView;
+        @BindView(R.id.archived_image_view_item_post_detail) ImageView mArchivedImageView;
+        @BindView(R.id.locked_image_view_item_post_detail) ImageView mLockedImageView;
         @BindView(R.id.nsfw_text_view_item_post_detail) Chip mNSFWChip;
         @BindView(R.id.spoiler_flair_linear_layout_item_post_detail) LinearLayout spoilerFlairlinearLayout;
         @BindView(R.id.spoiler_custom_text_view_item_post_detail) CustomTextView spoilerTextView;
