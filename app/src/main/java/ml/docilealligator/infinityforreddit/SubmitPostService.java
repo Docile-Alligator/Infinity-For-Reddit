@@ -122,7 +122,8 @@ public class SubmitPostService extends Service {
         return new NotificationCompat.Builder(this, NotificationUtils.CHANNEL_SUBMIT_POST)
                 .setContentTitle(getString(stringResId))
                 .setContentText(getString(R.string.please_wait))
-                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setColor(getResources().getColor(R.color.notificationIconColor))
                 .build();
     }
 
