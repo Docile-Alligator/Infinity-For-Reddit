@@ -261,7 +261,24 @@
     <string name="settings_theme_system_default_summary">Device default</string>
     <string name="settings_lazy_mode_interval_title">Lazy Mode Interval</string>
     <string name="settings_enable_nsfw_title">Enable NSFW</string>
+    <string name="settings_about_master_title">About</string>
     <string name="settings_acknowledgement_master_title">Acknowledgement</string>
+    <string name="settings_credits_master_title">Credits</string>
+    <string name="settings_credits_icon_foreground_title">Icon Foreground</string>
+    <string name="settings_credits_icon_foreground_summary">Technology vector created by freepik - www.freepik.com</string>
+    <string name="settings_credits_icon_background_title">Icon Background</string>
+    <string name="settings_credits_icon_background_summary">Background vector created by freepik - www.freepik.com</string>
+    <string name="settings_credits_error_image_title">Error Image</string>
+    <string name="settings_credits_error_image_summary">Technology vector created by freepik - www.freepik.com</string>
+    <string name="settings_credits_subreddit_and_user_placeholder_title">Subreddit and User Placeholder</string>
+    <string name="settings_credits_subreddit_and_user_placeholder_summary">Technology vector created by freepik - www.freepik.com</string>
+    <string name="settings_credits_gilded_icon_title">Gilded Icon</string>
+    <string name="settings_credits_gilded_icon_summary">Icon made by Freepik from www.flaticon.com</string>
+    <string name="settings_credits_crosspost_icon_title">Crosspost Icon</string>
+    <string name="settings_credits_crosspost_icon_summary">Icon made by Freepik from www.flaticon.com</string>
+    <string name="settings_credits_thumbtack_icon_title">Thumbtack Icon</string>
+    <string name="settings_credits_thumbtack_icon_summary">Icon made by Freepik from www.flaticon.com</string>
+    <string name="settings_credits_material_icons_title">Material Icons</string>
 
     <string name="no_link_available">Cannot get the link</string>
 </resources>

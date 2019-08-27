@@ -24,6 +24,7 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
  * A simple {@link PreferenceFragmentCompat} subclass.
  */
 public class MainPreferenceFragment extends PreferenceFragmentCompat {
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.main_preferences, rootKey);

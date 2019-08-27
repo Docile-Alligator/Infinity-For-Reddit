@@ -299,7 +299,6 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
 
                 if(gilded > 0) {
                     ((DataViewHolder) holder).gildedImageView.setVisibility(View.VISIBLE);
-                    mGlide.load(R.drawable.gold).into(((DataViewHolder) holder).gildedImageView);
                     ((DataViewHolder) holder).gildedNumberTextView.setVisibility(View.VISIBLE);
                     String gildedNumber = mContext.getResources().getString(R.string.gilded_count, gilded);
                     ((DataViewHolder) holder).gildedNumberTextView.setText(gildedNumber);

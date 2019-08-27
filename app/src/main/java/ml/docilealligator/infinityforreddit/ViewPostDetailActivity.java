@@ -655,7 +655,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         mFetchPostInfoLinearLayout.setVisibility(View.VISIBLE);
         mFetchPostInfoLinearLayout.setOnClickListener(view -> fetchPostAndCommentsById(subredditId));
         mFetchPostInfoTextView.setText(R.string.load_posts_error);
-        mGlide.load(R.drawable.load_post_error_indicator).into(mFetchPostInfoImageView);
+        mGlide.load(R.drawable.error_image).into(mFetchPostInfoImageView);
     }
 
     private void showMessage(int resId) {

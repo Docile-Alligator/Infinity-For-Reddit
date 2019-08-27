@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Preference
-        app:key="notification_master"
         app:icon="@drawable/ic_outline_notifications_24px"
         app:title="@string/settings_notification_master_title"
         app:fragment="Settings.NotificationPreferenceFragment" />
@@ -31,8 +30,7 @@
         app:title="@string/settings_enable_nsfw_title"/>
 
     <Preference
-        app:key="acknowledgement_master"
-        app:title="@string/settings_acknowledgement_master_title"
-        app:fragment="Settings.AcknowledgementFragment" />
+        app:title="@string/settings_about_master_title"
+        app:fragment="Settings.AboutPreferenceFragment" />
 
 </androidx.preference.PreferenceScreen>

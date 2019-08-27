@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        android:key="icon_foreground"
+        app:title="@string/settings_credits_icon_foreground_title"
+        android:summary="@string/settings_credits_icon_foreground_summary" />
+
+    <Preference
+        android:key="icon_background"
+        app:title="@string/settings_credits_icon_background_title"
+        android:summary="@string/settings_credits_icon_background_summary" />
+
+    <Preference
+        android:key="error_image"
+        app:title="@string/settings_credits_error_image_title"
+        android:summary="@string/settings_credits_error_image_summary" />
+
+    <Preference
+        android:key="subreddit_and_user_placeholder"
+        app:title="@string/settings_credits_subreddit_and_user_placeholder_title"
+        android:summary="@string/settings_credits_subreddit_and_user_placeholder_summary" />
+
+    <Preference
+        android:key="gilded_icon"
+        app:title="@string/settings_credits_gilded_icon_title"
+        android:summary="@string/settings_credits_gilded_icon_summary" />
+
+    <Preference
+        android:key="crosspost_icon"
+        app:title="@string/settings_credits_crosspost_icon_title"
+        android:summary="@string/settings_credits_crosspost_icon_summary" />
+
+    <Preference
+        android:key="thumbtack_icon"
+        app:title="@string/settings_credits_thumbtack_icon_title"
+        android:summary="@string/settings_credits_thumbtack_icon_summary" />
+
+    <Preference
+        android:key="material_icons"
+        app:title="@string/settings_credits_material_icons_title"/>
+
+</PreferenceScreen>

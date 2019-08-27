@@ -86,7 +86,7 @@ public class FollowedUsersListingFragment extends Fragment {
             if (subscribedUserData == null || subscribedUserData.size() == 0) {
                 mRecyclerView.setVisibility(View.GONE);
                 mLinearLayout.setVisibility(View.VISIBLE);
-                mGlide.load(R.drawable.load_post_error_indicator).into(mImageView);
+                mGlide.load(R.drawable.error_image).into(mImageView);
             } else {
                 mLinearLayout.setVisibility(View.GONE);
                 mRecyclerView.setVisibility(View.VISIBLE);

@@ -416,7 +416,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if(activity != null && isAdded()) {
             mFetchPostInfoLinearLayout.setVisibility(View.VISIBLE);
             mFetchPostInfoTextView.setText(stringResId);
-            mGlide.load(R.drawable.load_post_error_indicator).into(mFetchPostInfoImageView);
+            mGlide.load(R.drawable.error_image).into(mFetchPostInfoImageView);
         }
     }
 

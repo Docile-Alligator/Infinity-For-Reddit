@@ -29,7 +29,7 @@ class NotificationUtils {
         return new NotificationCompat.Builder(context.getApplicationContext(), channelId)
                 .setContentTitle(title)
                 .setContentText(content)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .setSummaryText(summary)
                         .bigText(content))
@@ -49,7 +49,7 @@ class NotificationUtils {
                 .setContentTitle(title)
                 //set content text to support devices running API level < 24
                 .setContentText(content)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setGroup(group)
                 .setGroupSummary(true)
                 .setAutoCancel(true);

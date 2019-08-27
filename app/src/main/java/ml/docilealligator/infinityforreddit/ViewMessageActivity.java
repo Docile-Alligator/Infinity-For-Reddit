@@ -258,7 +258,7 @@ public class ViewMessageActivity extends AppCompatActivity {
         mProgressBar.setVisibility(View.GONE);
         mFetchMessageInfoLinearLayout.setVisibility(View.VISIBLE);
         mFetchMessageInfoTextView.setText(stringResId);
-        mGlide.load(R.drawable.load_post_error_indicator).into(mFetchMessageInfoImageView);
+        mGlide.load(R.drawable.error_image).into(mFetchMessageInfoImageView);
     }
 
     @Override

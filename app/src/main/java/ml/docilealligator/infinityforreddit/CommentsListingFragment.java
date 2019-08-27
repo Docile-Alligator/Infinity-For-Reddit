@@ -156,7 +156,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         if(activity != null && isAdded()) {
             mFetchCommentInfoLinearLayout.setVisibility(View.VISIBLE);
             mFetchCommentInfoTextView.setText(stringResId);
-            mGlide.load(R.drawable.load_post_error_indicator).into(mFetchCommentInfoImageView);
+            mGlide.load(R.drawable.error_image).into(mFetchCommentInfoImageView);
         }
     }
 }
