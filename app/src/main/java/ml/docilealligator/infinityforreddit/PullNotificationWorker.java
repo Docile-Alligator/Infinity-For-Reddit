@@ -199,7 +199,7 @@ public class PullNotificationWorker extends Worker {
 
         Call<String> call = mOauthWithoutAuthenticatorRetrofit.create(RedditAPI.class)
                 .getMessages(RedditUtils.getOAuthHeader(account.getAccessToken()),
-                        FetchMessages.WHERE_INBOX, null);
+                        FetchMessages.WHERE_UNREAD, null);
         Response<String> response = call.execute();
 
         if(response.isSuccessful()) {

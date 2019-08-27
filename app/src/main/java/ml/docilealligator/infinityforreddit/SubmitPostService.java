@@ -22,6 +22,7 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -67,8 +68,7 @@ public class SubmitPostService extends Service {
     @Named("upload_video")
     Retrofit mUploadVideoRetrofit;
 
-    public SubmitPostService() {
-    }
+    public SubmitPostService() {}
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -79,18 +79,20 @@ public class SubmitPostService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
-        mAccessToken = intent.getExtras().getString(EXTRA_ACCESS_TOKEN);
-        subredditName = intent.getExtras().getString(EXTRA_SUBREDDIT_NAME);
-        title = intent.getExtras().getString(EXTRA_TITLE);
-        flair = intent.getExtras().getString(EXTRA_FLAIR);
-        isSpoiler = intent.getExtras().getBoolean(EXTRA_IS_SPOILER);
-        isNSFW = intent.getExtras().getBoolean(EXTRA_IS_NSFW);
-        int postType = intent.getExtras().getInt(EXTRA_POST_TYPE);
+        EventBus.getDefault().register(this);
+
+        mAccessToken = intent.getStringExtra(EXTRA_ACCESS_TOKEN);
+        subredditName = intent.getStringExtra(EXTRA_SUBREDDIT_NAME);
+        title = intent.getStringExtra(EXTRA_TITLE);
+        flair = intent.getStringExtra(EXTRA_FLAIR);
+        isSpoiler = intent.getBooleanExtra(EXTRA_IS_SPOILER, false);
+        isNSFW = intent.getBooleanExtra(EXTRA_IS_NSFW, false);
+        int postType = intent.getIntExtra(EXTRA_POST_TYPE, EXTRA_POST_TEXT_OR_LINK);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel = new NotificationChannel(
-                    NotificationUtils.CHANNEL_POST_MEDIA,
-                    NotificationUtils.CHANNEL_POST_MEDIA,
+                    NotificationUtils.CHANNEL_SUBMIT_POST,
+                    NotificationUtils.CHANNEL_SUBMIT_POST,
                     NotificationManager.IMPORTANCE_LOW
             );
 
@@ -101,15 +103,15 @@ public class SubmitPostService extends Service {
         if(postType == EXTRA_POST_TEXT_OR_LINK) {
             content = intent.getExtras().getString(EXTRA_CONTENT);
             kind = intent.getExtras().getString(EXTRA_KIND);
-            startForeground(1, createNotification(R.string.posting));
+            startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID, createNotification(R.string.posting));
             submitTextOrLinkPost();
         } else if(postType == EXTRA_POST_TYPE_IMAGE) {
             mediaUri = intent.getData();
-            startForeground(1, createNotification(R.string.posting_image));
+            startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID, createNotification(R.string.posting_image));
             submitImagePost();
         } else {
             mediaUri = intent.getData();
-            startForeground(1, createNotification(R.string.posting_video));
+            startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID, createNotification(R.string.posting_video));
             submitVideoPost();
         }
 
@@ -117,7 +119,7 @@ public class SubmitPostService extends Service {
     }
 
     private Notification createNotification(int stringResId) {
-        return new NotificationCompat.Builder(this, NotificationUtils.CHANNEL_POST_MEDIA)
+        return new NotificationCompat.Builder(this, NotificationUtils.CHANNEL_SUBMIT_POST)
                 .setContentTitle(getString(stringResId))
                 .setContentText(getString(R.string.please_wait))
                 .setSmallIcon(R.mipmap.ic_launcher_round)
@@ -131,16 +133,14 @@ public class SubmitPostService extends Service {
                     public void submitSuccessful(Post post) {
                         EventBus.getDefault().post(new SubmitTextOrLinkPostEvent(true, post, null));
 
-                        stopForeground(true);
-                        stopSelf();
+                        stopService();
                     }
 
                     @Override
                     public void submitFailed(@Nullable String errorMessage) {
                         EventBus.getDefault().post(new SubmitTextOrLinkPostEvent(false, null, errorMessage));
 
-                        stopForeground(true);
-                        stopSelf();
+                        stopService();
                     }
                 });
     }
@@ -161,16 +161,14 @@ public class SubmitPostService extends Service {
                                         EventBus.getDefault().post(new SubmitImagePostEvent(true, null));
                                         Toast.makeText(SubmitPostService.this, R.string.image_is_processing, Toast.LENGTH_SHORT).show();
 
-                                        stopForeground(true);
-                                        stopSelf();
+                                        stopService();
                                     }
 
                                     @Override
                                     public void submitFailed(@Nullable String errorMessage) {
                                         EventBus.getDefault().post(new SubmitImagePostEvent(false, errorMessage));
 
-                                        stopForeground(true);
-                                        stopSelf();
+                                        stopService();
                                     }
                                 });
                     }
@@ -204,16 +202,14 @@ public class SubmitPostService extends Service {
                                             EventBus.getDefault().post(new SubmitVideoPostEvent(true, false, null));
                                             Toast.makeText(SubmitPostService.this, R.string.video_is_processing, Toast.LENGTH_SHORT).show();
 
-                                            stopForeground(true);
-                                            stopSelf();
+                                            stopService();
                                         }
 
                                         @Override
                                         public void submitFailed(@Nullable String errorMessage) {
                                             EventBus.getDefault().post(new SubmitVideoPostEvent(false, false, errorMessage));
 
-                                            stopForeground(true);
-                                            stopSelf();
+                                            stopService();
                                         }
                                     });
                         }
@@ -227,8 +223,18 @@ public class SubmitPostService extends Service {
             e.printStackTrace();
             EventBus.getDefault().post(new SubmitVideoPostEvent(false, true, null));
 
-            stopForeground(true);
-            stopSelf();
+            stopService();
         }
+    }
+
+    private void stopService() {
+        EventBus.getDefault().unregister(this);
+        stopForeground(true);
+        stopSelf();
+    }
+
+    @Subscribe
+    public void onCancelSubmittingPostEvent(CancelSubmittingPostEvent event) {
+        stopService();
     }
 }

@@ -279,4 +279,11 @@
     <string name="settings_credits_material_icons_title">Material Icons</string>
 
     <string name="no_link_available">Cannot get the link</string>
+
+    <string name="cancel_submit_post">Cancel Submitting</string>
+    <string name="cancel_submit_post_detail">The post may still be submitted even if you cancel here.</string>
+    <string name="discard_post">Discard?</string>
+    <string name="discard_post_detail">All the draft will not be saved.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

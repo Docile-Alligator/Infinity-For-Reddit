@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.libRG.CustomTextView;
 
@@ -323,6 +324,33 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                if(isPosting) {
+                    new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                            .setTitle(R.string.cancel_submit_post)
+                            .setMessage(R.string.cancel_submit_post_detail)
+                            .setPositiveButton(R.string.yes, (dialogInterface, i)
+                                    -> {
+                                EventBus.getDefault().post(new CancelSubmittingPostEvent());
+                                finish();
+                            })
+                            .setNegativeButton(R.string.no, null)
+                            .show();
+                    return true;
+                } else {
+                    if(!titleEditText.getText().toString().equals("") || !contentEditText.getText().toString().equals("")) {
+                        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                                .setTitle(R.string.discard_post)
+                                .setMessage(R.string.discard_post_detail)
+                                .setPositiveButton(R.string.yes, (dialogInterface, i)
+                                        -> {
+                                    EventBus.getDefault().post(new CancelSubmittingPostEvent());
+                                    finish();
+                                })
+                                .setNegativeButton(R.string.no, null)
+                                .show();
+                        return true;
+                    }
+                }
                 finish();
                 return true;
             case R.id.action_send_post_text_activity:
@@ -366,6 +394,37 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
         }
 
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(isPosting) {
+            new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                    .setTitle(R.string.cancel_submit_post)
+                    .setMessage(R.string.cancel_submit_post_detail)
+                    .setPositiveButton(R.string.yes, (dialogInterface, i)
+                            -> {
+                        EventBus.getDefault().post(new CancelSubmittingPostEvent());
+                        finish();
+                    })
+                    .setNegativeButton(R.string.no, null)
+                    .show();
+        } else {
+            if(!titleEditText.getText().toString().equals("") || !contentEditText.getText().toString().equals("")) {
+                new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                        .setTitle(R.string.discard_post)
+                        .setMessage(R.string.discard_post_detail)
+                        .setPositiveButton(R.string.yes, (dialogInterface, i)
+                                -> {
+                            EventBus.getDefault().post(new CancelSubmittingPostEvent());
+                            finish();
+                        })
+                        .setNegativeButton(R.string.no, null)
+                        .show();
+            } else {
+                finish();
+            }
+        }
     }
 
     @Override
