@@ -13,7 +13,6 @@ public class SharedPreferencesUtils {
     public static final String ICON_FOREGROUND_KEY = "icon_foreground";
     public static final String ICON_BACKGROUND_KEY = "icon_background";
     public static final String ERROR_IMAGE_KEY = "error_image";
-    public static final String SUBREDDIT_AND_USER_PLACEHOLDER_KEY = "subreddit_and_user_profile_placeholder";
     public static final String GILDED_ICON_KEY = "gilded_icon";
     public static final String CROSSPOST_ICON_KEY = "crosspost_icon";
     public static final String THUMBTACK_ICON_KEY = "thumbtack_icon";

@@ -29,7 +29,8 @@ class NotificationUtils {
         return new NotificationCompat.Builder(context.getApplicationContext(), channelId)
                 .setContentTitle(title)
                 .setContentText(content)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setColor(context.getResources().getColor(R.color.notificationIconColor))
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .setSummaryText(summary)
                         .bigText(content))
@@ -49,7 +50,8 @@ class NotificationUtils {
                 .setContentTitle(title)
                 //set content text to support devices running API level < 24
                 .setContentText(content)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setColor(context.getResources().getColor(R.color.notificationIconColor))
                 .setGroup(group)
                 .setGroupSummary(true)
                 .setAutoCancel(true);

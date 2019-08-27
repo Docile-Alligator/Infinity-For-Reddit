@@ -25,7 +25,6 @@ public class CreditsPreferenceFragment extends PreferenceFragmentCompat {
         Preference iconForegroundPreference = findPreference(SharedPreferencesUtils.ICON_FOREGROUND_KEY);
         Preference iconBackgroundPreference = findPreference(SharedPreferencesUtils.ICON_BACKGROUND_KEY);
         Preference errorImagePreference = findPreference(SharedPreferencesUtils.ERROR_IMAGE_KEY);
-        Preference placeholderPreference = findPreference(SharedPreferencesUtils.SUBREDDIT_AND_USER_PLACEHOLDER_KEY);
         Preference gildedIconPreference = findPreference(SharedPreferencesUtils.GILDED_ICON_KEY);
         Preference crosspostIconPreference = findPreference(SharedPreferencesUtils.CROSSPOST_ICON_KEY);
         Preference thumbtackIconPreference = findPreference(SharedPreferencesUtils.THUMBTACK_ICON_KEY);
@@ -54,15 +53,6 @@ public class CreditsPreferenceFragment extends PreferenceFragmentCompat {
 
             if(errorImagePreference != null) {
                 errorImagePreference.setOnPreferenceClickListener(preference -> {
-                    Intent intent = new Intent(activity, LinkResolverActivity.class);
-                    intent.setData(Uri.parse("https://www.freepik.com/free-photos-vectors/technology"));
-                    startActivity(intent);
-                    return true;
-                });
-            }
-
-            if(placeholderPreference != null) {
-                placeholderPreference.setOnPreferenceClickListener(preference -> {
                     Intent intent = new Intent(activity, LinkResolverActivity.class);
                     intent.setData(Uri.parse("https://www.freepik.com/free-photos-vectors/technology"));
                     startActivity(intent);

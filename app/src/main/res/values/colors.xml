@@ -55,4 +55,6 @@
     <color name="archivedTint">#B4009F</color>
 
     <color name="lockedIconTint">#EE7302</color>
+
+    <color name="notificationIconColor">@color/colorPrimary</color>
 </resources>
