@@ -58,8 +58,6 @@
         android:elevation="1dp"
         android:visibility="gone" />
 
-    <!--<include layout="@layout/content_main" />-->
-
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager_main_activity"
         android:layout_width="match_parent"

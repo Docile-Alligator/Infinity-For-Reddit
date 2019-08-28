@@ -280,8 +280,8 @@
 
     <string name="no_link_available">Cannot get the link</string>
 
-    <string name="cancel_submit_post">Cancel Submitting</string>
-    <string name="cancel_submit_post_detail">The post may still be submitted even if you cancel here.</string>
+    <string name="exit_when_submit_post">Leave?</string>
+    <string name="exit_when_submit_post_detail">The post will still be submitted even if you leave here.</string>
     <string name="discard_post">Discard?</string>
     <string name="discard_post_detail">All the draft will not be saved.</string>
     <string name="yes">Yes</string>

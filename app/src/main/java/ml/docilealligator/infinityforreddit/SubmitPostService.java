@@ -22,7 +22,6 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -78,8 +77,6 @@ public class SubmitPostService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
-
-        EventBus.getDefault().register(this);
 
         mAccessToken = intent.getStringExtra(EXTRA_ACCESS_TOKEN);
         subredditName = intent.getStringExtra(EXTRA_SUBREDDIT_NAME);
@@ -229,13 +226,7 @@ public class SubmitPostService extends Service {
     }
 
     private void stopService() {
-        EventBus.getDefault().unregister(this);
         stopForeground(true);
         stopSelf();
-    }
-
-    @Subscribe
-    public void onCancelSubmittingPostEvent(CancelSubmittingPostEvent event) {
-        stopService();
     }
 }

@@ -305,6 +305,15 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
         }).execute();
     }
 
+    private void promptAlertDialog(int titleResId, int messageResId) {
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                .setTitle(titleResId)
+                .setMessage(messageResId)
+                .setPositiveButton(R.string.yes, (dialogInterface, i) -> finish())
+                .setNegativeButton(R.string.no, null)
+                .show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.post_link_activity, menu);
@@ -321,26 +330,11 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
         switch (item.getItemId()) {
             case android.R.id.home:
                 if(isPosting) {
-                    new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
-                            .setTitle(R.string.cancel_submit_post)
-                            .setMessage(R.string.cancel_submit_post_detail)
-                            .setPositiveButton(R.string.yes, (dialogInterface, i)
-                                    -> {
-                                EventBus.getDefault().post(new CancelSubmittingPostEvent());
-                                finish();
-                            })
-                            .setNegativeButton(R.string.no, null)
-                            .show();
+                    promptAlertDialog(R.string.exit_when_submit_post, R.string.exit_when_submit_post_detail);
                     return true;
                 } else {
                     if(!titleEditText.getText().toString().equals("") || !contentEditText.getText().toString().equals("")) {
-                        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
-                                .setTitle(R.string.discard_post)
-                                .setMessage(R.string.discard_post_detail)
-                                .setPositiveButton(R.string.yes, (dialogInterface, i)
-                                        -> finish())
-                                .setNegativeButton(R.string.no, null)
-                                .show();
+                        promptAlertDialog(R.string.discard_post, R.string.discard_post_detail);
                         return true;
                     }
                 }
@@ -397,25 +391,10 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
     @Override
     public void onBackPressed() {
         if(isPosting) {
-            new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
-                    .setTitle(R.string.cancel_submit_post)
-                    .setMessage(R.string.cancel_submit_post_detail)
-                    .setPositiveButton(R.string.yes, (dialogInterface, i)
-                            -> {
-                        EventBus.getDefault().post(new CancelSubmittingPostEvent());
-                        finish();
-                    })
-                    .setNegativeButton(R.string.no, null)
-                    .show();
+            promptAlertDialog(R.string.exit_when_submit_post, R.string.exit_when_submit_post_detail);
         } else {
             if(!titleEditText.getText().toString().equals("") || !contentEditText.getText().toString().equals("")) {
-                new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
-                        .setTitle(R.string.discard_post)
-                        .setMessage(R.string.discard_post_detail)
-                        .setPositiveButton(R.string.yes, (dialogInterface, i)
-                                -> finish())
-                        .setNegativeButton(R.string.no, null)
-                        .show();
+                promptAlertDialog(R.string.discard_post, R.string.discard_post_detail);
             } else {
                 finish();
             }
