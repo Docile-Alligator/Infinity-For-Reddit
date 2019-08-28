@@ -239,6 +239,11 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                         .into(iconGifImageView);
             }
+
+            imageUri = getIntent().getData();
+            if(imageUri != null) {
+                loadImage();
+            }
         }
 
         iconGifImageView.setOnClickListener(view -> {
@@ -448,6 +453,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
                 intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
                 intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);
                 intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_IMAGE);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     startForegroundService(intent);
@@ -563,7 +569,8 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
             if (submitImagePostEvent.errorMessage == null || submitImagePostEvent.errorMessage.equals("")) {
                 Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
             } else {
-                Snackbar.make(coordinatorLayout, submitImagePostEvent.errorMessage, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(coordinatorLayout, submitImagePostEvent.errorMessage.substring(0, 1).toUpperCase()
+                        + submitImagePostEvent.errorMessage.substring(1), Snackbar.LENGTH_SHORT).show();
             }
         }
     }

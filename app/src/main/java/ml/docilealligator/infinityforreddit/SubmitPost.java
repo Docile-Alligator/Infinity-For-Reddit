@@ -135,7 +135,7 @@ class SubmitPost {
                                             }
                                         }).execute();
                                     } else {
-                                        submitPostListener.submitFailed("Error: " + response.code());
+                                        submitPostListener.submitFailed(response.message());
                                     }
                                 }
 
@@ -234,7 +234,6 @@ class SubmitPost {
         uploadImageParams.put(RedditUtils.FILEPATH_KEY, "post_image.jpg");
         uploadImageParams.put(RedditUtils.MIMETYPE_KEY, "image/jpeg");
 
-        Log.i("map", RedditUtils.getOAuthHeader(accessToken).toString());
         Call<String> uploadImageCall = api.uploadImage(RedditUtils.getOAuthHeader(accessToken), uploadImageParams);
         uploadImageCall.enqueue(new Callback<String>() {
             @Override
@@ -417,7 +416,6 @@ class SubmitPost {
                 } else {
                     errorString = error.getString(0);
                 }
-                errorString = errorString.substring(0, 1).toUpperCase() + errorString.substring(1);
                 submitPostListener.submitFailed(errorString);
             } else {
                 submitPostListener.submitFailed(null);

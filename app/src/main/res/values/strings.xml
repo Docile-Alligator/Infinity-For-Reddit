@@ -118,7 +118,8 @@
     <string name="select_an_image">Please select an image first</string>
     <string name="posting">Posting</string>
     <string name="post_failed">Could not post it</string>
-    <string name="error_processing_video">Error processing this video</string>
+    <string name="error_processing_image">Error processing image</string>
+    <string name="error_processing_video">Error processing video</string>
 
     <string name="download_completed">Download completed</string>
     <string name="download_failed">Download Failed</string>
@@ -197,8 +198,8 @@
     <string name="best">Best</string>
     <string name="search">Search</string>
 
-    <string name="posting_video">Posting video</string>
-    <string name="posting_image">Posting image</string>
+    <string name="posting_video">Posting Video</string>
+    <string name="posting_image">Posting Image</string>
     <string name="please_wait">Please wait.</string>
 
     <string name="add_account">Add account</string>
@@ -283,7 +284,12 @@
     <string name="exit_when_submit_post">Leave?</string>
     <string name="exit_when_submit_post_detail">The post will still be submitted even if you leave here.</string>
     <string name="discard_post">Discard?</string>
-    <string name="discard_post_detail">All the draft will not be saved.</string>
+    <string name="discard_post_detail">All the draft will NOT be saved.</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+
+    <string name="no_data_received">No data received</string>
+    <string name="no_image_path_received">No image path received</string>
+    <string name="no_video_path_received">No video path received</string>
+    <string name="cannot_handle_intent">Could not handle the share request</string>
 </resources>

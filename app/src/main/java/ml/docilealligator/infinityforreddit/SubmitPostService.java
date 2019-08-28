@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
@@ -93,13 +94,13 @@ public class SubmitPostService extends Service {
                     NotificationManager.IMPORTANCE_LOW
             );
 
-            NotificationManager manager = getSystemService(NotificationManager.class);
+            NotificationManagerCompat manager = NotificationManagerCompat.from(this);
             manager.createNotificationChannel(serviceChannel);
         }
 
         if(postType == EXTRA_POST_TEXT_OR_LINK) {
-            content = intent.getExtras().getString(EXTRA_CONTENT);
-            kind = intent.getExtras().getString(EXTRA_KIND);
+            content = intent.getStringExtra(EXTRA_CONTENT);
+            kind = intent.getStringExtra(EXTRA_KIND);
             startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID, createNotification(R.string.posting));
             submitTextOrLinkPost();
         } else if(postType == EXTRA_POST_TYPE_IMAGE) {
@@ -172,6 +173,13 @@ public class SubmitPostService extends Service {
                     }
 
                     @Override
+                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                        EventBus.getDefault().post(new SubmitImagePostEvent(false, getString(R.string.error_processing_image)));
+
+                        stopService();
+                    }
+
+                    @Override
                     public void onLoadCleared(@Nullable Drawable placeholder) {
 
                     }
@@ -180,43 +188,59 @@ public class SubmitPostService extends Service {
 
     private void submitVideoPost() {
         try (ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(mediaUri, "r")) {
-            FileInputStream in = new FileInputStream(pfd.getFileDescriptor());
-            byte[] buffer;
-            buffer = new byte[in.available()];
-            while (in.read(buffer) != -1);
+            if(pfd != null) {
+                FileInputStream in = new FileInputStream(pfd.getFileDescriptor());
+                byte[] buffer;
+                buffer = new byte[in.available()];
+                while (in.read(buffer) != -1);
 
-            Glide.with(this)
-                    .asBitmap()
-                    .load(mediaUri)
-                    .into(new CustomTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                            SubmitPost.submitVideoPost(mOauthRetrofit, mUploadMediaRetrofit, mUploadVideoRetrofit,
-                                    mAccessToken, getResources().getConfiguration().locale, subredditName, title,
-                                    buffer, getContentResolver().getType(mediaUri), resource, flair, isSpoiler, isNSFW,
-                                    new SubmitPost.SubmitPostListener() {
-                                        @Override
-                                        public void submitSuccessful(Post post) {
-                                            EventBus.getDefault().post(new SubmitVideoPostEvent(true, false, null));
-                                            Toast.makeText(SubmitPostService.this, R.string.video_is_processing, Toast.LENGTH_SHORT).show();
+                Glide.with(this)
+                        .asBitmap()
+                        .load(mediaUri)
+                        .into(new CustomTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                String type = getContentResolver().getType(mediaUri);
+                                if(type != null) {
+                                    SubmitPost.submitVideoPost(mOauthRetrofit, mUploadMediaRetrofit, mUploadVideoRetrofit,
+                                            mAccessToken, getResources().getConfiguration().locale, subredditName, title,
+                                            buffer, type, resource, flair, isSpoiler, isNSFW,
+                                            new SubmitPost.SubmitPostListener() {
+                                                @Override
+                                                public void submitSuccessful(Post post) {
+                                                    EventBus.getDefault().post(new SubmitVideoPostEvent(true, false, null));
+                                                    Toast.makeText(SubmitPostService.this, R.string.video_is_processing, Toast.LENGTH_SHORT).show();
 
-                                            stopService();
-                                        }
+                                                    stopService();
+                                                }
 
-                                        @Override
-                                        public void submitFailed(@Nullable String errorMessage) {
-                                            EventBus.getDefault().post(new SubmitVideoPostEvent(false, false, errorMessage));
+                                                @Override
+                                                public void submitFailed(@Nullable String errorMessage) {
+                                                    EventBus.getDefault().post(new SubmitVideoPostEvent(false, false, errorMessage));
 
-                                            stopService();
-                                        }
-                                    });
-                        }
+                                                    stopService();
+                                                }
+                                            });
+                                } else {
+                                    EventBus.getDefault().post(new SubmitVideoPostEvent(false, true, null));
+                                }
+                            }
 
-                        @Override
-                        public void onLoadCleared(@Nullable Drawable placeholder) {
+                            @Override
+                            public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                                EventBus.getDefault().post(new SubmitVideoPostEvent(false, true, null));
 
-                        }
-                    });
+                                stopService();
+                            }
+
+                            @Override
+                            public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                            }
+                        });
+            } else {
+                EventBus.getDefault().post(new SubmitVideoPostEvent(false, true, null));
+            }
         } catch (IOException e) {
             e.printStackTrace();
             EventBus.getDefault().post(new SubmitVideoPostEvent(false, true, null));

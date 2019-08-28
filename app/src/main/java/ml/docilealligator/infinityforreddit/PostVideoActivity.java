@@ -14,7 +14,6 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +27,14 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -85,7 +92,7 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
     @BindView(R.id.capture_fab_post_video_activity) FloatingActionButton captureFab;
     @BindView(R.id.select_from_library_fab_post_video_activity) FloatingActionButton selectFromLibraryFab;
     @BindView(R.id.select_again_text_view_post_video_activity) TextView selectAgainTextView;
-    @BindView(R.id.video_view_post_video_activity) VideoView videoView;
+    @BindView(R.id.player_view_post_video_activity) PlayerView videoPlayerView;
 
     private boolean mNullAccessToken = false;
     private String mAccessToken;
@@ -97,6 +104,7 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
     private Uri videoUri;
     private boolean loadSubredditIconSuccessful = true;
     private boolean isPosting;
+    private boolean wasPlaying;
 
     private Flair flair;
     private boolean isSpoiler = false;
@@ -106,6 +114,9 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
     private RequestManager mGlide;
     private FlairBottomSheetFragment mFlairSelectionBottomSheetFragment;
     private Snackbar mPostingSnackbar;
+
+    private DataSource.Factory dataSourceFactory;
+    private SimpleExoPlayer player;
 
     @Inject
     @Named("no_oauth")
@@ -170,6 +181,12 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mGlide = Glide.with(this);
+
+        player = ExoPlayerFactory.newSimpleInstance(this);
+        videoPlayerView.setPlayer(player);
+        dataSourceFactory = new DefaultDataSourceFactory(this,
+                Util.getUserAgent(this, "Infinity"));
+        player.setRepeatMode(Player.REPEAT_MODE_ALL);
 
         mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
 
@@ -236,6 +253,11 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
                 mGlide.load(R.drawable.subreddit_default_icon)
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                         .into(iconGifImageView);
+            }
+
+            videoUri = getIntent().getData();
+            if(videoUri != null) {
+                loadVideo();
             }
         }
 
@@ -312,16 +334,12 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
             startActivityForResult(Intent.createChooser(intent,getResources().getString(R.string.select_from_gallery)), PICK_VIDEO_REQUEST_CODE);
         });
 
-        videoView.setOnPreparedListener(mediaPlayer -> {
-            mediaPlayer.setLooping(true);
-            mediaPlayer.setVolume(0, 0);
-        });
-
         selectAgainTextView.setOnClickListener(view -> {
+            wasPlaying = false;
+            player.setPlayWhenReady(false);
             videoUri = null;
+            videoPlayerView.setVisibility(View.GONE);
             selectAgainTextView.setVisibility(View.GONE);
-            videoView.stopPlayback();
-            videoView.setVisibility(View.GONE);
             constraintLayout.setVisibility(View.VISIBLE);
         });
     }
@@ -339,10 +357,11 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
 
     private void loadVideo() {
         constraintLayout.setVisibility(View.GONE);
-        videoView.setVisibility(View.VISIBLE);
         selectAgainTextView.setVisibility(View.VISIBLE);
-        videoView.setVideoURI(videoUri);
-        videoView.start();
+        videoPlayerView.setVisibility(View.VISIBLE);
+        player.prepare(new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(videoUri));
+        player.setPlayWhenReady(true);
+        wasPlaying = true;
     }
 
     private void displaySubredditIcon() {
@@ -442,6 +461,7 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
                 intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
                 intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);
                 intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_VIDEO);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     startForegroundService(intent);
@@ -469,9 +489,17 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if(wasPlaying) {
+            player.setPlayWhenReady(true);
+        }
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
-        videoView.stopPlayback();
+        player.setPlayWhenReady(false);
     }
 
     @Override
@@ -526,11 +554,13 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
                 loadVideo();
             }
         } else if (requestCode == CAPTURE_VIDEO_REQUEST_CODE) {
-            if(data != null) {
-                videoUri = data.getData();
-                loadVideo();
-            } else {
-                Snackbar.make(coordinatorLayout, R.string.error_getting_video, Snackbar.LENGTH_SHORT).show();
+            if(resultCode == RESULT_OK) {
+                if(data != null && data.getData() != null) {
+                    videoUri = data.getData();
+                    loadVideo();
+                } else {
+                    Snackbar.make(coordinatorLayout, R.string.error_getting_video, Snackbar.LENGTH_SHORT).show();
+                }
             }
         }
     }
@@ -539,6 +569,7 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+        player.release();
     }
 
     @Override
@@ -572,7 +603,8 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
             if (submitVideoPostEvent.errorMessage == null || submitVideoPostEvent.errorMessage.equals("")) {
                 Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
             } else {
-                Snackbar.make(coordinatorLayout, submitVideoPostEvent.errorMessage, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(coordinatorLayout, submitVideoPostEvent.errorMessage.substring(0, 1).toUpperCase()
+                        + submitVideoPostEvent.errorMessage.substring(1), Snackbar.LENGTH_SHORT).show();
             }
         }
     }

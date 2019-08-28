@@ -184,11 +184,12 @@
                 android:textColor="@color/colorAccent"
                 android:visibility="gone" />
 
-            <VideoView
-                android:id="@+id/video_view_post_video_activity"
+            <com.google.android.exoplayer2.ui.PlayerView
+                android:id="@+id/player_view_post_video_activity"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                android:layout_height="400dp"
+                android:visibility="gone"
+                app:controller_layout_id="@layout/exo_playback_control_view" />
 
         </LinearLayout>
 

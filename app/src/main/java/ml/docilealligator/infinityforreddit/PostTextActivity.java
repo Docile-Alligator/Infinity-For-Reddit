@@ -48,6 +48,7 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 public class PostTextActivity extends AppCompatActivity implements FlairBottomSheetFragment.FlairSelectionCallback {
 
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
+    static final String EXTRA_CONTENT = "EC";
 
     private static final String SUBREDDIT_NAME_STATE = "SNS";
     private static final String SUBREDDIT_ICON_STATE = "SIS";
@@ -209,6 +210,11 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
                 mGlide.load(R.drawable.subreddit_default_icon)
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                         .into(iconGifImageView);
+            }
+
+            String text = getIntent().getStringExtra(EXTRA_CONTENT);
+            if(text != null) {
+                contentEditText.setText(text);
             }
         }
 
@@ -472,7 +478,8 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
             if(submitTextOrLinkPostEvent.errorMessage == null) {
                 Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
             } else {
-                Snackbar.make(coordinatorLayout, submitTextOrLinkPostEvent.errorMessage, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(coordinatorLayout, submitTextOrLinkPostEvent.errorMessage.substring(0, 1).toUpperCase()
+                        + submitTextOrLinkPostEvent.errorMessage.substring(1), Snackbar.LENGTH_SHORT).show();
             }
         }
     }
