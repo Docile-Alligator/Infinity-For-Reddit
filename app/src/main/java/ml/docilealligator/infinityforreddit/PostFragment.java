@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -61,6 +63,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     static final String EXTRA_ACCESS_TOKEN = "EAT";
 
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
+    private static final String RECYCLER_VIEW_POSITION_STATE = "RVPS";
 
     @BindView(R.id.recycler_view_post_fragment) RecyclerView mPostRecyclerView;
     @BindView(R.id.progress_bar_post_fragment) CircleProgressBar mProgressBar;
@@ -72,6 +75,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     private Activity activity;
     private LinearLayoutManager mLinearLayoutManager;
+    private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
 
     private boolean isInLazyMode = false;
     private boolean isLazyModePaused = false;
@@ -84,7 +88,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     private Window window;
     private Handler lazyModeHandler;
-    private Runnable lazyModeRunnable;
+    private LazyModeRunnable lazyModeRunnable;
     private CountDownTimer resumeLazyModeCountDownTimer;
 
     private float lazyModeInterval;
@@ -149,17 +153,39 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
         }
 
+        if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && !resources.getBoolean(R.bool.isTablet)) {
+            mLinearLayoutManager = new LinearLayoutManager(activity);
+            mPostRecyclerView.setLayoutManager(mLinearLayoutManager);
+        } else {
+            mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            mPostRecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
+        }
+
         mGlide = Glide.with(activity);
 
-        lazyModeRunnable = new Runnable() {
+        lazyModeRunnable = new LazyModeRunnable() {
+
             @Override
             public void run() {
                 if(isInLazyMode && !isLazyModePaused) {
                     int nPosts = mAdapter.getItemCount();
-                    int firstVisiblePosition = mLinearLayoutManager.findFirstVisibleItemPosition();
-                    if(firstVisiblePosition != RecyclerView.NO_POSITION && nPosts > firstVisiblePosition) {
-                        smoothScroller.setTargetPosition(firstVisiblePosition + 1);
-                        mLinearLayoutManager.startSmoothScroll(smoothScroller);
+                    if(getCurrentPosition() == -1) {
+                        if(mLinearLayoutManager != null) {
+                            setCurrentPosition(mLinearLayoutManager.findFirstVisibleItemPosition());
+                        } else {
+                            int[] into = new int[2];
+                            setCurrentPosition(mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[1]);
+                        }
+                    }
+
+                    if(getCurrentPosition() != RecyclerView.NO_POSITION && nPosts > getCurrentPosition()) {
+                        incrementCurrentPosition();
+                        smoothScroller.setTargetPosition(getCurrentPosition());
+                        if(mLinearLayoutManager != null) {
+                            mLinearLayoutManager.startSmoothScroll(smoothScroller);
+                        } else {
+                            mStaggeredGridLayoutManager.startSmoothScroll(smoothScroller);
+                        }
                     }
                 }
                 lazyModeHandler.postDelayed(this, (long) (lazyModeInterval * 1000));
@@ -179,14 +205,17 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         };
 
         if(savedInstanceState != null) {
+            int recyclerViewPosition = savedInstanceState.getInt(RECYCLER_VIEW_POSITION_STATE);
+            if(recyclerViewPosition > 0) {
+                mPostRecyclerView.scrollToPosition(recyclerViewPosition);
+            }
+
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             if(isInLazyMode) {
                 resumeLazyMode(false);
             }
         }
 
-        mLinearLayoutManager = new LinearLayoutManager(activity);
-        mPostRecyclerView.setLayoutManager(mLinearLayoutManager);
         mPostRecyclerView.setOnTouchListener((view, motionEvent) -> {
             if(isInLazyMode) {
                 pauseLazyMode(true);
@@ -399,6 +428,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
+        if(mLinearLayoutManager != null) {
+            outState.putInt(RECYCLER_VIEW_POSITION_STATE, mLinearLayoutManager.findFirstVisibleItemPosition());
+        } else if(mStaggeredGridLayoutManager != null) {
+            int[] into = new int[2];
+            outState.putInt(RECYCLER_VIEW_POSITION_STATE,
+                    mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[0]);
+        }
     }
 
     @Override
@@ -459,6 +495,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if(isInLazyMode) {
             isLazyModePaused = false;
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+            lazyModeRunnable.resetOldPosition();
+
             if(resumeNow) {
                 lazyModeHandler.post(lazyModeRunnable);
             } else {
@@ -506,7 +545,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Override
     public void onStart() {
         super.onStart();
-        if(isInLazyMode) {
+        if(isInLazyMode && isLazyModePaused) {
             resumeLazyMode(false);
         }
     }
@@ -523,5 +562,25 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    private static abstract class LazyModeRunnable implements Runnable {
+        private int currentPosition = -1;
+
+        int getCurrentPosition() {
+            return currentPosition;
+        }
+
+        void setCurrentPosition(int currentPosition) {
+            this.currentPosition = currentPosition;
+        }
+
+        void incrementCurrentPosition() {
+            currentPosition++;
+        }
+
+        void resetOldPosition() {
+            currentPosition = -1;
+        }
     }
 }
