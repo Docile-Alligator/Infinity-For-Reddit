@@ -109,8 +109,10 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         mCommentViewModel.getInitialLoadingState().observe(this, networkState -> {
             if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
                 mProgressBar.setVisibility(View.GONE);
+                mFetchCommentInfoLinearLayout.setVisibility(View.GONE);
             } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
-                mFetchCommentInfoLinearLayout.setOnClickListener(view -> mCommentViewModel.retry());
+                mProgressBar.setVisibility(View.GONE);
+                mFetchCommentInfoLinearLayout.setOnClickListener(view -> mCommentViewModel.refresh());
                 showErrorView(R.string.load_comments_failed);
             } else {
                 mFetchCommentInfoLinearLayout.setVisibility(View.GONE);
@@ -119,6 +121,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         });
 
         mCommentViewModel.hasComment().observe(this, hasComment -> {
+            mProgressBar.setVisibility(View.GONE);
             if(hasComment) {
                 mFetchCommentInfoLinearLayout.setVisibility(View.GONE);
             } else {
@@ -149,6 +152,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     @Override
     public void refresh() {
         mCommentViewModel.refresh();
+        mAdapter.setNetworkState(null);
     }
 
     private void showErrorView(int stringResId) {

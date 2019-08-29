@@ -20,7 +20,7 @@ public class UserListingViewModel extends ViewModel {
     private LiveData<PagedList<UserData>> users;
     private MutableLiveData<String> sortTypeLiveData;
 
-    UserListingViewModel(Retrofit retrofit, String query, String sortType) {
+    public UserListingViewModel(Retrofit retrofit, String query, String sortType) {
         userListingDataSourceFactory = new UserListingDataSourceFactory(retrofit, query, sortType);
 
         initialLoadingState = Transformations.switchMap(userListingDataSourceFactory.getUserListingDataSourceMutableLiveData(),
@@ -63,10 +63,6 @@ public class UserListingViewModel extends ViewModel {
 
     void refresh() {
         userListingDataSourceFactory.getUserListingDataSource().invalidate();
-    }
-
-    void retry() {
-        userListingDataSourceFactory.getUserListingDataSource().retry();
     }
 
     void retryLoadingMore() {

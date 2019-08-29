@@ -375,12 +375,6 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
             }
         }
 
-        public void newSearch() {
-            getItem(0);
-            getItem(1);
-            getItem(2);
-        }
-
         public void changeNSFW(boolean nsfw) {
             if(postFragment != null) {
                 postFragment.changeNSFW(nsfw);

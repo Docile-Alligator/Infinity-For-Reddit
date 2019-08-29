@@ -66,10 +66,6 @@ public class MessageViewModel extends ViewModel {
         messageDataSourceFactory.getMessageDataSource().invalidate();
     }
 
-    void retry() {
-        messageDataSourceFactory.getMessageDataSource().retry();
-    }
-
     void retryLoadingMore() {
         messageDataSourceFactory.getMessageDataSource().retryLoadingMore();
     }

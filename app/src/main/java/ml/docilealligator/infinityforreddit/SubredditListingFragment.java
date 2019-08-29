@@ -130,8 +130,10 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         mSubredditListingViewModel.getInitialLoadingState().observe(this, networkState -> {
             if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
                 mProgressBar.setVisibility(View.GONE);
+                mFetchSubredditListingInfoLinearLayout.setVisibility(View.GONE);
             } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
-                mFetchSubredditListingInfoLinearLayout.setOnClickListener(view -> mSubredditListingViewModel.retry());
+                mProgressBar.setVisibility(View.GONE);
+                mFetchSubredditListingInfoLinearLayout.setOnClickListener(view -> mSubredditListingViewModel.refresh());
                 showErrorView(R.string.search_subreddits_error);
             } else {
                 mFetchSubredditListingInfoLinearLayout.setVisibility(View.GONE);
@@ -140,6 +142,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         });
 
         mSubredditListingViewModel.hasSubredditLiveData().observe(this, hasSubreddit -> {
+            mProgressBar.setVisibility(View.GONE);
             if(hasSubreddit) {
                 mFetchSubredditListingInfoLinearLayout.setVisibility(View.GONE);
             } else {
@@ -173,5 +176,6 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
     @Override
     public void refresh() {
         mSubredditListingViewModel.refresh();
+        mAdapter.setNetworkState(null);
     }
 }

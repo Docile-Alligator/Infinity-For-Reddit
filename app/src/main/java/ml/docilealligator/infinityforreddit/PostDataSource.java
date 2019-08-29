@@ -52,8 +52,6 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
     private MutableLiveData<NetworkState> initialLoadStateLiveData;
     private MutableLiveData<Boolean> hasPostLiveData;
 
-    private LoadInitialParams<String> initialParams;
-    private LoadInitialCallback<String, Post> initialCallback;
     private LoadParams<String> params;
     private LoadCallback<String, Post> callback;
 
@@ -132,9 +130,6 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull final LoadInitialCallback<String, Post> callback) {
-        initialParams = params;
-        initialCallback = callback;
-
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
         switch (postType) {
@@ -650,10 +645,6 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                 paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
             }
         });
-    }
-
-    void retry() {
-        loadInitial(initialParams, initialCallback);
     }
 
     void retryLoadingMore() {

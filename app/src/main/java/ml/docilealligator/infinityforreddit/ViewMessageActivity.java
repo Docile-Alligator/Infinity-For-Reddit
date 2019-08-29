@@ -229,8 +229,10 @@ public class ViewMessageActivity extends AppCompatActivity {
         mMessageViewModel.getInitialLoadingState().observe(this, networkState -> {
             if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
                 mProgressBar.setVisibility(View.GONE);
+                mFetchMessageInfoLinearLayout.setVisibility(View.GONE);
             } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
-                mFetchMessageInfoLinearLayout.setOnClickListener(view -> mMessageViewModel.retry());
+                mProgressBar.setVisibility(View.GONE);
+                mFetchMessageInfoLinearLayout.setOnClickListener(view -> mMessageViewModel.refresh());
                 showErrorView(R.string.load_messages_failed);
             } else {
                 mFetchMessageInfoLinearLayout.setVisibility(View.GONE);
@@ -239,6 +241,7 @@ public class ViewMessageActivity extends AppCompatActivity {
         });
 
         mMessageViewModel.hasMessage().observe(this, hasMessage -> {
+            mProgressBar.setVisibility(View.GONE);
             if(hasMessage) {
                 mFetchMessageInfoLinearLayout.setVisibility(View.GONE);
             } else {
@@ -271,6 +274,7 @@ public class ViewMessageActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.action_refresh_view_message_activity) {
             mMessageViewModel.refresh();
+            mAdapter.setNetworkState(null);
             return true;
         } else if(item.getItemId() == android.R.id.home) {
             finish();

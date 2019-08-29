@@ -20,7 +20,7 @@ public class SubredditListingViewModel extends ViewModel {
     private LiveData<PagedList<SubredditData>> subreddits;
     private MutableLiveData<String> sortTypeLiveData;
 
-    SubredditListingViewModel(Retrofit retrofit, String query, String sortType) {
+    public SubredditListingViewModel(Retrofit retrofit, String query, String sortType) {
         subredditListingDataSourceFactory = new SubredditListingDataSourceFactory(retrofit, query, sortType);
 
         initialLoadingState = Transformations.switchMap(subredditListingDataSourceFactory.getSubredditListingDataSourceMutableLiveData(),
@@ -63,10 +63,6 @@ public class SubredditListingViewModel extends ViewModel {
 
     void refresh() {
         subredditListingDataSourceFactory.getSubredditListingDataSource().invalidate();
-    }
-
-    void retry() {
-        subredditListingDataSourceFactory.getSubredditListingDataSource().retry();
     }
 
     void retryLoadingMore() {

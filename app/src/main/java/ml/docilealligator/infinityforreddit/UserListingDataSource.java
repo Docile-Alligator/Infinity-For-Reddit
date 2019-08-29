@@ -19,8 +19,6 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
     private MutableLiveData<NetworkState> initialLoadStateLiveData;
     private MutableLiveData<Boolean> hasUserLiveData;
 
-    private PageKeyedDataSource.LoadInitialParams<String> initialParams;
-    private PageKeyedDataSource.LoadInitialCallback<String, UserData> initialCallback;
     private PageKeyedDataSource.LoadParams<String> params;
     private PageKeyedDataSource.LoadCallback<String, UserData> callback;
 
@@ -47,9 +45,6 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
 
     @Override
     public void loadInitial(@NonNull PageKeyedDataSource.LoadInitialParams<String> params, @NonNull PageKeyedDataSource.LoadInitialCallback<String, UserData> callback) {
-        initialParams = params;
-        initialCallback = callback;
-
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
         FetchUserData.fetchUserListingData(retrofit, query, null, sortType,
@@ -100,10 +95,6 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
                 paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error retrieving User list"));
             }
         });
-    }
-
-    void retry() {
-        loadInitial(initialParams, initialCallback);
     }
 
     void retryLoadingMore() {

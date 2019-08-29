@@ -66,10 +66,6 @@ public class CommentViewModel extends ViewModel {
         commentDataSourceFactory.getCommentDataSource().invalidate();
     }
 
-    void retry() {
-        commentDataSourceFactory.getCommentDataSource().retry();
-    }
-
     void retryLoadingMore() {
         commentDataSourceFactory.getCommentDataSource().retryLoadingMore();
     }

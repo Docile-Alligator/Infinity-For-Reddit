@@ -169,10 +169,6 @@ public class PostViewModel extends ViewModel {
         postDataSourceFactory.getPostDataSource().invalidate();
     }
 
-    void retry() {
-        postDataSourceFactory.getPostDataSource().retry();
-    }
-
     void retryLoadingMore() {
         postDataSourceFactory.getPostDataSource().retryLoadingMore();
     }

@@ -109,8 +109,10 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         mUserListingViewModel.getInitialLoadingState().observe(this, networkState -> {
             if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
                 mProgressBar.setVisibility(View.GONE);
+                mFetchUserListingInfoLinearLayout.setVisibility(View.GONE);
             } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
-                mFetchUserListingInfoLinearLayout.setOnClickListener(view -> mUserListingViewModel.retry());
+                mProgressBar.setVisibility(View.GONE);
+                mFetchUserListingInfoLinearLayout.setOnClickListener(view -> mUserListingViewModel.refresh());
                 showErrorView(R.string.search_users_error);
             } else {
                 mFetchUserListingInfoLinearLayout.setVisibility(View.GONE);
@@ -119,6 +121,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         });
 
         mUserListingViewModel.hasUser().observe(this, hasUser -> {
+            mProgressBar.setVisibility(View.GONE);
             if(hasUser) {
                 mFetchUserListingInfoLinearLayout.setVisibility(View.GONE);
             } else {
@@ -152,5 +155,6 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
     @Override
     public void refresh() {
         mUserListingViewModel.refresh();
+        mAdapter.setNetworkState(null);
     }
 }

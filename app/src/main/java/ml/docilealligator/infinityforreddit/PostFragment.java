@@ -296,7 +296,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         } else if(postType == PostDataSource.TYPE_SUBREDDIT) {
             String subredditName = getArguments().getString(EXTRA_NAME);
 
-            boolean displaySubredditName = subredditName.equals("popular") || subredditName.equals("all");
+            boolean displaySubredditName = subredditName != null && (subredditName.equals("popular") || subredditName.equals("all"));
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, displaySubredditName, new PostRecyclerViewAdapter.Callback() {
                 @Override
@@ -392,8 +392,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         mPostViewModel.getInitialLoadingState().observe(this, networkState -> {
             if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
                 mProgressBar.setVisibility(View.GONE);
+                mFetchPostInfoLinearLayout.setVisibility(View.GONE);
             } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
-                mFetchPostInfoLinearLayout.setOnClickListener(view -> mPostViewModel.retry());
+                mProgressBar.setVisibility(View.GONE);
+                mFetchPostInfoLinearLayout.setOnClickListener(view -> mPostViewModel.refresh());
                 showErrorView(R.string.load_posts_error);
             } else {
                 mFetchPostInfoLinearLayout.setVisibility(View.GONE);
@@ -403,14 +405,15 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         mPostViewModel.hasPost().observe(this, hasPost -> {
             this.hasPost = hasPost;
+            mProgressBar.setVisibility(View.GONE);
             if(hasPost) {
                 mFetchPostInfoLinearLayout.setVisibility(View.GONE);
-                mProgressBar.setVisibility(View.GONE);
             } else {
                 if(isInLazyMode) {
                     stopLazyMode();
                 }
 
+                mFetchPostInfoLinearLayout.setOnClickListener(view -> {});
                 showErrorView(R.string.no_posts);
             }
         });
@@ -451,6 +454,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         hasPost = false;
         mPostViewModel.refresh();
+        mAdapter.setNetworkState(null);
     }
 
     private void showErrorView(int stringResId) {

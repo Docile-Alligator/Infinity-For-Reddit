@@ -19,8 +19,6 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
     private MutableLiveData<NetworkState> initialLoadStateLiveData;
     private MutableLiveData<Boolean> hasSubredditLiveData;
 
-    private LoadInitialParams<String> initialParams;
-    private LoadInitialCallback<String, SubredditData> initialCallback;
     private LoadParams<String> params;
     private LoadCallback<String, SubredditData> callback;
 
@@ -47,9 +45,6 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull LoadInitialCallback<String, SubredditData> callback) {
-        initialParams = params;
-        initialCallback = callback;
-
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
         FetchSubredditData.fetchSubredditListingData(retrofit, query, null, sortType,
@@ -100,10 +95,6 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
                 paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error retrieving subreddit list"));
             }
         });
-    }
-
-    void retry() {
-        loadInitial(initialParams, initialCallback);
     }
 
     void retryLoadingMore() {

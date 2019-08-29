@@ -226,7 +226,6 @@ class ParsePost {
         if(!data.has(JSONUtils.PREVIEW_KEY) && previewUrl.equals("")) {
             if(url.contains(permalink)) {
                 //Text post
-                Log.i("text", Integer.toString(i));
                 int postType = Post.TEXT_TYPE;
                 post = new Post(id, fullName, subredditName, subredditNamePrefixed, author, formattedPostTime,
                         title, permalink, score, postType, voteType, gilded, flair, spoiler, nsfw,
@@ -238,7 +237,6 @@ class ParsePost {
                 }
             } else {
                 //No preview link post
-                Log.i("no preview link", Integer.toString(i));
                 int postType = Post.NO_PREVIEW_LINK_TYPE;
                 post = new Post(id, fullName, subredditName, subredditNamePrefixed, author, formattedPostTime,
                         title, previewUrl, url, permalink, score, postType,
@@ -257,7 +255,6 @@ class ParsePost {
 
             if(isVideo) {
                 //Video post
-                Log.i("video", Integer.toString(i));
                 JSONObject redditVideoObject = data.getJSONObject(JSONUtils.MEDIA_KEY).getJSONObject(JSONUtils.REDDIT_VIDEO_KEY);
                 int postType = Post.VIDEO_TYPE;
                 String videoUrl = Html.fromHtml(redditVideoObject.getString(JSONUtils.DASH_URL_KEY)).toString();
@@ -274,7 +271,6 @@ class ParsePost {
                 JSONObject variations = data.getJSONObject(JSONUtils.PREVIEW_KEY).getJSONArray(JSONUtils.IMAGES_KEY).getJSONObject(0);
                 if (variations.has(JSONUtils.VARIANTS_KEY) && variations.getJSONObject(JSONUtils.VARIANTS_KEY).has(JSONUtils.MP4_KEY)) {
                     //Gif video post (MP4)
-                    Log.i("gif video mp4", Integer.toString(i));
                     int postType = Post.GIF_VIDEO_TYPE;
                     String videoUrl = Html.fromHtml(variations.getJSONObject(JSONUtils.VARIANTS_KEY).getJSONObject(JSONUtils.MP4_KEY).getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY)).toString();
                     String gifDownloadUrl = Html.fromHtml(variations.getJSONObject(JSONUtils.VARIANTS_KEY).getJSONObject(JSONUtils.GIF_KEY).getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY)).toString();
@@ -289,7 +285,6 @@ class ParsePost {
                     post.setGifOrVideoDownloadUrl(gifDownloadUrl);
                 } else if(data.getJSONObject(JSONUtils.PREVIEW_KEY).has(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY)) {
                     //Gif video post (Dash)
-                    Log.i("gif video dash", Integer.toString(i));
                     int postType = Post.GIF_VIDEO_TYPE;
                     String videoUrl = Html.fromHtml(data.getJSONObject(JSONUtils.PREVIEW_KEY)
                             .getJSONObject(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY).getString(JSONUtils.DASH_URL_KEY)).toString();
@@ -304,7 +299,6 @@ class ParsePost {
                 } else {
                     if (url.endsWith("jpg") || url.endsWith("png")) {
                         //Image post
-                        Log.i("image", Integer.toString(i));
                         int postType = Post.IMAGE_TYPE;
 
                         post = new Post(id, fullName, subredditName, subredditNamePrefixed, author, formattedPostTime,
@@ -316,7 +310,6 @@ class ParsePost {
                     } else {
                         if (url.contains(permalink)) {
                             //Text post but with a preview
-                            Log.i("text with image", Integer.toString(i));
                             int postType = Post.TEXT_TYPE;
 
                             post = new Post(id, fullName, subredditName, subredditNamePrefixed, author, formattedPostTime,
@@ -333,7 +326,6 @@ class ParsePost {
                             }
                         } else {
                             //Link post
-                            Log.i("link", Integer.toString(i));
                             int postType = Post.LINK_TYPE;
 
                             post = new Post(id, fullName, subredditName, subredditNamePrefixed, author, formattedPostTime,
@@ -353,7 +345,6 @@ class ParsePost {
             } else {
                 if (url.endsWith("jpg") || url.endsWith("png")) {
                     //Image post
-                    Log.i("CP image", Integer.toString(i));
                     int postType = Post.IMAGE_TYPE;
 
                     post = new Post(id, fullName, subredditName, subredditNamePrefixed, author, formattedPostTime,
@@ -363,7 +354,6 @@ class ParsePost {
                     post.setPreviewHeight(previewHeight);
                 } else {
                     //CP No Preview Link post
-                    Log.i("CP no preview link", Integer.toString(i));
                     int postType = Post.NO_PREVIEW_LINK_TYPE;
 
                     post = new Post(id, fullName, subredditName, subredditNamePrefixed, author, formattedPostTime, title,

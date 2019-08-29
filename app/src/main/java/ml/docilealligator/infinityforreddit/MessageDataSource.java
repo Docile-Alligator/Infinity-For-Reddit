@@ -22,8 +22,6 @@ class MessageDataSource extends PageKeyedDataSource<String, Message> {
     private MutableLiveData<NetworkState> initialLoadStateLiveData;
     private MutableLiveData<Boolean> hasPostLiveData;
 
-    private LoadInitialParams<String> initialParams;
-    private LoadInitialCallback<String, Message> initialCallback;
     private LoadParams<String> params;
     private LoadCallback<String, Message> callback;
 
@@ -49,19 +47,12 @@ class MessageDataSource extends PageKeyedDataSource<String, Message> {
         return hasPostLiveData;
     }
 
-    void retry() {
-        loadInitial(initialParams, initialCallback);
-    }
-
     void retryLoadingMore() {
         loadAfter(params, callback);
     }
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull LoadInitialCallback<String, Message> callback) {
-        initialParams = params;
-        initialCallback = callback;
-
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
         FetchMessages.fetchMessagesAsync(oauthRetrofit, locale, accessToken, where, null, new FetchMessages.FetchMessagesListener() {
