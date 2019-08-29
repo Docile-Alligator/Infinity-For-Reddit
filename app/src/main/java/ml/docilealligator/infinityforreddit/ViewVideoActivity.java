@@ -8,6 +8,7 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -94,11 +95,20 @@ public class ViewVideoActivity extends AppCompatActivity {
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarColor)));
         setTitle("");
 
-        //Set player controller margin bottom in order to display it above the navbar
-        int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-        LinearLayout controllerLinearLayout = findViewById(R.id.linear_layout_exo_playback_control_view);
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
-        params.bottomMargin = getResources().getDimensionPixelSize(resourceId);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || getResources().getBoolean(R.bool.isTablet)) {
+            //Set player controller bottom margin in order to display it above the navbar
+            int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+            LinearLayout controllerLinearLayout = findViewById(R.id.linear_layout_exo_playback_control_view);
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
+            params.bottomMargin = getResources().getDimensionPixelSize(resourceId);
+        } else {
+            //Set player controller right margin in order to display it above the navbar
+            int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+            LinearLayout controllerLinearLayout = findViewById(R.id.linear_layout_exo_playback_control_view);
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
+            params.rightMargin = getResources().getDimensionPixelSize(resourceId);
+        }
 
         Intent intent = getIntent();
         mVideoUri = intent.getData();

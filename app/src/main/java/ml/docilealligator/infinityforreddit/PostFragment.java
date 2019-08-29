@@ -325,12 +325,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                         filter, nsfw);
             }
         } else if(postType == PostDataSource.TYPE_USER) {
-            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mFetchPostInfoLinearLayout.getLayoutParams();
-            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            mFetchPostInfoLinearLayout.setLayoutParams(params);
-
             String username = getArguments().getString(EXTRA_USER_NAME);
             String where = getArguments().getString(EXTRA_USER_WHERE);
+            if(where != null && where.equals(PostDataSource.USER_WHERE_SUBMITTED)) {
+                CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mFetchPostInfoLinearLayout.getLayoutParams();
+                params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                mFetchPostInfoLinearLayout.setLayoutParams(params);
+            }
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, true, new PostRecyclerViewAdapter.Callback() {
@@ -404,6 +405,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             this.hasPost = hasPost;
             if(hasPost) {
                 mFetchPostInfoLinearLayout.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.GONE);
             } else {
                 if(isInLazyMode) {
                     stopLazyMode();
