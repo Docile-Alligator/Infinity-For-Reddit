@@ -15,6 +15,7 @@
         android:id="@+id/no_subscriptions_linear_layout_subreddits_listing_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="48dp"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone">

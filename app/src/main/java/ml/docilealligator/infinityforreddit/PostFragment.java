@@ -7,11 +7,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
@@ -159,6 +160,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         } else {
             mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
             mPostRecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
+            StaggeredGridLayoutManagerItemOffsetDecoration itemDecoration =
+                    new StaggeredGridLayoutManagerItemOffsetDecoration(activity, R.dimen.staggeredLayoutManagerItemOffset);
+            mPostRecyclerView.addItemDecoration(itemDecoration);
         }
 
         mGlide = Glide.with(activity);
@@ -581,6 +585,37 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         void resetOldPosition() {
             currentPosition = -1;
+        }
+    }
+
+    private static class StaggeredGridLayoutManagerItemOffsetDecoration extends RecyclerView.ItemDecoration {
+
+        private int mItemOffset;
+
+        StaggeredGridLayoutManagerItemOffsetDecoration(int itemOffset) {
+            mItemOffset = itemOffset;
+        }
+
+        StaggeredGridLayoutManagerItemOffsetDecoration(@NonNull Context context, @DimenRes int itemOffsetId) {
+            this(context.getResources().getDimensionPixelSize(itemOffsetId));
+        }
+
+        @Override
+        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent,
+                                   @NonNull RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+
+            StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) view.getLayoutParams();
+
+            int spanIndex = layoutParams.getSpanIndex();
+
+            int halfOffset = mItemOffset / 2;
+
+            if(spanIndex == 0) {
+                outRect.set(0, 0, halfOffset, 0);
+            } else {
+                outRect.set(halfOffset, 0, 0, 0);
+            }
         }
     }
 }

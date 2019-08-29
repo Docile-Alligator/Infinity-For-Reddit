@@ -9,4 +9,5 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="roundedBottomSheetCornerRadiusLeftPadding">0dp</dimen>
     <dimen name="roundedBottomSheetCornerRadiusRightPadding">0dp</dimen>
+    <dimen name="staggeredLayoutManagerItemOffset">16dp</dimen>
 </resources>
