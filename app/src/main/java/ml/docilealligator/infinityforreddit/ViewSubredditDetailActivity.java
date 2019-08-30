@@ -478,6 +478,9 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                 startActivity(intent);
                 break;
             case R.id.action_refresh_view_subreddit_detail_activity:
+                if(mMenu != null) {
+                    mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity).setTitle(R.string.action_start_lazy_mode);
+                }
                 if(mFragment instanceof FragmentCommunicator) {
                     ((FragmentCommunicator) mFragment).refresh();
                 }

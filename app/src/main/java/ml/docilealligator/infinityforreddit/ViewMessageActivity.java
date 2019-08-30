@@ -226,20 +226,6 @@ public class ViewMessageActivity extends AppCompatActivity {
         mMessageViewModel = new ViewModelProvider(this, factory).get(MessageViewModel.class);
         mMessageViewModel.getMessages().observe(this, messages -> mAdapter.submitList(messages));
 
-        mMessageViewModel.getInitialLoadingState().observe(this, networkState -> {
-            if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
-                mProgressBar.setVisibility(View.GONE);
-                mFetchMessageInfoLinearLayout.setVisibility(View.GONE);
-            } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
-                mProgressBar.setVisibility(View.GONE);
-                mFetchMessageInfoLinearLayout.setOnClickListener(view -> mMessageViewModel.refresh());
-                showErrorView(R.string.load_messages_failed);
-            } else {
-                mFetchMessageInfoLinearLayout.setVisibility(View.GONE);
-                mProgressBar.setVisibility(View.VISIBLE);
-            }
-        });
-
         mMessageViewModel.hasMessage().observe(this, hasMessage -> {
             mProgressBar.setVisibility(View.GONE);
             if(hasMessage) {
@@ -249,6 +235,22 @@ public class ViewMessageActivity extends AppCompatActivity {
                     //Do nothing
                 });
                 showErrorView(R.string.no_messages);
+            }
+        });
+
+        mMessageViewModel.getInitialLoadingState().observe(this, networkState -> {
+            if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
+                mProgressBar.setVisibility(View.GONE);
+            } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
+                mProgressBar.setVisibility(View.GONE);
+                mFetchMessageInfoLinearLayout.setOnClickListener(view -> {
+                    mFetchMessageInfoLinearLayout.setVisibility(View.GONE);
+                    mMessageViewModel.refresh();
+                    mAdapter.setNetworkState(null);
+                });
+                showErrorView(R.string.load_messages_failed);
+            } else {
+                mProgressBar.setVisibility(View.VISIBLE);
             }
         });
 

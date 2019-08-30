@@ -106,20 +106,6 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         mUserListingViewModel = new ViewModelProvider(this, factory).get(UserListingViewModel.class);
         mUserListingViewModel.getUsers().observe(this, UserData -> mAdapter.submitList(UserData));
 
-        mUserListingViewModel.getInitialLoadingState().observe(this, networkState -> {
-            if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
-                mProgressBar.setVisibility(View.GONE);
-                mFetchUserListingInfoLinearLayout.setVisibility(View.GONE);
-            } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
-                mProgressBar.setVisibility(View.GONE);
-                mFetchUserListingInfoLinearLayout.setOnClickListener(view -> mUserListingViewModel.refresh());
-                showErrorView(R.string.search_users_error);
-            } else {
-                mFetchUserListingInfoLinearLayout.setVisibility(View.GONE);
-                mProgressBar.setVisibility(View.VISIBLE);
-            }
-        });
-
         mUserListingViewModel.hasUser().observe(this, hasUser -> {
             mProgressBar.setVisibility(View.GONE);
             if(hasUser) {
@@ -132,6 +118,18 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
             }
         });
 
+        mUserListingViewModel.getInitialLoadingState().observe(this, networkState -> {
+            if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
+                mProgressBar.setVisibility(View.GONE);
+            } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
+                mProgressBar.setVisibility(View.GONE);
+                mFetchUserListingInfoLinearLayout.setOnClickListener(view -> refresh());
+                showErrorView(R.string.search_users_error);
+            } else {
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+        });
+
         mUserListingViewModel.getPaginationNetworkState().observe(this, networkState -> {
             mAdapter.setNetworkState(networkState);
         });
@@ -140,8 +138,8 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
     }
 
     private void showErrorView(int stringResId) {
-        mProgressBar.setVisibility(View.GONE);
         if(getActivity() != null && isAdded()) {
+            mProgressBar.setVisibility(View.GONE);
             mFetchUserListingInfoLinearLayout.setVisibility(View.VISIBLE);
             mFetchUserListingInfoTextView.setText(stringResId);
             Glide.with(this).load(R.drawable.error_image).into(mFetchUserListingInfoImageView);
@@ -154,6 +152,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
 
     @Override
     public void refresh() {
+        mFetchUserListingInfoLinearLayout.setVisibility(View.GONE);
         mUserListingViewModel.refresh();
         mAdapter.setNetworkState(null);
     }

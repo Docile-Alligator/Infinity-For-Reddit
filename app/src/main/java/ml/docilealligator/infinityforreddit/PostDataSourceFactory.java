@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
 
@@ -75,6 +76,7 @@ class PostDataSourceFactory extends DataSource.Factory {
         this.nsfw = nsfw;
     }
 
+    @NonNull
     @Override
     public DataSource create() {
         if(postType == PostDataSource.TYPE_FRONT_PAGE) {

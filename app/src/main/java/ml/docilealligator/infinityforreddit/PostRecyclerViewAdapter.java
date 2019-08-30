@@ -104,7 +104,8 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
 
         @Override
         public boolean areContentsTheSame(@NonNull Post post, @NonNull Post t1) {
-            return post.getTitle().equals(t1.getTitle());
+            return post.getTitle().equals(t1.getTitle()) && post.getSelfText().equals(t1.getSelfText())
+                    && post.getScore() == t1.getScore();
         }
     };
 
@@ -357,7 +358,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                     loadImage(holder, post);
                 }
 
-                if(mPostType == PostDataSource.TYPE_SUBREDDIT && post.isStickied()) {
+                if(mPostType == PostDataSource.TYPE_SUBREDDIT && !mDisplaySubredditName && post.isStickied()) {
                     ((DataViewHolder) holder).stickiedPostImageView.setVisibility(View.VISIBLE);
                     mGlide.load(R.drawable.thumbtack).into(((DataViewHolder) holder).stickiedPostImageView);
                 }

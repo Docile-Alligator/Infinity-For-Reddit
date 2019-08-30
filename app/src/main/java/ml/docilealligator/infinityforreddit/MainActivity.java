@@ -706,6 +706,9 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 startActivity(intent);
                 return true;
             case R.id.action_refresh_main_activity:
+                if(mMenu != null) {
+                    mMenu.findItem(R.id.action_lazy_mode_main_activity).setTitle(R.string.action_start_lazy_mode);
+                }
                 sectionsPagerAdapter.refresh();
                 mFetchUserInfoSuccess = false;
                 loadUserData();

@@ -62,7 +62,7 @@
     <string name="vote_failed">Vote failed</string>
     <string name="refresh_post_failed">Error refreshing the post</string>
 
-    <string name="load_messages_failed">Error loading messages</string>
+    <string name="load_messages_failed">Error loading messages.\nTap to retry.</string>
     <string name="no_messages">Empty</string>
 
     <string name="nsfw">NSFW</string>

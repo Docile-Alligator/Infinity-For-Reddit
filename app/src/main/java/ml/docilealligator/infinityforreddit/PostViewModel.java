@@ -48,10 +48,9 @@ public class PostViewModel extends ViewModel {
                 (new PagedList.Config.Builder())
                         .setEnablePlaceholders(false)
                         .setPageSize(25)
-                        .setInitialLoadSizeHint(75)
                         .build();
 
-        posts = Transformations.switchMap(NSFWAndSortTypeLiveData, sort -> {
+        posts = Transformations.switchMap(NSFWAndSortTypeLiveData, nsfwAndSort -> {
             postDataSourceFactory.changeNSFWAndSortType(nsfwLiveData.getValue(), sortTypeLiveData.getValue());
             return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
         });
@@ -80,10 +79,9 @@ public class PostViewModel extends ViewModel {
                 (new PagedList.Config.Builder())
                         .setEnablePlaceholders(false)
                         .setPageSize(25)
-                        .setInitialLoadSizeHint(75)
                         .build();
 
-        posts = Transformations.switchMap(NSFWAndSortTypeLiveData, sort -> {
+        posts = Transformations.switchMap(NSFWAndSortTypeLiveData, nsfwAndSort -> {
             postDataSourceFactory.changeNSFWAndSortType(nsfwLiveData.getValue(), sortTypeLiveData.getValue());
             return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
         });
@@ -112,10 +110,9 @@ public class PostViewModel extends ViewModel {
                 (new PagedList.Config.Builder())
                         .setEnablePlaceholders(false)
                         .setPageSize(25)
-                        .setInitialLoadSizeHint(75)
                         .build();
 
-        posts = Transformations.switchMap(NSFWAndSortTypeLiveData, sort -> {
+        posts = Transformations.switchMap(NSFWAndSortTypeLiveData, nsfwAndSort -> {
             postDataSourceFactory.changeNSFWAndSortType(nsfwLiveData.getValue(), sortTypeLiveData.getValue());
             return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
         });
@@ -144,10 +141,9 @@ public class PostViewModel extends ViewModel {
                 (new PagedList.Config.Builder())
                         .setEnablePlaceholders(false)
                         .setPageSize(25)
-                        .setInitialLoadSizeHint(75)
                         .build();
 
-        posts = Transformations.switchMap(sortTypeLiveData, sort -> {
+        posts = Transformations.switchMap(NSFWAndSortTypeLiveData, nsfwAndSort -> {
             postDataSourceFactory.changeNSFWAndSortType(nsfwLiveData.getValue(), sortTypeLiveData.getValue());
             return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
         });

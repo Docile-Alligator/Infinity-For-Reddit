@@ -127,20 +127,6 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         mSubredditListingViewModel = new ViewModelProvider(this, factory).get(SubredditListingViewModel.class);
         mSubredditListingViewModel.getSubreddits().observe(this, subredditData -> mAdapter.submitList(subredditData));
 
-        mSubredditListingViewModel.getInitialLoadingState().observe(this, networkState -> {
-            if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
-                mProgressBar.setVisibility(View.GONE);
-                mFetchSubredditListingInfoLinearLayout.setVisibility(View.GONE);
-            } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
-                mProgressBar.setVisibility(View.GONE);
-                mFetchSubredditListingInfoLinearLayout.setOnClickListener(view -> mSubredditListingViewModel.refresh());
-                showErrorView(R.string.search_subreddits_error);
-            } else {
-                mFetchSubredditListingInfoLinearLayout.setVisibility(View.GONE);
-                mProgressBar.setVisibility(View.VISIBLE);
-            }
-        });
-
         mSubredditListingViewModel.hasSubredditLiveData().observe(this, hasSubreddit -> {
             mProgressBar.setVisibility(View.GONE);
             if(hasSubreddit) {
@@ -153,6 +139,18 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
             }
         });
 
+        mSubredditListingViewModel.getInitialLoadingState().observe(this, networkState -> {
+            if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
+                mProgressBar.setVisibility(View.GONE);
+            } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
+                mProgressBar.setVisibility(View.GONE);
+                mFetchSubredditListingInfoLinearLayout.setOnClickListener(view -> refresh());
+                showErrorView(R.string.search_subreddits_error);
+            } else {
+                mProgressBar.setVisibility(View.VISIBLE);
+            }
+        });
+
         mSubredditListingViewModel.getPaginationNetworkState().observe(this, networkState -> {
             mAdapter.setNetworkState(networkState);
         });
@@ -161,8 +159,8 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
     }
 
     private void showErrorView(int stringResId) {
-        mProgressBar.setVisibility(View.GONE);
         if(getActivity() != null && isAdded()) {
+            mProgressBar.setVisibility(View.GONE);
             mFetchSubredditListingInfoLinearLayout.setVisibility(View.VISIBLE);
             mFetchSubredditListingInfoTextView.setText(stringResId);
             Glide.with(this).load(R.drawable.error_image).into(mFetchSubredditListingInfoImageView);
@@ -175,6 +173,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
     @Override
     public void refresh() {
+        mFetchSubredditListingInfoLinearLayout.setVisibility(View.GONE);
         mSubredditListingViewModel.refresh();
         mAdapter.setNetworkState(null);
     }

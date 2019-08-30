@@ -19,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -43,19 +44,24 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
     static final String EXTRA_SORT_TYPE = "EST";
     static final String EXTRA_USER_WHERE = "EUW";
 
+    private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String FRAGMENT_OUT_STATE = "FOS";
 
     @BindView(R.id.appbar_layout_filtered_posts_activity) AppBarLayout appBarLayout;
+    @BindView(R.id.collapsing_toolbar_layout_filtered_posts_activity) CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar_filtered_posts_activity) Toolbar toolbar;
 
+    private boolean isInLazyMode = false;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String name;
     private int postType;
 
     private Fragment mFragment;
+    private Menu mMenu;
+    private AppBarLayout.LayoutParams params;
 
     private SortTypeBottomSheetFragment bestSortTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment popularAndAllSortTypeBottomSheetFragment;
@@ -72,7 +78,7 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_filtered_posts);
+        setContentView(R.layout.activity_filtered_thing);
 
         ButterKnife.bind(this);
 
@@ -142,12 +148,15 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
+
         name = getIntent().getStringExtra(EXTRA_NAME);
         postType = getIntent().getIntExtra(EXTRA_POST_TYPE, PostDataSource.TYPE_FRONT_PAGE);
         int filter = getIntent().getIntExtra(EXTRA_FILTER, Post.TEXT_TYPE);
         String sortType = getIntent().getStringExtra(EXTRA_SORT_TYPE);
 
         if(savedInstanceState != null) {
+            isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
             if(!mNullAccessToken && mAccessToken == null) {
@@ -259,6 +268,17 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.filtered_posts_activity, menu);
+        mMenu = menu;
+        MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_filtered_thing_activity);
+        if(isInLazyMode) {
+            lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
+            collapsingToolbarLayout.setLayoutParams(params);
+        } else {
+            lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+            collapsingToolbarLayout.setLayoutParams(params);
+        }
         return true;
     }
 
@@ -268,7 +288,7 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.action_sort_filtered_posts_activity:
+            case R.id.action_sort_filtered_thing_activity:
                 switch (postType) {
                     case PostDataSource.TYPE_FRONT_PAGE:
                         bestSortTypeBottomSheetFragment.show(getSupportFragmentManager(), bestSortTypeBottomSheetFragment.getTag());
@@ -287,8 +307,30 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
                         userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
                 }
                 return true;
-            case R.id.action_refresh_filtered_posts_activity:
-                ((FragmentCommunicator) mFragment).refresh();
+            case R.id.action_refresh_filtered_thing_activity:
+                if(mMenu != null) {
+                    mMenu.findItem(R.id.action_lazy_mode_filtered_thing_activity).setTitle(R.string.action_start_lazy_mode);
+                }
+                if(mFragment instanceof FragmentCommunicator) {
+                    ((FragmentCommunicator) mFragment).refresh();
+                }
+                return true;
+            case R.id.action_lazy_mode_filtered_thing_activity:
+                MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_filtered_thing_activity);
+                if(isInLazyMode) {
+                    ((FragmentCommunicator) mFragment).stopLazyMode();
+                    isInLazyMode = false;
+                    lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                    collapsingToolbarLayout.setLayoutParams(params);
+                } else {
+                    if(((FragmentCommunicator) mFragment).startLazyMode()) {
+                        isInLazyMode = true;
+                        lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
+                        collapsingToolbarLayout.setLayoutParams(params);
+                    }
+                }
                 return true;
         }
         return false;
@@ -300,6 +342,7 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
         if (mFragment != null) {
             getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE, mFragment);
         }
+        outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
     }

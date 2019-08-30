@@ -389,20 +389,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         mPostViewModel = new ViewModelProvider(this, factory).get(PostViewModel.class);
         mPostViewModel.getPosts().observe(this, posts -> mAdapter.submitList(posts));
 
-        mPostViewModel.getInitialLoadingState().observe(this, networkState -> {
-            if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
-                mProgressBar.setVisibility(View.GONE);
-                mFetchPostInfoLinearLayout.setVisibility(View.GONE);
-            } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
-                mProgressBar.setVisibility(View.GONE);
-                mFetchPostInfoLinearLayout.setOnClickListener(view -> mPostViewModel.refresh());
-                showErrorView(R.string.load_posts_error);
-            } else {
-                mFetchPostInfoLinearLayout.setVisibility(View.GONE);
-                mProgressBar.setVisibility(View.VISIBLE);
-            }
-        });
-
         mPostViewModel.hasPost().observe(this, hasPost -> {
             this.hasPost = hasPost;
             mProgressBar.setVisibility(View.GONE);
@@ -415,6 +401,18 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
                 mFetchPostInfoLinearLayout.setOnClickListener(view -> {});
                 showErrorView(R.string.no_posts);
+            }
+        });
+
+        mPostViewModel.getInitialLoadingState().observe(this, networkState -> {
+            if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
+                mProgressBar.setVisibility(View.GONE);
+            } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
+                mProgressBar.setVisibility(View.GONE);
+                mFetchPostInfoLinearLayout.setOnClickListener(view -> refresh());
+                showErrorView(R.string.load_posts_error);
+            } else {
+                mProgressBar.setVisibility(View.VISIBLE);
             }
         });
 
@@ -452,14 +450,15 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             stopLazyMode();
         }
 
+        mFetchPostInfoLinearLayout.setVisibility(View.GONE);
         hasPost = false;
         mPostViewModel.refresh();
         mAdapter.setNetworkState(null);
     }
 
     private void showErrorView(int stringResId) {
-        mProgressBar.setVisibility(View.GONE);
         if(activity != null && isAdded()) {
+            mProgressBar.setVisibility(View.GONE);
             mFetchPostInfoLinearLayout.setVisibility(View.VISIBLE);
             mFetchPostInfoTextView.setText(stringResId);
             mGlide.load(R.drawable.error_image).into(mFetchPostInfoImageView);
@@ -494,6 +493,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void stopLazyMode() {
         isInLazyMode = false;
         isLazyModePaused = false;
+        lazyModeRunnable.resetOldPosition();
         lazyModeHandler.removeCallbacks(lazyModeRunnable);
         resumeLazyModeCountDownTimer.cancel();
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

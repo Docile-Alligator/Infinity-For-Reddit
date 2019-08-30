@@ -227,6 +227,9 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
                 userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
                 return true;
             case R.id.action_refresh_account_posts_activity:
+                if(mMenu != null) {
+                    mMenu.findItem(R.id.action_lazy_mode_account_posts_activity).setTitle(R.string.action_start_lazy_mode);
+                }
                 if(mFragment != null) {
                     ((PostFragment) mFragment).refresh();
                 }

@@ -106,20 +106,6 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         mCommentViewModel = new ViewModelProvider(this, factory).get(CommentViewModel.class);
         mCommentViewModel.getComments().observe(this, comments -> mAdapter.submitList(comments));
 
-        mCommentViewModel.getInitialLoadingState().observe(this, networkState -> {
-            if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
-                mProgressBar.setVisibility(View.GONE);
-                mFetchCommentInfoLinearLayout.setVisibility(View.GONE);
-            } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
-                mProgressBar.setVisibility(View.GONE);
-                mFetchCommentInfoLinearLayout.setOnClickListener(view -> mCommentViewModel.refresh());
-                showErrorView(R.string.load_comments_failed);
-            } else {
-                mFetchCommentInfoLinearLayout.setVisibility(View.GONE);
-                mProgressBar.setVisibility(View.VISIBLE);
-            }
-        });
-
         mCommentViewModel.hasComment().observe(this, hasComment -> {
             mProgressBar.setVisibility(View.GONE);
             if(hasComment) {
@@ -129,6 +115,18 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
                     //Do nothing
                 });
                 showErrorView(R.string.no_comments);
+            }
+        });
+
+        mCommentViewModel.getInitialLoadingState().observe(this, networkState -> {
+            if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
+                mProgressBar.setVisibility(View.GONE);
+            } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
+                mProgressBar.setVisibility(View.GONE);
+                mFetchCommentInfoLinearLayout.setOnClickListener(view -> refresh());
+                showErrorView(R.string.load_comments_failed);
+            } else {
+                mProgressBar.setVisibility(View.VISIBLE);
             }
         });
 
@@ -151,13 +149,14 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
     @Override
     public void refresh() {
+        mFetchCommentInfoLinearLayout.setVisibility(View.GONE);
         mCommentViewModel.refresh();
         mAdapter.setNetworkState(null);
     }
 
     private void showErrorView(int stringResId) {
-        mProgressBar.setVisibility(View.GONE);
         if(activity != null && isAdded()) {
+            mProgressBar.setVisibility(View.GONE);
             mFetchCommentInfoLinearLayout.setVisibility(View.VISIBLE);
             mFetchCommentInfoTextView.setText(stringResId);
             mGlide.load(R.drawable.error_image).into(mFetchCommentInfoImageView);
