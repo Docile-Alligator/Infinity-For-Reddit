@@ -8,6 +8,7 @@ import android.os.Parcelable;
  */
 
 class Post implements Parcelable {
+    static final int NSFW_TYPE = -1;
     static final int TEXT_TYPE = 0;
     static final int IMAGE_TYPE = 1;
     static final int LINK_TYPE = 2;
@@ -47,6 +48,7 @@ class Post implements Parcelable {
     private boolean isCrosspost;
     private boolean isDashVideo;
     private boolean isDownloadableGifOrVideo;
+    private String crosspostParentId;
 
     Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
          String postTime, String title, String previewUrl, String permalink, int score, int postType,
@@ -166,6 +168,7 @@ class Post implements Parcelable {
         isCrosspost = in.readByte() != 0;
         isDashVideo = in.readByte() != 0;
         isDownloadableGifOrVideo = in.readByte() != 0;
+        crosspostParentId = in.readString();
     }
 
     public static final Creator<Post> CREATOR = new Creator<Post>() {
@@ -373,6 +376,14 @@ class Post implements Parcelable {
         return isCrosspost;
     }
 
+    public String getCrosspostParentId() {
+        return crosspostParentId;
+    }
+
+    public void setCrosspostParentId(String crosspostParentId) {
+        this.crosspostParentId = crosspostParentId;
+    }
+
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(id);
@@ -407,5 +418,6 @@ class Post implements Parcelable {
         parcel.writeByte((byte) (isCrosspost ? 1 : 0));
         parcel.writeByte((byte) (isDashVideo ? 1 : 0));
         parcel.writeByte((byte) (isDownloadableGifOrVideo ? 1 : 0));
+        parcel.writeString(crosspostParentId);
     }
 }

@@ -217,6 +217,9 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
         }
 
         switch (filter) {
+            case Post.NSFW_TYPE:
+                toolbar.setSubtitle(R.string.nsfw);
+                break;
             case Post.TEXT_TYPE:
                 toolbar.setSubtitle(R.string.text);
                 break;
@@ -243,10 +246,10 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
             bundle.putInt(PostFragment.EXTRA_FILTER, filter);
             bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
             if(postType == PostDataSource.TYPE_USER) {
-                bundle.putString(PostFragment.EXTRA_USER_WHERE, getIntent().getExtras().getString(EXTRA_USER_WHERE));
+                bundle.putString(PostFragment.EXTRA_USER_WHERE, getIntent().getStringExtra(EXTRA_USER_WHERE));
             }
             if(postType == PostDataSource.TYPE_SEARCH) {
-                bundle.putString(PostFragment.EXTRA_QUERY, getIntent().getExtras().getString(EXTRA_QUERY));
+                bundle.putString(PostFragment.EXTRA_QUERY, getIntent().getStringExtra(EXTRA_QUERY));
             }
             mFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_filtered_posts_activity, mFragment).commit();

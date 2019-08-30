@@ -98,7 +98,7 @@ class ParsePost {
 
                 try {
                     JSONObject data = allData.getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY);
-                    post = parseBasicData(data, locale, -1);
+                    post = parseBasicData(data, locale);
                 } catch (JSONException e) {
                     Log.e("parsing post error", "message: " + e.getMessage());
                     parseFailed = true;
@@ -115,13 +115,15 @@ class ParsePost {
                 for (int i = 0; i < size; i++) {
                     try {
                         JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
-                        Post post = parseBasicData(data, locale, i);
+                        Post post = parseBasicData(data, locale);
                         if(!(!nsfw && post.isNSFW())) {
                             if (filter == PostFragment.EXTRA_NO_FILTER) {
                                 newPosts.add(post);
                             } else if (filter == post.getPostType()) {
                                 newPosts.add(post);
                             } else if (filter == Post.LINK_TYPE && post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
+                                newPosts.add(post);
+                            } else if(filter == Post.NSFW_TYPE && post.isNSFW()) {
                                 newPosts.add(post);
                             }
                         }
@@ -151,7 +153,7 @@ class ParsePost {
         }
     }
 
-    private static Post parseBasicData(JSONObject data, Locale locale, int i) throws JSONException {
+    private static Post parseBasicData(JSONObject data, Locale locale) throws JSONException {
         String id = data.getString(JSONUtils.ID_KEY);
         String fullName = data.getString(JSONUtils.NAME_KEY);
         String subredditName = data.getString(JSONUtils.SUBREDDIT_KEY);
@@ -200,15 +202,18 @@ class ParsePost {
         if(data.has(JSONUtils.CROSSPOST_PARENT_LIST)) {
             //Cross post
             data = data.getJSONArray(JSONUtils.CROSSPOST_PARENT_LIST).getJSONObject(0);
-            return parseData(data, permalink, id, fullName, subredditName, subredditNamePrefixed,
+            Post crosspostParent = parseBasicData(data, locale);
+            Post post = parseData(data, permalink, id, fullName, subredditName, subredditNamePrefixed,
                     author, formattedPostTime, title, previewUrl, previewWidth, previewHeight,
                     score, voteType, gilded, flair, spoiler, nsfw, stickied, archived, locked, saved,
-                    true, i);
+                    true);
+            post.setCrosspostParentId(crosspostParent.getId());
+            return post;
         } else {
             return parseData(data, permalink, id, fullName, subredditName, subredditNamePrefixed,
                     author, formattedPostTime, title, previewUrl, previewWidth, previewHeight,
                     score, voteType, gilded, flair, spoiler, nsfw, stickied, archived, locked, saved,
-                    false, i);
+                    false);
         }
     }
 
@@ -217,7 +222,7 @@ class ParsePost {
                                   String formattedPostTime, String title, String previewUrl, int previewWidth,
                                   int previewHeight, int score, int voteType, int gilded, String flair,
                                   boolean spoiler, boolean nsfw, boolean stickied, boolean archived,
-                                  boolean locked, boolean saved, boolean isCrosspost, int i) throws JSONException {
+                                  boolean locked, boolean saved, boolean isCrosspost) throws JSONException {
         Post post;
 
         boolean isVideo = data.getBoolean(JSONUtils.IS_VIDEO_KEY);

@@ -23,6 +23,8 @@
     <string name="action_download">Download</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_add_comment">Add a comment</string>
+    <string name="action_save_post">Save post</string>
+    <string name="action_view_crosspost_parent">Crosspost parent</string>
     <string name="action_search">Search</string>
     <string name="action_start_lazy_mode">Start Lazy Mode</string>
     <string name="action_stop_lazy_mode">Stop Lazy Mode</string>
@@ -44,6 +46,7 @@
 
     <string name="tap_to_retry">Error loading image. Tap to retry.</string>
     <string name="load_posts_error">Error loading posts.\nTap to retry.</string>
+    <string name="load_post_error">Error loading this post.\nTap to retry.</string>
     <string name="search_subreddits_error">Error searching subreddits.\nTap to retry.</string>
     <string name="search_users_error">Error searching users.\nTap to retry.</string>
     <string name="no_posts">No posts found</string>

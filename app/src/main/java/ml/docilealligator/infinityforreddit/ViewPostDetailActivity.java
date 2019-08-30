@@ -340,6 +340,8 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
                     mMenu.findItem(R.id.action_edit_flair_view_post_detail_activity).setVisible(true);
                 }
+
+                mMenu.findItem(R.id.action_view_crosspost_parent_view_post_detail_activity).setVisible(mPost.getCrosspostParentId() != null);
             }
 
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
@@ -429,13 +431,15 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                                 } else {
                                     saveItem.setVisible(false);
                                 }
-                            }
 
-                            if(mMenu != null && mPost.getAuthor().equals(mAccountName)) {
-                                if(mPost.getPostType() == Post.TEXT_TYPE) {
-                                    mMenu.findItem(R.id.action_edit_view_post_detail_activity).setVisible(true);
+                                if(mPost.getAuthor().equals(mAccountName)) {
+                                    if(mPost.getPostType() == Post.TEXT_TYPE) {
+                                        mMenu.findItem(R.id.action_edit_view_post_detail_activity).setVisible(true);
+                                    }
+                                    mMenu.findItem(R.id.action_delete_view_post_detail_activity).setVisible(true);
                                 }
-                                mMenu.findItem(R.id.action_delete_view_post_detail_activity).setVisible(true);
+
+                                mMenu.findItem(R.id.action_view_crosspost_parent_view_post_detail_activity).setVisible(mPost.getCrosspostParentId() != null);
                             }
 
                             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this,
@@ -637,6 +641,8 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                                     } else {
                                         saveItem.setVisible(false);
                                     }
+
+                                    mMenu.findItem(R.id.action_view_crosspost_parent_view_post_detail_activity).setVisible(mPost.getCrosspostParentId() != null);
                                 }
                             }
 
@@ -654,7 +660,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         mProgressBar.setVisibility(View.GONE);
         mFetchPostInfoLinearLayout.setVisibility(View.VISIBLE);
         mFetchPostInfoLinearLayout.setOnClickListener(view -> fetchPostAndCommentsById(subredditId));
-        mFetchPostInfoTextView.setText(R.string.load_posts_error);
+        mFetchPostInfoTextView.setText(R.string.load_post_error);
         mGlide.load(R.drawable.error_image).into(mFetchPostInfoImageView);
     }
 
@@ -838,6 +844,8 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
                 menu.findItem(R.id.action_edit_flair_view_post_detail_activity).setVisible(true);
             }
+
+            menu.findItem(R.id.action_view_crosspost_parent_view_post_detail_activity).setVisible(mPost.getCrosspostParentId() != null);
         }
         return true;
     }
@@ -915,7 +923,12 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                                 });
                     }
                 }
-                break;
+                return true;
+            case R.id.action_view_crosspost_parent_view_post_detail_activity:
+                Intent crosspostIntent = new Intent(this, ViewPostDetailActivity.class);
+                crosspostIntent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, mPost.getCrosspostParentId());
+                startActivity(crosspostIntent);
+                return true;
             case R.id.action_edit_view_post_detail_activity:
                 Intent editPostItent = new Intent(this, EditPostActivity.class);
                 editPostItent.putExtra(EditPostActivity.EXTRA_ACCESS_TOKEN, mAccessToken);

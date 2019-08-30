@@ -60,7 +60,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     static final String EXTRA_POST_TYPE = "EPT";
     static final String EXTRA_SORT_TYPE = "EST";
     static final String EXTRA_FILTER = "EF";
-    static final int EXTRA_NO_FILTER = -1;
+    static final int EXTRA_NO_FILTER = -2;
     static final String EXTRA_ACCESS_TOKEN = "EAT";
 
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";

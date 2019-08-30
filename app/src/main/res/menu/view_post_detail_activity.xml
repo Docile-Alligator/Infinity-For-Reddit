@@ -11,7 +11,7 @@
     <item
         android:id="@+id/action_save_view_post_detail_activity"
         android:orderInCategory="2"
-        android:title="@string/action_add_comment"
+        android:title="@string/action_save_post"
         app:showAsAction="ifRoom"
         android:visible="false" />
 
@@ -22,34 +22,41 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_edit_view_post_detail_activity"
+        android:id="@+id/action_view_crosspost_parent_view_post_detail_activity"
         android:orderInCategory="4"
+        android:title="@string/action_view_crosspost_parent"
+        app:showAsAction="never"
+        android:visible="false" />
+
+    <item
+        android:id="@+id/action_edit_view_post_detail_activity"
+        android:orderInCategory="5"
         android:title="@string/action_edit_post"
         app:showAsAction="never"
         android:visible="false" />
 
     <item
         android:id="@+id/action_delete_view_post_detail_activity"
-        android:orderInCategory="5"
+        android:orderInCategory="6"
         android:title="@string/action_delete_post"
         app:showAsAction="never"
         android:visible="false" />
 
     <item
         android:id="@+id/action_nsfw_view_post_detail_activity"
-        android:orderInCategory="6"
-        app:showAsAction="never"
-        android:visible="false" />
-
-    <item
-        android:id="@+id/action_spoiler_view_post_detail_activity"
         android:orderInCategory="7"
         app:showAsAction="never"
         android:visible="false" />
 
     <item
-        android:id="@+id/action_edit_flair_view_post_detail_activity"
+        android:id="@+id/action_spoiler_view_post_detail_activity"
         android:orderInCategory="8"
+        app:showAsAction="never"
+        android:visible="false" />
+
+    <item
+        android:id="@+id/action_edit_flair_view_post_detail_activity"
+        android:orderInCategory="9"
         android:title="@string/action_edit_flair"
         app:showAsAction="never"
         android:visible="false" />

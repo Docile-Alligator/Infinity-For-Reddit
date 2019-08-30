@@ -48,6 +48,7 @@ public class PostViewModel extends ViewModel {
                 (new PagedList.Config.Builder())
                         .setEnablePlaceholders(false)
                         .setPageSize(25)
+                        .setInitialLoadSizeHint(75)
                         .build();
 
         posts = Transformations.switchMap(NSFWAndSortTypeLiveData, sort -> {
@@ -79,6 +80,7 @@ public class PostViewModel extends ViewModel {
                 (new PagedList.Config.Builder())
                         .setEnablePlaceholders(false)
                         .setPageSize(25)
+                        .setInitialLoadSizeHint(75)
                         .build();
 
         posts = Transformations.switchMap(NSFWAndSortTypeLiveData, sort -> {
@@ -110,6 +112,7 @@ public class PostViewModel extends ViewModel {
                 (new PagedList.Config.Builder())
                         .setEnablePlaceholders(false)
                         .setPageSize(25)
+                        .setInitialLoadSizeHint(75)
                         .build();
 
         posts = Transformations.switchMap(NSFWAndSortTypeLiveData, sort -> {
@@ -141,6 +144,7 @@ public class PostViewModel extends ViewModel {
                 (new PagedList.Config.Builder())
                         .setEnablePlaceholders(false)
                         .setPageSize(25)
+                        .setInitialLoadSizeHint(75)
                         .build();
 
         posts = Transformations.switchMap(sortTypeLiveData, sort -> {

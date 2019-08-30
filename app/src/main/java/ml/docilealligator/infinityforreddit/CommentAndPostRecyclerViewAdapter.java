@@ -315,6 +315,11 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             }
 
             if(mPost.isCrosspost()) {
+                ((PostDetailViewHolder) holder).mCrosspostImageView.setOnClickListener(view -> {
+                    Intent crosspostIntent = new Intent(mActivity, ViewPostDetailActivity.class);
+                    crosspostIntent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, mPost.getCrosspostParentId());
+                    mActivity.startActivity(crosspostIntent);
+                });
                 ((PostDetailViewHolder) holder).mCrosspostImageView.setVisibility(View.VISIBLE);
             }
 
@@ -356,6 +361,14 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             }
 
             if(mPost.isNSFW()) {
+                ((PostDetailViewHolder) holder).mNSFWChip.setOnClickListener(view -> {
+                    Intent intent = new Intent(mActivity, FilteredThingActivity.class);
+                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, mSubredditNamePrefixed.substring(2));
+                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+                    intent.putExtra(FilteredThingActivity.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_HOT);
+                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, Post.NSFW_TYPE);
+                    mActivity.startActivity(intent);
+                });
                 ((PostDetailViewHolder) holder).mNSFWChip.setVisibility(View.VISIBLE);
             } else {
                 ((PostDetailViewHolder) holder).mNSFWChip.setVisibility(View.GONE);
