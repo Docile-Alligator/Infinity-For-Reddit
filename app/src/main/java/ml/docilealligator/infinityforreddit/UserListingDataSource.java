@@ -78,7 +78,7 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
         this.params = params;
         this.callback = callback;
 
-        if(params.key.equals("null")) {
+        if(params.key.equals("null") || params.key.equals("")) {
             return;
         }
 

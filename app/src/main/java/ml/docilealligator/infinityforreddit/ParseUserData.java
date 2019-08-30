@@ -43,7 +43,7 @@ public class ParseUserData {
                 this.parseUserDataListener = parseUserDataListener;
                 parseFailed = false;
             } catch (JSONException e) {
-                Log.i("userdata json error", e.getMessage());
+                Log.i("userdata json error", "error: " + e.getMessage());
                 parseUserDataListener.onParseUserDataFailed();
             }
         }
@@ -54,7 +54,7 @@ public class ParseUserData {
                 userData = parseUserDataBase(jsonResponse);
             } catch (JSONException e) {
                 parseFailed = true;
-                Log.i("parse user data error", e.getMessage());
+                Log.i("parse user data error", "error: " + e.getMessage());
             }
             return null;
         }
@@ -86,7 +86,7 @@ public class ParseUserData {
                 parseFailed = false;
                 userDataArrayList = new ArrayList<>();
             } catch (JSONException e) {
-                Log.i("userdata json error", e.getMessage());
+                Log.i("userdata json error", "error: " + e.getMessage());
                 parseFailed = true;
             }
         }
@@ -103,7 +103,7 @@ public class ParseUserData {
                 }
             } catch (JSONException e) {
                 parseFailed = true;
-                Log.i("parse user data error", e.getMessage());
+                Log.i("parse user data error", "error: " + e.getMessage());
             }
             return null;
         }
