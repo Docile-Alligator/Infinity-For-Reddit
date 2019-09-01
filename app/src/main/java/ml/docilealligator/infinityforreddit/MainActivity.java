@@ -819,7 +819,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         private PostFragment allPostFragment;
 
         SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
+            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
         @NonNull

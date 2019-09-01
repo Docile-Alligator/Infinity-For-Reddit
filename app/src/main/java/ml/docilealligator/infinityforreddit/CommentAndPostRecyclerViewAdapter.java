@@ -980,6 +980,10 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         } else if(holder instanceof PostDetailViewHolder) {
             ((PostDetailViewHolder) holder).mUpvoteButton.clearColorFilter();
             ((PostDetailViewHolder) holder).mDownvoteButton.clearColorFilter();
+            ((PostDetailViewHolder) holder).spoilerFlairlinearLayout.setVisibility(View.GONE);
+            ((PostDetailViewHolder) holder).flairTextView.setVisibility(View.GONE);
+            ((PostDetailViewHolder) holder).spoilerTextView.setVisibility(View.GONE);
+            ((PostDetailViewHolder) holder).mNSFWChip.setVisibility(View.GONE);
         }
     }
 

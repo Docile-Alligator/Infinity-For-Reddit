@@ -271,7 +271,7 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
         private UserListingFragment userListingFragment;
 
         public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
+            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
         @NonNull

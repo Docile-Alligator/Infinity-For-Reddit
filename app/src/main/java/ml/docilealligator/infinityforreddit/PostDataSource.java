@@ -195,8 +195,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                                 ArrayList<Post> singlePostList = new ArrayList<>();
                                 singlePostList.add(post);
                                 hasPostLiveData.postValue(true);
-                                callback.onResult(singlePostList, null, null);
                                 initialLoadStateLiveData.postValue(NetworkState.LOADED);
+                                callback.onResult(singlePostList, null, null);
                             }
 
                             @Override
@@ -226,8 +226,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                                             hasPostLiveData.postValue(false);
                                         }
 
-                                        callback.onResult(newPosts, null, nextPageKey);
                                         initialLoadStateLiveData.postValue(NetworkState.LOADED);
+                                        callback.onResult(newPosts, null, nextPageKey);
                                     }
 
                                     @Override
@@ -268,8 +268,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                             if(newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
                                 loadBestPostsAfter(params, callback, lastItem);
                             } else {
-                                callback.onResult(newPosts, lastItem);
                                 paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
+                                callback.onResult(newPosts, lastItem);
                             }
                         }
 
@@ -313,8 +313,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                                 ArrayList<Post> singlePostList = new ArrayList<>();
                                 singlePostList.add(post);
                                 hasPostLiveData.postValue(true);
-                                callback.onResult(singlePostList, null, null);
                                 initialLoadStateLiveData.postValue(NetworkState.LOADED);
+                                callback.onResult(singlePostList, null, null);
                             }
 
                             @Override
@@ -344,8 +344,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                                             hasPostLiveData.postValue(false);
                                         }
 
-                                        callback.onResult(newPosts, null, nextPageKey);
                                         initialLoadStateLiveData.postValue(NetworkState.LOADED);
+                                        callback.onResult(newPosts, null, nextPageKey);
                                     }
 
                                     @Override
@@ -392,8 +392,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                             if(newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
                                 loadSubredditPostsAfter(params, callback, lastItem);
                             } else {
-                                callback.onResult(newPosts, lastItem);
                                 paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
+                                callback.onResult(newPosts, lastItem);
                             }
                         }
 
@@ -451,8 +451,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                                         hasPostLiveData.postValue(false);
                                     }
 
-                                    callback.onResult(newPosts, null, nextPageKey);
                                     initialLoadStateLiveData.postValue(NetworkState.LOADED);
+                                    callback.onResult(newPosts, null, nextPageKey);
                                 }
 
                                 @Override
@@ -498,8 +498,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                             if(newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
                                 loadUserPostsAfter(params, callback, lastItem);
                             } else {
-                                callback.onResult(newPosts, lastItem);
                                 paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
+                                callback.onResult(newPosts, lastItem);
                             }
                         }
 
@@ -566,8 +566,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                                         hasPostLiveData.postValue(false);
                                     }
 
-                                    callback.onResult(newPosts, null, nextPageKey);
                                     initialLoadStateLiveData.postValue(NetworkState.LOADED);
+                                    callback.onResult(newPosts, null, nextPageKey);
                                 }
 
                                 @Override
@@ -622,8 +622,8 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
                             if(newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
                                 loadSearchPostsAfter(params, callback, lastItem);
                             } else {
-                                callback.onResult(newPosts, lastItem);
                                 paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
+                                callback.onResult(newPosts, lastItem);
                             }
                         }
 

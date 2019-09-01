@@ -673,6 +673,10 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     }
 
     private void markNSFW() {
+        if(mMenu != null) {
+            mMenu.findItem(R.id.action_nsfw_view_post_detail_activity).setTitle(R.string.action_unmark_nsfw);
+        }
+
         Map<String, String> params = new HashMap<>();
         params.put(RedditUtils.ID_KEY, mPost.getFullName());
         mOauthRetrofit.create(RedditAPI.class).markNSFW(RedditUtils.getOAuthHeader(mAccessToken), params)
@@ -680,21 +684,37 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if(response.isSuccessful()) {
+                    if(mMenu != null) {
+                        mMenu.findItem(R.id.action_nsfw_view_post_detail_activity).setTitle(R.string.action_unmark_nsfw);
+                    }
+
                     refresh(true, false);
                     showMessage(R.string.mark_nsfw_success);
                 } else {
+                    if(mMenu != null) {
+                        mMenu.findItem(R.id.action_nsfw_view_post_detail_activity).setTitle(R.string.action_mark_nsfw);
+                    }
+
                     showMessage(R.string.mark_nsfw_failed);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                if(mMenu != null) {
+                    mMenu.findItem(R.id.action_nsfw_view_post_detail_activity).setTitle(R.string.action_mark_nsfw);
+                }
+
                 showMessage(R.string.mark_nsfw_failed);
             }
         });
     }
 
     private void unmarkNSFW() {
+        if(mMenu != null) {
+            mMenu.findItem(R.id.action_nsfw_view_post_detail_activity).setTitle(R.string.action_mark_nsfw);
+        }
+
         Map<String, String> params = new HashMap<>();
         params.put(RedditUtils.ID_KEY, mPost.getFullName());
         mOauthRetrofit.create(RedditAPI.class).unmarkNSFW(RedditUtils.getOAuthHeader(mAccessToken), params)
@@ -702,21 +722,37 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                         if(response.isSuccessful()) {
+                            if(mMenu != null) {
+                                mMenu.findItem(R.id.action_nsfw_view_post_detail_activity).setTitle(R.string.action_mark_nsfw);
+                            }
+
                             refresh(true, false);
                             showMessage(R.string.unmark_nsfw_success);
                         } else {
+                            if(mMenu != null) {
+                                mMenu.findItem(R.id.action_nsfw_view_post_detail_activity).setTitle(R.string.action_unmark_nsfw);
+                            }
+
                             showMessage(R.string.unmark_nsfw_failed);
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                        if(mMenu != null) {
+                            mMenu.findItem(R.id.action_nsfw_view_post_detail_activity).setTitle(R.string.action_unmark_nsfw);
+                        }
+
                         showMessage(R.string.unmark_nsfw_failed);
                     }
                 });
     }
 
     private void markSpoiler() {
+        if(mMenu != null) {
+            mMenu.findItem(R.id.action_spoiler_view_post_detail_activity).setTitle(R.string.action_unmark_spoiler);
+        }
+
         Map<String, String> params = new HashMap<>();
         params.put(RedditUtils.ID_KEY, mPost.getFullName());
         mOauthRetrofit.create(RedditAPI.class).markSpoiler(RedditUtils.getOAuthHeader(mAccessToken), params)
@@ -724,21 +760,37 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                         if(response.isSuccessful()) {
+                            if(mMenu != null) {
+                                mMenu.findItem(R.id.action_spoiler_view_post_detail_activity).setTitle(R.string.action_unmark_spoiler);
+                            }
+
                             refresh(true, false);
                             showMessage(R.string.mark_spoiler_success);
                         } else {
+                            if(mMenu != null) {
+                                mMenu.findItem(R.id.action_spoiler_view_post_detail_activity).setTitle(R.string.action_mark_spoiler);
+                            }
+
                             showMessage(R.string.mark_spoiler_failed);
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                        if(mMenu != null) {
+                            mMenu.findItem(R.id.action_spoiler_view_post_detail_activity).setTitle(R.string.action_mark_spoiler);
+                        }
+
                         showMessage(R.string.mark_spoiler_failed);
                     }
                 });
     }
 
     private void unmarkSpoiler() {
+        if(mMenu != null) {
+            mMenu.findItem(R.id.action_spoiler_view_post_detail_activity).setTitle(R.string.action_mark_spoiler);
+        }
+
         Map<String, String> params = new HashMap<>();
         params.put(RedditUtils.ID_KEY, mPost.getFullName());
         mOauthRetrofit.create(RedditAPI.class).unmarkSpoiler(RedditUtils.getOAuthHeader(mAccessToken), params)
@@ -746,15 +798,27 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                         if(response.isSuccessful()) {
+                            if(mMenu != null) {
+                                mMenu.findItem(R.id.action_spoiler_view_post_detail_activity).setTitle(R.string.action_mark_spoiler);
+                            }
+
                             refresh(true, false);
                             showMessage(R.string.unmark_spoiler_success);
                         } else {
+                            if(mMenu != null) {
+                                mMenu.findItem(R.id.action_spoiler_view_post_detail_activity).setTitle(R.string.action_unmark_spoiler);
+                            }
+
                             showMessage(R.string.unmark_spoiler_failed);
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                        if(mMenu != null) {
+                            mMenu.findItem(R.id.action_spoiler_view_post_detail_activity).setTitle(R.string.action_unmark_spoiler);
+                        }
+
                         showMessage(R.string.unmark_spoiler_failed);
                     }
                 });

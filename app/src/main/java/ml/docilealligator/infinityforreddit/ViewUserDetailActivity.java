@@ -645,7 +645,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
         private CommentsListingFragment commentsListingFragment;
 
         SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
+            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
         @NonNull
