@@ -23,7 +23,7 @@ public class PostViewModel extends ViewModel {
     private LiveData<PagedList<Post>> posts;
     private MutableLiveData<Boolean> nsfwLiveData;
     private MutableLiveData<String> sortTypeLiveData;
-    private nsfwAndSortTypeLiveData NSFWAndSortTypeLiveData;
+    private PostViewModel.NSFWAndSortTypeLiveData NSFWAndSortTypeLiveData;
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, int postType, String sortType,
                          int filter, boolean nsfw) {
@@ -42,7 +42,7 @@ public class PostViewModel extends ViewModel {
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
 
-        NSFWAndSortTypeLiveData = new nsfwAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
+        NSFWAndSortTypeLiveData = new NSFWAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -73,7 +73,7 @@ public class PostViewModel extends ViewModel {
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
 
-        NSFWAndSortTypeLiveData = new nsfwAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
+        NSFWAndSortTypeLiveData = new NSFWAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -104,7 +104,7 @@ public class PostViewModel extends ViewModel {
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
 
-        NSFWAndSortTypeLiveData = new nsfwAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
+        NSFWAndSortTypeLiveData = new NSFWAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -135,7 +135,7 @@ public class PostViewModel extends ViewModel {
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
 
-        NSFWAndSortTypeLiveData = new nsfwAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
+        NSFWAndSortTypeLiveData = new NSFWAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -261,8 +261,8 @@ public class PostViewModel extends ViewModel {
         }
     }
 
-    private static class nsfwAndSortTypeLiveData extends MediatorLiveData<Pair<Boolean, String>> {
-        public nsfwAndSortTypeLiveData(LiveData<Boolean> nsfw, LiveData<String> sortType) {
+    private static class NSFWAndSortTypeLiveData extends MediatorLiveData<Pair<Boolean, String>> {
+        public NSFWAndSortTypeLiveData(LiveData<Boolean> nsfw, LiveData<String> sortType) {
             addSource(nsfw, accessToken1 -> setValue(Pair.create(accessToken1, sortType.getValue())));
             addSource(sortType, sortType1 -> setValue(Pair.create(nsfw.getValue(), sortType1)));
         }

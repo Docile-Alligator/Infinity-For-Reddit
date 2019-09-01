@@ -940,70 +940,123 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         }
 
         boolean startLazyMode() {
-            switch (viewPager.getCurrentItem()) {
-                case 0:
-                    return ((FragmentCommunicator) frontPagePostFragment).startLazyMode();
-                case 1:
-                    return ((FragmentCommunicator) popularPostFragment).startLazyMode();
-                case 2:
-                    return ((FragmentCommunicator) allPostFragment).startLazyMode();
+            if(mAccessToken == null) {
+                switch (viewPager.getCurrentItem()) {
+                    case 0:
+                        return ((FragmentCommunicator) popularPostFragment).startLazyMode();
+                    case 1:
+                        return ((FragmentCommunicator) allPostFragment).startLazyMode();
+                }
+            } else {
+                switch (viewPager.getCurrentItem()) {
+                    case 0:
+                        return ((FragmentCommunicator) frontPagePostFragment).startLazyMode();
+                    case 1:
+                        return ((FragmentCommunicator) popularPostFragment).startLazyMode();
+                    case 2:
+                        return ((FragmentCommunicator) allPostFragment).startLazyMode();
+                }
             }
 
             return false;
         }
 
         void stopLazyMode() {
-            switch (getCurrentLazyModeFragmentPosition()) {
-                case 0:
-                    ((FragmentCommunicator) frontPagePostFragment).stopLazyMode();
-                    break;
-                case 1:
-                    ((FragmentCommunicator) popularPostFragment).stopLazyMode();
-                    break;
-                case 2:
-                    ((FragmentCommunicator) allPostFragment).stopLazyMode();
-                    break;
+            if(mAccessToken == null) {
+                switch (getCurrentLazyModeFragmentPosition()) {
+                    case 0:
+                        ((FragmentCommunicator) popularPostFragment).stopLazyMode();
+                        break;
+                    case 1:
+                        ((FragmentCommunicator) allPostFragment).stopLazyMode();
+                        break;
+                }
+            } else {
+                switch (getCurrentLazyModeFragmentPosition()) {
+                    case 0:
+                        ((FragmentCommunicator) frontPagePostFragment).stopLazyMode();
+                        break;
+                    case 1:
+                        ((FragmentCommunicator) popularPostFragment).stopLazyMode();
+                        break;
+                    case 2:
+                        ((FragmentCommunicator) allPostFragment).stopLazyMode();
+                        break;
+                }
             }
         }
 
         void resumeLazyMode() {
-            switch (getCurrentLazyModeFragmentPosition()) {
-                case 0:
-                    ((FragmentCommunicator) frontPagePostFragment).resumeLazyMode(false);
-                    break;
-                case 1:
-                    ((FragmentCommunicator) popularPostFragment).resumeLazyMode(false);
-                    break;
-                case 2:
-                    ((FragmentCommunicator) allPostFragment).resumeLazyMode(false);
-                    break;
+            if(mAccessToken == null) {
+                switch (getCurrentLazyModeFragmentPosition()) {
+                    case 0:
+                        ((FragmentCommunicator) popularPostFragment).resumeLazyMode(false);
+                        break;
+                    case 1:
+                        ((FragmentCommunicator) allPostFragment).resumeLazyMode(false);
+                        break;
+                }
+            } else {
+                switch (getCurrentLazyModeFragmentPosition()) {
+                    case 0:
+                        ((FragmentCommunicator) frontPagePostFragment).resumeLazyMode(false);
+                        break;
+                    case 1:
+                        ((FragmentCommunicator) popularPostFragment).resumeLazyMode(false);
+                        break;
+                    case 2:
+                        ((FragmentCommunicator) allPostFragment).resumeLazyMode(false);
+                        break;
+                }
             }
         }
 
         void pauseLazyMode() {
-            switch (getCurrentLazyModeFragmentPosition()) {
-                case 0:
-                    ((FragmentCommunicator) frontPagePostFragment).pauseLazyMode(false);
-                    break;
-                case 1:
-                    ((FragmentCommunicator) popularPostFragment).pauseLazyMode(false);
-                    break;
-                case 2:
-                    ((FragmentCommunicator) allPostFragment).pauseLazyMode(false);
+            if(mAccessToken == null) {
+                switch (getCurrentLazyModeFragmentPosition()) {
+                    case 0:
+                        ((FragmentCommunicator) popularPostFragment).pauseLazyMode(false);
+                        break;
+                    case 1:
+                        ((FragmentCommunicator) allPostFragment).pauseLazyMode(false);
+                }
+            } else {
+                switch (getCurrentLazyModeFragmentPosition()) {
+                    case 0:
+                        ((FragmentCommunicator) frontPagePostFragment).pauseLazyMode(false);
+                        break;
+                    case 1:
+                        ((FragmentCommunicator) popularPostFragment).pauseLazyMode(false);
+                        break;
+                    case 2:
+                        ((FragmentCommunicator) allPostFragment).pauseLazyMode(false);
+                }
             }
         }
 
         int getCurrentLazyModeFragmentPosition() {
-            if(!isInLazyMode) {
-                return -1;
-            } else if(frontPagePostFragment != null && ((FragmentCommunicator) frontPagePostFragment).isInLazyMode()) {
-                return 0;
-            } else if(popularPostFragment != null && ((FragmentCommunicator) popularPostFragment).isInLazyMode()) {
-                return 1;
-            } else if(allPostFragment != null && ((FragmentCommunicator) allPostFragment).isInLazyMode()) {
-                return 2;
+            if(mAccessToken == null) {
+                if(!isInLazyMode) {
+                    return -1;
+                } else if(popularPostFragment != null && ((FragmentCommunicator) popularPostFragment).isInLazyMode()) {
+                    return 0;
+                } else if(allPostFragment != null && ((FragmentCommunicator) allPostFragment).isInLazyMode()) {
+                    return 1;
+                } else {
+                    return -1;
+                }
             } else {
-                return -1;
+                if(!isInLazyMode) {
+                    return -1;
+                } else if(frontPagePostFragment != null && ((FragmentCommunicator) frontPagePostFragment).isInLazyMode()) {
+                    return 0;
+                } else if(popularPostFragment != null && ((FragmentCommunicator) popularPostFragment).isInLazyMode()) {
+                    return 1;
+                } else if(allPostFragment != null && ((FragmentCommunicator) allPostFragment).isInLazyMode()) {
+                    return 2;
+                } else {
+                    return -1;
+                }
             }
         }
 
