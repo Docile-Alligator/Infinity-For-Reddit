@@ -341,11 +341,11 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                 switch (voteType) {
                     case 1:
                         //Upvote
-                        ((DataViewHolder) holder).upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.backgroundColorPrimaryDark), android.graphics.PorterDuff.Mode.SRC_IN);
+                        ((DataViewHolder) holder).upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.upvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                         break;
                     case -1:
                         //Downvote
-                        ((DataViewHolder) holder).downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                        ((DataViewHolder) holder).downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.downvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                         break;
                 }
 
@@ -507,7 +507,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         post.setVoteType(1);
                         newVoteType = RedditUtils.DIR_UPVOTE;
                         ((DataViewHolder) holder).upvoteButton
-                                .setColorFilter(ContextCompat.getColor(mContext, R.color.backgroundColorPrimaryDark), android.graphics.PorterDuff.Mode.SRC_IN);
+                                .setColorFilter(ContextCompat.getColor(mContext, R.color.upvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                     } else {
                         //Upvoted before
                         post.setVoteType(0);
@@ -523,7 +523,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                             if(newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
                                 post.setVoteType(1);
                                 ((DataViewHolder) holder).upvoteButton
-                                        .setColorFilter(ContextCompat.getColor(mContext, R.color.backgroundColorPrimaryDark), android.graphics.PorterDuff.Mode.SRC_IN);
+                                        .setColorFilter(ContextCompat.getColor(mContext, R.color.upvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                             } else {
                                 post.setVoteType(0);
                                 ((DataViewHolder) holder).upvoteButton.clearColorFilter();
@@ -572,7 +572,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         post.setVoteType(-1);
                         newVoteType = RedditUtils.DIR_DOWNVOTE;
                         ((DataViewHolder) holder).downvoteButton
-                                .setColorFilter(ContextCompat.getColor(mContext, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+                                .setColorFilter(ContextCompat.getColor(mContext, R.color.downvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                     } else {
                         //Downvoted before
                         post.setVoteType(0);
@@ -588,7 +588,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                             if(newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {
                                 post.setVoteType(-1);
                                 ((DataViewHolder) holder).downvoteButton
-                                        .setColorFilter(ContextCompat.getColor(mContext, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+                                        .setColorFilter(ContextCompat.getColor(mContext, R.color.downvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                             } else {
                                 post.setVoteType(0);
                                 ((DataViewHolder) holder).downvoteButton.clearColorFilter();

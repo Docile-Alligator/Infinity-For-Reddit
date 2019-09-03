@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#121212</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="minusButtonColor">#E91E63</color>
+    <color name="downvoted">#E91E63</color>
 
     <color name="transparentActionBarColor">#88000000</color>
     

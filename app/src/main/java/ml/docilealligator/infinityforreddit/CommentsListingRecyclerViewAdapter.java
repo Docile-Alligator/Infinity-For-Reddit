@@ -138,11 +138,11 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
                 switch (comment.getVoteType()) {
                     case 1:
                         ((DataViewHolder) holder).upvoteButton
-                                .setColorFilter(ContextCompat.getColor(mContext, R.color.colorPrimary), android.graphics.PorterDuff.Mode.SRC_IN);
+                                .setColorFilter(ContextCompat.getColor(mContext, R.color.upvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                         break;
                     case 2:
                         ((DataViewHolder) holder).downvoteButton
-                                .setColorFilter(ContextCompat.getColor(mContext, R.color.minusButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                                .setColorFilter(ContextCompat.getColor(mContext, R.color.downvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                         break;
                 }
 
@@ -258,7 +258,7 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
                     //Not upvoted before
                     getItem(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_UPVOTE);
                     newVoteType = RedditUtils.DIR_UPVOTE;
-                    upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.backgroundColorPrimaryDark), android.graphics.PorterDuff.Mode.SRC_IN);
+                    upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.upvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                 } else {
                     //Upvoted before
                     getItem(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
@@ -273,7 +273,7 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
                     public void onVoteThingSuccess(int position) {
                         if(newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
                             getItem(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_UPVOTE);
-                            upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.backgroundColorPrimaryDark), android.graphics.PorterDuff.Mode.SRC_IN);
+                            upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.upvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                         } else {
                             getItem(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
                             upvoteButton.clearColorFilter();
@@ -303,7 +303,7 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
                     //Not downvoted before
                     getItem(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
                     newVoteType = RedditUtils.DIR_DOWNVOTE;
-                    downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+                    downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.downvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                 } else {
                     //Downvoted before
                     getItem(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
@@ -318,7 +318,7 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
                     public void onVoteThingSuccess(int position1) {
                         if(newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {
                             getItem(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
-                            downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+                            downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.downvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                         } else {
                             getItem(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
                             downvoteButton.clearColorFilter();
