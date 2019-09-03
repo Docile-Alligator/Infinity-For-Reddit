@@ -59,4 +59,6 @@
     <color name="lockedIconTint">#EE7302</color>
 
     <color name="notificationIconColor">@color/colorPrimary</color>
+
+    <color name="defaultTextColor">#8A000000</color>
 </resources>

@@ -51,4 +51,6 @@
     <color name="singleCommentThreadBackgroundColor">#123E77</color>
 
     <color name="unreadMessageBackgroundColor">#123E77</color>
+
+    <color name="defaultTextColor">#B3FFFFFF</color>
 </resources>
