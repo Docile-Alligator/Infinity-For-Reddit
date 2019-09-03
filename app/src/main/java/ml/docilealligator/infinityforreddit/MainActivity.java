@@ -157,6 +157,8 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme_NoActionBarWithTransparentStatusBar);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 

@@ -10,6 +10,10 @@
         <item name="android:textColorPrimary">@android:color/white</item>
     </style>
 
+    <style name="AppTheme.Launcher" parent="@style/AppTheme.NoActionBarWithTransparentStatusBar">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

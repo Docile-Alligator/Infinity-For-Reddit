@@ -23,7 +23,7 @@ public class PostViewModel extends ViewModel {
     private LiveData<PagedList<Post>> posts;
     private MutableLiveData<Boolean> nsfwLiveData;
     private MutableLiveData<String> sortTypeLiveData;
-    private PostViewModel.NSFWAndSortTypeLiveData NSFWAndSortTypeLiveData;
+    private NSFWAndSortTypeLiveData nsfwAndSortTypeLiveData;
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, int postType, String sortType,
                          int filter, boolean nsfw) {
@@ -42,7 +42,7 @@ public class PostViewModel extends ViewModel {
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
 
-        NSFWAndSortTypeLiveData = new NSFWAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
+        nsfwAndSortTypeLiveData = new NSFWAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -50,7 +50,7 @@ public class PostViewModel extends ViewModel {
                         .setPageSize(25)
                         .build();
 
-        posts = Transformations.switchMap(NSFWAndSortTypeLiveData, nsfwAndSort -> {
+        posts = Transformations.switchMap(nsfwAndSortTypeLiveData, nsfwAndSort -> {
             postDataSourceFactory.changeNSFWAndSortType(nsfwLiveData.getValue(), sortTypeLiveData.getValue());
             return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
         });
@@ -73,7 +73,7 @@ public class PostViewModel extends ViewModel {
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
 
-        NSFWAndSortTypeLiveData = new NSFWAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
+        nsfwAndSortTypeLiveData = new NSFWAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -81,7 +81,7 @@ public class PostViewModel extends ViewModel {
                         .setPageSize(25)
                         .build();
 
-        posts = Transformations.switchMap(NSFWAndSortTypeLiveData, nsfwAndSort -> {
+        posts = Transformations.switchMap(nsfwAndSortTypeLiveData, nsfwAndSort -> {
             postDataSourceFactory.changeNSFWAndSortType(nsfwLiveData.getValue(), sortTypeLiveData.getValue());
             return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
         });
@@ -104,7 +104,7 @@ public class PostViewModel extends ViewModel {
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
 
-        NSFWAndSortTypeLiveData = new NSFWAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
+        nsfwAndSortTypeLiveData = new NSFWAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -112,7 +112,7 @@ public class PostViewModel extends ViewModel {
                         .setPageSize(25)
                         .build();
 
-        posts = Transformations.switchMap(NSFWAndSortTypeLiveData, nsfwAndSort -> {
+        posts = Transformations.switchMap(nsfwAndSortTypeLiveData, nsfwAndSort -> {
             postDataSourceFactory.changeNSFWAndSortType(nsfwLiveData.getValue(), sortTypeLiveData.getValue());
             return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
         });
@@ -135,7 +135,7 @@ public class PostViewModel extends ViewModel {
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
 
-        NSFWAndSortTypeLiveData = new NSFWAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
+        nsfwAndSortTypeLiveData = new NSFWAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -143,7 +143,7 @@ public class PostViewModel extends ViewModel {
                         .setPageSize(25)
                         .build();
 
-        posts = Transformations.switchMap(NSFWAndSortTypeLiveData, nsfwAndSort -> {
+        posts = Transformations.switchMap(nsfwAndSortTypeLiveData, nsfwAndSort -> {
             postDataSourceFactory.changeNSFWAndSortType(nsfwLiveData.getValue(), sortTypeLiveData.getValue());
             return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
         });

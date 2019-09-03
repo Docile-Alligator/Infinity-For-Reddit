@@ -450,10 +450,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             stopLazyMode();
         }
 
+        mAdapter.setNetworkState(null);
         mFetchPostInfoLinearLayout.setVisibility(View.GONE);
         hasPost = false;
         mPostViewModel.refresh();
-        mAdapter.setNetworkState(null);
     }
 
     private void showErrorView(int stringResId) {

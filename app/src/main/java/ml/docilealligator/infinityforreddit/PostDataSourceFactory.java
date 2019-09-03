@@ -78,7 +78,7 @@ class PostDataSourceFactory extends DataSource.Factory {
 
     @NonNull
     @Override
-    public DataSource create() {
+    public DataSource<String, Post> create() {
         if(postType == PostDataSource.TYPE_FRONT_PAGE) {
             postDataSource = new PostDataSource(retrofit, accessToken, locale, postType, sortType,
                     filter, nsfw);
