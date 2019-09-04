@@ -52,5 +52,7 @@
 
     <color name="unreadMessageBackgroundColor">#123E77</color>
 
+    <color name="notificationIconColor">#1565C0</color>
+
     <color name="defaultTextColor">#B3FFFFFF</color>
 </resources>
