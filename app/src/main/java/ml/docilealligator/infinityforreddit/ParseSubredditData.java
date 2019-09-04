@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +42,7 @@ class ParseSubredditData {
                 jsonResponse = new JSONObject(response);
                 parseFailed = false;
             } catch (JSONException e) {
-                Log.i("subreddit json error", "message: " + e.getMessage());
+                e.printStackTrace();
                 parseSubredditDataListener.onParseSubredditDataFail();
             }
         }
@@ -56,7 +55,7 @@ class ParseSubredditData {
                 subredditData = parseSubredditData(data);
             } catch (JSONException e) {
                 parseFailed = true;
-                Log.i("parse", "SubredditData error");
+                e.printStackTrace();
             }
             return null;
         }
@@ -85,7 +84,7 @@ class ParseSubredditData {
                 parseFailed = false;
                 subredditListingData = new ArrayList<>();
             } catch (JSONException e) {
-                Log.i("subreddit json error", "message: " + e.getMessage());
+                e.printStackTrace();
                 parseFailed = true;
             }
         }
@@ -104,8 +103,8 @@ class ParseSubredditData {
                     after = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
                 }
             } catch (JSONException e) {
+                e.printStackTrace();
                 parseFailed = true;
-                Log.i("parse", "SubredditDataListing error");
                 parseSubredditListingDataListener.onParseSubredditListingDataFail();
             }
             return null;

@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +42,7 @@ public class ParseUserData {
                 this.parseUserDataListener = parseUserDataListener;
                 parseFailed = false;
             } catch (JSONException e) {
-                Log.i("userdata json error", "error: " + e.getMessage());
+                e.printStackTrace();
                 parseUserDataListener.onParseUserDataFailed();
             }
         }
@@ -54,7 +53,7 @@ public class ParseUserData {
                 userData = parseUserDataBase(jsonResponse);
             } catch (JSONException e) {
                 parseFailed = true;
-                Log.i("parse user data error", "error: " + e.getMessage());
+                e.printStackTrace();
             }
             return null;
         }
@@ -86,7 +85,7 @@ public class ParseUserData {
                 parseFailed = false;
                 userDataArrayList = new ArrayList<>();
             } catch (JSONException e) {
-                Log.i("userdata json error", "error: " + e.getMessage());
+                e.printStackTrace();
                 parseFailed = true;
             }
         }
@@ -103,7 +102,7 @@ public class ParseUserData {
                 }
             } catch (JSONException e) {
                 parseFailed = true;
-                Log.i("parse user data error", "error: " + e.getMessage());
+                e.printStackTrace();
             }
             return null;
         }

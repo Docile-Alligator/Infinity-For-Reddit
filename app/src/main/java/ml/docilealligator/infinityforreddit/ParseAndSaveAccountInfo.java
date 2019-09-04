@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
 import android.text.Html;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +36,6 @@ class ParseAndSaveAccountInfo {
                 this.parseAndSaveAccountInfoListener = parseAndSaveAccountInfoListener;
                 parseFailed = false;
             } catch (JSONException e) {
-                Log.i("user info json error", "message: " + e.getMessage());
                 parseAndSaveAccountInfoListener.onParseMyInfoFail();
             }
         }
@@ -57,7 +55,6 @@ class ParseAndSaveAccountInfo {
                 redditDataRoomDatabase.accountDao().updateAccountInfo(name, profileImageUrl, bannerImageUrl, karma);
             } catch (JSONException e) {
                 parseFailed = true;
-                Log.i("parse comment error", "message: " + e.getMessage());
             }
             return null;
         }

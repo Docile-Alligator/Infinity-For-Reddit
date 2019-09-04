@@ -42,14 +42,12 @@ public class FetchUserData {
                         }
                     });
                 } else {
-                    Log.i("call failed", response.message());
                     fetchUserDataListener.onFetchUserDataFailed();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.i("call failed", "message " + t.getMessage());
                 fetchUserDataListener.onFetchUserDataFailed();
             }
         });
@@ -76,14 +74,12 @@ public class FetchUserData {
                         }
                     });
                 } else {
-                    Log.i("call failed", response.message());
                     fetchUserListingDataListener.onFetchUserListingDataFailed();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.i("call failed", "message " + t.getMessage());
                 fetchUserListingDataListener.onFetchUserListingDataFailed();
             }
         });

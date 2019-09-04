@@ -204,7 +204,6 @@ class SubmitPost {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if(response.isSuccessful()) {
-                    Log.i("afasdfadsfasdfasdfasdf", "a " + response.body());
                     try {
                         getSubmittedPost(response.body(), kind, oauthRetrofit, accessToken,
                                 locale, submitPostListener);

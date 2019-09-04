@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
 import android.text.Html;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -100,7 +99,7 @@ class ParsePost {
                     JSONObject data = allData.getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY);
                     post = parseBasicData(data, locale);
                 } catch (JSONException e) {
-                    Log.e("parsing post error", "message: " + e.getMessage());
+                    e.printStackTrace();
                     parseFailed = true;
                 }
             } else {
@@ -128,7 +127,7 @@ class ParsePost {
                             }
                         }
                     } catch (JSONException e) {
-                        Log.e("parsing post error", "message: " + e.getMessage());
+                        e.printStackTrace();
                     }
                 }
             }

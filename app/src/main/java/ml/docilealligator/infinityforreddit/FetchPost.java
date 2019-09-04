@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import java.util.Locale;
@@ -37,19 +35,16 @@ class FetchPost {
                         @Override
                         public void onParsePostFail() {
                             fetchPostListener.fetchPostFailed();
-                            Log.i("error", "fetch post failed");
                         }
                     });
                 } else {
                     fetchPostListener.fetchPostFailed();
-                    Log.i("call failed", Integer.toString(response.code()));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 fetchPostListener.fetchPostFailed();
-                Log.i("call failed", t.getMessage());
             }
         });
     }

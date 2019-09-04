@@ -26,14 +26,12 @@ class FetchMyInfo {
                 if(response.isSuccessful()) {
                     fetchUserMyListener.onFetchMyInfoSuccess(response.body());
                 } else {
-                    Log.i("call failed", response.message());
                     fetchUserMyListener.onFetchMyInfoFail();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.i("call failed", t.getMessage());
                 fetchUserMyListener.onFetchMyInfoFail();
             }
         });

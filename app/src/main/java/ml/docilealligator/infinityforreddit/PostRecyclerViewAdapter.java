@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -132,9 +131,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof DataViewHolder) {
             Post post = getItem(position);
-            if(post == null) {
-                Log.i("is null", Integer.toString(holder.getAdapterPosition()));
-            } else {
+            if(post != null) {
                 final String id = post.getFullName();
                 final String subredditNamePrefixed = post.getSubredditNamePrefixed();
                 String subredditName = subredditNamePrefixed.substring(2);

@@ -59,14 +59,12 @@ class FetchSubscribedThing {
                                 }
                             });
                 } else {
-                    Log.i("call failed", response.message());
                     fetchSubscribedThingListener.onFetchSubscribedThingFail();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.i("call failed", t.getMessage());
                 fetchSubscribedThingListener.onFetchSubscribedThingFail();
             }
         });

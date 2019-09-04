@@ -50,7 +50,6 @@ class VoteThing {
 
                 @Override
                 public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                    Log.i("call failed", t.getMessage());
                     voteThingListener.onVoteThingFail(position);
                 }
             });
@@ -79,7 +78,6 @@ class VoteThing {
 
                 @Override
                 public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                    Log.i("call failed", t.getMessage());
                     voteThingWithoutPositionListener.onVoteThingFail();
                 }
             });

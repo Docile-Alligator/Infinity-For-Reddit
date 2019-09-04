@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,7 +59,7 @@ class ParseSubscribedThing {
                 newSubredditData = new ArrayList<>();
                 this.parseSubscribedSubredditsListener = parseSubscribedSubredditsListener;
             } catch (JSONException e) {
-                Log.i("user info json error", e.getMessage());
+                e.printStackTrace();
                 parseSubscribedSubredditsListener.onParseSubscribedSubredditsFail();
             }
         }
@@ -109,7 +108,7 @@ class ParseSubscribedThing {
                 lastItem = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
             } catch (JSONException e) {
                 parseFailed = true;
-                Log.i("parse subscribed error", e.getMessage());
+                e.printStackTrace();
             }
             return null;
         }

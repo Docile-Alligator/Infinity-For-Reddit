@@ -4,7 +4,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -54,10 +53,7 @@ public class PullNotificationWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Log.i("workmanager", "do");
         try {
-            Log.i("workmanager", "before response");
-
             List<Account> accounts = redditDataRoomDatabase.accountDao().getAllAccounts();
             for(int accountIndex = 0; accountIndex < accounts.size(); accountIndex++) {
                 Account account = accounts.get(accountIndex);
@@ -67,7 +63,6 @@ public class PullNotificationWorker extends Worker {
                 Response<String> response = fetchMessages(account, 1);
 
                 if(response != null && response.isSuccessful()) {
-                    Log.i("workmanager", "has response");
                     String responseBody = response.body();
                     ArrayList<Message> messages = FetchMessages.parseMessage(responseBody, context.getResources().getConfiguration().locale);
 
@@ -165,30 +160,20 @@ public class PullNotificationWorker extends Worker {
                         summaryBuilder.setContentIntent(summaryPendingIntent);
 
                         notificationManager.notify(NotificationUtils.getSummaryIdUnreadMessage(accountIndex), summaryBuilder.build());
-
-                        Log.i("workmanager", "message size " + messages.size());
                     } else {
-                        Log.i("workmanager", "no message");
                         return Result.success();
                     }
                 } else {
-                    if(response != null) {
-                        Log.i("workmanager", "retry1 " + response.code());
-                    }
                     return Result.retry();
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
-            Log.i("workmanager", "retry2");
             return Result.retry();
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.i("workmanager", "json failure");
             return Result.failure();
         }
-
-        Log.i("workmanager", "success");
         return Result.success();
     }
 
@@ -234,8 +219,6 @@ public class PullNotificationWorker extends Worker {
                 JSONObject jsonObject = new JSONObject(response.body().toString());
                 String newAccessToken = jsonObject.getString(RedditUtils.ACCESS_TOKEN_KEY);
                 redditDataRoomDatabase.accountDao().changeAccessToken(account.getUsername(), newAccessToken);
-
-                Log.i("access token", newAccessToken);
                 return newAccessToken;
             }
             return "";

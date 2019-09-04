@@ -39,19 +39,16 @@ class FetchSubredditData {
 
                         @Override
                         public void onParseSubredditDataFail() {
-                            Log.i("parse failed", "true");
                             fetchSubredditDataListener.onFetchSubredditDataFail();
                         }
                     });
                 } else {
-                    Log.i("call failed", response.message());
                     fetchSubredditDataListener.onFetchSubredditDataFail();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.i("call failed", "message " + t.getMessage());
                 fetchSubredditDataListener.onFetchSubredditDataFail();
             }
         });
@@ -74,19 +71,16 @@ class FetchSubredditData {
 
                         @Override
                         public void onParseSubredditListingDataFail() {
-                            Log.i("parse failed", "true");
                             fetchSubredditListingDataListener.onFetchSubredditListingDataFail();
                         }
                     });
                 } else {
-                    Log.i("call failed", response.message());
                     fetchSubredditListingDataListener.onFetchSubredditListingDataFail();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.i("call failed", "message " + t.getMessage());
                 fetchSubredditListingDataListener.onFetchSubredditListingDataFail();
             }
         });

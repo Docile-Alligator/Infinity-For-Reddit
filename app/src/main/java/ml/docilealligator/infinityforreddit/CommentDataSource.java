@@ -88,19 +88,16 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
 
                         @Override
                         public void parseFailed() {
-                            Log.i("Comments fetch error", "Error parsing data");
                             initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                         }
                     }).execute();
                 } else {
-                    Log.i("Comments fetch error", "Error parsing data");
                     initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.i("Comments fetch error", "Error parsing data");
                 initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
             }
         });
@@ -137,19 +134,16 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
 
                         @Override
                         public void parseFailed() {
-                            Log.i("Comments fetch error", "Error parsing data");
                             paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                         }
                     }).execute();
                 } else {
-                    Log.i("Comments fetch error", "Error fetching data");
                     paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error fetching data"));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.i("Comments fetch error", "Error fetchin data");
                 paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error fetching data"));
             }
         });

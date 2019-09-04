@@ -201,7 +201,6 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
                             @Override
                             public void onParsePostFail() {
-                                Log.i("Post fetch error", "Error parsing data");
                                 initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                             }
                         });
@@ -232,13 +231,11 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
                                     @Override
                                     public void onParsePostsListingFail() {
-                                        Log.i("Post fetch error", "Error parsing data");
                                         initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                                     }
                                 });
                     }
                 } else {
-                    Log.i("Post fetch error", response.message());
                     initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                 }
             }
@@ -275,12 +272,10 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
                         @Override
                         public void onParsePostsListingFail() {
-                            Log.i("Best post", "Error parsing data");
                             paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                         }
                     });
                 } else {
-                    Log.i("best post", response.message());
                     paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                 }
             }
@@ -319,7 +314,6 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
                             @Override
                             public void onParsePostFail() {
-                                Log.i("Post fetch error", "Error parsing data");
                                 initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                             }
                         });
@@ -350,13 +344,11 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
                                     @Override
                                     public void onParsePostsListingFail() {
-                                        Log.i("Post fetch error", "Error parsing data");
                                         initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                                     }
                                 });
                     }
                 } else {
-                    Log.i("Post fetch error", response.message());
                     initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                 }
             }
@@ -399,12 +391,10 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
                         @Override
                         public void onParsePostsListingFail() {
-                            Log.i("Best post", "Error parsing data");
                             paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                         }
                     });
                 } else {
-                    Log.i("Best post", response.message());
                     paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                 }
             }
@@ -457,12 +447,10 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
                                 @Override
                                 public void onParsePostsListingFail() {
-                                    Log.i("Post fetch error", "Error parsing data");
                                     initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                                 }
                             });
                 } else {
-                    Log.i("Post fetch error", response.message());
                     initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                 }
             }
@@ -505,12 +493,10 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
                         @Override
                         public void onParsePostsListingFail() {
-                            Log.i("User posts", "Error parsing data");
                             paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                         }
                     });
                 } else {
-                    Log.i("User posts", response.message());
                     paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                 }
             }
@@ -572,12 +558,10 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
                                 @Override
                                 public void onParsePostsListingFail() {
-                                    Log.i("Post fetch error", "Error parsing data");
                                     initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                                 }
                             });
                 } else {
-                    Log.i("Post fetch error", response.message());
                     initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                 }
             }
@@ -629,12 +613,10 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
                         @Override
                         public void onParsePostsListingFail() {
-                            Log.i("Search post", "Error parsing data");
                             paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
                         }
                     });
                 } else {
-                    Log.i("Search post", response.message());
                     paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                 }
             }

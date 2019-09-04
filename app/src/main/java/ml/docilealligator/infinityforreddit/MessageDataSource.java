@@ -74,7 +74,6 @@ class MessageDataSource extends PageKeyedDataSource<String, Message> {
 
             @Override
             public void fetchFailed() {
-                Log.i("Messages fetch error", "Error fetch messages");
                 initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error fetch messages"));
             }
         });
@@ -106,7 +105,6 @@ class MessageDataSource extends PageKeyedDataSource<String, Message> {
 
             @Override
             public void fetchFailed() {
-                Log.i("Comments fetch error", "Error parsing data");
                 paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error fetching data"));
             }
         });

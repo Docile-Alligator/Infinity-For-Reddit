@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -47,19 +45,16 @@ class FetchComment {
 
                                 @Override
                                 public void onParseCommentFailed() {
-                                    Log.i("parse failed", "parse failed");
                                     fetchCommentListener.onFetchCommentFailed();
                                 }
                             });
                 } else {
-                    Log.i("call failed", response.message());
                     fetchCommentListener.onFetchCommentFailed();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.i("call failed", t.getMessage());
                 fetchCommentListener.onFetchCommentFailed();
             }
         });
@@ -100,18 +95,15 @@ class FetchComment {
                                 @Override
                                 public void onParseCommentFailed() {
                                     fetchMoreCommentListener.onFetchMoreCommentFailed();
-                                    Log.i("comment parse failed", "comment parse failed");
                                 }
                             });
                 } else {
-                    Log.i("more comment failed", response.message());
                     fetchMoreCommentListener.onFetchMoreCommentFailed();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.i("more comment failed", t.getMessage());
                 fetchMoreCommentListener.onFetchMoreCommentFailed();
             }
         });

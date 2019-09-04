@@ -38,9 +38,6 @@ class ParseComment {
             new ParseCommentAsyncTask(childrenArray, commentData, locale, parentId, 0, parseCommentListener).execute();
         } catch (JSONException e) {
             e.printStackTrace();
-            if(e.getMessage() != null) {
-                Log.i("comment json error", e.getMessage());
-            }
             parseCommentListener.onParseCommentFailed();
         }
     }

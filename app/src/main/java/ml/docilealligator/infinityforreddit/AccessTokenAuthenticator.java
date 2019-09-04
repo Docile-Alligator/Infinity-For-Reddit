@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -73,7 +71,6 @@ class AccessTokenAuthenticator implements Authenticator {
                 String newAccessToken = jsonObject.getString(RedditUtils.ACCESS_TOKEN_KEY);
                 mRedditDataRoomDatabase.accountDao().changeAccessToken(account.getUsername(), newAccessToken);
 
-                Log.i("access token", newAccessToken);
                 return newAccessToken;
             }
             return "";

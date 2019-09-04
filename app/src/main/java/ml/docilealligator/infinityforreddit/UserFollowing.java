@@ -68,14 +68,12 @@ class UserFollowing {
                     }
                     userFollowingListener.onUserFollowingSuccess();
                 } else {
-                    Log.i("call failed", Integer.toString(response.code()));
                     userFollowingListener.onUserFollowingFail();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.i("call failed", t.getMessage());
                 userFollowingListener.onUserFollowingFail();
             }
         });
