@@ -52,7 +52,6 @@ dependencies {
     // Room components
     implementation "androidx.room:room-runtime:$rootProject.roomVersion"
     annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
-    androidTestImplementation "androidx.room:room-testing:$rootProject.roomVersion"
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"
     annotationProcessor "androidx.lifecycle:lifecycle-common-java8:$rootProject.archLifecycleVersion"
