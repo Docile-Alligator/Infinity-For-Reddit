@@ -470,7 +470,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     String noPreviewLinkDomain = Uri.parse(mPost.getUrl()).getHost();
                     ((PostDetailViewHolder) holder).linkTextView.setText(noPreviewLinkDomain);
 
-                    if(!mPost.getSelfText().equals("")) {
+                    if(mPost.getSelfText() != null && !mPost.getSelfText().equals("")) {
                         ((PostDetailViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
                         mMarkwon.setMarkdown(((PostDetailViewHolder) holder).mContentMarkdownView, mPost.getSelfText());
                     }
