@@ -544,6 +544,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 post.setVoteType(event.post.getVoteType());
                 post.setScore(event.post.getScore());
                 post.setNSFW(event.post.isNSFW());
+                post.setHidden(event.post.isHidden());
                 post.setSpoiler(event.post.isSpoiler());
                 post.setFlair(event.post.getFlair());
                 post.setSaved(event.post.isSaved());

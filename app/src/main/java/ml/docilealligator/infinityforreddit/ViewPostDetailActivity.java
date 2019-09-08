@@ -304,6 +304,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         } else {
             if(mMenu != null) {
                 MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
+                MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
                 if(mAccessToken != null) {
                     if(mPost.isSaved()) {
                         saveItem.setVisible(true);
@@ -312,8 +313,17 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                         saveItem.setVisible(true);
                         saveItem.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
                     }
+
+                    if(mPost.isHidden()) {
+                        hideItem.setVisible(true);
+                        hideItem.setTitle(R.string.action_unhide_post);
+                    } else {
+                        hideItem.setVisible(true);
+                        hideItem.setTitle(R.string.action_hide_post);
+                    }
                 } else {
                     saveItem.setVisible(false);
+                    hideItem.setVisible(false);
                 }
 
                 if(mPost.getAuthor().equals(mAccountName)) {
@@ -420,6 +430,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
                             if(mMenu != null) {
                                 MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
+                                MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
                                 if(mAccessToken != null) {
                                     if(post.isSaved()) {
                                         saveItem.setVisible(true);
@@ -428,8 +439,17 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                                         saveItem.setVisible(true);
                                         saveItem.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
                                     }
+
+                                    if(post.isHidden()) {
+                                        hideItem.setVisible(true);
+                                        hideItem.setTitle(R.string.action_unhide_post);
+                                    } else {
+                                        hideItem.setVisible(true);
+                                        hideItem.setTitle(R.string.action_hide_post);
+                                    }
                                 } else {
                                     saveItem.setVisible(false);
+                                    hideItem.setVisible(false);
                                 }
 
                                 if(mPost.getAuthor().equals(mAccountName)) {
@@ -630,6 +650,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                                 isRefreshing = false;
                                 if(mMenu != null) {
                                     MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
+                                    MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
                                     if(mAccessToken != null) {
                                         if(post.isSaved()) {
                                             saveItem.setVisible(true);
@@ -638,8 +659,17 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                                             saveItem.setVisible(true);
                                             saveItem.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
                                         }
+
+                                        if(post.isHidden()) {
+                                            hideItem.setVisible(true);
+                                            hideItem.setTitle(R.string.action_unhide_post);
+                                        } else {
+                                            hideItem.setVisible(true);
+                                            hideItem.setTitle(R.string.action_hide_post);
+                                        }
                                     } else {
                                         saveItem.setVisible(false);
+                                        hideItem.setVisible(false);
                                     }
 
                                     mMenu.findItem(R.id.action_view_crosspost_parent_view_post_detail_activity).setVisible(mPost.getCrosspostParentId() != null);
@@ -668,7 +698,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         if(showToast) {
             Toast.makeText(ViewPostDetailActivity.this, resId, Toast.LENGTH_SHORT).show();
         } else {
-            Snackbar.make(mCoordinatorLayout, resId, Snackbar.LENGTH_SHORT);
+            Snackbar.make(mCoordinatorLayout, resId, Snackbar.LENGTH_SHORT).show();
         }
     }
 
@@ -872,6 +902,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         mMenu = menu;
         if(mPost != null) {
             MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
+            MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
             if(mAccessToken != null) {
                 if(mPost.isSaved()) {
                     saveItem.setVisible(true);
@@ -880,8 +911,17 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                     saveItem.setVisible(true);
                     saveItem.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
                 }
+
+                if(mPost.isHidden()) {
+                    hideItem.setVisible(true);
+                    hideItem.setTitle(R.string.action_unhide_post);
+                } else {
+                    hideItem.setVisible(true);
+                    hideItem.setTitle(R.string.action_hide_post);
+                }
             } else {
                 saveItem.setVisible(false);
+                hideItem.setVisible(false);
             }
 
             if(mPost.getAuthor().equals(mAccountName)) {
@@ -992,6 +1032,51 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                 Intent crosspostIntent = new Intent(this, ViewPostDetailActivity.class);
                 crosspostIntent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, mPost.getCrosspostParentId());
                 startActivity(crosspostIntent);
+                return true;
+            case R.id.action_hide_view_post_detail_activity:
+                if(mPost != null && mAccessToken != null) {
+                    if(mPost.isHidden()) {
+                        item.setTitle(R.string.action_hide_post);
+
+                        HidePost.unhidePost(mOauthRetrofit, mAccessToken, mPost.getFullName(), new HidePost.HidePostListener() {
+                            @Override
+                            public void success() {
+                                mPost.setHidden(false);
+                                item.setTitle(R.string.action_hide_post);
+                                showMessage(R.string.post_unhide_success);
+                                EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                            }
+
+                            @Override
+                            public void failed() {
+                                mPost.setHidden(true);
+                                item.setTitle(R.string.action_unhide_post);
+                                showMessage(R.string.post_unhide_failed);
+                                EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                            }
+                        });
+                    } else {
+                        item.setTitle(R.string.action_unhide_post);
+
+                        HidePost.hidePost(mOauthRetrofit, mAccessToken, mPost.getFullName(), new HidePost.HidePostListener() {
+                            @Override
+                            public void success() {
+                                mPost.setHidden(true);
+                                item.setTitle(R.string.action_unhide_post);
+                                showMessage(R.string.post_hide_success);
+                                EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                            }
+
+                            @Override
+                            public void failed() {
+                                mPost.setHidden(false);
+                                item.setTitle(R.string.action_hide_post);
+                                showMessage(R.string.post_hide_failed);
+                                EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                            }
+                        });
+                    }
+                }
                 return true;
             case R.id.action_edit_view_post_detail_activity:
                 Intent editPostItent = new Intent(this, EditPostActivity.class);

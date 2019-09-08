@@ -176,4 +176,12 @@ public interface RedditAPI {
     @FormUrlEncoded
     @POST("/api/unsave")
     Call<String> unsave(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("/api/hide")
+    Call<String> hide(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("/api/unhide")
+    Call<String> unhide(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }

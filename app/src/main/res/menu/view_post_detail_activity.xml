@@ -29,34 +29,40 @@
         android:visible="false" />
 
     <item
-        android:id="@+id/action_edit_view_post_detail_activity"
+        android:id="@+id/action_hide_view_post_detail_activity"
         android:orderInCategory="5"
+        app:showAsAction="never"
+        android:visible="false" />
+
+    <item
+        android:id="@+id/action_edit_view_post_detail_activity"
+        android:orderInCategory="6"
         android:title="@string/action_edit_post"
         app:showAsAction="never"
         android:visible="false" />
 
     <item
         android:id="@+id/action_delete_view_post_detail_activity"
-        android:orderInCategory="6"
+        android:orderInCategory="7"
         android:title="@string/action_delete_post"
         app:showAsAction="never"
         android:visible="false" />
 
     <item
         android:id="@+id/action_nsfw_view_post_detail_activity"
-        android:orderInCategory="7"
-        app:showAsAction="never"
-        android:visible="false" />
-
-    <item
-        android:id="@+id/action_spoiler_view_post_detail_activity"
         android:orderInCategory="8"
         app:showAsAction="never"
         android:visible="false" />
 
     <item
-        android:id="@+id/action_edit_flair_view_post_detail_activity"
+        android:id="@+id/action_spoiler_view_post_detail_activity"
         android:orderInCategory="9"
+        app:showAsAction="never"
+        android:visible="false" />
+
+    <item
+        android:id="@+id/action_edit_flair_view_post_detail_activity"
+        android:orderInCategory="10"
         android:title="@string/action_edit_flair"
         app:showAsAction="never"
         android:visible="false" />

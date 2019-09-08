@@ -84,4 +84,5 @@ public class JSONUtils {
     static final String WAS_COMMENT_KEY = "was_comment";
     static final String NEW_KEY = "new";
     static final String NUM_COMMENTS_KEY = "num_comments";
+    static final String HIDDEN_KEY = "hidden";
 }

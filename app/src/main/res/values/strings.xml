@@ -30,6 +30,8 @@
     <string name="action_stop_lazy_mode">Stop Lazy Mode</string>
     <string name="action_send">Send</string>
     <string name="action_sort">Sort</string>
+    <string name="action_hide_post">Hide Post</string>
+    <string name="action_unhide_post">Unhide Post</string>
     <string name="action_edit_post">Edit Post</string>
     <string name="action_delete_post">Delete Post</string>
     <string name="action_mark_nsfw">Mark NSFW</string>
@@ -216,6 +218,10 @@
     <string name="post_saved_failed">Unable to save post</string>
     <string name="post_unsaved_success">Post unsaved</string>
     <string name="post_unsaved_failed">Unable to unsave post</string>
+    <string name="post_hide_success">Post hidden</string>
+    <string name="post_hide_failed">Unable to hide post</string>
+    <string name="post_unhide_success">Post unhidden</string>
+    <string name="post_unhide_failed">Unable to unhide post</string>
     <string name="delete_this_post">Delete This Post</string>
     <string name="delete_this_comment">Delete This Comment</string>
     <string name="are_you_sure">Are you sure?</string>
