@@ -17,4 +17,5 @@ This is a Reddit client on Android written in Java. It does not have any ads and
 - etc...
 
 ## Version History
+- 1.0.1 (Sep 8, 2019)
 - 1.0 (Sep 4, 2019)
