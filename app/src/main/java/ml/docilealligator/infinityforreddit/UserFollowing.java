@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -99,7 +98,7 @@ class UserFollowing {
                                     String accountName, boolean isSubscribing) {
             this.subscribedUserDao = subscribedUserDao;
             this.subscribedUserData = new SubscribedUserData(userData.getName(), userData.getIconUrl(),
-                    userData.getName());
+                    accountName);
             this.accountName = accountName;
             this.isSubscribing = isSubscribing;
         }

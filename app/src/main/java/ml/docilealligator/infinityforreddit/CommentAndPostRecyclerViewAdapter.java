@@ -1296,7 +1296,8 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 mVisibleComments.get(commentPosition).setLoadMoreChildrenFailed(false);
                 placeholderTextView.setText(R.string.loading);
 
-                FetchComment.fetchMoreComment(mRetrofit, parentComment.getMoreChildrenFullnames(),
+                Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
+                FetchComment.fetchMoreComment(retrofit, mAccessToken, parentComment.getMoreChildrenFullnames(),
                         parentComment.getMoreChildrenStartingIndex(), parentComment.getDepth() + 1, mLocale,
                         new FetchComment.FetchMoreCommentListener() {
                             @Override

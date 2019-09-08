@@ -37,7 +37,7 @@ class CommentData implements Parcelable {
     private boolean loadMoreChildrenFailed;
 
     CommentData(String id, String fullName, String author, String linkAuthor, String commentTime, String commentContent,
-                String linkId, String subredditName, String parentId, int score, boolean isSubmitter, String permalink,
+                String linkId, String subredditName, String parentId, int score, int voteType, boolean isSubmitter, String permalink,
                 int depth, boolean collapsed, boolean hasReply, boolean scoreHidden) {
         this.id = id;
         this.fullName = fullName;
@@ -49,6 +49,7 @@ class CommentData implements Parcelable {
         this.subredditName = subredditName;
         this.parentId = parentId;
         this.score = score;
+        this.voteType = voteType;
         this.isSubmitter = isSubmitter;
         this.permalink = RedditUtils.API_BASE_URI + permalink;
         this.depth = depth;

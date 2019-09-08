@@ -548,7 +548,8 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
             commentId = mSingleCommentId;
         }
 
-        FetchComment.fetchComments(mRetrofit, mPost.getId(), commentId, mLocale, new FetchComment.FetchCommentListener() {
+        Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
+        FetchComment.fetchComments(retrofit, mAccessToken, mPost.getId(), commentId, mLocale, new FetchComment.FetchCommentListener() {
                     @Override
                     public void onFetchCommentSuccess(ArrayList<CommentData> expandedComments,
                                                       String parentId, ArrayList<String> children) {
@@ -597,7 +598,9 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         }
 
         isLoadingMoreChildren = true;
-        FetchComment.fetchMoreComment(mRetrofit, children, mChildrenStartingIndex,
+
+        Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
+        FetchComment.fetchMoreComment(retrofit, mAccessToken, children, mChildrenStartingIndex,
                 0, mLocale, new FetchComment.FetchMoreCommentListener() {
                     @Override
                     public void onFetchMoreCommentSuccess(ArrayList<CommentData> expandedComments, int childrenStartingIndex) {

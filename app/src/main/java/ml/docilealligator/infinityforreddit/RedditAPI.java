@@ -73,6 +73,9 @@ public interface RedditAPI {
     @GET("/api/info.json?raw_json=1")
     Call<String> getInfo(@Query("id") String id);
 
+    @GET("/api/info.json?raw_json=1")
+    Call<String> getInfoOauth(@Query("id") String id, @HeaderMap Map<String, String> headers);
+
     @GET("subreddits/search.json?raw_json=1")
     Call<String> searchSubreddits(@Query("q") String subredditName, @Query("after") String after,
                                   @Query("sort") String sort);

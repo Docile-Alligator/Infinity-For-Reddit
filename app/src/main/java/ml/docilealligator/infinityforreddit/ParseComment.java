@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
 import android.text.Html;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -14,6 +13,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+
+import static ml.docilealligator.infinityforreddit.CommentData.VOTE_TYPE_DOWNVOTE;
+import static ml.docilealligator.infinityforreddit.CommentData.VOTE_TYPE_NO_VOTE;
+import static ml.docilealligator.infinityforreddit.CommentData.VOTE_TYPE_UPVOTE;
 
 class ParseComment {
     interface ParseCommentListener {
@@ -49,9 +52,6 @@ class ParseComment {
             new ParseCommentAsyncTask(childrenArray, commentData, locale, null, depth, parseCommentListener).execute();
         } catch (JSONException e) {
             e.printStackTrace();
-            if(e.getMessage() != null) {
-                Log.i("comment json error", e.getMessage());
-            }
             parseCommentListener.onParseCommentFailed();
         }
     }
@@ -94,9 +94,6 @@ class ParseComment {
                 expandChildren(newComments, expandedNewComments);
             } catch (JSONException e) {
                 parseFailed = true;
-                if(e.getMessage() != null) {
-                    Log.i("parse comment error", e.getMessage());
-                }
             }
             return null;
         }
@@ -226,6 +223,13 @@ class ParseComment {
         }
         String permalink = Html.fromHtml(singleCommentData.getString(JSONUtils.PERMALINK_KEY)).toString();
         int score = singleCommentData.getInt(JSONUtils.SCORE_KEY);
+        int voteType;
+        if(singleCommentData.isNull(JSONUtils.LIKES_KEY)) {
+            voteType = VOTE_TYPE_NO_VOTE;
+        } else {
+            voteType = singleCommentData.getBoolean(JSONUtils.LIKES_KEY) ? VOTE_TYPE_UPVOTE : VOTE_TYPE_DOWNVOTE;
+            score -= voteType;
+        }
         long submitTime = singleCommentData.getLong(JSONUtils.CREATED_UTC_KEY) * 1000;
         boolean scoreHidden = singleCommentData.getBoolean(JSONUtils.SCORE_HIDDEN_KEY);
 
@@ -242,7 +246,7 @@ class ParseComment {
         boolean hasReply = !(singleCommentData.get(JSONUtils.REPLIES_KEY) instanceof String);
 
         return new CommentData(id, fullName, author, linkAuthor, formattedSubmitTime, commentContent,
-                linkId, subredditName, parentId, score, isSubmitter, permalink, depth, collapsed,
+                linkId, subredditName, parentId, score, voteType, isSubmitter, permalink, depth, collapsed,
                 hasReply, scoreHidden);
     }
 
