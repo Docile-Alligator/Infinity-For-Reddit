@@ -1,6 +1,12 @@
 # Infinity-For-Reddit
 This is a Reddit client on Android written in Java. It does not have any ads and it features clean UI and smooth browsing experience.
 
+## Google Play
+https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit
+
+## Highlighted feature
+- Lazy mode: Automatic scrolling of posts enables you to enjoy amazing posts without moving your thumb.
+
 ## Features
 - Browsing posts
 - View comments
@@ -17,5 +23,6 @@ This is a Reddit client on Android written in Java. It does not have any ads and
 - etc...
 
 ## Version History
+- 1.0.2 (Sep 8, 2019)
 - 1.0.1 (Sep 8, 2019)
 - 1.0 (Sep 4, 2019)
