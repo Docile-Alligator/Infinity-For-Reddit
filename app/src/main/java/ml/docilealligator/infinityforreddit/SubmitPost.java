@@ -212,7 +212,6 @@ class SubmitPost {
                         submitPostListener.submitFailed(null);
                     }
                 } else {
-                    Log.i("call_failed", response.message());
                     submitPostListener.submitFailed(response.message());
                 }
             }

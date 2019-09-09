@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.ColorFilter;
@@ -18,7 +19,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.paging.PagedListAdapter;
@@ -401,20 +401,14 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         ((DataViewHolder) holder).linkTextView.setText(domain);
 
                         ((DataViewHolder) holder).imageView.setOnClickListener(view -> {
-                            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                            // add share action to menu list
-                            builder.addDefaultShareMenuItem();
-                            builder.setToolbarColor(mContext.getResources().getColor(R.color.colorPrimary));
-                            CustomTabsIntent customTabsIntent = builder.build();
+                            Intent intent = new Intent(mContext, LinkResolverActivity.class);
                             Uri uri = Uri.parse(post.getUrl());
-                            if(uri.getHost() != null && uri.getHost().contains("reddit.com")) {
-                                customTabsIntent.intent.setPackage(mContext.getPackageName());
+                            if(uri.getScheme() == null && uri.getHost() == null) {
+                                intent.setData(LinkResolverActivity.getRedditUriByPath(post.getUrl()));
+                            } else {
+                                intent.setData(uri);
                             }
-                            String uriString = post.getUrl();
-                            if(!uriString.startsWith("http://") && !uriString.startsWith("https://")) {
-                                uriString = "http://" + uriString;
-                            }
-                            customTabsIntent.launchUrl(mContext, Uri.parse(uriString));
+                            mContext.startActivity(intent);
                         });
                         break;
                     case Post.GIF_VIDEO_TYPE:
@@ -462,20 +456,14 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         ((DataViewHolder) holder).linkTextView.setText(noPreviewLinkDomain);
                         ((DataViewHolder) holder).noPreviewLinkImageView.setVisibility(View.VISIBLE);
                         ((DataViewHolder) holder).noPreviewLinkImageView.setOnClickListener(view -> {
-                            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                            // add share action to menu list
-                            builder.addDefaultShareMenuItem();
-                            builder.setToolbarColor(mContext.getResources().getColor(R.color.colorPrimary));
-                            CustomTabsIntent customTabsIntent = builder.build();
+                            Intent intent = new Intent(mContext, LinkResolverActivity.class);
                             Uri uri = Uri.parse(post.getUrl());
-                            if(uri.getHost() != null && uri.getHost().contains("reddit.com")) {
-                                customTabsIntent.intent.setPackage(mContext.getPackageName());
+                            if(uri.getScheme() == null && uri.getHost() == null) {
+                                intent.setData(LinkResolverActivity.getRedditUriByPath(post.getUrl()));
+                            } else {
+                                intent.setData(uri);
                             }
-                            String uriString = noPreviewLinkUrl;
-                            if(!uriString.startsWith("http://") && !uriString.startsWith("https://")) {
-                                uriString = "http://" + uriString;
-                            }
-                            customTabsIntent.launchUrl(mContext, Uri.parse(uriString));
+                            mContext.startActivity(intent);
                         });
                         break;
                     case Post.TEXT_TYPE:
@@ -626,11 +614,15 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                 });
 
                 ((DataViewHolder) holder).shareButton.setOnClickListener(view -> {
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("text/plain");
-                    String extraText = title + "\n" + permalink;
-                    intent.putExtra(Intent.EXTRA_TEXT, extraText);
-                    mContext.startActivity(Intent.createChooser(intent, "Share"));
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_SEND);
+                        intent.setType("text/plain");
+                        String extraText = title + "\n" + permalink;
+                        intent.putExtra(Intent.EXTRA_TEXT, extraText);
+                        mContext.startActivity(Intent.createChooser(intent, mContext.getString(R.string.share)));
+                    } catch (ActivityNotFoundException e) {
+                        Toast.makeText(mContext, R.string.no_activity_found_for_share, Toast.LENGTH_SHORT).show();
+                    }
                 });
             }
         }

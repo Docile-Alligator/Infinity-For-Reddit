@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -161,6 +162,131 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
                         modifyCommentBottomSheetFragment.show(((AppCompatActivity) mContext).getSupportFragmentManager(), modifyCommentBottomSheetFragment.getTag());
                     });
                 }
+
+                ((DataViewHolder) holder).linearLayout.setOnClickListener(view -> {
+                    Intent intent = new Intent(mContext, ViewPostDetailActivity.class);
+                    intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, comment.getLinkId());
+                    intent.putExtra(ViewPostDetailActivity.EXTRA_SINGLE_COMMENT_ID, comment.getId());
+                    mContext.startActivity(intent);
+                });
+
+                ((DataViewHolder) holder).verticalBlock.setVisibility(View.GONE);
+
+                ((DataViewHolder) holder).commentMarkdownView.setOnClickListener(view ->
+                        ((DataViewHolder) holder).linearLayout.callOnClick());
+
+                ((DataViewHolder) holder).shareButton.setOnClickListener(view -> {
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_SEND);
+                        intent.setType("text/plain");
+                        String extraText = comment.getPermalink();
+                        intent.putExtra(Intent.EXTRA_TEXT, extraText);
+                        mContext.startActivity(Intent.createChooser(intent, mContext.getString(R.string.share)));
+                    } catch (ActivityNotFoundException e) {
+                        Toast.makeText(mContext, R.string.no_activity_found_for_share, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                ((DataViewHolder) holder).replyButton.setVisibility(View.GONE);
+
+                ((DataViewHolder) holder).upvoteButton.setOnClickListener(view -> {
+                    if(mAccessToken == null) {
+                        Toast.makeText(mContext, R.string.login_first, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    int previousVoteType = comment.getVoteType();
+                    String newVoteType;
+
+                    ((DataViewHolder) holder).downvoteButton.clearColorFilter();
+
+                    if(previousVoteType != CommentData.VOTE_TYPE_UPVOTE) {
+                        //Not upvoted before
+                        comment.setVoteType(CommentData.VOTE_TYPE_UPVOTE);
+                        newVoteType = RedditUtils.DIR_UPVOTE;
+                        ((DataViewHolder) holder).upvoteButton
+                                .setColorFilter(ContextCompat.getColor(mContext, R.color.upvoted), android.graphics.PorterDuff.Mode.SRC_IN);
+                        ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.upvoted));
+                    } else {
+                        //Upvoted before
+                        comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
+                        newVoteType = RedditUtils.DIR_UNVOTE;
+                        ((DataViewHolder) holder).upvoteButton.clearColorFilter();
+                        ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.defaultTextColor));
+                    }
+
+                    ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
+
+                    VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
+                        @Override
+                        public void onVoteThingSuccess(int position) {
+                            if(newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
+                                comment.setVoteType(CommentData.VOTE_TYPE_UPVOTE);
+                                ((DataViewHolder) holder).upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.upvoted), android.graphics.PorterDuff.Mode.SRC_IN);
+                                ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.upvoted));
+                            } else {
+                                comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
+                                ((DataViewHolder) holder).upvoteButton.clearColorFilter();
+                                ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.defaultTextColor));
+                            }
+
+                            ((DataViewHolder) holder).downvoteButton.clearColorFilter();
+                            ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
+                        }
+
+                        @Override
+                        public void onVoteThingFail(int position) { }
+                    }, comment.getFullName(), newVoteType, holder.getAdapterPosition());
+                });
+
+                ((DataViewHolder) holder).downvoteButton.setOnClickListener(view -> {
+                    if(mAccessToken == null) {
+                        Toast.makeText(mContext, R.string.login_first, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    int previousVoteType = comment.getVoteType();
+                    String newVoteType;
+
+                    ((DataViewHolder) holder).upvoteButton.clearColorFilter();
+
+                    if(previousVoteType != CommentData.VOTE_TYPE_DOWNVOTE) {
+                        //Not downvoted before
+                        comment.setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
+                        newVoteType = RedditUtils.DIR_DOWNVOTE;
+                        ((DataViewHolder) holder).downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.downvoted), android.graphics.PorterDuff.Mode.SRC_IN);
+                        ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.downvoted));
+                    } else {
+                        //Downvoted before
+                        comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
+                        newVoteType = RedditUtils.DIR_UNVOTE;
+                        ((DataViewHolder) holder).downvoteButton.clearColorFilter();
+                        ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.defaultTextColor));
+                    }
+
+                    ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
+
+                    VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
+                        @Override
+                        public void onVoteThingSuccess(int position1) {
+                            if(newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {
+                                comment.setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
+                                ((DataViewHolder) holder).downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.downvoted), android.graphics.PorterDuff.Mode.SRC_IN);
+                                ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.downvoted));
+                            } else {
+                                comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
+                                ((DataViewHolder) holder).downvoteButton.clearColorFilter();
+                                ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.defaultTextColor));
+                            }
+
+                            ((DataViewHolder) holder).upvoteButton.clearColorFilter();
+                            ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
+                        }
+
+                        @Override
+                        public void onVoteThingFail(int position1) { }
+                    }, comment.getFullName(), newVoteType, holder.getAdapterPosition());
+                });
             }
         }
     }
@@ -232,125 +358,6 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
         DataViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
-            linearLayout.setOnClickListener(view -> {
-                Intent intent = new Intent(mContext, ViewPostDetailActivity.class);
-                intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, getItem(getAdapterPosition()).getLinkId());
-                intent.putExtra(ViewPostDetailActivity.EXTRA_SINGLE_COMMENT_ID, getItem(getAdapterPosition()).getId());
-                mContext.startActivity(intent);
-            });
-
-            verticalBlock.setVisibility(View.GONE);
-
-            commentMarkdownView.setOnClickListener(view -> linearLayout.callOnClick());
-
-            shareButton.setOnClickListener(view -> {
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                String extraText = getItem(getAdapterPosition()).getPermalink();
-                intent.putExtra(Intent.EXTRA_TEXT, extraText);
-                mContext.startActivity(Intent.createChooser(intent, "Share"));
-            });
-
-            replyButton.setVisibility(View.GONE);
-
-            upvoteButton.setOnClickListener(view -> {
-                if(mAccessToken == null) {
-                    Toast.makeText(mContext, R.string.login_first, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                int previousVoteType = getItem(getAdapterPosition()).getVoteType();
-                String newVoteType;
-
-                downvoteButton.clearColorFilter();
-
-                if(previousVoteType != CommentData.VOTE_TYPE_UPVOTE) {
-                    //Not upvoted before
-                    getItem(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_UPVOTE);
-                    newVoteType = RedditUtils.DIR_UPVOTE;
-                    upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.upvoted), android.graphics.PorterDuff.Mode.SRC_IN);
-                    scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.upvoted));
-                } else {
-                    //Upvoted before
-                    getItem(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
-                    newVoteType = RedditUtils.DIR_UNVOTE;
-                    upvoteButton.clearColorFilter();
-                    scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.defaultTextColor));
-                }
-
-                scoreTextView.setText(Integer.toString(getItem(getAdapterPosition()).getScore() + getItem(getAdapterPosition()).getVoteType()));
-
-                VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
-                    @Override
-                    public void onVoteThingSuccess(int position) {
-                        if(newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
-                            getItem(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_UPVOTE);
-                            upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.upvoted), android.graphics.PorterDuff.Mode.SRC_IN);
-                            scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.upvoted));
-                        } else {
-                            getItem(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
-                            upvoteButton.clearColorFilter();
-                            scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.defaultTextColor));
-                        }
-
-                        downvoteButton.clearColorFilter();
-                        scoreTextView.setText(Integer.toString(getItem(getAdapterPosition()).getScore() + getItem(getAdapterPosition()).getVoteType()));
-                    }
-
-                    @Override
-                    public void onVoteThingFail(int position) { }
-                }, getItem(getAdapterPosition()).getFullName(), newVoteType, getAdapterPosition());
-            });
-
-            downvoteButton.setOnClickListener(view -> {
-                if(mAccessToken == null) {
-                    Toast.makeText(mContext, R.string.login_first, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                int previousVoteType = getItem(getAdapterPosition()).getVoteType();
-                String newVoteType;
-
-                upvoteButton.clearColorFilter();
-
-                if(previousVoteType != CommentData.VOTE_TYPE_DOWNVOTE) {
-                    //Not downvoted before
-                    getItem(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
-                    newVoteType = RedditUtils.DIR_DOWNVOTE;
-                    downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.downvoted), android.graphics.PorterDuff.Mode.SRC_IN);
-                    scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.downvoted));
-                } else {
-                    //Downvoted before
-                    getItem(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
-                    newVoteType = RedditUtils.DIR_UNVOTE;
-                    downvoteButton.clearColorFilter();
-                    scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.defaultTextColor));
-                }
-
-                scoreTextView.setText(Integer.toString(getItem(getAdapterPosition()).getScore() + getItem(getAdapterPosition()).getVoteType()));
-
-                VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
-                    @Override
-                    public void onVoteThingSuccess(int position1) {
-                        if(newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {
-                            getItem(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
-                            downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.downvoted), android.graphics.PorterDuff.Mode.SRC_IN);
-                            scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.downvoted));
-                        } else {
-                            getItem(getAdapterPosition()).setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
-                            downvoteButton.clearColorFilter();
-                            scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.defaultTextColor));
-                        }
-
-                        upvoteButton.clearColorFilter();
-                        scoreTextView.setText(Integer.toString(getItem(getAdapterPosition()).getScore() + getItem(getAdapterPosition()).getVoteType()));
-                    }
-
-                    @Override
-                    public void onVoteThingFail(int position1) { }
-                }, getItem(getAdapterPosition()).getFullName(), newVoteType, getAdapterPosition());
-            });
         }
     }
 

@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
@@ -22,7 +23,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -411,20 +411,14 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     ((PostDetailViewHolder) holder).linkTextView.setText(domain);
 
                     ((PostDetailViewHolder) holder).mImageView.setOnClickListener(view -> {
-                        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                        // add share action to menu list
-                        builder.addDefaultShareMenuItem();
-                        builder.setToolbarColor(mActivity.getResources().getColor(R.color.colorPrimary));
-                        CustomTabsIntent customTabsIntent = builder.build();
+                        Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                         Uri uri = Uri.parse(mPost.getUrl());
-                        if(uri.getHost() != null && uri.getHost().contains("reddit.com")) {
-                            customTabsIntent.intent.setPackage(mActivity.getPackageName());
+                        if(uri.getScheme() == null && uri.getHost() == null) {
+                            intent.setData(LinkResolverActivity.getRedditUriByPath(mPost.getUrl()));
+                        } else {
+                            intent.setData(uri);
                         }
-                        String uriString = mPost.getUrl();
-                        if(!uriString.startsWith("http://") && !uriString.startsWith("https://")) {
-                            uriString = "http://" + uriString;
-                        }
-                        customTabsIntent.launchUrl(mActivity, Uri.parse(uriString));
+                        mActivity.startActivity(intent);
                     });
                     break;
                 case Post.GIF_VIDEO_TYPE:
@@ -477,20 +471,14 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
                     ((PostDetailViewHolder) holder).mNoPreviewLinkImageView.setVisibility(View.VISIBLE);
                     ((PostDetailViewHolder) holder).mNoPreviewLinkImageView.setOnClickListener(view -> {
-                        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                        // add share action to menu list
-                        builder.addDefaultShareMenuItem();
-                        builder.setToolbarColor(mActivity.getResources().getColor(R.color.colorPrimary));
-                        CustomTabsIntent customTabsIntent = builder.build();
+                        Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                         Uri uri = Uri.parse(mPost.getUrl());
-                        if(uri.getHost() != null && uri.getHost().contains("reddit.com")) {
-                            customTabsIntent.intent.setPackage(mActivity.getPackageName());
+                        if(uri.getScheme() == null && uri.getHost() == null) {
+                            intent.setData(LinkResolverActivity.getRedditUriByPath(mPost.getUrl()));
+                        } else {
+                            intent.setData(uri);
                         }
-                        String uriString = mPost.getUrl();
-                        if(!uriString.startsWith("http://") && !uriString.startsWith("https://")) {
-                            uriString = "http://" + uriString;
-                        }
-                        customTabsIntent.launchUrl(mActivity, Uri.parse(uriString));
+                        mActivity.startActivity(intent);
                     });
                     break;
                 case Post.TEXT_TYPE:
@@ -1078,11 +1066,15 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             });
 
             mShareButton.setOnClickListener(view -> {
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                String extraText = mPost.getTitle() + "\n" + mPost.getPermalink();
-                intent.putExtra(Intent.EXTRA_TEXT, extraText);
-                mActivity.startActivity(Intent.createChooser(intent, "Share"));
+                try {
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    String extraText = mPost.getTitle() + "\n" + mPost.getPermalink();
+                    intent.putExtra(Intent.EXTRA_TEXT, extraText);
+                    mActivity.startActivity(Intent.createChooser(intent, mActivity.getString(R.string.share)));
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(mActivity, R.string.no_activity_found_for_share, Toast.LENGTH_SHORT).show();
+                }
             });
 
             mUpvoteButton.setOnClickListener(view -> {
@@ -1257,12 +1249,16 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             });
 
             shareButton.setOnClickListener(view -> {
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                String extraText = mIsSingleCommentThreadMode ? mVisibleComments.get(getAdapterPosition() - 2).getPermalink()
-                        : mVisibleComments.get(getAdapterPosition() - 1).getPermalink();
-                intent.putExtra(Intent.EXTRA_TEXT, extraText);
-                mActivity.startActivity(Intent.createChooser(intent, "Share"));
+                try {
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    String extraText = mIsSingleCommentThreadMode ? mVisibleComments.get(getAdapterPosition() - 2).getPermalink()
+                            : mVisibleComments.get(getAdapterPosition() - 1).getPermalink();
+                    intent.putExtra(Intent.EXTRA_TEXT, extraText);
+                    mActivity.startActivity(Intent.createChooser(intent, mActivity.getString(R.string.share)));
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(mActivity, R.string.no_activity_found_for_share, Toast.LENGTH_SHORT).show();
+                }
             });
 
             expandButton.setOnClickListener(view -> {
