@@ -235,7 +235,7 @@ class ParseComment {
 
         Calendar submitTimeCalendar = Calendar.getInstance();
         submitTimeCalendar.setTimeInMillis(submitTime);
-        String formattedSubmitTime = new SimpleDateFormat("MMM d, YYYY, HH:mm",
+        String formattedSubmitTime = new SimpleDateFormat("MMM d, yyyy, HH:mm",
                 locale).format(submitTimeCalendar.getTime());
 
         if(singleCommentData.has(JSONUtils.DEPTH_KEY)) {

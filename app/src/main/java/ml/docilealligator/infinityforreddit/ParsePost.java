@@ -184,7 +184,7 @@ class ParsePost {
 
         Calendar postTimeCalendar = Calendar.getInstance();
         postTimeCalendar.setTimeInMillis(postTime);
-        String formattedPostTime = new SimpleDateFormat("MMM d, YYYY, HH:mm",
+        String formattedPostTime = new SimpleDateFormat("MMM d, yyyy, HH:mm",
                 locale).format(postTimeCalendar.getTime());
         String permalink = Html.fromHtml(data.getString(JSONUtils.PERMALINK_KEY)).toString();
 
