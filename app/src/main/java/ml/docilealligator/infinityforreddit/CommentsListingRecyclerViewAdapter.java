@@ -133,7 +133,7 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
 
                 mMarkwon.setMarkdown(((DataViewHolder) holder).commentMarkdownView, comment.getCommentContent());
 
-                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore()));
+                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
 
                 switch (comment.getVoteType()) {
                     case 1:

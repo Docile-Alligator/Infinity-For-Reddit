@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -69,14 +68,12 @@ class SubredditSubscription {
                     }
                     subredditSubscriptionListener.onSubredditSubscriptionSuccess();
                 } else {
-                    Log.i("call failed", response.message());
                     subredditSubscriptionListener.onSubredditSubscriptionFail();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.i("call failed", t.getMessage());
                 subredditSubscriptionListener.onSubredditSubscriptionFail();
             }
         });

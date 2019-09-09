@@ -521,7 +521,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             ((CommentViewHolder) holder).commentTimeTextView.setText(comment.getCommentTime());
 
             mMarkwon.setMarkdown(((CommentViewHolder) holder).commentMarkdownView, comment.getCommentContent());
-            ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore()));
+            ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
 
             ViewGroup.LayoutParams params = ((CommentViewHolder) holder).verticalBlock.getLayoutParams();
             params.width = comment.getDepth() * 16;
