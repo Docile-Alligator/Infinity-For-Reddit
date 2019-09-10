@@ -426,22 +426,6 @@ public class ViewImageActivity extends AppCompatActivity {
                             @Override
                             protected Void doInBackground(Void... params) {
                                 try {
-                                    String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-                                    File directory = new File(path + "/Infinity/");
-                                    if(!directory.exists()) {
-                                        if(!directory.mkdir()) {
-                                            saveSuccess = false;
-                                            return null;
-                                        }
-                                    } else {
-                                        if(directory.isFile()) {
-                                            if(!directory.delete() && !directory.mkdir()) {
-                                                saveSuccess = false;
-                                                return null;
-                                            }
-                                        }
-                                    }
-
                                     //Android Q support
                                     if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                                         ContentValues values = new ContentValues();
@@ -478,6 +462,22 @@ public class ViewImageActivity extends AppCompatActivity {
                                         values.put(MediaStore.Images.Media.IS_PENDING, 0);
                                         resolver.update(item, values, null, null);
                                     } else {
+                                        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+                                        File directory = new File(path + "/Infinity/");
+                                        if(!directory.exists()) {
+                                            if(!directory.mkdir()) {
+                                                saveSuccess = false;
+                                                return null;
+                                            }
+                                        } else {
+                                            if(directory.isFile()) {
+                                                if(!directory.delete() && !directory.mkdir()) {
+                                                    saveSuccess = false;
+                                                    return null;
+                                                }
+                                            }
+                                        }
+
                                         File file = new File(path + "/Infinity/", mImageFileName + ".jpg");
                                         int postfix = 1;
                                         while(file.exists()) {

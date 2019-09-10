@@ -51,6 +51,8 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import java.io.File;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -395,6 +397,20 @@ public class ViewVideoActivity extends AppCompatActivity {
         if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, mGifOrVideoFileName);
         } else {
+            String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+            File directory = new File(path + "/Infinity/");
+            if(!directory.exists()) {
+                if(!directory.mkdir()) {
+                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, mGifOrVideoFileName);
+                }
+            } else {
+                if(directory.isFile()) {
+                    if(!directory.delete() && !directory.mkdir()) {
+                        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, mGifOrVideoFileName);
+                    }
+                }
+            }
+
             request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES + "/Infinity/", mGifOrVideoFileName);
         }
 
