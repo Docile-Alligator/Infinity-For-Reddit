@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -152,28 +153,13 @@ public class LinkResolverActivity extends AppCompatActivity {
             if(uri.getScheme() == null) {
                 uri = Uri.parse("http://" + uri.toString());
             }
-            customTabsIntent.launchUrl(this, uri);
+            try {
+                customTabsIntent.launchUrl(this, uri);
+            } catch (ActivityNotFoundException e) {
+                openInBrowser(uri, pm);
+            }
         } else {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(uri);
-
-            List<ResolveInfo> activities = pm.queryIntentActivities(intent, 0);
-            ArrayList<String> packageNames = new ArrayList<>();
-
-            String currentPackageName = getApplicationContext().getPackageName();
-
-            for(ResolveInfo info : activities) {
-                if(!info.activityInfo.packageName.equals(currentPackageName)) {
-                    packageNames.add(info.activityInfo.packageName);
-                }
-            }
-
-            if(!packageNames.isEmpty()) {
-                intent.setPackage(packageNames.get(0));
-                startActivity(intent);
-            } else {
-                Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show();
-            }
+            openInBrowser(uri, pm);
         }
     }
 
@@ -194,6 +180,29 @@ public class LinkResolverActivity extends AppCompatActivity {
             }
         }
         return packagesSupportingCustomTabs;
+    }
+
+    private void openInBrowser(Uri uri, PackageManager pm) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(uri);
+
+        List<ResolveInfo> activities = pm.queryIntentActivities(intent, 0);
+        ArrayList<String> packageNames = new ArrayList<>();
+
+        String currentPackageName = getApplicationContext().getPackageName();
+
+        for(ResolveInfo info : activities) {
+            if(!info.activityInfo.packageName.equals(currentPackageName)) {
+                packageNames.add(info.activityInfo.packageName);
+            }
+        }
+
+        if(!packageNames.isEmpty()) {
+            intent.setPackage(packageNames.get(0));
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static Uri getRedditUriByPath(String path) {
