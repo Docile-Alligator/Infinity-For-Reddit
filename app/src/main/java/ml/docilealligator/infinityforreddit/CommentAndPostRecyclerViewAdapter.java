@@ -544,12 +544,12 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             }
 
             switch (comment.getVoteType()) {
-                case 1:
+                case CommentData.VOTE_TYPE_UPVOTE:
                     ((CommentViewHolder) holder).upVoteButton
                             .setColorFilter(ContextCompat.getColor(mActivity, R.color.upvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                     ((CommentViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.upvoted));
                     break;
-                case 2:
+                case CommentData.VOTE_TYPE_DOWNVOTE:
                     ((CommentViewHolder) holder).downVoteButton
                             .setColorFilter(ContextCompat.getColor(mActivity, R.color.downvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                     ((CommentViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.downvoted));

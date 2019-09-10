@@ -117,7 +117,7 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
                     ((DataViewHolder) holder).authorTextView.setTextColor(mTextColorPrimaryDark);
                     ((DataViewHolder) holder).authorTextView.setOnClickListener(view -> {
                         Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
-                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, comment.getAuthor());
+                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, comment.getLinkAuthor());
                         mContext.startActivity(intent);
                     });
                 } else {
@@ -137,12 +137,12 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
                 ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
 
                 switch (comment.getVoteType()) {
-                    case 1:
+                    case CommentData.VOTE_TYPE_UPVOTE:
                         ((DataViewHolder) holder).upvoteButton
                                 .setColorFilter(ContextCompat.getColor(mContext, R.color.upvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                         ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.upvoted));
                         break;
-                    case 2:
+                    case CommentData.VOTE_TYPE_DOWNVOTE:
                         ((DataViewHolder) holder).downvoteButton
                                 .setColorFilter(ContextCompat.getColor(mContext, R.color.downvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                         ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.downvoted));

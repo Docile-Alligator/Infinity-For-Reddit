@@ -28,9 +28,9 @@
 
     <color name="roundedBottomSheetPrimaryNavigationBarColor">@color/roundedBottomSheetPrimaryBackground</color>
 
-    <color name="upvoted">#007DDE</color>
+    <color name="upvoted">#E91E63</color>
 
-    <color name="downvoted">#E91E63</color>
+    <color name="downvoted">#007DDE</color>
 
     <color name="voteAndReplyUnavailableVoteButtonColor">#F0F0F0</color>
 
