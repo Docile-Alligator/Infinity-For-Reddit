@@ -47,7 +47,7 @@ class Post implements Parcelable {
     private boolean locked;
     private boolean saved;
     private boolean isCrosspost;
-    private boolean isDashVideo;
+    private boolean isHLSVideo;
     private boolean isDownloadableGifOrVideo;
     private String crosspostParentId;
 
@@ -55,7 +55,7 @@ class Post implements Parcelable {
          String postTime, String title, String previewUrl, String permalink, int score, int postType,
          int voteType, int gilded, String flair, boolean hidden, boolean spoiler, boolean nsfw,
          boolean stickied, boolean archived, boolean locked, boolean saved, boolean isCrosspost,
-         boolean isDashVideo) {
+         boolean isHLSVideo) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -79,7 +79,7 @@ class Post implements Parcelable {
         this.locked = locked;
         this.saved = saved;
         this.isCrosspost = isCrosspost;
-        this.isDashVideo = isDashVideo;
+        this.isHLSVideo = isHLSVideo;
     }
 
     Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
@@ -172,7 +172,7 @@ class Post implements Parcelable {
         locked = in.readByte() != 0;
         saved = in.readByte() != 0;
         isCrosspost = in.readByte() != 0;
-        isDashVideo = in.readByte() != 0;
+        isHLSVideo = in.readByte() != 0;
         isDownloadableGifOrVideo = in.readByte() != 0;
         crosspostParentId = in.readString();
     }
@@ -354,8 +354,8 @@ class Post implements Parcelable {
         return 0;
     }
 
-    boolean isDashVideo() {
-        return isDashVideo;
+    boolean isHLSVideo() {
+        return isHLSVideo;
     }
 
     void setDownloadableGifOrVideo(boolean isDownloadableGifOrVideo) {
@@ -431,7 +431,7 @@ class Post implements Parcelable {
         parcel.writeByte((byte) (locked ? 1 : 0));
         parcel.writeByte((byte) (saved ? 1 : 0));
         parcel.writeByte((byte) (isCrosspost ? 1 : 0));
-        parcel.writeByte((byte) (isDashVideo ? 1 : 0));
+        parcel.writeByte((byte) (isHLSVideo ? 1 : 0));
         parcel.writeByte((byte) (isDownloadableGifOrVideo ? 1 : 0));
         parcel.writeString(crosspostParentId);
     }

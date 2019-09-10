@@ -262,7 +262,7 @@ class ParsePost {
                 //Video post
                 JSONObject redditVideoObject = data.getJSONObject(JSONUtils.MEDIA_KEY).getJSONObject(JSONUtils.REDDIT_VIDEO_KEY);
                 int postType = Post.VIDEO_TYPE;
-                String videoUrl = Html.fromHtml(redditVideoObject.getString(JSONUtils.DASH_URL_KEY)).toString();
+                String videoUrl = Html.fromHtml(redditVideoObject.getString(JSONUtils.HLS_URL_KEY)).toString();
 
                 post = new Post(id, fullName, subredditName, subredditNamePrefixed, author, formattedPostTime,
                         title, previewUrl, permalink, score, postType, voteType, gilded, flair, hidden,
@@ -290,10 +290,10 @@ class ParsePost {
                     post.setDownloadableGifOrVideo(true);
                     post.setGifOrVideoDownloadUrl(gifDownloadUrl);
                 } else if(data.getJSONObject(JSONUtils.PREVIEW_KEY).has(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY)) {
-                    //Gif video post (Dash)
+                    //Gif video post (HLS)
                     int postType = Post.GIF_VIDEO_TYPE;
                     String videoUrl = Html.fromHtml(data.getJSONObject(JSONUtils.PREVIEW_KEY)
-                            .getJSONObject(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY).getString(JSONUtils.DASH_URL_KEY)).toString();
+                            .getJSONObject(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY).getString(JSONUtils.HLS_URL_KEY)).toString();
 
                     post = new Post(id, fullName, subredditName, subredditNamePrefixed, author,
                             formattedPostTime, title, previewUrl, permalink, score, postType, voteType,

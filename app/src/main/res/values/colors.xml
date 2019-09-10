@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#0D47A1</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="transparentActionBarColor">#88000000</color>
+    <color name="transparentActionBarAndExoPlayerControllerColor">#88000000</color>
     
     <color name="gold">#FFC107</color>
 

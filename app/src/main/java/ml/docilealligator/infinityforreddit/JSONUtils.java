@@ -34,7 +34,7 @@ public class JSONUtils {
     static final String URL_KEY = "url";
     static final String MEDIA_KEY = "media";
     static final String REDDIT_VIDEO_KEY = "reddit_video";
-    static final String DASH_URL_KEY = "dash_url";
+    static final String HLS_URL_KEY = "hls_url";
     static final String IS_VIDEO_KEY = "is_video";
     static final String CROSSPOST_PARENT_LIST = "crosspost_parent_list";
     static final String REDDIT_VIDEO_PREVIEW_KEY = "reddit_video_preview";

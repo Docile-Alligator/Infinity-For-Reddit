@@ -419,7 +419,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                             Intent intent = new Intent(mContext, ViewVideoActivity.class);
                             intent.setData(gifVideoUri);
                             intent.putExtra(ViewVideoActivity.TITLE_KEY, title);
-                            intent.putExtra(ViewVideoActivity.IS_DASH_VIDEO_KEY, post.isDashVideo());
+                            intent.putExtra(ViewVideoActivity.IS_HLS_VIDEO_KEY, post.isHLSVideo());
                             intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, post.isDownloadableGifOrVideo());
                             if(post.isDownloadableGifOrVideo()) {
                                 intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, post.getGifOrVideoDownloadUrl());
@@ -437,7 +437,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                             Intent intent = new Intent(mContext, ViewVideoActivity.class);
                             intent.setData(videoUri);
                             intent.putExtra(ViewVideoActivity.TITLE_KEY, title);
-                            intent.putExtra(ViewVideoActivity.IS_DASH_VIDEO_KEY, post.isDashVideo());
+                            intent.putExtra(ViewVideoActivity.IS_HLS_VIDEO_KEY, post.isHLSVideo());
                             intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, post.isDownloadableGifOrVideo());
                             if(post.isDownloadableGifOrVideo()) {
                                 intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, post.getGifOrVideoDownloadUrl());

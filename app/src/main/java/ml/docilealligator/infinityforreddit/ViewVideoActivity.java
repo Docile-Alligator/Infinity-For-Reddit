@@ -39,8 +39,8 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.dash.DashChunkSource;
-import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
@@ -59,7 +59,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
 
     static final String TITLE_KEY = "TK";
-    static final String IS_DASH_VIDEO_KEY = "IDVK";
+    static final String IS_HLS_VIDEO_KEY = "IHVK";
     static final String IS_DOWNLOADABLE_KEY = "IDK";
     static final String DOWNLOAD_URL_KEY = "DUK";
     static final String SUBREDDIT_KEY = "SK";
@@ -76,7 +76,7 @@ public class ViewVideoActivity extends AppCompatActivity {
 
     private String mGifOrVideoFileName;
     private String mDownloadUrl;
-    private boolean mIsDashVideo;
+    private boolean mIsHLSVideo;
     private boolean wasPlaying;
     private boolean isDownloading = false;
     private float totalLengthY = 0.0f;
@@ -92,9 +92,8 @@ public class ViewVideoActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setHomeAsUpIndicator(upArrow);
-        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarColor)));
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
         setTitle("");
-
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || getResources().getBoolean(R.bool.isTablet)) {
             //Set player controller bottom margin in order to display it above the navbar
@@ -112,7 +111,7 @@ public class ViewVideoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         mVideoUri = intent.getData();
-        mIsDashVideo = intent.getExtras().getBoolean(IS_DASH_VIDEO_KEY);
+        mIsHLSVideo = intent.getExtras().getBoolean(IS_HLS_VIDEO_KEY);
 
         if(intent.getExtras().getBoolean(IS_DOWNLOADABLE_KEY)) {
             mGifOrVideoFileName = intent.getExtras().getString(SUBREDDIT_KEY).substring(2)
@@ -123,7 +122,7 @@ public class ViewVideoActivity extends AppCompatActivity {
         final float pxHeight = getResources().getDisplayMetrics().heightPixels;
 
         int activityColorFrom = getResources().getColor(android.R.color.black);
-        int actionBarColorFrom = getResources().getColor(R.color.transparentActionBarColor);
+        int actionBarColorFrom = getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor);
         int actionBarElementColorFrom = getResources().getColor(android.R.color.white);
         int colorTo = getResources().getColor(android.R.color.transparent);
 
@@ -286,7 +285,7 @@ public class ViewVideoActivity extends AppCompatActivity {
         });
 
         DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
+        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory();
         TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
         player = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
         videoPlayerView.setPlayer(player);
@@ -295,9 +294,9 @@ public class ViewVideoActivity extends AppCompatActivity {
                 Util.getUserAgent(this, "Infinity"), bandwidthMeter);
 
         // Prepare the player with the source.
-        if(mIsDashVideo) {
+        if(mIsHLSVideo) {
             DashChunkSource.Factory dashChunkSourceFactory = new DefaultDashChunkSource.Factory(dataSourceFactory);
-            player.prepare(new DashMediaSource(mVideoUri, dataSourceFactory, dashChunkSourceFactory, null, null));
+            player.prepare(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
         } else {
             player.prepare(new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
         }
@@ -308,7 +307,7 @@ public class ViewVideoActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(!mIsDashVideo) {
+        if(!mIsHLSVideo) {
             getMenuInflater().inflate(R.menu.view_video, menu);
             mMenu = menu;
         }

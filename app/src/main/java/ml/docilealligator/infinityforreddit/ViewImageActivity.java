@@ -95,7 +95,7 @@ public class ViewImageActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setHomeAsUpIndicator(upArrow);
-        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarColor)));
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
         setTitle("");
 
         Intent intent = getIntent();
@@ -113,7 +113,7 @@ public class ViewImageActivity extends AppCompatActivity {
         float pxHeight = getResources().getDisplayMetrics().heightPixels;
 
         int activityColorFrom = getResources().getColor(android.R.color.black);
-        int actionBarColorFrom = getResources().getColor(R.color.transparentActionBarColor);
+        int actionBarColorFrom = getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor);
         int actionBarElementColorFrom = getResources().getColor(android.R.color.white);
         int colorTo = getResources().getColor(android.R.color.transparent);
 
