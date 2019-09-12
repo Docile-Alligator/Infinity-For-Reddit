@@ -19,6 +19,7 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import javax.inject.Inject;
 
+import Settings.AboutPreferenceFragment;
 import Settings.MainPreferenceFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,10 +85,12 @@ public class SettingsActivity extends AppCompatActivity implements
             setTitle(savedInstanceState.getCharSequence(TITLE_STATE));
         }
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
-                    if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                        setTitle(R.string.settings_activity_label);
-                    }
-                });
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                setTitle(R.string.settings_activity_label);
+            } else if (getSupportFragmentManager().findFragmentById(R.id.frame_layout_settings_activity) instanceof AboutPreferenceFragment) {
+                setTitle(R.string.settings_about_master_title);
+            }
+        });
 
 
     }

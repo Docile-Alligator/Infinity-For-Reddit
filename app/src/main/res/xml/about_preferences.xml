@@ -10,4 +10,24 @@
         app:title="@string/settings_credits_master_title"
         app:fragment="Settings.CreditsPreferenceFragment" />
 
+    <Preference
+        android:key="open_source"
+        app:title="@string/settings_open_source_title"
+        app:summary="@string/settings_open_source_summary" />
+
+    <Preference
+        android:key="rate"
+        app:title="@string/settings_rate_title"
+        app:summary="@string/settings_rate_summary" />
+
+    <Preference
+        android:key="email"
+        app:title="@string/settings_email_title"
+        app:summary="@string/settings_email_summary" />
+
+    <Preference
+        android:key="reddit_account"
+        app:title="@string/settings_reddit_account_title"
+        app:summary="@string/settings_reddit_account_summary" />
+
 </PreferenceScreen>
