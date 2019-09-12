@@ -423,7 +423,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                             intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, post.isDownloadableGifOrVideo());
                             if(post.isDownloadableGifOrVideo()) {
                                 intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, post.getGifOrVideoDownloadUrl());
-                                intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, subredditNamePrefixed);
+                                intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, subredditName);
                                 intent.putExtra(ViewVideoActivity.ID_KEY, id);
                             }
                             mContext.startActivity(intent);
@@ -441,7 +441,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                             intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, post.isDownloadableGifOrVideo());
                             if(post.isDownloadableGifOrVideo()) {
                                 intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, post.getGifOrVideoDownloadUrl());
-                                intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, subredditNamePrefixed);
+                                intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, subredditName);
                                 intent.putExtra(ViewVideoActivity.ID_KEY, id);
                             }
                             mContext.startActivity(intent);

@@ -126,7 +126,7 @@
     <string name="error_processing_image">Error processing image</string>
     <string name="error_processing_video">Error processing video</string>
 
-    <string name="download_completed">Download completed</string>
+    <string name="download_started">Download Started. Check the notification for progress.</string>
     <string name="download_failed">Download Failed</string>
 
     <string name="comment_load_more_comments">Load more comments</string>

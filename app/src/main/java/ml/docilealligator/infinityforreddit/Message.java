@@ -112,6 +112,10 @@ class Message {
         return isNew;
     }
 
+    public void setNew(boolean isNew) {
+        this.isNew = isNew;
+    }
+
     public int getScore() {
         return score;
     }

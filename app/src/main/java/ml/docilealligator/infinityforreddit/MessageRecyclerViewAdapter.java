@@ -127,7 +127,8 @@ class MessageRecyclerViewAdapter extends PagedListAdapter<Message, RecyclerView.
                     }
 
                     if(message.isNew()) {
-                        ((DataViewHolder) holder).itemView.setBackgroundColor(mResources.getColor(android.R.color.white));
+                        ((DataViewHolder) holder).itemView.setBackgroundColor(mResources.getColor(R.color.backgroundColor));
+                        message.setNew(false);
 
                         ReadMessage.readMessage(mOauthRetrofit, mAccessToken, message.getFullname(),
                                 new ReadMessage.ReadMessageListener() {
@@ -136,6 +137,7 @@ class MessageRecyclerViewAdapter extends PagedListAdapter<Message, RecyclerView.
 
                             @Override
                             public void readFailed() {
+                                message.setNew(true);
                                 ((DataViewHolder) holder).itemView.setBackgroundColor(mResources.getColor(R.color.unreadMessageBackgroundColor));
                             }
                         });

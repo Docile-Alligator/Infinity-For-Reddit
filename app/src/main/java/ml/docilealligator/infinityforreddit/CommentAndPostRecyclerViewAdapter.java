@@ -433,7 +433,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                         intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, mPost.isDownloadableGifOrVideo());
                         if(mPost.isDownloadableGifOrVideo()) {
                             intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, mPost.getGifOrVideoDownloadUrl());
-                            intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, mPost.getSubredditNamePrefixed());
+                            intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, mPost.getSubredditName());
                             intent.putExtra(ViewVideoActivity.ID_KEY, mPost.getId());
                         }
                         mActivity.startActivity(intent);
@@ -451,7 +451,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                         intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, mPost.isDownloadableGifOrVideo());
                         if(mPost.isDownloadableGifOrVideo()) {
                             intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, mPost.getGifOrVideoDownloadUrl());
-                            intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, mPost.getSubredditNamePrefixed());
+                            intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, mPost.getSubredditName());
                             intent.putExtra(ViewVideoActivity.ID_KEY, mPost.getId());
                         }
                         mActivity.startActivity(intent);

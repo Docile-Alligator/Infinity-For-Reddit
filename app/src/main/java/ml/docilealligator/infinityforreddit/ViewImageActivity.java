@@ -4,22 +4,17 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
-import android.content.ContentResolver;
-import android.content.ContentValues;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.ParcelFileDescriptor;
-import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -44,16 +39,11 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
 import com.github.pwittchen.swipe.library.rx2.SimpleSwipeListener;
 import com.github.pwittchen.swipe.library.rx2.Swipe;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -99,8 +89,8 @@ public class ViewImageActivity extends AppCompatActivity {
         setTitle("");
 
         Intent intent = getIntent();
-        mImageUrl = intent.getExtras().getString(IMAGE_URL_KEY);
-        mImageFileName = intent.getExtras().getString(FILE_NAME_KEY);
+        mImageUrl = intent.getStringExtra(IMAGE_URL_KEY);
+        mImageFileName = intent.getStringExtra(FILE_NAME_KEY) + ".jpg";
 
         mLoadErrorLinearLayout.setOnClickListener(view -> {
             if(!isSwiping) {
@@ -402,109 +392,47 @@ public class ViewImageActivity extends AppCompatActivity {
     }
 
     private void saveImage() {
-        Glide.with(this)
-                .asBitmap()
-                .load(mImageUrl)
-                .into(new CustomTarget<Bitmap>() {
-                    @SuppressLint("StaticFieldLeak")
-                    @Override
-                    public void onResourceReady(@NonNull final Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        new AsyncTask<Void, Void, Void>() {
-                            private boolean saveSuccess = true;
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(mImageUrl));
+        request.setTitle(mImageFileName);
 
-                            @Override
-                            protected void onPostExecute(Void aVoid) {
-                                super.onPostExecute(aVoid);
-                                isDownloading = false;
-                                if(saveSuccess) {
-                                    Toast.makeText(ViewImageActivity.this, R.string.download_completed, Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(ViewImageActivity.this, R.string.download_failed, Toast.LENGTH_SHORT).show();
-                                }
-                            }
+        request.allowScanningByMediaScanner();
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
-                            @Override
-                            protected Void doInBackground(Void... params) {
-                                try {
-                                    //Android Q support
-                                    if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                                        ContentValues values = new ContentValues();
-                                        values.put(MediaStore.Images.Media.DISPLAY_NAME, mImageFileName + ".jpg");
-                                        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-                                        values.put(MediaStore.Images.Media.IS_PENDING, 1);
-
-                                        ContentResolver resolver = getContentResolver();
-                                        Uri collection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
-                                        Uri item = resolver.insert(collection, values);
-
-                                        if(item == null) {
-                                            saveSuccess = false;
-                                            return null;
-                                        }
-
-                                        try (ParcelFileDescriptor pfd = resolver.openFileDescriptor(item, "w", null)) {
-                                            if(pfd == null) {
-                                                saveSuccess = false;
-                                                return null;
-                                            }
-
-                                            FileOutputStream outputStream = new FileOutputStream(pfd.getFileDescriptor());
-                                            resource.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-
-                                            outputStream.flush();
-                                            outputStream.close();
-                                        } catch (IOException e) {
-                                            saveSuccess = false;
-                                            e.printStackTrace();
-                                        }
-
-                                        values.clear();
-                                        values.put(MediaStore.Images.Media.IS_PENDING, 0);
-                                        resolver.update(item, values, null, null);
-                                    } else {
-                                        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-                                        File directory = new File(path + "/Infinity/");
-                                        if(!directory.exists()) {
-                                            if(!directory.mkdir()) {
-                                                saveSuccess = false;
-                                                return null;
-                                            }
-                                        } else {
-                                            if(directory.isFile()) {
-                                                if(!directory.delete() && !directory.mkdir()) {
-                                                    saveSuccess = false;
-                                                    return null;
-                                                }
-                                            }
-                                        }
-
-                                        File file = new File(path + "/Infinity/", mImageFileName + ".jpg");
-                                        int postfix = 1;
-                                        while(file.exists()) {
-                                            file = new File(path + "/Infinity/", mImageFileName + "-" + (postfix++) + ".jpg");
-                                        }
-                                        OutputStream outputStream = new FileOutputStream(file);
-
-                                        resource.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-
-                                        outputStream.flush();
-                                        outputStream.close();
-                                    }
-                                } catch (IOException e) {
-                                    saveSuccess = false;
-                                    e.printStackTrace();
-                                }
-
-                                return null;
-                            }
-                        }.execute();
+        //Android Q support
+        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, mImageFileName);
+        } else {
+            String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+            File directory = new File(path + "/Infinity/");
+            boolean saveToInfinityFolder = true;
+            if(!directory.exists()) {
+                if(!directory.mkdir()) {
+                    saveToInfinityFolder = false;
+                }
+            } else {
+                if(directory.isFile()) {
+                    if(!(directory.delete() && directory.mkdir())) {
+                        saveToInfinityFolder = false;
                     }
+                }
+            }
 
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-                        
-                    }
-                });
+            if(saveToInfinityFolder) {
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES + "/Infinity/", mImageFileName);
+            } else {
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, mImageFileName);
+            }
+        }
+
+        DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+
+        if(manager == null) {
+            Toast.makeText(this, R.string.download_failed, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        manager.enqueue(request);
+        Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 
     @Override

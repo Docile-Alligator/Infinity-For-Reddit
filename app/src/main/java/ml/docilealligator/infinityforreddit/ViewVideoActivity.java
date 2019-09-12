@@ -116,9 +116,9 @@ public class ViewVideoActivity extends AppCompatActivity {
         mIsHLSVideo = intent.getExtras().getBoolean(IS_HLS_VIDEO_KEY);
 
         if(intent.getExtras().getBoolean(IS_DOWNLOADABLE_KEY)) {
-            mGifOrVideoFileName = intent.getExtras().getString(SUBREDDIT_KEY).substring(2)
-                    + "-" + intent.getExtras().getString(ID_KEY).substring(3) + ".gif";
-            mDownloadUrl = intent.getExtras().getString(DOWNLOAD_URL_KEY);
+            mGifOrVideoFileName = intent.getStringExtra(SUBREDDIT_KEY)
+                    + "-" + intent.getStringExtra(ID_KEY).substring(3) + ".gif";
+            mDownloadUrl = intent.getStringExtra(DOWNLOAD_URL_KEY);
         }
 
         final float pxHeight = getResources().getDisplayMetrics().heightPixels;
@@ -395,23 +395,28 @@ public class ViewVideoActivity extends AppCompatActivity {
 
         //Android Q support
         if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, mGifOrVideoFileName);
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, mGifOrVideoFileName);
         } else {
             String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
             File directory = new File(path + "/Infinity/");
+            boolean saveToInfinityFolder = true;
             if(!directory.exists()) {
                 if(!directory.mkdir()) {
-                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, mGifOrVideoFileName);
+                    saveToInfinityFolder = false;
                 }
             } else {
                 if(directory.isFile()) {
                     if(!directory.delete() && !directory.mkdir()) {
-                        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, mGifOrVideoFileName);
+                        saveToInfinityFolder = false;
                     }
                 }
             }
 
-            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES + "/Infinity/", mGifOrVideoFileName);
+            if(saveToInfinityFolder) {
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES + "/Infinity/", mGifOrVideoFileName);
+            } else {
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, mGifOrVideoFileName);
+            }
         }
 
         DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
@@ -422,6 +427,7 @@ public class ViewVideoActivity extends AppCompatActivity {
         }
 
         manager.enqueue(request);
+        Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 
     @Override
