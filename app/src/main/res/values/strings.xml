@@ -30,6 +30,7 @@
     <string name="action_stop_lazy_mode">Stop Lazy Mode</string>
     <string name="action_send">Send</string>
     <string name="action_sort">Sort</string>
+    <string name="action_subscriptions">Subscriptions</string>
     <string name="action_hide_post">Hide Post</string>
     <string name="action_unhide_post">Unhide Post</string>
     <string name="action_edit_post">Edit Post</string>

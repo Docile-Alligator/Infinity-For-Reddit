@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:application="ml.docilealligator.infinityforreddit.MainActivity">
     <item
-        android:id="@+id/action_sort_main_activity"
+        android:id="@+id/action_subscriptions_main_activity"
         android:orderInCategory="1"
-        android:title="@string/action_sort"
-        android:icon="@drawable/ic_outline_sort_24px"
-        app:showAsAction="ifRoom" />
+        android:title="@string/action_subscriptions"
+        android:icon="@drawable/ic_outline_check_circle_outline_white_24px"
+        app:showAsAction="ifRoom"
+        android:visible="false"/>
 
     <item
         android:id="@+id/action_search_main_activity"
@@ -18,14 +19,21 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_refresh_main_activity"
+        android:id="@+id/action_sort_main_activity"
         android:orderInCategory="3"
+        android:title="@string/action_sort"
+        android:icon="@drawable/ic_outline_sort_24px"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_refresh_main_activity"
+        android:orderInCategory="4"
         android:title="@string/action_refresh"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_lazy_mode_main_activity"
-        android:orderInCategory="4"
+        android:orderInCategory="5"
         android:title="@string/action_start_lazy_mode"
         app:showAsAction="never" />
 </menu>

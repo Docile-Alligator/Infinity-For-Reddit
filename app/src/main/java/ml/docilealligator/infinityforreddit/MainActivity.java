@@ -168,6 +168,8 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
         EventBus.getDefault().register(this);
 
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             Resources resources = getResources();
 
@@ -299,12 +301,20 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                         mNewAccountName = null;
                         if(newAccount == null) {
                             mNullAccessToken = true;
+
+                            if(mMenu != null) {
+                                mMenu.findItem(R.id.action_subscriptions_main_activity).setVisible(false);
+                            }
                         } else {
                             mAccessToken = newAccount.getAccessToken();
                             mAccountName = newAccount.getUsername();
                             mProfileImageUrl = newAccount.getProfileImageUrl();
                             mBannerImageUrl = newAccount.getBannerImageUrl();
                             mKarma = newAccount.getKarma();
+
+                            if(mMenu != null) {
+                                mMenu.findItem(R.id.action_subscriptions_main_activity).setVisible(true);
+                            }
                         }
 
                         if(enableNotification) {
@@ -333,6 +343,10 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                     mBannerImageUrl = account.getBannerImageUrl();
                     mKarma = account.getKarma();
 
+                    if(mMenu != null) {
+                        mMenu.findItem(R.id.action_subscriptions_main_activity).setVisible(true);
+                    }
+
                     if(enableNotification) {
                         Constraints constraints = new Constraints.Builder()
                                 .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -355,12 +369,20 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             } else {
                 if(account == null) {
                     mNullAccessToken = true;
+
+                    if(mMenu != null) {
+                        mMenu.findItem(R.id.action_subscriptions_main_activity).setVisible(false);
+                    }
                 } else {
                     mAccessToken = account.getAccessToken();
                     mAccountName = account.getUsername();
                     mProfileImageUrl = account.getProfileImageUrl();
                     mBannerImageUrl = account.getBannerImageUrl();
                     mKarma = account.getKarma();
+
+                    if(mMenu != null) {
+                        mMenu.findItem(R.id.action_subscriptions_main_activity).setVisible(true);
+                    }
                 }
 
                 if(enableNotification) {
@@ -679,6 +701,14 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         getMenuInflater().inflate(R.menu.main_activity, menu);
         mMenu = menu;
         MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);
+        MenuItem subscriptionsItem = mMenu.findItem(R.id.action_subscriptions_main_activity);
+
+        if(mAccessToken != null) {
+            subscriptionsItem.setVisible(true);
+        } else {
+            subscriptionsItem.setVisible(false);
+        }
+
         if(isInLazyMode) {
             lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
             params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
@@ -695,6 +725,10 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_subscriptions_main_activity:
+                Intent subscriptionsIntent = new Intent(this, SubscribedThingListingActivity.class);
+                startActivity(subscriptionsIntent);
+                return true;
             case R.id.action_sort_main_activity:
                 if(viewPager.getCurrentItem() == 1 ||viewPager.getCurrentItem() == 2) {
                     popularAndAllSortTypeBottomSheetFragment.show(getSupportFragmentManager(), popularAndAllSortTypeBottomSheetFragment.getTag());
