@@ -537,6 +537,8 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
                     mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity).setTitle(R.string.action_start_lazy_mode);
                 }
                 sectionsPagerAdapter.refresh();
+                mFetchUserInfoSuccess = false;
+                fetchUserInfo();
                 return true;
             case R.id.action_lazy_mode_view_user_detail_activity:
                 MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity);

@@ -61,6 +61,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
 
     private static final String FETCH_SUBREDDIT_INFO_STATE = "FSIS";
+    private static final String CURRENT_ONLINE_SUBSCRIBERS_STATE = "COSS";
     private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
@@ -87,6 +88,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     private String mAccountName;
     private String subredditName;
     private boolean mFetchSubredditInfoSuccess = false;
+    private int mNCurrentOnlineSubscribers = 0;
     private boolean subscriptionReady = false;
     private boolean isInLazyMode = false;
     private boolean showToast = false;
@@ -193,6 +195,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
             getCurrentAccountAndBindView();
         } else {
             mFetchSubredditInfoSuccess = savedInstanceState.getBoolean(FETCH_SUBREDDIT_INFO_STATE);
+            mNCurrentOnlineSubscribers = savedInstanceState.getInt(CURRENT_ONLINE_SUBSCRIBERS_STATE);
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
@@ -206,6 +209,10 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                 bindView(false);
                 mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
+            }
+
+            if(mFetchSubredditInfoSuccess) {
+                nOnlineSubscribersTextView.setText(getString(R.string.online_subscribers_number_detail, mNCurrentOnlineSubscribers));
             }
         }
 
@@ -340,10 +347,9 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
             FetchSubredditData.fetchSubredditData(mRetrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
                 @Override
                 public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
-                    new InsertSubredditDataAsyncTask(mRedditDataRoomDatabase, subredditData, () -> {
-                        nOnlineSubscribersTextView.setText(getString(R.string.online_subscribers_number_detail, nCurrentOnlineSubscribers));
-                        mFetchSubredditInfoSuccess = true;
-                    }).execute();
+                    mNCurrentOnlineSubscribers = nCurrentOnlineSubscribers;
+                    nOnlineSubscribersTextView.setText(getString(R.string.online_subscribers_number_detail, nCurrentOnlineSubscribers));
+                    new InsertSubredditDataAsyncTask(mRedditDataRoomDatabase, subredditData, () -> mFetchSubredditInfoSuccess = true).execute();
                 }
 
                 @Override
@@ -483,6 +489,8 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                 }
                 if(mFragment instanceof FragmentCommunicator) {
                     ((FragmentCommunicator) mFragment).refresh();
+                    mFetchSubredditInfoSuccess = false;
+                    fetchSubredditData();
                 }
                 break;
             case R.id.action_lazy_mode_view_subreddit_detail_activity:
@@ -513,6 +521,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(FETCH_SUBREDDIT_INFO_STATE, mFetchSubredditInfoSuccess);
+        outState.putInt(CURRENT_ONLINE_SUBSCRIBERS_STATE, mNCurrentOnlineSubscribers);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
