@@ -273,6 +273,7 @@
     <string name="settings_theme_system_default_summary">Device default</string>
     <string name="settings_lazy_mode_interval_title">Lazy Mode Interval</string>
     <string name="settings_enable_nsfw_title">Enable NSFW</string>
+    <string name="settings_layout_no_limits_title">Display under navigation bar and status bar</string>
     <string name="settings_about_master_title">About</string>
     <string name="settings_acknowledgement_master_title">Acknowledgement</string>
     <string name="settings_credits_master_title">Credits</string>

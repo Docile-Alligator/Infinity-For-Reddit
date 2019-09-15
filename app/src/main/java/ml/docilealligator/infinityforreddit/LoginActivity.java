@@ -92,6 +92,7 @@ public class LoginActivity extends AppCompatActivity {
 
         WebView webView = findViewById(R.id.webview_login_activity);
         webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setDomStorageEnabled(true);
 
         Uri baseUri = Uri.parse(RedditUtils.OAUTH_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();

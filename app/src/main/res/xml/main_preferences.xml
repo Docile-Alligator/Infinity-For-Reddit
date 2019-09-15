@@ -27,7 +27,7 @@
     <SwitchPreference
         app:defaultValue="false"
         app:key="nsfw"
-        app:title="@string/settings_enable_nsfw_title"/>
+        app:title="@string/settings_enable_nsfw_title" />
 
     <Preference
         app:title="@string/settings_about_master_title"

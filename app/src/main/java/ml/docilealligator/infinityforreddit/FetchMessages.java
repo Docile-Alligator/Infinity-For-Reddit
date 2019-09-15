@@ -87,7 +87,7 @@ class FetchMessages {
 
                 Calendar submitTimeCalendar = Calendar.getInstance();
                 submitTimeCalendar.setTimeInMillis(timeUTC);
-                String formattedTime = new SimpleDateFormat("MMM d, YYYY, HH:mm",
+                String formattedTime = new SimpleDateFormat("MMM d, yyyy, HH:mm",
                         locale).format(submitTimeCalendar.getTime());
 
                 messages.add(new Message(kind, subredditName, subredditNamePrefixed, id, fullname, subject,
