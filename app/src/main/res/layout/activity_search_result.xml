@@ -1,82 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <View
+    android:id="@+id/transparent_overlay_search_result_activity"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#40000000"
+    android:elevation="1dp"
+    android:visibility="gone" />
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar_layout_search_result_activity"
+  <androidx.viewpager.widget.ViewPager
+    android:id="@+id/view_pager_search_result_activity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:application=".SearchResultActivity" />
+
+  <com.google.android.material.appbar.AppBarLayout
+    android:id="@+id/appbar_layout_search_result_activity"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/AppTheme.AppBarOverlay">
+
+    <com.google.android.material.appbar.CollapsingToolbarLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      app:layout_scrollFlags="scroll|enterAlways"
+      app:titleEnabled="false"
+      app:toolbarId="@+id/toolbar_search_result_activity">
+
+      <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="wrap_content">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:titleEnabled="false"
-            app:toolbarId="@+id/toolbar_search_result_activity">
+        <androidx.appcompat.widget.Toolbar
+          android:id="@+id/toolbar_search_result_activity"
+          android:layout_width="match_parent"
+          android:layout_height="?attr/actionBarSize"
+          android:background="?attr/colorPrimary"
+          app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+        <com.ferfalk.simplesearchview.SimpleSearchView
+          android:id="@+id/search_view_search_result_activity"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:textColor="@android:color/white"
+          app:backIconAlpha="1"
+          app:backIconTint="@android:color/white"
+          app:cursorColor="@android:color/white"
+          app:hintColor="#E0E0E0"
+          app:iconsAlpha="1"
+          app:iconsTint="@android:color/white"
+          app:searchBackground="@color/colorPrimary"
+          app:voiceSearch="true" />
 
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar_search_result_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorPrimary"
-                    app:popupTheme="@style/AppTheme.PopupOverlay" />
+      </FrameLayout>
 
-                <com.ferfalk.simplesearchview.SimpleSearchView
-                    android:id="@+id/search_view_search_result_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textColor="@android:color/white"
-                    app:voiceSearch="true"
-                    app:searchBackground="@color/colorPrimary"
-                    app:cursorColor="@android:color/white"
-                    app:hintColor="#E0E0E0"
-                    app:iconsTint="@android:color/white"
-                    app:backIconTint="@android:color/white"
-                    app:iconsAlpha="1"
-                    app:backIconAlpha="1" />
+    </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-            </FrameLayout>
+    <com.google.android.material.tabs.TabLayout
+      android:id="@+id/tab_layout_search_result_activity"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:background="@color/colorPrimary"
+      app:layout_scrollFlags="scroll|enterAlways"
+      app:tabGravity="fill"
+      app:tabIndicatorColor="@android:color/white"
+      app:tabIndicatorHeight="3dp"
+      app:tabMode="fixed"
+      app:tabRippleColor="?attr/colorControlHighlight"
+      app:tabSelectedTextColor="@android:color/white"
+      app:tabTextColor="@android:color/white"
+      app:tabUnboundedRipple="false" />
 
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_layout_search_result_activity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:tabGravity="fill"
-            app:tabMode="fixed"
-            app:tabIndicatorColor="@android:color/white"
-            app:tabIndicatorHeight="3dp"
-            app:tabSelectedTextColor="@android:color/white"
-            app:tabTextColor="@android:color/white"
-            app:tabRippleColor="?attr/colorControlHighlight"
-            app:tabUnboundedRipple="false"/>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <View
-        android:id="@+id/transparent_overlay_search_result_activity"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#40000000"
-        android:elevation="1dp"
-        android:visibility="gone"/>
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager_search_result_activity"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:application=".SearchResultActivity" />
+  </com.google.android.material.appbar.AppBarLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

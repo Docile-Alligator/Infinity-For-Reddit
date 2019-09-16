@@ -1,49 +1,49 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:application="ml.docilealligator.infinityforreddit.PostFragment">
+
+  <LinearLayout
+    android:id="@+id/fetch_post_info_linear_layout_post_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:application="ml.docilealligator.infinityforreddit.PostFragment">
+    android:layout_marginTop="48dp"
+    android:layout_marginBottom="48dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:visibility="gone">
 
-    <com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar
-        android:id="@+id/progress_bar_post_fragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        app:mlpb_progress_stoke_width="3dp"
-        app:mlpb_progress_color="@color/colorAccent"
-        app:mlpb_background_color="@color/circularProgressBarBackground"
-        android:layout_gravity="center_horizontal"/>
+    <ImageView
+      android:id="@+id/fetch_post_info_image_view_post_fragment"
+      android:layout_width="150dp"
+      android:layout_height="wrap_content" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_post_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false" />
+    <TextView
+      android:id="@+id/fetch_post_info_text_view_post_fragment"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:gravity="center" />
 
-    <LinearLayout
-        android:id="@+id/fetch_post_info_linear_layout_post_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="48dp"
-        android:layout_marginBottom="48dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
+  </LinearLayout>
 
-        <ImageView
-            android:id="@+id/fetch_post_info_image_view_post_fragment"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content" />
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/recycler_view_post_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false" />
 
-        <TextView
-            android:id="@+id/fetch_post_info_text_view_post_fragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center" />
-
-    </LinearLayout>
+  <com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar
+    android:id="@+id/progress_bar_post_fragment"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="16dp"
+    android:layout_gravity="center_horizontal"
+    app:mlpb_background_color="@color/circularProgressBarBackground"
+    app:mlpb_progress_color="@color/colorAccent"
+    app:mlpb_progress_stoke_width="3dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

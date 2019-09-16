@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 29
+    buildToolsVersion = '29.0.2'
+
     defaultConfig {
         applicationId "ml.docilealligator.infinityforreddit"
         minSdkVersion 21
@@ -9,13 +11,26 @@ android {
         versionCode 9
         versionName "1.0.8"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
         }
     }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+        }
+    }
+
     compileOptions {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
@@ -32,53 +47,100 @@ repositories {
 }
 
 dependencies {
+    final def appcompatVersion = '1.1.0'
+    final def materialVersion = '1.1.0-alpha10'
+    final def constraintVersion = '1.1.3'
+    final def legacy4Version = '1.0.0'
+    final def legacy13Version = '1.0.0'
+    final def browserVersion = '1.0.0'
+    final def cardviewVersion = '1.0.0'
+    final def roomVersion = '2.2.0-rc01'
+    final def pagingVersion = '2.1.0'
+    final def workVersion = '2.2.0'
+    final def preferenceVersion = '1.1.0'
+    final def archLifecycleVersion = '2.2.0-alpha04'
+    final def junitVersion = '4.12'
+    final def testRunnerVersion = '1.2.0'
+    final def espressoVersion = '3.2.0'
+    final def exoplayerVersion = '2.10.4'
+    final def daggerVersion = '2.24'
+    final def glideVersion = '4.9.0'
+    final def gTransformationsVersion = '4.1.0'
+    final def butterknifeVersion = '10.2.0'
+    final def evernoteVersion = '1.4.1'
+    final def rxjava2Version = '2.2.12'
+    final def rxjava2AndroidVersion = '2.1.1'
+    final def retrofit2 = '2.6.1'
+    final def markwonVersion = '4.1.1'
+    final def gestureViewsVersion = '2.5.2'
+    final def swipeRx2Version = '0.3.0'
+    final def imageviewVersion = '1.0.8'
+    final def mProgressbarVersion = '0.5.8-RELEASE'
+    final def gifDrawableVersion = '1.2.18'
+    final def simpleSearchViewVersion = '0.1.4'
+    final def eventbusVersion = '3.1.1'
+    final def customtextviewVersion = '2.2'
+    final def RoundedBottomSheetVersion = '1.0.1'
+    final def bridgeVersion = '1.2.0'
+    final def htmlTextviewVersion = '3.6'
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
-    implementation 'com.google.android.material:material:1.1.0-alpha09'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'com.google.android.exoplayer:exoplayer:2.9.6'
-    implementation 'com.google.android.exoplayer:exoplayer-dash:2.9.6'
-    implementation 'androidx.browser:browser:1.0.0'
-    implementation 'com.alexvasilkov:gesture-views:2.5.2'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
-    implementation 'com.github.pwittchen:swipe-rx2:0.3.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
-    // Room components
-    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
-    annotationProcessor "androidx.room:room-compiler:$rootProject.roomVersion"
-    // Lifecycle components
-    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.archLifecycleVersion"
-    annotationProcessor "androidx.lifecycle:lifecycle-common-java8:$rootProject.archLifecycleVersion"
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.12'
-    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
-    implementation 'com.squareup.retrofit2:converter-scalars:2.6.1'
-    implementation 'jp.wasabeef:glide-transformations:4.0.0'
-    implementation 'com.google.dagger:dagger:2.24'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.24'
-    implementation 'com.jakewharton:butterknife:10.1.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
-    implementation 'com.github.santalu:aspect-ratio-imageview:1.0.6'
-    implementation 'androidx.paging:paging-runtime:2.1.0'
-    implementation 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
-    implementation 'io.noties.markwon:core:4.1.1'
-    implementation 'io.noties.markwon:linkify:4.1.1'
-    implementation 'io.noties.markwon:ext-strikethrough:4.1.1'
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.17'
-    implementation 'com.github.Ferfalk:SimpleSearchView:0.1.3'
-    implementation 'org.greenrobot:eventbus:3.1.1'
-    implementation 'com.libRG:customtextview:2.2'
-    implementation 'com.github.Deishelon:RoundedBottomSheet:1.0.1'
-    implementation 'com.github.livefront:bridge:v1.2.0'
-    implementation 'com.evernote:android-state:1.4.1'
-    annotationProcessor 'com.evernote:android-state-processor:1.4.1'
-    implementation 'androidx.work:work-runtime:2.2.0'
-    implementation 'androidx.preference:preference:1.1.0-rc01'
-    implementation 'org.sufficientlysecure:html-textview:3.6'
+
+    // ANDROID
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintVersion"
+    implementation "androidx.legacy:legacy-support-v4:$legacy4Version"
+    implementation "androidx.legacy:legacy-support-v13:$legacy13Version"
+    implementation "androidx.browser:browser:$browserVersion"
+    implementation "androidx.cardview:cardview:$cardviewVersion"
+    implementation "androidx.paging:paging-runtime:$pagingVersion"
+    implementation "androidx.work:work-runtime:$workVersion"
+    implementation "androidx.preference:preference:$preferenceVersion"
+    implementation "com.google.android.material:material:$materialVersion"
+    implementation "com.google.android.exoplayer:exoplayer:$exoplayerVersion"
+    // ROOM
+    implementation "androidx.room:room-runtime:$roomVersion"
+    annotationProcessor "androidx.room:room-compiler:$roomVersion"
+    // LIFECYCLE
+    implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
+    annotationProcessor "androidx.lifecycle:lifecycle-common-java8:$archLifecycleVersion"
+    // TEST UNIT
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test:runner:$testRunnerVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+    // DAGGER
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    // GLIDE
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+    implementation "jp.wasabeef:glide-transformations:$gTransformationsVersion"
+    // BUTTERKNIFE
+    implementation "com.jakewharton:butterknife:$butterknifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+    // EVERNOTE
+    implementation "com.evernote:android-state:$evernoteVersion"
+    annotationProcessor "com.evernote:android-state-processor:$evernoteVersion"
+    // RXJAVA2
+    implementation "io.reactivex.rxjava2:rxandroid:$rxjava2AndroidVersion"
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava2Version"
+    // RETROFIT2
+    implementation "com.squareup.retrofit2:retrofit:$retrofit2"
+    implementation "com.squareup.retrofit2:converter-scalars:$retrofit2"
+    // MARKWON
+    implementation "io.noties.markwon:core:$markwonVersion"
+    implementation "io.noties.markwon:linkify:$markwonVersion"
+    implementation "io.noties.markwon:ext-strikethrough:$markwonVersion"
+    // MISC
+    implementation "com.alexvasilkov:gesture-views:$gestureViewsVersion"
+    implementation "com.github.pwittchen:swipe-rx2:$swipeRx2Version"
+    implementation "com.github.santalu:aspect-ratio-imageview:$imageviewVersion"
+    implementation "com.lsjwzh:materialloadingprogressbar:$mProgressbarVersion"
+    implementation "pl.droidsonroids.gif:android-gif-drawable:$gifDrawableVersion"
+    implementation "com.github.Ferfalk:SimpleSearchView:$simpleSearchViewVersion"
+    implementation "org.greenrobot:eventbus:$eventbusVersion"
+    implementation "com.libRG:customtextview:$customtextviewVersion"
+    implementation "com.github.Deishelon:RoundedBottomSheet:$RoundedBottomSheetVersion"
+    implementation "com.github.livefront:bridge:$bridgeVersion"
+    implementation "org.sufficientlysecure:html-textview:$htmlTextviewVersion"
 }

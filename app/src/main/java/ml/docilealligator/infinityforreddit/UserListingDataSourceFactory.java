@@ -6,37 +6,37 @@ import androidx.paging.DataSource;
 import retrofit2.Retrofit;
 
 public class UserListingDataSourceFactory extends DataSource.Factory {
-    private Retrofit retrofit;
-    private String query;
-    private String sortType;
 
-    private UserListingDataSource userListingDataSource;
-    private MutableLiveData<UserListingDataSource> userListingDataSourceMutableLiveData;
+  private final Retrofit retrofit;
+  private final String query;
+  private final MutableLiveData<UserListingDataSource> userListingDataSourceMutableLiveData;
+  private String sortType;
+  private UserListingDataSource userListingDataSource;
 
-    UserListingDataSourceFactory(Retrofit retrofit, String query, String sortType) {
-        this.retrofit = retrofit;
-        this.query = query;
-        this.sortType = sortType;
-        userListingDataSourceMutableLiveData = new MutableLiveData<>();
-    }
+  UserListingDataSourceFactory(Retrofit retrofit, String query, String sortType) {
+    this.retrofit = retrofit;
+    this.query = query;
+    this.sortType = sortType;
+    userListingDataSourceMutableLiveData = new MutableLiveData<>();
+  }
 
-    @NonNull
-    @Override
-    public DataSource create() {
-        userListingDataSource = new UserListingDataSource(retrofit, query, sortType);
-        userListingDataSourceMutableLiveData.postValue(userListingDataSource);
-        return userListingDataSource;
-    }
+  @NonNull
+  @Override
+  public DataSource create() {
+    userListingDataSource = new UserListingDataSource(retrofit, query, sortType);
+    userListingDataSourceMutableLiveData.postValue(userListingDataSource);
+    return userListingDataSource;
+  }
 
-    public MutableLiveData<UserListingDataSource> getUserListingDataSourceMutableLiveData() {
-        return userListingDataSourceMutableLiveData;
-    }
+  public MutableLiveData<UserListingDataSource> getUserListingDataSourceMutableLiveData() {
+    return userListingDataSourceMutableLiveData;
+  }
 
-    UserListingDataSource getUserListingDataSource() {
-        return userListingDataSource;
-    }
+  UserListingDataSource getUserListingDataSource() {
+    return userListingDataSource;
+  }
 
-    void changeSortType(String sortType) {
-        this.sortType = sortType;
-    }
+  void changeSortType(String sortType) {
+    this.sortType = sortType;
+  }
 }

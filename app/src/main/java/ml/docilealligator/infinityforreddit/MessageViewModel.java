@@ -8,89 +8,92 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
-
 import java.util.Locale;
-
 import retrofit2.Retrofit;
 
 public class MessageViewModel extends ViewModel {
-    private MessageDataSourceFactory messageDataSourceFactory;
-    private LiveData<NetworkState> paginationNetworkState;
-    private LiveData<NetworkState> initialLoadingState;
-    private LiveData<Boolean> hasMessageLiveData;
-    private LiveData<PagedList<Message>> messages;
-    private MutableLiveData<String> whereLiveData;
 
-    public MessageViewModel(Retrofit retrofit, Locale locale, String accessToken, String where) {
-        messageDataSourceFactory = new MessageDataSourceFactory(retrofit, locale, accessToken, where);
+  private final MessageDataSourceFactory messageDataSourceFactory;
+  private final LiveData<NetworkState> paginationNetworkState;
+  private final LiveData<NetworkState> initialLoadingState;
+  private final LiveData<Boolean> hasMessageLiveData;
+  private final LiveData<PagedList<Message>> messages;
+  private final MutableLiveData<String> whereLiveData;
 
-        initialLoadingState = Transformations.switchMap(messageDataSourceFactory.getMessageDataSourceLiveData(),
-                MessageDataSource::getInitialLoadStateLiveData);
-        paginationNetworkState = Transformations.switchMap(messageDataSourceFactory.getMessageDataSourceLiveData(),
-                MessageDataSource::getPaginationNetworkStateLiveData);
-        hasMessageLiveData = Transformations.switchMap(messageDataSourceFactory.getMessageDataSourceLiveData(),
-                MessageDataSource::hasPostLiveData);
+  public MessageViewModel(Retrofit retrofit, Locale locale, String accessToken, String where) {
+    messageDataSourceFactory = new MessageDataSourceFactory(retrofit, locale, accessToken, where);
 
-        whereLiveData = new MutableLiveData<>();
-        whereLiveData.postValue(where);
+    initialLoadingState = Transformations
+        .switchMap(messageDataSourceFactory.getMessageDataSourceLiveData(),
+            MessageDataSource::getInitialLoadStateLiveData);
+    paginationNetworkState = Transformations
+        .switchMap(messageDataSourceFactory.getMessageDataSourceLiveData(),
+            MessageDataSource::getPaginationNetworkStateLiveData);
+    hasMessageLiveData = Transformations
+        .switchMap(messageDataSourceFactory.getMessageDataSourceLiveData(),
+            MessageDataSource::hasPostLiveData);
 
-        PagedList.Config pagedListConfig =
-                (new PagedList.Config.Builder())
-                        .setEnablePlaceholders(false)
-                        .setPageSize(25)
-                        .build();
+    whereLiveData = new MutableLiveData<>();
+    whereLiveData.postValue(where);
 
-        messages = Transformations.switchMap(whereLiveData, newWhere -> {
-            messageDataSourceFactory.changeWhere(whereLiveData.getValue());
-            return (new LivePagedListBuilder(messageDataSourceFactory, pagedListConfig)).build();
-        });
+    PagedList.Config pagedListConfig =
+        (new PagedList.Config.Builder())
+            .setEnablePlaceholders(false)
+            .setPageSize(25)
+            .build();
+
+    messages = Transformations.switchMap(whereLiveData, newWhere -> {
+      messageDataSourceFactory.changeWhere(whereLiveData.getValue());
+      return (new LivePagedListBuilder(messageDataSourceFactory, pagedListConfig)).build();
+    });
+  }
+
+  LiveData<PagedList<Message>> getMessages() {
+    return messages;
+  }
+
+  LiveData<NetworkState> getPaginationNetworkState() {
+    return paginationNetworkState;
+  }
+
+  LiveData<NetworkState> getInitialLoadingState() {
+    return initialLoadingState;
+  }
+
+  LiveData<Boolean> hasMessage() {
+    return hasMessageLiveData;
+  }
+
+  void refresh() {
+    messageDataSourceFactory.getMessageDataSource().invalidate();
+  }
+
+  void retryLoadingMore() {
+    messageDataSourceFactory.getMessageDataSource().retryLoadingMore();
+  }
+
+  void changeWhere(String where) {
+    whereLiveData.postValue(where);
+  }
+
+  public static class Factory extends ViewModelProvider.NewInstanceFactory {
+
+    private final Retrofit retrofit;
+    private final Locale locale;
+    private final String accessToken;
+    private final String where;
+
+    public Factory(Retrofit retrofit, Locale locale, String accessToken, String where) {
+      this.retrofit = retrofit;
+      this.locale = locale;
+      this.accessToken = accessToken;
+      this.where = where;
     }
 
-    LiveData<PagedList<Message>> getMessages() {
-        return messages;
+    @NonNull
+    @Override
+    public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+      return (T) new MessageViewModel(retrofit, locale, accessToken, where);
     }
-
-    LiveData<NetworkState> getPaginationNetworkState() {
-        return paginationNetworkState;
-    }
-
-    LiveData<NetworkState> getInitialLoadingState() {
-        return initialLoadingState;
-    }
-
-    LiveData<Boolean> hasMessage() {
-        return hasMessageLiveData;
-    }
-
-    void refresh() {
-        messageDataSourceFactory.getMessageDataSource().invalidate();
-    }
-
-    void retryLoadingMore() {
-        messageDataSourceFactory.getMessageDataSource().retryLoadingMore();
-    }
-
-    void changeWhere(String where) {
-        whereLiveData.postValue(where);
-    }
-
-    public static class Factory extends ViewModelProvider.NewInstanceFactory {
-        private Retrofit retrofit;
-        private Locale locale;
-        private String accessToken;
-        private String where;
-
-        public Factory(Retrofit retrofit, Locale locale, String accessToken, String where) {
-            this.retrofit = retrofit;
-            this.locale = locale;
-            this.accessToken = accessToken;
-            this.where = where;
-        }
-
-        @NonNull
-        @Override
-        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new MessageViewModel(retrofit, locale, accessToken, where);
-        }
-    }
+  }
 }

@@ -1,63 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="8dp">
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:paddingBottom="8dp"
+  android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/new_type_text_view_user_thing_sort_type_bottom_sheet_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/sort_new"
-        android:textColor="@color/primaryTextColor"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?attr/selectableItemBackground" />
+  <TextView
+    android:id="@+id/new_type_text_view_user_thing_sort_type_bottom_sheet_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:paddingStart="32dp"
+    android:paddingEnd="32dp"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:text="@string/sort_new"
+    android:textColor="@color/primaryTextColor" />
 
-    <TextView
-        android:id="@+id/hot_type_text_view_user_thing_sort_type_bottom_sheet_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/sort_hot"
-        android:textColor="@color/primaryTextColor"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?attr/selectableItemBackground" />
+  <TextView
+    android:id="@+id/hot_type_text_view_user_thing_sort_type_bottom_sheet_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:paddingStart="32dp"
+    android:paddingEnd="32dp"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:text="@string/sort_hot"
+    android:textColor="@color/primaryTextColor" />
 
-    <TextView
-        android:id="@+id/top_type_text_view_user_thing_sort_type_bottom_sheet_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/sort_top"
-        android:textColor="@color/primaryTextColor"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?attr/selectableItemBackground" />
+  <TextView
+    android:id="@+id/top_type_text_view_user_thing_sort_type_bottom_sheet_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:paddingStart="32dp"
+    android:paddingEnd="32dp"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:text="@string/sort_top"
+    android:textColor="@color/primaryTextColor" />
 
-    <TextView
-        android:id="@+id/controversial_type_text_view_user_thing_sort_type_bottom_sheet_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/sort_controversial"
-        android:textColor="@color/primaryTextColor"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?attr/selectableItemBackground" />
+  <TextView
+    android:id="@+id/controversial_type_text_view_user_thing_sort_type_bottom_sheet_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:paddingStart="32dp"
+    android:paddingEnd="32dp"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:text="@string/sort_controversial"
+    android:textColor="@color/primaryTextColor" />
 
 </LinearLayout>

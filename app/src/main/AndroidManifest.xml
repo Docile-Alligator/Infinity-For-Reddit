@@ -1,253 +1,256 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ml.docilealligator.infinityforreddit">
+  xmlns:tools="http://schemas.android.com/tools"
+  package="ml.docilealligator.infinityforreddit">
 
-    <application
-        android:name=".Infinity"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
-        <activity android:name=".ShareDataResolverActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="image/*" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="video/*" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/plain" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/search_activity_label"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/PreferenceActivityTheme" />
-        <activity
-            android:name=".ViewMessageActivity"
-            android:label="@string/view_message_activity_label"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".AccountPostsActivity"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".EditCommentActivity"
-            android:label="@string/edit_comment_activity_label"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".EditPostActivity"
-            android:label="@string/edit_post_activity_label"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
+  <application
+    android:allowBackup="true"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name"
+    android:name=".Infinity"
+    android:roundIcon="@mipmap/ic_launcher_round"
+    android:supportsRtl="true"
+    android:theme="@style/AppTheme"
+    android:usesCleartextTraffic="true"
+    tools:ignore="AllowBackup"
+    tools:targetApi="m">
+    <activity android:name=".ShareDataResolverActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.SEND" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:mimeType="image/*" />
+      </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.SEND" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:mimeType="video/*" />
+      </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.SEND" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:mimeType="text/plain" />
+      </intent-filter>
+    </activity>
+    <activity
+      android:label="@string/search_activity_label"
+      android:name=".SettingsActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/PreferenceActivityTheme" />
+    <activity
+      android:label="@string/view_message_activity_label"
+      android:name=".ViewMessageActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBar" />
+    <activity
+      android:name=".AccountPostsActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBar" />
+    <activity
+      android:label="@string/edit_comment_activity_label"
+      android:name=".EditCommentActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBar"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:label="@string/edit_post_activity_label"
+      android:name=".EditPostActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBar"
+      android:windowSoftInputMode="adjustResize" />
 
-        <activity
-            android:name=".FilteredThingActivity"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+    <activity
+      android:name=".FilteredThingActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity
-            android:name=".SearchSubredditsResultActivity"
-            android:label="@string/search_subreddits_activity_label"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".LinkResolverActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+    <activity
+      android:label="@string/search_subreddits_activity_label"
+      android:name=".SearchSubredditsResultActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBar" />
+    <activity android:name=".LinkResolverActivity">
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:host="www.reddit.com"
-                    android:scheme="https" />
-                <data
-                    android:host="reddit.com"
-                    android:scheme="https" />
-                <data
-                    android:host="amp.reddit.com"
-                    android:scheme="https" />
-                <data
-                    android:host="m.reddit.com"
-                    android:scheme="https" />
-                <data
-                    android:host="old.reddit.com"
-                    android:scheme="https" />
-                <data
-                    android:host="new.reddit.com"
-                    android:scheme="https" />
-                <data
-                    android:host="np.reddit.com"
-                    android:scheme="https" />
-                <data
-                    android:host="reddit.app.link"
-                    android:scheme="https" />
-                <data
-                    android:host="redd.it"
-                    android:scheme="https" />
-                <data
-                    android:host="s.reddit.com"
-                    android:scheme="https" />
+        <data
+          android:host="www.reddit.com"
+          android:scheme="https" />
+        <data
+          android:host="reddit.com"
+          android:scheme="https" />
+        <data
+          android:host="amp.reddit.com"
+          android:scheme="https" />
+        <data
+          android:host="m.reddit.com"
+          android:scheme="https" />
+        <data
+          android:host="old.reddit.com"
+          android:scheme="https" />
+        <data
+          android:host="new.reddit.com"
+          android:scheme="https" />
+        <data
+          android:host="np.reddit.com"
+          android:scheme="https" />
+        <data
+          android:host="reddit.app.link"
+          android:scheme="https" />
+        <data
+          android:host="redd.it"
+          android:scheme="https" />
+        <data
+          android:host="s.reddit.com"
+          android:scheme="https" />
 
-                <data
-                    android:host="www.reddit.com"
-                    android:scheme="http" />
-                <data
-                    android:host="reddit.com"
-                    android:scheme="http" />
-                <data
-                    android:host="amp.reddit.com"
-                    android:scheme="http" />
-                <data
-                    android:host="m.reddit.com"
-                    android:scheme="http" />
-                <data
-                    android:host="old.reddit.com"
-                    android:scheme="http" />
-                <data
-                    android:host="new.reddit.com"
-                    android:scheme="http" />
-                <data
-                    android:host="np.reddit.com"
-                    android:scheme="http" />
-                <data
-                    android:host="reddit.app.link"
-                    android:scheme="http" />
-                <data
-                    android:host="redd.it"
-                    android:scheme="http" />
-                <data
-                    android:host="s.reddit.com"
-                    android:scheme="http" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".SearchActivity"
-            android:label="@string/search_activity_label"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".RulesActivity"
-            android:label="@string/rules_activity_label"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".PostVideoActivity"
-            android:label="@string/post_video_activity_label"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".PostImageActivity"
-            android:label="@string/post_image_activity_label"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".PostLinkActivity"
-            android:label="@string/post_link_activity_label"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".SubscribedThingListingActivity"
-            android:label="@string/subscriptions"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".SubredditSelectionActivity"
-            android:label="@string/subreddit_selection_activity_label"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".PostTextActivity"
-            android:label="@string/post_text_activity_label"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".CommentActivity"
-            android:label="@string/comment_activity_label"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".SearchResultActivity"
-            android:label="@string/search_activity_label"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.Launcher">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <data
+          android:host="www.reddit.com"
+          android:scheme="http" />
+        <data
+          android:host="reddit.com"
+          android:scheme="http" />
+        <data
+          android:host="amp.reddit.com"
+          android:scheme="http" />
+        <data
+          android:host="m.reddit.com"
+          android:scheme="http" />
+        <data
+          android:host="old.reddit.com"
+          android:scheme="http" />
+        <data
+          android:host="new.reddit.com"
+          android:scheme="http" />
+        <data
+          android:host="np.reddit.com"
+          android:scheme="http" />
+        <data
+          android:host="reddit.app.link"
+          android:scheme="http" />
+        <data
+          android:host="redd.it"
+          android:scheme="http" />
+        <data
+          android:host="s.reddit.com"
+          android:scheme="http" />
+      </intent-filter>
+    </activity>
+    <activity
+      android:label="@string/search_activity_label"
+      android:name=".SearchActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBar" />
+    <activity
+      android:label="@string/rules_activity_label"
+      android:name=".RulesActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBar" />
+    <activity
+      android:label="@string/post_video_activity_label"
+      android:name=".PostVideoActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBar"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:label="@string/post_image_activity_label"
+      android:name=".PostImageActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBar"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:label="@string/post_link_activity_label"
+      android:name=".PostLinkActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBar"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:label="@string/subscriptions"
+      android:name=".SubscribedThingListingActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBar" />
+    <activity
+      android:label="@string/subreddit_selection_activity_label"
+      android:name=".SubredditSelectionActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBar" />
+    <activity
+      android:label="@string/post_text_activity_label"
+      android:name=".PostTextActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBar"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:label="@string/comment_activity_label"
+      android:name=".CommentActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBar"
+      android:windowSoftInputMode="adjustResize" />
+    <activity
+      android:label="@string/search_activity_label"
+      android:name=".SearchResultActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBar" />
+    <activity
+      android:label="@string/app_name"
+      android:name=".MainActivity"
+      android:theme="@style/AppTheme.Launcher">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:label="@string/login_activity_label"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ViewImageActivity"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.ActionBar.Transparent" />
-        <activity
-            android:name=".ViewVideoActivity"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.ActionBar.Transparent" />
-        <activity
-            android:name=".ViewPostDetailActivity"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ViewSubredditDetailActivity"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBarWithTranslucentWindow" />
-        <activity
-            android:name=".ViewUserDetailActivity"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBarWithTranslucentWindow" />
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+    <activity
+      android:label="@string/login_activity_label"
+      android:name=".LoginActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBar" />
+    <activity
+      android:name=".ViewImageActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.ActionBar.Transparent" />
+    <activity
+      android:name=".ViewVideoActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.ActionBar.Transparent" />
+    <activity
+      android:name=".ViewPostDetailActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBar" />
+    <activity
+      android:name=".ViewSubredditDetailActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBarWithTranslucentWindow" />
+    <activity
+      android:name=".ViewUserDetailActivity"
+      android:parentActivityName=".MainActivity"
+      android:theme="@style/AppTheme.NoActionBarWithTranslucentWindow" />
 
-        <service
-            android:name=".SubmitPostService"
-            android:enabled="true"
-            android:exported="false" />
-    </application>
+    <provider
+      android:authorities="${applicationId}.provider"
+      android:exported="false"
+      android:grantUriPermissions="true"
+      android:name="androidx.core.content.FileProvider">
+      <meta-data
+        android:name="android.support.FILE_PROVIDER_PATHS"
+        android:resource="@xml/file_paths" />
+    </provider>
 
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="22" />
+    <service
+      android:enabled="true"
+      android:exported="false"
+      android:name=".SubmitPostService" />
+  </application>
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-    <uses-permission-sdk-23 android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission
+    android:maxSdkVersion="22"
+    android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+  <uses-permission-sdk-23 android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 </manifest>

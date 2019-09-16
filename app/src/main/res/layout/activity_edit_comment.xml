@@ -1,37 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/coordinator_layout_edit_comment_activity"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context=".EditCommentActivity">
+
+  <EditText
+    android:id="@+id/post_text_content_edit_text_edit_comment_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinator_layout_edit_comment_activity"
-    tools:context=".EditCommentActivity">
+    android:padding="16dp"
+    android:background="#00000000"
+    android:gravity="top"
+    android:hint="@string/post_text_content_hint"
+    android:importantForAutofill="no"
+    android:inputType="textCapSentences|textMultiLine"
+    android:textColor="@color/primaryTextColor"
+    android:textSize="18sp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+  <com.google.android.material.appbar.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/AppTheme.AppBarOverlay">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_edit_comment_activity"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:navigationIcon="?attr/homeAsUpIndicator" />
+    <androidx.appcompat.widget.Toolbar
+      android:id="@+id/toolbar_edit_comment_activity"
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      app:navigationIcon="?attr/homeAsUpIndicator"
+      app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <EditText
-        android:id="@+id/post_text_content_edit_text_edit_comment_activity"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="top"
-        android:padding="16dp"
-        android:hint="@string/post_text_content_hint"
-        android:inputType="textCapSentences|textMultiLine"
-        android:textSize="18sp"
-        android:background="#00000000"
-        android:textColor="@color/primaryTextColor"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+  </com.google.android.material.appbar.AppBarLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -10,13 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.fragment.app.Fragment;
-
-import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
 
 
 /**
@@ -24,61 +21,64 @@ import butterknife.ButterKnife;
  */
 public class ModifyCommentBottomSheetFragment extends RoundedBottomSheetDialogFragment {
 
-    static final String EXTRA_COMMENT_FULLNAME = "ECF";
-    static final String EXTRA_COMMENT_CONTENT = "ECC";
-    static final String EXTRA_ACCESS_TOKEN = "EAT";
-    static final String EXTRA_POSITION = "EP";
+  static final String EXTRA_COMMENT_FULLNAME = "ECF";
+  static final String EXTRA_COMMENT_CONTENT = "ECC";
+  static final String EXTRA_ACCESS_TOKEN = "EAT";
+  static final String EXTRA_POSITION = "EP";
+  @BindView(R.id.edit_text_view_modify_comment_bottom_sheet_fragment)
+  TextView editTextView;
+  @BindView(R.id.delete_text_view_modify_comment_bottom_sheet_fragment)
+  TextView deleteTextView;
 
-    public ModifyCommentBottomSheetFragment() {
-        // Required empty public constructor
+  public ModifyCommentBottomSheetFragment() {
+    // Required empty public constructor
+  }
+
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
+    View rootView = inflater
+        .inflate(R.layout.fragment_modify_comment_bottom_sheet, container, false);
+    ButterKnife.bind(this, rootView);
+
+    Activity activity = getActivity();
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+        && (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
+        != Configuration.UI_MODE_NIGHT_YES) {
+      rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
     }
 
-    @BindView(R.id.edit_text_view_modify_comment_bottom_sheet_fragment) TextView editTextView;
-    @BindView(R.id.delete_text_view_modify_comment_bottom_sheet_fragment) TextView deleteTextView;
+    Bundle bundle = getArguments();
+    String fullName = bundle.getString(EXTRA_COMMENT_FULLNAME);
+    String content = bundle.getString(EXTRA_COMMENT_CONTENT);
+    String accessToken = bundle.getString(EXTRA_ACCESS_TOKEN);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_modify_comment_bottom_sheet, container, false);
-        ButterKnife.bind(this, rootView);
+    editTextView.setOnClickListener(view -> {
+      Intent intent = new Intent(getActivity(), EditCommentActivity.class);
+      intent.putExtra(EditCommentActivity.EXTRA_ACCESS_TOKEN, accessToken);
+      intent.putExtra(EditCommentActivity.EXTRA_FULLNAME, fullName);
+      intent.putExtra(EditCommentActivity.EXTRA_CONTENT, content);
+      intent.putExtra(EditCommentActivity.EXTRA_POSITION, bundle.getInt(EXTRA_POSITION));
+      if (activity instanceof ViewPostDetailActivity) {
+        activity.startActivityForResult(intent, ViewPostDetailActivity.EDIT_COMMENT_REQUEST_CODE);
+      } else {
+        startActivity(intent);
+      }
 
-        Activity activity = getActivity();
+      dismiss();
+    });
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-                && (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
-            rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-        }
+    deleteTextView.setOnClickListener(view -> {
+      dismiss();
+      if (activity instanceof ViewPostDetailActivity) {
+        ((ViewPostDetailActivity) activity).deleteComment(fullName, bundle.getInt(EXTRA_POSITION));
+      } else if (activity instanceof ViewUserDetailActivity) {
+        ((ViewUserDetailActivity) activity).deleteComment(fullName);
+      }
+    });
 
-        Bundle bundle = getArguments();
-        String fullName = bundle.getString(EXTRA_COMMENT_FULLNAME);
-        String content = bundle.getString(EXTRA_COMMENT_CONTENT);
-        String accessToken = bundle.getString(EXTRA_ACCESS_TOKEN);
-
-        editTextView.setOnClickListener(view -> {
-            Intent intent = new Intent(getActivity(), EditCommentActivity.class);
-            intent.putExtra(EditCommentActivity.EXTRA_ACCESS_TOKEN, accessToken);
-            intent.putExtra(EditCommentActivity.EXTRA_FULLNAME, fullName);
-            intent.putExtra(EditCommentActivity.EXTRA_CONTENT, content);
-            intent.putExtra(EditCommentActivity.EXTRA_POSITION, bundle.getInt(EXTRA_POSITION));
-            if(activity instanceof ViewPostDetailActivity) {
-                activity.startActivityForResult(intent, ViewPostDetailActivity.EDIT_COMMENT_REQUEST_CODE);
-            } else {
-                startActivity(intent);
-            }
-
-            dismiss();
-        });
-
-        deleteTextView.setOnClickListener(view -> {
-            dismiss();
-            if(activity instanceof ViewPostDetailActivity) {
-                ((ViewPostDetailActivity) activity).deleteComment(fullName, bundle.getInt(EXTRA_POSITION));
-            } else if(activity instanceof ViewUserDetailActivity) {
-                ((ViewUserDetailActivity) activity).deleteComment(fullName);
-            }
-        });
-
-        return rootView;
-    }
+    return rootView;
+  }
 
 }

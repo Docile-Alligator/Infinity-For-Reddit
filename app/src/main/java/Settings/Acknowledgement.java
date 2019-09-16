@@ -3,25 +3,26 @@ package Settings;
 import android.net.Uri;
 
 class Acknowledgement {
-    private String name;
-    private String introduction;
-    private Uri link;
 
-    Acknowledgement(String name, String introduction, Uri link) {
-        this.name = name;
-        this.introduction = introduction;
-        this.link = link;
-    }
+  private final String name;
+  private final String introduction;
+  private final Uri link;
 
-    public String getName() {
-        return name;
-    }
+  Acknowledgement(String name, String introduction, Uri link) {
+    this.name = name;
+    this.introduction = introduction;
+    this.link = link;
+  }
 
-    public String getIntroduction() {
-        return introduction;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public Uri getLink() {
-        return link;
-    }
+  public String getIntroduction() {
+    return introduction;
+  }
+
+  public Uri getLink() {
+    return link;
+  }
 }

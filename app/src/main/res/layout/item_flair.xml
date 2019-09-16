@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="?attr/selectableItemBackground"
+  android:clickable="true"
+  android:focusable="true">
+
+  <ImageView
+    android:id="@+id/edit_flair_image_view_item_flair"
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:layout_marginStart="32dp"
+    android:layout_gravity="center_vertical|end"
+    android:background="?actionBarItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:background="?attr/selectableItemBackground">
+    android:src="@drawable/ic_outline_edit_24px"
+    android:tint="@color/primaryTextColor"
+    android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/flair_text_view_item_flair"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:textColor="@color/primaryTextColor" />
-
-    <ImageView
-        android:id="@+id/edit_flair_image_view_item_flair"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center_vertical|end"
-        android:layout_marginStart="32dp"
-        android:src="@drawable/ic_outline_edit_24px"
-        android:visibility="gone"
-        android:tint="@color/primaryTextColor"
-        android:background="?actionBarItemBackground"
-        android:clickable="true"
-        android:focusable="true" />
+  <TextView
+    android:id="@+id/flair_text_view_item_flair"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:textColor="@color/primaryTextColor" />
 </LinearLayout>

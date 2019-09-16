@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <Preference
-        app:title="@string/settings_acknowledgement_master_title"
-        app:fragment="Settings.AcknowledgementFragment" />
+  <Preference
+    app:fragment="Settings.AcknowledgementFragment"
+    app:title="@string/settings_acknowledgement_master_title" />
 
-    <Preference
-        app:title="@string/settings_credits_master_title"
-        app:fragment="Settings.CreditsPreferenceFragment" />
+  <Preference
+    app:fragment="Settings.CreditsPreferenceFragment"
+    app:title="@string/settings_credits_master_title" />
 
-    <Preference
-        android:key="open_source"
-        app:title="@string/settings_open_source_title"
-        app:summary="@string/settings_open_source_summary" />
+  <Preference
+    android:key="open_source"
+    app:summary="@string/settings_open_source_summary"
+    app:title="@string/settings_open_source_title" />
 
-    <Preference
-        android:key="rate"
-        app:title="@string/settings_rate_title"
-        app:summary="@string/settings_rate_summary" />
+  <Preference
+    android:key="rate"
+    app:summary="@string/settings_rate_summary"
+    app:title="@string/settings_rate_title" />
 
-    <Preference
-        android:key="email"
-        app:title="@string/settings_email_title"
-        app:summary="@string/settings_email_summary" />
+  <Preference
+    android:key="email"
+    app:summary="@string/settings_email_summary"
+    app:title="@string/settings_email_title" />
 
-    <Preference
-        android:key="reddit_account"
-        app:title="@string/settings_reddit_account_title"
-        app:summary="@string/settings_reddit_account_summary" />
+  <Preference
+    android:key="reddit_account"
+    app:summary="@string/settings_reddit_account_summary"
+    app:title="@string/settings_reddit_account_title" />
 
 </PreferenceScreen>

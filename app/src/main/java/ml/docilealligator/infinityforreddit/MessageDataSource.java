@@ -1,112 +1,116 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
-
 import java.util.ArrayList;
 import java.util.Locale;
-
 import retrofit2.Retrofit;
 
 class MessageDataSource extends PageKeyedDataSource<String, Message> {
-    private Retrofit oauthRetrofit;
-    private Locale locale;
-    private String accessToken;
-    private String where;
 
-    private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
-    private MutableLiveData<NetworkState> initialLoadStateLiveData;
-    private MutableLiveData<Boolean> hasPostLiveData;
+  private final Retrofit oauthRetrofit;
+  private final Locale locale;
+  private final String accessToken;
+  private final String where;
 
-    private LoadParams<String> params;
-    private LoadCallback<String, Message> callback;
+  private final MutableLiveData<NetworkState> paginationNetworkStateLiveData;
+  private final MutableLiveData<NetworkState> initialLoadStateLiveData;
+  private final MutableLiveData<Boolean> hasPostLiveData;
 
-    MessageDataSource(Retrofit oauthRetrofit, Locale locale, String accessToken, String where) {
-        this.oauthRetrofit = oauthRetrofit;
-        this.locale = locale;
-        this.accessToken = accessToken;
-        this.where = where;
-        paginationNetworkStateLiveData = new MutableLiveData<>();
-        initialLoadStateLiveData = new MutableLiveData<>();
-        hasPostLiveData = new MutableLiveData<>();
-    }
+  private LoadParams<String> params;
+  private LoadCallback<String, Message> callback;
 
-    MutableLiveData<NetworkState> getPaginationNetworkStateLiveData() {
-        return paginationNetworkStateLiveData;
-    }
+  MessageDataSource(Retrofit oauthRetrofit, Locale locale, String accessToken, String where) {
+    this.oauthRetrofit = oauthRetrofit;
+    this.locale = locale;
+    this.accessToken = accessToken;
+    this.where = where;
+    paginationNetworkStateLiveData = new MutableLiveData<>();
+    initialLoadStateLiveData = new MutableLiveData<>();
+    hasPostLiveData = new MutableLiveData<>();
+  }
 
-    MutableLiveData<NetworkState> getInitialLoadStateLiveData() {
-        return initialLoadStateLiveData;
-    }
+  MutableLiveData<NetworkState> getPaginationNetworkStateLiveData() {
+    return paginationNetworkStateLiveData;
+  }
 
-    MutableLiveData<Boolean> hasPostLiveData() {
-        return hasPostLiveData;
-    }
+  MutableLiveData<NetworkState> getInitialLoadStateLiveData() {
+    return initialLoadStateLiveData;
+  }
 
-    void retryLoadingMore() {
-        loadAfter(params, callback);
-    }
+  MutableLiveData<Boolean> hasPostLiveData() {
+    return hasPostLiveData;
+  }
 
-    @Override
-    public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull LoadInitialCallback<String, Message> callback) {
-        initialLoadStateLiveData.postValue(NetworkState.LOADING);
+  void retryLoadingMore() {
+    loadAfter(params, callback);
+  }
 
-        FetchMessages.fetchMessagesAsync(oauthRetrofit, locale, accessToken, where, null, new FetchMessages.FetchMessagesListener() {
-            @Override
-            public void fetchSuccess(ArrayList<Message> messages, @Nullable String after) {
-                if(messages.size() == 0) {
-                    hasPostLiveData.postValue(false);
-                } else {
-                    hasPostLiveData.postValue(true);
-                }
+  @Override
+  public void loadInitial(@NonNull LoadInitialParams<String> params,
+      @NonNull LoadInitialCallback<String, Message> callback) {
+    initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
-                if(after == null || after.equals("") || after.equals("null")) {
-                    callback.onResult(messages, null, null);
-                } else {
-                    callback.onResult(messages, null, after);
-                }
-                initialLoadStateLiveData.postValue(NetworkState.LOADED);
+    FetchMessages.fetchMessagesAsync(oauthRetrofit, locale, accessToken, where, null,
+        new FetchMessages.FetchMessagesListener() {
+          @Override
+          public void fetchSuccess(ArrayList<Message> messages, @Nullable String after) {
+            if (messages.size() == 0) {
+              hasPostLiveData.postValue(false);
+            } else {
+              hasPostLiveData.postValue(true);
             }
 
-            @Override
-            public void fetchFailed() {
-                initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error fetch messages"));
+            if (after == null || after.equals("") || after.equals("null")) {
+              callback.onResult(messages, null, null);
+            } else {
+              callback.onResult(messages, null, after);
             }
+            initialLoadStateLiveData.postValue(NetworkState.LOADED);
+          }
+
+          @Override
+          public void fetchFailed() {
+            initialLoadStateLiveData
+                .postValue(new NetworkState(NetworkState.Status.FAILED, "Error fetch messages"));
+          }
         });
-    }
+  }
 
-    @Override
-    public void loadBefore(@NonNull LoadParams<String> params, @NonNull LoadCallback<String, Message> callback) {
+  @Override
+  public void loadBefore(@NonNull LoadParams<String> params,
+      @NonNull LoadCallback<String, Message> callback) {
 
-    }
+  }
 
-    @Override
-    public void loadAfter(@NonNull LoadParams<String> params, @NonNull LoadCallback<String, Message> callback) {
-        this.params = params;
-        this.callback = callback;
+  @Override
+  public void loadAfter(@NonNull LoadParams<String> params,
+      @NonNull LoadCallback<String, Message> callback) {
+    this.params = params;
+    this.callback = callback;
 
-        paginationNetworkStateLiveData.postValue(NetworkState.LOADING);
+    paginationNetworkStateLiveData.postValue(NetworkState.LOADING);
 
-        FetchMessages.fetchMessagesAsync(oauthRetrofit, locale, accessToken, where, params.key, new FetchMessages.FetchMessagesListener() {
-            @Override
-            public void fetchSuccess(ArrayList<Message> messages, @Nullable String after) {
-                if(after == null || after.equals("") || after.equals("null")) {
-                    callback.onResult(messages, null);
-                } else {
-                    callback.onResult(messages, after);
-                }
-
-                paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
+    FetchMessages.fetchMessagesAsync(oauthRetrofit, locale, accessToken, where, params.key,
+        new FetchMessages.FetchMessagesListener() {
+          @Override
+          public void fetchSuccess(ArrayList<Message> messages, @Nullable String after) {
+            if (after == null || after.equals("") || after.equals("null")) {
+              callback.onResult(messages, null);
+            } else {
+              callback.onResult(messages, after);
             }
 
-            @Override
-            public void fetchFailed() {
-                paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error fetching data"));
-            }
+            paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
+          }
+
+          @Override
+          public void fetchFailed() {
+            paginationNetworkStateLiveData
+                .postValue(new NetworkState(NetworkState.Status.FAILED, "Error fetching data"));
+          }
         });
-    }
+  }
 }

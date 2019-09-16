@@ -1,328 +1,327 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/card_view_item_post"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_marginTop="8dp"
+  android:layout_marginBottom="8dp"
+  app:cardCornerRadius="16dp"
+  app:cardElevation="2dp">
+
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
-    android:id="@+id/card_view_item_post"
-    app:cardElevation="2dp"
-    app:cardCornerRadius="16dp">
+    android:orientation="vertical">
+
+    <ImageView
+      android:id="@+id/image_view_no_preview_link_item_post"
+      android:layout_width="match_parent"
+      android:layout_height="150dp"
+      android:background="@color/grey"
+      android:scaleType="center"
+      android:src="@drawable/ic_link"
+      android:tint="@android:color/tab_indicator_text"
+      android:visibility="gone" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+      android:id="@+id/spoiler_flair_linear_layout_item_post"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="16dp"
+      android:visibility="gone">
+
+      <com.libRG.CustomTextView
+        android:id="@+id/spoiler_custom_text_view_item_post"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginStart="16dp"
+        android:layout_gravity="center"
+        android:padding="4dp"
+        android:text="@string/spoiler"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:lib_setRadius="3dp"
+        app:lib_setRoundedBorderColor="@color/colorPrimaryDarkDayNightTheme"
+        app:lib_setRoundedView="true"
+        app:lib_setShape="rectangle" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:id="@+id/icon_name_linear_layout_view_item_post"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constrainedWidth="true"
-                android:padding="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/stickied_post_image_view_item_post"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <CustomView.AspectRatioGifImageView
-                    android:id="@+id/icon_gif_image_view_item_post"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"/>
-
-                <TextView
-                    android:id="@+id/name_text_view_item_post"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_gravity="center"
-                    android:textColor="#E91E63"/>
-
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/stickied_post_image_view_item_post"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:tint="@color/backgroundColorPrimaryDark"
-                android:visibility="gone"
-                app:layout_constraintStart_toEndOf="@id/icon_name_linear_layout_view_item_post"
-                app:layout_constraintEnd_toStartOf="@+id/post_time_text_view_best_item_post"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <TextView
-                android:id="@+id/post_time_text_view_best_item_post"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/stickied_post_image_view_item_post"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintHorizontal_bias="1"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:id="@+id/title_text_view_best_item_post"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textSize="18sp"
-            android:textColor="@color/primaryTextColor"/>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/type_text_view_item_post"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/white"
-                app:chipBackgroundColor="@color/backgroundColorPrimaryDark"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/gilded_image_view_item_post"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/gold"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/type_text_view_item_post"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/gilded_number_text_view_item_post"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:textColor="@color/gold"
-                android:textSize="20sp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/gilded_image_view_item_post"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/archived_image_view_item_post"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/ic_archive_outline_24dp"
-                android:tint="@color/archivedTint"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/crosspost_image_view_item_post"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/locked_image_view_item_post"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/ic_outline_lock_24px"
-                android:tint="@color/lockedIconTint"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/nsfw_text_view_item_post"
-                app:layout_constraintStart_toEndOf="@+id/archived_image_view_item_post"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintHorizontal_bias="0" />
-
-            <ImageView
-                android:id="@+id/crosspost_image_view_item_post"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/crosspost"
-                android:tint="@color/colorAccent"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/gilded_number_text_view_item_post"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/nsfw_text_view_item_post"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/nsfw"
-                android:textColor="@android:color/white"
-                android:visibility="gone"
-                app:chipBackgroundColor="@color/colorAccent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <LinearLayout
-            android:id="@+id/spoiler_flair_linear_layout_item_post"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:visibility="gone">
-
-            <com.libRG.CustomTextView
-                android:id="@+id/spoiler_custom_text_view_item_post"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="16dp"
-                android:text="@string/spoiler"
-                android:textSize="12sp"
-                android:textColor="@android:color/white"
-                android:padding="4dp"
-                android:visibility="gone"
-                app:lib_setRadius="3dp"
-                app:lib_setRoundedBorderColor="@color/colorPrimaryDarkDayNightTheme"
-                app:lib_setRoundedView="true"
-                app:lib_setShape="rectangle" />
-
-            <com.libRG.CustomTextView
-                android:id="@+id/flair_custom_text_view_item_post"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="16dp"
-                android:textSize="12sp"
-                android:textColor="@android:color/white"
-                android:padding="4dp"
-                android:visibility="gone"
-                app:lib_setRadius="3dp"
-                app:lib_setRoundedBorderColor="@color/colorPrimaryDarkDayNightTheme"
-                app:lib_setRoundedView="true"
-                app:lib_setShape="rectangle" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/link_text_view_item_post"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textSize="12sp"
-            android:visibility="gone"/>
-
-        <RelativeLayout
-            android:id="@+id/image_view_wrapper_item_post"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
-
-            <ProgressBar
-                android:id="@+id/progress_bar_item_post"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true" />
-
-            <CustomView.AspectRatioGifImageView
-                android:id="@+id/image_view_best_post_item"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:scaleType="fitStart" />
-
-            <RelativeLayout
-                android:id="@+id/load_image_error_relative_layout_item_post"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerInParent="true"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableTop="@drawable/ic_error_outline_black_24dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="@string/tap_to_retry" />
-
-            </RelativeLayout>
-
-        </RelativeLayout>
-
-        <ImageView
-            android:id="@+id/image_view_no_preview_link_item_post"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:scaleType="center"
-            android:src="@drawable/ic_link"
-            android:tint="@android:color/tab_indicator_text"
-            android:background="@color/grey"
-            android:visibility="gone"/>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/plus_button_item_post"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:padding="16dp"
-                android:src="@drawable/ic_arrow_upward_black_24dp"
-                android:layout_centerVertical="true"
-                android:tint="@android:color/tab_indicator_text"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"/>
-
-            <TextView
-                android:id="@+id/score_text_view_item_post"
-                android:layout_width="64dp"
-                android:layout_height="match_parent"
-                android:layout_toEndOf="@id/plus_button_item_post"
-                android:layout_alignBottom="@id/plus_button_item_post"
-                android:layout_alignParentTop="true"
-                android:gravity="center"/>
-
-            <ImageView
-                android:id="@+id/minus_button_item_post"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@id/score_text_view_item_post"
-                android:padding="16dp"
-                android:src="@drawable/ic_arrow_downward_black_24dp"
-                android:tint="@android:color/tab_indicator_text"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"/>
-
-            <ImageView
-                android:id="@+id/share_button_item_post"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:padding="16dp"
-                android:src="@drawable/ic_outline_share_24px"
-                android:tint="@android:color/tab_indicator_text"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true" />
-
-        </RelativeLayout>
+      <com.libRG.CustomTextView
+        android:id="@+id/flair_custom_text_view_item_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_gravity="center"
+        android:padding="4dp"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:lib_setRadius="3dp"
+        app:lib_setRoundedBorderColor="@color/colorPrimaryDarkDayNightTheme"
+        app:lib_setRoundedView="true"
+        app:lib_setShape="rectangle" />
 
     </LinearLayout>
+
+    <RelativeLayout
+      android:id="@+id/image_view_wrapper_item_post"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:visibility="gone">
+
+      <CustomView.AspectRatioGifImageView
+        android:id="@+id/image_view_best_post_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:scaleType="fitStart" />
+
+      <ProgressBar
+        android:id="@+id/progress_bar_item_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+      <RelativeLayout
+        android:id="@+id/load_image_error_relative_layout_item_post"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:visibility="gone">
+
+        <TextView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:drawableTop="@drawable/ic_error_outline_black_24dp"
+          android:gravity="center"
+          android:text="@string/tap_to_retry" />
+
+      </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <ImageView
+        android:id="@+id/plus_button_item_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:padding="16dp"
+        android:background="?actionBarItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_arrow_upward_black_24dp"
+        android:tint="@android:color/tab_indicator_text" />
+
+      <ImageView
+        android:id="@+id/minus_button_item_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@id/score_text_view_item_post"
+        android:padding="16dp"
+        android:background="?actionBarItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_arrow_downward_black_24dp"
+        android:tint="@android:color/tab_indicator_text" />
+
+      <ImageView
+        android:id="@+id/share_button_item_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:padding="16dp"
+        android:background="?actionBarItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_outline_share_24px"
+        android:tint="@android:color/tab_indicator_text" />
+
+      <TextView
+        android:id="@+id/score_text_view_item_post"
+        android:layout_width="64dp"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@id/plus_button_item_post"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@id/plus_button_item_post"
+        android:gravity="center" />
+
+    </RelativeLayout>
+
+    <TextView
+      android:id="@+id/link_text_view_item_post"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="16dp"
+      android:paddingStart="16dp"
+      android:paddingEnd="16dp"
+      android:textSize="12sp"
+      android:visibility="gone" />
+
+    <TextView
+      android:id="@+id/title_text_view_best_item_post"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingStart="16dp"
+      android:paddingEnd="16dp"
+      android:textColor="@color/primaryTextColor"
+      android:textSize="18sp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:padding="16dp">
+
+      <ImageView
+        android:id="@+id/gilded_image_view_item_post"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/gold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/type_text_view_item_post"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <ImageView
+        android:id="@+id/archived_image_view_item_post"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/ic_archive_outline_24dp"
+        android:tint="@color/archivedTint"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/crosspost_image_view_item_post"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <ImageView
+        android:id="@+id/locked_image_view_item_post"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/ic_outline_lock_24px"
+        android:tint="@color/lockedIconTint"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/nsfw_text_view_item_post"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@+id/archived_image_view_item_post"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <ImageView
+        android:id="@+id/crosspost_image_view_item_post"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/crosspost"
+        android:tint="@color/colorAccent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/gilded_number_text_view_item_post"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <TextView
+        android:id="@+id/gilded_number_text_view_item_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:textColor="@color/gold"
+        android:textSize="20sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/gilded_image_view_item_post"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <com.google.android.material.chip.Chip
+        android:id="@+id/type_text_view_item_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        app:chipBackgroundColor="@color/backgroundColorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <com.google.android.material.chip.Chip
+        android:id="@+id/nsfw_text_view_item_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nsfw"
+        android:textColor="@android:color/white"
+        android:visibility="gone"
+        app:chipBackgroundColor="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <ImageView
+        android:id="@+id/stickied_post_image_view_item_post"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:tint="@color/backgroundColorPrimaryDark"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/post_time_text_view_best_item_post"
+        app:layout_constraintStart_toEndOf="@id/icon_name_linear_layout_view_item_post"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <LinearLayout
+        android:id="@+id/icon_name_linear_layout_view_item_post"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/stickied_post_image_view_item_post"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <CustomView.AspectRatioGifImageView
+          android:id="@+id/icon_gif_image_view_item_post"
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_gravity="center" />
+
+        <TextView
+          android:id="@+id/name_text_view_item_post"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="16dp"
+          android:layout_gravity="center"
+          android:textColor="#E91E63" />
+
+      </LinearLayout>
+
+      <TextView
+        android:id="@+id/post_time_text_view_best_item_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toEndOf="@id/stickied_post_image_view_item_post"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+  </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

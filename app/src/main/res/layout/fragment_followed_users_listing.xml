@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:application=".FollowedUsersListingFragment">
+
+  <LinearLayout
+    android:id="@+id/no_subscriptions_linear_layout_followed_users_listing_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:application=".FollowedUsersListingFragment">
+    android:layout_marginBottom="48dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:visibility="gone">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_followed_users_listing_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false" />
+    <ImageView
+      android:id="@+id/no_subscriptions_image_view_followed_users_listing_fragment"
+      android:layout_width="150dp"
+      android:layout_height="wrap_content" />
 
-    <LinearLayout
-        android:id="@+id/no_subscriptions_linear_layout_followed_users_listing_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="48dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:gravity="center"
+      android:text="@string/no_users" />
 
-        <ImageView
-            android:id="@+id/no_subscriptions_image_view_followed_users_listing_fragment"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content" />
+  </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:text="@string/no_users" />
-
-    </LinearLayout>
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/recycler_view_followed_users_listing_fragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

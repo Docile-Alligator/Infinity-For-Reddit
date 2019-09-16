@@ -1,57 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="@dimen/nav_header_height"
+  android:background="@drawable/side_nav_bar"
+  android:gravity="bottom"
+  android:orientation="vertical"
+  android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+  <ImageView
+    android:id="@+id/banner_image_view_nav_header_main"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/nav_header_height"
-    android:background="@drawable/side_nav_bar"
-    android:gravity="bottom"
-    android:orientation="vertical"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:layout_height="match_parent"
+    android:scaleType="centerCrop" />
 
-    <ImageView
-        android:id="@+id/banner_image_view_nav_header_main"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"/>
+  <ImageView
+    android:id="@+id/account_switcher_image_view_nav_header_main"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentEnd="true"
+    android:src="@drawable/ic_baseline_arrow_drop_down_24px" />
 
-    <pl.droidsonroids.gif.GifImageView
-        android:id="@+id/profile_image_view_nav_header_main"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"/>
+  <TextView
+    android:id="@+id/karma_text_view_nav_header_main"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_alignParentStart="true"
+    android:layout_below="@id/name_text_view_nav_header_main"
+    android:layout_toStartOf="@id/account_switcher_image_view_nav_header_main" />
 
-    <TextView
-        android:id="@+id/name_text_view_nav_header_main"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/nav_header_vertical_spacing"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_alignParentStart="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:layout_below="@id/profile_image_view_nav_header_main"
-        android:layout_toStartOf="@id/account_switcher_image_view_nav_header_main" />
+  <TextView
+    android:id="@+id/name_text_view_nav_header_main"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/nav_header_vertical_spacing"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_alignParentStart="true"
+    android:layout_below="@id/profile_image_view_nav_header_main"
+    android:layout_toStartOf="@id/account_switcher_image_view_nav_header_main"
+    android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-    <TextView
-        android:id="@+id/karma_text_view_nav_header_main"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/name_text_view_nav_header_main"
-        android:layout_toStartOf="@id/account_switcher_image_view_nav_header_main" />
-
-    <ImageView
-        android:id="@+id/account_switcher_image_view_nav_header_main"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_baseline_arrow_drop_down_24px" />
+  <pl.droidsonroids.gif.GifImageView
+    android:id="@+id/profile_image_view_nav_header_main"
+    android:layout_width="64dp"
+    android:layout_height="64dp"
+    android:layout_marginTop="40dp"
+    android:layout_marginBottom="16dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp" />
 
 </RelativeLayout>

@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+  xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <Preference
-        app:icon="@drawable/ic_outline_notifications_24px"
-        app:title="@string/settings_notification_master_title"
-        app:fragment="Settings.NotificationPreferenceFragment" />
+  <ListPreference
+    app:defaultValue="2"
+    app:entryValues="@array/settings_theme_values"
+    app:icon="@drawable/ic_outline_color_lens_24px"
+    app:key="theme"
+    app:title="@string/settings_theme_title"
+    app:useSimpleSummaryProvider="true" />
 
-    <ListPreference
-        app:defaultValue="2"
-        app:entryValues="@array/settings_theme_values"
-        app:key="theme"
-        app:icon="@drawable/ic_outline_color_lens_24px"
-        app:title="@string/settings_theme_title"
-        app:useSimpleSummaryProvider="true" />
+  <ListPreference
+    android:entries="@array/settings_lazy_mode_interval"
+    app:defaultValue="2.5"
+    app:entryValues="@array/settings_lazy_mode_interval_values"
+    app:icon="@drawable/ic_outline_access_time_24px"
+    app:key="lazy_mode_interval"
+    app:title="@string/settings_lazy_mode_interval_title"
+    app:useSimpleSummaryProvider="true" />
 
-    <ListPreference
-        app:defaultValue="2.5"
-        android:entries="@array/settings_lazy_mode_interval"
-        app:entryValues="@array/settings_lazy_mode_interval_values"
-        app:key="lazy_mode_interval"
-        app:icon="@drawable/ic_outline_access_time_24px"
-        app:title="@string/settings_lazy_mode_interval_title"
-        app:useSimpleSummaryProvider="true" />
+  <Preference
+    app:fragment="Settings.NotificationPreferenceFragment"
+    app:icon="@drawable/ic_outline_notifications_24px"
+    app:title="@string/settings_notification_master_title" />
 
-    <SwitchPreference
-        app:defaultValue="false"
-        app:key="nsfw"
-        app:title="@string/settings_enable_nsfw_title" />
+  <Preference
+    app:fragment="Settings.AboutPreferenceFragment"
+    app:title="@string/settings_about_master_title" />
 
-    <Preference
-        app:title="@string/settings_about_master_title"
-        app:fragment="Settings.AboutPreferenceFragment" />
+  <SwitchPreference
+    app:defaultValue="false"
+    app:key="nsfw"
+    app:title="@string/settings_enable_nsfw_title" />
 
 </androidx.preference.PreferenceScreen>

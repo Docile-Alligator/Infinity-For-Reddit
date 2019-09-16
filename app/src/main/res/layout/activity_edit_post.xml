@@ -1,64 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/coordinator_layout_edit_post_activity"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context=".EditPostActivity">
+
+  <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinator_layout_edit_post_activity"
-    tools:context=".EditPostActivity">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_edit_post_activity"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:navigationIcon="?attr/homeAsUpIndicator" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
+      <EditText
+        android:id="@+id/post_text_content_edit_text_edit_post_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:padding="16dp"
+        android:background="#00000000"
+        android:gravity="top"
+        android:hint="@string/post_text_content_hint"
+        android:importantForAutofill="no"
+        android:inputType="textCapSentences|textMultiLine"
+        android:textColor="@color/primaryTextColor"
+        android:textSize="18sp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+      <TextView
+        android:id="@+id/post_title_text_view_edit_post_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:gravity="top"
+        android:textColor="@color/primaryTextColor"
+        android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/post_title_text_view_edit_post_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="top"
-                android:padding="16dp"
-                android:textSize="18sp"
-                android:textColor="@color/primaryTextColor" />
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dividerColor" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/dividerColor" />
+    </LinearLayout>
 
-            <EditText
-                android:id="@+id/post_text_content_edit_text_edit_post_activity"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="top"
-                android:padding="16dp"
-                android:hint="@string/post_text_content_hint"
-                android:inputType="textCapSentences|textMultiLine"
-                android:textSize="18sp"
-                android:background="#00000000"
-                android:textColor="@color/primaryTextColor" />
+  </androidx.core.widget.NestedScrollView>
 
-        </LinearLayout>
+  <com.google.android.material.appbar.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/AppTheme.AppBarOverlay">
 
-    </androidx.core.widget.NestedScrollView>
+    <androidx.appcompat.widget.Toolbar
+      android:id="@+id/toolbar_edit_post_activity"
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      app:navigationIcon="?attr/homeAsUpIndicator"
+      app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+  </com.google.android.material.appbar.AppBarLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

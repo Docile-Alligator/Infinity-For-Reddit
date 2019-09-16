@@ -22,9 +22,3 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 - Get notifications of unread messages
 - etc...
 
-## Version History
-- 1.0.4 (Sep 9, 2019)
-- 1.0.3 (Sep 9, 2019)
-- 1.0.2 (Sep 8, 2019)
-- 1.0.1 (Sep 8, 2019)
-- 1.0 (Sep 4, 2019)

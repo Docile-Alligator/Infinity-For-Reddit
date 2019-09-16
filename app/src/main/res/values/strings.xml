@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="PluralsCandidate">
     <string name="app_name">Infinity</string>
     <string name="login_activity_label">Login</string>
     <string name="search_activity_label">Search</string>

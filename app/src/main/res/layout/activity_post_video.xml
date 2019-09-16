@@ -1,198 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/coordinator_layout_post_video_activity"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:application=".PostImageActivity">
+
+  <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinator_layout_post_video_activity"
-    tools:application=".PostImageActivity">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+
+      <EditText
+        android:id="@+id/post_title_edit_text_post_video_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:padding="16dp"
+        android:background="#00000000"
+        android:gravity="top"
+        android:hint="@string/post_title_hint"
+        android:importantForAutofill="no"
+        android:inputType="textCapSentences|textMultiLine"
+        android:textColor="@color/primaryTextColor"
+        android:textSize="18sp" />
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_post_video_activity"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:navigationIcon="?attr/homeAsUpIndicator" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
+      <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+        <com.libRG.CustomTextView
+          android:id="@+id/flair_custom_text_view_post_video_activity"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="16dp"
+          android:padding="4dp"
+          android:text="@string/flair"
+          android:textColor="@color/primaryTextColor"
+          android:visibility="gone"
+          app:lib_setRadius="3dp"
+          app:lib_setRoundedBorderColor="@color/colorPrimaryDarkDayNightTheme"
+          app:lib_setRoundedView="true"
+          app:lib_setShape="rectangle" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+        <com.libRG.CustomTextView
+          android:id="@+id/spoiler_custom_text_view_post_video_activity"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="16dp"
+          android:padding="4dp"
+          android:text="@string/spoiler"
+          android:textColor="@color/primaryTextColor"
+          app:lib_setRadius="3dp"
+          app:lib_setRoundedBorderColor="@color/colorPrimaryDarkDayNightTheme"
+          app:lib_setRoundedView="true"
+          app:lib_setShape="rectangle" />
 
-                <pl.droidsonroids.gif.GifImageView
-                    android:id="@+id/subreddit_icon_gif_image_view_post_video_activity"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true" />
+        <com.libRG.CustomTextView
+          android:id="@+id/nsfw_custom_text_view_post_video_activity"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="16dp"
+          android:padding="4dp"
+          android:text="@string/nsfw"
+          android:textColor="@color/primaryTextColor"
+          app:lib_setRadius="3dp"
+          app:lib_setRoundedBorderColor="@color/colorAccent"
+          app:lib_setRoundedView="true"
+          app:lib_setShape="rectangle" />
 
-                <TextView
-                    android:id="@+id/subreddit_name_text_view_post_video_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toStartOf="@id/rules_button_post_video_activity"
-                    android:layout_toEndOf="@id/subreddit_icon_gif_image_view_post_video_activity"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginEnd="16dp"
-                    android:text="@string/choose_a_subreddit" />
+      </LinearLayout>
 
-                <Button
-                    android:id="@+id/rules_button_post_video_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:text="@string/rules"
-                    android:textColor="@android:color/white" />
+      <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
-            </RelativeLayout>
+        <Button
+          android:id="@+id/rules_button_post_video_activity"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentEnd="true"
+          android:layout_centerVertical="true"
+          android:text="@string/rules"
+          android:textColor="@android:color/white" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/dividerColor" />
+        <TextView
+          android:id="@+id/subreddit_name_text_view_post_video_activity"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="32dp"
+          android:layout_marginEnd="16dp"
+          android:layout_centerVertical="true"
+          android:layout_toEndOf="@id/subreddit_icon_gif_image_view_post_video_activity"
+          android:layout_toStartOf="@id/rules_button_post_video_activity"
+          android:text="@string/choose_a_subreddit" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+        <pl.droidsonroids.gif.GifImageView
+          android:id="@+id/subreddit_icon_gif_image_view_post_video_activity"
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_alignParentStart="true"
+          android:layout_centerVertical="true" />
 
-                <com.libRG.CustomTextView
-                    android:id="@+id/flair_custom_text_view_post_video_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:padding="4dp"
-                    android:text="@string/flair"
-                    android:textColor="@color/primaryTextColor"
-                    android:visibility="gone"
-                    app:lib_setRadius="3dp"
-                    app:lib_setRoundedBorderColor="@color/colorPrimaryDarkDayNightTheme"
-                    app:lib_setRoundedView="true"
-                    app:lib_setShape="rectangle" />
+      </RelativeLayout>
 
-                <com.libRG.CustomTextView
-                    android:id="@+id/spoiler_custom_text_view_post_video_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:padding="4dp"
-                    android:text="@string/spoiler"
-                    android:textColor="@color/primaryTextColor"
-                    app:lib_setRadius="3dp"
-                    app:lib_setRoundedBorderColor="@color/colorPrimaryDarkDayNightTheme"
-                    app:lib_setRoundedView="true"
-                    app:lib_setShape="rectangle" />
+      <TextView
+        android:id="@+id/select_again_text_view_post_video_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="@string/select_again"
+        android:textColor="@color/colorAccent"
+        android:visibility="gone" />
 
-                <com.libRG.CustomTextView
-                    android:id="@+id/nsfw_custom_text_view_post_video_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:padding="4dp"
-                    android:text="@string/nsfw"
-                    android:textColor="@color/primaryTextColor"
-                    app:lib_setRadius="3dp"
-                    app:lib_setRoundedBorderColor="@color/colorAccent"
-                    app:lib_setRoundedView="true"
-                    app:lib_setShape="rectangle" />
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dividerColor" />
 
-            </LinearLayout>
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dividerColor" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/dividerColor" />
+      <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dividerColor" />
 
-            <EditText
-                android:id="@+id/post_title_edit_text_post_video_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="top"
-                android:padding="16dp"
-                android:hint="@string/post_title_hint"
-                android:inputType="textCapSentences|textMultiLine"
-                android:textSize="18sp"
-                android:background="#00000000"
-                android:textColor="@color/primaryTextColor" />
+      <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/select_video_constraint_layout_post_video_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="32dp">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/dividerColor" />
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+          android:id="@+id/capture_fab_post_video_activity"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:src="@drawable/ic_outline_add_a_photo_24px"
+          app:backgroundTint="@color/backgroundColorPrimary"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toStartOf="@+id/select_from_library_fab_post_video_activity"
+          app:layout_constraintHorizontal_chainStyle="spread"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          app:tint="@android:color/white" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/select_video_constraint_layout_post_video_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="32dp">
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+          android:id="@+id/select_from_library_fab_post_video_activity"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:src="@drawable/ic_outline_select_photo_24px"
+          app:backgroundTint="@color/backgroundColorPrimary"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintHorizontal_chainStyle="spread"
+          app:layout_constraintStart_toEndOf="@+id/capture_fab_post_video_activity"
+          app:layout_constraintTop_toTopOf="parent"
+          app:tint="@android:color/white" />
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/capture_fab_post_video_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_outline_add_a_photo_24px"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/select_from_library_fab_post_video_activity"
-                    app:layout_constraintHorizontal_chainStyle="spread"
-                    app:backgroundTint="@color/backgroundColorPrimary"
-                    app:tint="@android:color/white" />
+      </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/select_from_library_fab_post_video_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_outline_select_photo_24px"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/capture_fab_post_video_activity"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_chainStyle="spread"
-                    app:backgroundTint="@color/backgroundColorPrimary"
-                    app:tint="@android:color/white" />
+      <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/player_view_post_video_activity"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:visibility="gone"
+        app:controller_layout_id="@layout/exo_playback_control_view" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/select_again_text_view_post_video_activity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:text="@string/select_again"
-                android:textColor="@color/colorAccent"
-                android:visibility="gone" />
+  </androidx.core.widget.NestedScrollView>
 
-            <com.google.android.exoplayer2.ui.PlayerView
-                android:id="@+id/player_view_post_video_activity"
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:visibility="gone"
-                app:controller_layout_id="@layout/exo_playback_control_view" />
+  <com.google.android.material.appbar.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/AppTheme.AppBarOverlay">
 
-        </LinearLayout>
+    <androidx.appcompat.widget.Toolbar
+      android:id="@+id/toolbar_post_video_activity"
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      app:navigationIcon="?attr/homeAsUpIndicator"
+      app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    </androidx.core.widget.NestedScrollView>
+  </com.google.android.material.appbar.AppBarLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

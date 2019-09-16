@@ -1,311 +1,311 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
-    android:layout_width="match_parent"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/drawer_layout"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:fitsSystemWindows="true"
+  tools:openDrawer="start">
+
+  <com.google.android.material.navigation.NavigationView
+    android:id="@+id/nav_view"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    android:layout_gravity="start">
 
-    <include
-        layout="@layout/app_bar_main"
+    <androidx.core.widget.NestedScrollView
+      android:id="@+id/nested_scroll_view_main_activity"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:clipToPadding="false"
+      android:scrollbars="vertical">
+
+      <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start">
+        <LinearLayout
+          android:id="@+id/all_drawer_items_linear_layout_main_activity"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nested_scroll_view_main_activity"
+          <LinearLayout
+            android:id="@+id/profile_linear_layout_main_activity"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            android:clipToPadding="false">
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+            <ImageView
+              android:layout_width="24dp"
+              android:layout_height="24dp"
+              android:layout_marginEnd="32dp"
+              android:layout_gravity="center_vertical"
+              android:src="@drawable/ic_outline_account_circle_24px"
+              android:tint="@color/primaryTextColor" />
 
-                <include
-                    android:id="@+id/nav_header_main_activity"
-                    layout="@layout/nav_header_main" />
+            <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_vertical"
+              android:text="@string/profile"
+              android:textColor="@color/primaryTextColor" />
 
-                <LinearLayout
-                    android:id="@+id/all_drawer_items_linear_layout_main_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+          </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/account_label_main_activity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="16dp"
-                        android:text="@string/label_account" />
+          <LinearLayout
+            android:id="@+id/subscriptions_linear_layout_main_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
 
-                    <LinearLayout
-                        android:id="@+id/profile_linear_layout_main_activity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:padding="16dp">
+            <ImageView
+              android:layout_width="24dp"
+              android:layout_height="24dp"
+              android:layout_marginEnd="32dp"
+              android:layout_gravity="center_vertical"
+              android:src="@drawable/ic_outline_check_circle_outline_24px"
+              android:tint="@color/primaryTextColor" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_outline_account_circle_24px"
-                            android:tint="@color/primaryTextColor"/>
+            <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_vertical"
+              android:text="@string/subscriptions"
+              android:textColor="@color/primaryTextColor" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/profile"
-                            android:textColor="@color/primaryTextColor" />
+          </LinearLayout>
 
-                    </LinearLayout>
+          <LinearLayout
+            android:id="@+id/inbox_linear_layout_main_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
 
-                    <LinearLayout
-                        android:id="@+id/subscriptions_linear_layout_main_activity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:padding="16dp">
+            <ImageView
+              android:layout_width="24dp"
+              android:layout_height="24dp"
+              android:layout_marginEnd="32dp"
+              android:layout_gravity="center_vertical"
+              android:src="@drawable/ic_outline_inbox_24px"
+              android:tint="@color/primaryTextColor" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_outline_check_circle_outline_24px"
-                            android:tint="@color/primaryTextColor"/>
+            <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_vertical"
+              android:text="@string/inbox"
+              android:textColor="@color/primaryTextColor" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/subscriptions"
-                            android:textColor="@color/primaryTextColor" />
+          </LinearLayout>
 
-                    </LinearLayout>
+          <LinearLayout
+            android:id="@+id/upvoted_linear_layout_main_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
 
-                    <LinearLayout
-                        android:id="@+id/inbox_linear_layout_main_activity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:padding="16dp">
+            <ImageView
+              android:layout_width="24dp"
+              android:layout_height="24dp"
+              android:layout_marginEnd="32dp"
+              android:layout_gravity="center_vertical"
+              android:src="@drawable/ic_arrow_upward_black_24dp"
+              android:tint="@color/primaryTextColor" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_outline_inbox_24px"
-                            android:tint="@color/primaryTextColor"/>
+            <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_vertical"
+              android:text="@string/upvoted"
+              android:textColor="@color/primaryTextColor" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/inbox"
-                            android:textColor="@color/primaryTextColor" />
+          </LinearLayout>
 
-                    </LinearLayout>
+          <LinearLayout
+            android:id="@+id/downvoted_linear_layout_main_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
 
-                    <TextView
-                        android:id="@+id/post_label_main_activity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="16dp"
-                        android:text="@string/label_post" />
+            <ImageView
+              android:layout_width="24dp"
+              android:layout_height="24dp"
+              android:layout_marginEnd="32dp"
+              android:layout_gravity="center_vertical"
+              android:src="@drawable/ic_arrow_downward_black_24dp"
+              android:tint="@color/primaryTextColor" />
 
-                    <LinearLayout
-                        android:id="@+id/upvoted_linear_layout_main_activity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:padding="16dp">
+            <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_vertical"
+              android:text="@string/downvoted"
+              android:textColor="@color/primaryTextColor" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_arrow_upward_black_24dp"
-                            android:tint="@color/primaryTextColor"/>
+          </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/upvoted"
-                            android:textColor="@color/primaryTextColor" />
+          <LinearLayout
+            android:id="@+id/hidden_linear_layout_main_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
 
-                    </LinearLayout>
+            <ImageView
+              android:layout_width="24dp"
+              android:layout_height="24dp"
+              android:layout_marginEnd="32dp"
+              android:layout_gravity="center_vertical"
+              android:src="@drawable/ic_outline_lock_24px"
+              android:tint="@color/primaryTextColor" />
 
-                    <LinearLayout
-                        android:id="@+id/downvoted_linear_layout_main_activity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:padding="16dp">
+            <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_vertical"
+              android:text="@string/hidden"
+              android:textColor="@color/primaryTextColor" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_arrow_downward_black_24dp"
-                            android:tint="@color/primaryTextColor"/>
+          </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/downvoted"
-                            android:textColor="@color/primaryTextColor" />
+          <LinearLayout
+            android:id="@+id/saved_linear_layout_main_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
 
-                    </LinearLayout>
+            <ImageView
+              android:layout_width="24dp"
+              android:layout_height="24dp"
+              android:layout_marginEnd="32dp"
+              android:layout_gravity="center_vertical"
+              android:src="@drawable/ic_outline_bookmarks_24px"
+              android:tint="@color/primaryTextColor" />
 
-                    <LinearLayout
-                        android:id="@+id/hidden_linear_layout_main_activity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:padding="16dp">
+            <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_vertical"
+              android:text="@string/saved"
+              android:textColor="@color/primaryTextColor" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_outline_lock_24px"
-                            android:tint="@color/primaryTextColor"/>
+          </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/hidden"
-                            android:textColor="@color/primaryTextColor" />
+          <LinearLayout
+            android:id="@+id/gilded_linear_layout_main_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
 
-                    </LinearLayout>
+            <ImageView
+              android:layout_width="24dp"
+              android:layout_height="24dp"
+              android:layout_marginEnd="32dp"
+              android:layout_gravity="center_vertical"
+              android:src="@drawable/ic_outline_star_border_24px"
+              android:tint="@color/primaryTextColor" />
 
-                    <LinearLayout
-                        android:id="@+id/saved_linear_layout_main_activity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:padding="16dp">
+            <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_vertical"
+              android:text="@string/gilded"
+              android:textColor="@color/primaryTextColor" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_outline_bookmarks_24px"
-                            android:tint="@color/primaryTextColor"/>
+          </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/saved"
-                            android:textColor="@color/primaryTextColor" />
+          <LinearLayout
+            android:id="@+id/settings_linear_layout_main_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
 
-                    </LinearLayout>
+            <ImageView
+              android:layout_width="24dp"
+              android:layout_height="24dp"
+              android:layout_marginEnd="32dp"
+              android:layout_gravity="center_vertical"
+              android:src="@drawable/ic_outline_settings_24px"
+              android:tint="@color/primaryTextColor" />
 
-                    <LinearLayout
-                        android:id="@+id/gilded_linear_layout_main_activity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:padding="16dp">
+            <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_vertical"
+              android:text="@string/settings"
+              android:textColor="@color/primaryTextColor" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_outline_star_border_24px"
-                            android:tint="@color/primaryTextColor"/>
+          </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/gilded"
-                            android:textColor="@color/primaryTextColor" />
+          <TextView
+            android:id="@+id/account_label_main_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/label_account" />
 
-                    </LinearLayout>
+          <TextView
+            android:id="@+id/post_label_main_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="@string/label_post" />
 
-                    <View
-                        android:id="@+id/divider_main_activity"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/dividerColor" />
+          <View
+            android:id="@+id/divider_main_activity"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dividerColor" />
 
-                    <LinearLayout
-                        android:id="@+id/settings_linear_layout_main_activity"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:padding="16dp">
+        </LinearLayout>
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_outline_settings_24px"
-                            android:tint="@color/primaryTextColor"/>
+        <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/account_recycler_view_main_activity"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:visibility="gone" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/settings"
-                            android:textColor="@color/primaryTextColor" />
+        <include
+          android:id="@+id/nav_header_main_activity"
+          layout="@layout/nav_header_main" />
 
-                    </LinearLayout>
+      </LinearLayout>
 
-                </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/account_recycler_view_main_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone" />
+  </com.google.android.material.navigation.NavigationView>
 
-            </LinearLayout>
-
-        </androidx.core.widget.NestedScrollView>
-
-    </com.google.android.material.navigation.NavigationView>
+  <include
+    layout="@layout/app_bar_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

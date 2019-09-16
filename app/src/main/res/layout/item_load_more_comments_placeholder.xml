@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="@color/cardViewBackgroundColor"
+  android:orientation="vertical">
+
+  <TextView
+    android:id="@+id/placeholder_text_view_item_load_more_comments"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/cardViewBackgroundColor">
+    android:padding="8dp"
+    android:gravity="center"
+    android:text="@string/comment_load_more_comments"
+    android:textColor="@color/primaryTextColor" />
 
-    <View
-        android:id="@+id/vertical_block_item_load_more_comments"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimaryDarkDayNightTheme" />
-
-    <TextView
-        android:id="@+id/placeholder_text_view_item_load_more_comments"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="8dp"
-        android:text="@string/comment_load_more_comments"
-        android:textColor="@color/primaryTextColor" />
+  <View
+    android:id="@+id/vertical_block_item_load_more_comments"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDarkDayNightTheme" />
 
 </LinearLayout>

@@ -1,162 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linear_layout_item_comment"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/linear_layout_item_comment"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="@color/cardViewBackgroundColor"
+  android:orientation="vertical">
+
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/cardViewBackgroundColor">
-
-    <View
-        android:id="@+id/vertical_block_item_post_comment"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimaryDarkDayNightTheme"/>
+    android:layout_marginTop="12dp"
+    android:layout_marginBottom="12dp"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="match_parent"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginStart="16dp"
+      android:layout_marginEnd="16dp">
+
+      <TextView
+        android:id="@+id/author_text_view_item_post_comment"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
-        android:orientation="vertical">
+        android:layout_weight="1"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/colorPrimaryDarkDayNightTheme" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp">
-
-            <TextView
-                android:id="@+id/author_text_view_item_post_comment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="16dp"
-                android:textColor="@color/colorPrimaryDarkDayNightTheme"/>
-
-            <TextView
-                android:id="@+id/comment_time_text_view_item_post_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="end" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/comment_markdown_view_item_post_comment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginBottom="8dp"
-            android:textColor="@color/primaryTextColor"/>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/up_vote_button_item_post_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_arrow_upward_black_20dp"
-                android:tint="@android:color/tab_indicator_text"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-            <TextView
-                android:id="@+id/score_text_view_item_post_comment"
-                android:layout_width="64dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:gravity="center"
-                app:layout_constraintStart_toEndOf="@+id/up_vote_button_item_post_comment"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-            <ImageView
-                android:id="@+id/down_vote_button_item_post_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="16dp"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_arrow_downward_black_20dp"
-                android:tint="@android:color/tab_indicator_text"
-                app:layout_constraintStart_toEndOf="@+id/score_text_view_item_post_comment"
-                app:layout_constraintEnd_toStartOf="@id/more_button_item_post_comment"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0" />
-
-            <ImageView
-                android:id="@+id/more_button_item_post_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_outline_more_vert_24px"
-                android:tint="@android:color/tab_indicator_text"
-                android:visibility="gone"
-                app:layout_constraintEnd_toStartOf="@+id/expand_button_item_post_comment"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-            <ImageView
-                android:id="@+id/expand_button_item_post_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_expand_less_black_20dp"
-                android:tint="@android:color/tab_indicator_text"
-                android:visibility="gone"
-                app:layout_constraintEnd_toStartOf="@+id/share_button_item_post_comment"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-            <ImageView
-                android:id="@+id/share_button_item_post_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_outline_share_20px"
-                android:tint="@android:color/tab_indicator_text"
-                app:layout_constraintEnd_toStartOf="@+id/reply_button_item_post_comment"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-            <ImageView
-                android:id="@+id/reply_button_item_post_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_reply_black_20dp"
-                android:tint="@android:color/tab_indicator_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+      <TextView
+        android:id="@+id/comment_time_text_view_item_post_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="end" />
 
     </LinearLayout>
+
+    <TextView
+      android:id="@+id/comment_markdown_view_item_post_comment"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:layout_marginBottom="8dp"
+      android:layout_marginStart="32dp"
+      android:layout_marginEnd="32dp"
+      android:textColor="@color/primaryTextColor" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content">
+
+      <ImageView
+        android:id="@+id/up_vote_button_item_post_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:background="?actionBarItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_arrow_upward_black_20dp"
+        android:tint="@android:color/tab_indicator_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <ImageView
+        android:id="@+id/down_vote_button_item_post_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="?actionBarItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_arrow_downward_black_20dp"
+        android:tint="@android:color/tab_indicator_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/more_button_item_post_comment"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@+id/score_text_view_item_post_comment"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <ImageView
+        android:id="@+id/more_button_item_post_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:background="?actionBarItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_outline_more_vert_24px"
+        android:tint="@android:color/tab_indicator_text"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/expand_button_item_post_comment"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <ImageView
+        android:id="@+id/expand_button_item_post_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:background="?actionBarItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_expand_less_black_20dp"
+        android:tint="@android:color/tab_indicator_text"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/share_button_item_post_comment"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <ImageView
+        android:id="@+id/share_button_item_post_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:background="?actionBarItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_outline_share_20px"
+        android:tint="@android:color/tab_indicator_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/reply_button_item_post_comment"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <ImageView
+        android:id="@+id/reply_button_item_post_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:background="?actionBarItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_reply_black_20dp"
+        android:tint="@android:color/tab_indicator_text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+      <TextView
+        android:id="@+id/score_text_view_item_post_comment"
+        android:layout_width="64dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/up_vote_button_item_post_comment"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+  </LinearLayout>
+
+  <View
+    android:id="@+id/vertical_block_item_post_comment"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDarkDayNightTheme" />
 
 </LinearLayout>

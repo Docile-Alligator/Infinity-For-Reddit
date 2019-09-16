@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:padding="16dp"
+  android:orientation="vertical">
+
+  <TextView
+    android:id="@+id/author_text_view_item_message"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:layout_marginBottom="8dp"
+    android:textColor="@color/primaryTextColor" />
 
-    <TextView
-        android:id="@+id/author_text_view_item_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:textColor="@color/primaryTextColor" />
+  <TextView
+    android:id="@+id/subject_text_view_item_message"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:textColor="@color/primaryTextColor"
+    android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/subject_text_view_item_message"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:textSize="16sp"
-        android:textColor="@color/primaryTextColor" />
+  <TextView
+    android:id="@+id/title_text_view_item_message"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:textColor="@color/primaryTextColor" />
 
-    <TextView
-        android:id="@+id/title_text_view_item_message"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:textColor="@color/primaryTextColor" />
-
-    <TextView
-        android:id="@+id/content_custom_markwon_view_item_message"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+  <TextView
+    android:id="@+id/content_custom_markwon_view_item_message"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
 
 </LinearLayout>

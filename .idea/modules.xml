@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Infinity.iml" filepath="$PROJECT_DIR$/Infinity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Infinity-For-Reddit.iml" filepath="$PROJECT_DIR$/Infinity-For-Reddit.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
