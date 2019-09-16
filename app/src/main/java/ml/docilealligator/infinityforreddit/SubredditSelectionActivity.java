@@ -214,9 +214,8 @@ public class SubredditSelectionActivity extends AppCompatActivity {
                                                                   ArrayList<SubscribedUserData> subscribedUserData,
                                                                   ArrayList<SubredditData> subredditData) {
                             new InsertSubscribedThingsAsyncTask(
-                                    mRedditDataRoomDatabase.subscribedSubredditDao(),
-                                    mRedditDataRoomDatabase.subscribedUserDao(),
-                                    mRedditDataRoomDatabase.subredditDao(),
+                                    mRedditDataRoomDatabase,
+                                    mAccountName,
                                     subscribedSubredditData,
                                     subscribedUserData,
                                     subredditData,

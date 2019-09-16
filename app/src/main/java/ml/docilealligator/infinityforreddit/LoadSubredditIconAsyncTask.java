@@ -13,6 +13,7 @@ class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {
         void loadIconSuccess(String iconImageUrl);
     }
 
+    private RedditDataRoomDatabase redditDataRoomDatabase;
     private SubredditDao subredditDao;
     private String subredditName;
     private Retrofit retrofit;
@@ -20,9 +21,10 @@ class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {
     private boolean hasSubredditInDb;
     private LoadSubredditIconAsyncTaskListener loadSubredditIconAsyncTaskListener;
 
-    LoadSubredditIconAsyncTask(SubredditDao subredditDao, String subredditName, Retrofit retrofit,
+    LoadSubredditIconAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase, String subredditName, Retrofit retrofit,
                                LoadSubredditIconAsyncTaskListener loadSubredditIconAsyncTaskListener) {
-        this.subredditDao = subredditDao;
+        this.redditDataRoomDatabase = redditDataRoomDatabase;
+        this.subredditDao = redditDataRoomDatabase.subredditDao();
         this.subredditName = subredditName;
         this.retrofit = retrofit;
         this.loadSubredditIconAsyncTaskListener = loadSubredditIconAsyncTaskListener;
@@ -52,7 +54,7 @@ class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {
                     public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                         ArrayList<SubredditData> singleSubredditDataList = new ArrayList<>();
                         singleSubredditDataList.add(subredditData);
-                        new InsertSubscribedThingsAsyncTask(null, null, subredditDao,
+                        new InsertSubscribedThingsAsyncTask(redditDataRoomDatabase, null,
                                 null, null, singleSubredditDataList,
                                 () -> loadSubredditIconAsyncTaskListener.loadIconSuccess(subredditData.getIconUrl())).execute();
                     }

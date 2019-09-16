@@ -254,7 +254,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             } else {
                 if(mPost.getSubredditIconUrl() == null) {
                     new LoadSubredditIconAsyncTask(
-                            mRedditDataRoomDatabase.subredditDao(), mPost.getSubredditNamePrefixed().substring(2),
+                            mRedditDataRoomDatabase, mPost.getSubredditNamePrefixed().substring(2),
                             mRetrofit, iconImageUrl -> {
                                 if(iconImageUrl == null || iconImageUrl.equals("")) {
                                     mGlide.load(R.drawable.subreddit_default_icon)

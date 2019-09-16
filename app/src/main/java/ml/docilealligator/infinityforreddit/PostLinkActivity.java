@@ -303,8 +303,7 @@ public class PostLinkActivity extends AppCompatActivity implements FlairBottomSh
     }
 
     private void loadSubredditIcon() {
-        new LoadSubredditIconAsyncTask(mRedditDataRoomDatabase.subredditDao(),
-                subredditName, mRetrofit, iconImageUrl -> {
+        new LoadSubredditIconAsyncTask(mRedditDataRoomDatabase, subredditName, mRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
             loadSubredditIconSuccessful = true;

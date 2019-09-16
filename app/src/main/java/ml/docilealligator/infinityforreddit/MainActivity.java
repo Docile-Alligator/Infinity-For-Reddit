@@ -51,6 +51,7 @@ import com.google.android.material.tabs.TabLayout;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -58,6 +59,9 @@ import javax.inject.Named;
 
 import Account.Account;
 import Account.AccountViewModel;
+import SubredditDatabase.SubredditData;
+import SubscribedSubredditDatabase.SubscribedSubredditData;
+import SubscribedUserDatabase.SubscribedUserData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -77,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
 
     private static final String FETCH_USER_INFO_STATE = "FUIS";
+    private static final String FETCH_SUBSCRIPTIONS_STATE = "FSS";
     private static final String DRAWER_ON_ACCOUNT_SWITCH_STATE = "DOASS";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
@@ -135,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     private String mBannerImageUrl;
     private int mKarma;
     private boolean mFetchUserInfoSuccess = false;
+    private boolean mFetchSubscriptionsSuccess = false;
     private boolean mDrawerOnAccountSwitch = false;
     private String mMessageFullname;
     private String mNewAccountName;
@@ -258,6 +264,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
         if(savedInstanceState != null) {
             mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
+            mFetchSubscriptionsSuccess = savedInstanceState.getBoolean(FETCH_SUBSCRIPTIONS_STATE);
             mDrawerOnAccountSwitch = savedInstanceState.getBoolean(DRAWER_ON_ACCOUNT_SWITCH_STATE);
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
@@ -434,6 +441,8 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             @Override
             public void onPageScrollStateChanged(int state) {}
         });
+
+        loadSubscriptions();
 
         glide = Glide.with(this);
 
@@ -634,6 +643,33 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         });
     }
 
+    private void loadSubscriptions() {
+        if (mAccessToken != null && !mFetchSubscriptionsSuccess) {
+            FetchSubscribedThing.fetchSubscribedThing(mOauthRetrofit, mAccessToken, mAccountName, null,
+                    new ArrayList<>(), new ArrayList<>(),
+                    new ArrayList<>(),
+                    new FetchSubscribedThing.FetchSubscribedThingListener() {
+                        @Override
+                        public void onFetchSubscribedThingSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
+                                                                  ArrayList<SubscribedUserData> subscribedUserData,
+                                                                  ArrayList<SubredditData> subredditData) {
+                            new InsertSubscribedThingsAsyncTask(
+                                    mRedditDataRoomDatabase,
+                                    mAccountName,
+                                    subscribedSubredditData,
+                                    subscribedUserData,
+                                    subredditData,
+                                    () -> mFetchSubscriptionsSuccess = true).execute();
+                        }
+
+                        @Override
+                        public void onFetchSubscribedThingFail() {
+                            mFetchSubscriptionsSuccess = false;
+                        }
+                    });
+        }
+    }
+
     private void loadUserData() {
         if (!mFetchUserInfoSuccess) {
             FetchMyInfo.fetchAccountInfo(mOauthRetrofit, mAccessToken, new FetchMyInfo.FetchUserMyListener() {
@@ -782,6 +818,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(FETCH_USER_INFO_STATE, mFetchUserInfoSuccess);
+        outState.putBoolean(FETCH_SUBSCRIPTIONS_STATE, mFetchSubscriptionsSuccess);
         outState.putBoolean(DRAWER_ON_ACCOUNT_SWITCH_STATE, mDrawerOnAccountSwitch);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);

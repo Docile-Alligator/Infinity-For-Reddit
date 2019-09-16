@@ -370,8 +370,7 @@ public class PostImageActivity extends AppCompatActivity implements FlairBottomS
     }
 
     private void loadSubredditIcon() {
-        new LoadSubredditIconAsyncTask(mRedditDataRoomDatabase.subredditDao(),
-                subredditName, mRetrofit, iconImageUrl -> {
+        new LoadSubredditIconAsyncTask(mRedditDataRoomDatabase, subredditName, mRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
             loadSubredditIconSuccessful = true;

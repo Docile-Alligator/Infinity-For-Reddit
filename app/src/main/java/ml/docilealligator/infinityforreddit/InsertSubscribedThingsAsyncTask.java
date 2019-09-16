@@ -2,6 +2,8 @@ package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
 
+import androidx.annotation.Nullable;
+
 import java.util.List;
 
 import SubredditDatabase.SubredditDao;
@@ -17,6 +19,8 @@ class InsertSubscribedThingsAsyncTask extends AsyncTask<Void, Void, Void> {
         void insertSuccess();
     }
 
+    private RedditDataRoomDatabase mRedditDataRoomDatabase;
+    private String mAccountName;
     private SubscribedSubredditDao mSubscribedSubredditDao;
     private SubscribedUserDao mUserDao;
     private SubredditDao mSubredditDao;
@@ -25,17 +29,16 @@ class InsertSubscribedThingsAsyncTask extends AsyncTask<Void, Void, Void> {
     private List<SubredditData> subredditData;
     private InsertSubscribedThingListener insertSubscribedThingListener;
 
-    InsertSubscribedThingsAsyncTask(SubscribedSubredditDao subscribedSubredditDao,
-                                    SubscribedUserDao userDao,
-                                    SubredditDao subredditDao,
+    InsertSubscribedThingsAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase, @Nullable String accountName,
                                     List<SubscribedSubredditData> subscribedSubredditData,
                                     List<SubscribedUserData> subscribedUserData,
                                     List<SubredditData> subredditData,
                                     InsertSubscribedThingListener insertSubscribedThingListener) {
-
-        mSubscribedSubredditDao = subscribedSubredditDao;
-        mUserDao = userDao;
-        mSubredditDao = subredditDao;
+        mRedditDataRoomDatabase = redditDataRoomDatabase;
+        mAccountName = accountName;
+        mSubscribedSubredditDao = redditDataRoomDatabase.subscribedSubredditDao();
+        mUserDao = redditDataRoomDatabase.subscribedUserDao();
+        mSubredditDao = redditDataRoomDatabase.subredditDao();
 
         this.subscribedSubredditData = subscribedSubredditData;
         this.subscribedUserData = subscribedUserData;
@@ -45,6 +48,10 @@ class InsertSubscribedThingsAsyncTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(final Void... params) {
+        if(mAccountName != null && mRedditDataRoomDatabase.accountDao().getAccountData(mAccountName) == null) {
+            return null;
+        }
+
         if(subscribedSubredditData != null) {
             for (SubscribedSubredditData s : subscribedSubredditData) {
                 mSubscribedSubredditDao.insert(s);

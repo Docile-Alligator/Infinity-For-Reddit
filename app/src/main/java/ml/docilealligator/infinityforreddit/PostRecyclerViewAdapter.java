@@ -58,6 +58,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     private Retrofit mRetrofit;
     private String mAccessToken;
     private RequestManager mGlide;
+    private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private SubredditDao mSubredditDao;
     private UserDao mUserDao;
     private boolean canStartActivity = true;
@@ -89,6 +90,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
             mPostType = postType;
             mDisplaySubredditName = displaySubredditName;
             mGlide = Glide.with(mContext.getApplicationContext());
+            mRedditDataRoomDatabase = redditDataRoomDatabase;
             mSubredditDao = redditDataRoomDatabase.subredditDao();
             mUserDao = redditDataRoomDatabase.userDao();
             mCallback = callback;
@@ -192,7 +194,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         }
                     } else {
                         if(post.getSubredditIconUrl() == null) {
-                            new LoadSubredditIconAsyncTask(mSubredditDao, subredditName, mRetrofit,
+                            new LoadSubredditIconAsyncTask(mRedditDataRoomDatabase, subredditName, mRetrofit,
                                     iconImageUrl -> {
                                         if(mContext != null && getItemCount() > 0) {
                                             if(iconImageUrl == null || iconImageUrl.equals("")) {
