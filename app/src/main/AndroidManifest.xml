@@ -193,7 +193,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.Launcher">
+            android:theme="@style/AppTheme.NoActionBarWithTransparentStatusBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

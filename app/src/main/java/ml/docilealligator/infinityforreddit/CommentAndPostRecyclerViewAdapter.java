@@ -511,9 +511,12 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             mMarkwon.setMarkdown(((CommentViewHolder) holder).commentMarkdownView, comment.getCommentContent());
             ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
 
-            ViewGroup.LayoutParams params = ((CommentViewHolder) holder).verticalBlock.getLayoutParams();
-            params.width = comment.getDepth() * 16;
-            ((CommentViewHolder) holder).verticalBlock.setLayoutParams(params);
+            ((CommentViewHolder) holder).itemView.setPadding(comment.getDepth() * 16, 0, 0, 0);
+            if(comment.getDepth() > 0) {
+                ViewGroup.LayoutParams params = ((CommentViewHolder) holder).verticalBlock.getLayoutParams();
+                params.width = 16;
+                ((CommentViewHolder) holder).verticalBlock.setLayoutParams(params);
+            }
 
             if(!mPost.isArchived() && !mPost.isLocked() && comment.getAuthor().equals(mAccountName)) {
                 ((CommentViewHolder) holder).moreButton.setVisibility(View.VISIBLE);
@@ -717,9 +720,12 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             placeholder = mIsSingleCommentThreadMode ? mVisibleComments.get(holder.getAdapterPosition() - 2)
                     : mVisibleComments.get(holder.getAdapterPosition() - 1);
 
-            ViewGroup.LayoutParams params = ((LoadMoreChildCommentsViewHolder) holder).verticalBlock.getLayoutParams();
-            params.width = placeholder.getDepth() * 16;
-            ((LoadMoreChildCommentsViewHolder) holder).verticalBlock.setLayoutParams(params);
+            ((LoadMoreChildCommentsViewHolder) holder).itemView.setPadding(placeholder.getDepth() * 16, 0, 0, 0);
+            if(placeholder.getDepth() > 0) {
+                ViewGroup.LayoutParams params = ((LoadMoreChildCommentsViewHolder) holder).verticalBlock.getLayoutParams();
+                params.width = 16;
+                ((LoadMoreChildCommentsViewHolder) holder).verticalBlock.setLayoutParams(params);
+            }
 
             if(placeholder.isLoadingMoreChildren()) {
                 ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.loading);
@@ -770,6 +776,10 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     private int getParentPosition(int position) {
+        if(position >= mVisibleComments.size()) {
+            return -1;
+        }
+
         int childDepth = mVisibleComments.get(position).getDepth();
         for(int i = position; i >= 0; i--) {
             if(mVisibleComments.get(i).getDepth() < childDepth) {
@@ -977,6 +987,10 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             ((CommentViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
             ((CommentViewHolder) holder).downVoteButton.clearColorFilter();
             ((CommentViewHolder) holder).replyButton.clearColorFilter();
+            ViewGroup.LayoutParams params = ((CommentViewHolder) holder).verticalBlock.getLayoutParams();
+            params.width = 0;
+            ((CommentViewHolder) holder).verticalBlock.setLayoutParams(params);
+            ((CommentViewHolder) holder).itemView.setPadding(0, 0, 0, 0);
             ((CommentViewHolder) holder).itemView.setBackgroundColor(
                     mActivity.getResources().getColor(R.color.cardViewBackgroundColor));
         } else if(holder instanceof PostDetailViewHolder) {
@@ -987,6 +1001,11 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             ((PostDetailViewHolder) holder).flairTextView.setVisibility(View.GONE);
             ((PostDetailViewHolder) holder).spoilerTextView.setVisibility(View.GONE);
             ((PostDetailViewHolder) holder).mNSFWChip.setVisibility(View.GONE);
+        } else if(holder instanceof LoadMoreChildCommentsViewHolder) {
+            ((LoadMoreChildCommentsViewHolder) holder).itemView.setPadding(0, 0, 0, 0);
+            ViewGroup.LayoutParams params = ((LoadMoreChildCommentsViewHolder) holder).verticalBlock.getLayoutParams();
+            params.width = 0;
+            ((LoadMoreChildCommentsViewHolder) holder).verticalBlock.setLayoutParams(params);
         }
     }
 
@@ -1413,7 +1432,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                                     if(mVisibleComments.get(parentPosition).isExpanded()) {
                                         int commentPosition = mIsSingleCommentThreadMode ? getAdapterPosition() - 2 : getAdapterPosition() - 1;
                                         int placeholderPosition = commentPosition;
-                                        if(!mVisibleComments.get(commentPosition).getFullName().equals(parentComment.getFullName())) {
+                                        if(commentPosition >= mVisibleComments.size() || !mVisibleComments.get(commentPosition).getFullName().equals(parentComment.getFullName())) {
                                             for(int i = parentPosition + 1; i < mVisibleComments.size(); i++) {
                                                 if(mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
                                                     placeholderPosition = i;

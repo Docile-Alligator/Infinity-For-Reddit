@@ -165,7 +165,11 @@ public class SubredditSelectionActivity extends AppCompatActivity {
                 getCurrentAccountAndBindView();
             } else {
                 mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, mFragment).commit();
+                if(mFragment == null) {
+                    bindView();
+                } else {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, mFragment).commit();
+                }
             }
         }
     }
@@ -262,8 +266,8 @@ public class SubredditSelectionActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == SUBREDDIT_SEARCH_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
-                String name = data.getExtras().getString(SearchActivity.EXTRA_RETURN_SUBREDDIT_NAME);
-                String iconUrl = data.getExtras().getString(SearchActivity.EXTRA_RETURN_SUBREDDIT_ICON_URL);
+                String name = data.getStringExtra(SearchActivity.EXTRA_RETURN_SUBREDDIT_NAME);
+                String iconUrl = data.getStringExtra(SearchActivity.EXTRA_RETURN_SUBREDDIT_ICON_URL);
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_NAME, name);
                 returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_ICON_URL, iconUrl);
