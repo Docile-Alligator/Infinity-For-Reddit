@@ -305,6 +305,9 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
             if(mMenu != null) {
                 MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
                 MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
+
+                mMenu.findItem(R.id.action_comment_view_post_detail_activity).setVisible(true);
+
                 if(mAccessToken != null) {
                     if(mPost.isSaved()) {
                         saveItem.setVisible(true);
@@ -431,6 +434,9 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                             if(mMenu != null) {
                                 MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
                                 MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
+
+                                mMenu.findItem(R.id.action_comment_view_post_detail_activity).setVisible(true);
+
                                 if(mAccessToken != null) {
                                     if(post.isSaved()) {
                                         saveItem.setVisible(true);
@@ -654,6 +660,9 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                                 if(mMenu != null) {
                                     MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
                                     MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
+
+                                    mMenu.findItem(R.id.action_comment_view_post_detail_activity).setVisible(true);
+
                                     if(mAccessToken != null) {
                                         if(post.isSaved()) {
                                             saveItem.setVisible(true);
@@ -906,6 +915,9 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         if(mPost != null) {
             MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
             MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
+
+            mMenu.findItem(R.id.action_comment_view_post_detail_activity).setVisible(true);
+
             if(mAccessToken != null) {
                 if(mPost.isSaved()) {
                     saveItem.setVisible(true);
@@ -964,27 +976,29 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                 refresh(true, true);
                 return true;
             case R.id.action_comment_view_post_detail_activity:
-                if(mPost.isArchived()) {
-                    showMessage(R.string.archived_post_reply_unavailable);
-                    return true;
-                }
+                if(mPost != null) {
+                    if(mPost.isArchived()) {
+                        showMessage(R.string.archived_post_reply_unavailable);
+                        return true;
+                    }
 
-                if(mPost.isLocked()) {
-                    showMessage(R.string.locked_post_comment_unavailable);
-                    return true;
-                }
+                    if(mPost.isLocked()) {
+                        showMessage(R.string.locked_post_comment_unavailable);
+                        return true;
+                    }
 
-                if(mAccessToken == null) {
-                    showMessage(R.string.login_first);
-                    return true;
-                }
+                    if(mAccessToken == null) {
+                        showMessage(R.string.login_first);
+                        return true;
+                    }
 
-                Intent intent = new Intent(this, CommentActivity.class);
-                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, mPost.getTitle());
-                intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, mPost.getFullName());
-                intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, 0);
-                intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, false);
-                startActivityForResult(intent, WRITE_COMMENT_REQUEST_CODE);
+                    Intent intent = new Intent(this, CommentActivity.class);
+                    intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, mPost.getTitle());
+                    intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, mPost.getFullName());
+                    intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, 0);
+                    intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, false);
+                    startActivityForResult(intent, WRITE_COMMENT_REQUEST_CODE);
+                }
                 return true;
             case R.id.action_save_view_post_detail_activity:
                 if(mPost != null && mAccessToken != null) {

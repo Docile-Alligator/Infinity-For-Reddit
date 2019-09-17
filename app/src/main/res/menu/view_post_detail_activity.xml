@@ -6,7 +6,8 @@
         android:orderInCategory="1"
         android:title="@string/action_add_comment"
         android:icon="@drawable/ic_insert_comment_white_24dp"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"
+        android:visible="false" />
 
     <item
         android:id="@+id/action_save_view_post_detail_activity"

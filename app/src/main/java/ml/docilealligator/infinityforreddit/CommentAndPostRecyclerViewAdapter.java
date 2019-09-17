@@ -741,7 +741,6 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     private void loadImage(PostDetailViewHolder holder) {
         RequestBuilder imageRequestBuilder = mGlide.load(mPost.getPreviewUrl())
-                .apply(new RequestOptions().override(mPost.getPreviewWidth(), mPost.getPreviewHeight()))
                 .listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
