@@ -515,6 +515,36 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
             ((CommentViewHolder) holder).itemView.setPadding(comment.getDepth() * 16, 0, 0, 0);
             if(comment.getDepth() > 0) {
+                switch (comment.getDepth() % 7) {
+                    case 0:
+                        ((CommentViewHolder) holder).verticalBlock
+                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar7));
+                        break;
+                    case 1:
+                        ((CommentViewHolder) holder).verticalBlock
+                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar1));
+                        break;
+                    case 2:
+                        ((CommentViewHolder) holder).verticalBlock
+                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar2));
+                        break;
+                    case 3:
+                        ((CommentViewHolder) holder).verticalBlock
+                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar3));
+                        break;
+                    case 4:
+                        ((CommentViewHolder) holder).verticalBlock
+                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar4));
+                        break;
+                    case 5:
+                        ((CommentViewHolder) holder).verticalBlock
+                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar5));
+                        break;
+                    case 6:
+                        ((CommentViewHolder) holder).verticalBlock
+                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar6));
+                        break;
+                }
                 ViewGroup.LayoutParams params = ((CommentViewHolder) holder).verticalBlock.getLayoutParams();
                 params.width = 16;
                 ((CommentViewHolder) holder).verticalBlock.setLayoutParams(params);
@@ -724,6 +754,37 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
             ((LoadMoreChildCommentsViewHolder) holder).itemView.setPadding(placeholder.getDepth() * 16, 0, 0, 0);
             if(placeholder.getDepth() > 0) {
+                switch (placeholder.getDepth() % 7) {
+                    case 0:
+                        ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
+                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar7));
+                        break;
+                    case 1:
+                        ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
+                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar1));
+                        break;
+                    case 2:
+                        ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
+                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar2));
+                        break;
+                    case 3:
+                        ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
+                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar3));
+                        break;
+                    case 4:
+                        ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
+                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar4));
+                        break;
+                    case 5:
+                        ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
+                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar5));
+                        break;
+                    case 6:
+                        ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
+                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar6));
+                        break;
+                }
+
                 ViewGroup.LayoutParams params = ((LoadMoreChildCommentsViewHolder) holder).verticalBlock.getLayoutParams();
                 params.width = 16;
                 ((LoadMoreChildCommentsViewHolder) holder).verticalBlock.setLayoutParams(params);
@@ -1286,15 +1347,27 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             });
 
             expandButton.setOnClickListener(view -> {
-                int commentPosition = mIsSingleCommentThreadMode ? getAdapterPosition() - 2 : getAdapterPosition() - 1;
-                if(mVisibleComments.get(commentPosition).isExpanded()) {
-                    collapseChildren(commentPosition);
-                    expandButton.setImageResource(R.drawable.ic_expand_more_black_20dp);
-                } else {
-                    expandChildren(commentPosition);
-                    mVisibleComments.get(commentPosition).setExpanded(true);
-                    expandButton.setImageResource(R.drawable.ic_expand_less_black_20dp);
+                if(expandButton.getVisibility() == View.VISIBLE) {
+                    int commentPosition = mIsSingleCommentThreadMode ? getAdapterPosition() - 2 : getAdapterPosition() - 1;
+                    if(mVisibleComments.get(commentPosition).isExpanded()) {
+                        collapseChildren(commentPosition);
+                        expandButton.setImageResource(R.drawable.ic_expand_more_black_20dp);
+                    } else {
+                        expandChildren(commentPosition);
+                        mVisibleComments.get(commentPosition).setExpanded(true);
+                        expandButton.setImageResource(R.drawable.ic_expand_less_black_20dp);
+                    }
                 }
+            });
+
+            commentMarkdownView.setOnLongClickListener(view -> {
+                expandButton.performClick();
+                return true;
+            });
+
+            itemView.setOnLongClickListener(view -> {
+                expandButton.performClick();
+                return true;
             });
         }
     }

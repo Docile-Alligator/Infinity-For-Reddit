@@ -61,4 +61,12 @@
     <color name="notificationIconColor">@color/colorPrimary</color>
 
     <color name="defaultTextColor">#8A000000</color>
+
+    <color name="commentVerticalBar1">#1565C0</color>
+    <color name="commentVerticalBar2">#EE02BE</color>
+    <color name="commentVerticalBar3">#02DFEE</color>
+    <color name="commentVerticalBar4">#EED502</color>
+    <color name="commentVerticalBar5">#EE0220</color>
+    <color name="commentVerticalBar6">#02EE6E</color>
+    <color name="commentVerticalBar7">#EE4602</color>
 </resources>
