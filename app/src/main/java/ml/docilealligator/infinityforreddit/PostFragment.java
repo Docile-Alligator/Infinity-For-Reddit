@@ -258,6 +258,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         int filter = getArguments().getInt(EXTRA_FILTER);
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         boolean nsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_KEY, false);
+        boolean needBlurNsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_NSFW_KEY, true);
 
         PostViewModel.Factory factory;
 
@@ -266,7 +267,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             String query = getArguments().getString(EXTRA_QUERY);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    accessToken, postType, true, new PostRecyclerViewAdapter.Callback() {
+                    accessToken, postType, true, needBlurNsfw, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -298,7 +299,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             boolean displaySubredditName = subredditName != null && (subredditName.equals("popular") || subredditName.equals("all"));
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    accessToken, postType, displaySubredditName, new PostRecyclerViewAdapter.Callback() {
+                    accessToken, postType, displaySubredditName, needBlurNsfw, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -334,7 +335,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    accessToken, postType, true, new PostRecyclerViewAdapter.Callback() {
+                    accessToken, postType, true, needBlurNsfw, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -363,7 +364,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
         } else {
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    accessToken, postType, true, new PostRecyclerViewAdapter.Callback() {
+                    accessToken, postType, true, needBlurNsfw, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -550,6 +551,29 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 post.setSaved(event.post.isSaved());
                 mAdapter.notifyItemChanged(event.positionInList);
             }
+        }
+    }
+
+    @Subscribe
+    public void onChangeNSFWBlurEvent(ChangeNSFWBlurEvent event) {
+        mAdapter.setBlurNSFW(event.needBlurNSFW);
+
+        int previousPosition = -1;
+        if(mLinearLayoutManager != null) {
+            previousPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
+        } else if(mStaggeredGridLayoutManager != null) {
+            int[] into = new int[2];
+            previousPosition = mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[0];
+        }
+
+        RecyclerView.LayoutManager layoutManager = mPostRecyclerView.getLayoutManager();
+        mPostRecyclerView.setAdapter(null);
+        mPostRecyclerView.setLayoutManager(null);
+        mPostRecyclerView.setAdapter(mAdapter);
+        mPostRecyclerView.setLayoutManager(layoutManager);
+
+        if(previousPosition > 0) {
+            mPostRecyclerView.scrollToPosition(previousPosition);
         }
     }
 

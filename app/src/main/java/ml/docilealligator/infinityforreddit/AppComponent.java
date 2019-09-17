@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit;
 
 import javax.inject.Singleton;
 
+import Settings.MainPreferenceFragment;
 import Settings.NotificationPreferenceFragment;
 import dagger.Component;
 
@@ -41,4 +42,5 @@ public interface AppComponent {
     void inject(LinkResolverActivity linkResolverActivity);
     void inject(SearchActivity searchActivity);
     void inject(SettingsActivity settingsActivity);
+    void inject(MainPreferenceFragment mainPreferenceFragment);
 }

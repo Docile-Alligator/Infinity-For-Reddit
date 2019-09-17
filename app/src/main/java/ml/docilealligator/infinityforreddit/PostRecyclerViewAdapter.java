@@ -40,7 +40,6 @@ import com.libRG.CustomTextView;
 import org.greenrobot.eventbus.EventBus;
 
 import CustomView.AspectRatioGifImageView;
-import SubredditDatabase.SubredditDao;
 import User.UserDao;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,11 +58,11 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     private String mAccessToken;
     private RequestManager mGlide;
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
-    private SubredditDao mSubredditDao;
     private UserDao mUserDao;
     private boolean canStartActivity = true;
     private int mPostType;
     private boolean mDisplaySubredditName;
+    private boolean mNeedBlurNSFW;
 
     private static final int VIEW_TYPE_DATA = 0;
     private static final int VIEW_TYPE_ERROR = 1;
@@ -80,7 +79,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     PostRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, Retrofit retrofit,
                             RedditDataRoomDatabase redditDataRoomDatabase,
                             String accessToken, int postType,
-                            boolean displaySubredditName, Callback callback) {
+                            boolean displaySubredditName, boolean needBlurNSFW, Callback callback) {
         super(DIFF_CALLBACK);
         if(context != null) {
             mContext = context;
@@ -89,9 +88,9 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
             mAccessToken = accessToken;
             mPostType = postType;
             mDisplaySubredditName = displaySubredditName;
+            mNeedBlurNSFW = needBlurNSFW;
             mGlide = Glide.with(mContext.getApplicationContext());
             mRedditDataRoomDatabase = redditDataRoomDatabase;
-            mSubredditDao = redditDataRoomDatabase.subredditDao();
             mUserDao = redditDataRoomDatabase.userDao();
             mCallback = callback;
         }
@@ -652,7 +651,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
             }
         });
 
-        if(post.isNSFW()) {
+        if(post.isNSFW() && mNeedBlurNSFW) {
             imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 2)))
                     .into(((DataViewHolder) holder).imageView);
         } else {
@@ -680,6 +679,10 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
             return super.getItemCount() + 1;
         }
         return super.getItemCount();
+    }
+
+    void setBlurNSFW(boolean needBlurNSFW) {
+        mNeedBlurNSFW = needBlurNSFW;
     }
 
     private boolean hasExtraRow() {

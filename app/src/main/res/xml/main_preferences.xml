@@ -29,6 +29,12 @@
         app:key="nsfw"
         app:title="@string/settings_enable_nsfw_title" />
 
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="blur_nsfw"
+        app:title="@string/settings_blur_nsfw_title"
+        app:isPreferenceVisible="false" />
+
     <Preference
         app:title="@string/settings_about_master_title"
         app:fragment="Settings.AboutPreferenceFragment" />

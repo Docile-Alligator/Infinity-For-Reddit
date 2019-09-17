@@ -79,6 +79,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     private int orientation;
     private int postListPosition = -1;
     private String mSingleCommentId;
+    private boolean mNeedBlurNsfw;
 
     @State
     boolean mNullAccessToken = false;
@@ -215,6 +216,8 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
+
+        mNeedBlurNsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_NSFW_KEY, true);
 
         mGlide = Glide.with(this);
         mLocale = getResources().getConfiguration().locale;
@@ -359,7 +362,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
                     mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mAccountName, mPost,
-                    mLocale, mSingleCommentId, isSingleCommentThreadMode,
+                    mLocale, mSingleCommentId, isSingleCommentThreadMode, mNeedBlurNsfw,
                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                         @Override
                         public void updatePost(Post post) {
@@ -471,7 +474,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this,
                                     mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mGlide,
                                     mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId,
-                                    isSingleCommentThreadMode,
+                                    isSingleCommentThreadMode, mNeedBlurNsfw,
                                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                                         @Override
                                         public void updatePost(Post post) {
@@ -898,6 +901,26 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         if(mPost.getId().equals(event.postId)) {
             mPost.setVoteType(event.voteType);
             mAdapter.updatePost(mPost);
+        }
+    }
+
+    @Subscribe
+    public void onChangeNSFWBlurEvent(ChangeNSFWBlurEvent event) {
+        mAdapter.setBlurNSFW(event.needBlurNSFW);
+
+        int previousPosition = -1;
+        if(mLinearLayoutManager != null) {
+            previousPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
+        }
+
+        RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
+        mRecyclerView.setAdapter(null);
+        mRecyclerView.setLayoutManager(null);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        if(previousPosition > 0) {
+            mRecyclerView.scrollToPosition(previousPosition);
         }
     }
 

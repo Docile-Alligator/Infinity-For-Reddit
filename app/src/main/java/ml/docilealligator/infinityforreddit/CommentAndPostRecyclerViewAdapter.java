@@ -78,6 +78,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private Locale mLocale;
     private String mSingleCommentId;
     private boolean mIsSingleCommentThreadMode;
+    private boolean mNeedBlurNSFW;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
     private boolean isInitiallyLoadingFailed;
@@ -94,7 +95,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                                       RedditDataRoomDatabase redditDataRoomDatabase, RequestManager glide,
                                       String accessToken, String accountName, Post post,
                                       Locale locale, String singleCommentId, boolean isSingleCommentThreadMode,
-                                      CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
+                                      boolean needBlurNSFW, CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
         mActivity = activity;
         mRetrofit = retrofit;
         mOauthRetrofit = oauthRetrofit;
@@ -127,6 +128,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         mLocale = locale;
         mSingleCommentId = singleCommentId;
         mIsSingleCommentThreadMode = isSingleCommentThreadMode;
+        mNeedBlurNSFW = needBlurNSFW;
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
         isInitiallyLoadingFailed = false;
@@ -761,7 +763,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     }
                 });
 
-        if(mPost.isNSFW()) {
+        if(mPost.isNSFW() && mNeedBlurNSFW) {
             imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 2)))
                     .into(holder.mImageView);
         } else {
@@ -975,6 +977,10 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 notifyItemRemoved(position + 1);
             }
         }
+    }
+
+    void setBlurNSFW(boolean needBlurNSFW) {
+        mNeedBlurNSFW = needBlurNSFW;
     }
 
     @Override
