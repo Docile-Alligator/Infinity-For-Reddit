@@ -232,6 +232,7 @@ class ParseComment {
         }
         long submitTime = singleCommentData.getLong(JSONUtils.CREATED_UTC_KEY) * 1000;
         boolean scoreHidden = singleCommentData.getBoolean(JSONUtils.SCORE_HIDDEN_KEY);
+        boolean saved = singleCommentData.getBoolean(JSONUtils.SAVED_KEY);
 
         Calendar submitTimeCalendar = Calendar.getInstance();
         submitTimeCalendar.setTimeInMillis(submitTime);
@@ -247,7 +248,7 @@ class ParseComment {
 
         return new CommentData(id, fullName, author, linkAuthor, formattedSubmitTime, commentContent,
                 linkId, subredditName, parentId, score, voteType, isSubmitter, permalink, depth, collapsed,
-                hasReply, scoreHidden);
+                hasReply, scoreHidden, saved);
     }
 
     @Nullable

@@ -30,4 +30,9 @@
         app:title="@string/settings_reddit_account_title"
         app:summary="@string/settings_reddit_account_summary" />
 
+    <Preference
+        android:key="subreddit"
+        app:title="@string/settings_subreddit_title"
+        app:summary="@string/settings_subreddit_summary" />
+
 </PreferenceScreen>

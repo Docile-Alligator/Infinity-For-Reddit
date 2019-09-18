@@ -55,7 +55,7 @@ public class ModifyCommentBottomSheetFragment extends RoundedBottomSheetDialogFr
         String accessToken = bundle.getString(EXTRA_ACCESS_TOKEN);
 
         editTextView.setOnClickListener(view -> {
-            Intent intent = new Intent(getActivity(), EditCommentActivity.class);
+            Intent intent = new Intent(activity, EditCommentActivity.class);
             intent.putExtra(EditCommentActivity.EXTRA_ACCESS_TOKEN, accessToken);
             intent.putExtra(EditCommentActivity.EXTRA_FULLNAME, fullName);
             intent.putExtra(EditCommentActivity.EXTRA_CONTENT, content);

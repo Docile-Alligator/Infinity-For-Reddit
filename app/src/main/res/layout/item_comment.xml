@@ -20,7 +20,7 @@
         android:layout_marginBottom="12dp"
         android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -28,19 +28,25 @@
 
             <TextView
                 android:id="@+id/author_text_view_item_post_comment"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginEnd="16dp"
-                android:textColor="@color/colorPrimaryDarkDayNightTheme"/>
+                android:textColor="@color/colorPrimaryDarkDayNightTheme"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/comment_time_text_view_item_post_comment"
+                app:layout_constraintHorizontal_bias="0" />
 
             <TextView
                 android:id="@+id/comment_time_text_view_item_post_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="end" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/comment_markdown_view_item_post_comment"
@@ -108,6 +114,19 @@
                 android:src="@drawable/ic_outline_more_vert_24px"
                 android:tint="@android:color/tab_indicator_text"
                 android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/save_button_item_post_comment"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <ImageView
+                android:id="@+id/save_button_item_post_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:background="?actionBarItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:tint="@android:color/tab_indicator_text"
                 app:layout_constraintEnd_toStartOf="@+id/expand_button_item_post_comment"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>

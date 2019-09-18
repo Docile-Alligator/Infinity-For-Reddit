@@ -360,7 +360,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
 
                 if(mPostType == PostDataSource.TYPE_SUBREDDIT && !mDisplaySubredditName && post.isStickied()) {
                     ((DataViewHolder) holder).stickiedPostImageView.setVisibility(View.VISIBLE);
-                    mGlide.load(R.drawable.thumbtack).into(((DataViewHolder) holder).stickiedPostImageView);
+                    mGlide.load(R.drawable.ic_thumbtack_24dp).into(((DataViewHolder) holder).stickiedPostImageView);
                 }
 
                 if(isArchived) {

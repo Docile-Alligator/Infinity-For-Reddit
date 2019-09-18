@@ -27,6 +27,7 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
         Preference reviewPreference = findPreference(SharedPreferencesUtils.RATE_KEY);
         Preference emailPreference = findPreference(SharedPreferencesUtils.EMAIL_KEY);
         Preference redditAccountPreference = findPreference(SharedPreferencesUtils.REDDIT_ACCOUNT_KEY);
+        Preference subredditPreference = findPreference(SharedPreferencesUtils.SUBREDDIT_KEY);
 
         Activity activity = getActivity();
 
@@ -72,6 +73,15 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
                 redditAccountPreference.setOnPreferenceClickListener(preference -> {
                     Intent intent = new Intent(activity, LinkResolverActivity.class);
                     intent.setData(Uri.parse("https://www.reddit.com/user/Hostilenemy"));
+                    startActivity(intent);
+                    return true;
+                });
+            }
+
+            if(subredditPreference != null) {
+                subredditPreference.setOnPreferenceClickListener(preference -> {
+                    Intent intent = new Intent(activity, LinkResolverActivity.class);
+                    intent.setData(Uri.parse("https://www.reddit.com/r/Infinity_For_Reddit"));
                     startActivity(intent);
                     return true;
                 });

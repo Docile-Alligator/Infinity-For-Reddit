@@ -287,6 +287,50 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
                         public void onVoteThingFail(int position1) { }
                     }, comment.getFullName(), newVoteType, holder.getAdapterPosition());
                 });
+
+                if(comment.isSaved()) {
+                    ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                } else {
+                    ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                }
+
+                ((DataViewHolder) holder).saveButton.setOnClickListener(view -> {
+                    if (comment.isSaved()) {
+                        comment.setSaved(false);
+                        SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
+                            @Override
+                            public void success() {
+                                comment.setSaved(false);
+                                ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                                Toast.makeText(mContext, R.string.comment_unsaved_success, Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void failed() {
+                                comment.setSaved(true);
+                                ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                                Toast.makeText(mContext, R.string.comment_unsaved_failed, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        comment.setSaved(true);
+                        SaveThing.saveThing(mOauthRetrofit, mAccessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
+                            @Override
+                            public void success() {
+                                comment.setSaved(true);
+                                ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                                Toast.makeText(mContext, R.string.comment_saved_success, Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void failed() {
+                                comment.setSaved(false);
+                                ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                                Toast.makeText(mContext, R.string.comment_saved_failed, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
             }
         }
     }
@@ -352,6 +396,7 @@ class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, R
         @BindView(R.id.score_text_view_item_post_comment) TextView scoreTextView;
         @BindView(R.id.down_vote_button_item_post_comment) ImageView downvoteButton;
         @BindView(R.id.more_button_item_post_comment) ImageView moreButton;
+        @BindView(R.id.save_button_item_post_comment) ImageView saveButton;
         @BindView(R.id.share_button_item_post_comment) ImageView shareButton;
         @BindView(R.id.reply_button_item_post_comment) ImageView replyButton;
 

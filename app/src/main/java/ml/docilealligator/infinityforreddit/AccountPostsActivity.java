@@ -139,8 +139,6 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
             toolbar.setTitle(R.string.upvoted);
         } else if(mUserWhere.equals(PostDataSource.USER_WHERE_DOWNVOTED)) {
             toolbar.setTitle(R.string.downvoted);
-        } else if(mUserWhere.equals(PostDataSource.USER_WHERE_SAVED)) {
-            toolbar.setTitle(R.string.saved);
         } else if(mUserWhere.equals(PostDataSource.USER_WHERE_HIDDEN)) {
             toolbar.setTitle(R.string.hidden);
         } else if(mUserWhere.equals(PostDataSource.USER_WHERE_GILDED)){

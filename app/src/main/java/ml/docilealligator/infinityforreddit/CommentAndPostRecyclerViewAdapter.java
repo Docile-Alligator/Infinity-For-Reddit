@@ -747,6 +747,50 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     public void onVoteThingFail(int position1) { }
                 }, mVisibleComments.get(commentPosition).getFullName(), newVoteType, holder.getAdapterPosition());
             });
+
+            if(comment.isSaved()) {
+                ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+            } else {
+                ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+            }
+
+            ((CommentViewHolder) holder).saveButton.setOnClickListener(view -> {
+                if (comment.isSaved()) {
+                    comment.setSaved(false);
+                    SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
+                        @Override
+                        public void success() {
+                            comment.setSaved(false);
+                            ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                            Toast.makeText(mActivity, R.string.comment_unsaved_success, Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void failed() {
+                            comment.setSaved(true);
+                            ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                            Toast.makeText(mActivity, R.string.comment_unsaved_failed, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    comment.setSaved(true);
+                    SaveThing.saveThing(mOauthRetrofit, mAccessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
+                        @Override
+                        public void success() {
+                            comment.setSaved(true);
+                            ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                            Toast.makeText(mActivity, R.string.comment_saved_success, Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void failed() {
+                            comment.setSaved(false);
+                            ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                            Toast.makeText(mActivity, R.string.comment_saved_failed, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
         } else if(holder instanceof LoadMoreChildCommentsViewHolder) {
             CommentData placeholder;
             placeholder = mIsSingleCommentThreadMode ? mVisibleComments.get(holder.getAdapterPosition() - 2)
@@ -1314,6 +1358,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         @BindView(R.id.score_text_view_item_post_comment) TextView scoreTextView;
         @BindView(R.id.down_vote_button_item_post_comment) ImageView downVoteButton;
         @BindView(R.id.more_button_item_post_comment) ImageView moreButton;
+        @BindView(R.id.save_button_item_post_comment) ImageView saveButton;
         @BindView(R.id.expand_button_item_post_comment) ImageView expandButton;
         @BindView(R.id.share_button_item_post_comment) ImageView shareButton;
         @BindView(R.id.reply_button_item_post_comment) ImageView replyButton;

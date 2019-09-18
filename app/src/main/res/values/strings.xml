@@ -300,6 +300,8 @@
     <string name="settings_email_summary">docilealligator.app@gmail.com</string>
     <string name="settings_reddit_account_title">Reddit Account</string>
     <string name="settings_reddit_account_summary">u/Hostilenemy</string>
+    <string name="settings_subreddit_title">Subreddit</string>
+    <string name="settings_subreddit_summary">r/Infinity_For_Reddit</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -318,4 +320,9 @@
     <string name="share">Share</string>
 
     <string name="no_email_client">No Email client found</string>
+
+    <string name="comment_saved_success">Comment saved</string>
+    <string name="comment_saved_failed">Unable to save comment</string>
+    <string name="comment_unsaved_success">Comment unsaved</string>
+    <string name="comment_unsaved_failed">Unable to unsave comment</string>
 </resources>

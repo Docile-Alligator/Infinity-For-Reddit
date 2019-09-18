@@ -27,6 +27,7 @@ class CommentData implements Parcelable {
     private boolean collapsed;
     private boolean hasReply;
     private boolean scoreHidden;
+    private boolean saved;
     private boolean isExpanded;
     private ArrayList<CommentData> children;
     private ArrayList<String> moreChildrenFullnames;
@@ -38,7 +39,7 @@ class CommentData implements Parcelable {
 
     CommentData(String id, String fullName, String author, String linkAuthor, String commentTime, String commentContent,
                 String linkId, String subredditName, String parentId, int score, int voteType, boolean isSubmitter, String permalink,
-                int depth, boolean collapsed, boolean hasReply, boolean scoreHidden) {
+                int depth, boolean collapsed, boolean hasReply, boolean scoreHidden, boolean saved) {
         this.id = id;
         this.fullName = fullName;
         this.author = author;
@@ -56,6 +57,7 @@ class CommentData implements Parcelable {
         this.collapsed = collapsed;
         this.hasReply = hasReply;
         this.scoreHidden = scoreHidden;
+        this.saved = saved;
         this.isExpanded = false;
         moreChildrenStartingIndex = 0;
         isPlaceHolder = false;
@@ -190,6 +192,14 @@ class CommentData implements Parcelable {
 
     public boolean isScoreHidden() {
         return scoreHidden;
+    }
+
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public void setSaved(boolean saved) {
+        this.saved = saved;
     }
 
     public boolean isExpanded() {
