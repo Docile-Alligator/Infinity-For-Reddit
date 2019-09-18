@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
@@ -412,9 +410,9 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
         Call<String> getPost;
         if(accessToken == null) {
-            getPost = api.getUserBestPosts(subredditOrUserName, lastItem, sortType);
+            getPost = api.getUserPosts(subredditOrUserName, lastItem, sortType);
         } else {
-            getPost = api.getUserBestPostsOauth(subredditOrUserName, userWhere, lastItem, sortType,
+            getPost = api.getUserPostsOauth(subredditOrUserName, userWhere, lastItem, sortType,
                     RedditUtils.getOAuthHeader(accessToken));
         }
         getPost.enqueue(new Callback<String>() {
@@ -470,9 +468,9 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
         Call<String> getPost;
         if(accessToken == null) {
-            getPost = api.getUserBestPosts(subredditOrUserName, after, sortType);
+            getPost = api.getUserPosts(subredditOrUserName, after, sortType);
         } else {
-            getPost = api.getUserBestPostsOauth(subredditOrUserName, userWhere, after, sortType,
+            getPost = api.getUserPostsOauth(subredditOrUserName, userWhere, after, sortType,
                     RedditUtils.getOAuthHeader(accessToken));
         }
         getPost.enqueue(new Callback<String>() {

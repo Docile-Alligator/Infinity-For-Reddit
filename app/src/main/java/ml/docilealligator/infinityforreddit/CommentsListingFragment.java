@@ -38,9 +38,13 @@ import retrofit2.Retrofit;
  */
 public class CommentsListingFragment extends Fragment implements FragmentCommunicator {
 
-    static final String EXTRA_USERNAME_KEY = "ENK";
+    static final String EXTRA_USERNAME = "EN";
     static final String EXTRA_ACCESS_TOKEN = "EAT";
     static final String EXTRA_ACCOUNT_NAME = "EAN";
+    static final String EXTRA_ARE_SAVED_COMMENTS = "EISC";
+
+    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
+    private static final String ACCESS_TOKEN_STATE = "ATS";
 
     @BindView(R.id.coordinator_layout_comments_listing_fragment) CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.recycler_view_comments_listing_fragment) RecyclerView mCommentRecyclerView;
@@ -48,6 +52,9 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     @BindView(R.id.fetch_comments_info_linear_layout_comments_listing_fragment) LinearLayout mFetchCommentInfoLinearLayout;
     @BindView(R.id.fetch_comments_info_image_view_comments_listing_fragment) ImageView mFetchCommentInfoImageView;
     @BindView(R.id.fetch_comments_info_text_view_comments_listing_fragment) TextView mFetchCommentInfoTextView;
+
+    private boolean mNullAccessToken = false;
+    private String mAccessToken;
 
     private RequestManager mGlide;
 
@@ -63,6 +70,9 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
     @Inject @Named("oauth")
     Retrofit mOauthRetrofit;
+
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
 
     public CommentsListingFragment() {
         // Required empty public constructor
@@ -91,18 +101,56 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
             }
         }
 
+        if (savedInstanceState == null) {
+            getCurrentAccountAndBindView(resources);
+        } else {
+            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
+            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
+
+            if (!mNullAccessToken && mAccessToken == null) {
+                getCurrentAccountAndBindView(resources);
+            } else {
+                bindView(resources);
+            }
+        }
+
+        return rootView;
+    }
+
+    private void getCurrentAccountAndBindView(Resources resources) {
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if(account == null) {
+                mNullAccessToken = true;
+            } else {
+                mAccessToken = account.getAccessToken();
+            }
+            bindView(resources);
+        }).execute();
+    }
+
+    private void bindView(Resources resources) {
         mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
 
         mAdapter = new CommentsListingRecyclerViewAdapter(activity, mOauthRetrofit,
                 getArguments().getString(EXTRA_ACCESS_TOKEN), getArguments().getString(EXTRA_ACCOUNT_NAME),
                 () -> mCommentViewModel.retryLoadingMore());
 
-        String username = getArguments().getString(EXTRA_USERNAME_KEY);
+        String username = getArguments().getString(EXTRA_USERNAME);
 
         mCommentRecyclerView.setAdapter(mAdapter);
 
-        CommentViewModel.Factory factory = new CommentViewModel.Factory(mRetrofit,
-                resources.getConfiguration().locale, username, PostDataSource.SORT_TYPE_NEW);
+        CommentViewModel.Factory factory;
+
+        if(mAccessToken == null) {
+            factory = new CommentViewModel.Factory(mRetrofit,
+                    resources.getConfiguration().locale, mAccessToken, username, PostDataSource.SORT_TYPE_NEW,
+                    getArguments().getBoolean(EXTRA_ARE_SAVED_COMMENTS));
+        } else {
+            factory = new CommentViewModel.Factory(mOauthRetrofit,
+                    resources.getConfiguration().locale, mAccessToken, username, PostDataSource.SORT_TYPE_NEW,
+                    getArguments().getBoolean(EXTRA_ARE_SAVED_COMMENTS));
+        }
+
         mCommentViewModel = new ViewModelProvider(this, factory).get(CommentViewModel.class);
         mCommentViewModel.getComments().observe(this, comments -> mAdapter.submitList(comments));
 
@@ -130,11 +178,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
             }
         });
 
-        mCommentViewModel.getPaginationNetworkState().observe(this, networkState -> {
-            mAdapter.setNetworkState(networkState);
-        });
-
-        return rootView;
+        mCommentViewModel.getPaginationNetworkState().observe(this, networkState -> mAdapter.setNetworkState(networkState));
     }
 
     void changeSortType(String sortType) {
@@ -145,6 +189,13 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.activity = (Activity) context;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
+        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
     }
 
     @Override

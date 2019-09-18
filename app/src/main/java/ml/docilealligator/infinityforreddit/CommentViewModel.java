@@ -21,8 +21,10 @@ public class CommentViewModel extends ViewModel {
     private LiveData<PagedList<CommentData>> comments;
     private MutableLiveData<String> sortTypeLiveData;
 
-    public CommentViewModel(Retrofit retrofit, Locale locale, String username, String sortType) {
-        commentDataSourceFactory = new CommentDataSourceFactory(retrofit, locale, username, sortType);
+    public CommentViewModel(Retrofit retrofit, Locale locale, String accessToken, String username, String sortType,
+                            boolean areSavedComments) {
+        commentDataSourceFactory = new CommentDataSourceFactory(retrofit, locale, accessToken, username, sortType,
+                areSavedComments);
 
         initialLoadingState = Transformations.switchMap(commentDataSourceFactory.getCommentDataSourceLiveData(),
                 CommentDataSource::getInitialLoadStateLiveData);
@@ -77,20 +79,25 @@ public class CommentViewModel extends ViewModel {
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
         private Retrofit retrofit;
         private Locale locale;
+        private String accessToken;
         private String username;
         private String sortType;
+        private boolean areSavedComments;
 
-        public Factory(Retrofit retrofit, Locale locale, String username, String sortType) {
+        public Factory(Retrofit retrofit, Locale locale, String accessToken, String username,
+                       String sortType, boolean areSavedComments) {
             this.retrofit = retrofit;
             this.locale = locale;
+            this.accessToken = accessToken;
             this.username = username;
             this.sortType = sortType;
+            this.areSavedComments = areSavedComments;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new CommentViewModel(retrofit, locale, username, sortType);
+            return (T) new CommentViewModel(retrofit, locale, accessToken, username, sortType, areSavedComments);
         }
     }
 }

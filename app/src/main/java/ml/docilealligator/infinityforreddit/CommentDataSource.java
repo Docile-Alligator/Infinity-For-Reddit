@@ -1,9 +1,9 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
 
@@ -23,8 +23,11 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
 
     private Retrofit retrofit;
     private Locale locale;
+    @Nullable
+    private String accessToken;
     private String username;
     private String sortType;
+    private boolean areSavedComments;
 
     private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
     private MutableLiveData<NetworkState> initialLoadStateLiveData;
@@ -33,11 +36,14 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
     private LoadParams<String> params;
     private LoadCallback<String, CommentData> callback;
 
-    CommentDataSource(Retrofit retrofit, Locale locale, String username, String sortType) {
+    CommentDataSource(Retrofit retrofit, Locale locale, @Nullable String accessToken, String username, String sortType,
+                      boolean areSavedComments) {
         this.retrofit = retrofit;
         this.locale = locale;
+        this.accessToken = accessToken;
         this.username = username;
         this.sortType = sortType;
+        this.areSavedComments = areSavedComments;
         paginationNetworkStateLiveData = new MutableLiveData<>();
         initialLoadStateLiveData = new MutableLiveData<>();
         hasPostLiveData = new MutableLiveData<>();
@@ -64,7 +70,18 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> commentsCall = api.getUserComments(username, null, sortType);
+        Call<String> commentsCall;
+        if(areSavedComments) {
+            commentsCall = api.getUserSavedCommentsOauth(username, PostDataSource.USER_WHERE_SAVED,
+                    null, sortType, RedditUtils.getOAuthHeader(accessToken));
+        } else {
+            if(accessToken == null) {
+                commentsCall = api.getUserComments(username, null, sortType);
+            } else {
+                commentsCall = api.getUserCommentsOauth(RedditUtils.getOAuthHeader(accessToken), username,
+                        null, sortType);
+            }
+        }
         commentsCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -116,8 +133,19 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
         paginationNetworkStateLiveData.postValue(NetworkState.LOADING);
 
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> bestPost = api.getUserComments(username, params.key, sortType);
-        bestPost.enqueue(new Callback<String>() {
+        Call<String> commentsCall;
+        if(areSavedComments) {
+            commentsCall = api.getUserSavedCommentsOauth(username, PostDataSource.USER_WHERE_SAVED, params.key,
+                    sortType, RedditUtils.getOAuthHeader(accessToken));
+        } else {
+            if(accessToken == null) {
+                commentsCall = api.getUserComments(username, params.key, sortType);
+            } else {
+                commentsCall = api.getUserCommentsOauth(RedditUtils.getOAuthHeader(accessToken),
+                        username, params.key, sortType);
+            }
+        }
+        commentsCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if(response.isSuccessful()) {
@@ -150,9 +178,10 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
     }
 
     private static class ParseCommentAsyncTask extends AsyncTask<Void, ArrayList<CommentData>, ArrayList<CommentData>> {
-        private String response;
         private String after;
         private Locale locale;
+        private JSONArray commentsJSONArray;
+        private boolean parseFailed;
         private ParseCommentAsyncTaskListener parseCommentAsyncTaskListener;
 
         interface ParseCommentAsyncTaskListener {
@@ -161,27 +190,33 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
         }
 
         ParseCommentAsyncTask(String response, Locale locale, ParseCommentAsyncTaskListener parseCommentAsyncTaskListener) {
-            this.response = response;
             this.locale = locale;
             this.parseCommentAsyncTaskListener = parseCommentAsyncTaskListener;
+            try {
+                JSONObject data = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY);
+                commentsJSONArray = data.getJSONArray(JSONUtils.CHILDREN_KEY);
+                after = data.getString(JSONUtils.AFTER_KEY);
+                parseFailed = false;
+            } catch (JSONException e) {
+                parseFailed = true;
+                e.printStackTrace();
+            }
         }
 
         @Override
         protected ArrayList<CommentData> doInBackground(Void... voids) {
-            try {
-                JSONObject data = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY);
-                JSONArray commentsJSONArray = data.getJSONArray(JSONUtils.CHILDREN_KEY);
-                ArrayList<CommentData> comments = new ArrayList<>();
-                for(int i = 0; i < commentsJSONArray.length(); i++) {
+            if(parseFailed) {
+                return null;
+            }
+
+            ArrayList<CommentData> comments = new ArrayList<>();
+            for(int i = 0; i < commentsJSONArray.length(); i++) {
+                try {
                     JSONObject commentJSON = commentsJSONArray.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
                     comments.add(ParseComment.parseSingleComment(commentJSON, 0, locale));
-                }
-                after = data.getString(JSONUtils.AFTER_KEY);
-                return comments;
-            } catch (JSONException e) {
-                e.printStackTrace();
+                } catch (JSONException ignored) {}
             }
-            return null;
+            return comments;
         }
 
         @Override

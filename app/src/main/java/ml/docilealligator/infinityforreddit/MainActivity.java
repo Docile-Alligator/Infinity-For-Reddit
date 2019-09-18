@@ -625,8 +625,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         });
 
         savedLinearLayout.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_SAVED);
+            Intent intent = new Intent(MainActivity.this, AccountSavedThingActivity.class);
             startActivity(intent);
             drawer.closeDrawers();
         });

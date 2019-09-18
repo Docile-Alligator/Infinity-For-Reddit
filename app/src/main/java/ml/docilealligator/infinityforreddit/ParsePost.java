@@ -113,17 +113,19 @@ class ParsePost {
 
                 for (int i = 0; i < size; i++) {
                     try {
-                        JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
-                        Post post = parseBasicData(data, locale);
-                        if(!(!nsfw && post.isNSFW())) {
-                            if (filter == PostFragment.EXTRA_NO_FILTER) {
-                                newPosts.add(post);
-                            } else if (filter == post.getPostType()) {
-                                newPosts.add(post);
-                            } else if (filter == Post.LINK_TYPE && post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
-                                newPosts.add(post);
-                            } else if(filter == Post.NSFW_TYPE && post.isNSFW()) {
-                                newPosts.add(post);
+                        if(allData.getJSONObject(i).getString(JSONUtils.KIND_KEY).equals("t3")) {
+                            JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
+                            Post post = parseBasicData(data, locale);
+                            if(post != null && !(!nsfw && post.isNSFW())) {
+                                if (filter == PostFragment.EXTRA_NO_FILTER) {
+                                    newPosts.add(post);
+                                } else if (filter == post.getPostType()) {
+                                    newPosts.add(post);
+                                } else if (filter == Post.LINK_TYPE && post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
+                                    newPosts.add(post);
+                                } else if(filter == Post.NSFW_TYPE && post.isNSFW()) {
+                                    newPosts.add(post);
+                                }
                             }
                         }
                     } catch (JSONException e) {

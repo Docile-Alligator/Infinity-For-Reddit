@@ -15,6 +15,7 @@
     <string name="edit_comment_activity_label">Edit Comment</string>
     <string name="view_message_activity_label">Inbox</string>
     <string name="settings_activity_label">Settings</string>
+    <string name="account_saved_thing_activity">Saved</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

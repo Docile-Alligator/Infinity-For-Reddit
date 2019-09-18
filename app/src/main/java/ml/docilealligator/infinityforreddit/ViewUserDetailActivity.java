@@ -667,9 +667,10 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
             }
             CommentsListingFragment fragment = new CommentsListingFragment();
             Bundle bundle = new Bundle();
-            bundle.putString(CommentsListingFragment.EXTRA_USERNAME_KEY, username);
+            bundle.putString(CommentsListingFragment.EXTRA_USERNAME, username);
             bundle.putString(CommentsListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
             bundle.putString(CommentsListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
+            bundle.putBoolean(CommentsListingFragment.EXTRA_ARE_SAVED_COMMENTS, false);
             fragment.setArguments(bundle);
             return fragment;
         }

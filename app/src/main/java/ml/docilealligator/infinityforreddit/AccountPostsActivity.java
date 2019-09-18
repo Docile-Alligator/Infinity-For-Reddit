@@ -58,8 +58,6 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
 
-    private UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment;
-
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
 
@@ -146,9 +144,6 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
         } else if(mUserWhere.equals(PostDataSource.USER_WHERE_HIDDEN)) {
             toolbar.setTitle(R.string.hidden);
         } else if(mUserWhere.equals(PostDataSource.USER_WHERE_GILDED)){
-            if(mMenu != null) {
-                mMenu.findItem(R.id.action_sort_account_posts_activity).setVisible(true);
-            }
             toolbar.setTitle(R.string.gilded);
         }
 
@@ -171,8 +166,6 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
         } else {
             getCurrentAccountAndInitializeFragment();
         }
-
-        userThingSortTypeBottomSheetFragment = new UserThingSortTypeBottomSheetFragment();
     }
 
     private void getCurrentAccountAndInitializeFragment() {
@@ -204,9 +197,6 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.account_posts_activity, menu);
         mMenu = menu;
-        if(mUserWhere != null && mUserWhere.equals(PostDataSource.USER_WHERE_GILDED)) {
-            menu.findItem(R.id.action_sort_account_posts_activity).setVisible(true);
-        }
         MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_account_posts_activity);
         if(isInLazyMode) {
             lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
@@ -223,9 +213,6 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_sort_account_posts_activity:
-                userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
-                return true;
             case R.id.action_refresh_account_posts_activity:
                 if(mMenu != null) {
                     mMenu.findItem(R.id.action_lazy_mode_account_posts_activity).setTitle(R.string.action_start_lazy_mode);

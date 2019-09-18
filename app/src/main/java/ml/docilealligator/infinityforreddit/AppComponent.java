@@ -43,4 +43,5 @@ public interface AppComponent {
     void inject(SearchActivity searchActivity);
     void inject(SettingsActivity settingsActivity);
     void inject(MainPreferenceFragment mainPreferenceFragment);
+    void inject(AccountSavedThingActivity accountSavedThingActivity);
 }

@@ -51,13 +51,13 @@ public interface RedditAPI {
     Call<String> getSubredditBestPosts(@Path("subredditName") String subredditName, @Path("sortType") String sortType,
                                             @Query("after") String lastItem);
 
-    @GET("user/{username}/{where}.json?&raw_json=1&limit=25")
-    Call<String> getUserBestPostsOauth(@Path("username") String username, @Path("where") String where,
-                                       @Query("after") String lastItem, @Query("sort") String sortType, @HeaderMap Map<String, String> headers);
+    @GET("user/{username}/{where}.json?&type=links&raw_json=1&limit=25")
+    Call<String> getUserPostsOauth(@Path("username") String username, @Path("where") String where,
+                                   @Query("after") String lastItem, @Query("sort") String sortType, @HeaderMap Map<String, String> headers);
 
     @GET("user/{username}/submitted.json?raw_json=1&limit=25")
-    Call<String> getUserBestPosts(@Path("username") String username, @Query("after") String lastItem,
-                                  @Query("sort") String sortType);
+    Call<String> getUserPosts(@Path("username") String username, @Query("after") String lastItem,
+                              @Query("sort") String sortType);
 
     @GET("user/{username}/about.json?raw_json=1")
     Call<String> getUserData(@Path("username") String username);
@@ -65,6 +65,14 @@ public interface RedditAPI {
     @GET("user/{username}/comments.json?raw_json=1")
     Call<String> getUserComments(@Path("username") String username, @Query("after") String after,
                                  @Query("sort") String sortType);
+
+    @GET("user/{username}/comments.json?raw_json=1")
+    Call<String> getUserCommentsOauth(@HeaderMap Map<String, String> headers, @Path("username") String username,
+                                      @Query("after") String after, @Query("sort") String sortType);
+
+    @GET("user/{username}/{where}.json?&type=comments&raw_json=1&limit=25")
+    Call<String> getUserSavedCommentsOauth(@Path("username") String username, @Path("where") String where,
+                                   @Query("after") String lastItem, @Query("sort") String sortType, @HeaderMap Map<String, String> headers);
 
     @FormUrlEncoded
     @POST("api/subscribe")
@@ -76,29 +84,29 @@ public interface RedditAPI {
     @GET("/api/info.json?raw_json=1")
     Call<String> getInfoOauth(@Query("id") String id, @HeaderMap Map<String, String> headers);
 
-    @GET("subreddits/search.json?raw_json=1")
+    @GET("subreddits/search.json?include_over_18=1&raw_json=1")
     Call<String> searchSubreddits(@Query("q") String subredditName, @Query("after") String after,
                                   @Query("sort") String sort);
 
-    @GET("search.json?raw_json=1&type=user")
+    @GET("search.json?include_over_18=1&raw_json=1&type=user")
     Call<String> searchUsers(@Query("q") String profileName, @Query("after") String after,
                              @Query("sort") String sort);
 
-    @GET("search.json?raw_json=1&type=link")
+    @GET("search.json?include_over_18=1&raw_json=1&type=link")
     Call<String> searchPostsOauth(@Query("q") String query, @Query("after") String after,
                                   @Query("sort") String sort,
                                   @HeaderMap Map<String, String> headers);
 
-    @GET("search.json?raw_json=1&type=link")
+    @GET("search.json?include_over_18=1&raw_json=1&type=link")
     Call<String> searchPosts(@Query("q") String query, @Query("after") String after,
                              @Query("sort") String sort);
 
-    @GET("r/{subredditName}/search.json?raw_json=1&type=link&restrict_sr=true")
+    @GET("r/{subredditName}/search.json?include_over_18=1&raw_json=1&type=link&restrict_sr=true")
     Call<String> searchPostsInSpecificSubredditOauth(@Path("subredditName") String subredditName,
                                                      @Query("q") String query, @Query("after") String after,
                                                      @HeaderMap Map<String, String> headers);
 
-    @GET("r/{subredditName}/search.json?raw_json=1&type=link&restrict_sr=true")
+    @GET("r/{subredditName}/search.json?include_over_18=1&raw_json=1&type=link&restrict_sr=true")
     Call<String> searchPostsInSpecificSubreddit(@Path("subredditName") String subredditName,
                                                 @Query("q") String query, @Query("after") String after);
 
