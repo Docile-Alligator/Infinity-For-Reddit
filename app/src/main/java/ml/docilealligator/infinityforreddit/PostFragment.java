@@ -411,7 +411,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
                 mProgressBar.setVisibility(View.GONE);
                 mFetchPostInfoLinearLayout.setOnClickListener(view -> refresh());
-                showErrorView(R.string.load_posts_error);
+                //showErrorView(R.string.load_posts_error);
+                showErrorView(networkState.getMsg());
             } else {
                 mProgressBar.setVisibility(View.VISIBLE);
             }
@@ -462,6 +463,15 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mProgressBar.setVisibility(View.GONE);
             mFetchPostInfoLinearLayout.setVisibility(View.VISIBLE);
             mFetchPostInfoTextView.setText(stringResId);
+            mGlide.load(R.drawable.error_image).into(mFetchPostInfoImageView);
+        }
+    }
+
+    private void showErrorView(String message) {
+        if(activity != null && isAdded()) {
+            mProgressBar.setVisibility(View.GONE);
+            mFetchPostInfoLinearLayout.setVisibility(View.VISIBLE);
+            mFetchPostInfoTextView.setText(message);
             mGlide.load(R.drawable.error_image).into(mFetchPostInfoImageView);
         }
     }

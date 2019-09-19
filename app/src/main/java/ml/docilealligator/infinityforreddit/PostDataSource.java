@@ -229,19 +229,21 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
                                     @Override
                                     public void onParsePostsListingFail() {
-                                        initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
+                                        initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing posts"));
                                     }
                                 });
                     }
                 } else {
-                    initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
+                    initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED,
+                            "code: " + response.code() + " message: " + response.message()));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 String errorMessage = t.getMessage();
-                initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
+                initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED,
+                        errorMessage + " " + call.request().url().toString()));
             }
         });
     }
@@ -270,7 +272,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
                         @Override
                         public void onParsePostsListingFail() {
-                            paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
+                            paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing more posts"));
                         }
                     });
                 } else {
@@ -342,19 +344,21 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
                                     @Override
                                     public void onParsePostsListingFail() {
-                                        initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
+                                        initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing posts"));
                                     }
                                 });
                     }
                 } else {
-                    initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
+                    initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED,
+                            "code: " + response + " message: " + response.message()));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 String errorMessage = t.getMessage();
-                initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
+                initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED,
+                        errorMessage + " " + call.request().url().toString()));
             }
         });
     }

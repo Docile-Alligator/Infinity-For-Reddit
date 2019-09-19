@@ -749,9 +749,9 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             });
 
             if(comment.isSaved()) {
-                ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_20dp);
             } else {
-                ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_20dp);
             }
 
             ((CommentViewHolder) holder).saveButton.setOnClickListener(view -> {
@@ -761,14 +761,14 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                         @Override
                         public void success() {
                             comment.setSaved(false);
-                            ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                            ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_20dp);
                             Toast.makeText(mActivity, R.string.comment_unsaved_success, Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void failed() {
                             comment.setSaved(true);
-                            ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                            ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_20dp);
                             Toast.makeText(mActivity, R.string.comment_unsaved_failed, Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -778,14 +778,14 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                         @Override
                         public void success() {
                             comment.setSaved(true);
-                            ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                            ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_20dp);
                             Toast.makeText(mActivity, R.string.comment_saved_success, Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void failed() {
                             comment.setSaved(false);
-                            ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                            ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_20dp);
                             Toast.makeText(mActivity, R.string.comment_saved_failed, Toast.LENGTH_SHORT).show();
                         }
                     });
