@@ -30,7 +30,6 @@ class Post implements Parcelable {
     private String previewUrl;
     private String url;
     private String videoUrl;
-    private String gifOrVideoDownloadUrl;
     private String permalink;
     private String flair;
     private int score;
@@ -47,15 +46,12 @@ class Post implements Parcelable {
     private boolean locked;
     private boolean saved;
     private boolean isCrosspost;
-    private boolean isHLSVideo;
-    private boolean isDownloadableGifOrVideo;
     private String crosspostParentId;
 
     Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
          String postTime, String title, String previewUrl, String permalink, int score, int postType,
          int voteType, int gilded, String flair, boolean hidden, boolean spoiler, boolean nsfw,
-         boolean stickied, boolean archived, boolean locked, boolean saved, boolean isCrosspost,
-         boolean isHLSVideo) {
+         boolean stickied, boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -79,7 +75,6 @@ class Post implements Parcelable {
         this.locked = locked;
         this.saved = saved;
         this.isCrosspost = isCrosspost;
-        this.isHLSVideo = isHLSVideo;
     }
 
     Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
@@ -155,7 +150,6 @@ class Post implements Parcelable {
         previewUrl = in.readString();
         url = in.readString();
         videoUrl = in.readString();
-        gifOrVideoDownloadUrl = in.readString();
         permalink = in.readString();
         flair = in.readString();
         score = in.readInt();
@@ -172,8 +166,6 @@ class Post implements Parcelable {
         locked = in.readByte() != 0;
         saved = in.readByte() != 0;
         isCrosspost = in.readByte() != 0;
-        isHLSVideo = in.readByte() != 0;
-        isDownloadableGifOrVideo = in.readByte() != 0;
         crosspostParentId = in.readString();
     }
 
@@ -265,14 +257,6 @@ class Post implements Parcelable {
         return videoUrl;
     }
 
-    String getGifOrVideoDownloadUrl() {
-        return gifOrVideoDownloadUrl;
-    }
-
-    void setGifOrVideoDownloadUrl(String gifOrVideoDownloadUrl) {
-        this.gifOrVideoDownloadUrl = gifOrVideoDownloadUrl;
-    }
-
     String getPermalink() {
         return permalink;
     }
@@ -354,18 +338,6 @@ class Post implements Parcelable {
         return 0;
     }
 
-    boolean isHLSVideo() {
-        return isHLSVideo;
-    }
-
-    void setDownloadableGifOrVideo(boolean isDownloadableGifOrVideo) {
-        this.isDownloadableGifOrVideo = isDownloadableGifOrVideo;
-    }
-
-    boolean isDownloadableGifOrVideo() {
-        return isDownloadableGifOrVideo;
-    }
-
     boolean isStickied() {
         return stickied;
     }
@@ -414,7 +386,6 @@ class Post implements Parcelable {
         parcel.writeString(previewUrl);
         parcel.writeString(url);
         parcel.writeString(videoUrl);
-        parcel.writeString(gifOrVideoDownloadUrl);
         parcel.writeString(permalink);
         parcel.writeString(flair);
         parcel.writeInt(score);
@@ -431,8 +402,6 @@ class Post implements Parcelable {
         parcel.writeByte((byte) (locked ? 1 : 0));
         parcel.writeByte((byte) (saved ? 1 : 0));
         parcel.writeByte((byte) (isCrosspost ? 1 : 0));
-        parcel.writeByte((byte) (isHLSVideo ? 1 : 0));
-        parcel.writeByte((byte) (isDownloadableGifOrVideo ? 1 : 0));
         parcel.writeString(crosspostParentId);
     }
 }

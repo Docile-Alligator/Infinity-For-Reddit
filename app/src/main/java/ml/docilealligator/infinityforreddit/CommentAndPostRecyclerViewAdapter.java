@@ -431,13 +431,8 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                         Intent intent = new Intent(mActivity, ViewVideoActivity.class);
                         intent.setData(gifVideoUri);
                         intent.putExtra(ViewVideoActivity.TITLE_KEY, mPost.getTitle());
-                        intent.putExtra(ViewVideoActivity.IS_HLS_VIDEO_KEY, mPost.isHLSVideo());
-                        intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, mPost.isDownloadableGifOrVideo());
-                        if(mPost.isDownloadableGifOrVideo()) {
-                            intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, mPost.getGifOrVideoDownloadUrl());
-                            intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, mPost.getSubredditName());
-                            intent.putExtra(ViewVideoActivity.ID_KEY, mPost.getId());
-                        }
+                        intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, mPost.getSubredditName());
+                        intent.putExtra(ViewVideoActivity.ID_KEY, mPost.getId());
                         mActivity.startActivity(intent);
                     });
                     break;
@@ -449,13 +444,8 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                         Intent intent = new Intent(mActivity, ViewVideoActivity.class);
                         intent.setData(videoUri);
                         intent.putExtra(ViewVideoActivity.TITLE_KEY, mPost.getTitle());
-                        intent.putExtra(ViewVideoActivity.IS_HLS_VIDEO_KEY, mPost.isHLSVideo());
-                        intent.putExtra(ViewVideoActivity.IS_DOWNLOADABLE_KEY, mPost.isDownloadableGifOrVideo());
-                        if(mPost.isDownloadableGifOrVideo()) {
-                            intent.putExtra(ViewVideoActivity.DOWNLOAD_URL_KEY, mPost.getGifOrVideoDownloadUrl());
-                            intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, mPost.getSubredditName());
-                            intent.putExtra(ViewVideoActivity.ID_KEY, mPost.getId());
-                        }
+                        intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, mPost.getSubredditName());
+                        intent.putExtra(ViewVideoActivity.ID_KEY, mPost.getId());
                         mActivity.startActivity(intent);
                     });
                     break;

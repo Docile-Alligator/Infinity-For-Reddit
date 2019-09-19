@@ -4,8 +4,6 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.app.DownloadManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -16,7 +14,6 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -37,7 +34,6 @@ import com.github.pwittchen.swipe.library.rx2.Swipe;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
@@ -45,12 +41,8 @@ import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-
-import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,9 +52,6 @@ public class ViewVideoActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
 
     static final String TITLE_KEY = "TK";
-    static final String IS_HLS_VIDEO_KEY = "IHVK";
-    static final String IS_DOWNLOADABLE_KEY = "IDK";
-    static final String DOWNLOAD_URL_KEY = "DUK";
     static final String SUBREDDIT_KEY = "SK";
     static final String ID_KEY = "IK";
 
@@ -71,13 +60,11 @@ public class ViewVideoActivity extends AppCompatActivity {
 
     private Uri mVideoUri;
     private SimpleExoPlayer player;
+    private DataSource.Factory dataSourceFactory;
 
     private Menu mMenu;
     private Swipe swipe;
 
-    private String mGifOrVideoFileName;
-    private String mDownloadUrl;
-    private boolean mIsHLSVideo;
     private boolean wasPlaying;
     private boolean isDownloading = false;
     private float totalLengthY = 0.0f;
@@ -112,13 +99,6 @@ public class ViewVideoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         mVideoUri = intent.getData();
-        mIsHLSVideo = intent.getExtras().getBoolean(IS_HLS_VIDEO_KEY);
-
-        if(intent.getExtras().getBoolean(IS_DOWNLOADABLE_KEY)) {
-            mGifOrVideoFileName = intent.getStringExtra(SUBREDDIT_KEY)
-                    + "-" + intent.getStringExtra(ID_KEY).substring(3) + ".gif";
-            mDownloadUrl = intent.getStringExtra(DOWNLOAD_URL_KEY);
-        }
 
         final float pxHeight = getResources().getDisplayMetrics().heightPixels;
 
@@ -285,39 +265,26 @@ public class ViewVideoActivity extends AppCompatActivity {
             }
         });
 
-        DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory();
         TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
         player = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
         videoPlayerView.setPlayer(player);
-        DataSource.Factory dataSourceFactory;
-
+        // Produces DataSource instances through which media data is loaded.
+        dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "Infinity"));
         // Prepare the player with the source.
-        if(mIsHLSVideo) {
-            // Produces DataSource instances through which media data is loaded.
-            dataSourceFactory = new DefaultHttpDataSourceFactory(
-                    Util.getUserAgent(this, "Infinity"));
-            player.prepare(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
-        } else {
-            // Produces DataSource instances through which media data is loaded.
-            dataSourceFactory = new DefaultDataSourceFactory(this,
-                    Util.getUserAgent(this, "Infinity"), bandwidthMeter);
-            player.prepare(new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
-        }
+        player.prepare(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
 
         player.setRepeatMode(Player.REPEAT_MODE_ALL);
         player.setPlayWhenReady(true);
         wasPlaying = true;
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(!mIsHLSVideo) {
-            getMenuInflater().inflate(R.menu.view_video, menu);
-            mMenu = menu;
-        }
+        getMenuInflater().inflate(R.menu.view_video, menu);
+        mMenu = menu;
         return true;
-    }
+    }*/
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -390,47 +357,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     }
 
     private void download() {
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(mDownloadUrl));
-        request.setTitle(mGifOrVideoFileName);
-
-        request.allowScanningByMediaScanner();
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-
-        //Android Q support
-        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, mGifOrVideoFileName);
-        } else {
-            String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-            File directory = new File(path + "/Infinity/");
-            boolean saveToInfinityFolder = true;
-            if(!directory.exists()) {
-                if(!directory.mkdir()) {
-                    saveToInfinityFolder = false;
-                }
-            } else {
-                if(directory.isFile()) {
-                    if(!directory.delete() && !directory.mkdir()) {
-                        saveToInfinityFolder = false;
-                    }
-                }
-            }
-
-            if(saveToInfinityFolder) {
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES + "/Infinity/", mGifOrVideoFileName);
-            } else {
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, mGifOrVideoFileName);
-            }
-        }
-
-        DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-
-        if(manager == null) {
-            Toast.makeText(this, R.string.download_failed, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        manager.enqueue(request);
-        Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
+        isDownloading = false;
     }
 
     @Override
