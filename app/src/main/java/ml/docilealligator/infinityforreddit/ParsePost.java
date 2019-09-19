@@ -275,23 +275,7 @@ class ParsePost {
                 post.setVideoUrl(videoUrl);
                 post.setDownloadableGifOrVideo(false);
             } else if(data.has(JSONUtils.PREVIEW_KEY)){
-                JSONObject variations = data.getJSONObject(JSONUtils.PREVIEW_KEY).getJSONArray(JSONUtils.IMAGES_KEY).getJSONObject(0);
-                if (variations.has(JSONUtils.VARIANTS_KEY) && variations.getJSONObject(JSONUtils.VARIANTS_KEY).has(JSONUtils.MP4_KEY)) {
-                    //Gif video post (MP4)
-                    int postType = Post.GIF_VIDEO_TYPE;
-                    String videoUrl = Html.fromHtml(variations.getJSONObject(JSONUtils.VARIANTS_KEY).getJSONObject(JSONUtils.MP4_KEY).getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY)).toString();
-                    String gifDownloadUrl = Html.fromHtml(variations.getJSONObject(JSONUtils.VARIANTS_KEY).getJSONObject(JSONUtils.GIF_KEY).getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY)).toString();
-
-                    post = new Post(id, fullName, subredditName, subredditNamePrefixed, author,
-                            formattedPostTime, title, previewUrl, permalink, score, postType, voteType,
-                            gilded, flair, hidden, spoiler, nsfw, stickied, archived, locked, saved,
-                            isCrosspost, false);
-                    post.setPreviewWidth(previewWidth);
-                    post.setPreviewHeight(previewHeight);
-                    post.setVideoUrl(videoUrl);
-                    post.setDownloadableGifOrVideo(true);
-                    post.setGifOrVideoDownloadUrl(gifDownloadUrl);
-                } else if(data.getJSONObject(JSONUtils.PREVIEW_KEY).has(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY)) {
+                if(data.getJSONObject(JSONUtils.PREVIEW_KEY).has(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY)) {
                     //Gif video post (HLS)
                     int postType = Post.GIF_VIDEO_TYPE;
                     String videoUrl = Html.fromHtml(data.getJSONObject(JSONUtils.PREVIEW_KEY)
