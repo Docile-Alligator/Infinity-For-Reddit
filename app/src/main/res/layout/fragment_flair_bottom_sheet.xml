@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:text="@string/flair"
-        android:textSize="18sp" />
+        android:textSize="?attr/font_18" />
 
     <ProgressBar
         android:id="@+id/progress_bar_flair_bottom_sheet_fragment"
@@ -27,7 +27,8 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:padding="48dp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:textSize="?attr/font_default" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_bottom_sheet_fragment"

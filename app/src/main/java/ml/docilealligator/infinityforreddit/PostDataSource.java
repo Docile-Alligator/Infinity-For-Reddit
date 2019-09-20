@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
@@ -69,6 +71,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
 
     PostDataSource(Retrofit retrofit, String accessToken, Locale locale, String subredditOrUserName, int postType,
                    String sortType, int filter, boolean nsfw) {
+        Log.i("asfdasdf", "datasource: " + sortType);
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;

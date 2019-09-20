@@ -50,6 +50,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:visibility="gone"
+        android:textSize="?attr/font_default"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

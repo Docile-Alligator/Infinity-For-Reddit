@@ -55,7 +55,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="16dp"
-                    android:text="@string/choose_a_subreddit" />
+                    android:text="@string/choose_a_subreddit"
+                    android:textSize="?attr/font_default" />
 
                 <Button
                     android:id="@+id/rules_button_post_text_activity"
@@ -64,7 +65,8 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:text="@string/rules"
-                    android:textColor="@android:color/white" />
+                    android:textColor="@android:color/white"
+                    android:textSize="?attr/font_default" />
 
             </RelativeLayout>
 
@@ -85,6 +87,7 @@
                     android:padding="4dp"
                     android:text="@string/flair"
                     android:textColor="@color/primaryTextColor"
+                    android:textSize="?attr/font_default"
                     android:visibility="gone"
                     app:lib_setRadius="3dp"
                     app:lib_setRoundedBorderColor="@color/colorPrimaryDarkDayNightTheme"
@@ -99,6 +102,7 @@
                     android:padding="4dp"
                     android:text="@string/spoiler"
                     android:textColor="@color/primaryTextColor"
+                    android:textSize="?attr/font_default"
                     app:lib_setRadius="3dp"
                     app:lib_setRoundedBorderColor="@color/colorPrimaryDarkDayNightTheme"
                     app:lib_setRoundedView="true"
@@ -112,6 +116,7 @@
                     android:padding="4dp"
                     android:text="@string/nsfw"
                     android:textColor="@color/primaryTextColor"
+                    android:textSize="?attr/font_default"
                     app:lib_setRadius="3dp"
                     app:lib_setRoundedBorderColor="@color/colorAccent"
                     app:lib_setRoundedView="true"
@@ -132,7 +137,7 @@
                 android:padding="16dp"
                 android:hint="@string/post_title_hint"
                 android:inputType="textCapSentences|textMultiLine"
-                android:textSize="18sp"
+                android:textSize="?attr/font_18"
                 android:background="#00000000"
                 android:textColor="@color/primaryTextColor" />
 
@@ -149,7 +154,7 @@
                 android:padding="16dp"
                 android:hint="@string/post_text_content_hint"
                 android:inputType="textCapSentences|textMultiLine"
-                android:textSize="18sp"
+                android:textSize="?attr/font_18"
                 android:background="#00000000"
                 android:textColor="@color/primaryTextColor" />
 

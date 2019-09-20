@@ -45,7 +45,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="16dp"
-                        android:text="@string/label_account" />
+                        android:text="@string/label_account"
+                        android:textSize="?attr/font_default" />
 
                     <LinearLayout
                         android:id="@+id/profile_linear_layout_main_activity"
@@ -69,7 +70,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/profile"
-                            android:textColor="@color/primaryTextColor" />
+                            android:textColor="@color/primaryTextColor"
+                            android:textSize="?attr/font_default" />
 
                     </LinearLayout>
 
@@ -95,7 +97,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/subscriptions"
-                            android:textColor="@color/primaryTextColor" />
+                            android:textColor="@color/primaryTextColor"
+                            android:textSize="?attr/font_default" />
 
                     </LinearLayout>
 
@@ -121,7 +124,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/inbox"
-                            android:textColor="@color/primaryTextColor" />
+                            android:textColor="@color/primaryTextColor"
+                            android:textSize="?attr/font_default" />
 
                     </LinearLayout>
 
@@ -130,7 +134,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="16dp"
-                        android:text="@string/label_post" />
+                        android:text="@string/label_post"
+                        android:textSize="?attr/font_default" />
 
                     <LinearLayout
                         android:id="@+id/upvoted_linear_layout_main_activity"
@@ -154,7 +159,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/upvoted"
-                            android:textColor="@color/primaryTextColor" />
+                            android:textColor="@color/primaryTextColor"
+                            android:textSize="?attr/font_default" />
 
                     </LinearLayout>
 
@@ -180,7 +186,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/downvoted"
-                            android:textColor="@color/primaryTextColor" />
+                            android:textColor="@color/primaryTextColor"
+                            android:textSize="?attr/font_default" />
 
                     </LinearLayout>
 
@@ -206,7 +213,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/hidden"
-                            android:textColor="@color/primaryTextColor" />
+                            android:textColor="@color/primaryTextColor"
+                            android:textSize="?attr/font_default" />
 
                     </LinearLayout>
 
@@ -232,7 +240,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/saved"
-                            android:textColor="@color/primaryTextColor" />
+                            android:textColor="@color/primaryTextColor"
+                            android:textSize="?attr/font_default" />
 
                     </LinearLayout>
 
@@ -258,7 +267,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/gilded"
-                            android:textColor="@color/primaryTextColor" />
+                            android:textColor="@color/primaryTextColor"
+                            android:textSize="?attr/font_default" />
 
                     </LinearLayout>
 
@@ -290,7 +300,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:text="@string/settings"
-                            android:textColor="@color/primaryTextColor" />
+                            android:textColor="@color/primaryTextColor"
+                            android:textSize="?attr/font_default" />
 
                     </LinearLayout>
 

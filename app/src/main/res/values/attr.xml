@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <bool name="isTablet">false</bool>
+
+    <declare-styleable name="FontStyle">
+        <attr name="font_default" format="dimension"/>
+        <attr name="font_12" format="dimension"/>
+        <attr name="font_16" format="dimension"/>
+        <attr name="font_18" format="dimension"/>
+        <attr name="font_20" format="dimension"/>
+    </declare-styleable>
 </resources>

@@ -25,6 +25,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginStart="32dp"
         android:textColor="@color/primaryTextColor"
+        android:textSize="?attr/font_default"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/user_icon_gif_image_view_item_user_listing"
         app:layout_constraintTop_toTopOf="parent" />
@@ -42,6 +43,6 @@
         android:clickable="true"
         android:focusable="true"
         android:background="?attr/selectableItemBackground"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

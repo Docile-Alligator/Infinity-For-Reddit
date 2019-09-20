@@ -9,14 +9,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:textColor="@color/primaryTextColor" />
+        android:textColor="@color/primaryTextColor"
+        android:textSize="?attr/font_default" />
 
     <TextView
         android:id="@+id/subject_text_view_item_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:textSize="16sp"
+        android:textSize="?attr/font_16"
         android:textColor="@color/primaryTextColor" />
 
     <TextView
@@ -24,11 +25,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:textColor="@color/primaryTextColor" />
+        android:textColor="@color/primaryTextColor"
+        android:textSize="?attr/font_default" />
 
     <TextView
         android:id="@+id/content_custom_markwon_view_item_message"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textSize="?attr/font_default" />
 
 </LinearLayout>

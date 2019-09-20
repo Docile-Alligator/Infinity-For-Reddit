@@ -33,7 +33,8 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:textColor="@android:color/white"
-            android:text="@string/tap_to_retry" />
+            android:text="@string/tap_to_retry"
+            android:textSize="?attr/font_default" />
 
     </LinearLayout>
 

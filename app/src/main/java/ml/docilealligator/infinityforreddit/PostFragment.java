@@ -255,6 +255,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         int postType = getArguments().getInt(EXTRA_POST_TYPE);
         String sortType = getArguments().getString(EXTRA_SORT_TYPE);
+
         int filter = getArguments().getInt(EXTRA_FILTER);
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         boolean nsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_KEY, false);

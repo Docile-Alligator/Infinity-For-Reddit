@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
-        android:text="@string/load_comments_failed" />
+        android:text="@string/load_comments_failed"
+        android:textSize="?attr/font_default" />
 
 </LinearLayout>

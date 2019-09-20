@@ -42,7 +42,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_gravity="center"
-                    android:textColor="#E91E63"/>
+                    android:textColor="#E91E63"
+                    android:textSize="?attr/font_default" />
 
             </LinearLayout>
 
@@ -64,6 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
+                android:textSize="?attr/font_default"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/stickied_post_image_view_item_post"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -78,7 +80,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textSize="18sp"
+            android:textSize="?attr/font_18"
             android:textColor="@color/primaryTextColor"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -113,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:textColor="@color/gold"
-                android:textSize="20sp"
+                android:textSize="?attr/font_20"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/gilded_image_view_item_post"
@@ -185,7 +187,7 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="16dp"
                 android:text="@string/spoiler"
-                android:textSize="12sp"
+                android:textSize="?attr/font_12"
                 android:textColor="@android:color/white"
                 android:padding="4dp"
                 android:visibility="gone"
@@ -200,7 +202,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="16dp"
-                android:textSize="12sp"
+                android:textSize="?attr/font_12"
                 android:textColor="@android:color/white"
                 android:padding="4dp"
                 android:visibility="gone"
@@ -218,7 +220,7 @@
             android:layout_marginBottom="16dp"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textSize="12sp"
+            android:textSize="?attr/font_12"
             android:visibility="gone"/>
 
         <RelativeLayout
@@ -253,7 +255,8 @@
                     android:drawableTop="@drawable/ic_error_outline_black_24dp"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="@string/tap_to_retry" />
+                    android:text="@string/tap_to_retry"
+                    android:textSize="?attr/font_default" />
 
             </RelativeLayout>
 
@@ -293,7 +296,8 @@
                 android:layout_toEndOf="@id/plus_button_item_post"
                 android:layout_alignBottom="@id/plus_button_item_post"
                 android:layout_alignParentTop="true"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:textSize="?attr/font_default" />
 
             <ImageView
                 android:id="@+id/minus_button_item_post"

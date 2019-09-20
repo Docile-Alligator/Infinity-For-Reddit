@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:text="@string/view_all_comments"
         android:gravity="center"
-        android:textColor="@color/colorAccent" />
+        android:textColor="@color/colorAccent"
+        android:textSize="?attr/font_default" />
 
 </LinearLayout>

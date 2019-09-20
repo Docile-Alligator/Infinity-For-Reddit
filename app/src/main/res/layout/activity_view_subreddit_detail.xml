@@ -58,7 +58,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
-                        android:textSize="18sp"
+                        android:textSize="?attr/font_18"
                         android:textColor="@color/colorAccent"
                         android:layout_gravity="center_horizontal"/>
 
@@ -80,6 +80,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/primaryTextColor"
+                            android:textSize="?attr/font_default"
                             android:layout_alignParentStart="true"
                             android:layout_toStartOf="@id/online_subscriber_count_text_view_view_subreddit_detail_activity" />
 
@@ -88,7 +89,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
-                            android:textColor="@color/primaryTextColor" />
+                            android:textColor="@color/primaryTextColor"
+                            android:textSize="?attr/font_default" />
 
                     </RelativeLayout>
 
@@ -98,6 +100,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:textColor="@color/primaryTextColor"
+                        android:textSize="?attr/font_default"
                         android:visibility="gone"/>
 
                 </LinearLayout>

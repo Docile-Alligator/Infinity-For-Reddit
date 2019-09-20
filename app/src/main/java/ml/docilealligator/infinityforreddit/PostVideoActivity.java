@@ -143,13 +143,17 @@ public class PostVideoActivity extends AppCompatActivity implements FlairBottomS
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        getTheme().applyStyle(FontStyle.valueOf(mSharedPreferences
+                .getString(SharedPreferencesUtils.FONT_SIZE_KEY, FontStyle.Normal.name())).getResId(), true);
+
         setContentView(R.layout.activity_post_video);
 
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
-
-        ((Infinity) getApplication()).getAppComponent().inject(this);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Window window = getWindow();

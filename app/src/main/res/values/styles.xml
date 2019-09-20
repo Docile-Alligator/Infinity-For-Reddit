@@ -45,6 +45,9 @@
     </style>
     
     <style name="MaterialAlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="android:textSize">?attr/font_default</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialogTitleTextStyle</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/MaterialAlertDialogBodyTextStyle</item>
         <item name="buttonBarPositiveButtonStyle">@style/MaterialAlertDialogPositiveButtonStyle</item>
         <item name="buttonBarNegativeButtonStyle">@style/MaterialAlertDialogNegativeButtonStyle</item>
     </style>
@@ -57,10 +60,63 @@
         <item name="android:textColor">@color/primaryTextColor</item>
     </style>
 
+    <style name="MaterialAlertDialogTitleTextStyle" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textSize">?attr/font_20</item>
+    </style>
+
+    <style name="MaterialAlertDialogBodyTextStyle">
+        <item name="android:textSize">?attr/font_default</item>
+    </style>
+
     <style name="PreferenceActivityTheme" parent="AppTheme.NoActionBar">
+        <item name="android:textAppearanceListItem">@style/PreferenceTitleTextStyle</item>
+        <item name="android:textAppearanceListItemSecondary">@style/PreferenceSubtitleTextStyle</item>
         <item name="android:textColorPrimary">@color/primaryTextColor</item>
         <item name="buttonBarPositiveButtonStyle">@style/MaterialAlertDialogPositiveButtonStyle</item>
         <item name="buttonBarNegativeButtonStyle">@style/MaterialAlertDialogNegativeButtonStyle</item>
+    </style>
+
+    <style name="PreferenceTitleTextStyle">
+        <item name="android:textSize">?attr/font_16</item>
+    </style>
+
+    <style name="PreferenceSubtitleTextStyle">
+        <item name="android:textSize">?attr/font_default</item>
+    </style>
+
+    <style name="FontStyle">
+    </style>
+
+    <style name="FontStyle.Small">
+        <item name="font_default">12sp</item>
+        <item name="font_12">12sp</item>
+        <item name="font_16">14sp</item>
+        <item name="font_18">16sp</item>
+        <item name="font_20">18sp</item>
+    </style>
+
+    <style name="FontStyle.Normal">
+        <item name="font_default">14sp</item>
+        <item name="font_12">12sp</item>
+        <item name="font_16">16sp</item>
+        <item name="font_18">18sp</item>
+        <item name="font_20">20sp</item>
+    </style>
+
+    <style name="FontStyle.Large">
+        <item name="font_default">16sp</item>
+        <item name="font_12">14sp</item>
+        <item name="font_16">18sp</item>
+        <item name="font_18">20sp</item>
+        <item name="font_20">22sp</item>
+    </style>
+
+    <style name="FontStyle.XLarge">
+        <item name="font_default">18sp</item>
+        <item name="font_12">16sp</item>
+        <item name="font_16">20sp</item>
+        <item name="font_18">22sp</item>
+        <item name="font_20">24sp</item>
     </style>
 
 </resources>

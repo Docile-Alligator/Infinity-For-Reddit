@@ -7,6 +7,7 @@ import android.animation.ValueAnimator;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
@@ -45,6 +46,8 @@ import com.github.pwittchen.swipe.library.rx2.Swipe;
 
 import java.io.File;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -76,10 +79,20 @@ public class ViewImageActivity extends AppCompatActivity {
 
     private boolean isSwiping = false;
 
+    @Inject
+    SharedPreferences mSharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        getTheme().applyStyle(FontStyle.valueOf(mSharedPreferences
+                .getString(SharedPreferencesUtils.FONT_SIZE_KEY, FontStyle.Normal.name())).getResId(), true);
+
         setContentView(R.layout.activity_view_image);
+
         ButterKnife.bind(this);
 
         ActionBar actionBar = getSupportActionBar();

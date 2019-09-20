@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
@@ -58,6 +60,7 @@ public class PostViewModel extends ViewModel {
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
                          String sortType, int filter, boolean nsfw) {
+        Log.i("asfdasdf", "viewmodel: " + sortType);
         postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, subredditName,
                 postType, sortType, filter, nsfw);
 
@@ -206,6 +209,7 @@ public class PostViewModel extends ViewModel {
 
         public Factory(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
                        String sortType, int filter, boolean nsfw) {
+            Log.i("asfdasdf", "viewmodel factory: " + sortType);
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.locale = locale;

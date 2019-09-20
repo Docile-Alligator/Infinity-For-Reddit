@@ -71,11 +71,15 @@ public class EditPostActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        getTheme().applyStyle(FontStyle.valueOf(mSharedPreferences
+                .getString(SharedPreferencesUtils.FONT_SIZE_KEY, FontStyle.Normal.name())).getResId(), true);
+
         setContentView(R.layout.activity_edit_post);
 
         ButterKnife.bind(this);
-
-        ((Infinity) getApplication()).getAppComponent().inject(this);
 
         EventBus.getDefault().register(this);
 

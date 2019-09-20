@@ -32,6 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:textColor="@color/colorPrimaryDarkDayNightTheme"
+                android:textSize="?attr/font_default"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -42,6 +43,7 @@
                 android:id="@+id/comment_time_text_view_item_post_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="?attr/font_default"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -56,7 +58,8 @@
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="8dp"
-            android:textColor="@color/primaryTextColor"/>
+            android:textColor="@color/primaryTextColor"
+            android:textSize="?attr/font_default" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -82,6 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:gravity="center"
+                android:textSize="?attr/font_default"
                 app:layout_constraintStart_toEndOf="@+id/up_vote_button_item_post_comment"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>

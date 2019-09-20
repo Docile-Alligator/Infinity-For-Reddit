@@ -15,12 +15,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/primaryTextColor"
-        android:textSize="16sp" />
+        android:textSize="?attr/font_16" />
 
     <TextView
         android:id="@+id/introduction_text_view_item_acknowledgement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        android:textSize="?attr/font_default" />
 
 </LinearLayout>

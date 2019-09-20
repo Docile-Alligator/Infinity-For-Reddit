@@ -15,6 +15,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
 
+import ml.docilealligator.infinityforreddit.ChangeFontSizeEvent;
 import ml.docilealligator.infinityforreddit.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -44,7 +45,8 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
 
             SwitchPreference nsfwSwitch = findPreference(SharedPreferencesUtils.NSFW_KEY);
             SwitchPreference blurNSFWSwitch = findPreference(SharedPreferencesUtils.BLUR_NSFW_KEY);
-            ListPreference listPreference = findPreference(SharedPreferencesUtils.THEME_KEY);
+            ListPreference themePreference = findPreference(SharedPreferencesUtils.THEME_KEY);
+            ListPreference fontSizePreference = findPreference(SharedPreferencesUtils.FONT_SIZE_KEY);
 
             if(nsfwSwitch != null) {
                 nsfwSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -73,14 +75,14 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
 
             boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
 
-            if(listPreference != null) {
+            if(themePreference != null) {
                 if(systemDefault) {
-                    listPreference.setEntries(R.array.settings_theme_q);
+                    themePreference.setEntries(R.array.settings_theme_q);
                 } else {
-                    listPreference.setEntries(R.array.settings_theme);
+                    themePreference.setEntries(R.array.settings_theme);
                 }
 
-                listPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                themePreference.setOnPreferenceChangeListener((preference, newValue) -> {
                     int option = Integer.parseInt((String) newValue);
                     switch (option) {
                         case 0:
@@ -96,6 +98,14 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
                                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
                             }
                     }
+                    return true;
+                });
+            }
+
+            if(fontSizePreference != null) {
+                fontSizePreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                    EventBus.getDefault().post(new ChangeFontSizeEvent((String) newValue));
+                    activity.recreate();
                     return true;
                 });
             }

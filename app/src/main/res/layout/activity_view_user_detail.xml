@@ -63,7 +63,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:textSize="18sp"
+                        android:textSize="?attr/font_18"
                         android:textColor="@color/colorPrimaryDarkDayNightTheme"
                         android:layout_gravity="center_horizontal"/>
 
@@ -74,6 +74,7 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
                         android:textColor="@color/primaryTextColor"
+                        android:textSize="?attr/font_default"
                         android:layout_gravity="center_horizontal"/>
 
                     <com.google.android.material.chip.Chip

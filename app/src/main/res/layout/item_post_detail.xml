@@ -35,7 +35,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_alignParentTop="true"
                 android:layout_toEndOf="@id/icon_gif_image_view_item_post_detail"
-                android:textColor="@color/colorAccent" />
+                android:textColor="@color/colorAccent"
+                android:textSize="?attr/font_default" />
 
             <TextView
                 android:id="@+id/user_text_view_item_post_detail"
@@ -45,7 +46,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_below="@id/subreddit_text_view_item_post_detail"
                 android:layout_toEndOf="@id/icon_gif_image_view_item_post_detail"
-                android:textColor="@color/colorPrimaryDarkDayNightTheme" />
+                android:textColor="@color/colorPrimaryDarkDayNightTheme"
+                android:textSize="?attr/font_default" />
 
         </RelativeLayout>
 
@@ -55,6 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginEnd="16dp"
+            android:textSize="?attr/font_default"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/subreddit_icon_name_relative_layout_item_post_detail"
             app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +72,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textColor="@color/primaryTextColor"
-        android:textSize="18sp" />
+        android:textSize="?attr/font_18" />
 
     <TextView
         android:id="@+id/content_markdown_view_item_post_detail"
@@ -78,7 +81,8 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:layout_marginTop="16dp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:textSize="?attr/font_default" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -112,7 +116,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:textColor="@color/gold"
-            android:textSize="20sp"
+            android:textSize="?attr/font_20"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/gilded_image_view_item_post_detail"
@@ -184,7 +188,7 @@
             android:layout_gravity="center"
             android:layout_marginStart="16dp"
             android:text="@string/spoiler"
-            android:textSize="12sp"
+            android:textSize="?attr/font_12"
             android:textColor="@android:color/white"
             android:padding="4dp"
             android:visibility="gone"
@@ -199,7 +203,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="16dp"
-            android:textSize="12sp"
+            android:textSize="?attr/font_12"
             android:textColor="@android:color/white"
             android:padding="4dp"
             android:visibility="gone"
@@ -217,7 +221,7 @@
         android:layout_marginBottom="16dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:textSize="12sp"
+        android:textSize="?attr/font_12"
         android:visibility="gone"/>
 
     <RelativeLayout
@@ -253,6 +257,7 @@
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:text="@string/tap_to_retry"
+                android:textSize="?attr/font_default"
                 android:visibility="gone" />
 
         </RelativeLayout>
@@ -292,7 +297,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/plus_button_item_post_detail"
-            android:gravity="center" />
+            android:gravity="center"
+            android:textSize="?attr/font_default" />
 
         <ImageView
             android:id="@+id/minus_button_item_post_detail"

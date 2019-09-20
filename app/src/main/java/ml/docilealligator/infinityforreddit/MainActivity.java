@@ -166,11 +166,16 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         setTheme(R.style.AppTheme_NoActionBarWithTransparentStatusBar);
 
         super.onCreate(savedInstanceState);
+
+        ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        getTheme().applyStyle(FontStyle.valueOf(mSharedPreferences
+                .getString(SharedPreferencesUtils.FONT_SIZE_KEY, FontStyle.Normal.name())).getResId(), true);
+
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
 
-        ((Infinity) getApplication()).getAppComponent().inject(this);
 
         EventBus.getDefault().register(this);
 
@@ -883,6 +888,11 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     @Subscribe
     public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
         sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
+    }
+
+    @Subscribe
+    public void onChangeFontSizeEvent(ChangeFontSizeEvent changeFontSizeEvent) {
+        recreate();
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {

@@ -19,6 +19,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:text="@string/only_allow_64_chars"
-        android:textColor="@color/colorAccent"/>
+        android:textColor="@color/colorAccent"
+        android:textSize="?attr/font_default" />
 
 </LinearLayout>

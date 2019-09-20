@@ -72,11 +72,15 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        getTheme().applyStyle(FontStyle.valueOf(mSharedPreferences
+                .getString(SharedPreferencesUtils.FONT_SIZE_KEY, FontStyle.Normal.name())).getResId(), true);
+
         setContentView(R.layout.activity_search_result);
 
         ButterKnife.bind(this);
-
-        ((Infinity) getApplication()).getAppComponent().inject(this);
 
         EventBus.getDefault().register(this);
 

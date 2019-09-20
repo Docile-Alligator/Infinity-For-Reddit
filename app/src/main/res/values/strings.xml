@@ -273,6 +273,7 @@
     <string name="settings_theme_dark_theme_summary">Dark Theme</string>
     <string name="settings_theme_system_default_summary">Device default</string>
     <string name="settings_lazy_mode_interval_title">Lazy Mode Interval</string>
+    <string name="settings_font_size_title">Font Size</string>
     <string name="settings_enable_nsfw_title">Enable NSFW</string>
     <string name="settings_blur_nsfw_title">Blur NSFW images</string>
     <string name="settings_layout_no_limits_title">Display Under Navigation bar and Status Bar</string>

@@ -23,4 +23,5 @@ public class SharedPreferencesUtils {
     public static final String EMAIL_KEY = "email";
     public static final String REDDIT_ACCOUNT_KEY = "reddit_account";
     public static final String SUBREDDIT_KEY = "subreddit";
+    public static final String FONT_SIZE_KEY = "font_size";
 }

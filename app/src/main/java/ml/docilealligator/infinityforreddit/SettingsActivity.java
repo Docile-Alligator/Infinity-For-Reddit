@@ -42,11 +42,15 @@ public class SettingsActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        getTheme().applyStyle(FontStyle.valueOf(mSharedPreferences
+                .getString(SharedPreferencesUtils.FONT_SIZE_KEY, FontStyle.Normal.name())).getResId(), true);
+
         setContentView(R.layout.settings_activity);
 
         ButterKnife.bind(this);
-
-        ((Infinity) getApplication()).getAppComponent().inject(this);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Window window = getWindow();

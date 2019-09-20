@@ -44,4 +44,5 @@ public interface AppComponent {
     void inject(SettingsActivity settingsActivity);
     void inject(MainPreferenceFragment mainPreferenceFragment);
     void inject(AccountSavedThingActivity accountSavedThingActivity);
+    void inject(ViewImageActivity viewImageActivity);
 }

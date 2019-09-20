@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:textColor="@color/primaryTextColor"
-        android:textSize="16sp" />
+        android:textSize="?attr/font_16" />
 
     <TextView
         android:id="@+id/description_markwon_view_item_rule"
@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="16dp"
         android:paddingStart="16dp"
-        android:paddingEnd="16dp" />
+        android:paddingEnd="16dp"
+        android:textSize="?attr/font_default" />
 
 </LinearLayout>

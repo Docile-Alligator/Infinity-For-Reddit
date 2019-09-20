@@ -29,7 +29,7 @@
         android:padding="16dp"
         android:hint="@string/post_text_content_hint"
         android:inputType="textCapSentences|textMultiLine"
-        android:textSize="18sp"
+        android:textSize="?attr/font_18"
         android:background="#00000000"
         android:textColor="@color/primaryTextColor"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />

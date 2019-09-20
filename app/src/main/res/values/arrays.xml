@@ -56,4 +56,18 @@
         <item>7</item>
         <item>10</item>
     </string-array>
+
+    <string-array name="settings_font_size">
+        <item>Small</item>
+        <item>Normal</item>
+        <item>Large</item>
+        <item>Extra Large</item>
+    </string-array>
+
+    <string-array name="settings_font_size_values">
+        <item>Small</item>
+        <item>Normal</item>
+        <item>Large</item>
+        <item>XLarge</item>
+    </string-array>
 </resources>
