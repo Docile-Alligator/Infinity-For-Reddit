@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
@@ -39,7 +37,6 @@ class PostDataSourceFactory extends DataSource.Factory {
 
     PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, String subredditName,
                           int postType, String sortType, int filter, boolean nsfw) {
-        Log.i("asfdasdf", "datasource factory: " + sortType);
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
@@ -89,7 +86,6 @@ class PostDataSourceFactory extends DataSource.Factory {
             postDataSource = new PostDataSource(retrofit, accessToken, locale, subredditName, query,
                     postType, sortType, filter, nsfw);
         } else if(postType == PostDataSource.TYPE_SUBREDDIT) {
-            Log.i("asfdasdf", "datasource create: " + sortType);
             postDataSource = new PostDataSource(retrofit, accessToken, locale, subredditName, postType,
                     sortType, filter, nsfw);
         } else {

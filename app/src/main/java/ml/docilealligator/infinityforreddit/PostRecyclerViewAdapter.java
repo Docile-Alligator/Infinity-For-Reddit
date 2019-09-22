@@ -34,7 +34,6 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.chip.Chip;
 import com.libRG.CustomTextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -309,7 +308,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
 
                 if(nsfw) {
                     if(!(mContext instanceof FilteredThingActivity)) {
-                        ((DataViewHolder) holder).nsfwChip.setOnClickListener(view -> {
+                        ((DataViewHolder) holder).nsfwTextView.setOnClickListener(view -> {
                             Intent intent = new Intent(mContext, FilteredThingActivity.class);
                             intent.putExtra(FilteredThingActivity.EXTRA_NAME, post.getSubredditNamePrefixed().substring(2));
                             intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
@@ -318,7 +317,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                             mContext.startActivity(intent);
                         });
                     }
-                    ((DataViewHolder) holder).nsfwChip.setVisibility(View.VISIBLE);
+                    ((DataViewHolder) holder).nsfwTextView.setVisibility(View.VISIBLE);
                 }
 
                 if(spoiler || flair != null) {
@@ -327,13 +326,11 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
 
                 if(spoiler) {
                     ((DataViewHolder) holder).spoilerTextView.setVisibility(View.VISIBLE);
-                    ((DataViewHolder) holder).spoilerTextView.setBackgroundColor(mContext.getResources().getColor(R.color.backgroundColorPrimaryDark));
                 }
 
                 if(flair != null) {
                     ((DataViewHolder) holder).flairTextView.setVisibility(View.VISIBLE);
                     ((DataViewHolder) holder).flairTextView.setText(flair);
-                    ((DataViewHolder) holder).flairTextView.setBackgroundColor(mContext.getResources().getColor(R.color.backgroundColorPrimaryDark));
                 }
 
                 switch (voteType) {
@@ -377,12 +374,12 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                 }
 
                 if(!(mContext instanceof FilteredThingActivity)) {
-                    ((DataViewHolder) holder).typeChip.setOnClickListener(view -> mCallback.typeChipClicked(post.getPostType()));
+                    ((DataViewHolder) holder).typeTextView.setOnClickListener(view -> mCallback.typeChipClicked(post.getPostType()));
                 }
 
                 switch (post.getPostType()) {
                     case Post.IMAGE_TYPE:
-                        ((DataViewHolder) holder).typeChip.setText(R.string.image);
+                        ((DataViewHolder) holder).typeTextView.setText(R.string.image);
 
                         final String imageUrl = post.getUrl();
                         ((DataViewHolder) holder).imageView.setOnClickListener(view -> {
@@ -395,7 +392,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         });
                         break;
                     case Post.LINK_TYPE:
-                        ((DataViewHolder) holder).typeChip.setText(R.string.link);
+                        ((DataViewHolder) holder).typeTextView.setText(R.string.link);
 
                         ((DataViewHolder) holder).linkTextView.setVisibility(View.VISIBLE);
                         String domain = Uri.parse(post.getUrl()).getHost();
@@ -413,7 +410,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         });
                         break;
                     case Post.GIF_VIDEO_TYPE:
-                        ((DataViewHolder) holder).typeChip.setText(R.string.gif);
+                        ((DataViewHolder) holder).typeTextView.setText(R.string.gif);
 
                         final Uri gifVideoUri = Uri.parse(post.getVideoUrl());
                         ((DataViewHolder) holder).imageView.setOnClickListener(view -> {
@@ -426,7 +423,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         });
                         break;
                     case Post.VIDEO_TYPE:
-                        ((DataViewHolder) holder).typeChip.setText(R.string.video);
+                        ((DataViewHolder) holder).typeTextView.setText(R.string.video);
 
                         final Uri videoUri = Uri.parse(post.getVideoUrl());
                         ((DataViewHolder) holder).imageView.setOnClickListener(view -> {
@@ -439,7 +436,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         });
                         break;
                     case Post.NO_PREVIEW_LINK_TYPE:
-                        ((DataViewHolder) holder).typeChip.setText(R.string.link);
+                        ((DataViewHolder) holder).typeTextView.setText(R.string.link);
 
                         String noPreviewLinkUrl = post.getUrl();
                         ((DataViewHolder) holder).linkTextView.setVisibility(View.VISIBLE);
@@ -458,7 +455,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                         });
                         break;
                     case Post.TEXT_TYPE:
-                        ((DataViewHolder) holder).typeChip.setText(R.string.text);
+                        ((DataViewHolder) holder).typeTextView.setText(R.string.text);
                         break;
                 }
 
@@ -516,7 +513,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                             ((DataViewHolder) holder).downvoteButton.clearColorFilter();
                             ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
 
-                            EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post.getId(), post.getVoteType()));
+                            EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
 
                         @Override
@@ -528,7 +525,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                             ((DataViewHolder) holder).downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
                             ((DataViewHolder) holder).scoreTextView.setTextColor(previousScoreTextViewColor);
 
-                            EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post.getId(), post.getVoteType()));
+                            EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
                     }, id, newVoteType, holder.getAdapterPosition());
                 });
@@ -587,7 +584,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                             ((DataViewHolder) holder).upvoteButton.clearColorFilter();
                             ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
 
-                            EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post.getId(), post.getVoteType()));
+                            EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
 
                         @Override
@@ -599,9 +596,80 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
                             ((DataViewHolder) holder).downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
                             ((DataViewHolder) holder).scoreTextView.setTextColor(previousScoreTextViewColor);
 
-                            EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post.getId(), post.getVoteType()));
+                            EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
                     }, id, newVoteType, holder.getAdapterPosition());
+                });
+
+                ((DataViewHolder) holder).commentButton.setOnClickListener(view -> {
+                    if(mAccessToken == null) {
+                        Toast.makeText(mContext, R.string.login_first, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    Intent intent = new Intent(mContext, CommentActivity.class);
+                    intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, post.getFullName());
+                    intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, post.getTitle());
+                    intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, false);
+                    intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, 0);
+                    mContext.startActivity(intent);
+                });
+
+                ((DataViewHolder) holder).commentsCountTextView.setText(Integer.toString(post.getnComments()));
+
+                if(post.isSaved()) {
+                    ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                } else {
+                    ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                }
+
+                ((DataViewHolder) holder).saveButton.setOnClickListener(view -> {
+                    if(mAccessToken == null) {
+                        Toast.makeText(mContext, R.string.login_first, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if(post.isSaved()) {
+                        ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                        SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, post.getFullName(),
+                                new SaveThing.SaveThingListener() {
+                                    @Override
+                                    public void success() {
+                                        post.setSaved(false);
+                                        ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                                        Toast.makeText(mContext, R.string.post_unsaved_success, Toast.LENGTH_SHORT).show();
+                                        EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
+                                    }
+
+                                    @Override
+                                    public void failed() {
+                                        post.setSaved(true);
+                                        ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                                        Toast.makeText(mContext, R.string.post_unsaved_failed, Toast.LENGTH_SHORT).show();
+                                        EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
+                                    }
+                                });
+                    } else {
+                        ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                        SaveThing.saveThing(mOauthRetrofit, mAccessToken, post.getFullName(),
+                                new SaveThing.SaveThingListener() {
+                                    @Override
+                                    public void success() {
+                                        post.setSaved(true);
+                                        ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                                        Toast.makeText(mContext, R.string.post_saved_success, Toast.LENGTH_SHORT).show();
+                                        EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
+                                    }
+
+                                    @Override
+                                    public void failed() {
+                                        post.setSaved(false);
+                                        ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                                        Toast.makeText(mContext, R.string.post_saved_failed, Toast.LENGTH_SHORT).show();
+                                        EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
+                                    }
+                                });
+                    }
                 });
 
                 ((DataViewHolder) holder).shareButton.setOnClickListener(view -> {
@@ -703,13 +771,13 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
         @BindView(R.id.stickied_post_image_view_item_post) ImageView stickiedPostImageView;
         @BindView(R.id.post_time_text_view_best_item_post) TextView postTimeTextView;
         @BindView(R.id.title_text_view_best_item_post) TextView titleTextView;
-        @BindView(R.id.type_text_view_item_post) Chip typeChip;
+        @BindView(R.id.type_text_view_item_post) CustomTextView typeTextView;
         @BindView(R.id.gilded_image_view_item_post) ImageView gildedImageView;
         @BindView(R.id.gilded_number_text_view_item_post) TextView gildedNumberTextView;
         @BindView(R.id.archived_image_view_item_post) ImageView archivedImageView;
         @BindView(R.id.locked_image_view_item_post) ImageView lockedImageView;
         @BindView(R.id.crosspost_image_view_item_post) ImageView crosspostImageView;
-        @BindView(R.id.nsfw_text_view_item_post) Chip nsfwChip;
+        @BindView(R.id.nsfw_text_view_item_post) CustomTextView nsfwTextView;
         @BindView(R.id.spoiler_flair_linear_layout_item_post) LinearLayout spoilerFlairLinearLayout;
         @BindView(R.id.spoiler_custom_text_view_item_post) CustomTextView spoilerTextView;
         @BindView(R.id.flair_custom_text_view_item_post) CustomTextView flairTextView;
@@ -722,6 +790,9 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
         @BindView(R.id.plus_button_item_post) ImageView upvoteButton;
         @BindView(R.id.score_text_view_item_post) TextView scoreTextView;
         @BindView(R.id.minus_button_item_post) ImageView downvoteButton;
+        @BindView(R.id.comment_button_item_post) ImageView commentButton;
+        @BindView(R.id.comments_count_item_post) TextView commentsCountTextView;
+        @BindView(R.id.save_button_item_post) ImageView saveButton;
         @BindView(R.id.share_button_item_post) ImageView shareButton;
 
         DataViewHolder(View itemView) {
@@ -764,7 +835,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
             ((DataViewHolder) holder).crosspostImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).archivedImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).lockedImageView.setVisibility(View.GONE);
-            ((DataViewHolder) holder).nsfwChip.setVisibility(View.GONE);
+            ((DataViewHolder) holder).nsfwTextView.setVisibility(View.GONE);
             ((DataViewHolder) holder).spoilerFlairLinearLayout.setVisibility(View.GONE);
             ((DataViewHolder) holder).spoilerTextView.setVisibility(View.GONE);
             ((DataViewHolder) holder).flairTextView.setVisibility(View.GONE);

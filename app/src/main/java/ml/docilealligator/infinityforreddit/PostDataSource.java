@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
@@ -64,14 +62,13 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         initialLoadStateLiveData = new MutableLiveData<>();
         hasPostLiveData = new MutableLiveData<>();
         this.postType = postType;
-        this.sortType = sortType;
+        this.sortType = sortType == null ? PostDataSource.SORT_TYPE_BEST : sortType;
         this.filter = filter;
         this.nsfw = nsfw;
     }
 
     PostDataSource(Retrofit retrofit, String accessToken, Locale locale, String subredditOrUserName, int postType,
                    String sortType, int filter, boolean nsfw) {
-        Log.i("asfdasdf", "datasource: " + sortType);
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
@@ -80,7 +77,15 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         initialLoadStateLiveData = new MutableLiveData<>();
         hasPostLiveData = new MutableLiveData<>();
         this.postType = postType;
-        this.sortType = sortType;
+        if(sortType == null) {
+            if(subredditOrUserName.equals("popular") || subredditOrUserName.equals("all")) {
+                this.sortType = PostDataSource.SORT_TYPE_HOT;
+            } else {
+                this.sortType = PostDataSource.SORT_TYPE_BEST;
+            }
+        } else {
+            this.sortType = sortType;
+        }
         this.filter = filter;
         this.nsfw = nsfw;
     }
@@ -95,7 +100,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         initialLoadStateLiveData = new MutableLiveData<>();
         hasPostLiveData = new MutableLiveData<>();
         this.postType = postType;
-        this.sortType = sortType;
+        this.sortType = sortType == null ? PostDataSource.SORT_TYPE_NEW : sortType;
         userWhere = where;
         this.filter = filter;
         this.nsfw = nsfw;
@@ -112,7 +117,7 @@ class PostDataSource extends PageKeyedDataSource<String, Post> {
         initialLoadStateLiveData = new MutableLiveData<>();
         hasPostLiveData = new MutableLiveData<>();
         this.postType = postType;
-        this.sortType = sortType;
+        this.sortType = sortType == null ? PostDataSource.SORT_TYPE_RELEVANCE : sortType;
         this.filter = filter;
         this.nsfw = nsfw;
     }

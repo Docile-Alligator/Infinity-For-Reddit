@@ -13,7 +13,7 @@
 
         <RelativeLayout
             android:id="@+id/subreddit_icon_name_relative_layout_item_post_detail"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
             app:layout_constrainedWidth="true"
@@ -53,10 +53,11 @@
 
         <TextView
             android:id="@+id/post_time_text_view_item_post_detail"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginEnd="16dp"
+            android:gravity="end"
             android:textSize="?attr/font_default"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/subreddit_icon_name_relative_layout_item_post_detail"
@@ -89,15 +90,22 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <com.google.android.material.chip.Chip
+        <com.libRG.CustomTextView
             android:id="@+id/type_text_view_item_post_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:textSize="?attr/font_12"
             android:textColor="@android:color/white"
             app:chipBackgroundColor="@color/backgroundColorPrimaryDark"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:lib_setRoundedBGColor="@color/backgroundColorPrimaryDark"
+            app:lib_setRoundedBorderColor="@color/backgroundColorPrimaryDark"
+            app:lib_setRadius="3dp"
+            app:lib_setRoundedView="true"
+            app:lib_setShape="rectangle" />
 
         <ImageView
             android:id="@+id/gilded_image_view_item_post_detail"
@@ -116,7 +124,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:textColor="@color/gold"
-            android:textSize="?attr/font_20"
+            android:textSize="?attr/font_default"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/gilded_image_view_item_post_detail"
@@ -124,10 +132,10 @@
 
         <ImageView
             android:id="@+id/archived_image_view_item_post_detail"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginStart="16dp"
-            android:src="@drawable/ic_archive_outline_24dp"
+            android:src="@drawable/ic_archive_outline"
             android:tint="@color/archivedTint"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -136,10 +144,10 @@
 
         <ImageView
             android:id="@+id/locked_image_view_item_post_detail"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginStart="16dp"
-            android:src="@drawable/ic_outline_lock_24px"
+            android:src="@drawable/ic_outline_lock"
             android:tint="@color/lockedIconTint"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -150,8 +158,8 @@
 
         <ImageView
             android:id="@+id/crosspost_image_view_item_post_detail"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginStart="16dp"
             android:src="@drawable/crosspost"
             android:tint="@color/colorAccent"
@@ -160,17 +168,25 @@
             app:layout_constraintStart_toEndOf="@+id/gilded_number_text_view_item_post_detail"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.chip.Chip
+        <com.libRG.CustomTextView
             android:id="@+id/nsfw_text_view_item_post_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="4dp"
             android:text="@string/nsfw"
+            android:textSize="?attr/font_12"
             android:textColor="@android:color/white"
             android:visibility="gone"
             app:chipBackgroundColor="@color/colorAccent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            app:lib_setRoundedBGColor="@color/colorAccent"
+            app:lib_setRoundedBorderColor="@color/colorAccent"
+            app:lib_setRadius="3dp"
+            app:lib_setRoundedView="true"
+            app:lib_setShape="rectangle" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -203,9 +219,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="16dp"
+            android:padding="4dp"
             android:textSize="?attr/font_12"
             android:textColor="@android:color/white"
-            android:padding="4dp"
             android:visibility="gone"
             app:lib_setRadius="3dp"
             app:lib_setRoundedBorderColor="@color/colorPrimaryDarkDayNightTheme"
@@ -274,7 +290,7 @@
         android:tint="@android:color/tab_indicator_text"
         android:visibility="gone" />
 
-    <RelativeLayout
+    <!--<RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -326,6 +342,107 @@
             android:src="@drawable/ic_outline_share_24px"
             android:tint="@android:color/tab_indicator_text" />
 
-    </RelativeLayout>
+    </RelativeLayout>-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/plus_button_item_post_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:src="@drawable/ic_arrow_upward_black_24dp"
+            android:tint="@android:color/tab_indicator_text"
+            android:background="?actionBarItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/score_text_view_item_post_detail"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="?attr/font_12"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/plus_button_item_post_detail" />
+
+        <ImageView
+            android:id="@+id/minus_button_item_post_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:src="@drawable/ic_arrow_downward_black_24dp"
+            android:tint="@android:color/tab_indicator_text"
+            android:background="?actionBarItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/score_text_view_item_post_detail" />
+
+        <ImageView
+            android:id="@+id/comment_button_item_post_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:src="@drawable/ic_comment_white_24dp"
+            android:tint="@android:color/tab_indicator_text"
+            android:background="?actionBarItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/minus_button_item_post_detail" />
+
+        <TextView
+            android:id="@+id/comments_count_item_post_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="?attr/font_12"
+            android:textStyle="bold"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/comment_button_item_post_detail" />
+
+        <ImageView
+            android:id="@+id/save_button_item_post_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:tint="@android:color/tab_indicator_text"
+            android:background="?actionBarItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/comments_count_item_post_detail"
+            app:layout_constraintEnd_toStartOf="@id/share_button_item_post_detail" />
+
+        <ImageView
+            android:id="@+id/share_button_item_post_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:src="@drawable/ic_outline_share_24px"
+            android:tint="@android:color/tab_indicator_text"
+            android:background="?actionBarItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

@@ -205,7 +205,7 @@
                             android:layout_height="24dp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_outline_lock_24px"
+                            android:src="@drawable/ic_outline_lock"
                             android:tint="@color/primaryTextColor"/>
 
                         <TextView

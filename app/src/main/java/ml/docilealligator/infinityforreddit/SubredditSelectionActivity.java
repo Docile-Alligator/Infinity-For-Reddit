@@ -169,11 +169,7 @@ public class SubredditSelectionActivity extends AppCompatActivity {
                 getCurrentAccountAndBindView();
             } else {
                 mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
-                if(mFragment == null) {
-                    bindView();
-                } else {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, mFragment).commit();
-                }
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, mFragment).commit();
             }
         }
     }

@@ -165,6 +165,7 @@ class ParsePost {
         int score = data.getInt(JSONUtils.SCORE_KEY);
         int voteType;
         int gilded = data.getInt(JSONUtils.GILDED_KEY);
+        int nComments = data.getInt(JSONUtils.NUM_COMMENTS_KEY);
         boolean hidden = data.getBoolean(JSONUtils.HIDDEN_KEY);
         boolean spoiler = data.getBoolean(JSONUtils.SPOILER_KEY);
         boolean nsfw = data.getBoolean(JSONUtils.NSFW_KEY);
@@ -207,23 +208,23 @@ class ParsePost {
             Post crosspostParent = parseBasicData(data, locale);
             Post post = parseData(data, permalink, id, fullName, subredditName, subredditNamePrefixed,
                     author, formattedPostTime, title, previewUrl, previewWidth, previewHeight,
-                    score, voteType, gilded, flair, hidden, spoiler, nsfw, stickied, archived, locked,
-                    saved, true);
+                    score, voteType, gilded, nComments, flair, hidden, spoiler, nsfw, stickied,
+                    archived, locked, saved, true);
             post.setCrosspostParentId(crosspostParent.getId());
             return post;
         } else {
             return parseData(data, permalink, id, fullName, subredditName, subredditNamePrefixed,
                     author, formattedPostTime, title, previewUrl, previewWidth, previewHeight,
-                    score, voteType, gilded, flair, hidden, spoiler, nsfw, stickied, archived, locked,
-                    saved, false);
+                    score, voteType, gilded, nComments, flair, hidden, spoiler, nsfw, stickied,
+                    archived, locked, saved, false);
         }
     }
 
     private static Post parseData(JSONObject data, String permalink, String id, String fullName,
                                   String subredditName, String subredditNamePrefixed, String author,
                                   String formattedPostTime, String title, String previewUrl, int previewWidth,
-                                  int previewHeight, int score, int voteType, int gilded, String flair,
-                                  boolean hidden, boolean spoiler, boolean nsfw, boolean stickied,
+                                  int previewHeight, int score, int voteType, int gilded, int nComments,
+                                  String flair, boolean hidden, boolean spoiler, boolean nsfw, boolean stickied,
                                   boolean archived, boolean locked, boolean saved, boolean isCrosspost) throws JSONException {
         Post post;
 
@@ -235,8 +236,8 @@ class ParsePost {
                 //Text post
                 int postType = Post.TEXT_TYPE;
                 post = new Post(id, fullName, subredditName, subredditNamePrefixed, author, formattedPostTime,
-                        title, permalink, score, postType, voteType, gilded, flair, hidden, spoiler, nsfw,
-                        stickied, archived, locked, saved, isCrosspost);
+                        title, permalink, score, postType, voteType, gilded, nComments, flair, hidden,
+                        spoiler, nsfw, stickied, archived, locked, saved, isCrosspost);
                 if(data.isNull(JSONUtils.SELFTEXT_KEY)) {
                     post.setSelfText("");
                 } else {
@@ -246,8 +247,8 @@ class ParsePost {
                 //No preview link post
                 int postType = Post.NO_PREVIEW_LINK_TYPE;
                 post = new Post(id, fullName, subredditName, subredditNamePrefixed, author, formattedPostTime,
-                        title, previewUrl, url, permalink, score, postType, voteType, gilded, flair,
-                        hidden, spoiler, nsfw, stickied, archived, locked, saved, isCrosspost);
+                        title, previewUrl, url, permalink, score, postType, voteType, gilded, nComments,
+                        flair, hidden, spoiler, nsfw, stickied, archived, locked, saved, isCrosspost);
                 if(data.isNull(JSONUtils.SELFTEXT_KEY)) {
                     post.setSelfText("");
                 } else {
@@ -267,8 +268,8 @@ class ParsePost {
                 String videoUrl = Html.fromHtml(redditVideoObject.getString(JSONUtils.HLS_URL_KEY)).toString();
 
                 post = new Post(id, fullName, subredditName, subredditNamePrefixed, author, formattedPostTime,
-                        title, previewUrl, permalink, score, postType, voteType, gilded, flair, hidden,
-                        spoiler, nsfw, stickied, archived, locked, saved, isCrosspost);
+                        title, previewUrl, permalink, score, postType, voteType, gilded, nComments,
+                        flair, hidden, spoiler, nsfw, stickied, archived, locked, saved, isCrosspost);
 
                 post.setPreviewWidth(previewWidth);
                 post.setPreviewHeight(previewHeight);
@@ -282,8 +283,8 @@ class ParsePost {
 
                     post = new Post(id, fullName, subredditName, subredditNamePrefixed, author,
                             formattedPostTime, title, previewUrl, permalink, score, postType, voteType,
-                            gilded, flair, hidden, spoiler, nsfw, stickied, archived, locked, saved,
-                            isCrosspost);
+                            gilded, nComments, flair, hidden, spoiler, nsfw, stickied, archived,
+                            locked, saved, isCrosspost);
                     post.setPreviewWidth(previewWidth);
                     post.setPreviewHeight(previewHeight);
                     post.setVideoUrl(videoUrl);
@@ -294,8 +295,8 @@ class ParsePost {
 
                         post = new Post(id, fullName, subredditName, subredditNamePrefixed, author,
                                 formattedPostTime, title, url, url, permalink, score, postType,
-                                voteType, gilded, flair, hidden, spoiler, nsfw, stickied, archived,
-                                locked, saved, isCrosspost);
+                                voteType, gilded, nComments, flair, hidden, spoiler, nsfw, stickied,
+                                archived, locked, saved, isCrosspost);
 
                         post.setPreviewWidth(previewWidth);
                         post.setPreviewHeight(previewHeight);
@@ -306,8 +307,8 @@ class ParsePost {
 
                             post = new Post(id, fullName, subredditName, subredditNamePrefixed, author,
                                     formattedPostTime, title, permalink, score, postType, voteType,
-                                    gilded, flair, hidden, spoiler, nsfw, stickied, archived, locked,
-                                    saved, isCrosspost);
+                                    gilded, nComments, flair, hidden, spoiler, nsfw, stickied, archived,
+                                    locked, saved, isCrosspost);
 
                             post.setPreviewWidth(previewWidth);
                             post.setPreviewHeight(previewHeight);
@@ -323,8 +324,8 @@ class ParsePost {
 
                             post = new Post(id, fullName, subredditName, subredditNamePrefixed, author,
                                     formattedPostTime, title, previewUrl, url, permalink, score, postType,
-                                    voteType, gilded, flair, hidden, spoiler, nsfw, stickied, archived,
-                                    locked, saved, isCrosspost);
+                                    voteType, gilded, nComments, flair, hidden, spoiler, nsfw, stickied,
+                                    archived, locked, saved, isCrosspost);
                             if(data.isNull(JSONUtils.SELFTEXT_KEY)) {
                                 post.setSelfText("");
                             } else {
@@ -343,8 +344,8 @@ class ParsePost {
 
                     post = new Post(id, fullName, subredditName, subredditNamePrefixed, author,
                             formattedPostTime, title, previewUrl, url, permalink, score, postType,
-                            voteType, gilded, flair, hidden, spoiler, nsfw, stickied, archived,
-                            locked, saved, isCrosspost);
+                            voteType, gilded, nComments, flair, hidden, spoiler, nsfw, stickied,
+                            archived, locked, saved, isCrosspost);
                     post.setPreviewWidth(previewWidth);
                     post.setPreviewHeight(previewHeight);
                 } else {
@@ -353,8 +354,8 @@ class ParsePost {
 
                     post = new Post(id, fullName, subredditName, subredditNamePrefixed, author,
                             formattedPostTime, title, url, url, permalink, score, postType, voteType,
-                            gilded, flair, hidden, spoiler, nsfw, stickied, archived, locked, saved,
-                            isCrosspost);
+                            gilded, nComments, flair, hidden, spoiler, nsfw, stickied, archived, locked,
+                            saved, isCrosspost);
                 }
             }
         }

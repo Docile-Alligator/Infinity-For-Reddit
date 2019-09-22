@@ -902,8 +902,18 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
     @Subscribe
     public void onPostUpdateEvent(PostUpdateEventToDetailActivity event) {
-        if(mPost.getId().equals(event.postId)) {
-            mPost.setVoteType(event.voteType);
+        if(mPost.getId().equals(event.post.getId())) {
+            mPost.setVoteType(event.post.getVoteType());
+            mPost.setSaved(event.post.isSaved());
+            if(mMenu != null) {
+                if(event.post.isSaved()) {
+                    mMenu.findItem(R.id.action_save_view_post_detail_activity).setIcon(getResources()
+                            .getDrawable(R.drawable.ic_baseline_bookmark_24px));
+                } else {
+                    mMenu.findItem(R.id.action_save_view_post_detail_activity).setIcon(getResources()
+                            .getDrawable(R.drawable.ic_baseline_bookmark_border_24px));
+                }
+            }
             mAdapter.updatePost(mPost);
         }
     }

@@ -38,6 +38,7 @@ class Post implements Parcelable {
     private int gilded;
     private int previewWidth;
     private int previewHeight;
+    private int nComments;
     private boolean hidden;
     private boolean spoiler;
     private boolean nsfw;
@@ -50,8 +51,8 @@ class Post implements Parcelable {
 
     Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
          String postTime, String title, String previewUrl, String permalink, int score, int postType,
-         int voteType, int gilded, String flair, boolean hidden, boolean spoiler, boolean nsfw,
-         boolean stickied, boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
+         int voteType, int gilded, int nComments, String flair, boolean hidden, boolean spoiler,
+         boolean nsfw, boolean stickied, boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -66,6 +67,7 @@ class Post implements Parcelable {
         this.postType = postType;
         this.voteType = voteType;
         this.gilded = gilded;
+        this.nComments = nComments;
         this.flair = flair;
         this.hidden = hidden;
         this.spoiler = spoiler;
@@ -79,8 +81,9 @@ class Post implements Parcelable {
 
     Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
          String postTime, String title, String previewUrl, String url, String permalink, int score,
-         int postType, int voteType, int gilded, String flair, boolean hidden, boolean spoiler,
-         boolean nsfw, boolean stickied, boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
+         int postType, int voteType, int gilded, int nComments, String flair, boolean hidden,
+         boolean spoiler, boolean nsfw, boolean stickied, boolean archived, boolean locked,
+         boolean saved, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -96,6 +99,7 @@ class Post implements Parcelable {
         this.postType = postType;
         this.voteType = voteType;
         this.gilded = gilded;
+        this.nComments = nComments;
         this.flair = flair;
         this.hidden = hidden;
         this.spoiler = spoiler;
@@ -109,8 +113,8 @@ class Post implements Parcelable {
 
     Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
          String postTime, String title, String permalink, int score, int postType, int voteType, int gilded,
-         String flair, boolean hidden, boolean spoiler, boolean nsfw, boolean stickied, boolean archived,
-         boolean locked, boolean saved, boolean isCrosspost) {
+         int nComments, String flair, boolean hidden, boolean spoiler, boolean nsfw, boolean stickied,
+         boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -124,6 +128,7 @@ class Post implements Parcelable {
         this.postType = postType;
         this.voteType = voteType;
         this.gilded = gilded;
+        this.nComments = nComments;
         this.flair = flair;
         this.hidden = hidden;
         this.spoiler = spoiler;
@@ -158,6 +163,7 @@ class Post implements Parcelable {
         gilded = in.readInt();
         previewWidth = in.readInt();
         previewHeight = in.readInt();
+        nComments = in.readInt();
         hidden = in.readByte() != 0;
         spoiler = in.readByte() != 0;
         nsfw = in.readByte() != 0;
@@ -309,6 +315,14 @@ class Post implements Parcelable {
         return previewHeight;
     }
 
+    public int getnComments() {
+        return nComments;
+    }
+
+    public void setnComments(int nComments) {
+        this.nComments = nComments;
+    }
+
     boolean isHidden() {
         return hidden;
     }
@@ -394,6 +408,7 @@ class Post implements Parcelable {
         parcel.writeInt(gilded);
         parcel.writeInt(previewWidth);
         parcel.writeInt(previewHeight);
+        parcel.writeInt(nComments);
         parcel.writeByte((byte) (hidden ? 1 : 0));
         parcel.writeByte((byte) (spoiler ? 1 : 0));
         parcel.writeByte((byte) (nsfw ? 1 : 0));

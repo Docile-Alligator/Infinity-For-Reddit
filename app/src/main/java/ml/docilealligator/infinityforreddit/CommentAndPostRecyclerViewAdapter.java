@@ -33,7 +33,6 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.google.android.material.chip.Chip;
 import com.libRG.CustomTextView;
 import com.santalu.aspectratioimageview.AspectRatioImageView;
 
@@ -366,7 +365,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             }
 
             if(mPost.isNSFW()) {
-                ((PostDetailViewHolder) holder).mNSFWChip.setOnClickListener(view -> {
+                ((PostDetailViewHolder) holder).mNSFWTextView.setOnClickListener(view -> {
                     Intent intent = new Intent(mActivity, FilteredThingActivity.class);
                     intent.putExtra(FilteredThingActivity.EXTRA_NAME, mSubredditNamePrefixed.substring(2));
                     intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
@@ -374,15 +373,15 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     intent.putExtra(FilteredThingActivity.EXTRA_FILTER, Post.NSFW_TYPE);
                     mActivity.startActivity(intent);
                 });
-                ((PostDetailViewHolder) holder).mNSFWChip.setVisibility(View.VISIBLE);
+                ((PostDetailViewHolder) holder).mNSFWTextView.setVisibility(View.VISIBLE);
             } else {
-                ((PostDetailViewHolder) holder).mNSFWChip.setVisibility(View.GONE);
+                ((PostDetailViewHolder) holder).mNSFWTextView.setVisibility(View.GONE);
             }
 
             String scoreWithVote = Integer.toString(mPost.getScore() + mPost.getVoteType());
             ((PostDetailViewHolder) holder).mScoreTextView.setText(scoreWithVote);
 
-            ((PostDetailViewHolder) holder).mTypeChip.setOnClickListener(view -> {
+            ((PostDetailViewHolder) holder).mTypeTextView.setOnClickListener(view -> {
                 Intent intent = new Intent(mActivity, FilteredThingActivity.class);
                 intent.putExtra(FilteredThingActivity.EXTRA_NAME, mSubredditNamePrefixed.substring(2));
                 intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
@@ -394,7 +393,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
             switch (mPost.getPostType()) {
                 case Post.IMAGE_TYPE:
-                    ((PostDetailViewHolder) holder).mTypeChip.setText("IMAGE");
+                    ((PostDetailViewHolder) holder).mTypeTextView.setText("IMAGE");
 
                     ((PostDetailViewHolder) holder).mImageView.setOnClickListener(view -> {
                         Intent intent = new Intent(mActivity, ViewImageActivity.class);
@@ -406,7 +405,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     });
                     break;
                 case Post.LINK_TYPE:
-                    ((PostDetailViewHolder) holder).mTypeChip.setText("LINK");
+                    ((PostDetailViewHolder) holder).mTypeTextView.setText("LINK");
 
                     ((PostDetailViewHolder) holder).linkTextView.setVisibility(View.VISIBLE);
                     String domain = Uri.parse(mPost.getUrl()).getHost();
@@ -424,7 +423,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     });
                     break;
                 case Post.GIF_VIDEO_TYPE:
-                    ((PostDetailViewHolder) holder).mTypeChip.setText("GIF");
+                    ((PostDetailViewHolder) holder).mTypeTextView.setText("GIF");
 
                     final Uri gifVideoUri = Uri.parse(mPost.getVideoUrl());
                     ((PostDetailViewHolder) holder).mImageView.setOnClickListener(view -> {
@@ -437,7 +436,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     });
                     break;
                 case Post.VIDEO_TYPE:
-                    ((PostDetailViewHolder) holder).mTypeChip.setText("VIDEO");
+                    ((PostDetailViewHolder) holder).mTypeTextView.setText("VIDEO");
 
                     final Uri videoUri = Uri.parse(mPost.getVideoUrl());
                     ((PostDetailViewHolder) holder).mImageView.setOnClickListener(view -> {
@@ -450,7 +449,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     });
                     break;
                 case Post.NO_PREVIEW_LINK_TYPE:
-                    ((PostDetailViewHolder) holder).mTypeChip.setText("LINK");
+                    ((PostDetailViewHolder) holder).mTypeTextView.setText("LINK");
 
                     ((PostDetailViewHolder) holder).linkTextView.setVisibility(View.VISIBLE);
                     String noPreviewLinkDomain = Uri.parse(mPost.getUrl()).getHost();
@@ -474,7 +473,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     });
                     break;
                 case Post.TEXT_TYPE:
-                    ((PostDetailViewHolder) holder).mTypeChip.setText("TEXT");
+                    ((PostDetailViewHolder) holder).mTypeTextView.setText("TEXT");
 
                     if(!mPost.getSelfText().equals("")) {
                         ((PostDetailViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
@@ -482,6 +481,77 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     }
                     break;
             }
+
+            ((PostDetailViewHolder) holder).commentButton.setOnClickListener(view -> {
+                if(mAccessToken == null) {
+                    Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Intent intent = new Intent(mActivity, CommentActivity.class);
+                intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, mPost.getFullName());
+                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, mPost.getTitle());
+                intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, false);
+                intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, 0);
+                mActivity.startActivity(intent);
+            });
+
+            ((PostDetailViewHolder) holder).commentsCountTextView.setText(Integer.toString(mPost.getnComments()));
+
+            if(mPost.isSaved()) {
+                ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+            } else {
+                ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+            }
+
+            ((PostDetailViewHolder) holder).saveButton.setOnClickListener(view -> {
+                if(mAccessToken == null) {
+                    Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(mPost.isSaved()) {
+                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                    SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
+                            new SaveThing.SaveThingListener() {
+                                @Override
+                                public void success() {
+                                    mPost.setSaved(false);
+                                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                                    Toast.makeText(mActivity, R.string.post_unsaved_success, Toast.LENGTH_SHORT).show();
+                                    mCommentRecyclerViewAdapterCallback.updatePost(mPost);
+                                }
+
+                                @Override
+                                public void failed() {
+                                    mPost.setSaved(true);
+                                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                                    Toast.makeText(mActivity, R.string.post_unsaved_failed, Toast.LENGTH_SHORT).show();
+                                    mCommentRecyclerViewAdapterCallback.updatePost(mPost);
+                                }
+                            });
+                } else {
+                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                    SaveThing.saveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
+                            new SaveThing.SaveThingListener() {
+                                @Override
+                                public void success() {
+                                    mPost.setSaved(true);
+                                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                                    Toast.makeText(mActivity, R.string.post_saved_success, Toast.LENGTH_SHORT).show();
+                                    mCommentRecyclerViewAdapterCallback.updatePost(mPost);
+                                }
+
+                                @Override
+                                public void failed() {
+                                    mPost.setSaved(false);
+                                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                                    Toast.makeText(mActivity, R.string.post_saved_failed, Toast.LENGTH_SHORT).show();
+                                    mCommentRecyclerViewAdapterCallback.updatePost(mPost);
+                                }
+                            });
+                }
+            });
         } else if(holder.getItemViewType() == VIEW_TYPE_COMMENT) {
             CommentData comment;
             if(mIsSingleCommentThreadMode) {
@@ -1100,7 +1170,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             ((PostDetailViewHolder) holder).spoilerFlairlinearLayout.setVisibility(View.GONE);
             ((PostDetailViewHolder) holder).flairTextView.setVisibility(View.GONE);
             ((PostDetailViewHolder) holder).spoilerTextView.setVisibility(View.GONE);
-            ((PostDetailViewHolder) holder).mNSFWChip.setVisibility(View.GONE);
+            ((PostDetailViewHolder) holder).mNSFWTextView.setVisibility(View.GONE);
         } else if(holder instanceof LoadMoreChildCommentsViewHolder) {
             ((LoadMoreChildCommentsViewHolder) holder).itemView.setPadding(0, 0, 0, 0);
             ViewGroup.LayoutParams params = ((LoadMoreChildCommentsViewHolder) holder).verticalBlock.getLayoutParams();
@@ -1137,13 +1207,13 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         @BindView(R.id.post_time_text_view_item_post_detail) TextView mPostTimeTextView;
         @BindView(R.id.title_text_view_item_post_detail) TextView mTitleTextView;
         @BindView(R.id.content_markdown_view_item_post_detail) TextView mContentMarkdownView;
-        @BindView(R.id.type_text_view_item_post_detail) Chip mTypeChip;
+        @BindView(R.id.type_text_view_item_post_detail) CustomTextView mTypeTextView;
         @BindView(R.id.gilded_image_view_item_post_detail) ImageView mGildedImageView;
         @BindView(R.id.gilded_number_text_view_item_post_detail) TextView mGildedNumberTextView;
         @BindView(R.id.crosspost_image_view_item_post_detail) ImageView mCrosspostImageView;
         @BindView(R.id.archived_image_view_item_post_detail) ImageView mArchivedImageView;
         @BindView(R.id.locked_image_view_item_post_detail) ImageView mLockedImageView;
-        @BindView(R.id.nsfw_text_view_item_post_detail) Chip mNSFWChip;
+        @BindView(R.id.nsfw_text_view_item_post_detail) CustomTextView mNSFWTextView;
         @BindView(R.id.spoiler_flair_linear_layout_item_post_detail) LinearLayout spoilerFlairlinearLayout;
         @BindView(R.id.spoiler_custom_text_view_item_post_detail) CustomTextView spoilerTextView;
         @BindView(R.id.flair_custom_text_view_item_post_detail) CustomTextView flairTextView;
@@ -1157,6 +1227,9 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         @BindView(R.id.plus_button_item_post_detail) ImageView mUpvoteButton;
         @BindView(R.id.score_text_view_item_post_detail) TextView mScoreTextView;
         @BindView(R.id.minus_button_item_post_detail) ImageView mDownvoteButton;
+        @BindView(R.id.comment_button_item_post_detail) ImageView commentButton;
+        @BindView(R.id.comments_count_item_post_detail) TextView commentsCountTextView;
+        @BindView(R.id.save_button_item_post_detail) ImageView saveButton;
         @BindView(R.id.share_button_item_post_detail) ImageView mShareButton;
 
         PostDetailViewHolder(@NonNull View itemView) {

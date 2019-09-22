@@ -150,8 +150,8 @@ public class CommentActivity extends AppCompatActivity {
                 })
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .build();
-        markwon.setMarkdown(commentParentMarkwonView, intent.getExtras().getString(EXTRA_COMMENT_PARENT_TEXT_KEY));
-        parentFullname = intent.getExtras().getString(EXTRA_PARENT_FULLNAME_KEY);
+        markwon.setMarkdown(commentParentMarkwonView, intent.getStringExtra(EXTRA_COMMENT_PARENT_TEXT_KEY));
+        parentFullname = intent.getStringExtra(EXTRA_PARENT_FULLNAME_KEY);
         parentDepth = intent.getExtras().getInt(EXTRA_PARENT_DEPTH_KEY);
         parentPosition = intent.getExtras().getInt(EXTRA_PARENT_POSITION_KEY);
         isReplying = intent.getExtras().getBoolean(EXTRA_IS_REPLYING_KEY);
