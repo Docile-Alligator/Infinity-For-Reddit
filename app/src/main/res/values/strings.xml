@@ -116,6 +116,7 @@
     <string name="write_comment_hint">Your interesting thought here</string>
     <string name="comment_content_required">Where is your interesting thought</string>
     <string name="sending_comment">Sending</string>
+    <string name="send_comment_success">Comment sent</string>
     <string name="send_comment_failed">Could not send this comment</string>
     <string name="parse_sent_comment_failed">The comment is sent but unable to get the sent comment</string>
 

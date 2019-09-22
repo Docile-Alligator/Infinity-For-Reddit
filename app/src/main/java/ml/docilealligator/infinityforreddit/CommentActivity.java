@@ -15,6 +15,7 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -216,6 +217,7 @@ public class CommentActivity extends AppCompatActivity {
                         new SendComment.SendCommentListener() {
                             @Override
                             public void sendCommentSuccess(CommentData commentData) {
+                                Toast.makeText(CommentActivity.this, R.string.send_comment_success, Toast.LENGTH_SHORT).show();
                                 Intent returnIntent = new Intent();
                                 returnIntent.putExtra(EXTRA_COMMENT_DATA_KEY, commentData);
                                 returnIntent.putExtra(EXTRA_PARENT_FULLNAME_KEY, parentFullname);
