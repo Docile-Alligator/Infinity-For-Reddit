@@ -3,7 +3,9 @@ package ml.docilealligator.infinityforreddit;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -16,6 +18,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +45,10 @@ public class PullNotificationWorker extends Worker {
     Retrofit mRetrofit;
 
     @Inject
-    RedditDataRoomDatabase redditDataRoomDatabase;
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
+
+    @Inject
+    SharedPreferences mSharedPreferences;
 
     public PullNotificationWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -54,7 +60,7 @@ public class PullNotificationWorker extends Worker {
     @Override
     public Result doWork() {
         try {
-            List<Account> accounts = redditDataRoomDatabase.accountDao().getAllAccounts();
+            List<Account> accounts = mRedditDataRoomDatabase.accountDao().getAllAccounts();
             for(int accountIndex = 0; accountIndex < accounts.size(); accountIndex++) {
                 Account account = accounts.get(accountIndex);
 
@@ -78,9 +84,19 @@ public class PullNotificationWorker extends Worker {
                         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
                         int messageSize = messages.size() >= 5 ? 5 : messages.size();
+                        long currentTime = Calendar.getInstance().getTimeInMillis();
+                        long notificationInterval = Long.parseLong(
+                                mSharedPreferences.getString(SharedPreferencesUtils.NOTIFICATION_INTERVAL_KEY, "1"))
+                                * 1000 * 60 * 60;
+                        boolean hasValidMessage = false;
 
                         for(int messageIndex = messageSize - 1; messageIndex >= 0; messageIndex--) {
                             Message message = messages.get(messageIndex);
+                            if(currentTime - message.getTimeUTC() > notificationInterval) {
+                                continue;
+                            }
+
+                            hasValidMessage = true;
 
                             inboxStyle.addLine(message.getAuthor() + " " + message.getBody());
 
@@ -149,17 +165,19 @@ public class PullNotificationWorker extends Worker {
                             notificationManager.notify(NotificationUtils.getNotificationIdUnreadMessage(accountIndex, messageIndex), builder.build());
                         }
 
-                        inboxStyle.setBigContentTitle(context.getString(R.string.notification_new_messages, messages.size()))
-                                .setSummaryText(accountName);
+                        if(hasValidMessage) {
+                            inboxStyle.setBigContentTitle(context.getString(R.string.notification_new_messages, messages.size()))
+                                    .setSummaryText(accountName);
 
-                        summaryBuilder.setStyle(inboxStyle);
+                            summaryBuilder.setStyle(inboxStyle);
 
-                        Intent summaryIntent = new Intent(context, ViewMessageActivity.class);
-                        summaryIntent.putExtra(ViewMessageActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
-                        PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, accountIndex * 6 + 6, summaryIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-                        summaryBuilder.setContentIntent(summaryPendingIntent);
+                            Intent summaryIntent = new Intent(context, ViewMessageActivity.class);
+                            summaryIntent.putExtra(ViewMessageActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
+                            PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, accountIndex * 6 + 6, summaryIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                            summaryBuilder.setContentIntent(summaryPendingIntent);
 
-                        notificationManager.notify(NotificationUtils.getSummaryIdUnreadMessage(accountIndex), summaryBuilder.build());
+                            notificationManager.notify(NotificationUtils.getSummaryIdUnreadMessage(accountIndex), summaryBuilder.build());
+                        }
                     } else {
                         return Result.success();
                     }
@@ -218,7 +236,7 @@ public class PullNotificationWorker extends Worker {
             if(response.isSuccessful() && response.body() != null) {
                 JSONObject jsonObject = new JSONObject(response.body().toString());
                 String newAccessToken = jsonObject.getString(RedditUtils.ACCESS_TOKEN_KEY);
-                redditDataRoomDatabase.accountDao().changeAccessToken(account.getUsername(), newAccessToken);
+                mRedditDataRoomDatabase.accountDao().changeAccessToken(account.getUsername(), newAccessToken);
                 return newAccessToken;
             }
             return "";
