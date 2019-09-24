@@ -78,6 +78,7 @@
 
     <style name="PreferenceTitleTextStyle">
         <item name="android:textSize">?attr/font_16</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
     </style>
 
     <style name="PreferenceSubtitleTextStyle">

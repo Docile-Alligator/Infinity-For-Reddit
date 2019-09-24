@@ -381,6 +381,11 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         }
 
         subscribeSubredditChip.setOnClickListener(view -> {
+            if(mAccessToken == null) {
+                Toast.makeText(ViewSubredditDetailActivity.this, R.string.login_first, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             if(subscriptionReady) {
                 subscriptionReady = false;
                 if(subscribeSubredditChip.getText().equals(getResources().getString(R.string.subscribe))) {

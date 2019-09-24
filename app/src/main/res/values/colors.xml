@@ -69,4 +69,6 @@
     <color name="commentVerticalBar5">#EE0220</color>
     <color name="commentVerticalBar6">#02EE6E</color>
     <color name="commentVerticalBar7">#EE4602</color>
+
+    <color name="greyTabBackgroundColor">@color/colorPrimary</color>
 </resources>

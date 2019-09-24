@@ -311,6 +311,11 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
                 if (userData.isCanBeFollowed()) {
                     subscribeUserChip.setVisibility(View.VISIBLE);
                     subscribeUserChip.setOnClickListener(view -> {
+                        if(mAccessToken == null) {
+                            Toast.makeText(ViewUserDetailActivity.this, R.string.login_first, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
                         if (subscriptionReady) {
                             subscriptionReady = false;
                             if (subscribeUserChip.getText().equals(resources.getString(R.string.follow))) {

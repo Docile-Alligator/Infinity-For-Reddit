@@ -4,8 +4,6 @@
     <color name="colorPrimaryDark">#121212</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="downvoted">#E91E63</color>
-
     <color name="transparentActionBarAndExoPlayerControllerColor">#88000000</color>
     
     <color name="gold">#FFC107</color>
@@ -55,4 +53,6 @@
     <color name="notificationIconColor">#1565C0</color>
 
     <color name="defaultTextColor">#B3FFFFFF</color>
+
+    <color name="greyTabBackgroundColor">#282828</color>
 </resources>
