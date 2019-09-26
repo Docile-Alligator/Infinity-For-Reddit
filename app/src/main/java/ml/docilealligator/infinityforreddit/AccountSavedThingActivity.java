@@ -215,12 +215,11 @@ public class AccountSavedThingActivity extends AppCompatActivity {
         MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_account_saved_thing_activity);
         if (isInLazyMode) {
             lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
             collapsingToolbarLayout.setLayoutParams(params);
         } else {
             lazyModeItem.setTitle(R.string.action_start_lazy_mode);
-            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
-                    AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
             collapsingToolbarLayout.setLayoutParams(params);
         }
 
@@ -245,15 +244,14 @@ public class AccountSavedThingActivity extends AppCompatActivity {
                     isInLazyMode = false;
                     sectionsPagerAdapter.stopLazyMode();
                     lazyModeItem.setTitle(R.string.action_start_lazy_mode);
-                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
-                            AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
+                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
                     collapsingToolbarLayout.setLayoutParams(params);
                 } else {
                     isInLazyMode = true;
                     if(sectionsPagerAdapter.startLazyMode()) {
                         lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
                         appBarLayout.setExpanded(false);
-                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
                         collapsingToolbarLayout.setLayoutParams(params);
                     } else {
                         isInLazyMode = false;

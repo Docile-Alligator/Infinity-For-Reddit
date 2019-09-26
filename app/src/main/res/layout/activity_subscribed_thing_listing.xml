@@ -23,7 +23,8 @@
                 android:id="@+id/toolbar_subscribed_thing_listing_activity"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="scroll|enterAlways"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -32,7 +33,7 @@
             android:id="@+id/tab_layout_subscribed_thing_listing_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
+            android:background="@color/greyTabBackgroundColor"
             app:layout_scrollFlags="scroll|enterAlways"
             app:tabGravity="fill"
             app:tabMode="fixed"
@@ -49,7 +50,6 @@
         android:id="@+id/view_pager_subscribed_thing_listing_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:application=".SubscribedThingListingActivity" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
