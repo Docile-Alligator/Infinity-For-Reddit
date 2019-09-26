@@ -79,7 +79,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textSize="?attr/font_18"
+            android:textSize="?attr/title_font_18"
             android:textColor="@color/primaryTextColor"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout

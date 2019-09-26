@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="top"
                 android:padding="16dp"
-                android:textSize="?attr/font_18"
+                android:textSize="?attr/title_font_18"
                 android:textColor="@color/primaryTextColor" />
 
             <View
@@ -53,7 +53,7 @@
                 android:padding="16dp"
                 android:hint="@string/post_text_content_hint"
                 android:inputType="textCapSentences|textMultiLine"
-                android:textSize="?attr/font_18"
+                android:textSize="?attr/content_font_18"
                 android:background="#00000000"
                 android:textColor="@color/primaryTextColor" />
 

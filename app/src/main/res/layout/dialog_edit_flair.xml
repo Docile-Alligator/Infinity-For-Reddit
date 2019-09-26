@@ -10,6 +10,7 @@
         android:layout_margin="24dp"
         android:background="#00000000"
         android:textColor="@color/primaryTextColor"
+        android:textSize="?attr/font_default"
         android:hint="@string/flair"
         android:maxLength="64" />
 

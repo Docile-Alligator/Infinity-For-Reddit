@@ -116,6 +116,12 @@ public class PostTextActivity extends AppCompatActivity implements FlairBottomSh
         getTheme().applyStyle(FontStyle.valueOf(mSharedPreferences
                 .getString(SharedPreferencesUtils.FONT_SIZE_KEY, FontStyle.Normal.name())).getResId(), true);
 
+        getTheme().applyStyle(TitleFontStyle.valueOf(mSharedPreferences
+                .getString(SharedPreferencesUtils.TITLE_FONT_SIZE_KEY, TitleFontStyle.Normal.name())).getResId(), true);
+
+        getTheme().applyStyle(ContentFontStyle.valueOf(mSharedPreferences
+                .getString(SharedPreferencesUtils.CONTENT_FONT_SIZE_KEY, ContentFontStyle.Normal.name())).getResId(), true);
+
         setContentView(R.layout.activity_post_text);
 
         ButterKnife.bind(this);

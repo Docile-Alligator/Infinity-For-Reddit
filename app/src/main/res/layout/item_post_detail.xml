@@ -73,7 +73,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textColor="@color/primaryTextColor"
-        android:textSize="?attr/font_18" />
+        android:textSize="?attr/title_font_18" />
 
     <TextView
         android:id="@+id/content_markdown_view_item_post_detail"
@@ -83,7 +83,7 @@
         android:paddingEnd="16dp"
         android:layout_marginTop="16dp"
         android:visibility="gone"
-        android:textSize="?attr/font_default" />
+        android:textSize="?attr/content_font_default" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

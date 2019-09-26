@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:textSize="?attr/font_16" />
+                android:textSize="?attr/content_font_16" />
 
             <EditText
                 android:id="@+id/comment_edit_text_comment_activity"
@@ -46,7 +46,7 @@
                 android:gravity="top"
                 android:hint="@string/write_comment_hint"
                 android:inputType="textCapSentences|textMultiLine"
-                android:textSize="?attr/font_18"
+                android:textSize="?attr/content_font_18"
                 android:background="#00000000"
                 android:textColor="@color/primaryTextColor" />
 

@@ -24,13 +24,9 @@
         app:title="@string/settings_lazy_mode_interval_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ListPreference
-        app:defaultValue="Normal"
-        android:entries="@array/settings_font_size"
-        app:entryValues="@array/settings_font_size_values"
-        app:key="font_size"
+    <Preference
         app:title="@string/settings_font_size_title"
-        app:useSimpleSummaryProvider="true" />
+        app:fragment="Settings.FontSizePreferenceFragment" />
 
     <SwitchPreference
         app:defaultValue="false"

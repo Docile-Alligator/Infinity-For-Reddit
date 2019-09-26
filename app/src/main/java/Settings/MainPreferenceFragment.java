@@ -15,7 +15,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
 
-import ml.docilealligator.infinityforreddit.ChangeFontSizeEvent;
 import ml.docilealligator.infinityforreddit.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -46,7 +45,6 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
             SwitchPreference nsfwSwitch = findPreference(SharedPreferencesUtils.NSFW_KEY);
             SwitchPreference blurNSFWSwitch = findPreference(SharedPreferencesUtils.BLUR_NSFW_KEY);
             ListPreference themePreference = findPreference(SharedPreferencesUtils.THEME_KEY);
-            ListPreference fontSizePreference = findPreference(SharedPreferencesUtils.FONT_SIZE_KEY);
 
             if(nsfwSwitch != null) {
                 nsfwSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -98,14 +96,6 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
                                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
                             }
                     }
-                    return true;
-                });
-            }
-
-            if(fontSizePreference != null) {
-                fontSizePreference.setOnPreferenceChangeListener((preference, newValue) -> {
-                    EventBus.getDefault().post(new ChangeFontSizeEvent((String) newValue));
-                    activity.recreate();
                     return true;
                 });
             }

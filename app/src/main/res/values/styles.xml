@@ -85,8 +85,7 @@
         <item name="android:textSize">?attr/font_default</item>
     </style>
 
-    <style name="FontStyle">
-    </style>
+    <style name="FontStyle" />
 
     <style name="FontStyle.Small">
         <item name="font_default">12sp</item>
@@ -118,6 +117,82 @@
         <item name="font_16">20sp</item>
         <item name="font_18">22sp</item>
         <item name="font_20">24sp</item>
+    </style>
+
+    <style name="TitleFontStyle" />
+
+    <style name="TitleFontStyle.Small">
+        <item name="title_font_default">12sp</item>
+        <item name="title_font_12">12sp</item>
+        <item name="title_font_16">14sp</item>
+        <item name="title_font_18">16sp</item>
+        <item name="title_font_20">18sp</item>
+    </style>
+
+    <style name="TitleFontStyle.Normal">
+        <item name="title_font_default">14sp</item>
+        <item name="title_font_12">12sp</item>
+        <item name="title_font_16">16sp</item>
+        <item name="title_font_18">18sp</item>
+        <item name="title_font_20">20sp</item>
+    </style>
+
+    <style name="TitleFontStyle.Large">
+        <item name="font_default">16sp</item>
+        <item name="title_font_12">14sp</item>
+        <item name="title_font_16">18sp</item>
+        <item name="title_font_18">20sp</item>
+        <item name="title_font_20">22sp</item>
+    </style>
+
+    <style name="TitleFontStyle.XLarge">
+        <item name="title_font_default">18sp</item>
+        <item name="title_font_12">16sp</item>
+        <item name="title_font_16">20sp</item>
+        <item name="title_font_18">22sp</item>
+        <item name="title_font_20">24sp</item>
+    </style>
+
+    <style name="ContentFontStyle" />
+
+    <style name="ContentFontStyle.Small">
+        <item name="content_font_default">12sp</item>
+        <item name="content_font_12">12sp</item>
+        <item name="content_font_16">14sp</item>
+        <item name="content_font_18">16sp</item>
+        <item name="content_font_20">18sp</item>
+    </style>
+
+    <style name="ContentFontStyle.Normal">
+        <item name="content_font_default">14sp</item>
+        <item name="content_font_12">12sp</item>
+        <item name="content_font_16">16sp</item>
+        <item name="content_font_18">18sp</item>
+        <item name="content_font_20">20sp</item>
+    </style>
+
+    <style name="ContentFontStyle.Large">
+        <item name="content_font_default">16sp</item>
+        <item name="content_font_12">14sp</item>
+        <item name="content_font_16">18sp</item>
+        <item name="content_font_18">20sp</item>
+        <item name="content_font_20">22sp</item>
+    </style>
+
+    <style name="ContentFontStyle.XLarge">
+        <item name="content_font_default">18sp</item>
+        <item name="content_font_12">16sp</item>
+        <item name="content_font_16">20sp</item>
+        <item name="content_font_18">22sp</item>
+        <item name="content_font_20">24sp</item>
+    </style>
+
+    <style name="ContentFontStyle.XXLarge">
+        <item name="content_font_default">20sp</item>
+        <item name="content_font_12">18sp</item>
+        <item name="content_font_16">22sp</item>
+        <item name="content_font_18">24sp</item>
+        <item name="content_font_20">26sp</item>
     </style>
 
 </resources>

@@ -9,4 +9,20 @@
         <attr name="font_18" format="dimension"/>
         <attr name="font_20" format="dimension"/>
     </declare-styleable>
+
+    <declare-styleable name="TitleFontStyle">
+        <attr name="title_font_default" format="dimension"/>
+        <attr name="title_font_12" format="dimension"/>
+        <attr name="title_font_16" format="dimension"/>
+        <attr name="title_font_18" format="dimension"/>
+        <attr name="title_font_20" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="ContentFontStyle">
+        <attr name="content_font_default" format="dimension"/>
+        <attr name="content_font_12" format="dimension"/>
+        <attr name="content_font_16" format="dimension"/>
+        <attr name="content_font_18" format="dimension"/>
+        <attr name="content_font_20" format="dimension"/>
+    </declare-styleable>
 </resources>

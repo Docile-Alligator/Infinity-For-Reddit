@@ -70,4 +70,34 @@
         <item>Large</item>
         <item>XLarge</item>
     </string-array>
+
+    <string-array name="settings_title_font_size">
+        <item>Small</item>
+        <item>Normal</item>
+        <item>Large</item>
+        <item>Extra Large</item>
+    </string-array>
+
+    <string-array name="settings_title_font_size_values">
+        <item>Small</item>
+        <item>Normal</item>
+        <item>Large</item>
+        <item>XLarge</item>
+    </string-array>
+
+    <string-array name="settings_content_font_size">
+        <item>Small</item>
+        <item>Normal</item>
+        <item>Large</item>
+        <item>Extra Large</item>
+        <item>Enormous Large</item>
+    </string-array>
+
+    <string-array name="settings_content_font_size_values">
+        <item>Small</item>
+        <item>Normal</item>
+        <item>Large</item>
+        <item>XLarge</item>
+        <item>XXLarge</item>
+    </string-array>
 </resources>

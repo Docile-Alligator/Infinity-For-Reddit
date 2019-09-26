@@ -137,7 +137,7 @@
                 android:padding="16dp"
                 android:hint="@string/post_title_hint"
                 android:inputType="textCapSentences|textMultiLine"
-                android:textSize="?attr/font_18"
+                android:textSize="?attr/title_font_18"
                 android:background="#00000000"
                 android:textColor="@color/primaryTextColor" />
 
@@ -154,7 +154,7 @@
                 android:padding="16dp"
                 android:hint="@string/post_text_content_hint"
                 android:inputType="textCapSentences|textMultiLine"
-                android:textSize="?attr/font_18"
+                android:textSize="?attr/content_font_18"
                 android:background="#00000000"
                 android:textColor="@color/primaryTextColor" />
 
