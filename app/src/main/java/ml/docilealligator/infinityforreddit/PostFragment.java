@@ -260,6 +260,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         boolean nsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_KEY, false);
         boolean needBlurNsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_NSFW_KEY, true);
+        boolean needBlurSpoiler = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_SPOILER_KEY, false);
 
         PostViewModel.Factory factory;
 
@@ -268,7 +269,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             String query = getArguments().getString(EXTRA_QUERY);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    accessToken, postType, true, needBlurNsfw, new PostRecyclerViewAdapter.Callback() {
+                    accessToken, postType, true, needBlurNsfw, needBlurSpoiler,
+                    new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -300,7 +302,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             boolean displaySubredditName = subredditName != null && (subredditName.equals("popular") || subredditName.equals("all"));
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    accessToken, postType, displaySubredditName, needBlurNsfw, new PostRecyclerViewAdapter.Callback() {
+                    accessToken, postType, displaySubredditName, needBlurNsfw, needBlurSpoiler,
+                    new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -336,7 +339,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    accessToken, postType, true, needBlurNsfw, new PostRecyclerViewAdapter.Callback() {
+                    accessToken, postType, true, needBlurNsfw, needBlurSpoiler,
+                    new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -365,7 +369,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
         } else {
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    accessToken, postType, true, needBlurNsfw, new PostRecyclerViewAdapter.Callback() {
+                    accessToken, postType, true, needBlurNsfw, needBlurSpoiler,
+                    new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -558,7 +563,16 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Subscribe
     public void onChangeNSFWBlurEvent(ChangeNSFWBlurEvent event) {
         mAdapter.setBlurNSFW(event.needBlurNSFW);
+        refreshAdapter();
+    }
 
+    @Subscribe
+    public void onChangeSpoilerBlurEvent(ChangeSpoilerBlurEvent event) {
+        mAdapter.setBlurSpoiler(event.needBlurSpoiler);
+        refreshAdapter();
+    }
+
+    private void refreshAdapter() {
         int previousPosition = -1;
         if(mLinearLayoutManager != null) {
             previousPosition = mLinearLayoutManager.findFirstVisibleItemPosition();

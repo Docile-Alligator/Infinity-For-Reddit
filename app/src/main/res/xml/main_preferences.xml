@@ -26,6 +26,7 @@
 
     <Preference
         app:title="@string/settings_font_size_title"
+        app:icon="@drawable/ic_font_size_24dp"
         app:fragment="Settings.FontSizePreferenceFragment" />
 
     <SwitchPreference
@@ -38,6 +39,11 @@
         app:key="blur_nsfw"
         app:title="@string/settings_blur_nsfw_title"
         app:isPreferenceVisible="false" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="blur_spoiler"
+        app:title="@string/settings_blur_spoiler_title" />
 
     <Preference
         app:title="@string/settings_about_master_title"

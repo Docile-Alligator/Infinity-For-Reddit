@@ -17,6 +17,7 @@ import javax.inject.Inject;
 
 import ml.docilealligator.infinityforreddit.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.ChangeNSFWEvent;
+import ml.docilealligator.infinityforreddit.ChangeSpoilerBlurEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
@@ -44,6 +45,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
 
             SwitchPreference nsfwSwitch = findPreference(SharedPreferencesUtils.NSFW_KEY);
             SwitchPreference blurNSFWSwitch = findPreference(SharedPreferencesUtils.BLUR_NSFW_KEY);
+            SwitchPreference blurSpoilerSwitch = findPreference(SharedPreferencesUtils.BLUR_SPOILER_KEY);
             ListPreference themePreference = findPreference(SharedPreferencesUtils.THEME_KEY);
 
             if(nsfwSwitch != null) {
@@ -67,6 +69,13 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
 
                 blurNSFWSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                     EventBus.getDefault().post(new ChangeNSFWBlurEvent((Boolean) newValue));
+                    return true;
+                });
+            }
+
+            if(blurSpoilerSwitch != null) {
+                blurSpoilerSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                    EventBus.getDefault().post(new ChangeSpoilerBlurEvent((Boolean) newValue));
                     return true;
                 });
             }

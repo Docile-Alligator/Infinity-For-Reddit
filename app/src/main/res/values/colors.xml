@@ -75,4 +75,8 @@
     <color name="submitter">#EE8A02</color>
 
     <color name="moderator">#00BA81</color>
+
+    <color name="spoilerBackgroundColor">#EE02EB</color>
+
+    <color name="flairBackgroundColor">#00AA8C</color>
 </resources>

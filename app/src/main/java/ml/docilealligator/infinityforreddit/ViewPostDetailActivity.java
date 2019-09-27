@@ -80,6 +80,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     private int postListPosition = -1;
     private String mSingleCommentId;
     private boolean mNeedBlurNsfw;
+    private boolean mNeedBlurSpoiler;
 
     @State
     boolean mNullAccessToken = false;
@@ -228,6 +229,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         setSupportActionBar(toolbar);
 
         mNeedBlurNsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_NSFW_KEY, true);
+        mNeedBlurSpoiler = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_SPOILER_KEY, false);
 
         mGlide = Glide.with(this);
         mLocale = getResources().getConfiguration().locale;
@@ -372,7 +374,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
                     mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mAccountName, mPost,
-                    mLocale, mSingleCommentId, isSingleCommentThreadMode, mNeedBlurNsfw,
+                    mLocale, mSingleCommentId, isSingleCommentThreadMode, mNeedBlurNsfw, mNeedBlurSpoiler,
                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                         @Override
                         public void updatePost(Post post) {
@@ -484,7 +486,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this,
                                     mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mGlide,
                                     mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId,
-                                    isSingleCommentThreadMode, mNeedBlurNsfw,
+                                    isSingleCommentThreadMode, mNeedBlurNsfw, mNeedBlurSpoiler,
                                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                                         @Override
                                         public void updatePost(Post post) {
@@ -927,7 +929,16 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     @Subscribe
     public void onChangeNSFWBlurEvent(ChangeNSFWBlurEvent event) {
         mAdapter.setBlurNSFW(event.needBlurNSFW);
+        refreshAdapter();
+    }
 
+    @Subscribe
+    public void onChangeSpoilerBlurEvent(ChangeSpoilerBlurEvent event) {
+        mAdapter.setBlurSpoiler(event.needBlurSpoiler);
+        refreshAdapter();
+    }
+
+    private void refreshAdapter() {
         int previousPosition = -1;
         if(mLinearLayoutManager != null) {
             previousPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
@@ -1201,13 +1212,15 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         if(requestCode == WRITE_COMMENT_REQUEST_CODE) {
             if(data != null && resultCode == RESULT_OK) {
                 if(data.hasExtra(EXTRA_COMMENT_DATA_KEY)) {
-                    CommentData comment = data.getExtras().getParcelable(EXTRA_COMMENT_DATA_KEY);
-                    if(comment.getDepth() == 0) {
+                    CommentData comment = data.getParcelableExtra(EXTRA_COMMENT_DATA_KEY);
+                    if(comment != null && comment.getDepth() == 0) {
                         mAdapter.addComment(comment);
                     } else {
-                        String parentFullname = data.getExtras().getString(CommentActivity.EXTRA_PARENT_FULLNAME_KEY);
-                        int parentPosition = data.getExtras().getInt(CommentActivity.EXTRA_PARENT_POSITION_KEY);
-                        mAdapter.addChildComment(comment, parentFullname, parentPosition);
+                        String parentFullname = data.getStringExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY);
+                        int parentPosition = data.getIntExtra(CommentActivity.EXTRA_PARENT_POSITION_KEY, -1);
+                        if(parentFullname != null && parentPosition >= 0) {
+                            mAdapter.addChildComment(comment, parentFullname, parentPosition);
+                        }
                     }
                 } else {
                     Toast.makeText(this, R.string.send_comment_failed, Toast.LENGTH_SHORT).show();
@@ -1219,7 +1232,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
             }
         } else if(requestCode == EDIT_COMMENT_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
-                mAdapter.editComment(data.getExtras().getString(EditCommentActivity.EXTRA_EDITED_COMMENT_CONTENT),
+                mAdapter.editComment(data.getStringExtra(EditCommentActivity.EXTRA_EDITED_COMMENT_CONTENT),
                         data.getExtras().getInt(EditCommentActivity.EXTRA_EDITED_COMMENT_POSITION));
             }
         }
@@ -1228,6 +1241,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        comments = mAdapter.getVisibleComments();
         Bridge.saveInstanceState(this, outState);
     }
 

@@ -62,6 +62,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     private int mPostType;
     private boolean mDisplaySubredditName;
     private boolean mNeedBlurNSFW;
+    private boolean mNeedBlurSpoiler;
 
     private static final int VIEW_TYPE_DATA = 0;
     private static final int VIEW_TYPE_ERROR = 1;
@@ -76,9 +77,9 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
     }
 
     PostRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, Retrofit retrofit,
-                            RedditDataRoomDatabase redditDataRoomDatabase,
-                            String accessToken, int postType,
-                            boolean displaySubredditName, boolean needBlurNSFW, Callback callback) {
+                            RedditDataRoomDatabase redditDataRoomDatabase, String accessToken,
+                            int postType, boolean displaySubredditName, boolean needBlurNSFW,
+                            boolean needBlurSpoiler, Callback callback) {
         super(DIFF_CALLBACK);
         if(context != null) {
             mContext = context;
@@ -88,6 +89,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
             mPostType = postType;
             mDisplaySubredditName = displaySubredditName;
             mNeedBlurNSFW = needBlurNSFW;
+            mNeedBlurSpoiler = needBlurSpoiler;
             mGlide = Glide.with(mContext.getApplicationContext());
             mRedditDataRoomDatabase = redditDataRoomDatabase;
             mUserDao = redditDataRoomDatabase.userDao();
@@ -710,7 +712,7 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
             }
         });
 
-        if(post.isNSFW() && mNeedBlurNSFW) {
+        if((post.isNSFW() && mNeedBlurNSFW) || post.isSpoiler() && mNeedBlurSpoiler) {
             imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 2)))
                     .into(((DataViewHolder) holder).imageView);
         } else {
@@ -742,6 +744,10 @@ class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHo
 
     void setBlurNSFW(boolean needBlurNSFW) {
         mNeedBlurNSFW = needBlurNSFW;
+    }
+
+    void setBlurSpoiler(boolean needBlurSpoiler) {
+        mNeedBlurSpoiler = needBlurSpoiler;
     }
 
     private boolean hasExtraRow() {

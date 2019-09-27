@@ -204,8 +204,8 @@
                 android:padding="4dp"
                 android:visibility="gone"
                 app:lib_setRadius="3dp"
-                app:lib_setRoundedBGColor="@color/backgroundColorPrimaryDark"
-                app:lib_setRoundedBorderColor="@color/backgroundColorPrimaryDark"
+                app:lib_setRoundedBGColor="@color/spoilerBackgroundColor"
+                app:lib_setRoundedBorderColor="@color/spoilerBackgroundColor"
                 app:lib_setRoundedView="true"
                 app:lib_setShape="rectangle" />
 
@@ -220,8 +220,8 @@
                 android:padding="4dp"
                 android:visibility="gone"
                 app:lib_setRadius="3dp"
-                app:lib_setRoundedBGColor="@color/backgroundColorPrimaryDark"
-                app:lib_setRoundedBorderColor="@color/backgroundColorPrimaryDark"
+                app:lib_setRoundedBGColor="@color/flairBackgroundColor"
+                app:lib_setRoundedBorderColor="@color/flairBackgroundColor"
                 app:lib_setRoundedView="true"
                 app:lib_setShape="rectangle" />
 

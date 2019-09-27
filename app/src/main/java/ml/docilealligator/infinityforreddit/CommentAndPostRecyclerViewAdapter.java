@@ -52,6 +52,8 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import retrofit2.Retrofit;
 
+import static ml.docilealligator.infinityforreddit.CommentActivity.WRITE_COMMENT_REQUEST_CODE;
+
 class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_POST_DETAIL = 0;
     private static final int VIEW_TYPE_FIRST_LOADING = 1;
@@ -78,6 +80,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private String mSingleCommentId;
     private boolean mIsSingleCommentThreadMode;
     private boolean mNeedBlurNSFW;
+    private boolean mNeedBlurSpoiler;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
     private boolean isInitiallyLoadingFailed;
@@ -92,9 +95,10 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     CommentAndPostRecyclerViewAdapter(Activity activity, Retrofit retrofit, Retrofit oauthRetrofit,
                                       RedditDataRoomDatabase redditDataRoomDatabase, RequestManager glide,
-                                      String accessToken, String accountName, Post post,
-                                      Locale locale, String singleCommentId, boolean isSingleCommentThreadMode,
-                                      boolean needBlurNSFW, CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
+                                      String accessToken, String accountName, Post post, Locale locale,
+                                      String singleCommentId, boolean isSingleCommentThreadMode,
+                                      boolean needBlurNSFW, boolean needBlurSpoiler,
+                                      CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
         mActivity = activity;
         mRetrofit = retrofit;
         mOauthRetrofit = oauthRetrofit;
@@ -128,6 +132,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         mSingleCommentId = singleCommentId;
         mIsSingleCommentThreadMode = isSingleCommentThreadMode;
         mNeedBlurNSFW = needBlurNSFW;
+        mNeedBlurSpoiler = needBlurSpoiler;
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
         isInitiallyLoadingFailed = false;
@@ -353,15 +358,11 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
             if(mPost.isSpoiler()) {
                 ((PostDetailViewHolder) holder).spoilerTextView.setVisibility(View.VISIBLE);
-                ((PostDetailViewHolder) holder).spoilerTextView
-                        .setBackgroundColor(mActivity.getResources().getColor(R.color.backgroundColorPrimaryDark));
             }
 
             if(mPost.getFlair() != null) {
                 ((PostDetailViewHolder) holder).flairTextView.setVisibility(View.VISIBLE);
                 ((PostDetailViewHolder) holder).flairTextView.setText(mPost.getFlair());
-                ((PostDetailViewHolder) holder).flairTextView
-                        .setBackgroundColor(mActivity.getResources().getColor(R.color.backgroundColorPrimaryDark));
             }
 
             if(mPost.isNSFW()) {
@@ -493,7 +494,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, mPost.getTitle());
                 intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, false);
                 intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, 0);
-                mActivity.startActivity(intent);
+                mActivity.startActivityForResult(intent, WRITE_COMMENT_REQUEST_CODE);
             });
 
             ((PostDetailViewHolder) holder).commentsCountTextView.setText(Integer.toString(mPost.getnComments()));
@@ -942,7 +943,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     }
                 });
 
-        if(mPost.isNSFW() && mNeedBlurNSFW) {
+        if((mPost.isNSFW() && mNeedBlurNSFW) || (mPost.isSpoiler() && mNeedBlurSpoiler)) {
             imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 2)))
                     .into(holder.mImageView);
         } else {
@@ -1093,6 +1094,10 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         mIsSingleCommentThreadMode = isSingleCommentThreadMode;
     }
 
+    ArrayList<CommentData> getVisibleComments() {
+        return mVisibleComments;
+    }
+
     void initiallyLoading() {
         if(mVisibleComments.size() != 0) {
             int previousSize = mVisibleComments.size();
@@ -1160,6 +1165,10 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     void setBlurNSFW(boolean needBlurNSFW) {
         mNeedBlurNSFW = needBlurNSFW;
+    }
+
+    void setBlurSpoiler(boolean needBlurSpoiler) {
+        mNeedBlurSpoiler = needBlurSpoiler;
     }
 
     @Override
