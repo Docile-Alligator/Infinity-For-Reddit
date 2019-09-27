@@ -30,23 +30,33 @@
                 android:id="@+id/author_text_view_item_post_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
                 android:textColor="@color/colorPrimaryDarkDayNightTheme"
                 android:textSize="?attr/font_default"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/comment_time_text_view_item_post_comment"
-                app:layout_constraintHorizontal_bias="0" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/author_type_image_view_item_comment"
+                android:layout_width="?attr/font_default"
+                android:layout_height="?attr/font_default"
+                android:layout_marginStart="4dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/author_text_view_item_post_comment" />
 
             <TextView
                 android:id="@+id/comment_time_text_view_item_post_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
                 android:textSize="?attr/font_default"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/author_type_image_view_item_comment"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_bias="1" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

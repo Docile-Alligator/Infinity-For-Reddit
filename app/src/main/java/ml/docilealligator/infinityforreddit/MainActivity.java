@@ -299,7 +299,14 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             getCurrentAccountAndBindView();
         }
 
-        fab.setOnClickListener(view -> postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag()));
+        fab.setOnClickListener(view -> {
+            if(mAccessToken == null) {
+                Toast.makeText(MainActivity.this, R.string.login_first, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
+        });
     }
 
     private void getCurrentAccountAndBindView() {

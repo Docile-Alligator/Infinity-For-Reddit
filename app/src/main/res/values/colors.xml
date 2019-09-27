@@ -71,4 +71,8 @@
     <color name="commentVerticalBar7">#EE4602</color>
 
     <color name="greyTabBackgroundColor">@color/colorPrimary</color>
+
+    <color name="submitter">#EE8A02</color>
+
+    <color name="moderator">#00BA81</color>
 </resources>

@@ -22,6 +22,7 @@ class CommentData implements Parcelable {
     private int score;
     private int voteType;
     private boolean isSubmitter;
+    private String distinguished;
     private String permalink;
     private int depth;
     private boolean collapsed;
@@ -37,8 +38,9 @@ class CommentData implements Parcelable {
     private boolean isLoadingMoreChildren;
     private boolean loadMoreChildrenFailed;
 
-    CommentData(String id, String fullName, String author, String linkAuthor, String commentTime, String commentContent,
-                String linkId, String subredditName, String parentId, int score, int voteType, boolean isSubmitter, String permalink,
+    CommentData(String id, String fullName, String author, String linkAuthor, String commentTime,
+                String commentContent, String linkId, String subredditName, String parentId, int score,
+                int voteType, boolean isSubmitter, String distinguished, String permalink,
                 int depth, boolean collapsed, boolean hasReply, boolean scoreHidden, boolean saved) {
         this.id = id;
         this.fullName = fullName;
@@ -52,6 +54,7 @@ class CommentData implements Parcelable {
         this.score = score;
         this.voteType = voteType;
         this.isSubmitter = isSubmitter;
+        this.distinguished = distinguished;
         this.permalink = RedditUtils.API_BASE_URI + permalink;
         this.depth = depth;
         this.collapsed = collapsed;
@@ -84,6 +87,7 @@ class CommentData implements Parcelable {
         score = in.readInt();
         voteType = in.readInt();
         isSubmitter = in.readByte() != 0;
+        distinguished = in.readString();
         permalink = in.readString();
         depth = in.readInt();
         collapsed = in.readByte() != 0;
@@ -168,6 +172,10 @@ class CommentData implements Parcelable {
 
     public boolean isSubmitter() {
         return isSubmitter;
+    }
+
+    public boolean isModerator() {
+        return distinguished != null && distinguished.equals("moderator");
     }
 
     public String getPermalink() {
@@ -312,6 +320,7 @@ class CommentData implements Parcelable {
         parcel.writeInt(score);
         parcel.writeInt(voteType);
         parcel.writeByte((byte) (isSubmitter ? 1 : 0));
+        parcel.writeString(distinguished);
         parcel.writeString(permalink);
         parcel.writeInt(depth);
         parcel.writeByte((byte) (collapsed ? 1 : 0));

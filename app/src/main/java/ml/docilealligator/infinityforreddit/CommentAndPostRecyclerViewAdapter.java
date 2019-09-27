@@ -568,6 +568,20 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             String authorPrefixed = "u/" + comment.getAuthor();
             ((CommentViewHolder) holder).authorTextView.setText(authorPrefixed);
 
+            if(comment.isSubmitter()) {
+                ((CommentViewHolder) holder).authorTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.submitter));
+                ((CommentViewHolder) holder).authorTypeImageView.setVisibility(View.VISIBLE);
+                ((CommentViewHolder) holder).authorTypeImageView.
+                        setColorFilter(ContextCompat.getColor(mActivity, R.color.submitter), android.graphics.PorterDuff.Mode.SRC_IN);
+                ((CommentViewHolder) holder).authorTypeImageView.setImageResource(R.drawable.ic_mic_14dp);
+            } else if(comment.isModerator()) {
+                ((CommentViewHolder) holder).authorTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.moderator));
+                ((CommentViewHolder) holder).authorTypeImageView.setVisibility(View.VISIBLE);
+                ((CommentViewHolder) holder).authorTypeImageView.
+                        setColorFilter(ContextCompat.getColor(mActivity, R.color.moderator), android.graphics.PorterDuff.Mode.SRC_IN);
+                ((CommentViewHolder) holder).authorTypeImageView.setImageResource(R.drawable.ic_verified_user_14dp);
+            }
+
             ((CommentViewHolder) holder).commentTimeTextView.setText(comment.getCommentTime());
 
             mMarkwon.setMarkdown(((CommentViewHolder) holder).commentMarkdownView, comment.getCommentContent());
@@ -1151,6 +1165,10 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof CommentViewHolder) {
+            ((CommentViewHolder) holder).authorTextView.setTextColor(
+                    ContextCompat.getColor(mActivity, R.color.colorPrimaryDarkDayNightTheme));
+            mGlide.clear(((CommentViewHolder) holder).authorTypeImageView);
+            ((CommentViewHolder) holder).authorTypeImageView.setVisibility(View.GONE);
             ((CommentViewHolder) holder).moreButton.setVisibility(View.GONE);
             ((CommentViewHolder) holder).expandButton.setVisibility(View.GONE);
             ((CommentViewHolder) holder).upVoteButton.clearColorFilter();
@@ -1415,6 +1433,7 @@ class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     class CommentViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.author_text_view_item_post_comment) TextView authorTextView;
+        @BindView(R.id.author_type_image_view_item_comment) ImageView authorTypeImageView;
         @BindView(R.id.comment_time_text_view_item_post_comment) TextView commentTimeTextView;
         @BindView(R.id.comment_markdown_view_item_post_comment) TextView commentMarkdownView;
         @BindView(R.id.up_vote_button_item_post_comment) ImageView upVoteButton;

@@ -197,7 +197,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
 
         }
 
-        subredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME_KEY);
+        subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME_KEY);
 
         if(savedInstanceState == null) {
             mMessageFullname = getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME);
@@ -313,7 +313,14 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
             }
         });
 
-        fab.setOnClickListener(view -> postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag()));
+        fab.setOnClickListener(view -> {
+            if(mAccessToken == null) {
+                Toast.makeText(ViewSubredditDetailActivity.this, R.string.login_first, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
+        });
     }
 
     private void getCurrentAccountAndBindView() {
