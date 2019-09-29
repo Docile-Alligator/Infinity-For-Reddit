@@ -2,7 +2,7 @@ package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
 
-import Account.AccountDao;
+import ml.docilealligator.infinityforreddit.Account.AccountDao;
 
 class SwitchToAnonymousAccountAsyncTask extends AsyncTask<Void, Void, Void> {
     interface SwitchToAnonymousAccountAsyncTaskListener {

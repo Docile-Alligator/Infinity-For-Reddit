@@ -6,7 +6,7 @@ import androidx.paging.PageKeyedDataSource;
 
 import java.util.ArrayList;
 
-import User.UserData;
+import ml.docilealligator.infinityforreddit.User.UserData;
 import retrofit2.Retrofit;
 
 public class UserListingDataSource extends PageKeyedDataSource<String, UserData> {
@@ -63,7 +63,7 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
 
             @Override
             public void onFetchUserListingDataFailed() {
-                initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error retrieving User list"));
+                initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error retrieving ml.docilealligator.infinityforreddit.User list"));
             }
         });
     }
@@ -92,7 +92,7 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
 
             @Override
             public void onFetchUserListingDataFailed() {
-                paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error retrieving User list"));
+                paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error retrieving ml.docilealligator.infinityforreddit.User list"));
             }
         });
     }

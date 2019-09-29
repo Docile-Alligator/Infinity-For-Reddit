@@ -43,10 +43,10 @@ import org.greenrobot.eventbus.Subscribe;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import SubscribedUserDatabase.SubscribedUserDao;
-import User.UserDao;
-import User.UserData;
-import User.UserViewModel;
+import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserDao;
+import ml.docilealligator.infinityforreddit.User.UserDao;
+import ml.docilealligator.infinityforreddit.User.UserData;
+import ml.docilealligator.infinityforreddit.User.UserViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;

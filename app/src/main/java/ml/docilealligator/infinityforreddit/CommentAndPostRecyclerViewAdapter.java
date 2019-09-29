@@ -39,7 +39,7 @@ import com.santalu.aspectratioimageview.AspectRatioImageView;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import CustomView.AspectRatioGifImageView;
+import ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;

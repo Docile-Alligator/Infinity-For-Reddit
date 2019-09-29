@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import SubredditDatabase.SubredditData;
+import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 
 class ParseSubredditData {
     interface ParseSubredditDataListener {

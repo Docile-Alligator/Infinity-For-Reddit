@@ -2,8 +2,8 @@ package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
 
-import Account.Account;
-import Account.AccountDao;
+import ml.docilealligator.infinityforreddit.Account.Account;
+import ml.docilealligator.infinityforreddit.Account.AccountDao;
 
 class ParseAndInsertNewAccountAsyncTask extends AsyncTask<Void, Void, Void> {
 

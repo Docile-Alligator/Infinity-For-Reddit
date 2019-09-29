@@ -29,7 +29,7 @@
                 app:layout_constraintEnd_toStartOf="@id/stickied_post_image_view_item_post"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <CustomView.AspectRatioGifImageView
+                <ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView
                     android:id="@+id/icon_gif_image_view_item_post"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -249,7 +249,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true" />
 
-            <CustomView.AspectRatioGifImageView
+            <ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView
                 android:id="@+id/image_view_best_post_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import User.UserData;
+import ml.docilealligator.infinityforreddit.User.UserData;
 
 public class ParseUserData {
     interface ParseUserDataListener {

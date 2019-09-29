@@ -31,9 +31,9 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import SubredditDatabase.SubredditData;
-import SubscribedSubredditDatabase.SubscribedSubredditData;
-import SubscribedUserDatabase.SubscribedUserData;
+import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
+import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
+import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Retrofit;

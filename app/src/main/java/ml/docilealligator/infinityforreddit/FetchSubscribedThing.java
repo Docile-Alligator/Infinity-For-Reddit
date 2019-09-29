@@ -1,14 +1,12 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
-import SubredditDatabase.SubredditData;
-import SubscribedSubredditDatabase.SubscribedSubredditData;
-import SubscribedUserDatabase.SubscribedUserData;
+import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
+import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
+import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

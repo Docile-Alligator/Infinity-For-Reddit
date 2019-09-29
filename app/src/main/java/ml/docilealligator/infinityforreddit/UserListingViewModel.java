@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
-import User.UserData;
+import ml.docilealligator.infinityforreddit.User.UserData;
 import retrofit2.Retrofit;
 
 public class UserListingViewModel extends ViewModel {

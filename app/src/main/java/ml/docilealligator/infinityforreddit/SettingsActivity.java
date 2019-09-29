@@ -19,8 +19,8 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import javax.inject.Inject;
 
-import Settings.AboutPreferenceFragment;
-import Settings.MainPreferenceFragment;
+import ml.docilealligator.infinityforreddit.Settings.AboutPreferenceFragment;
+import ml.docilealligator.infinityforreddit.Settings.MainPreferenceFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

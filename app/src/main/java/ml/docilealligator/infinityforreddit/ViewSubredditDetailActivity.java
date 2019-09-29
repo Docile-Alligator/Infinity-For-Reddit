@@ -39,9 +39,9 @@ import org.greenrobot.eventbus.Subscribe;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import SubredditDatabase.SubredditDao;
-import SubredditDatabase.SubredditData;
-import SubredditDatabase.SubredditViewModel;
+import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditDao;
+import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
+import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;

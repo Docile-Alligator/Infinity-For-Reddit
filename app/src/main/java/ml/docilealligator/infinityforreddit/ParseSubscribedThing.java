@@ -8,9 +8,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import SubredditDatabase.SubredditData;
-import SubscribedSubredditDatabase.SubscribedSubredditData;
-import SubscribedUserDatabase.SubscribedUserData;
+import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
+import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
+import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
 
 class ParseSubscribedThing {
     interface ParseSubscribedSubredditsListener {

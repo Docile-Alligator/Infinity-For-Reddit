@@ -15,7 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
-import Account.Account;
+import ml.docilealligator.infinityforreddit.Account.Account;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;

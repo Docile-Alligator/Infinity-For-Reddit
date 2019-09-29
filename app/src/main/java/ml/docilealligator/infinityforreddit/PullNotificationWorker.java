@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -26,7 +25,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import Account.Account;
+import ml.docilealligator.infinityforreddit.Account.Account;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;

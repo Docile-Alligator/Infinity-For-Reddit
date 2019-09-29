@@ -2,8 +2,8 @@ package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
 
-import SubscribedUserDatabase.SubscribedUserDao;
-import SubscribedUserDatabase.SubscribedUserData;
+import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserDao;
+import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
 
 public class CheckIsFollowingUserAsyncTask extends AsyncTask<Void, Void, Void> {
     private SubscribedUserDao subscribedUserDao;

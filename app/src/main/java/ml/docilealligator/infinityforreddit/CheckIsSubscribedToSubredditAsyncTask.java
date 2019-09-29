@@ -2,7 +2,7 @@ package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
 
-import SubscribedSubredditDatabase.SubscribedSubredditData;
+import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
 
 class CheckIsSubscribedToSubredditAsyncTask extends AsyncTask<Void, Void, Void> {
 

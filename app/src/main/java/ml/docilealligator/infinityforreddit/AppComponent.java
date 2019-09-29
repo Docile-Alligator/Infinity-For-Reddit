@@ -2,8 +2,8 @@ package ml.docilealligator.infinityforreddit;
 
 import javax.inject.Singleton;
 
-import Settings.MainPreferenceFragment;
-import Settings.NotificationPreferenceFragment;
+import ml.docilealligator.infinityforreddit.Settings.MainPreferenceFragment;
+import ml.docilealligator.infinityforreddit.Settings.NotificationPreferenceFragment;
 import dagger.Component;
 
 @Singleton

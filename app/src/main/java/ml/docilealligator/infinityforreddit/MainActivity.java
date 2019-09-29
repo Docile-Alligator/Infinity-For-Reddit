@@ -57,11 +57,11 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import Account.Account;
-import Account.AccountViewModel;
-import SubredditDatabase.SubredditData;
-import SubscribedSubredditDatabase.SubscribedSubredditData;
-import SubscribedUserDatabase.SubscribedUserData;
+import ml.docilealligator.infinityforreddit.Account.Account;
+import ml.docilealligator.infinityforreddit.Account.AccountViewModel;
+import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
+import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
+import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;

@@ -2,8 +2,8 @@ package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
 
-import User.UserData;
-import User.UserDao;
+import ml.docilealligator.infinityforreddit.User.UserData;
+import ml.docilealligator.infinityforreddit.User.UserDao;
 
 public class InsertUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
     private UserDao userDao;

@@ -16,7 +16,7 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
-import SubscribedUserDatabase.SubscribedUserData;
+import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pl.droidsonroids.gif.GifImageView;
 

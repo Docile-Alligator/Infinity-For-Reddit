@@ -4,8 +4,8 @@ import android.os.AsyncTask;
 
 import java.util.ArrayList;
 
-import SubredditDatabase.SubredditDao;
-import SubredditDatabase.SubredditData;
+import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditDao;
+import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import retrofit2.Retrofit;
 
 class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {

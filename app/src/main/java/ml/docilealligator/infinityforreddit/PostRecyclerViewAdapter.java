@@ -38,8 +38,8 @@ import com.libRG.CustomTextView;
 
 import org.greenrobot.eventbus.EventBus;
 
-import CustomView.AspectRatioGifImageView;
-import User.UserDao;
+import ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView;
+import ml.docilealligator.infinityforreddit.User.UserDao;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.BlurTransformation;

@@ -7,9 +7,9 @@ import androidx.annotation.NonNull;
 import java.util.HashMap;
 import java.util.Map;
 
-import SubscribedUserDatabase.SubscribedUserDao;
-import SubscribedUserDatabase.SubscribedUserData;
-import User.UserData;
+import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserDao;
+import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
+import ml.docilealligator.infinityforreddit.User.UserData;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;

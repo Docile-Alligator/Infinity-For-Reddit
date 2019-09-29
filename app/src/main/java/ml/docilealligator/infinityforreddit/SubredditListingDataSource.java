@@ -6,7 +6,7 @@ import androidx.paging.PageKeyedDataSource;
 
 import java.util.ArrayList;
 
-import SubredditDatabase.SubredditData;
+import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import retrofit2.Retrofit;
 
 public class SubredditListingDataSource extends PageKeyedDataSource<String, SubredditData> {

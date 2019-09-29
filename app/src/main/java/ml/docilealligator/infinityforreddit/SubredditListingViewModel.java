@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
-import SubredditDatabase.SubredditData;
+import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import retrofit2.Retrofit;
 
 public class SubredditListingViewModel extends ViewModel {

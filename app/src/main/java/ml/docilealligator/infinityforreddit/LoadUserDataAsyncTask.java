@@ -2,8 +2,8 @@ package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
 
-import User.UserData;
-import User.UserDao;
+import ml.docilealligator.infinityforreddit.User.UserData;
+import ml.docilealligator.infinityforreddit.User.UserDao;
 import retrofit2.Retrofit;
 
 public class LoadUserDataAsyncTask extends AsyncTask<Void, Void, Void> {

@@ -6,12 +6,12 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
-import SubredditDatabase.SubredditDao;
-import SubredditDatabase.SubredditData;
-import SubscribedSubredditDatabase.SubscribedSubredditDao;
-import SubscribedSubredditDatabase.SubscribedSubredditData;
-import SubscribedUserDatabase.SubscribedUserDao;
-import SubscribedUserDatabase.SubscribedUserData;
+import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditDao;
+import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
+import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditDao;
+import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
+import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserDao;
+import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
 
 class InsertSubscribedThingsAsyncTask extends AsyncTask<Void, Void, Void> {
 

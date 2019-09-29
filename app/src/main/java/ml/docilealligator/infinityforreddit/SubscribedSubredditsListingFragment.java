@@ -23,7 +23,7 @@ import com.bumptech.glide.RequestManager;
 
 import javax.inject.Inject;
 
-import SubscribedSubredditDatabase.SubscribedSubredditViewModel;
+import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditViewModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

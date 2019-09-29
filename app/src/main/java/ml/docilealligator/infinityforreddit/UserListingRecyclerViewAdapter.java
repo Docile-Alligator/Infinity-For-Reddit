@@ -21,8 +21,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 
-import SubscribedUserDatabase.SubscribedUserDao;
-import User.UserData;
+import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserDao;
+import ml.docilealligator.infinityforreddit.User.UserData;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
