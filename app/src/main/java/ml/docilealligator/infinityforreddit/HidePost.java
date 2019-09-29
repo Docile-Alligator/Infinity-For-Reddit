@@ -11,11 +11,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class HidePost {
-    public interface HidePostListener {
-        void success();
-        void failed();
-    }
-
     public static void hidePost(Retrofit oauthRetrofit, String accessToken, String fullname,
                                 HidePostListener hidePostListener) {
         Map<String, String> params = new HashMap<>();
@@ -23,7 +18,7 @@ public class HidePost {
         oauthRetrofit.create(RedditAPI.class).hide(RedditUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     hidePostListener.success();
                 } else {
                     hidePostListener.failed();
@@ -44,7 +39,7 @@ public class HidePost {
         oauthRetrofit.create(RedditAPI.class).unhide(RedditUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     hidePostListener.success();
                 } else {
                     hidePostListener.failed();
@@ -56,5 +51,11 @@ public class HidePost {
                 hidePostListener.failed();
             }
         });
+    }
+
+    public interface HidePostListener {
+        void success();
+
+        void failed();
     }
 }

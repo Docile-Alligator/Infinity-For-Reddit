@@ -11,11 +11,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class SaveThing {
-    public interface SaveThingListener {
-        void success();
-        void failed();
-    }
-
     public static void saveThing(Retrofit oauthRetrofit, String accessToken, String fullname,
                                  SaveThingListener saveThingListener) {
         Map<String, String> params = new HashMap<>();
@@ -23,7 +18,7 @@ public class SaveThing {
         oauthRetrofit.create(RedditAPI.class).save(RedditUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     saveThingListener.success();
                 } else {
                     saveThingListener.failed();
@@ -44,7 +39,7 @@ public class SaveThing {
         oauthRetrofit.create(RedditAPI.class).unsave(RedditUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     saveThingListener.success();
                 } else {
                     saveThingListener.failed();
@@ -56,5 +51,11 @@ public class SaveThing {
                 saveThingListener.failed();
             }
         });
+    }
+
+    public interface SaveThingListener {
+        void success();
+
+        void failed();
     }
 }

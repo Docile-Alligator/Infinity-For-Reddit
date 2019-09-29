@@ -43,6 +43,20 @@ import ml.docilealligator.infinityforreddit.VoteThing;
 import retrofit2.Retrofit;
 
 public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, RecyclerView.ViewHolder> {
+    private static final int VIEW_TYPE_DATA = 0;
+    private static final int VIEW_TYPE_ERROR = 1;
+    private static final int VIEW_TYPE_LOADING = 2;
+    private static final DiffUtil.ItemCallback<CommentData> DIFF_CALLBACK = new DiffUtil.ItemCallback<CommentData>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull CommentData commentData, @NonNull CommentData t1) {
+            return commentData.getId().equals(t1.getId());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull CommentData commentData, @NonNull CommentData t1) {
+            return commentData.getCommentContent().equals(t1.getCommentContent());
+        }
+    };
     private Context mContext;
     private Retrofit mOauthRetrofit;
     private Markwon mMarkwon;
@@ -50,21 +64,12 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     private String mAccountName;
     private int mTextColorPrimaryDark;
     private int mColorAccent;
-
-    private static final int VIEW_TYPE_DATA = 0;
-    private static final int VIEW_TYPE_ERROR = 1;
-    private static final int VIEW_TYPE_LOADING = 2;
-
     private NetworkState networkState;
     private RetryLoadingMoreCallback mRetryLoadingMoreCallback;
 
-    public interface RetryLoadingMoreCallback {
-        void retryLoadingMore();
-    }
-
     public CommentsListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
-                                                 String accessToken, String accountName,
-                                                 RetryLoadingMoreCallback retryLoadingMoreCallback) {
+                                              String accessToken, String accountName,
+                                              RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         mContext = context;
         mOauthRetrofit = oauthRetrofit;
@@ -75,7 +80,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         builder.linkResolver((view, link) -> {
                             Intent intent = new Intent(mContext, LinkResolverActivity.class);
                             Uri uri = Uri.parse(link);
-                            if(uri.getScheme() == null && uri.getHost() == null) {
+                            if (uri.getScheme() == null && uri.getHost() == null) {
                                 intent.setData(LinkResolverActivity.getRedditUriByPath(link));
                             } else {
                                 intent.setData(uri);
@@ -94,24 +99,12 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         mColorAccent = mContext.getResources().getColor(R.color.colorAccent);
     }
 
-    private static final DiffUtil.ItemCallback<CommentData> DIFF_CALLBACK = new DiffUtil.ItemCallback<CommentData>() {
-        @Override
-        public boolean areItemsTheSame(@NonNull CommentData commentData, @NonNull CommentData t1) {
-            return commentData.getId().equals(t1.getId());
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull CommentData commentData, @NonNull CommentData t1) {
-            return commentData.getCommentContent().equals(t1.getCommentContent());
-        }
-    };
-
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(viewType == VIEW_TYPE_DATA) {
+        if (viewType == VIEW_TYPE_DATA) {
             return new DataViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false));
-        } else if(viewType == VIEW_TYPE_ERROR) {
+        } else if (viewType == VIEW_TYPE_ERROR) {
             return new ErrorViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_error, parent, false));
         } else {
             return new LoadingViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_loading, parent, false));
@@ -120,10 +113,10 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if(holder instanceof DataViewHolder) {
+        if (holder instanceof DataViewHolder) {
             CommentData comment = getItem(holder.getAdapterPosition());
-            if(comment != null) {
-                if(comment.getSubredditName().substring(2).equals(comment.getLinkAuthor())) {
+            if (comment != null) {
+                if (comment.getSubredditName().substring(2).equals(comment.getLinkAuthor())) {
                     ((DataViewHolder) holder).authorTextView.setText("u/" + comment.getLinkAuthor());
                     ((DataViewHolder) holder).authorTextView.setTextColor(mTextColorPrimaryDark);
                     ((DataViewHolder) holder).authorTextView.setOnClickListener(view -> {
@@ -160,7 +153,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         break;
                 }
 
-                if(comment.getAuthor().equals(mAccountName)) {
+                if (comment.getAuthor().equals(mAccountName)) {
                     ((DataViewHolder) holder).moreButton.setVisibility(View.VISIBLE);
                     ((DataViewHolder) holder).moreButton.setOnClickListener(view -> {
                         ModifyCommentBottomSheetFragment modifyCommentBottomSheetFragment = new ModifyCommentBottomSheetFragment();
@@ -201,7 +194,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 ((DataViewHolder) holder).replyButton.setVisibility(View.GONE);
 
                 ((DataViewHolder) holder).upvoteButton.setOnClickListener(view -> {
-                    if(mAccessToken == null) {
+                    if (mAccessToken == null) {
                         Toast.makeText(mContext, R.string.login_first, Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -211,7 +204,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
                     ((DataViewHolder) holder).downvoteButton.clearColorFilter();
 
-                    if(previousVoteType != CommentData.VOTE_TYPE_UPVOTE) {
+                    if (previousVoteType != CommentData.VOTE_TYPE_UPVOTE) {
                         //Not upvoted before
                         comment.setVoteType(CommentData.VOTE_TYPE_UPVOTE);
                         newVoteType = RedditUtils.DIR_UPVOTE;
@@ -231,7 +224,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
-                            if(newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
+                            if (newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
                                 comment.setVoteType(CommentData.VOTE_TYPE_UPVOTE);
                                 ((DataViewHolder) holder).upvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.upvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                                 ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.upvoted));
@@ -246,12 +239,13 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         }
 
                         @Override
-                        public void onVoteThingFail(int position) { }
+                        public void onVoteThingFail(int position) {
+                        }
                     }, comment.getFullName(), newVoteType, holder.getAdapterPosition());
                 });
 
                 ((DataViewHolder) holder).downvoteButton.setOnClickListener(view -> {
-                    if(mAccessToken == null) {
+                    if (mAccessToken == null) {
                         Toast.makeText(mContext, R.string.login_first, Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -261,7 +255,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
                     ((DataViewHolder) holder).upvoteButton.clearColorFilter();
 
-                    if(previousVoteType != CommentData.VOTE_TYPE_DOWNVOTE) {
+                    if (previousVoteType != CommentData.VOTE_TYPE_DOWNVOTE) {
                         //Not downvoted before
                         comment.setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
                         newVoteType = RedditUtils.DIR_DOWNVOTE;
@@ -280,7 +274,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
-                            if(newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {
+                            if (newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {
                                 comment.setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
                                 ((DataViewHolder) holder).downvoteButton.setColorFilter(ContextCompat.getColor(mContext, R.color.downvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                                 ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.downvoted));
@@ -295,11 +289,12 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         }
 
                         @Override
-                        public void onVoteThingFail(int position1) { }
+                        public void onVoteThingFail(int position1) {
+                        }
                     }, comment.getFullName(), newVoteType, holder.getAdapterPosition());
                 });
 
-                if(comment.isSaved()) {
+                if (comment.isSaved()) {
                     ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_20dp);
                 } else {
                     ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_20dp);
@@ -362,7 +357,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
-        if(holder instanceof DataViewHolder) {
+        if (holder instanceof DataViewHolder) {
             ((DataViewHolder) holder).upvoteButton.clearColorFilter();
             ((DataViewHolder) holder).downvoteButton.clearColorFilter();
             ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.defaultTextColor));
@@ -371,7 +366,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
     @Override
     public int getItemCount() {
-        if(hasExtraRow()) {
+        if (hasExtraRow()) {
             return super.getItemCount() + 1;
         }
         return super.getItemCount();
@@ -397,19 +392,35 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         }
     }
 
+    public interface RetryLoadingMoreCallback {
+        void retryLoadingMore();
+    }
+
     class DataViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.linear_layout_item_comment) LinearLayout linearLayout;
-        @BindView(R.id.vertical_block_item_post_comment) View verticalBlock;
-        @BindView(R.id.author_text_view_item_post_comment) TextView authorTextView;
-        @BindView(R.id.comment_time_text_view_item_post_comment) TextView commentTimeTextView;
-        @BindView(R.id.comment_markdown_view_item_post_comment) TextView commentMarkdownView;
-        @BindView(R.id.up_vote_button_item_post_comment) ImageView upvoteButton;
-        @BindView(R.id.score_text_view_item_post_comment) TextView scoreTextView;
-        @BindView(R.id.down_vote_button_item_post_comment) ImageView downvoteButton;
-        @BindView(R.id.more_button_item_post_comment) ImageView moreButton;
-        @BindView(R.id.save_button_item_post_comment) ImageView saveButton;
-        @BindView(R.id.share_button_item_post_comment) ImageView shareButton;
-        @BindView(R.id.reply_button_item_post_comment) ImageView replyButton;
+        @BindView(R.id.linear_layout_item_comment)
+        LinearLayout linearLayout;
+        @BindView(R.id.vertical_block_item_post_comment)
+        View verticalBlock;
+        @BindView(R.id.author_text_view_item_post_comment)
+        TextView authorTextView;
+        @BindView(R.id.comment_time_text_view_item_post_comment)
+        TextView commentTimeTextView;
+        @BindView(R.id.comment_markdown_view_item_post_comment)
+        TextView commentMarkdownView;
+        @BindView(R.id.up_vote_button_item_post_comment)
+        ImageView upvoteButton;
+        @BindView(R.id.score_text_view_item_post_comment)
+        TextView scoreTextView;
+        @BindView(R.id.down_vote_button_item_post_comment)
+        ImageView downvoteButton;
+        @BindView(R.id.more_button_item_post_comment)
+        ImageView moreButton;
+        @BindView(R.id.save_button_item_post_comment)
+        ImageView saveButton;
+        @BindView(R.id.share_button_item_post_comment)
+        ImageView shareButton;
+        @BindView(R.id.reply_button_item_post_comment)
+        ImageView replyButton;
 
         DataViewHolder(View itemView) {
             super(itemView);
@@ -418,8 +429,10 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     }
 
     class ErrorViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.error_text_view_item_footer_error) TextView errorTextView;
-        @BindView(R.id.retry_button_item_footer_error) Button retryButton;
+        @BindView(R.id.error_text_view_item_footer_error)
+        TextView errorTextView;
+        @BindView(R.id.retry_button_item_footer_error)
+        Button retryButton;
 
         ErrorViewHolder(View itemView) {
             super(itemView);

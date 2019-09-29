@@ -13,13 +13,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FetchSubscribedThing {
-    public interface FetchSubscribedThingListener {
-        void onFetchSubscribedThingSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
-                                           ArrayList<SubscribedUserData> subscribedUserData,
-                                           ArrayList<SubredditData> subredditData);
-        void onFetchSubscribedThingFail();
-    }
-
     public static void fetchSubscribedThing(final Retrofit retrofit, String accessToken, String accountName,
                                             final String lastItem, final ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                             final ArrayList<SubscribedUserData> subscribedUserData,
@@ -31,7 +24,7 @@ public class FetchSubscribedThing {
         subredditDataCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     ParseSubscribedThing.parseSubscribedSubreddits(response.body(), accountName,
                             subscribedSubredditData, subscribedUserData, subredditData,
                             new ParseSubscribedThing.ParseSubscribedSubredditsListener() {
@@ -41,7 +34,7 @@ public class FetchSubscribedThing {
                                                                                ArrayList<SubscribedUserData> subscribedUserData,
                                                                                ArrayList<SubredditData> subredditData,
                                                                                String lastItem) {
-                                    if(lastItem.equals("null")) {
+                                    if (lastItem.equals("null")) {
                                         fetchSubscribedThingListener.onFetchSubscribedThingSuccess(
                                                 subscribedSubredditData, subscribedUserData, subredditData);
                                     } else {
@@ -66,5 +59,13 @@ public class FetchSubscribedThing {
                 fetchSubscribedThingListener.onFetchSubscribedThingFail();
             }
         });
+    }
+
+    public interface FetchSubscribedThingListener {
+        void onFetchSubscribedThingSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
+                                           ArrayList<SubscribedUserData> subscribedUserData,
+                                           ArrayList<SubredditData> subredditData);
+
+        void onFetchSubscribedThingFail();
     }
 }

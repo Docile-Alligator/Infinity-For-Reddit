@@ -10,14 +10,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FetchPost {
-    public interface FetchPostListener {
-        void fetchPostSuccess(Post post);
-        void fetchPostFailed();
-    }
-
     public static void fetchPost(Retrofit retrofit, String id, String accessToken, Locale locale, FetchPostListener fetchPostListener) {
         Call<String> postCall;
-        if(accessToken == null) {
+        if (accessToken == null) {
             postCall = retrofit.create(RedditAPI.class).getPost(id);
         } else {
             postCall = retrofit.create(RedditAPI.class).getPostOauth(id, RedditUtils.getOAuthHeader(accessToken));
@@ -25,7 +20,7 @@ public class FetchPost {
         postCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     ParsePost.parsePost(response.body(), locale, new ParsePost.ParsePostListener() {
                         @Override
                         public void onParsePostSuccess(Post post) {
@@ -47,5 +42,11 @@ public class FetchPost {
                 fetchPostListener.fetchPostFailed();
             }
         });
+    }
+
+    public interface FetchPostListener {
+        void fetchPostSuccess(Post post);
+
+        void fetchPostFailed();
     }
 }

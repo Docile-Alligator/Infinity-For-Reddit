@@ -26,21 +26,18 @@ import ml.docilealligator.infinityforreddit.R;
  */
 public class UserThingSortTypeBottomSheetFragment extends RoundedBottomSheetDialogFragment {
 
-    public interface UserThingSortTypeSelectionCallback {
-        void userThingSortTypeSelected(String sortType);
-    }
-
     static final String EXTRA_NO_BEST_TYPE = "ENBT";
-
-    @BindView(R.id.new_type_text_view_user_thing_sort_type_bottom_sheet_fragment) TextView newTypeTextView;
-    @BindView(R.id.hot_type_text_view_user_thing_sort_type_bottom_sheet_fragment) TextView hotTypeTextView;
-    @BindView(R.id.top_type_text_view_user_thing_sort_type_bottom_sheet_fragment) TextView topTypeTextView;
-    @BindView(R.id.controversial_type_text_view_user_thing_sort_type_bottom_sheet_fragment) TextView controversialTypeTextView;
-
+    @BindView(R.id.new_type_text_view_user_thing_sort_type_bottom_sheet_fragment)
+    TextView newTypeTextView;
+    @BindView(R.id.hot_type_text_view_user_thing_sort_type_bottom_sheet_fragment)
+    TextView hotTypeTextView;
+    @BindView(R.id.top_type_text_view_user_thing_sort_type_bottom_sheet_fragment)
+    TextView topTypeTextView;
+    @BindView(R.id.controversial_type_text_view_user_thing_sort_type_bottom_sheet_fragment)
+    TextView controversialTypeTextView;
     public UserThingSortTypeBottomSheetFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -51,40 +48,45 @@ public class UserThingSortTypeBottomSheetFragment extends RoundedBottomSheetDial
 
         Activity activity = getActivity();
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
             rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
 
         newTypeTextView.setOnClickListener(view -> {
-            if(activity != null) {
+            if (activity != null) {
                 ((UserThingSortTypeSelectionCallback) activity).userThingSortTypeSelected(PostDataSource.SORT_TYPE_NEW);
             }
             dismiss();
         });
 
         hotTypeTextView.setOnClickListener(view -> {
-            if(activity != null) {
+            if (activity != null) {
                 ((UserThingSortTypeSelectionCallback) activity).userThingSortTypeSelected(PostDataSource.SORT_TYPE_HOT);
             }
             dismiss();
         });
 
         topTypeTextView.setOnClickListener(view -> {
-            if(activity != null) {
+            if (activity != null) {
                 ((UserThingSortTypeSelectionCallback) activity).userThingSortTypeSelected(PostDataSource.SORT_TYPE_TOP);
             }
             dismiss();
         });
 
         controversialTypeTextView.setOnClickListener(view -> {
-            if(activity != null) {
+            if (activity != null) {
                 ((UserThingSortTypeSelectionCallback) activity).userThingSortTypeSelected(PostDataSource.SORT_TYPE_CONTROVERSIAL);
             }
             dismiss();
         });
 
         return rootView;
+    }
+
+
+    public interface UserThingSortTypeSelectionCallback {
+        void userThingSortTypeSelected(String sortType);
     }
 
 }

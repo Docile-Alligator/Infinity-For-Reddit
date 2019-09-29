@@ -7,14 +7,9 @@ import ml.docilealligator.infinityforreddit.Account.AccountDao;
 
 public class GetCurrentAccountAsyncTask extends AsyncTask<Void, Void, Void> {
 
-    public interface GetCurrentAccountAsyncTaskListener {
-        void success(Account account);
-    }
-
     Account account;
     AccountDao accountDao;
     GetCurrentAccountAsyncTaskListener getCurrentAccountAsyncTaskListener;
-
     public GetCurrentAccountAsyncTask(AccountDao accountDao, GetCurrentAccountAsyncTaskListener getCurrentAccountAsyncTaskListener) {
         this.accountDao = accountDao;
         this.getCurrentAccountAsyncTaskListener = getCurrentAccountAsyncTaskListener;
@@ -29,5 +24,9 @@ public class GetCurrentAccountAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         getCurrentAccountAsyncTaskListener.success(account);
+    }
+
+    public interface GetCurrentAccountAsyncTaskListener {
+        void success(Account account);
     }
 }

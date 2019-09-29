@@ -29,20 +29,20 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
-import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
-import ml.docilealligator.infinityforreddit.ContentFontStyle;
-import ml.docilealligator.infinityforreddit.FontStyle;
-import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.ContentFontStyle;
+import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
+import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.FontStyle;
+import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
+import ml.docilealligator.infinityforreddit.Fragment.UserThingSortTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.PostDataSource;
-import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.TitleFontStyle;
-import ml.docilealligator.infinityforreddit.Fragment.UserThingSortTypeBottomSheetFragment;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
@@ -59,25 +59,24 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
     private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String FRAGMENT_OUT_STATE = "FOS";
 
-    @BindView(R.id.collapsing_toolbar_layout_account_posts_activity) CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.appbar_layout_account_posts_activity) AppBarLayout appBarLayout;
-    @BindView(R.id.toolbar_account_posts_activity) Toolbar toolbar;
-
+    @BindView(R.id.collapsing_toolbar_layout_account_posts_activity)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.appbar_layout_account_posts_activity)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.toolbar_account_posts_activity)
+    Toolbar toolbar;
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
+    @Inject
+    SharedPreferences mSharedPreferences;
     private boolean isInLazyMode = false;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
     private String mUserWhere;
-
     private Fragment mFragment;
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
-
-    @Inject
-    RedditDataRoomDatabase mRedditDataRoomDatabase;
-
-    @Inject
-    SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,24 +108,24 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
             window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
             boolean lightNavBar = false;
-            if((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+            if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
                 lightNavBar = true;
             }
             boolean finalLightNavBar = lightNavBar;
 
             View decorView = window.getDecorView();
-            if(finalLightNavBar) {
+            if (finalLightNavBar) {
                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
             }
             appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
                 @Override
                 public void onStateChanged(AppBarLayout appBarLayout, State state) {
                     if (state == State.COLLAPSED) {
-                        if(finalLightNavBar) {
+                        if (finalLightNavBar) {
                             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                         }
                     } else if (state == State.EXPANDED) {
-                        if(finalLightNavBar) {
+                        if (finalLightNavBar) {
                             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                         }
                     }
@@ -151,7 +150,7 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 break;
             case 2:
-                if(systemDefault) {
+                if (systemDefault) {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
@@ -160,13 +159,13 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
         }
 
         mUserWhere = getIntent().getExtras().getString(EXTRA_USER_WHERE);
-        if(mUserWhere.equals(PostDataSource.USER_WHERE_UPVOTED)) {
+        if (mUserWhere.equals(PostDataSource.USER_WHERE_UPVOTED)) {
             toolbar.setTitle(R.string.upvoted);
-        } else if(mUserWhere.equals(PostDataSource.USER_WHERE_DOWNVOTED)) {
+        } else if (mUserWhere.equals(PostDataSource.USER_WHERE_DOWNVOTED)) {
             toolbar.setTitle(R.string.downvoted);
-        } else if(mUserWhere.equals(PostDataSource.USER_WHERE_HIDDEN)) {
+        } else if (mUserWhere.equals(PostDataSource.USER_WHERE_HIDDEN)) {
             toolbar.setTitle(R.string.hidden);
-        } else if(mUserWhere.equals(PostDataSource.USER_WHERE_GILDED)){
+        } else if (mUserWhere.equals(PostDataSource.USER_WHERE_GILDED)) {
             toolbar.setTitle(R.string.gilded);
         }
 
@@ -175,12 +174,12 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
-            if(!mNullAccessToken && mAccessToken == null) {
+            if (!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndInitializeFragment();
             } else {
                 mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
@@ -193,7 +192,7 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
 
     private void getCurrentAccountAndInitializeFragment() {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-            if(account == null) {
+            if (account == null) {
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
@@ -221,7 +220,7 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
         getMenuInflater().inflate(R.menu.account_posts_activity, menu);
         mMenu = menu;
         MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_account_posts_activity);
-        if(isInLazyMode) {
+        if (isInLazyMode) {
             lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
             params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
             collapsingToolbarLayout.setLayoutParams(params);
@@ -237,23 +236,23 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_refresh_account_posts_activity:
-                if(mMenu != null) {
+                if (mMenu != null) {
                     mMenu.findItem(R.id.action_lazy_mode_account_posts_activity).setTitle(R.string.action_start_lazy_mode);
                 }
-                if(mFragment != null) {
+                if (mFragment != null) {
                     ((PostFragment) mFragment).refresh();
                 }
                 return true;
             case R.id.action_lazy_mode_account_posts_activity:
                 MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_account_posts_activity);
-                if(isInLazyMode) {
+                if (isInLazyMode) {
                     ((FragmentCommunicator) mFragment).stopLazyMode();
                     isInLazyMode = false;
                     lazyModeItem.setTitle(R.string.action_start_lazy_mode);
                     params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
                     collapsingToolbarLayout.setLayoutParams(params);
                 } else {
-                    if(((FragmentCommunicator) mFragment).startLazyMode()) {
+                    if (((FragmentCommunicator) mFragment).startLazyMode()) {
                         isInLazyMode = true;
                         lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
                         params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
@@ -288,7 +287,7 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
 
     @Override
     public void userThingSortTypeSelected(String sortType) {
-        if(mFragment != null) {
+        if (mFragment != null) {
             ((PostFragment) mFragment).changeSortType(sortType);
         }
     }

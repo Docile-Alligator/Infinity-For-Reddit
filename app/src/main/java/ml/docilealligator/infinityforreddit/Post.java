@@ -15,7 +15,17 @@ public class Post implements Parcelable {
     public static final int VIDEO_TYPE = 3;
     public static final int GIF_VIDEO_TYPE = 4;
     public static final int NO_PREVIEW_LINK_TYPE = 5;
+    public static final Creator<Post> CREATOR = new Creator<Post>() {
+        @Override
+        public Post createFromParcel(Parcel in) {
+            return new Post(in);
+        }
 
+        @Override
+        public Post[] newArray(int size) {
+            return new Post[size];
+        }
+    };
     private String id;
     private String fullName;
     private String subredditName;
@@ -50,9 +60,9 @@ public class Post implements Parcelable {
     private String crosspostParentId;
 
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
-         String postTime, String title, String previewUrl, String permalink, int score, int postType,
-         int voteType, int gilded, int nComments, String flair, boolean hidden, boolean spoiler,
-         boolean nsfw, boolean stickied, boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
+                String postTime, String title, String previewUrl, String permalink, int score, int postType,
+                int voteType, int gilded, int nComments, String flair, boolean hidden, boolean spoiler,
+                boolean nsfw, boolean stickied, boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -80,10 +90,10 @@ public class Post implements Parcelable {
     }
 
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
-         String postTime, String title, String previewUrl, String url, String permalink, int score,
-         int postType, int voteType, int gilded, int nComments, String flair, boolean hidden,
-         boolean spoiler, boolean nsfw, boolean stickied, boolean archived, boolean locked,
-         boolean saved, boolean isCrosspost) {
+                String postTime, String title, String previewUrl, String url, String permalink, int score,
+                int postType, int voteType, int gilded, int nComments, String flair, boolean hidden,
+                boolean spoiler, boolean nsfw, boolean stickied, boolean archived, boolean locked,
+                boolean saved, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -112,9 +122,9 @@ public class Post implements Parcelable {
     }
 
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
-         String postTime, String title, String permalink, int score, int postType, int voteType, int gilded,
-         int nComments, String flair, boolean hidden, boolean spoiler, boolean nsfw, boolean stickied,
-         boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
+                String postTime, String title, String permalink, int score, int postType, int voteType, int gilded,
+                int nComments, String flair, boolean hidden, boolean spoiler, boolean nsfw, boolean stickied,
+                boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -137,7 +147,7 @@ public class Post implements Parcelable {
         this.archived = archived;
         this.locked = locked;
         this.saved = saved;
-        this.isCrosspost= isCrosspost;
+        this.isCrosspost = isCrosspost;
     }
 
     protected Post(Parcel in) {
@@ -174,18 +184,6 @@ public class Post implements Parcelable {
         isCrosspost = in.readByte() != 0;
         crosspostParentId = in.readString();
     }
-
-    public static final Creator<Post> CREATOR = new Creator<Post>() {
-        @Override
-        public Post createFromParcel(Parcel in) {
-            return new Post(in);
-        }
-
-        @Override
-        public Post[] newArray(int size) {
-            return new Post[size];
-        }
-    };
 
     public String getId() {
         return id;
@@ -231,20 +229,20 @@ public class Post implements Parcelable {
         return postTime;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getTitle() {
         return title;
     }
 
-    public void setSelfText(String selfText) {
-        this.selfText = selfText;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getSelfText() {
         return selfText;
+    }
+
+    public void setSelfText(String selfText) {
+        this.selfText = selfText;
     }
 
     public String getPreviewUrl() {
@@ -255,12 +253,12 @@ public class Post implements Parcelable {
         return url;
     }
 
-    public void setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
-    }
-
     public String getVideoUrl() {
         return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
     }
 
     public String getPermalink() {
@@ -275,44 +273,44 @@ public class Post implements Parcelable {
         this.flair = flair;
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
-
     public int getScore() {
         return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public int getPostType() {
         return postType;
     }
 
-    public void setVoteType(int voteType) {
-        this.voteType = voteType;
-    }
-
     public int getVoteType() {
         return voteType;
+    }
+
+    public void setVoteType(int voteType) {
+        this.voteType = voteType;
     }
 
     public int getGilded() {
         return gilded;
     }
 
-    public void setPreviewWidth(int previewWidth) {
-        this.previewWidth = previewWidth;
-    }
-
     public int getPreviewWidth() {
         return previewWidth;
     }
 
-    public void setPreviewHeight(int previewHeight) {
-        this.previewHeight = previewHeight;
+    public void setPreviewWidth(int previewWidth) {
+        this.previewWidth = previewWidth;
     }
 
     public int getPreviewHeight() {
         return previewHeight;
+    }
+
+    public void setPreviewHeight(int previewHeight) {
+        this.previewHeight = previewHeight;
     }
 
     public int getnComments() {

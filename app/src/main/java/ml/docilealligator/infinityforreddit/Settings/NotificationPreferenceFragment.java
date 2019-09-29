@@ -29,13 +29,11 @@ import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
  */
 public class NotificationPreferenceFragment extends PreferenceFragmentCompat {
 
-    private boolean enableNotification;
-    private long notificationInterval;
-
-    private WorkManager workManager;
-
     @Inject
     SharedPreferences sharedPreferences;
+    private boolean enableNotification;
+    private long notificationInterval;
+    private WorkManager workManager;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -43,7 +41,7 @@ public class NotificationPreferenceFragment extends PreferenceFragmentCompat {
 
         Activity activity = getActivity();
 
-        if(activity != null) {
+        if (activity != null) {
             workManager = WorkManager.getInstance(activity);
 
             ((Infinity) activity.getApplication()).getAppComponent().inject(this);
@@ -54,20 +52,20 @@ public class NotificationPreferenceFragment extends PreferenceFragmentCompat {
             enableNotification = sharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_NOTIFICATION_KEY, true);
             notificationInterval = Long.parseLong(sharedPreferences.getString(SharedPreferencesUtils.NOTIFICATION_INTERVAL_KEY, "1"));
 
-            if(enableNotification) {
+            if (enableNotification) {
                 if (notificationIntervalListPreference != null) {
                     notificationIntervalListPreference.setVisible(true);
                 }
             }
 
-            if(enableNotificationSwitchPreference != null) {
+            if (enableNotificationSwitchPreference != null) {
                 enableNotificationSwitchPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                     enableNotification = ((Boolean) newValue);
-                    if(notificationIntervalListPreference != null) {
+                    if (notificationIntervalListPreference != null) {
                         notificationIntervalListPreference.setVisible(enableNotification);
                     }
 
-                    if(enableNotification) {
+                    if (enableNotification) {
                         Constraints constraints = new Constraints.Builder()
                                 .setRequiredNetworkType(NetworkType.CONNECTED)
                                 .build();
@@ -88,11 +86,11 @@ public class NotificationPreferenceFragment extends PreferenceFragmentCompat {
                 });
             }
 
-            if(notificationIntervalListPreference != null) {
+            if (notificationIntervalListPreference != null) {
                 notificationIntervalListPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                     notificationInterval = Long.parseLong((String) newValue);
 
-                    if(enableNotification) {
+                    if (enableNotification) {
                         Constraints constraints = new Constraints.Builder()
                                 .setRequiredNetworkType(NetworkType.CONNECTED)
                                 .build();

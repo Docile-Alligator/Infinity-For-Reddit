@@ -32,13 +32,13 @@ public class ModifyCommentBottomSheetFragment extends RoundedBottomSheetDialogFr
     public static final String EXTRA_COMMENT_CONTENT = "ECC";
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
     public static final String EXTRA_POSITION = "EP";
-
+    @BindView(R.id.edit_text_view_modify_comment_bottom_sheet_fragment)
+    TextView editTextView;
+    @BindView(R.id.delete_text_view_modify_comment_bottom_sheet_fragment)
+    TextView deleteTextView;
     public ModifyCommentBottomSheetFragment() {
         // Required empty public constructor
     }
-
-    @BindView(R.id.edit_text_view_modify_comment_bottom_sheet_fragment) TextView editTextView;
-    @BindView(R.id.delete_text_view_modify_comment_bottom_sheet_fragment) TextView deleteTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,7 +48,7 @@ public class ModifyCommentBottomSheetFragment extends RoundedBottomSheetDialogFr
 
         Activity activity = getActivity();
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
             rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
@@ -64,7 +64,7 @@ public class ModifyCommentBottomSheetFragment extends RoundedBottomSheetDialogFr
             intent.putExtra(EditCommentActivity.EXTRA_FULLNAME, fullName);
             intent.putExtra(EditCommentActivity.EXTRA_CONTENT, content);
             intent.putExtra(EditCommentActivity.EXTRA_POSITION, bundle.getInt(EXTRA_POSITION));
-            if(activity instanceof ViewPostDetailActivity) {
+            if (activity instanceof ViewPostDetailActivity) {
                 activity.startActivityForResult(intent, ViewPostDetailActivity.EDIT_COMMENT_REQUEST_CODE);
             } else {
                 startActivity(intent);
@@ -75,9 +75,9 @@ public class ModifyCommentBottomSheetFragment extends RoundedBottomSheetDialogFr
 
         deleteTextView.setOnClickListener(view -> {
             dismiss();
-            if(activity instanceof ViewPostDetailActivity) {
+            if (activity instanceof ViewPostDetailActivity) {
                 ((ViewPostDetailActivity) activity).deleteComment(fullName, bundle.getInt(EXTRA_POSITION));
-            } else if(activity instanceof ViewUserDetailActivity) {
+            } else if (activity instanceof ViewUserDetailActivity) {
                 ((ViewUserDetailActivity) activity).deleteComment(fullName);
             }
         });

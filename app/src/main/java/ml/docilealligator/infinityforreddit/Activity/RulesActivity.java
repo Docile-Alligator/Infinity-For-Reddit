@@ -63,22 +63,23 @@ public class RulesActivity extends AppCompatActivity {
 
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
 
-    @BindView(R.id.appbar_layout_rules_activity) AppBarLayout appBarLayout;
-    @BindView(R.id.toolbar_rules_activity) Toolbar toolbar;
-    @BindView(R.id.progress_bar_rules_activity) ProgressBar progressBar;
-    @BindView(R.id.recycler_view_rules_activity) RecyclerView recyclerView;
-    @BindView(R.id.error_text_view_rules_activity) TextView errorTextView;
-
-    private String mSubredditName;
-
-    private RulesRecyclerViewAdapter mAdapter;
-
+    @BindView(R.id.appbar_layout_rules_activity)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.toolbar_rules_activity)
+    Toolbar toolbar;
+    @BindView(R.id.progress_bar_rules_activity)
+    ProgressBar progressBar;
+    @BindView(R.id.recycler_view_rules_activity)
+    RecyclerView recyclerView;
+    @BindView(R.id.error_text_view_rules_activity)
+    TextView errorTextView;
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
-
     @Inject
     SharedPreferences mSharedPreferences;
+    private String mSubredditName;
+    private RulesRecyclerViewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,29 +105,29 @@ public class RulesActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             Resources resources = getResources();
 
-            if(resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
+            if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
                 Window window = getWindow();
                 window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
                 boolean lightNavBar = false;
-                if((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+                if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
                     lightNavBar = true;
                 }
                 boolean finalLightNavBar = lightNavBar;
 
                 View decorView = window.getDecorView();
-                if(finalLightNavBar) {
+                if (finalLightNavBar) {
                     decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                 }
                 appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
                     @Override
                     public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                        if(state == State.COLLAPSED) {
-                            if(finalLightNavBar) {
+                        if (state == State.COLLAPSED) {
+                            if (finalLightNavBar) {
                                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                             }
-                        } else if(state == State.EXPANDED) {
-                            if(finalLightNavBar) {
+                        } else if (state == State.EXPANDED) {
+                            if (finalLightNavBar) {
                                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                             }
                         }
@@ -159,7 +160,7 @@ public class RulesActivity extends AppCompatActivity {
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 break;
             case 2:
-                if(systemDefault) {
+                if (systemDefault) {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
@@ -188,15 +189,16 @@ public class RulesActivity extends AppCompatActivity {
         rulesCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     new ParseRulesAsyncTask(response.body(), new ParseRulesAsyncTask.ParseRulesAsyncTaskListener() {
                         @Override
                         public void parseSuccessful(ArrayList<Rule> rules) {
                             progressBar.setVisibility(View.GONE);
-                            if(rules == null || rules.size() == 0) {
+                            if (rules == null || rules.size() == 0) {
                                 errorTextView.setVisibility(View.VISIBLE);
                                 errorTextView.setText(R.string.no_rule);
-                                errorTextView.setOnClickListener(view -> {});
+                                errorTextView.setOnClickListener(view -> {
+                                });
                             }
                             mAdapter.changeDataset(rules);
                         }
@@ -227,7 +229,7 @@ public class RulesActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == android.R.id.home) {
+        if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
         }
@@ -250,11 +252,6 @@ public class RulesActivity extends AppCompatActivity {
         private String response;
         private ParseRulesAsyncTaskListener parseRulesAsyncTaskListener;
 
-        interface ParseRulesAsyncTaskListener {
-            void parseSuccessful(ArrayList<Rule> rules);
-            void parseFailed();
-        }
-
         ParseRulesAsyncTask(String response, ParseRulesAsyncTaskListener parseRulesAsyncTaskListener) {
             this.response = response;
             this.parseRulesAsyncTaskListener = parseRulesAsyncTaskListener;
@@ -265,10 +262,10 @@ public class RulesActivity extends AppCompatActivity {
             try {
                 JSONArray rulesArray = new JSONObject(response).getJSONArray(JSONUtils.RULES_KEY);
                 ArrayList<Rule> rules = new ArrayList<>();
-                for(int i = 0; i < rulesArray.length(); i++) {
+                for (int i = 0; i < rulesArray.length(); i++) {
                     String shortName = rulesArray.getJSONObject(i).getString(JSONUtils.SHORT_NAME_KEY);
                     String description = null;
-                    if(rulesArray.getJSONObject(i).has(JSONUtils.DESCRIPTION_KEY)) {
+                    if (rulesArray.getJSONObject(i).has(JSONUtils.DESCRIPTION_KEY)) {
                         description = Utils.addSubredditAndUserLink(rulesArray.getJSONObject(i).getString(JSONUtils.DESCRIPTION_KEY));
                     }
                     rules.add(new Rule(shortName, description));
@@ -282,11 +279,17 @@ public class RulesActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(ArrayList<Rule> rules) {
-            if(rules != null) {
+            if (rules != null) {
                 parseRulesAsyncTaskListener.parseSuccessful(rules);
             } else {
                 parseRulesAsyncTaskListener.parseFailed();
             }
+        }
+
+        interface ParseRulesAsyncTaskListener {
+            void parseSuccessful(ArrayList<Rule> rules);
+
+            void parseFailed();
         }
     }
 }

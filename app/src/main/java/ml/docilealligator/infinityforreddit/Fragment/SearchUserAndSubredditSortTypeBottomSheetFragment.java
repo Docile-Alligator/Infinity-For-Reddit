@@ -25,19 +25,14 @@ import ml.docilealligator.infinityforreddit.R;
  */
 public class SearchUserAndSubredditSortTypeBottomSheetFragment extends RoundedBottomSheetDialogFragment {
 
-    public interface SearchUserAndSubredditSortTypeSelectionCallback {
-        void searchUserAndSubredditSortTypeSelected(String sortType, int fragmentPosition);
-    }
-
     public static final String EXTRA_FRAGMENT_POSITION = "EFP";
-
-    @BindView(R.id.relevance_type_text_view_search_user_and_subreddit_sort_type_bottom_sheet_fragment) TextView relevanceTypeTextView;
-    @BindView(R.id.activity_type_text_view_search_user_and_subreddit_sort_type_bottom_sheet_fragment) TextView activityTypeTextView;
-
+    @BindView(R.id.relevance_type_text_view_search_user_and_subreddit_sort_type_bottom_sheet_fragment)
+    TextView relevanceTypeTextView;
+    @BindView(R.id.activity_type_text_view_search_user_and_subreddit_sort_type_bottom_sheet_fragment)
+    TextView activityTypeTextView;
     public SearchUserAndSubredditSortTypeBottomSheetFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,7 +42,7 @@ public class SearchUserAndSubredditSortTypeBottomSheetFragment extends RoundedBo
 
         Activity activity = getActivity();
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
             rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
@@ -65,6 +60,11 @@ public class SearchUserAndSubredditSortTypeBottomSheetFragment extends RoundedBo
         });
 
         return rootView;
+    }
+
+
+    public interface SearchUserAndSubredditSortTypeSelectionCallback {
+        void searchUserAndSubredditSortTypeSelected(String sortType, int fragmentPosition);
     }
 
 }

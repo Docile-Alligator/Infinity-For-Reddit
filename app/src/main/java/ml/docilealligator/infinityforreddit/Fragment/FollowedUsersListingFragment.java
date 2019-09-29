@@ -22,13 +22,13 @@ import com.bumptech.glide.RequestManager;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Adapter.FollowedUsersRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserViewModel;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 
 /**
@@ -38,22 +38,21 @@ public class FollowedUsersListingFragment extends Fragment {
 
     public static final String EXTRA_ACCOUNT_NAME = "EAN";
 
-    @BindView(R.id.recycler_view_followed_users_listing_fragment) RecyclerView mRecyclerView;
-    @BindView(R.id.no_subscriptions_linear_layout_followed_users_listing_fragment) LinearLayout mLinearLayout;
-    @BindView(R.id.no_subscriptions_image_view_followed_users_listing_fragment) ImageView mImageView;
-
+    @BindView(R.id.recycler_view_followed_users_listing_fragment)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.no_subscriptions_linear_layout_followed_users_listing_fragment)
+    LinearLayout mLinearLayout;
+    @BindView(R.id.no_subscriptions_image_view_followed_users_listing_fragment)
+    ImageView mImageView;
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
     private Activity mActivity;
-
     private RequestManager mGlide;
-
     private SubscribedUserViewModel mSubscribedUserViewModel;
 
     public FollowedUsersListingFragment() {
         // Required empty public constructor
     }
-
-    @Inject
-    RedditDataRoomDatabase mRedditDataRoomDatabase;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

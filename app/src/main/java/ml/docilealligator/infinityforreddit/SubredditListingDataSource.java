@@ -49,23 +49,23 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
 
         FetchSubredditData.fetchSubredditListingData(retrofit, query, null, sortType,
                 new FetchSubredditData.FetchSubredditListingDataListener() {
-            @Override
-            public void onFetchSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
-                if(subredditData.size() == 0) {
-                    hasSubredditLiveData.postValue(false);
-                } else {
-                    hasSubredditLiveData.postValue(true);
-                }
+                    @Override
+                    public void onFetchSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
+                        if (subredditData.size() == 0) {
+                            hasSubredditLiveData.postValue(false);
+                        } else {
+                            hasSubredditLiveData.postValue(true);
+                        }
 
-                callback.onResult(subredditData, null, after);
-                initialLoadStateLiveData.postValue(NetworkState.LOADED);
-            }
+                        callback.onResult(subredditData, null, after);
+                        initialLoadStateLiveData.postValue(NetworkState.LOADED);
+                    }
 
-            @Override
-            public void onFetchSubredditListingDataFail() {
-                initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error retrieving subreddit list"));
-            }
-        });
+                    @Override
+                    public void onFetchSubredditListingDataFail() {
+                        initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error retrieving subreddit list"));
+                    }
+                });
     }
 
     @Override
@@ -78,23 +78,23 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
         this.params = params;
         this.callback = callback;
 
-        if(params.key.equals("") || params.key.equals("null")) {
+        if (params.key.equals("") || params.key.equals("null")) {
             return;
         }
 
         FetchSubredditData.fetchSubredditListingData(retrofit, query, params.key, sortType,
                 new FetchSubredditData.FetchSubredditListingDataListener() {
-            @Override
-            public void onFetchSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
-                callback.onResult(subredditData, after);
-                paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
-            }
+                    @Override
+                    public void onFetchSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
+                        callback.onResult(subredditData, after);
+                        paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
+                    }
 
-            @Override
-            public void onFetchSubredditListingDataFail() {
-                paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error retrieving subreddit list"));
-            }
-        });
+                    @Override
+                    public void onFetchSubredditListingDataFail() {
+                        paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error retrieving subreddit list"));
+                    }
+                });
     }
 
     void retryLoadingMore() {

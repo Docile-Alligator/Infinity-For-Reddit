@@ -43,6 +43,10 @@ public class LinkResolverActivity extends AppCompatActivity {
     @Inject
     SharedPreferences mSharedPreferences;
 
+    public static Uri getRedditUriByPath(String path) {
+        return Uri.parse("https://www.reddit.com" + path);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +63,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 break;
             case 2:
-                if(systemDefault) {
+                if (systemDefault) {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
@@ -68,25 +72,25 @@ public class LinkResolverActivity extends AppCompatActivity {
         }
 
         Uri uri = getIntent().getData();
-        if(uri == null) {
+        if (uri == null) {
             Toast.makeText(this, R.string.no_link_available, Toast.LENGTH_SHORT).show();
             finish();
         } else {
             String path = uri.getPath();
-            if(path == null) {
+            if (path == null) {
                 deepLinkError(uri);
             } else {
-                if(path.endsWith("/")) {
+                if (path.endsWith("/")) {
                     path = path.substring(0, path.length() - 1);
                 }
 
                 String messageFullname = getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME);
                 String newAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
 
-                if(path.matches(POST_PATTERN)) {
+                if (path.matches(POST_PATTERN)) {
                     List<String> segments = uri.getPathSegments();
                     int commentsIndex = segments.lastIndexOf("comments");
-                    if(commentsIndex >=0 && commentsIndex < segments.size() - 1) {
+                    if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
                         Intent intent = new Intent(this, ViewPostDetailActivity.class);
                         intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, segments.get(commentsIndex + 1));
                         intent.putExtra(ViewPostDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
@@ -95,10 +99,10 @@ public class LinkResolverActivity extends AppCompatActivity {
                     } else {
                         deepLinkError(uri);
                     }
-                } else if(path.matches(COMMENT_PATTERN)) {
+                } else if (path.matches(COMMENT_PATTERN)) {
                     List<String> segments = uri.getPathSegments();
                     int commentsIndex = segments.lastIndexOf("comments");
-                    if(commentsIndex >=0 && commentsIndex < segments.size() - 1) {
+                    if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
                         Intent intent = new Intent(this, ViewPostDetailActivity.class);
                         intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, segments.get(commentsIndex + 1));
                         intent.putExtra(ViewPostDetailActivity.EXTRA_SINGLE_COMMENT_ID, segments.get(segments.size() - 1));
@@ -108,9 +112,9 @@ public class LinkResolverActivity extends AppCompatActivity {
                     } else {
                         deepLinkError(uri);
                     }
-                } else if(path.matches(SUBREDDIT_PATTERN)) {
+                } else if (path.matches(SUBREDDIT_PATTERN)) {
                     String subredditName = path.substring(3);
-                    if(subredditName.equals("popular") || subredditName.equals("all")) {
+                    if (subredditName.equals("popular") || subredditName.equals("all")) {
                         Intent intent = new Intent(this, MainActivity.class);
                         intent.putExtra(MainActivity.EXTRA_POST_TYPE, subredditName);
                         intent.putExtra(MainActivity.EXTRA_MESSSAGE_FULLNAME, messageFullname);
@@ -123,13 +127,13 @@ public class LinkResolverActivity extends AppCompatActivity {
                         intent.putExtra(ViewSubredditDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
                         startActivity(intent);
                     }
-                } else if(path.matches(USER_PATTERN_1)) {
+                } else if (path.matches(USER_PATTERN_1)) {
                     Intent intent = new Intent(this, ViewUserDetailActivity.class);
                     intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, path.substring(6));
                     intent.putExtra(ViewUserDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
                     intent.putExtra(ViewUserDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
                     startActivity(intent);
-                } else if(path.matches(USER_PATTERN_2)) {
+                } else if (path.matches(USER_PATTERN_2)) {
                     Intent intent = new Intent(this, ViewUserDetailActivity.class);
                     intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, path.substring(3));
                     intent.putExtra(ViewUserDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
@@ -147,14 +151,14 @@ public class LinkResolverActivity extends AppCompatActivity {
     private void deepLinkError(Uri uri) {
         PackageManager pm = getPackageManager();
         ArrayList<ResolveInfo> resolveInfos = getCustomTabsPackages(pm);
-        if(!resolveInfos.isEmpty()) {
+        if (!resolveInfos.isEmpty()) {
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
             // add share action to menu list
             builder.addDefaultShareMenuItem();
             builder.setToolbarColor(getResources().getColor(R.color.colorPrimary));
             CustomTabsIntent customTabsIntent = builder.build();
             customTabsIntent.intent.setPackage(resolveInfos.get(0).activityInfo.packageName);
-            if(uri.getScheme() == null) {
+            if (uri.getScheme() == null) {
                 uri = Uri.parse("http://" + uri.toString());
             }
             try {
@@ -195,21 +199,17 @@ public class LinkResolverActivity extends AppCompatActivity {
 
         String currentPackageName = getApplicationContext().getPackageName();
 
-        for(ResolveInfo info : activities) {
-            if(!info.activityInfo.packageName.equals(currentPackageName)) {
+        for (ResolveInfo info : activities) {
+            if (!info.activityInfo.packageName.equals(currentPackageName)) {
                 packageNames.add(info.activityInfo.packageName);
             }
         }
 
-        if(!packageNames.isEmpty()) {
+        if (!packageNames.isEmpty()) {
             intent.setPackage(packageNames.get(0));
             startActivity(intent);
         } else {
             Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    public static Uri getRedditUriByPath(String path) {
-        return Uri.parse("https://www.reddit.com" + path);
     }
 }

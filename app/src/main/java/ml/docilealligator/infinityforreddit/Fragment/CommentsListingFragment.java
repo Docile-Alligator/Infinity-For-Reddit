@@ -55,33 +55,32 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
 
-    @BindView(R.id.coordinator_layout_comments_listing_fragment) CoordinatorLayout mCoordinatorLayout;
-    @BindView(R.id.recycler_view_comments_listing_fragment) RecyclerView mCommentRecyclerView;
-    @BindView(R.id.progress_bar_comments_listing_fragment) CircleProgressBar mProgressBar;
-    @BindView(R.id.fetch_comments_info_linear_layout_comments_listing_fragment) LinearLayout mFetchCommentInfoLinearLayout;
-    @BindView(R.id.fetch_comments_info_image_view_comments_listing_fragment) ImageView mFetchCommentInfoImageView;
-    @BindView(R.id.fetch_comments_info_text_view_comments_listing_fragment) TextView mFetchCommentInfoTextView;
-
-    private boolean mNullAccessToken = false;
-    private String mAccessToken;
-
-    private RequestManager mGlide;
-
-    private Activity activity;
-
-    private CommentsListingRecyclerViewAdapter mAdapter;
-
+    @BindView(R.id.coordinator_layout_comments_listing_fragment)
+    CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.recycler_view_comments_listing_fragment)
+    RecyclerView mCommentRecyclerView;
+    @BindView(R.id.progress_bar_comments_listing_fragment)
+    CircleProgressBar mProgressBar;
+    @BindView(R.id.fetch_comments_info_linear_layout_comments_listing_fragment)
+    LinearLayout mFetchCommentInfoLinearLayout;
+    @BindView(R.id.fetch_comments_info_image_view_comments_listing_fragment)
+    ImageView mFetchCommentInfoImageView;
+    @BindView(R.id.fetch_comments_info_text_view_comments_listing_fragment)
+    TextView mFetchCommentInfoTextView;
     CommentViewModel mCommentViewModel;
-
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
-
-    @Inject @Named("oauth")
+    @Inject
+    @Named("oauth")
     Retrofit mOauthRetrofit;
-
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
+    private boolean mNullAccessToken = false;
+    private String mAccessToken;
+    private RequestManager mGlide;
+    private Activity activity;
+    private CommentsListingRecyclerViewAdapter mAdapter;
 
     public CommentsListingFragment() {
         // Required empty public constructor
@@ -128,7 +127,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
     private void getCurrentAccountAndBindView(Resources resources) {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-            if(account == null) {
+            if (account == null) {
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
@@ -150,7 +149,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
         CommentViewModel.Factory factory;
 
-        if(mAccessToken == null) {
+        if (mAccessToken == null) {
             factory = new CommentViewModel.Factory(mRetrofit,
                     resources.getConfiguration().locale, mAccessToken, username, PostDataSource.SORT_TYPE_NEW,
                     getArguments().getBoolean(EXTRA_ARE_SAVED_COMMENTS));
@@ -165,7 +164,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
         mCommentViewModel.hasComment().observe(this, hasComment -> {
             mProgressBar.setVisibility(View.GONE);
-            if(hasComment) {
+            if (hasComment) {
                 mFetchCommentInfoLinearLayout.setVisibility(View.GONE);
             } else {
                 mFetchCommentInfoLinearLayout.setOnClickListener(view -> {
@@ -176,9 +175,9 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         });
 
         mCommentViewModel.getInitialLoadingState().observe(this, networkState -> {
-            if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
+            if (networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
                 mProgressBar.setVisibility(View.GONE);
-            } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
+            } else if (networkState.getStatus().equals(NetworkState.Status.FAILED)) {
                 mProgressBar.setVisibility(View.GONE);
                 mFetchCommentInfoLinearLayout.setOnClickListener(view -> refresh());
                 showErrorView(R.string.load_comments_failed);
@@ -215,7 +214,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     }
 
     private void showErrorView(int stringResId) {
-        if(activity != null && isAdded()) {
+        if (activity != null && isAdded()) {
             mProgressBar.setVisibility(View.GONE);
             mFetchCommentInfoLinearLayout.setVisibility(View.VISIBLE);
             mFetchCommentInfoTextView.setText(stringResId);

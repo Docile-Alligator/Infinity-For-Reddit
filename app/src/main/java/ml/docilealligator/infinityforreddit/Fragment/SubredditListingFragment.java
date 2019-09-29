@@ -31,13 +31,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Activity.SearchSubredditsResultActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
+import ml.docilealligator.infinityforreddit.Adapter.SubredditListingRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.Adapter.SubredditListingRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.SubredditListingViewModel;
 import retrofit2.Retrofit;
 
@@ -52,27 +52,29 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
     public static final String EXTRA_ACCOUNT_NAME = "EAN";
 
-    @BindView(R.id.coordinator_layout_subreddit_listing_fragment) CoordinatorLayout mCoordinatorLayout;
-    @BindView(R.id.recycler_view_subreddit_listing_fragment) RecyclerView mSubredditListingRecyclerView;
-    @BindView(R.id.progress_bar_subreddit_listing_fragment) CircleProgressBar mProgressBar;
-    @BindView(R.id.fetch_subreddit_listing_info_linear_layout_subreddit_listing_fragment) LinearLayout mFetchSubredditListingInfoLinearLayout;
-    @BindView(R.id.fetch_subreddit_listing_info_image_view_subreddit_listing_fragment) ImageView mFetchSubredditListingInfoImageView;
-    @BindView(R.id.fetch_subreddit_listing_info_text_view_subreddit_listing_fragment) TextView mFetchSubredditListingInfoTextView;
-
-    private LinearLayoutManager mLinearLayoutManager;
-
-    private SubredditListingRecyclerViewAdapter mAdapter;
-
+    @BindView(R.id.coordinator_layout_subreddit_listing_fragment)
+    CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.recycler_view_subreddit_listing_fragment)
+    RecyclerView mSubredditListingRecyclerView;
+    @BindView(R.id.progress_bar_subreddit_listing_fragment)
+    CircleProgressBar mProgressBar;
+    @BindView(R.id.fetch_subreddit_listing_info_linear_layout_subreddit_listing_fragment)
+    LinearLayout mFetchSubredditListingInfoLinearLayout;
+    @BindView(R.id.fetch_subreddit_listing_info_image_view_subreddit_listing_fragment)
+    ImageView mFetchSubredditListingInfoImageView;
+    @BindView(R.id.fetch_subreddit_listing_info_text_view_subreddit_listing_fragment)
+    TextView mFetchSubredditListingInfoTextView;
     SubredditListingViewModel mSubredditListingViewModel;
-
-    @Inject @Named("no_oauth")
+    @Inject
+    @Named("no_oauth")
     Retrofit mRetrofit;
-
-    @Inject @Named("oauth")
+    @Inject
+    @Named("oauth")
     Retrofit mOauthRetrofit;
-
     @Inject
     RedditDataRoomDatabase redditDataRoomDatabase;
+    private LinearLayoutManager mLinearLayoutManager;
+    private SubredditListingRecyclerViewAdapter mAdapter;
 
     public SubredditListingFragment() {
         // Required empty public constructor
@@ -120,7 +122,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
                     @Override
                     public void subredditSelected(String subredditName, String iconUrl) {
-                        if(isPosting) {
+                        if (isPosting) {
                             ((SearchSubredditsResultActivity) activity).getSelectedSubreddit(subredditName, iconUrl);
                         } else {
                             Intent intent = new Intent(activity, ViewSubredditDetailActivity.class);
@@ -139,7 +141,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
         mSubredditListingViewModel.hasSubredditLiveData().observe(this, hasSubreddit -> {
             mProgressBar.setVisibility(View.GONE);
-            if(hasSubreddit) {
+            if (hasSubreddit) {
                 mFetchSubredditListingInfoLinearLayout.setVisibility(View.GONE);
             } else {
                 mFetchSubredditListingInfoLinearLayout.setOnClickListener(view -> {
@@ -150,9 +152,9 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         });
 
         mSubredditListingViewModel.getInitialLoadingState().observe(this, networkState -> {
-            if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
+            if (networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
                 mProgressBar.setVisibility(View.GONE);
-            } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
+            } else if (networkState.getStatus().equals(NetworkState.Status.FAILED)) {
                 mProgressBar.setVisibility(View.GONE);
                 mFetchSubredditListingInfoLinearLayout.setOnClickListener(view -> refresh());
                 showErrorView(R.string.search_subreddits_error);
@@ -169,7 +171,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
     }
 
     private void showErrorView(int stringResId) {
-        if(getActivity() != null && isAdded()) {
+        if (getActivity() != null && isAdded()) {
             mProgressBar.setVisibility(View.GONE);
             mFetchSubredditListingInfoLinearLayout.setVisibility(View.VISIBLE);
             mFetchSubredditListingInfoTextView.setText(stringResId);

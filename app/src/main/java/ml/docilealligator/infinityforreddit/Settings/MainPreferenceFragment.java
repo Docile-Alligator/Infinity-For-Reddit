@@ -40,7 +40,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.main_preferences, rootKey);
 
         Activity activity = getActivity();
-        if(activity != null) {
+        if (activity != null) {
             ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
             SwitchPreference nsfwSwitch = findPreference(SharedPreferencesUtils.NSFW_KEY);
@@ -48,20 +48,20 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
             SwitchPreference blurSpoilerSwitch = findPreference(SharedPreferencesUtils.BLUR_SPOILER_KEY);
             ListPreference themePreference = findPreference(SharedPreferencesUtils.THEME_KEY);
 
-            if(nsfwSwitch != null) {
+            if (nsfwSwitch != null) {
                 nsfwSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                     EventBus.getDefault().post(new ChangeNSFWEvent((Boolean) newValue));
-                    if(blurNSFWSwitch != null) {
+                    if (blurNSFWSwitch != null) {
                         blurNSFWSwitch.setVisible((Boolean) newValue);
                     }
                     return true;
                 });
             }
 
-            if(blurNSFWSwitch != null) {
+            if (blurNSFWSwitch != null) {
                 boolean nsfwEnabled = sharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_KEY, false);
 
-                if(nsfwEnabled) {
+                if (nsfwEnabled) {
                     blurNSFWSwitch.setVisible(true);
                 } else {
                     blurNSFWSwitch.setVisible(false);
@@ -73,7 +73,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
                 });
             }
 
-            if(blurSpoilerSwitch != null) {
+            if (blurSpoilerSwitch != null) {
                 blurSpoilerSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                     EventBus.getDefault().post(new ChangeSpoilerBlurEvent((Boolean) newValue));
                     return true;
@@ -82,8 +82,8 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
 
             boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
 
-            if(themePreference != null) {
-                if(systemDefault) {
+            if (themePreference != null) {
+                if (systemDefault) {
                     themePreference.setEntries(R.array.settings_theme_q);
                 } else {
                     themePreference.setEntries(R.array.settings_theme);
@@ -99,7 +99,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
                             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                             break;
                         case 2:
-                            if(systemDefault) {
+                            if (systemDefault) {
                                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
                             } else {
                                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);

@@ -11,18 +11,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class DeleteThing {
-    public interface DeleteThingListener {
-        void deleteSuccess();
-        void deleteFailed();
-    }
-
     public static void delete(Retrofit oauthRetrofit, String fullname, String accessToken, DeleteThingListener deleteThingListener) {
         Map<String, String> params = new HashMap<>();
         params.put(RedditUtils.ID_KEY, fullname);
         oauthRetrofit.create(RedditAPI.class).delete(RedditUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     deleteThingListener.deleteSuccess();
                 } else {
                     deleteThingListener.deleteFailed();
@@ -34,5 +29,11 @@ public class DeleteThing {
                 deleteThingListener.deleteFailed();
             }
         });
+    }
+
+    public interface DeleteThingListener {
+        void deleteSuccess();
+
+        void deleteFailed();
     }
 }

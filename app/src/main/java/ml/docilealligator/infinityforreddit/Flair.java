@@ -4,6 +4,17 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Flair implements Parcelable {
+    public static final Creator<Flair> CREATOR = new Creator<Flair>() {
+        @Override
+        public Flair createFromParcel(Parcel in) {
+            return new Flair(in);
+        }
+
+        @Override
+        public Flair[] newArray(int size) {
+            return new Flair[size];
+        }
+    };
     private String id;
     private String text;
     private boolean editable;
@@ -19,18 +30,6 @@ public class Flair implements Parcelable {
         text = in.readString();
         editable = in.readByte() != 0;
     }
-
-    public static final Creator<Flair> CREATOR = new Creator<Flair>() {
-        @Override
-        public Flair createFromParcel(Parcel in) {
-            return new Flair(in);
-        }
-
-        @Override
-        public Flair[] newArray(int size) {
-            return new Flair[size];
-        }
-    };
 
     public String getId() {
         return id;

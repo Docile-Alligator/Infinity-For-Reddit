@@ -16,10 +16,10 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pl.droidsonroids.gif.GifImageView;
 
 public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -31,10 +31,6 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
     private String username;
     private String userIconUrl;
     private boolean hasClearSelectionRow;
-
-    public interface ItemClickListener {
-        void onClick(String name, String iconUrl, boolean subredditIsUser);
-    }
 
     public SubscribedSubredditsRecyclerViewAdapter(Context context) {
         mContext = context;
@@ -59,13 +55,13 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
         String name;
         String iconUrl;
 
-        if(itemClickListener != null) {
-            if(hasClearSelectionRow) {
-                if(viewHolder.getAdapterPosition() == 0) {
+        if (itemClickListener != null) {
+            if (hasClearSelectionRow) {
+                if (viewHolder.getAdapterPosition() == 0) {
                     ((SubredditViewHolder) viewHolder).subredditNameTextView.setText(R.string.all_subreddits);
                     viewHolder.itemView.setOnClickListener(view -> itemClickListener.onClick(null, null, false));
                     return;
-                } else if(viewHolder.getAdapterPosition() == 1) {
+                } else if (viewHolder.getAdapterPosition() == 1) {
                     name = username;
                     iconUrl = userIconUrl;
                     viewHolder.itemView.setOnClickListener(view -> itemClickListener.onClick(name, iconUrl, true));
@@ -75,7 +71,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                     viewHolder.itemView.setOnClickListener(view -> itemClickListener.onClick(name, iconUrl, false));
                 }
             } else {
-                if(viewHolder.getAdapterPosition() == 0) {
+                if (viewHolder.getAdapterPosition() == 0) {
                     name = username;
                     iconUrl = userIconUrl;
                     viewHolder.itemView.setOnClickListener(view -> itemClickListener.onClick(name, iconUrl, true));
@@ -96,7 +92,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
             });
         }
 
-        if(iconUrl != null && !iconUrl.equals("")) {
+        if (iconUrl != null && !iconUrl.equals("")) {
             glide.load(iconUrl)
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                     .error(glide.load(R.drawable.subreddit_default_icon)
@@ -112,9 +108,9 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
 
     @Override
     public int getItemCount() {
-        if(mSubscribedSubredditData != null) {
-            if(itemClickListener != null) {
-                if(hasClearSelectionRow) {
+        if (mSubscribedSubredditData != null) {
+            if (itemClickListener != null) {
+                if (hasClearSelectionRow) {
                     return mSubscribedSubredditData.size() + 2;
                 } else {
                     return mSubscribedSubredditData.size() + 1;
@@ -131,7 +127,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
         glide.clear(((SubredditViewHolder) holder).iconGifImageView);
     }
 
-    public void setSubscribedSubreddits(List<SubscribedSubredditData> subscribedSubreddits){
+    public void setSubscribedSubreddits(List<SubscribedSubredditData> subscribedSubreddits) {
         mSubscribedSubredditData = subscribedSubreddits;
         notifyDataSetChanged();
     }
@@ -139,6 +135,10 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
     public void addUser(String username, String userIconUrl) {
         this.username = username;
         this.userIconUrl = userIconUrl;
+    }
+
+    public interface ItemClickListener {
+        void onClick(String name, String iconUrl, boolean subredditIsUser);
     }
 
     private class SubredditViewHolder extends RecyclerView.ViewHolder {

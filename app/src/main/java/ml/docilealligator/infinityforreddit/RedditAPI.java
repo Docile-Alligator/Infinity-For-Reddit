@@ -49,7 +49,7 @@ public interface RedditAPI {
 
     @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=25")
     Call<String> getSubredditBestPosts(@Path("subredditName") String subredditName, @Path("sortType") String sortType,
-                                            @Query("after") String lastItem);
+                                       @Query("after") String lastItem);
 
     @GET("user/{username}/{where}.json?&type=links&raw_json=1&limit=25")
     Call<String> getUserPostsOauth(@Path("username") String username, @Path("where") String where,
@@ -72,7 +72,7 @@ public interface RedditAPI {
 
     @GET("user/{username}/{where}.json?&type=comments&raw_json=1&limit=25")
     Call<String> getUserSavedCommentsOauth(@Path("username") String username, @Path("where") String where,
-                                   @Query("after") String lastItem, @Query("sort") String sortType, @HeaderMap Map<String, String> headers);
+                                           @Query("after") String lastItem, @Query("sort") String sortType, @HeaderMap Map<String, String> headers);
 
     @FormUrlEncoded
     @POST("api/subscribe")
@@ -134,7 +134,7 @@ public interface RedditAPI {
 
     @GET("/comments/{id}/placeholder/{singleCommentId}.json?context=8&raw_json=1")
     Call<String> getPostAndCommentsSingleThreadByIdOauth(@Path("id") String id, @Path("singleCommentId") String singleCommentId,
-                                             @HeaderMap Map<String, String> headers);
+                                                         @HeaderMap Map<String, String> headers);
 
     @GET("/comments/{id}.json?raw_json=1")
     Call<String> getPostAndCommentsByIdOauth(@Path("id") String id, @HeaderMap Map<String, String> headers);
@@ -147,7 +147,7 @@ public interface RedditAPI {
 
     @Multipart
     @POST(".")
-    Call<String> uploadMediaToAWS(@PartMap()Map<String, RequestBody> params, @Part() MultipartBody.Part file);
+    Call<String> uploadMediaToAWS(@PartMap() Map<String, RequestBody> params, @Part() MultipartBody.Part file);
 
     @FormUrlEncoded
     @POST("/api/editusertext")

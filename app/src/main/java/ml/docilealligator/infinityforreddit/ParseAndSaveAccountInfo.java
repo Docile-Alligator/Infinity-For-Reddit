@@ -7,14 +7,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ParseAndSaveAccountInfo {
-    public interface ParseAndSaveAccountInfoListener {
-        void onParseMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma);
-        void onParseMyInfoFail();
-    }
-
     public static void parseAndSaveAccountInfo(String response, RedditDataRoomDatabase redditDataRoomDatabase,
                                                ParseAndSaveAccountInfoListener parseAndSaveAccountInfoListener) {
         new ParseAndSaveAccountInfoAsyncTask(response, redditDataRoomDatabase, parseAndSaveAccountInfoListener).execute();
+    }
+
+    public interface ParseAndSaveAccountInfoListener {
+        void onParseMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma);
+
+        void onParseMyInfoFail();
     }
 
     private static class ParseAndSaveAccountInfoAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -29,7 +30,7 @@ public class ParseAndSaveAccountInfo {
         private int karma;
 
         ParseAndSaveAccountInfoAsyncTask(String response, RedditDataRoomDatabase redditDataRoomDatabase,
-                                         ParseAndSaveAccountInfoListener parseAndSaveAccountInfoListener){
+                                         ParseAndSaveAccountInfoListener parseAndSaveAccountInfoListener) {
             try {
                 jsonResponse = new JSONObject(response);
                 this.redditDataRoomDatabase = redditDataRoomDatabase;
@@ -45,7 +46,7 @@ public class ParseAndSaveAccountInfo {
             try {
                 name = jsonResponse.getString(JSONUtils.NAME_KEY);
                 profileImageUrl = Html.fromHtml(jsonResponse.getString(JSONUtils.ICON_IMG_KEY)).toString();
-                if(!jsonResponse.isNull(JSONUtils.SUBREDDIT_KEY)) {
+                if (!jsonResponse.isNull(JSONUtils.SUBREDDIT_KEY)) {
                     bannerImageUrl = Html.fromHtml(jsonResponse.getJSONObject(JSONUtils.SUBREDDIT_KEY).getString(JSONUtils.BANNER_IMG_KEY)).toString();
                 }
                 int linkKarma = jsonResponse.getInt(JSONUtils.LINK_KARMA_KEY);
@@ -61,7 +62,7 @@ public class ParseAndSaveAccountInfo {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            if(!parseFailed) {
+            if (!parseFailed) {
                 parseAndSaveAccountInfoListener.onParseMyInfoSuccess(name, profileImageUrl, bannerImageUrl, karma);
             } else {
                 parseAndSaveAccountInfoListener.onParseMyInfoFail();

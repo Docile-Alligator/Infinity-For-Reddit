@@ -59,34 +59,30 @@ import ml.docilealligator.infinityforreddit.TitleFontStyle;
 
 public class ViewImageActivity extends AppCompatActivity {
 
-    private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
-
     public static final String TITLE_KEY = "TK";
     public static final String IMAGE_URL_KEY = "IUK";
     public static final String FILE_NAME_KEY = "FNK";
-
-    @BindView(R.id.parent_relative_layout_view_image_activity) RelativeLayout mRelativeLayout;
-    @BindView(R.id.progress_bar_view_image_activity) ProgressBar mProgressBar;
-    @BindView(R.id.image_view_view_image_activity) GestureImageView mImageView;
-    @BindView(R.id.load_image_error_linear_layout_view_image_activity) LinearLayout mLoadErrorLinearLayout;
-
+    private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
+    @BindView(R.id.parent_relative_layout_view_image_activity)
+    RelativeLayout mRelativeLayout;
+    @BindView(R.id.progress_bar_view_image_activity)
+    ProgressBar mProgressBar;
+    @BindView(R.id.image_view_view_image_activity)
+    GestureImageView mImageView;
+    @BindView(R.id.load_image_error_linear_layout_view_image_activity)
+    LinearLayout mLoadErrorLinearLayout;
+    @Inject
+    SharedPreferences mSharedPreferences;
     private boolean isActionBarHidden = false;
     private boolean isDownloading = false;
-
     private Menu mMenu;
     private Swipe swipe;
-
     private String mImageUrl;
     private String mImageFileName;
-
     private float totalLengthY = 0.0f;
     private float touchY = -1.0f;
     private float zoom = 1.0f;
-
     private boolean isSwiping = false;
-
-    @Inject
-    SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +114,7 @@ public class ViewImageActivity extends AppCompatActivity {
         mImageFileName = intent.getStringExtra(FILE_NAME_KEY) + ".jpg";
 
         mLoadErrorLinearLayout.setOnClickListener(view -> {
-            if(!isSwiping) {
+            if (!isSwiping) {
                 mProgressBar.setVisibility(View.VISIBLE);
                 mLoadErrorLinearLayout.setVisibility(View.GONE);
                 loadImage();
@@ -146,7 +142,7 @@ public class ViewImageActivity extends AppCompatActivity {
 
         actionBarElementColorAnimation.addUpdateListener(valueAnimator -> {
             upArrow.setColorFilter((int) valueAnimator.getAnimatedValue(), PorterDuff.Mode.SRC_IN);
-            if(mMenu != null) {
+            if (mMenu != null) {
                 Drawable drawable = mMenu.getItem(0).getIcon();
                 //drawable.mutate();
                 drawable.setColorFilter((int) valueAnimator.getAnimatedValue(), PorterDuff.Mode.SRC_IN);
@@ -398,7 +394,7 @@ public class ViewImageActivity extends AppCompatActivity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if(zoom == 1.0) {
+        if (zoom == 1.0) {
             swipe.dispatchTouchEvent(ev);
         }
         return super.dispatchTouchEvent(ev);
@@ -406,10 +402,10 @@ public class ViewImageActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE && grantResults.length > 0) {
-            if(grantResults[0] == PackageManager.PERMISSION_DENIED) {
+        if (requestCode == PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE && grantResults.length > 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 Toast.makeText(this, R.string.no_storage_permission, Toast.LENGTH_SHORT).show();
-            } else if(grantResults[0] == PackageManager.PERMISSION_GRANTED && isDownloading) {
+            } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED && isDownloading) {
                 saveImage();
             }
             isDownloading = false;
@@ -424,25 +420,25 @@ public class ViewImageActivity extends AppCompatActivity {
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
         //Android Q support
-        if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, mImageFileName);
         } else {
             String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
             File directory = new File(path + "/Infinity/");
             boolean saveToInfinityFolder = true;
-            if(!directory.exists()) {
-                if(!directory.mkdir()) {
+            if (!directory.exists()) {
+                if (!directory.mkdir()) {
                     saveToInfinityFolder = false;
                 }
             } else {
-                if(directory.isFile()) {
-                    if(!(directory.delete() && directory.mkdir())) {
+                if (directory.isFile()) {
+                    if (!(directory.delete() && directory.mkdir())) {
                         saveToInfinityFolder = false;
                     }
                 }
             }
 
-            if(saveToInfinityFolder) {
+            if (saveToInfinityFolder) {
                 request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES + "/Infinity/", mImageFileName);
             } else {
                 request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, mImageFileName);
@@ -451,7 +447,7 @@ public class ViewImageActivity extends AppCompatActivity {
 
         DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
 
-        if(manager == null) {
+        if (manager == null) {
             Toast.makeText(this, R.string.download_failed, Toast.LENGTH_SHORT).show();
             return;
         }

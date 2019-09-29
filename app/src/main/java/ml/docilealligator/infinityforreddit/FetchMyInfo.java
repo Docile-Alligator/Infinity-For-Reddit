@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import retrofit2.Call;
@@ -9,11 +7,6 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 
 public class FetchMyInfo {
-
-    public interface FetchUserMyListener {
-        void onFetchMyInfoSuccess(String response);
-        void onFetchMyInfoFail();
-    }
 
     public static void fetchAccountInfo(final Retrofit retrofit, String accessToken,
                                         final FetchUserMyListener fetchUserMyListener) {
@@ -23,7 +16,7 @@ public class FetchMyInfo {
         userInfo.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     fetchUserMyListener.onFetchMyInfoSuccess(response.body());
                 } else {
                     fetchUserMyListener.onFetchMyInfoFail();
@@ -35,5 +28,11 @@ public class FetchMyInfo {
                 fetchUserMyListener.onFetchMyInfoFail();
             }
         });
+    }
+
+    public interface FetchUserMyListener {
+        void onFetchMyInfoSuccess(String response);
+
+        void onFetchMyInfoFail();
     }
 }

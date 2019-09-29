@@ -14,11 +14,6 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 
 public class SubredditSubscription {
-    public interface SubredditSubscriptionListener {
-        void onSubredditSubscriptionSuccess();
-        void onSubredditSubscriptionFail();
-    }
-
     public static void subscribeToSubreddit(Retrofit oauthRetrofit, Retrofit retrofit,
                                             String accessToken, String subredditName, String accountName,
                                             RedditDataRoomDatabase redditDataRoomDatabase,
@@ -32,7 +27,7 @@ public class SubredditSubscription {
                                               RedditDataRoomDatabase redditDataRoomDatabase,
                                               SubredditSubscriptionListener subredditSubscriptionListener) {
         subredditSubscription(oauthRetrofit, null, accessToken, subredditName, accountName, "unsub",
-                redditDataRoomDatabase,subredditSubscriptionListener);
+                redditDataRoomDatabase, subredditSubscriptionListener);
     }
 
     private static void subredditSubscription(Retrofit oauthRetrofit, Retrofit retrofit, String accessToken,
@@ -49,8 +44,8 @@ public class SubredditSubscription {
         subredditSubscriptionCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                if(response.isSuccessful()) {
-                    if(action.equals("sub")) {
+                if (response.isSuccessful()) {
+                    if (action.equals("sub")) {
                         FetchSubredditData.fetchSubredditData(retrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
                             @Override
                             public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
@@ -77,6 +72,12 @@ public class SubredditSubscription {
                 subredditSubscriptionListener.onSubredditSubscriptionFail();
             }
         });
+    }
+
+    public interface SubredditSubscriptionListener {
+        void onSubredditSubscriptionSuccess();
+
+        void onSubredditSubscriptionFail();
     }
 
     private static class UpdateSubscriptionAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -106,7 +107,7 @@ public class SubredditSubscription {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            if(isSubscribing) {
+            if (isSubscribing) {
                 redditDataRoomDatabase.subscribedSubredditDao().insert(subscribedSubredditData);
             } else {
                 redditDataRoomDatabase.subscribedSubredditDao().deleteSubscribedSubreddit(subredditName, accountName);

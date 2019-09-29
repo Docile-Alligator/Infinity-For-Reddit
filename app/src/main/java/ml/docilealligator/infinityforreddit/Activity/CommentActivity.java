@@ -39,16 +39,16 @@ import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.linkify.LinkifyPlugin;
+import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CommentData;
 import ml.docilealligator.infinityforreddit.ContentFontStyle;
+import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FontStyle;
-import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SendComment;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.TitleFontStyle;
 import retrofit2.Retrofit;
 
@@ -70,27 +70,27 @@ public class CommentActivity extends AppCompatActivity {
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
 
-    @BindView(R.id.coordinator_layout_comment_activity) CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.toolbar_comment_activity) Toolbar toolbar;
-    @BindView(R.id.comment_parent_markwon_view_comment_activity) TextView commentParentMarkwonView;
-    @BindView(R.id.comment_edit_text_comment_activity) EditText commentEditText;
-
+    @BindView(R.id.coordinator_layout_comment_activity)
+    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.toolbar_comment_activity)
+    Toolbar toolbar;
+    @BindView(R.id.comment_parent_markwon_view_comment_activity)
+    TextView commentParentMarkwonView;
+    @BindView(R.id.comment_edit_text_comment_activity)
+    EditText commentEditText;
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
+    @Inject
+    SharedPreferences mSharedPreferences;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String parentFullname;
     private int parentDepth;
     private int parentPosition;
     private boolean isReplying;
-
-    @Inject
-    @Named("oauth")
-    Retrofit mOauthRetrofit;
-
-    @Inject
-    RedditDataRoomDatabase mRedditDataRoomDatabase;
-
-    @Inject
-    SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,9 +113,9 @@ public class CommentActivity extends AppCompatActivity {
 
         EventBus.getDefault().register(this);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Window window = getWindow();
-            if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+            if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
                 window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
             }
             window.setNavigationBarColor(ContextCompat.getColor(this, R.color.navBarColor));
@@ -131,7 +131,7 @@ public class CommentActivity extends AppCompatActivity {
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 break;
             case 2:
-                if(systemDefault) {
+                if (systemDefault) {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
@@ -139,12 +139,12 @@ public class CommentActivity extends AppCompatActivity {
 
         }
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             getCurrentAccount();
         } else {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
-            if(!mNullAccessToken && mAccessToken == null) {
+            if (!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccount();
             }
         }
@@ -157,7 +157,7 @@ public class CommentActivity extends AppCompatActivity {
                         builder.linkResolver((view, link) -> {
                             Intent intent = new Intent(CommentActivity.this, LinkResolverActivity.class);
                             Uri uri = Uri.parse(link);
-                            if(uri.getScheme() == null && uri.getHost() == null) {
+                            if (uri.getScheme() == null && uri.getHost() == null) {
                                 intent.setData(LinkResolverActivity.getRedditUriByPath(link));
                             } else {
                                 intent.setData(uri);
@@ -173,7 +173,7 @@ public class CommentActivity extends AppCompatActivity {
         parentDepth = intent.getExtras().getInt(EXTRA_PARENT_DEPTH_KEY);
         parentPosition = intent.getExtras().getInt(EXTRA_PARENT_POSITION_KEY);
         isReplying = intent.getExtras().getBoolean(EXTRA_IS_REPLYING_KEY);
-        if(isReplying) {
+        if (isReplying) {
             toolbar.setTitle(getString(R.string.comment_activity_label_is_replying));
         }
 
@@ -181,14 +181,14 @@ public class CommentActivity extends AppCompatActivity {
 
         commentEditText.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if(imm != null) {
+        if (imm != null) {
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
     }
 
     private void getCurrentAccount() {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-            if(account == null) {
+            if (account == null) {
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
@@ -199,8 +199,8 @@ public class CommentActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        if(imm != null) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
             imm.hideSoftInputFromWindow(commentEditText.getWindowToken(), 0);
         }
     }
@@ -218,7 +218,7 @@ public class CommentActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_send_comment_activity:
-                if(commentEditText.getText() == null || commentEditText.getText().toString().equals("")) {
+                if (commentEditText.getText() == null || commentEditText.getText().toString().equals("")) {
                     Snackbar.make(coordinatorLayout, R.string.comment_content_required, Snackbar.LENGTH_SHORT).show();
                     return true;
                 }
@@ -238,7 +238,7 @@ public class CommentActivity extends AppCompatActivity {
                                 Intent returnIntent = new Intent();
                                 returnIntent.putExtra(EXTRA_COMMENT_DATA_KEY, commentData);
                                 returnIntent.putExtra(EXTRA_PARENT_FULLNAME_KEY, parentFullname);
-                                if(isReplying) {
+                                if (isReplying) {
                                     returnIntent.putExtra(EXTRA_PARENT_POSITION_KEY, parentPosition);
                                 }
                                 setResult(RESULT_OK, returnIntent);
@@ -251,7 +251,7 @@ public class CommentActivity extends AppCompatActivity {
                                 item.setEnabled(true);
                                 item.getIcon().setAlpha(255);
 
-                                if(errorMessage == null) {
+                                if (errorMessage == null) {
                                     Snackbar.make(coordinatorLayout, R.string.send_comment_failed, Snackbar.LENGTH_SHORT).show();
                                 } else {
                                     Snackbar.make(coordinatorLayout, errorMessage, Snackbar.LENGTH_SHORT).show();

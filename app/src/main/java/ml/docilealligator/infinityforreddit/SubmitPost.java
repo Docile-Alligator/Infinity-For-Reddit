@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,16 +29,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 class SubmitPost {
-    interface SubmitPostListener {
-        void submitSuccessful(Post post);
-        void submitFailed(@Nullable String errorMessage);
-    }
-
-    private interface UploadImageListener {
-        void uploaded(String imageUrl);
-        void uploadFailed(@Nullable String errorMessage);
-    }
-
     static void submitTextOrLinkPost(Retrofit oauthRetrofit, String accessToken,
                                      Locale locale, String subredditName, String title, String content,
                                      String flair, boolean isSpoiler, boolean isNSFW, String kind,
@@ -85,7 +74,7 @@ class SubmitPost {
         uploadImageCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     new ParseJSONResponseFromAWSAsyncTask(response.body(), new ParseJSONResponseFromAWSAsyncTask.ParseJSONResponseFromAWSListener() {
                         @Override
                         public void parseSuccessful(Map<String, RequestBody> nameValuePairsMap) {
@@ -93,7 +82,7 @@ class SubmitPost {
                             MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", "post_video." + fileType, fileBody);
 
                             RedditAPI uploadVideoToAWSApi;
-                            if(fileType.equals("gif")) {
+                            if (fileType.equals("gif")) {
                                 uploadVideoToAWSApi = uploadMediaRetrofit.create(RedditAPI.class);
                             } else {
                                 uploadVideoToAWSApi = uploadVideoRetrofit.create(RedditAPI.class);
@@ -103,7 +92,7 @@ class SubmitPost {
                             uploadMediaToAWS.enqueue(new Callback<String>() {
                                 @Override
                                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                                    if(response.isSuccessful()) {
+                                    if (response.isSuccessful()) {
                                         new ParseXMLReponseFromAWSAsyncTask(response.body(), new ParseXMLReponseFromAWSAsyncTask.ParseXMLResponseFromAWSListener() {
                                             @Override
                                             public void parseSuccessful(String url) {
@@ -111,7 +100,7 @@ class SubmitPost {
                                                         posterBitmap, new UploadImageListener() {
                                                             @Override
                                                             public void uploaded(String imageUrl) {
-                                                                if(fileType.equals("gif")) {
+                                                                if (fileType.equals("gif")) {
                                                                     submitPost(oauthRetrofit, accessToken, locale,
                                                                             subredditName, title, url, flair, isSpoiler, isNSFW,
                                                                             RedditUtils.KIND_VIDEOGIF, imageUrl, submitPostListener);
@@ -193,7 +182,7 @@ class SubmitPost {
                 break;
         }
 
-        if(flair != null) {
+        if (flair != null) {
             params.put(RedditUtils.FLAIR_TEXT_KEY, flair);
         }
         params.put(RedditUtils.SPOILER_KEY, Boolean.toString(isSpoiler));
@@ -203,7 +192,7 @@ class SubmitPost {
         submitPostCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     try {
                         getSubmittedPost(response.body(), kind, oauthRetrofit, accessToken,
                                 locale, submitPostListener);
@@ -236,7 +225,7 @@ class SubmitPost {
         uploadImageCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     new ParseJSONResponseFromAWSAsyncTask(response.body(), new ParseJSONResponseFromAWSAsyncTask.ParseJSONResponseFromAWSListener() {
                         @Override
                         public void parseSuccessful(Map<String, RequestBody> nameValuePairsMap) {
@@ -253,7 +242,7 @@ class SubmitPost {
                             uploadMediaToAWS.enqueue(new Callback<String>() {
                                 @Override
                                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                                    if(response.isSuccessful()) {
+                                    if (response.isSuccessful()) {
                                         new ParseXMLReponseFromAWSAsyncTask(response.body(), new ParseXMLReponseFromAWSAsyncTask.ParseXMLResponseFromAWSListener() {
                                             @Override
                                             public void parseSuccessful(String url) {
@@ -294,122 +283,16 @@ class SubmitPost {
         });
     }
 
-    private static class ParseJSONResponseFromAWSAsyncTask extends AsyncTask<Void, Void, Void> {
-        interface ParseJSONResponseFromAWSListener {
-            void parseSuccessful(Map<String, RequestBody> nameValuePairsMap);
-            void parseFailed();
-        }
-
-        private String response;
-        private ParseJSONResponseFromAWSListener parseJSONResponseFromAWSListener;
-        private Map<String, RequestBody> nameValuePairsMap;
-        private boolean successful;
-
-        ParseJSONResponseFromAWSAsyncTask(String response, ParseJSONResponseFromAWSListener parseJSONResponseFromAWSListener) {
-            this.response = response;
-            this.parseJSONResponseFromAWSListener = parseJSONResponseFromAWSListener;
-            nameValuePairsMap = new HashMap<>();
-            successful = false;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                JSONObject responseObject = new JSONObject(response);
-                JSONArray nameValuePairs = responseObject.getJSONObject(JSONUtils.ARGS_KEY).getJSONArray(JSONUtils.FIELDS_KEY);
-
-                nameValuePairsMap = new HashMap<>();
-                for(int i = 0; i < nameValuePairs.length(); i++) {
-                    nameValuePairsMap.put(nameValuePairs.getJSONObject(i).getString(JSONUtils.NAME_KEY),
-                            RedditUtils.getRequestBody(nameValuePairs.getJSONObject(i).getString(JSONUtils.VALUE_KEY)));
-                }
-
-                successful = true;
-            } catch (JSONException e) {
-                e.printStackTrace();
-                successful = false;
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            if(successful) {
-                parseJSONResponseFromAWSListener.parseSuccessful(nameValuePairsMap);
-            } else {
-                parseJSONResponseFromAWSListener.parseFailed();
-            }
-        }
-    }
-
-    private static class ParseXMLReponseFromAWSAsyncTask extends AsyncTask<Void, Void, Void> {
-        interface ParseXMLResponseFromAWSListener {
-            void parseSuccessful(String url);
-            void parseFailed();
-        }
-
-        private String response;
-        private ParseXMLResponseFromAWSListener parseXMLResponseFromAWSListener;
-        private String imageUrl;
-        private boolean successful;
-
-        ParseXMLReponseFromAWSAsyncTask(String response, ParseXMLResponseFromAWSListener parseXMLResponseFromAWSListener) {
-            this.response = response;
-            this.parseXMLResponseFromAWSListener = parseXMLResponseFromAWSListener;
-            successful = false;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                XmlPullParser xmlPullParser = XmlPullParserFactory.newInstance().newPullParser();
-                xmlPullParser.setInput(new StringReader(response));
-
-                boolean isLocationTag = false;
-                int eventType = xmlPullParser.getEventType();
-                while(eventType != XmlPullParser.END_DOCUMENT) {
-                    if(eventType == XmlPullParser.START_TAG) {
-                        if(xmlPullParser.getName().equals("Location")) {
-                            isLocationTag = true;
-                        }
-                    } else if(eventType == XmlPullParser.TEXT) {
-                        if(isLocationTag) {
-                            imageUrl = xmlPullParser.getText();
-                            successful = true;
-                            return null;
-                        }
-                    }
-                    eventType = xmlPullParser.next();
-                }
-            } catch (XmlPullParserException | IOException e) {
-                e.printStackTrace();
-                successful = false;
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            if(successful) {
-                parseXMLResponseFromAWSListener.parseSuccessful(imageUrl);
-            } else {
-                parseXMLResponseFromAWSListener.parseFailed();
-            }
-        }
-    }
-
     private static void getSubmittedPost(String response, String kind, Retrofit oauthRetrofit,
                                          String accessToken, Locale locale,
                                          SubmitPostListener submitPostListener) throws JSONException {
         JSONObject responseObject = new JSONObject(response).getJSONObject(JSONUtils.JSON_KEY);
-        if(responseObject.getJSONArray(JSONUtils.ERRORS_KEY).length() != 0) {
+        if (responseObject.getJSONArray(JSONUtils.ERRORS_KEY).length() != 0) {
             JSONArray error = responseObject.getJSONArray(JSONUtils.ERRORS_KEY)
                     .getJSONArray(responseObject.getJSONArray(JSONUtils.ERRORS_KEY).length() - 1);
-            if(error.length() != 0) {
+            if (error.length() != 0) {
                 String errorString;
-                if(error.length() >= 2) {
+                if (error.length() >= 2) {
                     errorString = error.getString(1);
                 } else {
                     errorString = error.getString(0);
@@ -422,7 +305,7 @@ class SubmitPost {
             return;
         }
 
-        if(!kind.equals(RedditUtils.KIND_IMAGE) && !kind.equals(RedditUtils.KIND_VIDEO) && !kind.equals(RedditUtils.KIND_VIDEOGIF)) {
+        if (!kind.equals(RedditUtils.KIND_IMAGE) && !kind.equals(RedditUtils.KIND_VIDEO) && !kind.equals(RedditUtils.KIND_VIDEOGIF)) {
             String postId = responseObject.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.ID_KEY);
 
             RedditAPI api = oauthRetrofit.create(RedditAPI.class);
@@ -431,7 +314,7 @@ class SubmitPost {
             getPostCall.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                    if(response.isSuccessful()) {
+                    if (response.isSuccessful()) {
                         ParsePost.parsePost(response.body(), locale, new ParsePost.ParsePostListener() {
                             @Override
                             public void onParsePostSuccess(Post post) {
@@ -455,6 +338,124 @@ class SubmitPost {
             });
         } else {
             submitPostListener.submitSuccessful(null);
+        }
+    }
+
+    interface SubmitPostListener {
+        void submitSuccessful(Post post);
+
+        void submitFailed(@Nullable String errorMessage);
+    }
+
+    private interface UploadImageListener {
+        void uploaded(String imageUrl);
+
+        void uploadFailed(@Nullable String errorMessage);
+    }
+
+    private static class ParseJSONResponseFromAWSAsyncTask extends AsyncTask<Void, Void, Void> {
+        private String response;
+        private ParseJSONResponseFromAWSListener parseJSONResponseFromAWSListener;
+        private Map<String, RequestBody> nameValuePairsMap;
+        private boolean successful;
+        ParseJSONResponseFromAWSAsyncTask(String response, ParseJSONResponseFromAWSListener parseJSONResponseFromAWSListener) {
+            this.response = response;
+            this.parseJSONResponseFromAWSListener = parseJSONResponseFromAWSListener;
+            nameValuePairsMap = new HashMap<>();
+            successful = false;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                JSONObject responseObject = new JSONObject(response);
+                JSONArray nameValuePairs = responseObject.getJSONObject(JSONUtils.ARGS_KEY).getJSONArray(JSONUtils.FIELDS_KEY);
+
+                nameValuePairsMap = new HashMap<>();
+                for (int i = 0; i < nameValuePairs.length(); i++) {
+                    nameValuePairsMap.put(nameValuePairs.getJSONObject(i).getString(JSONUtils.NAME_KEY),
+                            RedditUtils.getRequestBody(nameValuePairs.getJSONObject(i).getString(JSONUtils.VALUE_KEY)));
+                }
+
+                successful = true;
+            } catch (JSONException e) {
+                e.printStackTrace();
+                successful = false;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if (successful) {
+                parseJSONResponseFromAWSListener.parseSuccessful(nameValuePairsMap);
+            } else {
+                parseJSONResponseFromAWSListener.parseFailed();
+            }
+        }
+
+        interface ParseJSONResponseFromAWSListener {
+            void parseSuccessful(Map<String, RequestBody> nameValuePairsMap);
+
+            void parseFailed();
+        }
+    }
+
+    private static class ParseXMLReponseFromAWSAsyncTask extends AsyncTask<Void, Void, Void> {
+        private String response;
+        private ParseXMLResponseFromAWSListener parseXMLResponseFromAWSListener;
+        private String imageUrl;
+        private boolean successful;
+        ParseXMLReponseFromAWSAsyncTask(String response, ParseXMLResponseFromAWSListener parseXMLResponseFromAWSListener) {
+            this.response = response;
+            this.parseXMLResponseFromAWSListener = parseXMLResponseFromAWSListener;
+            successful = false;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                XmlPullParser xmlPullParser = XmlPullParserFactory.newInstance().newPullParser();
+                xmlPullParser.setInput(new StringReader(response));
+
+                boolean isLocationTag = false;
+                int eventType = xmlPullParser.getEventType();
+                while (eventType != XmlPullParser.END_DOCUMENT) {
+                    if (eventType == XmlPullParser.START_TAG) {
+                        if (xmlPullParser.getName().equals("Location")) {
+                            isLocationTag = true;
+                        }
+                    } else if (eventType == XmlPullParser.TEXT) {
+                        if (isLocationTag) {
+                            imageUrl = xmlPullParser.getText();
+                            successful = true;
+                            return null;
+                        }
+                    }
+                    eventType = xmlPullParser.next();
+                }
+            } catch (XmlPullParserException | IOException e) {
+                e.printStackTrace();
+                successful = false;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if (successful) {
+                parseXMLResponseFromAWSListener.parseSuccessful(imageUrl);
+            } else {
+                parseXMLResponseFromAWSListener.parseFailed();
+            }
+        }
+
+        interface ParseXMLResponseFromAWSListener {
+            void parseSuccessful(String url);
+
+            void parseFailed();
         }
     }
 }

@@ -1,10 +1,10 @@
 package ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
-import androidx.annotation.NonNull;
 
 import ml.docilealligator.infinityforreddit.Account.Account;
 
@@ -43,11 +43,11 @@ public class SubscribedSubredditData {
         return iconUrl;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getUsername() {
         return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

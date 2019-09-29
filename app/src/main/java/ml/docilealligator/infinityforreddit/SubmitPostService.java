@@ -48,7 +48,15 @@ public class SubmitPostService extends Service {
     public static final int EXTRA_POST_TEXT_OR_LINK = 0;
     public static final int EXTRA_POST_TYPE_IMAGE = 1;
     public static final int EXTRA_POST_TYPE_VIDEO = 2;
-
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
+    @Inject
+    @Named("upload_media")
+    Retrofit mUploadMediaRetrofit;
+    @Inject
+    @Named("upload_video")
+    Retrofit mUploadVideoRetrofit;
     private String mAccessToken;
     private String subredditName;
     private String title;
@@ -59,19 +67,8 @@ public class SubmitPostService extends Service {
     private String kind;
     private Uri mediaUri;
 
-    @Inject
-    @Named("oauth")
-    Retrofit mOauthRetrofit;
-
-    @Inject
-    @Named("upload_media")
-    Retrofit mUploadMediaRetrofit;
-
-    @Inject
-    @Named("upload_video")
-    Retrofit mUploadVideoRetrofit;
-
-    public SubmitPostService() {}
+    public SubmitPostService() {
+    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -101,12 +98,12 @@ public class SubmitPostService extends Service {
             manager.createNotificationChannel(serviceChannel);
         }
 
-        if(postType == EXTRA_POST_TEXT_OR_LINK) {
+        if (postType == EXTRA_POST_TEXT_OR_LINK) {
             content = intent.getStringExtra(EXTRA_CONTENT);
             kind = intent.getStringExtra(EXTRA_KIND);
             startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID, createNotification(R.string.posting));
             submitTextOrLinkPost();
-        } else if(postType == EXTRA_POST_TYPE_IMAGE) {
+        } else if (postType == EXTRA_POST_TYPE_IMAGE) {
             mediaUri = intent.getData();
             startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID, createNotification(R.string.posting_image));
             submitImagePost();
@@ -191,11 +188,11 @@ public class SubmitPostService extends Service {
 
     private void submitVideoPost() {
         try (ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(mediaUri, "r")) {
-            if(pfd != null) {
+            if (pfd != null) {
                 FileInputStream in = new FileInputStream(pfd.getFileDescriptor());
                 byte[] buffer;
                 buffer = new byte[in.available()];
-                while (in.read(buffer) != -1);
+                while (in.read(buffer) != -1) ;
 
                 Glide.with(this)
                         .asBitmap()
@@ -204,7 +201,7 @@ public class SubmitPostService extends Service {
                             @Override
                             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                                 String type = getContentResolver().getType(mediaUri);
-                                if(type != null) {
+                                if (type != null) {
                                     SubmitPost.submitVideoPost(mOauthRetrofit, mUploadMediaRetrofit, mUploadVideoRetrofit,
                                             mAccessToken, getResources().getConfiguration().locale, subredditName, title,
                                             buffer, type, resource, flair, isSpoiler, isNSFW,

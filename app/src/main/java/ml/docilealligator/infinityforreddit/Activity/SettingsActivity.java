@@ -19,14 +19,14 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.FontStyle;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Settings.AboutPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.MainPreferenceFragment;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.TitleFontStyle;
 
@@ -40,7 +40,8 @@ public class SettingsActivity extends AppCompatActivity implements
 
     private static final String TITLE_STATE = "TS";
 
-    @BindView(R.id.toolbar_settings_activity) Toolbar toolbar;
+    @BindView(R.id.toolbar_settings_activity)
+    Toolbar toolbar;
 
     @Inject
     SharedPreferences mSharedPreferences;
@@ -64,9 +65,9 @@ public class SettingsActivity extends AppCompatActivity implements
 
         ButterKnife.bind(this);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Window window = getWindow();
-            if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+            if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
                 window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
             }
             window.setNavigationBarColor(ContextCompat.getColor(this, R.color.navBarColor));
@@ -82,7 +83,7 @@ public class SettingsActivity extends AppCompatActivity implements
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 break;
             case 2:
-                if(systemDefault) {
+                if (systemDefault) {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
@@ -113,7 +114,7 @@ public class SettingsActivity extends AppCompatActivity implements
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == android.R.id.home) {
+        if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;
         }

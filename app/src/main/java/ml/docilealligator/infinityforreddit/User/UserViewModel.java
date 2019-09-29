@@ -1,11 +1,12 @@
 package ml.docilealligator.infinityforreddit.User;
 
 import android.app.Application;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.annotation.NonNull;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 

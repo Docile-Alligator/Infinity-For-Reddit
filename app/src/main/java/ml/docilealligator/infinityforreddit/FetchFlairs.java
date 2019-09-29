@@ -15,11 +15,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FetchFlairs {
-    public interface FetchFlairsInSubredditListener {
-        void fetchSuccessful(ArrayList<Flair> flairs);
-        void fetchFailed();
-    }
-
     public static void fetchFlairsInSubreddit(Retrofit oauthRetrofit, String accessToken, String subredditName, FetchFlairsInSubredditListener fetchFlairsInSubredditListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
@@ -39,7 +34,7 @@ public class FetchFlairs {
                             fetchFlairsInSubredditListener.fetchFailed();
                         }
                     }).execute();
-                } else if(response.code() == 403) {
+                } else if (response.code() == 403) {
                     //No flairs
                     fetchFlairsInSubredditListener.fetchSuccessful(null);
                 } else {
@@ -54,15 +49,15 @@ public class FetchFlairs {
         });
     }
 
-    private static class ParseFlairsAsyncTask extends AsyncTask<Void, ArrayList<Flair>, ArrayList<Flair>> {
-        interface ParseFlairsAsyncTaskListener {
-            void parseSuccessful(ArrayList<Flair> flairs);
-            void parseFailed();
-        }
+    public interface FetchFlairsInSubredditListener {
+        void fetchSuccessful(ArrayList<Flair> flairs);
 
+        void fetchFailed();
+    }
+
+    private static class ParseFlairsAsyncTask extends AsyncTask<Void, ArrayList<Flair>, ArrayList<Flair>> {
         private String response;
         private ParseFlairsAsyncTaskListener parseFlairsAsyncTaskListener;
-
         ParseFlairsAsyncTask(String response, ParseFlairsAsyncTaskListener parseFlairsAsyncTaskListener) {
             this.response = response;
             this.parseFlairsAsyncTaskListener = parseFlairsAsyncTaskListener;
@@ -73,7 +68,7 @@ public class FetchFlairs {
             try {
                 JSONArray jsonArray = new JSONArray(response);
                 ArrayList<Flair> flairs = new ArrayList<>();
-                for(int i  = 0; i < jsonArray.length(); i++) {
+                for (int i = 0; i < jsonArray.length(); i++) {
                     String id = jsonArray.getJSONObject(i).getString(JSONUtils.ID_KEY);
                     String text = jsonArray.getJSONObject(i).getString(JSONUtils.TEXT_KEY);
                     boolean editable = jsonArray.getJSONObject(i).getBoolean(JSONUtils.TEXT_EDITABLE_KEY);
@@ -89,11 +84,17 @@ public class FetchFlairs {
 
         @Override
         protected void onPostExecute(ArrayList<Flair> strings) {
-            if(strings != null) {
+            if (strings != null) {
                 parseFlairsAsyncTaskListener.parseSuccessful(strings);
             } else {
                 parseFlairsAsyncTaskListener.parseFailed();
             }
+        }
+
+        interface ParseFlairsAsyncTaskListener {
+            void parseSuccessful(ArrayList<Flair> flairs);
+
+            void parseFailed();
         }
     }
 }

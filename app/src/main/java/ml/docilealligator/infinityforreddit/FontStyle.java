@@ -9,16 +9,16 @@ public enum FontStyle {
     private int resId;
     private String title;
 
+    FontStyle(int resId, String title) {
+        this.resId = resId;
+        this.title = title;
+    }
+
     public int getResId() {
         return resId;
     }
 
     public String getTitle() {
         return title;
-    }
-
-    FontStyle(int resId, String title) {
-        this.resId = resId;
-        this.title = title;
     }
 }

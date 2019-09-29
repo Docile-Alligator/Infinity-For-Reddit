@@ -50,14 +50,14 @@ import ml.docilealligator.infinityforreddit.R;
 
 public class ViewVideoActivity extends AppCompatActivity {
 
-    private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
-
     public static final String TITLE_KEY = "TK";
     public static final String SUBREDDIT_KEY = "SK";
     public static final String ID_KEY = "IK";
-
-    @BindView(R.id.relative_layout_view_video_activity) RelativeLayout relativeLayout;
-    @BindView(R.id.player_view_view_video_activity) PlayerView videoPlayerView;
+    private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
+    @BindView(R.id.relative_layout_view_video_activity)
+    RelativeLayout relativeLayout;
+    @BindView(R.id.player_view_view_video_activity)
+    PlayerView videoPlayerView;
 
     private Uri mVideoUri;
     private SimpleExoPlayer player;
@@ -122,7 +122,7 @@ public class ViewVideoActivity extends AppCompatActivity {
 
         actionBarElementColorAnimation.addUpdateListener(valueAnimator -> {
             upArrow.setColorFilter((int) valueAnimator.getAnimatedValue(), PorterDuff.Mode.SRC_IN);
-            if(mMenu != null) {
+            if (mMenu != null) {
                 Drawable drawable = mMenu.getItem(0).getIcon();
                 drawable.setColorFilter((int) valueAnimator.getAnimatedValue(), PorterDuff.Mode.SRC_IN);
             }
@@ -134,7 +134,7 @@ public class ViewVideoActivity extends AppCompatActivity {
             public void onSwipingUp(final MotionEvent event) {
                 float nowY = event.getY();
                 float offset;
-                if(touchY == -1.0f) {
+                if (touchY == -1.0f) {
                     offset = 0.0f;
                 } else {
                     offset = nowY - touchY;
@@ -154,7 +154,7 @@ public class ViewVideoActivity extends AppCompatActivity {
                         .setDuration(300)
                         .start();
 
-                if(totalLengthY < -pxHeight / 8) {
+                if (totalLengthY < -pxHeight / 8) {
                     videoPlayerView.animate()
                             .y(-pxHeight)
                             .setDuration(300)
@@ -172,10 +172,12 @@ public class ViewVideoActivity extends AppCompatActivity {
                                 }
 
                                 @Override
-                                public void onAnimationCancel(Animator animator) {}
+                                public void onAnimationCancel(Animator animator) {
+                                }
 
                                 @Override
-                                public void onAnimationRepeat(Animator animator) {}
+                                public void onAnimationRepeat(Animator animator) {
+                                }
                             })
                             .start();
                 } else {
@@ -194,7 +196,7 @@ public class ViewVideoActivity extends AppCompatActivity {
             public void onSwipingDown(final MotionEvent event) {
                 float nowY = event.getY();
                 float offset;
-                if(touchY == -1.0f) {
+                if (touchY == -1.0f) {
                     offset = 0.0f;
                 } else {
                     offset = nowY - touchY;
@@ -209,7 +211,7 @@ public class ViewVideoActivity extends AppCompatActivity {
 
             @Override
             public boolean onSwipedDown(final MotionEvent event) {
-                if(totalLengthY > pxHeight / 8) {
+                if (totalLengthY > pxHeight / 8) {
                     videoPlayerView.animate()
                             .y(pxHeight)
                             .setDuration(300)
@@ -227,10 +229,12 @@ public class ViewVideoActivity extends AppCompatActivity {
                                 }
 
                                 @Override
-                                public void onAnimationCancel(Animator animator) {}
+                                public void onAnimationCancel(Animator animator) {
+                                }
 
                                 @Override
-                                public void onAnimationRepeat(Animator animator) {}
+                                public void onAnimationRepeat(Animator animator) {
+                                }
                             })
                             .start();
                 } else {
@@ -333,7 +337,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if(wasPlaying) {
+        if (wasPlaying) {
             player.setPlayWhenReady(true);
         }
     }
@@ -347,10 +351,10 @@ public class ViewVideoActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE && grantResults.length > 0) {
-            if(grantResults[0] == PackageManager.PERMISSION_DENIED) {
+        if (requestCode == PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE && grantResults.length > 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 Toast.makeText(this, R.string.no_storage_permission, Toast.LENGTH_SHORT).show();
-            } else if(grantResults[0] == PackageManager.PERMISSION_GRANTED && isDownloading) {
+            } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED && isDownloading) {
                 download();
             }
             isDownloading = false;

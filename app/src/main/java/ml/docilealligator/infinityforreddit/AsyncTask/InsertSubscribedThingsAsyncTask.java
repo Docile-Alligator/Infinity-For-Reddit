@@ -16,10 +16,6 @@ import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUse
 
 public class InsertSubscribedThingsAsyncTask extends AsyncTask<Void, Void, Void> {
 
-    public interface InsertSubscribedThingListener {
-        void insertSuccess();
-    }
-
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private String mAccountName;
     private SubscribedSubredditDao mSubscribedSubredditDao;
@@ -29,12 +25,11 @@ public class InsertSubscribedThingsAsyncTask extends AsyncTask<Void, Void, Void>
     private List<SubscribedUserData> subscribedUserData;
     private List<SubredditData> subredditData;
     private InsertSubscribedThingListener insertSubscribedThingListener;
-
     public InsertSubscribedThingsAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase, @Nullable String accountName,
-                                    List<SubscribedSubredditData> subscribedSubredditData,
-                                    List<SubscribedUserData> subscribedUserData,
-                                    List<SubredditData> subredditData,
-                                    InsertSubscribedThingListener insertSubscribedThingListener) {
+                                           List<SubscribedSubredditData> subscribedSubredditData,
+                                           List<SubscribedUserData> subscribedUserData,
+                                           List<SubredditData> subredditData,
+                                           InsertSubscribedThingListener insertSubscribedThingListener) {
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mAccountName = accountName;
         mSubscribedSubredditDao = redditDataRoomDatabase.subscribedSubredditDao();
@@ -49,23 +44,23 @@ public class InsertSubscribedThingsAsyncTask extends AsyncTask<Void, Void, Void>
 
     @Override
     protected Void doInBackground(final Void... params) {
-        if(mAccountName != null && mRedditDataRoomDatabase.accountDao().getAccountData(mAccountName) == null) {
+        if (mAccountName != null && mRedditDataRoomDatabase.accountDao().getAccountData(mAccountName) == null) {
             return null;
         }
 
-        if(subscribedSubredditData != null) {
+        if (subscribedSubredditData != null) {
             for (SubscribedSubredditData s : subscribedSubredditData) {
                 mSubscribedSubredditDao.insert(s);
             }
         }
 
-        if(subscribedUserData != null) {
+        if (subscribedUserData != null) {
             for (SubscribedUserData s : subscribedUserData) {
                 mUserDao.insert(s);
             }
         }
 
-        if(subredditData != null) {
+        if (subredditData != null) {
             for (SubredditData s : subredditData) {
                 mSubredditDao.insert(s);
             }
@@ -76,5 +71,9 @@ public class InsertSubscribedThingsAsyncTask extends AsyncTask<Void, Void, Void>
     @Override
     protected void onPostExecute(Void aVoid) {
         insertSubscribedThingListener.insertSuccess();
+    }
+
+    public interface InsertSubscribedThingListener {
+        void insertSuccess();
     }
 }

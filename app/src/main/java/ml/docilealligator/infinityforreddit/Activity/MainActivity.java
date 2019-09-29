@@ -57,39 +57,39 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Account.Account;
 import ml.docilealligator.infinityforreddit.Account.AccountViewModel;
 import ml.docilealligator.infinityforreddit.Adapter.AccountRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
+import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubscribedThingsAsyncTask;
+import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.AsyncTask.SwitchToAnonymousAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.Event.ChangeFontSizeEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
-import ml.docilealligator.infinityforreddit.ContentFontStyle;
+import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchMyInfo;
 import ml.docilealligator.infinityforreddit.FetchSubscribedThing;
 import ml.docilealligator.infinityforreddit.FontStyle;
-import ml.docilealligator.infinityforreddit.FragmentCommunicator;
-import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubscribedThingsAsyncTask;
-import ml.docilealligator.infinityforreddit.ParseAndSaveAccountInfo;
-import ml.docilealligator.infinityforreddit.PostDataSource;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.Fragment.SortTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.FragmentCommunicator;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.ParseAndSaveAccountInfo;
+import ml.docilealligator.infinityforreddit.PostDataSource;
 import ml.docilealligator.infinityforreddit.PullNotificationWorker;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.ReadMessage;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.Fragment.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
-import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.AsyncTask.SwitchToAnonymousAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.TitleFontStyle;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
@@ -121,44 +121,71 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
     private static final int LOGIN_ACTIVITY_REQUEST_CODE = 0;
 
-    @BindView(R.id.drawer_layout) DrawerLayout drawer;
-    @BindView(R.id.coordinator_layout_main_activity) CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_main_activity) AppBarLayout appBarLayout;
-    @BindView(R.id.view_pager_main_activity) ViewPager viewPager;
-    @BindView(R.id.collapsing_toolbar_layout_main_activity) CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.nested_scroll_view_main_activity) NestedScrollView nestedScrollView;
-    @BindView(R.id.all_drawer_items_linear_layout_main_activity) LinearLayout allDrawerItemsLinearLayout;
-    @BindView(R.id.account_label_main_activity) TextView accountLabelTextView;
-    @BindView(R.id.profile_linear_layout_main_activity) LinearLayout profileLinearLayout;
-    @BindView(R.id.subscriptions_linear_layout_main_activity) LinearLayout subscriptionLinearLayout;
-    @BindView(R.id.inbox_linear_layout_main_activity) LinearLayout inboxLinearLayout;
-    @BindView(R.id.post_label_main_activity) TextView postLabelTextView;
-    @BindView(R.id.upvoted_linear_layout_main_activity) LinearLayout upvotedLinearLayout;
-    @BindView(R.id.downvoted_linear_layout_main_activity) LinearLayout downvotedLinearLayout;
-    @BindView(R.id.hidden_linear_layout_main_activity) LinearLayout hiddenLinearLayout;
-    @BindView(R.id.saved_linear_layout_main_activity) LinearLayout savedLinearLayout;
-    @BindView(R.id.gilded_linear_layout_main_activity) LinearLayout gildedLinearLayout;
-    @BindView(R.id.divider_main_activity) View divider;
-    @BindView(R.id.settings_linear_layout_main_activity) LinearLayout settingsLinearLayout;
-    @BindView(R.id.account_recycler_view_main_activity) RecyclerView accountRecyclerView;
-    @BindView(R.id.tab_layout_main_activity) TabLayout tabLayout;
-    @BindView(R.id.fab_main_activity) FloatingActionButton fab;
-
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+    @BindView(R.id.coordinator_layout_main_activity)
+    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.appbar_layout_main_activity)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.view_pager_main_activity)
+    ViewPager viewPager;
+    @BindView(R.id.collapsing_toolbar_layout_main_activity)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.nested_scroll_view_main_activity)
+    NestedScrollView nestedScrollView;
+    @BindView(R.id.all_drawer_items_linear_layout_main_activity)
+    LinearLayout allDrawerItemsLinearLayout;
+    @BindView(R.id.account_label_main_activity)
+    TextView accountLabelTextView;
+    @BindView(R.id.profile_linear_layout_main_activity)
+    LinearLayout profileLinearLayout;
+    @BindView(R.id.subscriptions_linear_layout_main_activity)
+    LinearLayout subscriptionLinearLayout;
+    @BindView(R.id.inbox_linear_layout_main_activity)
+    LinearLayout inboxLinearLayout;
+    @BindView(R.id.post_label_main_activity)
+    TextView postLabelTextView;
+    @BindView(R.id.upvoted_linear_layout_main_activity)
+    LinearLayout upvotedLinearLayout;
+    @BindView(R.id.downvoted_linear_layout_main_activity)
+    LinearLayout downvotedLinearLayout;
+    @BindView(R.id.hidden_linear_layout_main_activity)
+    LinearLayout hiddenLinearLayout;
+    @BindView(R.id.saved_linear_layout_main_activity)
+    LinearLayout savedLinearLayout;
+    @BindView(R.id.gilded_linear_layout_main_activity)
+    LinearLayout gildedLinearLayout;
+    @BindView(R.id.divider_main_activity)
+    View divider;
+    @BindView(R.id.settings_linear_layout_main_activity)
+    LinearLayout settingsLinearLayout;
+    @BindView(R.id.account_recycler_view_main_activity)
+    RecyclerView accountRecyclerView;
+    @BindView(R.id.tab_layout_main_activity)
+    TabLayout tabLayout;
+    @BindView(R.id.fab_main_activity)
+    FloatingActionButton fab;
+    AccountViewModel accountViewModel;
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
+    @Inject
+    SharedPreferences mSharedPreferences;
     private SectionsPagerAdapter sectionsPagerAdapter;
-
     private TextView mAccountNameTextView;
     private TextView mKarmaTextView;
     private GifImageView mProfileImageView;
     private ImageView mBannerImageView;
     private ImageView mDropIconImageView;
-
     private RequestManager glide;
     private AppBarLayout.LayoutParams params;
     private PostTypeBottomSheetFragment postTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment bestSortTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment popularAndAllSortTypeBottomSheetFragment;
-
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
@@ -170,22 +197,8 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     private boolean mDrawerOnAccountSwitch = false;
     private String mMessageFullname;
     private String mNewAccountName;
-
     private Menu mMenu;
-
     private boolean isInLazyMode = false;
-
-    AccountViewModel accountViewModel;
-
-    @Inject
-    @Named("oauth")
-    Retrofit mOauthRetrofit;
-
-    @Inject
-    RedditDataRoomDatabase mRedditDataRoomDatabase;
-
-    @Inject
-    SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,12 +228,12 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             Resources resources = getResources();
 
-            if(resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
+            if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
                 Window window = getWindow();
                 window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
                 boolean lightNavBar = false;
-                if((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+                if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
                     lightNavBar = true;
                 }
                 boolean finalLightNavBar = lightNavBar;
@@ -229,12 +242,12 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
                     @Override
                     public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                        if(state == State.COLLAPSED) {
-                            if(finalLightNavBar) {
+                        if (state == State.COLLAPSED) {
+                            if (finalLightNavBar) {
                                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                             }
-                        } else if(state == State.EXPANDED) {
-                            if(finalLightNavBar) {
+                        } else if (state == State.EXPANDED) {
+                            if (finalLightNavBar) {
                                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                             }
                         }
@@ -270,7 +283,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 break;
             case 2:
-                if(systemDefault) {
+                if (systemDefault) {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
@@ -300,7 +313,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
             mFetchSubscriptionsSuccess = savedInstanceState.getBoolean(FETCH_SUBSCRIPTIONS_STATE);
             mDrawerOnAccountSwitch = savedInstanceState.getBoolean(DRAWER_ON_ACCOUNT_SWITCH_STATE);
@@ -314,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             mMessageFullname = savedInstanceState.getString(MESSAGE_FULLNAME_STATE);
             mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
 
-            if(!mNullAccessToken && mAccessToken == null) {
+            if (!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndBindView();
             } else {
                 bindView();
@@ -326,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         }
 
         fab.setOnClickListener(view -> {
-            if(mAccessToken == null) {
+            if (mAccessToken == null) {
                 Toast.makeText(MainActivity.this, R.string.login_first, Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -342,17 +355,17 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
             WorkManager workManager = WorkManager.getInstance(this);
 
-            if(mNewAccountName != null) {
-                if(account == null || !account.getUsername().equals(mNewAccountName)) {
+            if (mNewAccountName != null) {
+                if (account == null || !account.getUsername().equals(mNewAccountName)) {
                     new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
                         EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
                         Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
 
                         mNewAccountName = null;
-                        if(newAccount == null) {
+                        if (newAccount == null) {
                             mNullAccessToken = true;
 
-                            if(mMenu != null) {
+                            if (mMenu != null) {
                                 mMenu.findItem(R.id.action_subscriptions_main_activity).setVisible(false);
                             }
                         } else {
@@ -362,12 +375,12 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                             mBannerImageUrl = newAccount.getBannerImageUrl();
                             mKarma = newAccount.getKarma();
 
-                            if(mMenu != null) {
+                            if (mMenu != null) {
                                 mMenu.findItem(R.id.action_subscriptions_main_activity).setVisible(true);
                             }
                         }
 
-                        if(enableNotification) {
+                        if (enableNotification) {
                             Constraints constraints = new Constraints.Builder()
                                     .setRequiredNetworkType(NetworkType.CONNECTED)
                                     .build();
@@ -393,11 +406,11 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                     mBannerImageUrl = account.getBannerImageUrl();
                     mKarma = account.getKarma();
 
-                    if(mMenu != null) {
+                    if (mMenu != null) {
                         mMenu.findItem(R.id.action_subscriptions_main_activity).setVisible(true);
                     }
 
-                    if(enableNotification) {
+                    if (enableNotification) {
                         Constraints constraints = new Constraints.Builder()
                                 .setRequiredNetworkType(NetworkType.CONNECTED)
                                 .build();
@@ -417,10 +430,10 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                     bindView();
                 }
             } else {
-                if(account == null) {
+                if (account == null) {
                     mNullAccessToken = true;
 
-                    if(mMenu != null) {
+                    if (mMenu != null) {
                         mMenu.findItem(R.id.action_subscriptions_main_activity).setVisible(false);
                     }
                 } else {
@@ -430,12 +443,12 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                     mBannerImageUrl = account.getBannerImageUrl();
                     mKarma = account.getKarma();
 
-                    if(mMenu != null) {
+                    if (mMenu != null) {
                         mMenu.findItem(R.id.action_subscriptions_main_activity).setVisible(true);
                     }
                 }
 
-                if(enableNotification) {
+                if (enableNotification) {
                     Constraints constraints = new Constraints.Builder()
                             .setRequiredNetworkType(NetworkType.CONNECTED)
                             .build();
@@ -458,7 +471,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     }
 
     private void bindView() {
-        if(isDestroyed()) {
+        if (isDestroyed()) {
             return;
         }
 
@@ -469,13 +482,14 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
 
             @Override
             public void onPageSelected(int position) {
                 fab.show();
-                if(isInLazyMode) {
-                    if(position == sectionsPagerAdapter.getCurrentLazyModeFragmentPosition()) {
+                if (isInLazyMode) {
+                    if (position == sectionsPagerAdapter.getCurrentLazyModeFragmentPosition()) {
                         sectionsPagerAdapter.resumeLazyMode();
                     } else {
                         sectionsPagerAdapter.pauseLazyMode();
@@ -484,7 +498,8 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {}
+            public void onPageScrollStateChanged(int state) {
+            }
         });
 
         loadSubscriptions();
@@ -493,41 +508,41 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
         AccountRecyclerViewAdapter adapter = new AccountRecyclerViewAdapter(this, glide, mAccountName,
                 new AccountRecyclerViewAdapter.ItemSelectedListener() {
-            @Override
-            public void accountSelected(Account account) {
-                new SwitchAccountAsyncTask(mRedditDataRoomDatabase, account.getUsername(), newAccount -> {
-                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }).execute();
-            }
-
-            @Override
-            public void addAccountSelected() {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivityForResult(intent, LOGIN_ACTIVITY_REQUEST_CODE);
-            }
-
-            @Override
-            public void anonymousSelected() {
-                new SwitchToAnonymousAccountAsyncTask(mRedditDataRoomDatabase, false,
-                        () -> {
+                    @Override
+                    public void accountSelected(Account account) {
+                        new SwitchAccountAsyncTask(mRedditDataRoomDatabase, account.getUsername(), newAccount -> {
                             Intent intent = new Intent(MainActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
                         }).execute();
-            }
+                    }
 
-            @Override
-            public void logoutSelected() {
-                new SwitchToAnonymousAccountAsyncTask(mRedditDataRoomDatabase, true,
-                        () -> {
-                            Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }).execute();
-            }
-        });
+                    @Override
+                    public void addAccountSelected() {
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivityForResult(intent, LOGIN_ACTIVITY_REQUEST_CODE);
+                    }
+
+                    @Override
+                    public void anonymousSelected() {
+                        new SwitchToAnonymousAccountAsyncTask(mRedditDataRoomDatabase, false,
+                                () -> {
+                                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }).execute();
+                    }
+
+                    @Override
+                    public void logoutSelected() {
+                        new SwitchToAnonymousAccountAsyncTask(mRedditDataRoomDatabase, true,
+                                () -> {
+                                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }).execute();
+                    }
+                });
 
         accountRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         accountRecyclerView.setNestedScrollingEnabled(false);
@@ -537,9 +552,9 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 new AccountViewModel.Factory(getApplication(), mRedditDataRoomDatabase, mAccountName)).get(AccountViewModel.class);
         accountViewModel.getAccountsExceptCurrentAccountLiveData().observe(this, adapter::changeAccountsDataset);
 
-        if(getIntent().hasExtra(EXTRA_POST_TYPE)) {
+        if (getIntent().hasExtra(EXTRA_POST_TYPE)) {
             String type = getIntent().getStringExtra(EXTRA_POST_TYPE);
-            if(type != null && type.equals("popular")) {
+            if (type != null && type.equals("popular")) {
                 viewPager.setCurrentItem(1);
             } else {
                 viewPager.setCurrentItem(2);
@@ -553,7 +568,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         mBannerImageView = header.findViewById(R.id.banner_image_view_nav_header_main);
         mDropIconImageView = header.findViewById(R.id.account_switcher_image_view_nav_header_main);
 
-        if(mDrawerOnAccountSwitch) {
+        if (mDrawerOnAccountSwitch) {
             mDropIconImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_arrow_drop_up_24px));
             accountRecyclerView.setVisibility(View.VISIBLE);
             allDrawerItemsLinearLayout.setVisibility(View.GONE);
@@ -564,7 +579,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         }
 
         header.setOnClickListener(view -> {
-            if(mDrawerOnAccountSwitch) {
+            if (mDrawerOnAccountSwitch) {
                 mDrawerOnAccountSwitch = false;
                 mDropIconImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_arrow_drop_down_24px));
                 accountRecyclerView.setVisibility(View.GONE);
@@ -579,10 +594,10 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
         loadUserData();
 
-        if(mAccessToken != null) {
+        if (mAccessToken != null) {
             mKarmaTextView.setText(getString(R.string.karma_info, mKarma));
             mAccountNameTextView.setText(mAccountName);
-            if(mMessageFullname != null) {
+            if (mMessageFullname != null) {
                 ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
                     @Override
                     public void readSuccess() {
@@ -765,7 +780,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == LOGIN_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == LOGIN_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -781,13 +796,13 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);
         MenuItem subscriptionsItem = mMenu.findItem(R.id.action_subscriptions_main_activity);
 
-        if(mAccessToken != null) {
+        if (mAccessToken != null) {
             subscriptionsItem.setVisible(true);
         } else {
             subscriptionsItem.setVisible(false);
         }
 
-        if(isInLazyMode) {
+        if (isInLazyMode) {
             lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
             params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
             collapsingToolbarLayout.setLayoutParams(params);
@@ -808,7 +823,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 startActivity(subscriptionsIntent);
                 return true;
             case R.id.action_sort_main_activity:
-                if(viewPager.getCurrentItem() == 1 ||viewPager.getCurrentItem() == 2) {
+                if (viewPager.getCurrentItem() == 1 || viewPager.getCurrentItem() == 2) {
                     popularAndAllSortTypeBottomSheetFragment.show(getSupportFragmentManager(), popularAndAllSortTypeBottomSheetFragment.getTag());
                 } else {
                     bestSortTypeBottomSheetFragment.show(getSupportFragmentManager(), bestSortTypeBottomSheetFragment.getTag());
@@ -820,7 +835,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 startActivity(intent);
                 return true;
             case R.id.action_refresh_main_activity:
-                if(mMenu != null) {
+                if (mMenu != null) {
                     mMenu.findItem(R.id.action_lazy_mode_main_activity).setTitle(R.string.action_start_lazy_mode);
                 }
                 sectionsPagerAdapter.refresh();
@@ -829,14 +844,14 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 return true;
             case R.id.action_lazy_mode_main_activity:
                 MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);
-                if(isInLazyMode) {
+                if (isInLazyMode) {
                     sectionsPagerAdapter.stopLazyMode();
                     isInLazyMode = false;
                     lazyModeItem.setTitle(R.string.action_start_lazy_mode);
                     params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
                     collapsingToolbarLayout.setLayoutParams(params);
                 } else {
-                    if(sectionsPagerAdapter.startLazyMode()) {
+                    if (sectionsPagerAdapter.startLazyMode()) {
                         isInLazyMode = true;
                         lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
                         params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
@@ -918,7 +933,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
     @Subscribe
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
-        if(!getClass().getName().equals(event.excludeActivityClassName)) {
+        if (!getClass().getName().equals(event.excludeActivityClassName)) {
             finish();
         }
     }
@@ -945,8 +960,8 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            if(mAccessToken == null) {
-                if(position == 0) {
+            if (mAccessToken == null) {
+                if (position == 0) {
                     PostFragment fragment = new PostFragment();
                     Bundle bundle = new Bundle();
                     bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
@@ -978,7 +993,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 fragment.setArguments(bundle);
                 return fragment;
-            } else if(position == 1) {
+            } else if (position == 1) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
@@ -1002,9 +1017,8 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         }
 
         @Override
-        public int getCount()
-        {
-            if(mAccessToken == null) {
+        public int getCount() {
+            if (mAccessToken == null) {
                 return 2;
             }
             return 3;
@@ -1012,7 +1026,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if(mAccessToken == null) {
+            if (mAccessToken == null) {
                 switch (position) {
                     case 0:
                         return "Popular";
@@ -1036,7 +1050,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         @Override
         public Object instantiateItem(@NonNull ViewGroup container, int position) {
             Fragment fragment = (Fragment) super.instantiateItem(container, position);
-            if(mAccessToken == null) {
+            if (mAccessToken == null) {
                 switch (position) {
                     case 0:
                         popularPostFragment = (PostFragment) fragment;
@@ -1060,7 +1074,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         }
 
         boolean startLazyMode() {
-            if(mAccessToken == null) {
+            if (mAccessToken == null) {
                 switch (viewPager.getCurrentItem()) {
                     case 0:
                         return ((FragmentCommunicator) popularPostFragment).startLazyMode();
@@ -1082,7 +1096,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         }
 
         void stopLazyMode() {
-            if(mAccessToken == null) {
+            if (mAccessToken == null) {
                 switch (getCurrentLazyModeFragmentPosition()) {
                     case 0:
                         ((FragmentCommunicator) popularPostFragment).stopLazyMode();
@@ -1107,7 +1121,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         }
 
         void resumeLazyMode() {
-            if(mAccessToken == null) {
+            if (mAccessToken == null) {
                 switch (getCurrentLazyModeFragmentPosition()) {
                     case 0:
                         ((FragmentCommunicator) popularPostFragment).resumeLazyMode(false);
@@ -1132,7 +1146,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         }
 
         void pauseLazyMode() {
-            if(mAccessToken == null) {
+            if (mAccessToken == null) {
                 switch (getCurrentLazyModeFragmentPosition()) {
                     case 0:
                         ((FragmentCommunicator) popularPostFragment).pauseLazyMode(false);
@@ -1155,24 +1169,24 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         }
 
         int getCurrentLazyModeFragmentPosition() {
-            if(mAccessToken == null) {
-                if(!isInLazyMode) {
+            if (mAccessToken == null) {
+                if (!isInLazyMode) {
                     return -1;
-                } else if(popularPostFragment != null && ((FragmentCommunicator) popularPostFragment).isInLazyMode()) {
+                } else if (popularPostFragment != null && ((FragmentCommunicator) popularPostFragment).isInLazyMode()) {
                     return 0;
-                } else if(allPostFragment != null && ((FragmentCommunicator) allPostFragment).isInLazyMode()) {
+                } else if (allPostFragment != null && ((FragmentCommunicator) allPostFragment).isInLazyMode()) {
                     return 1;
                 } else {
                     return -1;
                 }
             } else {
-                if(!isInLazyMode) {
+                if (!isInLazyMode) {
                     return -1;
-                } else if(frontPagePostFragment != null && ((FragmentCommunicator) frontPagePostFragment).isInLazyMode()) {
+                } else if (frontPagePostFragment != null && ((FragmentCommunicator) frontPagePostFragment).isInLazyMode()) {
                     return 0;
-                } else if(popularPostFragment != null && ((FragmentCommunicator) popularPostFragment).isInLazyMode()) {
+                } else if (popularPostFragment != null && ((FragmentCommunicator) popularPostFragment).isInLazyMode()) {
                     return 1;
-                } else if(allPostFragment != null && ((FragmentCommunicator) allPostFragment).isInLazyMode()) {
+                } else if (allPostFragment != null && ((FragmentCommunicator) allPostFragment).isInLazyMode()) {
                     return 2;
                 } else {
                     return -1;
@@ -1181,8 +1195,8 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         }
 
         void changeSortType(String sortType) {
-            if(mAccessToken == null) {
-                if(viewPager.getCurrentItem() == 0) {
+            if (mAccessToken == null) {
+                if (viewPager.getCurrentItem() == 0) {
                     popularPostFragment.changeSortType(sortType);
                 } else {
                     allPostFragment.changeSortType(sortType);
@@ -1202,30 +1216,30 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         }
 
         public void refresh() {
-            if(mAccessToken == null) {
-                if(viewPager.getCurrentItem() == 0) {
-                    if(popularPostFragment != null) {
+            if (mAccessToken == null) {
+                if (viewPager.getCurrentItem() == 0) {
+                    if (popularPostFragment != null) {
                         ((FragmentCommunicator) popularPostFragment).refresh();
                     }
                 } else {
-                    if(allPostFragment != null) {
+                    if (allPostFragment != null) {
                         ((FragmentCommunicator) allPostFragment).refresh();
                     }
                 }
             } else {
                 switch (viewPager.getCurrentItem()) {
                     case 0:
-                        if(frontPagePostFragment != null) {
+                        if (frontPagePostFragment != null) {
                             ((FragmentCommunicator) frontPagePostFragment).refresh();
                         }
                         break;
                     case 1:
-                        if(popularPostFragment != null) {
+                        if (popularPostFragment != null) {
                             ((FragmentCommunicator) popularPostFragment).refresh();
                         }
                         break;
                     case 2:
-                        if(allPostFragment != null) {
+                        if (allPostFragment != null) {
                             ((FragmentCommunicator) allPostFragment).refresh();
                         }
                 }
@@ -1233,13 +1247,13 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
         }
 
         void changeNSFW(boolean nsfw) {
-            if(frontPagePostFragment != null) {
+            if (frontPagePostFragment != null) {
                 frontPagePostFragment.changeNSFW(nsfw);
             }
-            if(popularPostFragment != null) {
+            if (popularPostFragment != null) {
                 popularPostFragment.changeNSFW(nsfw);
             }
-            if(allPostFragment != null) {
+            if (allPostFragment != null) {
                 allPostFragment.changeNSFW(nsfw);
             }
         }

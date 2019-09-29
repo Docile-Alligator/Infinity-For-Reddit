@@ -71,26 +71,23 @@ public class SubredditSelectionActivity extends AppCompatActivity {
     private static final String ACCOUNT_PROFILE_IMAGE_URL = "APIU";
     private static final String FRAGMENT_OUT_STATE = "FOS";
 
-    @BindView(R.id.appbar_layout_subreddit_selection_activity) AppBarLayout appBarLayout;
-    @BindView(R.id.toolbar_subreddit_selection_activity) Toolbar toolbar;
-
+    @BindView(R.id.appbar_layout_subreddit_selection_activity)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.toolbar_subreddit_selection_activity)
+    Toolbar toolbar;
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
+    @Inject
+    SharedPreferences mSharedPreferences;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
     private String mAccountProfileImageUrl;
     private boolean mInsertSuccess = false;
-
     private Fragment mFragment;
-
-    @Inject
-    @Named("oauth")
-    Retrofit mOauthRetrofit;
-
-    @Inject
-    RedditDataRoomDatabase mRedditDataRoomDatabase;
-
-    @Inject
-    SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,29 +113,29 @@ public class SubredditSelectionActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             Resources resources = getResources();
 
-            if(resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
+            if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
                 Window window = getWindow();
                 window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
                 boolean lightNavBar = false;
-                if((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+                if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
                     lightNavBar = true;
                 }
                 boolean finalLightNavBar = lightNavBar;
 
                 View decorView = window.getDecorView();
-                if(finalLightNavBar) {
+                if (finalLightNavBar) {
                     decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                 }
                 appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
                     @Override
                     public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                        if(state == State.COLLAPSED) {
-                            if(finalLightNavBar) {
+                        if (state == State.COLLAPSED) {
+                            if (finalLightNavBar) {
                                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                             }
-                        } else if(state == State.EXPANDED) {
-                            if(finalLightNavBar) {
+                        } else if (state == State.EXPANDED) {
+                            if (finalLightNavBar) {
                                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                             }
                         }
@@ -164,7 +161,7 @@ public class SubredditSelectionActivity extends AppCompatActivity {
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 break;
             case 2:
-                if(systemDefault) {
+                if (systemDefault) {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
@@ -175,7 +172,7 @@ public class SubredditSelectionActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             getCurrentAccountAndBindView();
         } else {
             mInsertSuccess = savedInstanceState.getBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE);
@@ -184,7 +181,7 @@ public class SubredditSelectionActivity extends AppCompatActivity {
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
             mAccountProfileImageUrl = savedInstanceState.getString(ACCOUNT_PROFILE_IMAGE_URL);
 
-            if(!mNullAccessToken && mAccountName == null) {
+            if (!mNullAccessToken && mAccountName == null) {
                 getCurrentAccountAndBindView();
             } else {
                 mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
@@ -195,7 +192,7 @@ public class SubredditSelectionActivity extends AppCompatActivity {
 
     private void getCurrentAccountAndBindView() {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-            if(account == null) {
+            if (account == null) {
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
@@ -214,7 +211,7 @@ public class SubredditSelectionActivity extends AppCompatActivity {
         bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
         bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCOUNT_PROFILE_IMAGE_URL, mAccountProfileImageUrl);
         bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_IS_SUBREDDIT_SELECTION, true);
-        if(getIntent().hasExtra(EXTRA_EXTRA_CLEAR_SELECTION)) {
+        if (getIntent().hasExtra(EXTRA_EXTRA_CLEAR_SELECTION)) {
             bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_EXTRA_CLEAR_SELECTION,
                     getIntent().getExtras().getBoolean(EXTRA_EXTRA_CLEAR_SELECTION));
         }
@@ -282,8 +279,8 @@ public class SubredditSelectionActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(requestCode == SUBREDDIT_SEARCH_REQUEST_CODE) {
-            if(resultCode == RESULT_OK) {
+        if (requestCode == SUBREDDIT_SEARCH_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
                 String name = data.getStringExtra(SearchActivity.EXTRA_RETURN_SUBREDDIT_NAME);
                 String iconUrl = data.getStringExtra(SearchActivity.EXTRA_RETURN_SUBREDDIT_ICON_URL);
                 Intent returnIntent = new Intent();

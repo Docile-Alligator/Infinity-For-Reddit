@@ -13,7 +13,7 @@ import okhttp3.RequestBody;
  */
 
 public class RedditUtils {
-    public static final String OAUTH_URL ="https://www.reddit.com/api/v1/authorize.compact";
+    public static final String OAUTH_URL = "https://www.reddit.com/api/v1/authorize.compact";
     public static final String OAUTH_API_BASE_URI = "https://oauth.reddit.com";
     public static final String API_BASE_URI = "https://www.reddit.com";
     public static final String API_UPLOAD_MEDIA_URI = "https://reddit-uploaded-media.s3-accelerate.amazonaws.com";

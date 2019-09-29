@@ -24,11 +24,12 @@ import ml.docilealligator.infinityforreddit.R;
 public class AcknowledgementFragment extends Fragment {
 
 
+    @BindView(R.id.recycler_view_acknowledgement_fragment)
+    RecyclerView recyclerView;
+
     public AcknowledgementFragment() {
         // Required empty public constructor
     }
-
-    @BindView(R.id.recycler_view_acknowledgement_fragment) RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

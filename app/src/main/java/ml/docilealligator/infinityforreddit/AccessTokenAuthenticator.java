@@ -35,7 +35,7 @@ class AccessTokenAuthenticator implements Authenticator {
             String accessToken = response.request().header(RedditUtils.AUTHORIZATION_KEY).substring(RedditUtils.AUTHORIZATION_BASE.length());
             synchronized (this) {
                 Account account = mRedditDataRoomDatabase.accountDao().getCurrentAccount();
-                if(account == null) {
+                if (account == null) {
                     return null;
                 }
                 String accessTokenFromDatabase = account.getAccessToken();
@@ -66,7 +66,7 @@ class AccessTokenAuthenticator implements Authenticator {
         Call<String> accessTokenCall = api.getAccessToken(RedditUtils.getHttpBasicAuthHeader(), params);
         try {
             retrofit2.Response response = accessTokenCall.execute();
-            if(response.isSuccessful() && response.body() != null) {
+            if (response.isSuccessful() && response.body() != null) {
                 JSONObject jsonObject = new JSONObject((String) response.body());
                 String newAccessToken = jsonObject.getString(RedditUtils.ACCESS_TOKEN_KEY);
                 mRedditDataRoomDatabase.accountDao().changeAccessToken(account.getUsername(), newAccessToken);

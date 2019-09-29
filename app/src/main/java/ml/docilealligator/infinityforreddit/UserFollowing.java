@@ -15,11 +15,6 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 
 public class UserFollowing {
-    public interface UserFollowingListener {
-        void onUserFollowingSuccess();
-        void onUserFollowingFail();
-    }
-
     public static void followUser(Retrofit oauthRetrofit, Retrofit retrofit,
                                   String accessToken, String username, String accountName,
                                   SubscribedUserDao subscribedUserDao,
@@ -49,8 +44,8 @@ public class UserFollowing {
         subredditSubscriptionCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                if(response.isSuccessful()) {
-                    if(action.equals("sub")) {
+                if (response.isSuccessful()) {
+                    if (action.equals("sub")) {
                         FetchUserData.fetchUserData(retrofit, username, new FetchUserData.FetchUserDataListener() {
                             @Override
                             public void onFetchUserDataSuccess(UserData userData) {
@@ -76,6 +71,12 @@ public class UserFollowing {
                 userFollowingListener.onUserFollowingFail();
             }
         });
+    }
+
+    public interface UserFollowingListener {
+        void onUserFollowingSuccess();
+
+        void onUserFollowingFail();
     }
 
     private static class UpdateSubscriptionAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -105,7 +106,7 @@ public class UserFollowing {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            if(isSubscribing) {
+            if (isSubscribing) {
                 subscribedUserDao.insert(subscribedUserData);
             } else {
                 subscribedUserDao.deleteSubscribedUser(username, accountName);

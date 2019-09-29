@@ -21,11 +21,6 @@ import retrofit2.Retrofit;
 
 public class FetchMessages {
 
-    interface FetchMessagesListener {
-        void fetchSuccess(ArrayList<Message> messages, @Nullable String after);
-        void fetchFailed();
-    }
-
     public static final String WHERE_INBOX = "inbox";
     public static final String WHERE_UNREAD = "unread";
     public static final String WHERE_SENT = "sent";
@@ -37,7 +32,7 @@ public class FetchMessages {
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                        if(response.isSuccessful()) {
+                        if (response.isSuccessful()) {
                             new ParseMessageAsnycTask(response.body(), locale, fetchMessagesListener::fetchSuccess).execute();
                         } else {
                             fetchMessagesListener.fetchFailed();
@@ -62,7 +57,7 @@ public class FetchMessages {
         }
 
         ArrayList<Message> messages = new ArrayList<>();
-        for(int i = 0; i < messageArray.length(); i++) {
+        for (int i = 0; i < messageArray.length(); i++) {
             try {
                 JSONObject messageJSON = messageArray.getJSONObject(i);
                 String kind = messageJSON.getString(JSONUtils.KIND_KEY);
@@ -100,18 +95,19 @@ public class FetchMessages {
         return messages;
     }
 
-    private static class ParseMessageAsnycTask extends AsyncTask<Void, Void, Void> {
+    interface FetchMessagesListener {
+        void fetchSuccess(ArrayList<Message> messages, @Nullable String after);
 
-        interface ParseMessageAsyncTaskListener {
-            void parseSuccess(ArrayList<Message> messages, @Nullable String after);
-        }
+        void fetchFailed();
+    }
+
+    private static class ParseMessageAsnycTask extends AsyncTask<Void, Void, Void> {
 
         private String response;
         private Locale locale;
         private ArrayList<Message> messages;
         private String after;
         private ParseMessageAsyncTaskListener parseMessageAsyncTaskListener;
-
         ParseMessageAsnycTask(String response, Locale locale, ParseMessageAsyncTaskListener parseMessageAsnycTaskListener) {
             this.response = response;
             this.locale = locale;
@@ -134,6 +130,10 @@ public class FetchMessages {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             parseMessageAsyncTaskListener.parseSuccess(messages, after);
+        }
+
+        interface ParseMessageAsyncTaskListener {
+            void parseSuccess(ArrayList<Message> messages, @Nullable String after);
         }
     }
 }

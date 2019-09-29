@@ -1,3 +1,4 @@
 package ml.docilealligator.infinityforreddit.Event;
 
-public class ChangeFontSizeEvent { }
+public class ChangeFontSizeEvent {
+}

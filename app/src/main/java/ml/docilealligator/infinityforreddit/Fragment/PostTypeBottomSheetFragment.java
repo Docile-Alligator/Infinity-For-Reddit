@@ -24,24 +24,21 @@ import ml.docilealligator.infinityforreddit.R;
  */
 public class PostTypeBottomSheetFragment extends RoundedBottomSheetDialogFragment {
 
-    public interface PostTypeSelectionCallback {
-        void postTypeSelected(int postType);
-    }
-
     public static final int TYPE_TEXT = 0;
     public static final int TYPE_LINK = 1;
     public static final int TYPE_IMAGE = 2;
     public static final int TYPE_VIDEO = 3;
-
-    @BindView(R.id.text_type_linear_layout_post_type_bottom_sheet_fragment) LinearLayout textTypeLinearLayout;
-    @BindView(R.id.link_type_linear_layout_post_type_bottom_sheet_fragment) LinearLayout linkTypeLinearLayout;
-    @BindView(R.id.image_type_linear_layout_post_type_bottom_sheet_fragment) LinearLayout imageTypeLinearLayout;
-    @BindView(R.id.video_type_linear_layout_post_type_bottom_sheet_fragment) LinearLayout videoTypeLinearLayout;
-
+    @BindView(R.id.text_type_linear_layout_post_type_bottom_sheet_fragment)
+    LinearLayout textTypeLinearLayout;
+    @BindView(R.id.link_type_linear_layout_post_type_bottom_sheet_fragment)
+    LinearLayout linkTypeLinearLayout;
+    @BindView(R.id.image_type_linear_layout_post_type_bottom_sheet_fragment)
+    LinearLayout imageTypeLinearLayout;
+    @BindView(R.id.video_type_linear_layout_post_type_bottom_sheet_fragment)
+    LinearLayout videoTypeLinearLayout;
     public PostTypeBottomSheetFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,7 +48,7 @@ public class PostTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
 
         Activity activity = getActivity();
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
             rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
@@ -77,6 +74,11 @@ public class PostTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
         });
 
         return rootView;
+    }
+
+
+    public interface PostTypeSelectionCallback {
+        void postTypeSelected(int postType);
     }
 
 }

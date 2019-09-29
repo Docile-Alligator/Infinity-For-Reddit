@@ -12,11 +12,6 @@ public class CheckIsFollowingUserAsyncTask extends AsyncTask<Void, Void, Void> {
     private SubscribedUserData subscribedUserData;
     private CheckIsFollowingUserListener checkIsFollowingUserListener;
 
-    public interface CheckIsFollowingUserListener {
-        void isSubscribed();
-        void isNotSubscribed();
-    }
-
     public CheckIsFollowingUserAsyncTask(SubscribedUserDao subscribedUserDao, String username, String accountName,
                                          CheckIsFollowingUserListener checkIsFollowingUserListener) {
         this.subscribedUserDao = subscribedUserDao;
@@ -34,10 +29,16 @@ public class CheckIsFollowingUserAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        if(subscribedUserData != null) {
+        if (subscribedUserData != null) {
             checkIsFollowingUserListener.isSubscribed();
         } else {
             checkIsFollowingUserListener.isNotSubscribed();
         }
+    }
+
+    public interface CheckIsFollowingUserListener {
+        void isSubscribed();
+
+        void isNotSubscribed();
     }
 }

@@ -22,7 +22,8 @@ class AppModule {
         mApplication = application;
     }
 
-    @Provides @Named("oauth")
+    @Provides
+    @Named("oauth")
     @Singleton
     Retrofit provideOauthRetrofit(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
@@ -32,7 +33,8 @@ class AppModule {
                 .build();
     }
 
-    @Provides @Named("oauth_without_authenticator")
+    @Provides
+    @Named("oauth_without_authenticator")
     @Singleton
     Retrofit provideOauthWithoutAuthenticatorRetrofit() {
         return new Retrofit.Builder()
@@ -41,7 +43,8 @@ class AppModule {
                 .build();
     }
 
-    @Provides @Named("no_oauth")
+    @Provides
+    @Named("no_oauth")
     @Singleton
     Retrofit provideRetrofit() {
         return new Retrofit.Builder()
@@ -50,7 +53,8 @@ class AppModule {
                 .build();
     }
 
-    @Provides @Named("upload_media")
+    @Provides
+    @Named("upload_media")
     @Singleton
     Retrofit provideUploadMediaRetrofit() {
         return new Retrofit.Builder()
@@ -59,7 +63,8 @@ class AppModule {
                 .build();
     }
 
-    @Provides @Named("upload_video")
+    @Provides
+    @Named("upload_video")
     @Singleton
     Retrofit provideUploadVideoRetrofit() {
         return new Retrofit.Builder()

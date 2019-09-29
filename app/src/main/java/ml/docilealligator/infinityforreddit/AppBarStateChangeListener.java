@@ -3,13 +3,6 @@ package ml.docilealligator.infinityforreddit;
 import com.google.android.material.appbar.AppBarLayout;
 
 public abstract class AppBarStateChangeListener implements AppBarLayout.OnOffsetChangedListener {
-    // State
-    public enum State {
-        EXPANDED,
-        COLLAPSED,
-        IDLE
-    }
-
     private AppBarStateChangeListener.State mCurrentState = AppBarStateChangeListener.State.IDLE;
 
     @Override
@@ -34,8 +27,16 @@ public abstract class AppBarStateChangeListener implements AppBarLayout.OnOffset
 
     /**
      * Notifies on state change
+     *
      * @param appBarLayout Layout
-     * @param state Collapse state
+     * @param state        Collapse state
      */
     public abstract void onStateChanged(AppBarLayout appBarLayout, AppBarStateChangeListener.State state);
+
+    // State
+    public enum State {
+        EXPANDED,
+        COLLAPSED,
+        IDLE
+    }
 }

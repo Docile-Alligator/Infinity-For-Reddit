@@ -36,35 +36,28 @@ import retrofit2.Retrofit;
  */
 public class FlairBottomSheetFragment extends BottomSheetDialogFragment {
 
-    public interface FlairSelectionCallback {
-        void flairSelected(Flair flair);
-    }
-
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
-
-    @BindView(R.id.progress_bar_flair_bottom_sheet_fragment) ProgressBar progressBar;
-    @BindView(R.id.error_text_view_flair_bottom_sheet_fragment) TextView errorTextView;
-    @BindView(R.id.recycler_view_bottom_sheet_fragment) RecyclerView recyclerView;
-
-    private String mAccessToken;
-    private String mSubredditName;
-
-    private Activity mActivity;
-    private FlairBottomSheetRecyclerViewAdapter mAdapter;
-
+    @BindView(R.id.progress_bar_flair_bottom_sheet_fragment)
+    ProgressBar progressBar;
+    @BindView(R.id.error_text_view_flair_bottom_sheet_fragment)
+    TextView errorTextView;
+    @BindView(R.id.recycler_view_bottom_sheet_fragment)
+    RecyclerView recyclerView;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
-
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
+    private String mAccessToken;
+    private String mSubredditName;
+    private Activity mActivity;
+    private FlairBottomSheetRecyclerViewAdapter mAdapter;
 
     public FlairBottomSheetFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -101,25 +94,29 @@ public class FlairBottomSheetFragment extends BottomSheetDialogFragment {
     private void fetchFlairs() {
         FetchFlairs.fetchFlairsInSubreddit(mOauthRetrofit, mAccessToken,
                 mSubredditName, new FetchFlairs.FetchFlairsInSubredditListener() {
-            @Override
-            public void fetchSuccessful(ArrayList<Flair> flairs) {
-                progressBar.setVisibility(View.GONE);
-                if(flairs == null || flairs.size() == 0) {
-                    errorTextView.setVisibility(View.VISIBLE);
-                    errorTextView.setText(R.string.no_flair);
-                } else {
-                    errorTextView.setVisibility(View.GONE);
-                    mAdapter.changeDataset(flairs);
-                }
-            }
+                    @Override
+                    public void fetchSuccessful(ArrayList<Flair> flairs) {
+                        progressBar.setVisibility(View.GONE);
+                        if (flairs == null || flairs.size() == 0) {
+                            errorTextView.setVisibility(View.VISIBLE);
+                            errorTextView.setText(R.string.no_flair);
+                        } else {
+                            errorTextView.setVisibility(View.GONE);
+                            mAdapter.changeDataset(flairs);
+                        }
+                    }
 
-            @Override
-            public void fetchFailed() {
-                progressBar.setVisibility(View.GONE);
-                errorTextView.setVisibility(View.VISIBLE);
-                errorTextView.setText(R.string.error_loading_flairs);
-                errorTextView.setOnClickListener(view -> fetchFlairs());
-            }
-        });
+                    @Override
+                    public void fetchFailed() {
+                        progressBar.setVisibility(View.GONE);
+                        errorTextView.setVisibility(View.VISIBLE);
+                        errorTextView.setText(R.string.error_loading_flairs);
+                        errorTextView.setOnClickListener(view -> fetchFlairs());
+                    }
+                });
+    }
+
+    public interface FlairSelectionCallback {
+        void flairSelected(Flair flair);
     }
 }

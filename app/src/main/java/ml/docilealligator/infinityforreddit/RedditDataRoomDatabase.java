@@ -21,16 +21,10 @@ import ml.docilealligator.infinityforreddit.User.UserData;
 public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static RedditDataRoomDatabase INSTANCE;
 
-    public abstract AccountDao accountDao();
-    public abstract SubredditDao subredditDao();
-    public abstract SubscribedSubredditDao subscribedSubredditDao();
-    public abstract UserDao userDao();
-    public abstract SubscribedUserDao subscribedUserDao();
-
     public static RedditDataRoomDatabase getDatabase(final Context context) {
-        if(INSTANCE == null) {
+        if (INSTANCE == null) {
             synchronized (RedditDataRoomDatabase.class) {
-                if(INSTANCE == null) {
+                if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             RedditDataRoomDatabase.class, "reddit_data")
                             .build();
@@ -39,4 +33,14 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
         }
         return INSTANCE;
     }
+
+    public abstract AccountDao accountDao();
+
+    public abstract SubredditDao subredditDao();
+
+    public abstract SubscribedSubredditDao subscribedSubredditDao();
+
+    public abstract UserDao userDao();
+
+    public abstract SubscribedUserDao subscribedUserDao();
 }

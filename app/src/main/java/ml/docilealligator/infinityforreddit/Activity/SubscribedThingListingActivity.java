@@ -64,27 +64,26 @@ public class SubscribedThingListingActivity extends AppCompatActivity {
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
 
-    @BindView(R.id.appbar_layout_subscribed_thing_listing_activity) AppBarLayout appBarLayout;
-    @BindView(R.id.toolbar_subscribed_thing_listing_activity) Toolbar toolbar;
-    @BindView(R.id.tab_layout_subscribed_thing_listing_activity) TabLayout tabLayout;
-    @BindView(R.id.view_pager_subscribed_thing_listing_activity) ViewPager viewPager;
-
+    @BindView(R.id.appbar_layout_subscribed_thing_listing_activity)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.toolbar_subscribed_thing_listing_activity)
+    Toolbar toolbar;
+    @BindView(R.id.tab_layout_subscribed_thing_listing_activity)
+    TabLayout tabLayout;
+    @BindView(R.id.view_pager_subscribed_thing_listing_activity)
+    ViewPager viewPager;
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
+    @Inject
+    SharedPreferences mSharedPreferences;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
     private boolean mInsertSuccess = false;
-
     private SectionsPagerAdapter sectionsPagerAdapter;
-
-    @Inject
-    @Named("oauth")
-    Retrofit mOauthRetrofit;
-
-    @Inject
-    RedditDataRoomDatabase mRedditDataRoomDatabase;
-
-    @Inject
-    SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,29 +109,29 @@ public class SubscribedThingListingActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             Resources resources = getResources();
 
-            if(resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
+            if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
                 Window window = getWindow();
                 window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
                 boolean lightNavBar = false;
-                if((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+                if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
                     lightNavBar = true;
                 }
                 boolean finalLightNavBar = lightNavBar;
 
                 View decorView = window.getDecorView();
-                if(finalLightNavBar) {
+                if (finalLightNavBar) {
                     decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                 }
                 appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
                     @Override
                     public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                        if(state == State.COLLAPSED) {
-                            if(finalLightNavBar) {
+                        if (state == State.COLLAPSED) {
+                            if (finalLightNavBar) {
                                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                             }
-                        } else if(state == State.EXPANDED) {
-                            if(finalLightNavBar) {
+                        } else if (state == State.EXPANDED) {
+                            if (finalLightNavBar) {
                                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                             }
                         }
@@ -158,7 +157,7 @@ public class SubscribedThingListingActivity extends AppCompatActivity {
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 break;
             case 2:
-                if(systemDefault) {
+                if (systemDefault) {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
@@ -169,12 +168,12 @@ public class SubscribedThingListingActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             mInsertSuccess = savedInstanceState.getBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE);
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
-            if(!mNullAccessToken && mAccessToken == null) {
+            if (!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndInitializeViewPager();
             } else {
                 initializeViewPagerAndLoadSubscriptions();
@@ -186,7 +185,7 @@ public class SubscribedThingListingActivity extends AppCompatActivity {
 
     private void getCurrentAccountAndInitializeViewPager() {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-            if(account == null) {
+            if (account == null) {
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
@@ -207,7 +206,7 @@ public class SubscribedThingListingActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == android.R.id.home) {
+        if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
         }
@@ -280,8 +279,7 @@ public class SubscribedThingListingActivity extends AppCompatActivity {
                     fragment.setArguments(bundle);
                     return fragment;
                 }
-                default:
-                {
+                default: {
                     FollowedUsersListingFragment fragment = new FollowedUsersListingFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString(FollowedUsersListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);

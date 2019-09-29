@@ -10,16 +10,6 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 
 public class FetchUserData {
-    public interface FetchUserDataListener {
-        void onFetchUserDataSuccess(UserData userData);
-        void onFetchUserDataFailed();
-    }
-
-    public interface FetchUserListingDataListener {
-        void onFetchUserListingDataSuccess(ArrayList<UserData> userData, String after);
-        void onFetchUserListingDataFailed();
-    }
-
     public static void fetchUserData(Retrofit retrofit, String userName, FetchUserDataListener fetchUserDataListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
@@ -27,7 +17,7 @@ public class FetchUserData {
         userInfo.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     ParseUserData.parseUserData(response.body(), new ParseUserData.ParseUserDataListener() {
                         @Override
                         public void onParseUserDataSuccess(UserData userData) {
@@ -59,7 +49,7 @@ public class FetchUserData {
         userInfo.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     ParseUserData.parseUserListingData(response.body(), new ParseUserData.ParseUserListingDataListener() {
                         @Override
                         public void onParseUserListingDataSuccess(ArrayList<UserData> userData, String after) {
@@ -81,5 +71,17 @@ public class FetchUserData {
                 fetchUserListingDataListener.onFetchUserListingDataFailed();
             }
         });
+    }
+
+    public interface FetchUserDataListener {
+        void onFetchUserDataSuccess(UserData userData);
+
+        void onFetchUserDataFailed();
+    }
+
+    public interface FetchUserListingDataListener {
+        void onFetchUserListingDataSuccess(ArrayList<UserData> userData, String after);
+
+        void onFetchUserListingDataFailed();
     }
 }

@@ -82,45 +82,41 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
     private static final String RECYCLER_VIEW_POSITION_STATE = "RVPS";
 
-    @BindView(R.id.recycler_view_post_fragment) RecyclerView mPostRecyclerView;
-    @BindView(R.id.progress_bar_post_fragment) CircleProgressBar mProgressBar;
-    @BindView(R.id.fetch_post_info_linear_layout_post_fragment) LinearLayout mFetchPostInfoLinearLayout;
-    @BindView(R.id.fetch_post_info_image_view_post_fragment) ImageView mFetchPostInfoImageView;
-    @BindView(R.id.fetch_post_info_text_view_post_fragment) TextView mFetchPostInfoTextView;
-
+    @BindView(R.id.recycler_view_post_fragment)
+    RecyclerView mPostRecyclerView;
+    @BindView(R.id.progress_bar_post_fragment)
+    CircleProgressBar mProgressBar;
+    @BindView(R.id.fetch_post_info_linear_layout_post_fragment)
+    LinearLayout mFetchPostInfoLinearLayout;
+    @BindView(R.id.fetch_post_info_image_view_post_fragment)
+    ImageView mFetchPostInfoImageView;
+    @BindView(R.id.fetch_post_info_text_view_post_fragment)
+    TextView mFetchPostInfoTextView;
+    PostViewModel mPostViewModel;
+    @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
+    @Inject
+    SharedPreferences mSharedPreferences;
     private RequestManager mGlide;
-
     private Activity activity;
     private LinearLayoutManager mLinearLayoutManager;
     private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
-
     private boolean isInLazyMode = false;
     private boolean isLazyModePaused = false;
     private boolean hasPost = false;
-
     private PostRecyclerViewAdapter mAdapter;
     private RecyclerView.SmoothScroller smoothScroller;
-
-    PostViewModel mPostViewModel;
-
     private Window window;
     private Handler lazyModeHandler;
     private LazyModeRunnable lazyModeRunnable;
     private CountDownTimer resumeLazyModeCountDownTimer;
-
     private float lazyModeInterval;
-
-    @Inject @Named("no_oauth")
-    Retrofit mRetrofit;
-
-    @Inject @Named("oauth")
-    Retrofit mOauthRetrofit;
-
-    @Inject
-    RedditDataRoomDatabase mRedditDataRoomDatabase;
-
-    @Inject
-    SharedPreferences mSharedPreferences;
 
     public PostFragment() {
         // Required empty public constructor
@@ -129,7 +125,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Override
     public void onResume() {
         super.onResume();
-        if(mPostRecyclerView.getAdapter() != null) {
+        if (mPostRecyclerView.getAdapter() != null) {
             ((PostRecyclerViewAdapter) mPostRecyclerView.getAdapter()).setCanStartActivity(true);
         }
     }
@@ -187,10 +183,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             @Override
             public void run() {
-                if(isInLazyMode && !isLazyModePaused) {
+                if (isInLazyMode && !isLazyModePaused) {
                     int nPosts = mAdapter.getItemCount();
-                    if(getCurrentPosition() == -1) {
-                        if(mLinearLayoutManager != null) {
+                    if (getCurrentPosition() == -1) {
+                        if (mLinearLayoutManager != null) {
                             setCurrentPosition(mLinearLayoutManager.findFirstVisibleItemPosition());
                         } else {
                             int[] into = new int[2];
@@ -198,10 +194,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                         }
                     }
 
-                    if(getCurrentPosition() != RecyclerView.NO_POSITION && nPosts > getCurrentPosition()) {
+                    if (getCurrentPosition() != RecyclerView.NO_POSITION && nPosts > getCurrentPosition()) {
                         incrementCurrentPosition();
                         smoothScroller.setTargetPosition(getCurrentPosition());
-                        if(mLinearLayoutManager != null) {
+                        if (mLinearLayoutManager != null) {
                             mLinearLayoutManager.startSmoothScroll(smoothScroller);
                         } else {
                             mStaggeredGridLayoutManager.startSmoothScroll(smoothScroller);
@@ -224,26 +220,26 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
         };
 
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             int recyclerViewPosition = savedInstanceState.getInt(RECYCLER_VIEW_POSITION_STATE);
-            if(recyclerViewPosition > 0) {
+            if (recyclerViewPosition > 0) {
                 mPostRecyclerView.scrollToPosition(recyclerViewPosition);
             }
 
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
-            if(isInLazyMode) {
+            if (isInLazyMode) {
                 resumeLazyMode(false);
             }
         }
 
         mPostRecyclerView.setOnTouchListener((view, motionEvent) -> {
-            if(isInLazyMode) {
+            if (isInLazyMode) {
                 pauseLazyMode(true);
             }
             return false;
         });
 
-        if(activity instanceof MainActivity) {
+        if (activity instanceof MainActivity) {
             mPostRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -255,7 +251,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
                 }
             });
-        } else if(activity instanceof ViewSubredditDetailActivity) {
+        } else if (activity instanceof ViewSubredditDetailActivity) {
             mPostRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -280,31 +276,31 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         PostViewModel.Factory factory;
 
-        if(postType == PostDataSource.TYPE_SEARCH) {
+        if (postType == PostDataSource.TYPE_SEARCH) {
             String subredditName = getArguments().getString(EXTRA_NAME);
             String query = getArguments().getString(EXTRA_QUERY);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, true, needBlurNsfw, needBlurSpoiler,
                     new PostRecyclerViewAdapter.Callback() {
-                @Override
-                public void retryLoadingMore() {
-                    mPostViewModel.retryLoadingMore();
-                }
+                        @Override
+                        public void retryLoadingMore() {
+                            mPostViewModel.retryLoadingMore();
+                        }
 
-                @Override
-                public void typeChipClicked(int filter) {
-                    Intent intent = new Intent(activity, FilteredThingActivity.class);
-                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, subredditName);
-                    intent.putExtra(FilteredThingActivity.EXTRA_QUERY, query);
-                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
-                    intent.putExtra(FilteredThingActivity.EXTRA_SORT_TYPE, sortType);
-                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
-                    startActivity(intent);
-                }
-            });
+                        @Override
+                        public void typeChipClicked(int filter) {
+                            Intent intent = new Intent(activity, FilteredThingActivity.class);
+                            intent.putExtra(FilteredThingActivity.EXTRA_NAME, subredditName);
+                            intent.putExtra(FilteredThingActivity.EXTRA_QUERY, query);
+                            intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+                            intent.putExtra(FilteredThingActivity.EXTRA_SORT_TYPE, sortType);
+                            intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
+                            startActivity(intent);
+                        }
+                    });
 
-            if(accessToken == null) {
+            if (accessToken == null) {
                 factory = new PostViewModel.Factory(mRetrofit, accessToken,
                         getResources().getConfiguration().locale, subredditName, query, postType,
                         sortType, filter, nsfw);
@@ -313,30 +309,30 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                         getResources().getConfiguration().locale, subredditName, query, postType,
                         sortType, filter, nsfw);
             }
-        } else if(postType == PostDataSource.TYPE_SUBREDDIT) {
+        } else if (postType == PostDataSource.TYPE_SUBREDDIT) {
             String subredditName = getArguments().getString(EXTRA_NAME);
 
             boolean displaySubredditName = subredditName != null && (subredditName.equals("popular") || subredditName.equals("all"));
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, displaySubredditName, needBlurNsfw, needBlurSpoiler,
                     new PostRecyclerViewAdapter.Callback() {
-                @Override
-                public void retryLoadingMore() {
-                    mPostViewModel.retryLoadingMore();
-                }
+                        @Override
+                        public void retryLoadingMore() {
+                            mPostViewModel.retryLoadingMore();
+                        }
 
-                @Override
-                public void typeChipClicked(int filter) {
-                    Intent intent = new Intent(activity, FilteredThingActivity.class);
-                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, subredditName);
-                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
-                    intent.putExtra(FilteredThingActivity.EXTRA_SORT_TYPE, sortType);
-                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
-                    startActivity(intent);
-                }
-            });
+                        @Override
+                        public void typeChipClicked(int filter) {
+                            Intent intent = new Intent(activity, FilteredThingActivity.class);
+                            intent.putExtra(FilteredThingActivity.EXTRA_NAME, subredditName);
+                            intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+                            intent.putExtra(FilteredThingActivity.EXTRA_SORT_TYPE, sortType);
+                            intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
+                            startActivity(intent);
+                        }
+                    });
 
-            if(accessToken == null) {
+            if (accessToken == null) {
                 factory = new PostViewModel.Factory(mRetrofit, accessToken,
                         getResources().getConfiguration().locale, subredditName, postType, sortType,
                         filter, nsfw);
@@ -345,10 +341,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                         getResources().getConfiguration().locale, subredditName, postType, sortType,
                         filter, nsfw);
             }
-        } else if(postType == PostDataSource.TYPE_USER) {
+        } else if (postType == PostDataSource.TYPE_USER) {
             String username = getArguments().getString(EXTRA_USER_NAME);
             String where = getArguments().getString(EXTRA_USER_WHERE);
-            if(where != null && where.equals(PostDataSource.USER_WHERE_SUBMITTED)) {
+            if (where != null && where.equals(PostDataSource.USER_WHERE_SUBMITTED)) {
                 CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mFetchPostInfoLinearLayout.getLayoutParams();
                 params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
                 mFetchPostInfoLinearLayout.setLayoutParams(params);
@@ -357,24 +353,24 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, true, needBlurNsfw, needBlurSpoiler,
                     new PostRecyclerViewAdapter.Callback() {
-                @Override
-                public void retryLoadingMore() {
-                    mPostViewModel.retryLoadingMore();
-                }
+                        @Override
+                        public void retryLoadingMore() {
+                            mPostViewModel.retryLoadingMore();
+                        }
 
-                @Override
-                public void typeChipClicked(int filter) {
-                    Intent intent = new Intent(activity, FilteredThingActivity.class);
-                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, username);
-                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
-                    intent.putExtra(FilteredThingActivity.EXTRA_SORT_TYPE, sortType);
-                    intent.putExtra(FilteredThingActivity.EXTRA_USER_WHERE, where);
-                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
-                    startActivity(intent);
-                }
-            });
+                        @Override
+                        public void typeChipClicked(int filter) {
+                            Intent intent = new Intent(activity, FilteredThingActivity.class);
+                            intent.putExtra(FilteredThingActivity.EXTRA_NAME, username);
+                            intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+                            intent.putExtra(FilteredThingActivity.EXTRA_SORT_TYPE, sortType);
+                            intent.putExtra(FilteredThingActivity.EXTRA_USER_WHERE, where);
+                            intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
+                            startActivity(intent);
+                        }
+                    });
 
-            if(accessToken == null) {
+            if (accessToken == null) {
                 factory = new PostViewModel.Factory(mRetrofit, accessToken,
                         getResources().getConfiguration().locale, username, postType, sortType, where,
                         filter, nsfw);
@@ -387,21 +383,21 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, true, needBlurNsfw, needBlurSpoiler,
                     new PostRecyclerViewAdapter.Callback() {
-                @Override
-                public void retryLoadingMore() {
-                    mPostViewModel.retryLoadingMore();
-                }
+                        @Override
+                        public void retryLoadingMore() {
+                            mPostViewModel.retryLoadingMore();
+                        }
 
-                @Override
-                public void typeChipClicked(int filter) {
-                    Intent intent = new Intent(activity, FilteredThingActivity.class);
-                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, activity.getString(R.string.best));
-                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
-                    intent.putExtra(FilteredThingActivity.EXTRA_SORT_TYPE, sortType);
-                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
-                    startActivity(intent);
-                }
-            });
+                        @Override
+                        public void typeChipClicked(int filter) {
+                            Intent intent = new Intent(activity, FilteredThingActivity.class);
+                            intent.putExtra(FilteredThingActivity.EXTRA_NAME, activity.getString(R.string.best));
+                            intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+                            intent.putExtra(FilteredThingActivity.EXTRA_SORT_TYPE, sortType);
+                            intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
+                            startActivity(intent);
+                        }
+                    });
 
             factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
                     getResources().getConfiguration().locale, postType, sortType, filter, nsfw);
@@ -415,22 +411,23 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         mPostViewModel.hasPost().observe(this, hasPost -> {
             this.hasPost = hasPost;
             mProgressBar.setVisibility(View.GONE);
-            if(hasPost) {
+            if (hasPost) {
                 mFetchPostInfoLinearLayout.setVisibility(View.GONE);
             } else {
-                if(isInLazyMode) {
+                if (isInLazyMode) {
                     stopLazyMode();
                 }
 
-                mFetchPostInfoLinearLayout.setOnClickListener(view -> {});
+                mFetchPostInfoLinearLayout.setOnClickListener(view -> {
+                });
                 showErrorView(R.string.no_posts);
             }
         });
 
         mPostViewModel.getInitialLoadingState().observe(this, networkState -> {
-            if(networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
+            if (networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
                 mProgressBar.setVisibility(View.GONE);
-            } else if(networkState.getStatus().equals(NetworkState.Status.FAILED)) {
+            } else if (networkState.getStatus().equals(NetworkState.Status.FAILED)) {
                 mProgressBar.setVisibility(View.GONE);
                 mFetchPostInfoLinearLayout.setOnClickListener(view -> refresh());
                 showErrorView(R.string.load_posts_error);
@@ -458,9 +455,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
-        if(mLinearLayoutManager != null) {
+        if (mLinearLayoutManager != null) {
             outState.putInt(RECYCLER_VIEW_POSITION_STATE, mLinearLayoutManager.findFirstVisibleItemPosition());
-        } else if(mStaggeredGridLayoutManager != null) {
+        } else if (mStaggeredGridLayoutManager != null) {
             int[] into = new int[2];
             outState.putInt(RECYCLER_VIEW_POSITION_STATE,
                     mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[0]);
@@ -469,7 +466,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void refresh() {
-        if(isInLazyMode) {
+        if (isInLazyMode) {
             stopLazyMode();
         }
 
@@ -480,7 +477,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     }
 
     private void showErrorView(int stringResId) {
-        if(activity != null && isAdded()) {
+        if (activity != null && isAdded()) {
             mProgressBar.setVisibility(View.GONE);
             mFetchPostInfoLinearLayout.setVisibility(View.VISIBLE);
             mFetchPostInfoTextView.setText(stringResId);
@@ -495,7 +492,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public boolean startLazyMode() {
-        if(!hasPost) {
+        if (!hasPost) {
             Toast.makeText(activity, R.string.no_posts_no_lazy_mode, Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -525,13 +522,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void resumeLazyMode(boolean resumeNow) {
-        if(isInLazyMode) {
+        if (isInLazyMode) {
             isLazyModePaused = false;
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
             lazyModeRunnable.resetOldPosition();
 
-            if(resumeNow) {
+            if (resumeNow) {
                 lazyModeHandler.post(lazyModeRunnable);
             } else {
                 lazyModeHandler.postDelayed(lazyModeRunnable, (long) (lazyModeInterval * 1000));
@@ -547,7 +544,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         lazyModeHandler.removeCallbacks(lazyModeRunnable);
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        if(startTimer) {
+        if (startTimer) {
             resumeLazyModeCountDownTimer.start();
         }
     }
@@ -590,9 +587,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     private void refreshAdapter() {
         int previousPosition = -1;
-        if(mLinearLayoutManager != null) {
+        if (mLinearLayoutManager != null) {
             previousPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
-        } else if(mStaggeredGridLayoutManager != null) {
+        } else if (mStaggeredGridLayoutManager != null) {
             int[] into = new int[2];
             previousPosition = mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[0];
         }
@@ -603,7 +600,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         mPostRecyclerView.setAdapter(mAdapter);
         mPostRecyclerView.setLayoutManager(layoutManager);
 
-        if(previousPosition > 0) {
+        if (previousPosition > 0) {
             mPostRecyclerView.scrollToPosition(previousPosition);
         }
     }
@@ -611,7 +608,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Override
     public void onStart() {
         super.onStart();
-        if(isInLazyMode && isLazyModePaused) {
+        if (isInLazyMode && isLazyModePaused) {
             resumeLazyMode(false);
         }
     }
@@ -619,7 +616,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Override
     public void onStop() {
         super.onStop();
-        if(isInLazyMode) {
+        if (isInLazyMode) {
             pauseLazyMode(false);
         }
     }
@@ -673,7 +670,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             int halfOffset = mItemOffset / 2;
 
-            if(spanIndex == 0) {
+            if (spanIndex == 0) {
                 outRect.set(0, 0, halfOffset, 0);
             } else {
                 outRect.set(halfOffset, 0, 0, 0);

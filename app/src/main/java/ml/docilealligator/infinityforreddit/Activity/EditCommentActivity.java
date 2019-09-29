@@ -35,13 +35,13 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ContentFontStyle;
+import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FontStyle;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditAPI;
 import ml.docilealligator.infinityforreddit.RedditUtils;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.TitleFontStyle;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -63,20 +63,20 @@ public class EditCommentActivity extends AppCompatActivity {
     static final String EXTRA_EDITED_COMMENT_CONTENT = "EECC";
     static final String EXTRA_EDITED_COMMENT_POSITION = "EECP";
 
-    @BindView(R.id.coordinator_layout_edit_comment_activity) CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.toolbar_edit_comment_activity) Toolbar toolbar;
-    @BindView(R.id.post_text_content_edit_text_edit_comment_activity) EditText contentEditText;
-
-    private String mFullName;
-    private String mAccessToken;
-    private boolean isSubmitting = false;
-
+    @BindView(R.id.coordinator_layout_edit_comment_activity)
+    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.toolbar_edit_comment_activity)
+    Toolbar toolbar;
+    @BindView(R.id.post_text_content_edit_text_edit_comment_activity)
+    EditText contentEditText;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
-
     @Inject
     SharedPreferences mSharedPreferences;
+    private String mFullName;
+    private String mAccessToken;
+    private boolean isSubmitting = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,9 +99,9 @@ public class EditCommentActivity extends AppCompatActivity {
 
         EventBus.getDefault().register(this);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Window window = getWindow();
-            if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+            if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
                 window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
             }
             window.setNavigationBarColor(ContextCompat.getColor(this, R.color.navBarColor));
@@ -117,7 +117,7 @@ public class EditCommentActivity extends AppCompatActivity {
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 break;
             case 2:
-                if(systemDefault) {
+                if (systemDefault) {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
@@ -134,7 +134,7 @@ public class EditCommentActivity extends AppCompatActivity {
 
         contentEditText.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if(imm != null) {
+        if (imm != null) {
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
     }
@@ -142,8 +142,8 @@ public class EditCommentActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        if(imm != null) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
             imm.hideSoftInputFromWindow(contentEditText.getWindowToken(), 0);
         }
     }
@@ -156,8 +156,8 @@ public class EditCommentActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.action_send_edit_comment_activity) {
-            if(!isSubmitting) {
+        if (item.getItemId() == R.id.action_send_edit_comment_activity) {
+            if (!isSubmitting) {
                 isSubmitting = true;
 
                 Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_SHORT).show();
@@ -174,7 +174,7 @@ public class EditCommentActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                                 isSubmitting = false;
-                                if(response.isSuccessful()) {
+                                if (response.isSuccessful()) {
                                     Toast.makeText(EditCommentActivity.this, R.string.edit_success, Toast.LENGTH_SHORT).show();
 
                                     Intent returnIntent = new Intent();
@@ -197,7 +197,7 @@ public class EditCommentActivity extends AppCompatActivity {
 
             }
             return true;
-        } else if(item.getItemId() == android.R.id.home) {
+        } else if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
         }

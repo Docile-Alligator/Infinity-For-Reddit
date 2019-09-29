@@ -48,26 +48,28 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
-import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
-import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
 import ml.docilealligator.infinityforreddit.Adapter.CommentAndPostRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
+import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CommentData;
 import ml.docilealligator.infinityforreddit.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.DeleteThing;
+import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
+import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToDetailActivity;
+import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToPostList;
+import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchComment;
 import ml.docilealligator.infinityforreddit.FetchPost;
 import ml.docilealligator.infinityforreddit.Flair;
-import ml.docilealligator.infinityforreddit.Fragment.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.FontStyle;
-import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.Fragment.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.HidePost;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.ParseComment;
 import ml.docilealligator.infinityforreddit.ParsePost;
 import ml.docilealligator.infinityforreddit.Post;
-import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToDetailActivity;
-import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.ReadMessage;
 import ml.docilealligator.infinityforreddit.RedditAPI;
@@ -75,8 +77,6 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.RedditUtils;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
-import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.TitleFontStyle;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -98,20 +98,8 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     public static final String EXTRA_SINGLE_COMMENT_ID = "ESCI";
     public static final String EXTRA_MESSAGE_FULLNAME = "ENI";
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
-
-    private static final int EDIT_POST_REQUEST_CODE = 2;
     public static final int EDIT_COMMENT_REQUEST_CODE = 3;
-
-    private RequestManager mGlide;
-    private Locale mLocale;
-    private Menu mMenu;
-
-    private int orientation;
-    private int postListPosition = -1;
-    private String mSingleCommentId;
-    private boolean mNeedBlurNsfw;
-    private boolean mNeedBlurSpoiler;
-
+    private static final int EDIT_POST_REQUEST_CODE = 2;
     @State
     boolean mNullAccessToken = false;
     @State
@@ -140,32 +128,43 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     String mMessageFullname;
     @State
     String mNewAccountName;
-
-    private boolean showToast = false;
-
-    private LinearLayoutManager mLinearLayoutManager;
-    private CommentAndPostRecyclerViewAdapter mAdapter;
-
-    @BindView(R.id.coordinator_layout_view_post_detail) CoordinatorLayout mCoordinatorLayout;
-    @BindView(R.id.appbar_layout_view_post_detail_activity) AppBarLayout appBarLayout;
-    @BindView(R.id.toolbar_view_post_detail_activity) Toolbar toolbar;
-    @BindView(R.id.progress_bar_view_post_detail_activity) ProgressBar mProgressBar;
-    @BindView(R.id.recycler_view_view_post_detail) RecyclerView mRecyclerView;
-    @BindView(R.id.fetch_post_info_linear_layout_view_post_detail_activity) LinearLayout mFetchPostInfoLinearLayout;
-    @BindView(R.id.fetch_post_info_image_view_view_post_detail_activity) ImageView mFetchPostInfoImageView;
-    @BindView(R.id.fetch_post_info_text_view_view_post_detail_activity) TextView mFetchPostInfoTextView;
-
-    @Inject @Named("no_oauth")
+    @BindView(R.id.coordinator_layout_view_post_detail)
+    CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.appbar_layout_view_post_detail_activity)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.toolbar_view_post_detail_activity)
+    Toolbar toolbar;
+    @BindView(R.id.progress_bar_view_post_detail_activity)
+    ProgressBar mProgressBar;
+    @BindView(R.id.recycler_view_view_post_detail)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.fetch_post_info_linear_layout_view_post_detail_activity)
+    LinearLayout mFetchPostInfoLinearLayout;
+    @BindView(R.id.fetch_post_info_image_view_view_post_detail_activity)
+    ImageView mFetchPostInfoImageView;
+    @BindView(R.id.fetch_post_info_text_view_view_post_detail_activity)
+    TextView mFetchPostInfoTextView;
+    @Inject
+    @Named("no_oauth")
     Retrofit mRetrofit;
-
-    @Inject @Named("oauth")
+    @Inject
+    @Named("oauth")
     Retrofit mOauthRetrofit;
-
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
-
     @Inject
     SharedPreferences mSharedPreferences;
+    private RequestManager mGlide;
+    private Locale mLocale;
+    private Menu mMenu;
+    private int orientation;
+    private int postListPosition = -1;
+    private String mSingleCommentId;
+    private boolean mNeedBlurNsfw;
+    private boolean mNeedBlurSpoiler;
+    private boolean showToast = false;
+    private LinearLayoutManager mLinearLayoutManager;
+    private CommentAndPostRecyclerViewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,24 +198,24 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
             window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
             boolean lightNavBar = false;
-            if((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+            if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
                 lightNavBar = true;
             }
             boolean finalLightNavBar = lightNavBar;
 
             View decorView = window.getDecorView();
-            if(finalLightNavBar) {
+            if (finalLightNavBar) {
                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
             }
             appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
                 @Override
                 public void onStateChanged(AppBarLayout appBarLayout, State state) {
                     if (state == State.COLLAPSED) {
-                        if(finalLightNavBar) {
+                        if (finalLightNavBar) {
                             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                         }
                     } else if (state == State.EXPANDED) {
-                        if(finalLightNavBar) {
+                        if (finalLightNavBar) {
                             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                         }
                     }
@@ -247,7 +246,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 break;
             case 2:
-                if(systemDefault) {
+                if (systemDefault) {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
@@ -268,8 +267,8 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         mSingleCommentId = getIntent().hasExtra(EXTRA_SINGLE_COMMENT_ID) ? getIntent().getExtras().getString(EXTRA_SINGLE_COMMENT_ID) : null;
-        if(savedInstanceState == null) {
-            if(mSingleCommentId != null) {
+        if (savedInstanceState == null) {
+            if (mSingleCommentId != null) {
                 isSingleCommentThreadMode = true;
             }
             mMessageFullname = getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME);
@@ -278,27 +277,27 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
         orientation = getResources().getConfiguration().orientation;
 
-        if(!mNullAccessToken && mAccessToken == null) {
+        if (!mNullAccessToken && mAccessToken == null) {
             getCurrentAccountAndBindView();
         } else {
             bindView();
         }
 
-        if(getIntent().hasExtra(EXTRA_POST_LIST_POSITION)) {
+        if (getIntent().hasExtra(EXTRA_POST_LIST_POSITION)) {
             postListPosition = getIntent().getIntExtra(EXTRA_POST_LIST_POSITION, -1);
         }
     }
 
     private void getCurrentAccountAndBindView() {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-            if(mNewAccountName != null) {
-                if(account == null || !account.getUsername().equals(mNewAccountName)) {
+            if (mNewAccountName != null) {
+                if (account == null || !account.getUsername().equals(mNewAccountName)) {
                     new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
                         EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
                         Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
 
                         mNewAccountName = null;
-                        if(newAccount == null) {
+                        if (newAccount == null) {
                             mNullAccessToken = true;
                         } else {
                             mAccessToken = newAccount.getAccessToken();
@@ -313,7 +312,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                     bindView();
                 }
             } else {
-                if(account == null) {
+                if (account == null) {
                     mNullAccessToken = true;
                 } else {
                     mAccessToken = account.getAccessToken();
@@ -326,7 +325,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     }
 
     private void bindView() {
-        if(mAccessToken != null && mMessageFullname != null) {
+        if (mAccessToken != null && mMessageFullname != null) {
             ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
                 @Override
                 public void readSuccess() {
@@ -340,21 +339,21 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
             });
         }
 
-        if(mPost == null) {
+        if (mPost == null) {
             mPost = getIntent().getParcelableExtra(EXTRA_POST_DATA);
         }
 
-        if(mPost == null) {
+        if (mPost == null) {
             fetchPostAndCommentsById(getIntent().getStringExtra(EXTRA_POST_ID));
         } else {
-            if(mMenu != null) {
+            if (mMenu != null) {
                 MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
                 MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
 
                 mMenu.findItem(R.id.action_comment_view_post_detail_activity).setVisible(true);
 
-                if(mAccessToken != null) {
-                    if(mPost.isSaved()) {
+                if (mAccessToken != null) {
+                    if (mPost.isSaved()) {
                         saveItem.setVisible(true);
                         saveItem.setIcon(R.drawable.ic_baseline_bookmark_24px);
                     } else {
@@ -362,7 +361,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                         saveItem.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
                     }
 
-                    if(mPost.isHidden()) {
+                    if (mPost.isHidden()) {
                         hideItem.setVisible(true);
                         hideItem.setTitle(R.string.action_unhide_post);
                     } else {
@@ -374,15 +373,15 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                     hideItem.setVisible(false);
                 }
 
-                if(mPost.getAuthor().equals(mAccountName)) {
-                    if(mPost.getPostType() == Post.TEXT_TYPE) {
+                if (mPost.getAuthor().equals(mAccountName)) {
+                    if (mPost.getPostType() == Post.TEXT_TYPE) {
                         mMenu.findItem(R.id.action_edit_view_post_detail_activity).setVisible(true);
                     }
                     mMenu.findItem(R.id.action_delete_view_post_detail_activity).setVisible(true);
 
                     MenuItem nsfwItem = mMenu.findItem(R.id.action_nsfw_view_post_detail_activity);
                     nsfwItem.setVisible(true);
-                    if(mPost.isNSFW()) {
+                    if (mPost.isNSFW()) {
                         nsfwItem.setTitle(R.string.action_unmark_nsfw);
                     } else {
                         nsfwItem.setTitle(R.string.action_mark_nsfw);
@@ -390,7 +389,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
                     MenuItem spoilerItem = mMenu.findItem(R.id.action_spoiler_view_post_detail_activity);
                     spoilerItem.setVisible(true);
-                    if(mPost.isSpoiler()) {
+                    if (mPost.isSpoiler()) {
                         spoilerItem.setTitle(R.string.action_unmark_spoiler);
                     } else {
                         spoilerItem.setTitle(R.string.action_mark_spoiler);
@@ -426,15 +425,15 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                     });
             mRecyclerView.setAdapter(mAdapter);
 
-            if(comments == null) {
+            if (comments == null) {
                 fetchComments(false);
             } else {
-                if(isRefreshing) {
+                if (isRefreshing) {
                     isRefreshing = false;
                     refresh(true, true);
                 } else {
                     mAdapter.addComments(comments, hasMoreChildren);
-                    if(isLoadingMoreChildren) {
+                    if (isLoadingMoreChildren) {
                         isLoadingMoreChildren = false;
                         fetchMoreComments();
                     }
@@ -450,14 +449,14 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         mGlide.clear(mFetchPostInfoImageView);
 
         Call<String> postAndComments;
-        if(mAccessToken == null) {
-            if(isSingleCommentThreadMode && mSingleCommentId != null) {
+        if (mAccessToken == null) {
+            if (isSingleCommentThreadMode && mSingleCommentId != null) {
                 postAndComments = mRetrofit.create(RedditAPI.class).getPostAndCommentsSingleThreadById(subredditId, mSingleCommentId);
             } else {
                 postAndComments = mRetrofit.create(RedditAPI.class).getPostAndCommentsById(subredditId);
             }
         } else {
-            if(isSingleCommentThreadMode && mSingleCommentId != null) {
+            if (isSingleCommentThreadMode && mSingleCommentId != null) {
                 postAndComments = mOauthRetrofit.create(RedditAPI.class).getPostAndCommentsSingleThreadByIdOauth(subredditId,
                         mSingleCommentId, RedditUtils.getOAuthHeader(mAccessToken));
             } else {
@@ -470,20 +469,20 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 mProgressBar.setVisibility(View.GONE);
 
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     ParsePost.parsePost(response.body(), mLocale, new ParsePost.ParsePostListener() {
                         @Override
                         public void onParsePostSuccess(Post post) {
                             mPost = post;
 
-                            if(mMenu != null) {
+                            if (mMenu != null) {
                                 MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
                                 MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
 
                                 mMenu.findItem(R.id.action_comment_view_post_detail_activity).setVisible(true);
 
-                                if(mAccessToken != null) {
-                                    if(post.isSaved()) {
+                                if (mAccessToken != null) {
+                                    if (post.isSaved()) {
                                         saveItem.setVisible(true);
                                         saveItem.setIcon(R.drawable.ic_baseline_bookmark_24px);
                                     } else {
@@ -491,7 +490,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                                         saveItem.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
                                     }
 
-                                    if(post.isHidden()) {
+                                    if (post.isHidden()) {
                                         hideItem.setVisible(true);
                                         hideItem.setTitle(R.string.action_unhide_post);
                                     } else {
@@ -503,8 +502,8 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                                     hideItem.setVisible(false);
                                 }
 
-                                if(mPost.getAuthor().equals(mAccountName)) {
-                                    if(mPost.getPostType() == Post.TEXT_TYPE) {
+                                if (mPost.getAuthor().equals(mAccountName)) {
+                                    if (mPost.getPostType() == Post.TEXT_TYPE) {
                                         mMenu.findItem(R.id.action_edit_view_post_detail_activity).setVisible(true);
                                     }
                                     mMenu.findItem(R.id.action_delete_view_post_detail_activity).setVisible(true);
@@ -547,13 +546,13 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                                             hasMoreChildren = children.size() != 0;
                                             mAdapter.addComments(expandedComments, hasMoreChildren);
 
-                                            if(children.size() > 0) {
+                                            if (children.size() > 0) {
                                                 mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                                                     @Override
                                                     public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                                                         super.onScrolled(recyclerView, dx, dy);
 
-                                                        if(!isLoadingMoreChildren && loadMoreChildrenSuccess) {
+                                                        if (!isLoadingMoreChildren && loadMoreChildrenSuccess) {
                                                             int visibleItemCount = mLinearLayoutManager.getChildCount();
                                                             int totalItemCount = mLinearLayoutManager.getItemCount();
                                                             int firstVisibleItemPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
@@ -595,56 +594,56 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         mAdapter.setSingleComment(mSingleCommentId, isSingleCommentThreadMode);
         mAdapter.initiallyLoading();
         String commentId = null;
-        if(isSingleCommentThreadMode) {
+        if (isSingleCommentThreadMode) {
             commentId = mSingleCommentId;
         }
 
         Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
         FetchComment.fetchComments(retrofit, mAccessToken, mPost.getId(), commentId, mLocale, new FetchComment.FetchCommentListener() {
-                    @Override
-                    public void onFetchCommentSuccess(ArrayList<CommentData> expandedComments,
-                                                      String parentId, ArrayList<String> children) {
-                        ViewPostDetailActivity.this.children = children;
+            @Override
+            public void onFetchCommentSuccess(ArrayList<CommentData> expandedComments,
+                                              String parentId, ArrayList<String> children) {
+                ViewPostDetailActivity.this.children = children;
 
-                        comments = expandedComments;
-                        hasMoreChildren = children.size() != 0;
-                        mAdapter.addComments(expandedComments, hasMoreChildren);
+                comments = expandedComments;
+                hasMoreChildren = children.size() != 0;
+                mAdapter.addComments(expandedComments, hasMoreChildren);
 
-                        if(children.size() > 0) {
-                            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                                @Override
-                                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                                    super.onScrolled(recyclerView, dx, dy);
+                if (children.size() > 0) {
+                    mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                        @Override
+                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                            super.onScrolled(recyclerView, dx, dy);
 
-                                    if(!isLoadingMoreChildren && loadMoreChildrenSuccess) {
-                                        int visibleItemCount = mLinearLayoutManager.getChildCount();
-                                        int totalItemCount = mLinearLayoutManager.getItemCount();
-                                        int firstVisibleItemPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
+                            if (!isLoadingMoreChildren && loadMoreChildrenSuccess) {
+                                int visibleItemCount = mLinearLayoutManager.getChildCount();
+                                int totalItemCount = mLinearLayoutManager.getItemCount();
+                                int firstVisibleItemPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
 
-                                        if ((visibleItemCount + firstVisibleItemPosition >= totalItemCount) && firstVisibleItemPosition >= 0) {
-                                            fetchMoreComments();
-                                        }
-                                    }
+                                if ((visibleItemCount + firstVisibleItemPosition >= totalItemCount) && firstVisibleItemPosition >= 0) {
+                                    fetchMoreComments();
                                 }
-                            });
+                            }
                         }
-                        if(changeRefreshState) {
-                            isRefreshing = false;
-                        }
-                    }
+                    });
+                }
+                if (changeRefreshState) {
+                    isRefreshing = false;
+                }
+            }
 
-                    @Override
-                    public void onFetchCommentFailed() {
-                        mAdapter.initiallyLoadCommentsFailed();
-                        if(changeRefreshState) {
-                            isRefreshing = false;
-                        }
-                    }
-                });
+            @Override
+            public void onFetchCommentFailed() {
+                mAdapter.initiallyLoadCommentsFailed();
+                if (changeRefreshState) {
+                    isRefreshing = false;
+                }
+            }
+        });
     }
 
     void fetchMoreComments() {
-        if(isLoadingMoreChildren || !loadMoreChildrenSuccess) {
+        if (isLoadingMoreChildren || !loadMoreChildrenSuccess) {
             return;
         }
 
@@ -672,24 +671,24 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     }
 
     private void refresh(boolean fetchPost, boolean fetchComments) {
-        if(!isRefreshing) {
+        if (!isRefreshing) {
             isRefreshing = true;
             mChildrenStartingIndex = 0;
 
             mFetchPostInfoLinearLayout.setVisibility(View.GONE);
             mGlide.clear(mFetchPostInfoImageView);
 
-            if(fetchComments) {
-                if(!fetchPost) {
+            if (fetchComments) {
+                if (!fetchPost) {
                     fetchComments(true);
                 } else {
                     fetchComments(false);
                 }
             }
 
-            if(fetchPost) {
+            if (fetchPost) {
                 Retrofit retrofit;
-                if(mAccessToken == null) {
+                if (mAccessToken == null) {
                     retrofit = mRetrofit;
                 } else {
                     retrofit = mOauthRetrofit;
@@ -702,14 +701,14 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                                 mAdapter.updatePost(mPost);
                                 EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                 isRefreshing = false;
-                                if(mMenu != null) {
+                                if (mMenu != null) {
                                     MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
                                     MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
 
                                     mMenu.findItem(R.id.action_comment_view_post_detail_activity).setVisible(true);
 
-                                    if(mAccessToken != null) {
-                                        if(post.isSaved()) {
+                                    if (mAccessToken != null) {
+                                        if (post.isSaved()) {
                                             saveItem.setVisible(true);
                                             saveItem.setIcon(R.drawable.ic_baseline_bookmark_24px);
                                         } else {
@@ -717,7 +716,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                                             saveItem.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
                                         }
 
-                                        if(post.isHidden()) {
+                                        if (post.isHidden()) {
                                             hideItem.setVisible(true);
                                             hideItem.setTitle(R.string.action_unhide_post);
                                         } else {
@@ -752,7 +751,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     }
 
     private void showMessage(int resId) {
-        if(showToast) {
+        if (showToast) {
             Toast.makeText(ViewPostDetailActivity.this, resId, Toast.LENGTH_SHORT).show();
         } else {
             Snackbar.make(mCoordinatorLayout, resId, Snackbar.LENGTH_SHORT).show();
@@ -760,7 +759,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     }
 
     private void markNSFW() {
-        if(mMenu != null) {
+        if (mMenu != null) {
             mMenu.findItem(R.id.action_nsfw_view_post_detail_activity).setTitle(R.string.action_unmark_nsfw);
         }
 
@@ -768,37 +767,37 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         params.put(RedditUtils.ID_KEY, mPost.getFullName());
         mOauthRetrofit.create(RedditAPI.class).markNSFW(RedditUtils.getOAuthHeader(mAccessToken), params)
                 .enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful()) {
-                    if(mMenu != null) {
-                        mMenu.findItem(R.id.action_nsfw_view_post_detail_activity).setTitle(R.string.action_unmark_nsfw);
+                    @Override
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                        if (response.isSuccessful()) {
+                            if (mMenu != null) {
+                                mMenu.findItem(R.id.action_nsfw_view_post_detail_activity).setTitle(R.string.action_unmark_nsfw);
+                            }
+
+                            refresh(true, false);
+                            showMessage(R.string.mark_nsfw_success);
+                        } else {
+                            if (mMenu != null) {
+                                mMenu.findItem(R.id.action_nsfw_view_post_detail_activity).setTitle(R.string.action_mark_nsfw);
+                            }
+
+                            showMessage(R.string.mark_nsfw_failed);
+                        }
                     }
 
-                    refresh(true, false);
-                    showMessage(R.string.mark_nsfw_success);
-                } else {
-                    if(mMenu != null) {
-                        mMenu.findItem(R.id.action_nsfw_view_post_detail_activity).setTitle(R.string.action_mark_nsfw);
+                    @Override
+                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                        if (mMenu != null) {
+                            mMenu.findItem(R.id.action_nsfw_view_post_detail_activity).setTitle(R.string.action_mark_nsfw);
+                        }
+
+                        showMessage(R.string.mark_nsfw_failed);
                     }
-
-                    showMessage(R.string.mark_nsfw_failed);
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                if(mMenu != null) {
-                    mMenu.findItem(R.id.action_nsfw_view_post_detail_activity).setTitle(R.string.action_mark_nsfw);
-                }
-
-                showMessage(R.string.mark_nsfw_failed);
-            }
-        });
+                });
     }
 
     private void unmarkNSFW() {
-        if(mMenu != null) {
+        if (mMenu != null) {
             mMenu.findItem(R.id.action_nsfw_view_post_detail_activity).setTitle(R.string.action_mark_nsfw);
         }
 
@@ -808,15 +807,15 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                        if(response.isSuccessful()) {
-                            if(mMenu != null) {
+                        if (response.isSuccessful()) {
+                            if (mMenu != null) {
                                 mMenu.findItem(R.id.action_nsfw_view_post_detail_activity).setTitle(R.string.action_mark_nsfw);
                             }
 
                             refresh(true, false);
                             showMessage(R.string.unmark_nsfw_success);
                         } else {
-                            if(mMenu != null) {
+                            if (mMenu != null) {
                                 mMenu.findItem(R.id.action_nsfw_view_post_detail_activity).setTitle(R.string.action_unmark_nsfw);
                             }
 
@@ -826,7 +825,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
                     @Override
                     public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                        if(mMenu != null) {
+                        if (mMenu != null) {
                             mMenu.findItem(R.id.action_nsfw_view_post_detail_activity).setTitle(R.string.action_unmark_nsfw);
                         }
 
@@ -836,7 +835,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     }
 
     private void markSpoiler() {
-        if(mMenu != null) {
+        if (mMenu != null) {
             mMenu.findItem(R.id.action_spoiler_view_post_detail_activity).setTitle(R.string.action_unmark_spoiler);
         }
 
@@ -846,15 +845,15 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                        if(response.isSuccessful()) {
-                            if(mMenu != null) {
+                        if (response.isSuccessful()) {
+                            if (mMenu != null) {
                                 mMenu.findItem(R.id.action_spoiler_view_post_detail_activity).setTitle(R.string.action_unmark_spoiler);
                             }
 
                             refresh(true, false);
                             showMessage(R.string.mark_spoiler_success);
                         } else {
-                            if(mMenu != null) {
+                            if (mMenu != null) {
                                 mMenu.findItem(R.id.action_spoiler_view_post_detail_activity).setTitle(R.string.action_mark_spoiler);
                             }
 
@@ -864,7 +863,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
                     @Override
                     public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                        if(mMenu != null) {
+                        if (mMenu != null) {
                             mMenu.findItem(R.id.action_spoiler_view_post_detail_activity).setTitle(R.string.action_mark_spoiler);
                         }
 
@@ -874,7 +873,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     }
 
     private void unmarkSpoiler() {
-        if(mMenu != null) {
+        if (mMenu != null) {
             mMenu.findItem(R.id.action_spoiler_view_post_detail_activity).setTitle(R.string.action_mark_spoiler);
         }
 
@@ -884,15 +883,15 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                        if(response.isSuccessful()) {
-                            if(mMenu != null) {
+                        if (response.isSuccessful()) {
+                            if (mMenu != null) {
                                 mMenu.findItem(R.id.action_spoiler_view_post_detail_activity).setTitle(R.string.action_mark_spoiler);
                             }
 
                             refresh(true, false);
                             showMessage(R.string.unmark_spoiler_success);
                         } else {
-                            if(mMenu != null) {
+                            if (mMenu != null) {
                                 mMenu.findItem(R.id.action_spoiler_view_post_detail_activity).setTitle(R.string.action_unmark_spoiler);
                             }
 
@@ -902,7 +901,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
                     @Override
                     public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                        if(mMenu != null) {
+                        if (mMenu != null) {
                             mMenu.findItem(R.id.action_spoiler_view_post_detail_activity).setTitle(R.string.action_unmark_spoiler);
                         }
 
@@ -940,11 +939,11 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
     @Subscribe
     public void onPostUpdateEvent(PostUpdateEventToDetailActivity event) {
-        if(mPost.getId().equals(event.post.getId())) {
+        if (mPost.getId().equals(event.post.getId())) {
             mPost.setVoteType(event.post.getVoteType());
             mPost.setSaved(event.post.isSaved());
-            if(mMenu != null) {
-                if(event.post.isSaved()) {
+            if (mMenu != null) {
+                if (event.post.isSaved()) {
                     mMenu.findItem(R.id.action_save_view_post_detail_activity).setIcon(getResources()
                             .getDrawable(R.drawable.ic_baseline_bookmark_24px));
                 } else {
@@ -970,7 +969,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
     private void refreshAdapter() {
         int previousPosition = -1;
-        if(mLinearLayoutManager != null) {
+        if (mLinearLayoutManager != null) {
             previousPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
         }
 
@@ -980,14 +979,14 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(layoutManager);
 
-        if(previousPosition > 0) {
+        if (previousPosition > 0) {
             mRecyclerView.scrollToPosition(previousPosition);
         }
     }
 
     @Subscribe
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
-        if(!getClass().getName().equals(event.excludeActivityClassName)) {
+        if (!getClass().getName().equals(event.excludeActivityClassName)) {
             finish();
         }
     }
@@ -996,14 +995,14 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_post_detail_activity, menu);
         mMenu = menu;
-        if(mPost != null) {
+        if (mPost != null) {
             MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
             MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
 
             mMenu.findItem(R.id.action_comment_view_post_detail_activity).setVisible(true);
 
-            if(mAccessToken != null) {
-                if(mPost.isSaved()) {
+            if (mAccessToken != null) {
+                if (mPost.isSaved()) {
                     saveItem.setVisible(true);
                     saveItem.setIcon(R.drawable.ic_baseline_bookmark_24px);
                 } else {
@@ -1011,7 +1010,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                     saveItem.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
                 }
 
-                if(mPost.isHidden()) {
+                if (mPost.isHidden()) {
                     hideItem.setVisible(true);
                     hideItem.setTitle(R.string.action_unhide_post);
                 } else {
@@ -1023,15 +1022,15 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                 hideItem.setVisible(false);
             }
 
-            if(mPost.getAuthor().equals(mAccountName)) {
-                if(mPost.getPostType() == Post.TEXT_TYPE) {
+            if (mPost.getAuthor().equals(mAccountName)) {
+                if (mPost.getPostType() == Post.TEXT_TYPE) {
                     menu.findItem(R.id.action_edit_view_post_detail_activity).setVisible(true);
                 }
                 menu.findItem(R.id.action_delete_view_post_detail_activity).setVisible(true);
 
                 MenuItem nsfwItem = menu.findItem(R.id.action_nsfw_view_post_detail_activity);
                 nsfwItem.setVisible(true);
-                if(mPost.isNSFW()) {
+                if (mPost.isNSFW()) {
                     nsfwItem.setTitle(R.string.action_unmark_nsfw);
                 } else {
                     nsfwItem.setTitle(R.string.action_mark_nsfw);
@@ -1039,7 +1038,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
                 MenuItem spoilerItem = menu.findItem(R.id.action_spoiler_view_post_detail_activity);
                 spoilerItem.setVisible(true);
-                if(mPost.isSpoiler()) {
+                if (mPost.isSpoiler()) {
                     spoilerItem.setTitle(R.string.action_unmark_spoiler);
                 } else {
                     spoilerItem.setTitle(R.string.action_mark_spoiler);
@@ -1060,18 +1059,18 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                 refresh(true, true);
                 return true;
             case R.id.action_comment_view_post_detail_activity:
-                if(mPost != null) {
-                    if(mPost.isArchived()) {
+                if (mPost != null) {
+                    if (mPost.isArchived()) {
                         showMessage(R.string.archived_post_reply_unavailable);
                         return true;
                     }
 
-                    if(mPost.isLocked()) {
+                    if (mPost.isLocked()) {
                         showMessage(R.string.locked_post_comment_unavailable);
                         return true;
                     }
 
-                    if(mAccessToken == null) {
+                    if (mAccessToken == null) {
                         showMessage(R.string.login_first);
                         return true;
                     }
@@ -1085,8 +1084,8 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                 }
                 return true;
             case R.id.action_save_view_post_detail_activity:
-                if(mPost != null && mAccessToken != null) {
-                    if(mPost.isSaved()) {
+                if (mPost != null && mAccessToken != null) {
+                    if (mPost.isSaved()) {
                         item.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
                         SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
                                 new SaveThing.SaveThingListener() {
@@ -1135,8 +1134,8 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                 startActivity(crosspostIntent);
                 return true;
             case R.id.action_hide_view_post_detail_activity:
-                if(mPost != null && mAccessToken != null) {
-                    if(mPost.isHidden()) {
+                if (mPost != null && mAccessToken != null) {
+                    if (mPost.isHidden()) {
                         item.setTitle(R.string.action_hide_post);
 
                         HidePost.unhidePost(mOauthRetrofit, mAccessToken, mPost.getFullName(), new HidePost.HidePostListener() {
@@ -1208,14 +1207,14 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                         .show();
                 return true;
             case R.id.action_nsfw_view_post_detail_activity:
-                if(mPost.isNSFW()) {
+                if (mPost.isNSFW()) {
                     unmarkNSFW();
                 } else {
                     markNSFW();
                 }
                 return true;
             case R.id.action_spoiler_view_post_detail_activity:
-                if(mPost.isSpoiler()) {
+                if (mPost.isSpoiler()) {
                     unmarkSpoiler();
                 } else {
                     markSpoiler();
@@ -1239,16 +1238,16 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == WRITE_COMMENT_REQUEST_CODE) {
-            if(data != null && resultCode == RESULT_OK) {
-                if(data.hasExtra(EXTRA_COMMENT_DATA_KEY)) {
+        if (requestCode == WRITE_COMMENT_REQUEST_CODE) {
+            if (data != null && resultCode == RESULT_OK) {
+                if (data.hasExtra(EXTRA_COMMENT_DATA_KEY)) {
                     CommentData comment = data.getParcelableExtra(EXTRA_COMMENT_DATA_KEY);
-                    if(comment != null && comment.getDepth() == 0) {
+                    if (comment != null && comment.getDepth() == 0) {
                         mAdapter.addComment(comment);
                     } else {
                         String parentFullname = data.getStringExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY);
                         int parentPosition = data.getIntExtra(CommentActivity.EXTRA_PARENT_POSITION_KEY, -1);
-                        if(parentFullname != null && parentPosition >= 0) {
+                        if (parentFullname != null && parentPosition >= 0) {
                             mAdapter.addChildComment(comment, parentFullname, parentPosition);
                         }
                     }
@@ -1256,12 +1255,12 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                     Toast.makeText(this, R.string.send_comment_failed, Toast.LENGTH_SHORT).show();
                 }
             }
-        } else if(requestCode == EDIT_POST_REQUEST_CODE) {
-            if(resultCode == RESULT_OK) {
+        } else if (requestCode == EDIT_POST_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
                 refresh(true, false);
             }
-        } else if(requestCode == EDIT_COMMENT_REQUEST_CODE) {
-            if(resultCode == RESULT_OK) {
+        } else if (requestCode == EDIT_COMMENT_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
                 mAdapter.editComment(data.getStringExtra(EditCommentActivity.EXTRA_EDITED_COMMENT_CONTENT),
                         data.getExtras().getInt(EditCommentActivity.EXTRA_EDITED_COMMENT_POSITION));
             }
@@ -1277,7 +1276,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
 
     @Override
     public void onBackPressed() {
-        if(orientation == getResources().getConfiguration().orientation) {
+        if (orientation == getResources().getConfiguration().orientation) {
             super.onBackPressed();
         } else {
             finish();
@@ -1303,7 +1302,7 @@ public class ViewPostDetailActivity extends AppCompatActivity implements FlairBo
                 RedditUtils.getOAuthHeader(mAccessToken), params).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     refresh(true, false);
                     showMessage(R.string.update_flair_success);
                 } else {

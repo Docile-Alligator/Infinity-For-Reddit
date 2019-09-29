@@ -71,11 +71,11 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
 
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> commentsCall;
-        if(areSavedComments) {
+        if (areSavedComments) {
             commentsCall = api.getUserSavedCommentsOauth(username, PostDataSource.USER_WHERE_SAVED,
                     null, sortType, RedditUtils.getOAuthHeader(accessToken));
         } else {
-            if(accessToken == null) {
+            if (accessToken == null) {
                 commentsCall = api.getUserComments(username, null, sortType);
             } else {
                 commentsCall = api.getUserCommentsOauth(RedditUtils.getOAuthHeader(accessToken), username,
@@ -85,17 +85,17 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
         commentsCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     new ParseCommentAsyncTask(response.body(), locale, new ParseCommentAsyncTask.ParseCommentAsyncTaskListener() {
                         @Override
                         public void parseSuccessful(ArrayList<CommentData> comments, String after) {
-                            if(comments.size() == 0) {
+                            if (comments.size() == 0) {
                                 hasPostLiveData.postValue(false);
                             } else {
                                 hasPostLiveData.postValue(true);
                             }
 
-                            if(after == null || after.equals("") || after.equals("null")) {
+                            if (after == null || after.equals("") || after.equals("null")) {
                                 callback.onResult(comments, null, null);
                             } else {
                                 callback.onResult(comments, null, after);
@@ -134,11 +134,11 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
 
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> commentsCall;
-        if(areSavedComments) {
+        if (areSavedComments) {
             commentsCall = api.getUserSavedCommentsOauth(username, PostDataSource.USER_WHERE_SAVED, params.key,
                     sortType, RedditUtils.getOAuthHeader(accessToken));
         } else {
-            if(accessToken == null) {
+            if (accessToken == null) {
                 commentsCall = api.getUserComments(username, params.key, sortType);
             } else {
                 commentsCall = api.getUserCommentsOauth(RedditUtils.getOAuthHeader(accessToken),
@@ -148,11 +148,11 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
         commentsCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     new ParseCommentAsyncTask(response.body(), locale, new ParseCommentAsyncTask.ParseCommentAsyncTaskListener() {
                         @Override
                         public void parseSuccessful(ArrayList<CommentData> comments, String after) {
-                            if(after == null || after.equals("") || after.equals("null")) {
+                            if (after == null || after.equals("") || after.equals("null")) {
                                 callback.onResult(comments, null);
                             } else {
                                 callback.onResult(comments, after);
@@ -184,11 +184,6 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
         private boolean parseFailed;
         private ParseCommentAsyncTaskListener parseCommentAsyncTaskListener;
 
-        interface ParseCommentAsyncTaskListener {
-            void parseSuccessful(ArrayList<CommentData> comments, String after);
-            void parseFailed();
-        }
-
         ParseCommentAsyncTask(String response, Locale locale, ParseCommentAsyncTaskListener parseCommentAsyncTaskListener) {
             this.locale = locale;
             this.parseCommentAsyncTaskListener = parseCommentAsyncTaskListener;
@@ -205,16 +200,17 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
 
         @Override
         protected ArrayList<CommentData> doInBackground(Void... voids) {
-            if(parseFailed) {
+            if (parseFailed) {
                 return null;
             }
 
             ArrayList<CommentData> comments = new ArrayList<>();
-            for(int i = 0; i < commentsJSONArray.length(); i++) {
+            for (int i = 0; i < commentsJSONArray.length(); i++) {
                 try {
                     JSONObject commentJSON = commentsJSONArray.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
                     comments.add(ParseComment.parseSingleComment(commentJSON, 0, locale));
-                } catch (JSONException ignored) {}
+                } catch (JSONException ignored) {
+                }
             }
             return comments;
         }
@@ -222,11 +218,17 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
         @Override
         protected void onPostExecute(ArrayList<CommentData> commentData) {
             super.onPostExecute(commentData);
-            if(commentData != null) {
+            if (commentData != null) {
                 parseCommentAsyncTaskListener.parseSuccessful(commentData, after);
             } else {
                 parseCommentAsyncTaskListener.parseFailed();
             }
+        }
+
+        interface ParseCommentAsyncTaskListener {
+            void parseSuccessful(ArrayList<CommentData> comments, String after);
+
+            void parseFailed();
         }
     }
 }

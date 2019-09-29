@@ -29,9 +29,9 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.AsyncTask.ParseAndInsertNewAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.FetchMyInfo;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.AsyncTask.ParseAndInsertNewAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.ParseAndSaveAccountInfo;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditAPI;
@@ -50,23 +50,19 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public class LoginActivity extends AppCompatActivity {
 
-    @BindView(R.id.toolbar_login_activity) Toolbar toolbar;
-
-    private String authCode;
-
+    @BindView(R.id.toolbar_login_activity)
+    Toolbar toolbar;
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
-
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
-
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
-
     @Inject
     SharedPreferences mSharedPreferences;
+    private String authCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 break;
             case 2:
-                if(systemDefault) {
+                if (systemDefault) {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
@@ -114,16 +110,17 @@ public class LoginActivity extends AppCompatActivity {
 
         String url = uriBuilder.toString();
 
-        CookieManager.getInstance().removeAllCookies(aBoolean -> {});
+        CookieManager.getInstance().removeAllCookies(aBoolean -> {
+        });
 
         webView.loadUrl(url);
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if(url.contains("&code=") || url.contains("?code=")) {
+                if (url.contains("&code=") || url.contains("?code=")) {
                     Uri uri = Uri.parse(url);
                     String state = uri.getQueryParameter("state");
-                    if(state.equals(RedditUtils.STATE)) {
+                    if (state.equals(RedditUtils.STATE)) {
                         authCode = uri.getQueryParameter("code");
 
                         Map<String, String> params = new HashMap<>();
@@ -136,10 +133,10 @@ public class LoginActivity extends AppCompatActivity {
                         accessTokenCall.enqueue(new Callback<String>() {
                             @Override
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                                if(response.isSuccessful()) {
+                                if (response.isSuccessful()) {
                                     try {
                                         String accountResponse = response.body();
-                                        if(accountResponse == null) {
+                                        if (accountResponse == null) {
                                             //Handle error
                                             return;
                                         }

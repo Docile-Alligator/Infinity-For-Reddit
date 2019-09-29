@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
@@ -58,13 +56,13 @@ class MessageDataSource extends PageKeyedDataSource<String, Message> {
         FetchMessages.fetchMessagesAsync(oauthRetrofit, locale, accessToken, where, null, new FetchMessages.FetchMessagesListener() {
             @Override
             public void fetchSuccess(ArrayList<Message> messages, @Nullable String after) {
-                if(messages.size() == 0) {
+                if (messages.size() == 0) {
                     hasPostLiveData.postValue(false);
                 } else {
                     hasPostLiveData.postValue(true);
                 }
 
-                if(after == null || after.equals("") || after.equals("null")) {
+                if (after == null || after.equals("") || after.equals("null")) {
                     callback.onResult(messages, null, null);
                 } else {
                     callback.onResult(messages, null, after);
@@ -94,7 +92,7 @@ class MessageDataSource extends PageKeyedDataSource<String, Message> {
         FetchMessages.fetchMessagesAsync(oauthRetrofit, locale, accessToken, where, params.key, new FetchMessages.FetchMessagesListener() {
             @Override
             public void fetchSuccess(ArrayList<Message> messages, @Nullable String after) {
-                if(after == null || after.equals("") || after.equals("null")) {
+                if (after == null || after.equals("") || after.equals("null")) {
                     callback.onResult(messages, null);
                 } else {
                     callback.onResult(messages, after);

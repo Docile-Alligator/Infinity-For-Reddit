@@ -43,35 +43,35 @@ import org.greenrobot.eventbus.Subscribe;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
-import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.AsyncTask.CheckIsFollowingUserAsyncTask;
-import ml.docilealligator.infinityforreddit.Fragment.CommentsListingFragment;
+import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.DeleteThing;
+import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
+import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchUserData;
 import ml.docilealligator.infinityforreddit.FontStyle;
+import ml.docilealligator.infinityforreddit.Fragment.CommentsListingFragment;
+import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
+import ml.docilealligator.infinityforreddit.Fragment.UserThingSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
-import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.PostDataSource;
-import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.ReadMessage;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserDao;
-import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
-import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.User.UserDao;
 import ml.docilealligator.infinityforreddit.User.UserData;
 import ml.docilealligator.infinityforreddit.User.UserViewModel;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.UserFollowing;
-import ml.docilealligator.infinityforreddit.Fragment.UserThingSortTypeBottomSheetFragment;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
@@ -94,27 +94,43 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
     private static final String MESSAGE_FULLNAME_STATE = "MFS";
     private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
 
-    @BindView(R.id.coordinator_layout_view_user_detail_activity) CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.view_pager_view_user_detail_activity) ViewPager viewPager;
-    @BindView(R.id.appbar_layout_view_user_detail) AppBarLayout appBarLayout;
-    @BindView(R.id.tab_layout_view_user_detail_activity) TabLayout tabLayout;
-    @BindView(R.id.collapsing_toolbar_layout_view_user_detail_activity) CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.banner_image_view_view_user_detail_activity) GifImageView bannerImageView;
-    @BindView(R.id.icon_gif_image_view_view_user_detail_activity) GifImageView iconGifImageView;
-    @BindView(R.id.user_name_text_view_view_user_detail_activity) TextView userNameTextView;
-    @BindView(R.id.subscribe_user_chip_view_user_detail_activity) Chip subscribeUserChip;
-    @BindView(R.id.karma_text_view_view_user_detail_activity) TextView karmaTextView;
-
+    @BindView(R.id.coordinator_layout_view_user_detail_activity)
+    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.view_pager_view_user_detail_activity)
+    ViewPager viewPager;
+    @BindView(R.id.appbar_layout_view_user_detail)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.tab_layout_view_user_detail_activity)
+    TabLayout tabLayout;
+    @BindView(R.id.collapsing_toolbar_layout_view_user_detail_activity)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.banner_image_view_view_user_detail_activity)
+    GifImageView bannerImageView;
+    @BindView(R.id.icon_gif_image_view_view_user_detail_activity)
+    GifImageView iconGifImageView;
+    @BindView(R.id.user_name_text_view_view_user_detail_activity)
+    TextView userNameTextView;
+    @BindView(R.id.subscribe_user_chip_view_user_detail_activity)
+    Chip subscribeUserChip;
+    @BindView(R.id.karma_text_view_view_user_detail_activity)
+    TextView karmaTextView;
+    @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
+    @Inject
+    SharedPreferences mSharedPreferences;
     private SectionsPagerAdapter sectionsPagerAdapter;
-
     private SubscribedUserDao subscribedUserDao;
     private RequestManager glide;
     private UserViewModel userViewModel;
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
-
     private UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment;
-
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
@@ -131,20 +147,6 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
     private boolean showToast = false;
     private String mMessageFullname;
     private String mNewAccountName;
-
-    @Inject
-    @Named("no_oauth")
-    Retrofit mRetrofit;
-
-    @Inject
-    @Named("oauth")
-    Retrofit mOauthRetrofit;
-
-    @Inject
-    RedditDataRoomDatabase mRedditDataRoomDatabase;
-
-    @Inject
-    SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,7 +179,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 break;
             case 2:
-                if(systemDefault) {
+                if (systemDefault) {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
@@ -246,7 +248,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
             window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
             boolean lightNavBar = false;
-            if((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+            if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
                 lightNavBar = true;
             }
             boolean finalLightNavBar = lightNavBar;
@@ -256,14 +258,14 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
                 @Override
                 public void onStateChanged(AppBarLayout appBarLayout, State state) {
                     if (state == State.COLLAPSED) {
-                        if(finalLightNavBar) {
+                        if (finalLightNavBar) {
                             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                         }
                         tabLayout.setTabTextColors(collapsedTabTextColor, collapsedTabTextColor);
                         tabLayout.setSelectedTabIndicatorColor(collapsedTabIndicatorColor);
                         tabLayout.setBackgroundColor(collapsedTabBackgroundColor);
                     } else if (state == State.EXPANDED) {
-                        if(finalLightNavBar) {
+                        if (finalLightNavBar) {
                             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                         }
                         tabLayout.setTabTextColors(expandedTabTextColor, expandedTabTextColor);
@@ -339,7 +341,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
                 if (userData.isCanBeFollowed()) {
                     subscribeUserChip.setVisibility(View.VISIBLE);
                     subscribeUserChip.setOnClickListener(view -> {
-                        if(mAccessToken == null) {
+                        if (mAccessToken == null) {
                             Toast.makeText(ViewUserDetailActivity.this, R.string.login_first, Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -418,14 +420,14 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
 
     private void getCurrentAccountAndInitializeViewPager() {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-            if(mNewAccountName != null) {
-                if(account == null || !account.getUsername().equals(mNewAccountName)) {
+            if (mNewAccountName != null) {
+                if (account == null || !account.getUsername().equals(mNewAccountName)) {
                     new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
                         EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
                         Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
 
                         mNewAccountName = null;
-                        if(newAccount == null) {
+                        if (newAccount == null) {
                             mNullAccessToken = true;
                         } else {
                             mAccessToken = newAccount.getAccessToken();
@@ -440,7 +442,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
                     initializeViewPager();
                 }
             } else {
-                if(account == null) {
+                if (account == null) {
                     mNullAccessToken = true;
                 } else {
                     mAccessToken = account.getAccessToken();
@@ -466,8 +468,8 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
 
             @Override
             public void onPageSelected(int position) {
-                if(isInLazyMode) {
-                    if(viewPager.getCurrentItem() == 0) {
+                if (isInLazyMode) {
+                    if (viewPager.getCurrentItem() == 0) {
                         sectionsPagerAdapter.resumeLazyMode();
                     } else {
                         sectionsPagerAdapter.pauseLazyMode();
@@ -481,7 +483,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
             }
         });
 
-        if(mAccessToken != null && mMessageFullname != null) {
+        if (mAccessToken != null && mMessageFullname != null) {
             ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
                 @Override
                 public void readSuccess() {
@@ -570,7 +572,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
                 startActivity(intent);
                 return true;
             case R.id.action_refresh_view_user_detail_activity:
-                if(mMenu != null) {
+                if (mMenu != null) {
                     mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity).setTitle(R.string.action_start_lazy_mode);
                 }
                 sectionsPagerAdapter.refresh();
@@ -579,7 +581,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
                 return true;
             case R.id.action_lazy_mode_view_user_detail_activity:
                 MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity);
-                if(isInLazyMode) {
+                if (isInLazyMode) {
                     isInLazyMode = false;
                     sectionsPagerAdapter.stopLazyMode();
                     lazyModeItem.setTitle(R.string.action_start_lazy_mode);
@@ -588,7 +590,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
                     collapsingToolbarLayout.setLayoutParams(params);
                 } else {
                     isInLazyMode = true;
-                    if(sectionsPagerAdapter.startLazyMode()) {
+                    if (sectionsPagerAdapter.startLazyMode()) {
                         lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
                         appBarLayout.setExpanded(false);
                         params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
@@ -621,7 +623,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
     }
 
     private void showMessage(int resId, boolean retry) {
-        if(showToast) {
+        if (showToast) {
             Toast.makeText(this, resId, Toast.LENGTH_SHORT).show();
         } else {
             if (retry) {
@@ -640,7 +642,7 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
 
     @Subscribe
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
-        if(!getClass().getName().equals(event.excludeActivityClassName)) {
+        if (!getClass().getName().equals(event.excludeActivityClassName)) {
             finish();
         }
     }
@@ -652,14 +654,9 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
 
     private static class InsertUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        interface InsertUserDataAsyncTaskListener {
-            void insertSuccess();
-        }
-
         private UserDao userDao;
         private UserData subredditData;
         private InsertUserDataAsyncTaskListener insertUserDataAsyncTaskListener;
-
         InsertUserDataAsyncTask(UserDao userDao, UserData userData,
                                 InsertUserDataAsyncTaskListener insertUserDataAsyncTaskListener) {
             this.userDao = userDao;
@@ -676,6 +673,10 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
         @Override
         protected void onPostExecute(Void aVoid) {
             insertUserDataAsyncTaskListener.insertSuccess();
+        }
+
+        interface InsertUserDataAsyncTaskListener {
+            void insertSuccess();
         }
     }
 
@@ -744,55 +745,55 @@ public class ViewUserDetailActivity extends AppCompatActivity implements UserThi
 
         public void refresh() {
             if (viewPager.getCurrentItem() == 0) {
-                if(postFragment != null) {
+                if (postFragment != null) {
                     postFragment.refresh();
                 }
             } else {
-                if(commentsListingFragment != null) {
+                if (commentsListingFragment != null) {
                     commentsListingFragment.refresh();
                 }
             }
         }
 
         boolean startLazyMode() {
-            if(postFragment != null) {
+            if (postFragment != null) {
                 return ((FragmentCommunicator) postFragment).startLazyMode();
             }
             return false;
         }
 
         void stopLazyMode() {
-            if(postFragment != null) {
+            if (postFragment != null) {
                 ((FragmentCommunicator) postFragment).stopLazyMode();
             }
         }
 
         void resumeLazyMode() {
-            if(postFragment != null) {
+            if (postFragment != null) {
                 ((FragmentCommunicator) postFragment).resumeLazyMode(false);
             }
         }
 
         void pauseLazyMode() {
-            if(postFragment != null) {
+            if (postFragment != null) {
                 ((FragmentCommunicator) postFragment).pauseLazyMode(false);
             }
         }
 
         public void changeSortType(String sortType) {
-            if(viewPager.getCurrentItem() == 0) {
-                if(postFragment != null) {
+            if (viewPager.getCurrentItem() == 0) {
+                if (postFragment != null) {
                     postFragment.changeSortType(sortType);
                 }
             } else {
-                if(commentsListingFragment != null) {
+                if (commentsListingFragment != null) {
                     commentsListingFragment.changeSortType(sortType);
                 }
             }
         }
 
         public void changeNSFW(boolean nsfw) {
-            if(postFragment != null) {
+            if (postFragment != null) {
                 postFragment.changeNSFW(nsfw);
             }
         }

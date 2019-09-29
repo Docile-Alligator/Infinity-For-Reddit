@@ -37,7 +37,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
                         builder.linkResolver((view, link) -> {
                             Intent intent = new Intent(context, LinkResolverActivity.class);
                             Uri uri = Uri.parse(link);
-                            if(uri.getScheme() == null && uri.getHost() == null) {
+                            if (uri.getScheme() == null && uri.getHost() == null) {
                                 intent.setData(LinkResolverActivity.getRedditUriByPath(link));
                             } else {
                                 intent.setData(uri);
@@ -60,7 +60,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
     @Override
     public void onBindViewHolder(@NonNull RuleViewHolder holder, int position) {
         holder.shortNameTextView.setText(rules.get(holder.getAdapterPosition()).getShortName());
-        if(rules.get(holder.getAdapterPosition()).getDescriptionHtml() == null) {
+        if (rules.get(holder.getAdapterPosition()).getDescriptionHtml() == null) {
             holder.descriptionMarkwonView.setVisibility(View.GONE);
         } else {
             markwon.setMarkdown(holder.descriptionMarkwonView, rules.get(holder.getAdapterPosition()).getDescriptionHtml());
@@ -84,8 +84,10 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
     }
 
     class RuleViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.short_name_text_view_item_rule) TextView shortNameTextView;
-        @BindView(R.id.description_markwon_view_item_rule) TextView descriptionMarkwonView;
+        @BindView(R.id.short_name_text_view_item_rule)
+        TextView shortNameTextView;
+        @BindView(R.id.description_markwon_view_item_rule)
+        TextView descriptionMarkwonView;
 
         RuleViewHolder(@NonNull View itemView) {
             super(itemView);

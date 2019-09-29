@@ -14,11 +14,6 @@ import retrofit2.Retrofit;
 
 public class SendComment {
 
-    public interface SendCommentListener {
-        void sendCommentSuccess(CommentData commentData);
-        void sendCommentFailed(String errorMessage);
-    }
-
     public static void sendComment(String commentMarkdown, String thingFullname, int parentDepth,
                                    Locale locale, Retrofit oauthRetrofit, String accessToken,
                                    SendCommentListener sendCommentListener) {
@@ -35,7 +30,7 @@ public class SendComment {
         sendCommentCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     ParseComment.parseSentComment(response.body(), parentDepth, locale, new ParseComment.ParseSentCommentListener() {
                         @Override
                         public void onParseSentCommentSuccess(CommentData commentData) {
@@ -57,5 +52,11 @@ public class SendComment {
                 sendCommentListener.sendCommentFailed(t.getMessage());
             }
         });
+    }
+
+    public interface SendCommentListener {
+        void sendCommentSuccess(CommentData commentData);
+
+        void sendCommentFailed(String errorMessage);
     }
 }

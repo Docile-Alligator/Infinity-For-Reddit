@@ -9,7 +9,17 @@ public class CommentData implements Parcelable {
     public static final int VOTE_TYPE_NO_VOTE = 0;
     public static final int VOTE_TYPE_UPVOTE = 1;
     public static final int VOTE_TYPE_DOWNVOTE = -1;
+    public static final Creator<CommentData> CREATOR = new Creator<CommentData>() {
+        @Override
+        public CommentData createFromParcel(Parcel in) {
+            return new CommentData(in);
+        }
 
+        @Override
+        public CommentData[] newArray(int size) {
+            return new CommentData[size];
+        }
+    };
     private String id;
     private String fullName;
     private String author;
@@ -33,15 +43,14 @@ public class CommentData implements Parcelable {
     private ArrayList<CommentData> children;
     private ArrayList<String> moreChildrenFullnames;
     private int moreChildrenStartingIndex;
-
     private boolean isPlaceHolder;
     private boolean isLoadingMoreChildren;
     private boolean loadMoreChildrenFailed;
 
     public CommentData(String id, String fullName, String author, String linkAuthor, String commentTime,
-                String commentContent, String linkId, String subredditName, String parentId, int score,
-                int voteType, boolean isSubmitter, String distinguished, String permalink,
-                int depth, boolean collapsed, boolean hasReply, boolean scoreHidden, boolean saved) {
+                       String commentContent, String linkId, String subredditName, String parentId, int score,
+                       int voteType, boolean isSubmitter, String distinguished, String permalink,
+                       int depth, boolean collapsed, boolean hasReply, boolean scoreHidden, boolean saved) {
         this.id = id;
         this.fullName = fullName;
         this.author = author;
@@ -101,18 +110,6 @@ public class CommentData implements Parcelable {
         isLoadingMoreChildren = in.readByte() != 0;
         loadMoreChildrenFailed = in.readByte() != 0;
     }
-
-    public static final Creator<CommentData> CREATOR = new Creator<CommentData>() {
-        @Override
-        public CommentData createFromParcel(Parcel in) {
-            return new CommentData(in);
-        }
-
-        @Override
-        public CommentData[] newArray(int size) {
-            return new CommentData[size];
-        }
-    };
 
     public String getId() {
         return id;
@@ -235,10 +232,10 @@ public class CommentData implements Parcelable {
     }
 
     public void addChildren(ArrayList<CommentData> moreChildren) {
-        if(children == null || children.size() == 0) {
+        if (children == null || children.size() == 0) {
             setChildren(moreChildren);
         } else {
-            if(children.get(children.size() - 1).isPlaceHolder) {
+            if (children.get(children.size() - 1).isPlaceHolder) {
                 children.addAll(children.size() - 2, moreChildren);
             } else {
                 children.addAll(moreChildren);
@@ -251,7 +248,7 @@ public class CommentData implements Parcelable {
     }
 
     public void addChild(CommentData comment, int position) {
-        if(children == null) {
+        if (children == null) {
             children = new ArrayList<>();
         }
         children.add(position, comment);

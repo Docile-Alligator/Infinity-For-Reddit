@@ -11,16 +11,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FetchSubredditData {
-    public interface FetchSubredditDataListener {
-        void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers);
-        void onFetchSubredditDataFail();
-    }
-
-    interface FetchSubredditListingDataListener {
-        void onFetchSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after);
-        void onFetchSubredditListingDataFail();
-    }
-
     public static void fetchSubredditData(Retrofit retrofit, String subredditName, final FetchSubredditDataListener fetchSubredditDataListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
@@ -28,7 +18,7 @@ public class FetchSubredditData {
         subredditData.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     ParseSubredditData.parseSubredditData(response.body(), new ParseSubredditData.ParseSubredditDataListener() {
                         @Override
                         public void onParseSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
@@ -60,7 +50,7 @@ public class FetchSubredditData {
         subredditDataCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     ParseSubredditData.parseSubredditListingData(response.body(), new ParseSubredditData.ParseSubredditListingDataListener() {
                         @Override
                         public void onParseSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
@@ -82,5 +72,17 @@ public class FetchSubredditData {
                 fetchSubredditListingDataListener.onFetchSubredditListingDataFail();
             }
         });
+    }
+
+    public interface FetchSubredditDataListener {
+        void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers);
+
+        void onFetchSubredditDataFail();
+    }
+
+    interface FetchSubredditListingDataListener {
+        void onFetchSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after);
+
+        void onFetchSubredditListingDataFail();
     }
 }

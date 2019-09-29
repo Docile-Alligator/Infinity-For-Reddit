@@ -34,19 +34,19 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
-import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
-import ml.docilealligator.infinityforreddit.Fragment.CommentsListingFragment;
-import ml.docilealligator.infinityforreddit.ContentFontStyle;
-import ml.docilealligator.infinityforreddit.FontStyle;
-import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.ContentFontStyle;
+import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
+import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.FontStyle;
+import ml.docilealligator.infinityforreddit.Fragment.CommentsListingFragment;
+import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
+import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.PostDataSource;
-import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.TitleFontStyle;
 import retrofit2.Retrofit;
 
@@ -62,30 +62,30 @@ public class AccountSavedThingActivity extends AppCompatActivity {
     private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
-    @BindView(R.id.collapsing_toolbar_layout_account_saved_thing_activity) CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.appbar_layout_account_saved_thing_activity) AppBarLayout appBarLayout;
-    @BindView(R.id.toolbar_account_saved_thing_activity) Toolbar toolbar;
-    @BindView(R.id.tab_layout_tab_layout_account_saved_thing_activity_activity) TabLayout tabLayout;
-    @BindView(R.id.view_pager_account_saved_thing_activity) ViewPager viewPager;
-
+    @BindView(R.id.collapsing_toolbar_layout_account_saved_thing_activity)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.appbar_layout_account_saved_thing_activity)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.toolbar_account_saved_thing_activity)
+    Toolbar toolbar;
+    @BindView(R.id.tab_layout_tab_layout_account_saved_thing_activity_activity)
+    TabLayout tabLayout;
+    @BindView(R.id.view_pager_account_saved_thing_activity)
+    ViewPager viewPager;
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
+    @Inject
+    SharedPreferences mSharedPreferences;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
-
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
     private boolean isInLazyMode = false;
-
-    @Inject
-    @Named("oauth")
-    Retrofit mOauthRetrofit;
-
-    @Inject
-    RedditDataRoomDatabase mRedditDataRoomDatabase;
-
-    @Inject
-    SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,24 +117,24 @@ public class AccountSavedThingActivity extends AppCompatActivity {
             window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
             boolean lightNavBar = false;
-            if((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+            if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
                 lightNavBar = true;
             }
             boolean finalLightNavBar = lightNavBar;
 
             View decorView = window.getDecorView();
-            if(finalLightNavBar) {
+            if (finalLightNavBar) {
                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
             }
             appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
                 @Override
                 public void onStateChanged(AppBarLayout appBarLayout, State state) {
                     if (state == State.COLLAPSED) {
-                        if(finalLightNavBar) {
+                        if (finalLightNavBar) {
                             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                         }
                     } else if (state == State.EXPANDED) {
-                        if(finalLightNavBar) {
+                        if (finalLightNavBar) {
                             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                         }
                     }
@@ -159,7 +159,7 @@ public class AccountSavedThingActivity extends AppCompatActivity {
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 break;
             case 2:
-                if(systemDefault) {
+                if (systemDefault) {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
@@ -172,12 +172,12 @@ public class AccountSavedThingActivity extends AppCompatActivity {
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
-            if(!mNullAccessToken && mAccessToken == null) {
+            if (!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndInitializeViewPager();
             } else {
                 initializeViewPager();
@@ -189,7 +189,7 @@ public class AccountSavedThingActivity extends AppCompatActivity {
 
     private void getCurrentAccountAndInitializeViewPager() {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-            if(account == null) {
+            if (account == null) {
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
@@ -213,8 +213,8 @@ public class AccountSavedThingActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if(isInLazyMode) {
-                    if(viewPager.getCurrentItem() == 0) {
+                if (isInLazyMode) {
+                    if (viewPager.getCurrentItem() == 0) {
                         sectionsPagerAdapter.resumeLazyMode();
                     } else {
                         sectionsPagerAdapter.pauseLazyMode();
@@ -254,14 +254,14 @@ public class AccountSavedThingActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_refresh_account_saved_thing_activity:
-                if(mMenu != null) {
+                if (mMenu != null) {
                     mMenu.findItem(R.id.action_lazy_mode_account_saved_thing_activity).setTitle(R.string.action_start_lazy_mode);
                 }
                 sectionsPagerAdapter.refresh();
                 return true;
             case R.id.action_lazy_mode_account_saved_thing_activity:
                 MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_account_saved_thing_activity);
-                if(isInLazyMode) {
+                if (isInLazyMode) {
                     isInLazyMode = false;
                     sectionsPagerAdapter.stopLazyMode();
                     lazyModeItem.setTitle(R.string.action_start_lazy_mode);
@@ -269,7 +269,7 @@ public class AccountSavedThingActivity extends AppCompatActivity {
                     collapsingToolbarLayout.setLayoutParams(params);
                 } else {
                     isInLazyMode = true;
-                    if(sectionsPagerAdapter.startLazyMode()) {
+                    if (sectionsPagerAdapter.startLazyMode()) {
                         lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
                         appBarLayout.setExpanded(false);
                         params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
@@ -373,43 +373,43 @@ public class AccountSavedThingActivity extends AppCompatActivity {
 
         public void refresh() {
             if (viewPager.getCurrentItem() == 0) {
-                if(postFragment != null) {
+                if (postFragment != null) {
                     postFragment.refresh();
                 }
             } else {
-                if(commentsListingFragment != null) {
+                if (commentsListingFragment != null) {
                     commentsListingFragment.refresh();
                 }
             }
         }
 
         boolean startLazyMode() {
-            if(postFragment != null) {
+            if (postFragment != null) {
                 return ((FragmentCommunicator) postFragment).startLazyMode();
             }
             return false;
         }
 
         void stopLazyMode() {
-            if(postFragment != null) {
+            if (postFragment != null) {
                 ((FragmentCommunicator) postFragment).stopLazyMode();
             }
         }
 
         void resumeLazyMode() {
-            if(postFragment != null) {
+            if (postFragment != null) {
                 ((FragmentCommunicator) postFragment).resumeLazyMode(false);
             }
         }
 
         void pauseLazyMode() {
-            if(postFragment != null) {
+            if (postFragment != null) {
                 ((FragmentCommunicator) postFragment).pauseLazyMode(false);
             }
         }
 
         public void changeNSFW(boolean nsfw) {
-            if(postFragment != null) {
+            if (postFragment != null) {
                 postFragment.changeNSFW(nsfw);
             }
         }

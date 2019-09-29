@@ -33,23 +33,23 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
-import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
-import ml.docilealligator.infinityforreddit.ContentFontStyle;
-import ml.docilealligator.infinityforreddit.FontStyle;
-import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.PostDataSource;
+import ml.docilealligator.infinityforreddit.ContentFontStyle;
+import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
+import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.FontStyle;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Fragment.SearchPostSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SearchUserAndSubredditSortTypeBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Fragment.SubredditListingFragment;
-import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.Fragment.UserListingFragment;
+import ml.docilealligator.infinityforreddit.FragmentCommunicator;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.PostDataSource;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.TitleFontStyle;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
@@ -64,28 +64,26 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
-
+    @BindView(R.id.appbar_layout_search_result_activity)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.toolbar_search_result_activity)
+    Toolbar toolbar;
+    @BindView(R.id.tab_layout_search_result_activity)
+    TabLayout tabLayout;
+    @BindView(R.id.view_pager_search_result_activity)
+    ViewPager viewPager;
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
+    @Inject
+    SharedPreferences mSharedPreferences;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
     private String mQuery;
     private String mSubredditName;
-
-    @BindView(R.id.appbar_layout_search_result_activity) AppBarLayout appBarLayout;
-    @BindView(R.id.toolbar_search_result_activity) Toolbar toolbar;
-    @BindView(R.id.tab_layout_search_result_activity) TabLayout tabLayout;
-    @BindView(R.id.view_pager_search_result_activity) ViewPager viewPager;
-
     private SectionsPagerAdapter sectionsPagerAdapter;
-
     private SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment;
     private SearchUserAndSubredditSortTypeBottomSheetFragment searchUserAndSubredditSortTypeBottomSheetFragment;
-
-    @Inject
-    RedditDataRoomDatabase mRedditDataRoomDatabase;
-
-    @Inject
-    SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,12 +109,12 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             Resources resources = getResources();
 
-            if(resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
+            if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
                 Window window = getWindow();
                 window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
                 boolean lightNavBar = false;
-                if((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+                if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
                     lightNavBar = true;
                 }
                 boolean finalLightNavBar = lightNavBar;
@@ -125,12 +123,12 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
                 appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
                     @Override
                     public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                        if(state == State.COLLAPSED) {
-                            if(finalLightNavBar) {
+                        if (state == State.COLLAPSED) {
+                            if (finalLightNavBar) {
                                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                             }
-                        } else if(state == State.EXPANDED) {
-                            if(finalLightNavBar) {
+                        } else if (state == State.EXPANDED) {
+                            if (finalLightNavBar) {
                                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                             }
                         }
@@ -156,7 +154,7 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 break;
             case 2:
-                if(systemDefault) {
+                if (systemDefault) {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
@@ -167,13 +165,13 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             getCurrentAccountAndInitializeViewPager();
         } else {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
-            if(!mNullAccessToken && mAccessToken == null) {
+            if (!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndInitializeViewPager();
             } else {
                 initializeViewPager();
@@ -192,7 +190,7 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
 
         mSubredditName = intent.getStringExtra(EXTRA_SUBREDDIT_NAME);
 
-        if(query != null) {
+        if (query != null) {
             mQuery = query;
             setTitle(query);
         }
@@ -200,7 +198,7 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
 
     private void getCurrentAccountAndInitializeViewPager() {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-            if(account == null) {
+            if (account == null) {
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
@@ -404,7 +402,7 @@ public class SearchResultActivity extends AppCompatActivity implements SearchPos
         }
 
         public void changeNSFW(boolean nsfw) {
-            if(postFragment != null) {
+            if (postFragment != null) {
                 postFragment.changeNSFW(nsfw);
             }
         }

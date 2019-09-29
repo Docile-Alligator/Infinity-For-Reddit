@@ -16,10 +16,10 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pl.droidsonroids.gif.GifImageView;
 
 public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -45,7 +45,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mSubscribedUserData.get(viewHolder.getAdapterPosition()).getName());
             mContext.startActivity(intent);
         });
-        if(!mSubscribedUserData.get(i).getIconUrl().equals("")) {
+        if (!mSubscribedUserData.get(i).getIconUrl().equals("")) {
             glide.load(mSubscribedUserData.get(i).getIconUrl())
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                     .error(glide.load(R.drawable.subreddit_default_icon)
@@ -61,7 +61,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
     @Override
     public int getItemCount() {
-        if(mSubscribedUserData != null) {
+        if (mSubscribedUserData != null) {
             return mSubscribedUserData.size();
         }
         return 0;
@@ -72,7 +72,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         glide.clear(((UserViewHolder) holder).iconGifImageView);
     }
 
-    public void setSubscribedUsers(List<SubscribedUserData> subscribedUsers){
+    public void setSubscribedUsers(List<SubscribedUserData> subscribedUsers) {
         mSubscribedUserData = subscribedUsers;
         notifyDataSetChanged();
     }

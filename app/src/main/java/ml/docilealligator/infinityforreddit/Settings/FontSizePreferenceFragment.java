@@ -18,12 +18,12 @@ public class FontSizePreferenceFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.font_size_preferences, rootKey);
 
         Activity activity = getActivity();
-        if(activity != null) {
+        if (activity != null) {
             ListPreference fontSizePreference = findPreference(SharedPreferencesUtils.FONT_SIZE_KEY);
             ListPreference titleFontSizePreference = findPreference(SharedPreferencesUtils.TITLE_FONT_SIZE_KEY);
             ListPreference contentFontSizePreference = findPreference(SharedPreferencesUtils.CONTENT_FONT_SIZE_KEY);
 
-            if(fontSizePreference != null) {
+            if (fontSizePreference != null) {
                 fontSizePreference.setOnPreferenceChangeListener((preference, newValue) -> {
                     EventBus.getDefault().post(new ChangeFontSizeEvent());
                     activity.recreate();
@@ -31,14 +31,14 @@ public class FontSizePreferenceFragment extends PreferenceFragmentCompat {
                 });
             }
 
-            if(titleFontSizePreference != null) {
+            if (titleFontSizePreference != null) {
                 titleFontSizePreference.setOnPreferenceChangeListener((preference, newValue) -> {
                     EventBus.getDefault().post(new ChangeFontSizeEvent());
                     return true;
                 });
             }
 
-            if(contentFontSizePreference != null) {
+            if (contentFontSizePreference != null) {
                 contentFontSizePreference.setOnPreferenceChangeListener((preference, newValue) -> {
                     EventBus.getDefault().post(new ChangeFontSizeEvent());
                     return true;

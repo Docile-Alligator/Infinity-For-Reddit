@@ -35,11 +35,11 @@ class AcknowledgementRecyclerViewAdapter extends RecyclerView.Adapter<Acknowledg
     @Override
     public void onBindViewHolder(@NonNull AcknowledgementViewHolder holder, int position) {
         Acknowledgement acknowledgement = acknowledgements.get(holder.getAdapterPosition());
-        if(acknowledgement != null) {
+        if (acknowledgement != null) {
             holder.nameTextView.setText(acknowledgement.getName());
             holder.introductionTextView.setText(acknowledgement.getIntroduction());
             holder.itemView.setOnClickListener(view -> {
-                if(context != null) {
+                if (context != null) {
                     Intent intent = new Intent(context, LinkResolverActivity.class);
                     intent.setData(acknowledgement.getLink());
                     context.startActivity(intent);
@@ -55,8 +55,10 @@ class AcknowledgementRecyclerViewAdapter extends RecyclerView.Adapter<Acknowledg
 
     class AcknowledgementViewHolder extends RecyclerView.ViewHolder {
         View itemView;
-        @BindView(R.id.name_text_view_item_acknowledgement) TextView nameTextView;
-        @BindView(R.id.introduction_text_view_item_acknowledgement) TextView introductionTextView;
+        @BindView(R.id.name_text_view_item_acknowledgement)
+        TextView nameTextView;
+        @BindView(R.id.introduction_text_view_item_acknowledgement)
+        TextView introductionTextView;
 
         AcknowledgementViewHolder(@NonNull View itemView) {
             super(itemView);

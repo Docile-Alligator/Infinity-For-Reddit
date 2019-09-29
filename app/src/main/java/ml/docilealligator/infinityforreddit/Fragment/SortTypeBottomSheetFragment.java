@@ -26,24 +26,24 @@ import ml.docilealligator.infinityforreddit.R;
  */
 public class SortTypeBottomSheetFragment extends RoundedBottomSheetDialogFragment {
 
-    public interface SortTypeSelectionCallback {
-        void sortTypeSelected(String sortType);
-    }
-
     public static final String EXTRA_NO_BEST_TYPE = "ENBT";
-
-    @BindView(R.id.best_type_text_view_sort_type_bottom_sheet_fragment) TextView bestTypeTextView;
-    @BindView(R.id.hot_type_text_view_sort_type_bottom_sheet_fragment) TextView hotTypeTextView;
-    @BindView(R.id.new_type_text_view_sort_type_bottom_sheet_fragment) TextView newTypeTextView;
-    @BindView(R.id.random_type_text_view_sort_type_bottom_sheet_fragment) TextView randomTypeTextView;
-    @BindView(R.id.rising_type_text_view_sort_type_bottom_sheet_fragment) TextView risingTypeTextView;
-    @BindView(R.id.top_type_text_view_sort_type_bottom_sheet_fragment) TextView topTypeTextView;
-    @BindView(R.id.controversial_type_text_view_sort_type_bottom_sheet_fragment) TextView controversialTypeTextView;
-
+    @BindView(R.id.best_type_text_view_sort_type_bottom_sheet_fragment)
+    TextView bestTypeTextView;
+    @BindView(R.id.hot_type_text_view_sort_type_bottom_sheet_fragment)
+    TextView hotTypeTextView;
+    @BindView(R.id.new_type_text_view_sort_type_bottom_sheet_fragment)
+    TextView newTypeTextView;
+    @BindView(R.id.random_type_text_view_sort_type_bottom_sheet_fragment)
+    TextView randomTypeTextView;
+    @BindView(R.id.rising_type_text_view_sort_type_bottom_sheet_fragment)
+    TextView risingTypeTextView;
+    @BindView(R.id.top_type_text_view_sort_type_bottom_sheet_fragment)
+    TextView topTypeTextView;
+    @BindView(R.id.controversial_type_text_view_sort_type_bottom_sheet_fragment)
+    TextView controversialTypeTextView;
     public SortTypeBottomSheetFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -53,12 +53,12 @@ public class SortTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
 
         Activity activity = getActivity();
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
             rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
 
-        if(getArguments().getBoolean(EXTRA_NO_BEST_TYPE)) {
+        if (getArguments().getBoolean(EXTRA_NO_BEST_TYPE)) {
             bestTypeTextView.setVisibility(View.GONE);
         } else {
             bestTypeTextView.setOnClickListener(view -> {
@@ -98,6 +98,11 @@ public class SortTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
         });
 
         return rootView;
+    }
+
+
+    public interface SortTypeSelectionCallback {
+        void sortTypeSelected(String sortType);
     }
 
 }

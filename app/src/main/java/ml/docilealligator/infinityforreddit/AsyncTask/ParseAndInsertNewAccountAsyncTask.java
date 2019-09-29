@@ -7,10 +7,6 @@ import ml.docilealligator.infinityforreddit.Account.AccountDao;
 
 public class ParseAndInsertNewAccountAsyncTask extends AsyncTask<Void, Void, Void> {
 
-    public interface ParseAndInsertAccountListener {
-        void success();
-    }
-
     private String username;
     private String accessToken;
     private String refreshToken;
@@ -20,10 +16,9 @@ public class ParseAndInsertNewAccountAsyncTask extends AsyncTask<Void, Void, Voi
     private String code;
     private AccountDao accountDao;
     private ParseAndInsertAccountListener parseAndInsertAccountListener;
-
     public ParseAndInsertNewAccountAsyncTask(String username, String accessToken, String refreshToken, String profileImageUrl, String bannerImageUrl,
-                                      int karma, String code, AccountDao accountDao,
-                                      ParseAndInsertAccountListener parseAndInsertAccountListener) {
+                                             int karma, String code, AccountDao accountDao,
+                                             ParseAndInsertAccountListener parseAndInsertAccountListener) {
         this.username = username;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
@@ -47,5 +42,9 @@ public class ParseAndInsertNewAccountAsyncTask extends AsyncTask<Void, Void, Voi
     @Override
     protected void onPostExecute(Void aVoid) {
         parseAndInsertAccountListener.success();
+    }
+
+    public interface ParseAndInsertAccountListener {
+        void success();
     }
 }

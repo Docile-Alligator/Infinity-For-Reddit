@@ -9,6 +9,17 @@ import pl.droidsonroids.gif.GifImageView;
 public class AspectRatioGifImageView extends GifImageView {
     private float ratio;
 
+    public AspectRatioGifImageView(Context context) {
+        super(context);
+        this.ratio = 1.0F;
+    }
+
+    public AspectRatioGifImageView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        this.ratio = 1.0F;
+        this.init(context, attrs);
+    }
+
     public final float getRatio() {
         return this.ratio;
     }
@@ -32,23 +43,12 @@ public class AspectRatioGifImageView extends GifImageView {
         int height = this.getMeasuredHeight();
         if (width != 0 || height != 0) {
             if (width > 0) {
-                height = (int)((float)width * this.ratio);
+                height = (int) ((float) width * this.ratio);
             } else {
-                width = (int)((float)height / this.ratio);
+                width = (int) ((float) height / this.ratio);
             }
 
             this.setMeasuredDimension(width, height);
         }
-    }
-
-    public AspectRatioGifImageView(Context context) {
-        super(context);
-        this.ratio = 1.0F;
-    }
-
-    public AspectRatioGifImageView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        this.ratio = 1.0F;
-        this.init(context, attrs);
     }
 }

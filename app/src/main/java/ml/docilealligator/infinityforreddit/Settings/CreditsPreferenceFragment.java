@@ -32,8 +32,8 @@ public class CreditsPreferenceFragment extends PreferenceFragmentCompat {
 
         Activity activity = getActivity();
 
-        if(activity != null) {
-            if(iconForegroundPreference != null) {
+        if (activity != null) {
+            if (iconForegroundPreference != null) {
                 iconForegroundPreference.setOnPreferenceClickListener(preference -> {
                     Intent intent = new Intent(activity, LinkResolverActivity.class);
                     intent.setData(Uri.parse("https://www.freepik.com/free-photos-vectors/technology"));
@@ -42,7 +42,7 @@ public class CreditsPreferenceFragment extends PreferenceFragmentCompat {
                 });
             }
 
-            if(iconBackgroundPreference != null) {
+            if (iconBackgroundPreference != null) {
                 iconBackgroundPreference.setOnPreferenceClickListener(preference -> {
                     Intent intent = new Intent(activity, LinkResolverActivity.class);
                     intent.setData(Uri.parse("https://www.freepik.com/free-photos-vectors/background"));
@@ -51,7 +51,7 @@ public class CreditsPreferenceFragment extends PreferenceFragmentCompat {
                 });
             }
 
-            if(errorImagePreference != null) {
+            if (errorImagePreference != null) {
                 errorImagePreference.setOnPreferenceClickListener(preference -> {
                     Intent intent = new Intent(activity, LinkResolverActivity.class);
                     intent.setData(Uri.parse("https://www.freepik.com/free-photos-vectors/technology"));
@@ -60,7 +60,7 @@ public class CreditsPreferenceFragment extends PreferenceFragmentCompat {
                 });
             }
 
-            if(gildedIconPreference != null) {
+            if (gildedIconPreference != null) {
                 gildedIconPreference.setOnPreferenceClickListener(preference -> {
                     Intent intent = new Intent(activity, LinkResolverActivity.class);
                     intent.setData(Uri.parse("https://br.flaticon.com/icone-gratis/medalha_1007239"));
@@ -69,7 +69,7 @@ public class CreditsPreferenceFragment extends PreferenceFragmentCompat {
                 });
             }
 
-            if(crosspostIconPreference != null) {
+            if (crosspostIconPreference != null) {
                 crosspostIconPreference.setOnPreferenceClickListener(preference -> {
                     Intent intent = new Intent(activity, LinkResolverActivity.class);
                     intent.setData(Uri.parse("https://www.flaticon.com/free-icon/crossed-arrows_2291"));
@@ -78,7 +78,7 @@ public class CreditsPreferenceFragment extends PreferenceFragmentCompat {
                 });
             }
 
-            if(thumbtackIconPreference != null) {
+            if (thumbtackIconPreference != null) {
                 thumbtackIconPreference.setOnPreferenceClickListener(preference -> {
                     Intent intent = new Intent(activity, LinkResolverActivity.class);
                     intent.setData(Uri.parse("https://www.flaticon.com/free-icon/tack-save-button_61845#term=thumbtack&page=1&position=3"));
@@ -87,7 +87,7 @@ public class CreditsPreferenceFragment extends PreferenceFragmentCompat {
                 });
             }
 
-            if(materialIconsPreference != null) {
+            if (materialIconsPreference != null) {
                 materialIconsPreference.setOnPreferenceClickListener(preference -> {
                     Intent intent = new Intent(activity, LinkResolverActivity.class);
                     intent.setData(Uri.parse("https://material.io/resources/icons/"));

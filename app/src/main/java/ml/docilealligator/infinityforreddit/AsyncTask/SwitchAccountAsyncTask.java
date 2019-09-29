@@ -6,15 +6,10 @@ import ml.docilealligator.infinityforreddit.Account.Account;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class SwitchAccountAsyncTask extends AsyncTask<Void, Void, Void> {
-    public interface SwitchAccountAsyncTaskListener {
-        void switched(Account account);
-    }
-
     private RedditDataRoomDatabase redditDataRoomDatabase;
     private String newAccountName;
     private Account account;
     private SwitchAccountAsyncTaskListener switchAccountAsyncTaskListener;
-
     public SwitchAccountAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase, String newAccountName,
                                   SwitchAccountAsyncTaskListener switchAccountAsyncTaskListener) {
         this.redditDataRoomDatabase = redditDataRoomDatabase;
@@ -33,5 +28,9 @@ public class SwitchAccountAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         switchAccountAsyncTaskListener.switched(account);
+    }
+
+    public interface SwitchAccountAsyncTaskListener {
+        void switched(Account account);
     }
 }

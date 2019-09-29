@@ -15,28 +15,20 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
-import ml.docilealligator.infinityforreddit.Account.Account;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import ml.docilealligator.infinityforreddit.Account.Account;
 import ml.docilealligator.infinityforreddit.R;
 import pl.droidsonroids.gif.GifImageView;
 
 public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecyclerViewAdapter.AccountViewHolder> {
-
-    public interface ItemSelectedListener {
-        void accountSelected(Account account);
-        void addAccountSelected();
-        void anonymousSelected();
-        void logoutSelected();
-    }
 
     private List<Account> mAccounts;
     private String mCurrentAccountName;
     private Context mContext;
     private RequestManager mGlide;
     private ItemSelectedListener mItemSelectedListener;
-
     public AccountRecyclerViewAdapter(Context context, RequestManager glide, String currentAccountName, ItemSelectedListener itemSelectedListener) {
         mContext = context;
         mGlide = glide;
@@ -52,14 +44,14 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
     @Override
     public void onBindViewHolder(@NonNull AccountViewHolder holder, int position) {
-        if(mAccounts == null) {
+        if (mAccounts == null) {
             mGlide.load(R.drawable.subreddit_default_icon)
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
                     .into(holder.profileImageGifImageView);
             holder.usernameTextView.setText(R.string.add_account);
             holder.itemView.setOnClickListener(view -> mItemSelectedListener.addAccountSelected());
         } else {
-            if(position < mAccounts.size()) {
+            if (position < mAccounts.size()) {
                 mGlide.load(mAccounts.get(position).getProfileImageUrl())
                         .error(mGlide.load(R.drawable.subreddit_default_icon))
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
@@ -69,14 +61,14 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                     mCurrentAccountName = mAccounts.get(position).getUsername();
                     mItemSelectedListener.accountSelected(mAccounts.get(position));
                 });
-            } else if(position == mAccounts.size()) {
+            } else if (position == mAccounts.size()) {
                 holder.profileImageGifImageView.setColorFilter(ContextCompat.getColor(mContext, R.color.primaryTextColor), android.graphics.PorterDuff.Mode.SRC_IN);
                 mGlide.load(R.drawable.ic_outline_add_circle_outline_24px)
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
                         .into(holder.profileImageGifImageView);
                 holder.usernameTextView.setText(R.string.add_account);
                 holder.itemView.setOnClickListener(view -> mItemSelectedListener.addAccountSelected());
-            } else if(position == mAccounts.size() + 1) {
+            } else if (position == mAccounts.size() + 1) {
                 holder.profileImageGifImageView.setColorFilter(ContextCompat.getColor(mContext, R.color.primaryTextColor), android.graphics.PorterDuff.Mode.SRC_IN);
                 mGlide.load(R.drawable.ic_outline_public_24px)
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
@@ -96,10 +88,10 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
 
     @Override
     public int getItemCount() {
-        if(mAccounts == null) {
+        if (mAccounts == null) {
             return 1;
         } else {
-            if(mCurrentAccountName == null) {
+            if (mCurrentAccountName == null) {
                 return mAccounts.size() + 1;
             } else {
                 return mAccounts.size() + 3;
@@ -118,9 +110,21 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
         notifyDataSetChanged();
     }
 
+    public interface ItemSelectedListener {
+        void accountSelected(Account account);
+
+        void addAccountSelected();
+
+        void anonymousSelected();
+
+        void logoutSelected();
+    }
+
     class AccountViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.profile_image_item_account) GifImageView profileImageGifImageView;
-        @BindView(R.id.username_text_view_item_account) TextView usernameTextView;
+        @BindView(R.id.profile_image_item_account)
+        GifImageView profileImageGifImageView;
+        @BindView(R.id.username_text_view_item_account)
+        TextView usernameTextView;
 
         AccountViewHolder(@NonNull View itemView) {
             super(itemView);

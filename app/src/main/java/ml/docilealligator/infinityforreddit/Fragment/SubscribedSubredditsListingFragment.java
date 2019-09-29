@@ -43,18 +43,17 @@ public class SubscribedSubredditsListingFragment extends Fragment {
     public static final String EXTRA_IS_SUBREDDIT_SELECTION = "EISS";
     public static final String EXTRA_EXTRA_CLEAR_SELECTION = "EECS";
 
-    @BindView(R.id.recycler_view_subscribed_subreddits_listing_fragment) RecyclerView mRecyclerView;
-    @BindView(R.id.no_subscriptions_linear_layout_subreddits_listing_fragment) LinearLayout mLinearLayout;
-    @BindView(R.id.no_subscriptions_image_view_subreddits_listing_fragment) ImageView mImageView;
-
-    private Activity mActivity;
-
-    private RequestManager mGlide;
-
-    private SubscribedSubredditViewModel mSubscribedSubredditViewModel;
-
+    @BindView(R.id.recycler_view_subscribed_subreddits_listing_fragment)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.no_subscriptions_linear_layout_subreddits_listing_fragment)
+    LinearLayout mLinearLayout;
+    @BindView(R.id.no_subscriptions_image_view_subreddits_listing_fragment)
+    ImageView mImageView;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
+    private Activity mActivity;
+    private RequestManager mGlide;
+    private SubscribedSubredditViewModel mSubscribedSubredditViewModel;
 
     public SubscribedSubredditsListingFragment() {
         // Required empty public constructor
@@ -89,7 +88,7 @@ public class SubscribedSubredditsListingFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
 
         SubscribedSubredditsRecyclerViewAdapter adapter;
-        if(getArguments().getBoolean(EXTRA_IS_SUBREDDIT_SELECTION)) {
+        if (getArguments().getBoolean(EXTRA_IS_SUBREDDIT_SELECTION)) {
             adapter = new SubscribedSubredditsRecyclerViewAdapter(mActivity, getArguments().getBoolean(EXTRA_EXTRA_CLEAR_SELECTION),
                     (name, iconUrl, subredditIsUser) -> ((SubredditSelectionActivity) mActivity).getSelectedSubreddit(name, iconUrl, subredditIsUser));
         } else {

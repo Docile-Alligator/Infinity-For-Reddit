@@ -49,23 +49,23 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
 
         FetchUserData.fetchUserListingData(retrofit, query, null, sortType,
                 new FetchUserData.FetchUserListingDataListener() {
-            @Override
-            public void onFetchUserListingDataSuccess(ArrayList<UserData> UserData, String after) {
-                if(UserData.size() == 0) {
-                    hasUserLiveData.postValue(false);
-                } else {
-                    hasUserLiveData.postValue(true);
-                }
+                    @Override
+                    public void onFetchUserListingDataSuccess(ArrayList<UserData> UserData, String after) {
+                        if (UserData.size() == 0) {
+                            hasUserLiveData.postValue(false);
+                        } else {
+                            hasUserLiveData.postValue(true);
+                        }
 
-                callback.onResult(UserData, null, after);
-                initialLoadStateLiveData.postValue(NetworkState.LOADED);
-            }
+                        callback.onResult(UserData, null, after);
+                        initialLoadStateLiveData.postValue(NetworkState.LOADED);
+                    }
 
-            @Override
-            public void onFetchUserListingDataFailed() {
-                initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error retrieving ml.docilealligator.infinityforreddit.User list"));
-            }
-        });
+                    @Override
+                    public void onFetchUserListingDataFailed() {
+                        initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error retrieving ml.docilealligator.infinityforreddit.User list"));
+                    }
+                });
     }
 
     @Override
@@ -78,23 +78,23 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
         this.params = params;
         this.callback = callback;
 
-        if(params.key.equals("null") || params.key.equals("")) {
+        if (params.key.equals("null") || params.key.equals("")) {
             return;
         }
 
         FetchUserData.fetchUserListingData(retrofit, query, params.key, sortType,
                 new FetchUserData.FetchUserListingDataListener() {
-            @Override
-            public void onFetchUserListingDataSuccess(ArrayList<UserData> UserData, String after) {
-                callback.onResult(UserData, after);
-                paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
-            }
+                    @Override
+                    public void onFetchUserListingDataSuccess(ArrayList<UserData> UserData, String after) {
+                        callback.onResult(UserData, after);
+                        paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
+                    }
 
-            @Override
-            public void onFetchUserListingDataFailed() {
-                paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error retrieving ml.docilealligator.infinityforreddit.User list"));
-            }
-        });
+                    @Override
+                    public void onFetchUserListingDataFailed() {
+                        paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error retrieving ml.docilealligator.infinityforreddit.User list"));
+                    }
+                });
     }
 
     void retryLoadingMore() {

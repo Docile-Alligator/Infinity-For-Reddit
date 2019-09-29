@@ -13,14 +13,6 @@ import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.Subscrib
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
 
 class ParseSubscribedThing {
-    interface ParseSubscribedSubredditsListener {
-        void onParseSubscribedSubredditsSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
-                                                ArrayList<SubscribedUserData> subscribedUserData,
-                                                ArrayList<SubredditData> subredditData,
-                                                String lastItem);
-        void onParseSubscribedSubredditsFail();
-    }
-
     static void parseSubscribedSubreddits(String response, String accountName,
                                           ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                           ArrayList<SubscribedUserData> subscribedUserData,
@@ -28,6 +20,15 @@ class ParseSubscribedThing {
                                           ParseSubscribedSubredditsListener parseSubscribedSubredditsListener) {
         new ParseSubscribedSubredditsAsyncTask(response, accountName, subscribedSubredditData, subscribedUserData, subredditData,
                 parseSubscribedSubredditsListener).execute();
+    }
+
+    interface ParseSubscribedSubredditsListener {
+        void onParseSubscribedSubredditsSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
+                                                ArrayList<SubscribedUserData> subscribedUserData,
+                                                ArrayList<SubredditData> subredditData,
+                                                String lastItem);
+
+        void onParseSubscribedSubredditsFail();
     }
 
     private static class ParseSubscribedSubredditsAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -46,7 +47,7 @@ class ParseSubscribedThing {
         ParseSubscribedSubredditsAsyncTask(String response, String accountName, ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                            ArrayList<SubscribedUserData> subscribedUserData,
                                            ArrayList<SubredditData> subredditData,
-                                           ParseSubscribedSubredditsListener parseSubscribedSubredditsListener){
+                                           ParseSubscribedSubredditsListener parseSubscribedSubredditsListener) {
             try {
                 jsonResponse = new JSONObject(response);
                 this.accountName = accountName;
@@ -68,32 +69,32 @@ class ParseSubscribedThing {
         protected Void doInBackground(Void... voids) {
             try {
                 JSONArray children = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-                for(int i = 0; i < children.length(); i++) {
+                for (int i = 0; i < children.length(); i++) {
                     JSONObject data = children.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
                     String name = data.getString(JSONUtils.DISPLAY_NAME);
                     String bannerImageUrl = data.getString(JSONUtils.BANNER_BACKGROUND_IMAGE_KEY);
-                    if(bannerImageUrl.equals("") || bannerImageUrl.equals("null")) {
-                        bannerImageUrl= data.getString(JSONUtils.BANNER_IMG_KEY);
-                        if(bannerImageUrl.equals("null")) {
+                    if (bannerImageUrl.equals("") || bannerImageUrl.equals("null")) {
+                        bannerImageUrl = data.getString(JSONUtils.BANNER_IMG_KEY);
+                        if (bannerImageUrl.equals("null")) {
                             bannerImageUrl = "";
                         }
                     }
                     String iconUrl = data.getString(JSONUtils.COMMUNITY_ICON_KEY);
-                    if(iconUrl.equals("") || iconUrl.equals("null")) {
+                    if (iconUrl.equals("") || iconUrl.equals("null")) {
                         iconUrl = data.getString(JSONUtils.ICON_IMG_KEY);
-                        if(iconUrl.equals("null")) {
+                        if (iconUrl.equals("null")) {
                             iconUrl = "";
                         }
                     }
                     String id = data.getString(JSONUtils.NAME_KEY);
-                    if(iconUrl.equals("") || iconUrl.equals("null")) {
+                    if (iconUrl.equals("") || iconUrl.equals("null")) {
                         iconUrl = data.getString(JSONUtils.COMMUNITY_ICON_KEY);
-                        if(iconUrl.equals("null")) {
+                        if (iconUrl.equals("null")) {
                             iconUrl = "";
                         }
                     }
 
-                    if(data.getString(JSONUtils.SUBREDDIT_TYPE_KEY)
+                    if (data.getString(JSONUtils.SUBREDDIT_TYPE_KEY)
                             .equals(JSONUtils.SUBREDDIT_TYPE_VALUE_USER)) {
                         //It's a user
                         newSubscribedUserData.add(new SubscribedUserData(name.substring(2), iconUrl, accountName));
@@ -115,7 +116,7 @@ class ParseSubscribedThing {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            if(!parseFailed) {
+            if (!parseFailed) {
                 subscribedSubredditData.addAll(newSubscribedSubredditData);
                 subscribedUserData.addAll(newSubscribedUserData);
                 subredditData.addAll(newSubredditData);

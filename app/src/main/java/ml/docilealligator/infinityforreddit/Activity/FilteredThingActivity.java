@@ -29,22 +29,22 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
-import ml.docilealligator.infinityforreddit.ContentFontStyle;
-import ml.docilealligator.infinityforreddit.FontStyle;
-import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.ContentFontStyle;
+import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.FontStyle;
+import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
+import ml.docilealligator.infinityforreddit.Fragment.SearchPostSortTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.Fragment.SortTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.Fragment.UserThingSortTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.Post;
 import ml.docilealligator.infinityforreddit.PostDataSource;
-import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.Fragment.SearchPostSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.Fragment.SortTypeBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.TitleFontStyle;
-import ml.docilealligator.infinityforreddit.Fragment.UserThingSortTypeBottomSheetFragment;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
@@ -66,31 +66,29 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String FRAGMENT_OUT_STATE = "FOS";
 
-    @BindView(R.id.appbar_layout_filtered_posts_activity) AppBarLayout appBarLayout;
-    @BindView(R.id.collapsing_toolbar_layout_filtered_posts_activity) CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.toolbar_filtered_posts_activity) Toolbar toolbar;
-
+    @BindView(R.id.appbar_layout_filtered_posts_activity)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.collapsing_toolbar_layout_filtered_posts_activity)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.toolbar_filtered_posts_activity)
+    Toolbar toolbar;
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
+    @Inject
+    SharedPreferences mSharedPreferences;
     private boolean isInLazyMode = false;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String name;
     private int postType;
-
     private Fragment mFragment;
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
-
     private SortTypeBottomSheetFragment bestSortTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment popularAndAllSortTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment subredditSortTypeBottomSheetFragment;
     private UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment;
     private SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment;
-
-    @Inject
-    RedditDataRoomDatabase mRedditDataRoomDatabase;
-
-    @Inject
-    SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,24 +120,24 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
             window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
             boolean lightNavBar = false;
-            if((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+            if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
                 lightNavBar = true;
             }
             boolean finalLightNavBar = lightNavBar;
 
             View decorView = window.getDecorView();
-            if(finalLightNavBar) {
+            if (finalLightNavBar) {
                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
             }
             appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
                 @Override
                 public void onStateChanged(AppBarLayout appBarLayout, State state) {
                     if (state == State.COLLAPSED) {
-                        if(finalLightNavBar) {
+                        if (finalLightNavBar) {
                             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                         }
                     } else if (state == State.EXPANDED) {
-                        if(finalLightNavBar) {
+                        if (finalLightNavBar) {
                             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                         }
                     }
@@ -164,7 +162,7 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 break;
             case 2:
-                if(systemDefault) {
+                if (systemDefault) {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
@@ -182,11 +180,11 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
         int filter = getIntent().getIntExtra(EXTRA_FILTER, Post.TEXT_TYPE);
         String sortType = getIntent().getStringExtra(EXTRA_SORT_TYPE);
 
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
-            if(!mNullAccessToken && mAccessToken == null) {
+            if (!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndBindView(filter, sortType);
             } else {
                 mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
@@ -200,7 +198,7 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
 
     private void getCurrentAccountAndBindView(int filter, String sortType) {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-            if(account == null) {
+            if (account == null) {
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
@@ -227,7 +225,7 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
                 searchPostSortTypeBottomSheetFragment.setArguments(searchBundle);
                 break;
             case PostDataSource.TYPE_SUBREDDIT:
-                if(name.equals("popular") || name.equals("all")) {
+                if (name.equals("popular") || name.equals("all")) {
                     getSupportActionBar().setTitle(name.substring(0, 1).toUpperCase() + name.substring(1));
 
                     popularAndAllSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
@@ -273,7 +271,7 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
                 toolbar.setSubtitle(R.string.gif);
         }
 
-        if(initializeFragment) {
+        if (initializeFragment) {
             mFragment = new PostFragment();
             Bundle bundle = new Bundle();
             bundle.putString(PostFragment.EXTRA_NAME, name);
@@ -281,10 +279,10 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
             bundle.putString(PostFragment.EXTRA_SORT_TYPE, sortType);
             bundle.putInt(PostFragment.EXTRA_FILTER, filter);
             bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
-            if(postType == PostDataSource.TYPE_USER) {
+            if (postType == PostDataSource.TYPE_USER) {
                 bundle.putString(PostFragment.EXTRA_USER_WHERE, getIntent().getStringExtra(EXTRA_USER_WHERE));
             }
-            if(postType == PostDataSource.TYPE_SEARCH) {
+            if (postType == PostDataSource.TYPE_SEARCH) {
                 bundle.putString(PostFragment.EXTRA_QUERY, getIntent().getStringExtra(EXTRA_QUERY));
             }
             mFragment.setArguments(bundle);
@@ -297,7 +295,7 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
         getMenuInflater().inflate(R.menu.filtered_posts_activity, menu);
         mMenu = menu;
         MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_filtered_thing_activity);
-        if(isInLazyMode) {
+        if (isInLazyMode) {
             lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
             params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
             collapsingToolbarLayout.setLayoutParams(params);
@@ -324,7 +322,7 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
                         searchPostSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchPostSortTypeBottomSheetFragment.getTag());
                         break;
                     case PostDataSource.TYPE_SUBREDDIT:
-                        if(name.equals("popular") || name.equals("all")) {
+                        if (name.equals("popular") || name.equals("all")) {
                             popularAndAllSortTypeBottomSheetFragment.show(getSupportFragmentManager(), popularAndAllSortTypeBottomSheetFragment.getTag());
                         } else {
                             subredditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), subredditSortTypeBottomSheetFragment.getTag());
@@ -335,23 +333,23 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
                 }
                 return true;
             case R.id.action_refresh_filtered_thing_activity:
-                if(mMenu != null) {
+                if (mMenu != null) {
                     mMenu.findItem(R.id.action_lazy_mode_filtered_thing_activity).setTitle(R.string.action_start_lazy_mode);
                 }
-                if(mFragment instanceof FragmentCommunicator) {
+                if (mFragment instanceof FragmentCommunicator) {
                     ((FragmentCommunicator) mFragment).refresh();
                 }
                 return true;
             case R.id.action_lazy_mode_filtered_thing_activity:
                 MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_filtered_thing_activity);
-                if(isInLazyMode) {
+                if (isInLazyMode) {
                     ((FragmentCommunicator) mFragment).stopLazyMode();
                     isInLazyMode = false;
                     lazyModeItem.setTitle(R.string.action_start_lazy_mode);
                     params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
                     collapsingToolbarLayout.setLayoutParams(params);
                 } else {
-                    if(((FragmentCommunicator) mFragment).startLazyMode()) {
+                    if (((FragmentCommunicator) mFragment).startLazyMode()) {
                         isInLazyMode = true;
                         lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
                         params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
@@ -382,17 +380,17 @@ public class FilteredThingActivity extends AppCompatActivity implements SortType
 
     @Override
     public void searchSortTypeSelected(String sortType) {
-        ((PostFragment)mFragment).changeSortType(sortType);
+        ((PostFragment) mFragment).changeSortType(sortType);
     }
 
     @Override
     public void sortTypeSelected(String sortType) {
-        ((PostFragment)mFragment).changeSortType(sortType);
+        ((PostFragment) mFragment).changeSortType(sortType);
     }
 
     @Override
     public void userThingSortTypeSelected(String sortType) {
-        ((PostFragment)mFragment).changeSortType(sortType);
+        ((PostFragment) mFragment).changeSortType(sortType);
     }
 
     @Subscribe

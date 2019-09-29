@@ -11,10 +11,6 @@ import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import retrofit2.Retrofit;
 
 public class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {
-    public interface LoadSubredditIconAsyncTaskListener {
-        void loadIconSuccess(String iconImageUrl);
-    }
-
     private RedditDataRoomDatabase redditDataRoomDatabase;
     private SubredditDao subredditDao;
     private String subredditName;
@@ -22,9 +18,8 @@ public class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {
     private String iconImageUrl;
     private boolean hasSubredditInDb;
     private LoadSubredditIconAsyncTaskListener loadSubredditIconAsyncTaskListener;
-
     public LoadSubredditIconAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase, String subredditName, Retrofit retrofit,
-                               LoadSubredditIconAsyncTaskListener loadSubredditIconAsyncTaskListener) {
+                                      LoadSubredditIconAsyncTaskListener loadSubredditIconAsyncTaskListener) {
         this.redditDataRoomDatabase = redditDataRoomDatabase;
         this.subredditDao = redditDataRoomDatabase.subredditDao();
         this.subredditName = subredditName;
@@ -35,7 +30,7 @@ public class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
         SubredditData subredditData = subredditDao.getSubredditData(subredditName);
-        if(subredditData != null) {
+        if (subredditData != null) {
             iconImageUrl = subredditDao.getSubredditData(subredditName).getIconUrl();
             hasSubredditInDb = true;
         } else {
@@ -47,8 +42,8 @@ public class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        if(!isCancelled()) {
-            if(hasSubredditInDb) {
+        if (!isCancelled()) {
+            if (hasSubredditInDb) {
                 loadSubredditIconAsyncTaskListener.loadIconSuccess(iconImageUrl);
             } else {
                 FetchSubredditData.fetchSubredditData(retrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
@@ -68,5 +63,9 @@ public class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {
                 });
             }
         }
+    }
+
+    public interface LoadSubredditIconAsyncTaskListener {
+        void loadIconSuccess(String iconImageUrl);
     }
 }

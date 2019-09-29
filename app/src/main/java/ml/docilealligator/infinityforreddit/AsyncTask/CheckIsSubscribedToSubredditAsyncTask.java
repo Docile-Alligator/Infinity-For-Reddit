@@ -13,16 +13,11 @@ public class CheckIsSubscribedToSubredditAsyncTask extends AsyncTask<Void, Void,
     private SubscribedSubredditData subscribedSubredditData;
     private CheckIsSubscribedToSubredditListener checkIsSubscribedToSubredditListener;
 
-    public interface CheckIsSubscribedToSubredditListener {
-        void isSubscribed();
-        void isNotSubscribed();
-    }
-
     public CheckIsSubscribedToSubredditAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase,
-                                          String subredditName, String accountName,
-                                          CheckIsSubscribedToSubredditListener checkIsSubscribedToSubredditListener) {
+                                                 String subredditName, String accountName,
+                                                 CheckIsSubscribedToSubredditListener checkIsSubscribedToSubredditListener) {
         this.redditDataRoomDatabase = redditDataRoomDatabase;
-        this.subredditName =subredditName;
+        this.subredditName = subredditName;
         this.accountName = accountName;
         this.checkIsSubscribedToSubredditListener = checkIsSubscribedToSubredditListener;
     }
@@ -36,10 +31,16 @@ public class CheckIsSubscribedToSubredditAsyncTask extends AsyncTask<Void, Void,
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        if(subscribedSubredditData != null) {
+        if (subscribedSubredditData != null) {
             checkIsSubscribedToSubredditListener.isSubscribed();
         } else {
             checkIsSubscribedToSubredditListener.isNotSubscribed();
         }
+    }
+
+    public interface CheckIsSubscribedToSubredditListener {
+        void isSubscribed();
+
+        void isNotSubscribed();
     }
 }

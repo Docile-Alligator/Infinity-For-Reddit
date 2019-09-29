@@ -31,8 +31,8 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
 
         Activity activity = getActivity();
 
-        if(activity != null) {
-            if(openSourcePreference != null) {
+        if (activity != null) {
+            if (openSourcePreference != null) {
                 openSourcePreference.setOnPreferenceClickListener(preference -> {
                     Intent intent = new Intent(activity, LinkResolverActivity.class);
                     intent.setData(Uri.parse("https://github.com/Docile-Alligator/Infinity-For-Reddit"));
@@ -41,11 +41,11 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
                 });
             }
 
-            if(reviewPreference != null) {
+            if (reviewPreference != null) {
                 reviewPreference.setOnPreferenceClickListener(preference -> {
                     Intent playStoreIntent = new Intent(Intent.ACTION_VIEW);
                     playStoreIntent.setData(Uri.parse("market://details?id=ml.docilealligator.infinityforreddit"));
-                    if(playStoreIntent.resolveActivity(activity.getPackageManager()) != null) {
+                    if (playStoreIntent.resolveActivity(activity.getPackageManager()) != null) {
                         activity.startActivity(playStoreIntent);
                     } else {
                         Intent intent = new Intent(activity, LinkResolverActivity.class);
@@ -56,11 +56,11 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
                 });
             }
 
-            if(emailPreference != null) {
+            if (emailPreference != null) {
                 emailPreference.setOnPreferenceClickListener(preference -> {
                     Intent intent = new Intent(Intent.ACTION_SENDTO);
                     intent.setData(Uri.parse("mailto:docilealligator.app@gmail.com"));
-                    if(intent.resolveActivity(activity.getPackageManager()) != null) {
+                    if (intent.resolveActivity(activity.getPackageManager()) != null) {
                         startActivity(intent);
                     } else {
                         Toast.makeText(activity, R.string.no_email_client, Toast.LENGTH_SHORT).show();
@@ -69,7 +69,7 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
                 });
             }
 
-            if(redditAccountPreference != null) {
+            if (redditAccountPreference != null) {
                 redditAccountPreference.setOnPreferenceClickListener(preference -> {
                     Intent intent = new Intent(activity, LinkResolverActivity.class);
                     intent.setData(Uri.parse("https://www.reddit.com/user/Hostilenemy"));
@@ -78,7 +78,7 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
                 });
             }
 
-            if(subredditPreference != null) {
+            if (subredditPreference != null) {
                 subredditPreference.setOnPreferenceClickListener(preference -> {
                     Intent intent = new Intent(activity, LinkResolverActivity.class);
                     intent.setData(Uri.parse("https://www.reddit.com/r/Infinity_For_Reddit"));

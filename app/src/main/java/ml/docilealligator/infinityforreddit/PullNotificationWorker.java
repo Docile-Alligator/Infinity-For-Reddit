@@ -34,22 +34,17 @@ import retrofit2.Retrofit;
 
 public class PullNotificationWorker extends Worker {
     public static final String WORKER_TAG = "PNWT";
-
-    private Context context;
-
     @Inject
     @Named("oauth_without_authenticator")
     Retrofit mOauthWithoutAuthenticatorRetrofit;
-
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
-
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
-
     @Inject
     SharedPreferences mSharedPreferences;
+    private Context context;
 
     public PullNotificationWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -62,18 +57,18 @@ public class PullNotificationWorker extends Worker {
     public Result doWork() {
         try {
             List<Account> accounts = mRedditDataRoomDatabase.accountDao().getAllAccounts();
-            for(int accountIndex = 0; accountIndex < accounts.size(); accountIndex++) {
+            for (int accountIndex = 0; accountIndex < accounts.size(); accountIndex++) {
                 Account account = accounts.get(accountIndex);
 
                 String accountName = account.getUsername();
 
                 Response<String> response = fetchMessages(account, 1);
 
-                if(response != null && response.isSuccessful()) {
+                if (response != null && response.isSuccessful()) {
                     String responseBody = response.body();
                     ArrayList<Message> messages = FetchMessages.parseMessage(responseBody, context.getResources().getConfiguration().locale);
 
-                    if(messages != null && !messages.isEmpty()) {
+                    if (messages != null && !messages.isEmpty()) {
                         NotificationManagerCompat notificationManager = NotificationUtils.getNotificationManager(context);
 
                         NotificationCompat.Builder summaryBuilder = NotificationUtils.buildSummaryNotification(context,
@@ -91,9 +86,9 @@ public class PullNotificationWorker extends Worker {
                                 * 1000 * 60 * 60;
                         boolean hasValidMessage = false;
 
-                        for(int messageIndex = messageSize - 1; messageIndex >= 0; messageIndex--) {
+                        for (int messageIndex = messageSize - 1; messageIndex >= 0; messageIndex--) {
                             Message message = messages.get(messageIndex);
-                            if(currentTime - message.getTimeUTC() > notificationInterval) {
+                            if (currentTime - message.getTimeUTC() > notificationInterval) {
                                 continue;
                             }
 
@@ -104,16 +99,16 @@ public class PullNotificationWorker extends Worker {
                             String kind = message.getKind();
                             String title;
                             String summary;
-                            if(kind.equals(Message.TYPE_COMMENT) || kind.equals(Message.TYPE_LINK)) {
+                            if (kind.equals(Message.TYPE_COMMENT) || kind.equals(Message.TYPE_LINK)) {
                                 title = message.getAuthor();
                                 summary = message.getSubject().substring(0, 1).toUpperCase() + message.getSubject().substring(1);
                             } else {
                                 title = message.getTitle() == null || message.getTitle().equals("") ? message.getSubject() : message.getTitle();
-                                if(kind.equals(Message.TYPE_ACCOUNT)) {
+                                if (kind.equals(Message.TYPE_ACCOUNT)) {
                                     summary = context.getString(R.string.notification_summary_account);
-                                } else if(kind.equals(Message.TYPE_MESSAGE)) {
+                                } else if (kind.equals(Message.TYPE_MESSAGE)) {
                                     summary = context.getString(R.string.notification_summary_message);
-                                } else if(kind.equals(Message.TYPE_SUBREDDIT)) {
+                                } else if (kind.equals(Message.TYPE_SUBREDDIT)) {
                                     summary = context.getString(R.string.notification_summary_subreddit);
                                 } else {
                                     summary = context.getString(R.string.notification_summary_award);
@@ -126,7 +121,7 @@ public class PullNotificationWorker extends Worker {
                                     NotificationUtils.CHANNEL_NEW_MESSAGES,
                                     NotificationUtils.getAccountGroupName(accountName));
 
-                            if(kind.equals(Message.TYPE_COMMENT)) {
+                            if (kind.equals(Message.TYPE_COMMENT)) {
                                 Intent intent = new Intent(context, LinkResolverActivity.class);
                                 Uri uri = LinkResolverActivity.getRedditUriByPath(message.getContext());
                                 intent.setData(uri);
@@ -134,12 +129,12 @@ public class PullNotificationWorker extends Worker {
                                 intent.putExtra(LinkResolverActivity.EXTRA_MESSAGE_FULLNAME, message.getFullname());
                                 PendingIntent pendingIntent = PendingIntent.getActivity(context, accountIndex * 6, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 builder.setContentIntent(pendingIntent);
-                            } else if(kind.equals(Message.TYPE_ACCOUNT)) {
+                            } else if (kind.equals(Message.TYPE_ACCOUNT)) {
                                 Intent intent = new Intent(context, ViewMessageActivity.class);
                                 intent.putExtra(ViewMessageActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
                                 PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, accountIndex * 6 + 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 builder.setContentIntent(summaryPendingIntent);
-                            } else if(kind.equals(Message.TYPE_LINK)) {
+                            } else if (kind.equals(Message.TYPE_LINK)) {
                                 Intent intent = new Intent(context, LinkResolverActivity.class);
                                 Uri uri = LinkResolverActivity.getRedditUriByPath(message.getContext());
                                 intent.setData(uri);
@@ -147,12 +142,12 @@ public class PullNotificationWorker extends Worker {
                                 intent.putExtra(LinkResolverActivity.EXTRA_MESSAGE_FULLNAME, message.getFullname());
                                 PendingIntent pendingIntent = PendingIntent.getActivity(context, accountIndex * 6 + 2, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 builder.setContentIntent(pendingIntent);
-                            } else if(kind.equals(Message.TYPE_MESSAGE)) {
+                            } else if (kind.equals(Message.TYPE_MESSAGE)) {
                                 Intent intent = new Intent(context, ViewMessageActivity.class);
                                 intent.putExtra(ViewMessageActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
                                 PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, accountIndex * 6 + 3, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 builder.setContentIntent(summaryPendingIntent);
-                            } else if(kind.equals(Message.TYPE_SUBREDDIT)) {
+                            } else if (kind.equals(Message.TYPE_SUBREDDIT)) {
                                 Intent intent = new Intent(context, ViewMessageActivity.class);
                                 intent.putExtra(ViewMessageActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
                                 PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, accountIndex * 6 + 4, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -166,7 +161,7 @@ public class PullNotificationWorker extends Worker {
                             notificationManager.notify(NotificationUtils.getNotificationIdUnreadMessage(accountIndex, messageIndex), builder.build());
                         }
 
-                        if(hasValidMessage) {
+                        if (hasValidMessage) {
                             inboxStyle.setBigContentTitle(context.getString(R.string.notification_new_messages, messages.size()))
                                     .setSummaryText(accountName);
 
@@ -197,7 +192,7 @@ public class PullNotificationWorker extends Worker {
     }
 
     private Response<String> fetchMessages(Account account, int retryCount) throws IOException, JSONException {
-        if(retryCount < 0) {
+        if (retryCount < 0) {
             return null;
         }
 
@@ -206,12 +201,12 @@ public class PullNotificationWorker extends Worker {
                         FetchMessages.WHERE_UNREAD, null);
         Response<String> response = call.execute();
 
-        if(response.isSuccessful()) {
+        if (response.isSuccessful()) {
             return response;
         } else {
-            if(response.code() == 401) {
+            if (response.code() == 401) {
                 String accessToken = refreshAccessToken(account);
-                if(!accessToken.equals("")) {
+                if (!accessToken.equals("")) {
                     return fetchMessages(account, retryCount - 1);
                 }
 
@@ -234,7 +229,7 @@ public class PullNotificationWorker extends Worker {
         Call<String> accessTokenCall = api.getAccessToken(RedditUtils.getHttpBasicAuthHeader(), params);
         try {
             Response response = accessTokenCall.execute();
-            if(response.isSuccessful() && response.body() != null) {
+            if (response.isSuccessful() && response.body() != null) {
                 JSONObject jsonObject = new JSONObject(response.body().toString());
                 String newAccessToken = jsonObject.getString(RedditUtils.ACCESS_TOKEN_KEY);
                 mRedditDataRoomDatabase.accountDao().changeAccessToken(account.getUsername(), newAccessToken);

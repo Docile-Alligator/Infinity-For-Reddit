@@ -21,54 +21,23 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.AsyncTask.CheckIsFollowingUserAsyncTask;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserDao;
 import ml.docilealligator.infinityforreddit.User.UserData;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.UserFollowing;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
 public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, RecyclerView.ViewHolder> {
-    public interface RetryLoadingMoreCallback {
-        void retryLoadingMore();
-    }
-
-    private RequestManager glide;
-
     private static final int VIEW_TYPE_DATA = 0;
     private static final int VIEW_TYPE_ERROR = 1;
     private static final int VIEW_TYPE_LOADING = 2;
-
-    private Context context;
-    private Retrofit oauthRetrofit;
-    private Retrofit retrofit;
-    private String accessToken;
-    private String accountName;
-    private SubscribedUserDao subscribedUserDao;
-
-    private NetworkState networkState;
-    private UserListingRecyclerViewAdapter.RetryLoadingMoreCallback retryLoadingMoreCallback;
-
-    public UserListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, Retrofit retrofit,
-                                        String accessToken, String accountName, SubscribedUserDao subscribedUserDao,
-                                        UserListingRecyclerViewAdapter.RetryLoadingMoreCallback retryLoadingMoreCallback) {
-        super(DIFF_CALLBACK);
-        this.context = context;
-        this.oauthRetrofit = oauthRetrofit;
-        this.retrofit = retrofit;
-        this.accessToken = accessToken;
-        this.accountName = accountName;
-        this.subscribedUserDao = subscribedUserDao;
-        this.retryLoadingMoreCallback = retryLoadingMoreCallback;
-        glide = Glide.with(context.getApplicationContext());
-    }
-
     private static final DiffUtil.ItemCallback<UserData> DIFF_CALLBACK = new DiffUtil.ItemCallback<UserData>() {
         @Override
         public boolean areItemsTheSame(@NonNull UserData oldItem, @NonNull UserData newItem) {
@@ -80,14 +49,38 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
             return true;
         }
     };
+    private RequestManager glide;
+    private Context context;
+    private Retrofit oauthRetrofit;
+    private Retrofit retrofit;
+    private String accessToken;
+    private String accountName;
+    private SubscribedUserDao subscribedUserDao;
+
+    private NetworkState networkState;
+    private UserListingRecyclerViewAdapter.RetryLoadingMoreCallback retryLoadingMoreCallback;
+
+    public UserListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, Retrofit retrofit,
+                                          String accessToken, String accountName, SubscribedUserDao subscribedUserDao,
+                                          UserListingRecyclerViewAdapter.RetryLoadingMoreCallback retryLoadingMoreCallback) {
+        super(DIFF_CALLBACK);
+        this.context = context;
+        this.oauthRetrofit = oauthRetrofit;
+        this.retrofit = retrofit;
+        this.accessToken = accessToken;
+        this.accountName = accountName;
+        this.subscribedUserDao = subscribedUserDao;
+        this.retryLoadingMoreCallback = retryLoadingMoreCallback;
+        glide = Glide.with(context.getApplicationContext());
+    }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(viewType == VIEW_TYPE_DATA) {
+        if (viewType == VIEW_TYPE_DATA) {
             ConstraintLayout constraintLayout = (ConstraintLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_user_listing, parent, false);
             return new UserListingRecyclerViewAdapter.DataViewHolder(constraintLayout);
-        } else if(viewType == VIEW_TYPE_ERROR) {
+        } else if (viewType == VIEW_TYPE_ERROR) {
             RelativeLayout relativeLayout = (RelativeLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_error, parent, false);
             return new UserListingRecyclerViewAdapter.ErrorViewHolder(relativeLayout);
         } else {
@@ -98,7 +91,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if(holder instanceof UserListingRecyclerViewAdapter.DataViewHolder) {
+        if (holder instanceof UserListingRecyclerViewAdapter.DataViewHolder) {
             UserData userData = getItem(position);
             ((UserListingRecyclerViewAdapter.DataViewHolder) holder).constraintLayout.setOnClickListener(view -> {
                 Intent intent = new Intent(context, ViewUserDetailActivity.class);
@@ -106,7 +99,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
                 context.startActivity(intent);
             });
 
-            if(!userData.getIconUrl().equals("")) {
+            if (!userData.getIconUrl().equals("")) {
                 glide.load(userData.getIconUrl())
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                         .error(glide.load(R.drawable.subreddit_default_icon)
@@ -167,7 +160,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
 
     @Override
     public int getItemCount() {
-        if(hasExtraRow()) {
+        if (hasExtraRow()) {
             return super.getItemCount() + 1;
         }
         return super.getItemCount();
@@ -193,11 +186,27 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
         }
     }
 
+    @Override
+    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+        if (holder instanceof UserListingRecyclerViewAdapter.DataViewHolder) {
+            glide.clear(((UserListingRecyclerViewAdapter.DataViewHolder) holder).iconGifImageView);
+            ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
+        }
+    }
+
+    public interface RetryLoadingMoreCallback {
+        void retryLoadingMore();
+    }
+
     class DataViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.constraint_layout_item_user_listing) ConstraintLayout constraintLayout;
-        @BindView(R.id.user_icon_gif_image_view_item_user_listing) GifImageView iconGifImageView;
-        @BindView(R.id.user_name_text_view_item_user_listing) TextView UserNameTextView;
-        @BindView(R.id.subscribe_image_view_item_user_listing) ImageView subscribeButton;
+        @BindView(R.id.constraint_layout_item_user_listing)
+        ConstraintLayout constraintLayout;
+        @BindView(R.id.user_icon_gif_image_view_item_user_listing)
+        GifImageView iconGifImageView;
+        @BindView(R.id.user_name_text_view_item_user_listing)
+        TextView UserNameTextView;
+        @BindView(R.id.subscribe_image_view_item_user_listing)
+        ImageView subscribeButton;
 
         DataViewHolder(View itemView) {
             super(itemView);
@@ -206,8 +215,10 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
     }
 
     class ErrorViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.error_text_view_item_footer_error) TextView errorTextView;
-        @BindView(R.id.retry_button_item_footer_error) Button retryButton;
+        @BindView(R.id.error_text_view_item_footer_error)
+        TextView errorTextView;
+        @BindView(R.id.retry_button_item_footer_error)
+        Button retryButton;
 
         ErrorViewHolder(View itemView) {
             super(itemView);
@@ -221,14 +232,6 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
         LoadingViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-        }
-    }
-
-    @Override
-    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
-        if(holder instanceof UserListingRecyclerViewAdapter.DataViewHolder) {
-            glide.clear(((UserListingRecyclerViewAdapter.DataViewHolder) holder).iconGifImageView);
-            ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
         }
     }
 }

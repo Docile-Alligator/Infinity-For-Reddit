@@ -77,8 +77,8 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         initialLoadStateLiveData = new MutableLiveData<>();
         hasPostLiveData = new MutableLiveData<>();
         this.postType = postType;
-        if(sortType == null) {
-            if(subredditOrUserName.equals("popular") || subredditOrUserName.equals("all")) {
+        if (sortType == null) {
+            if (subredditOrUserName.equals("popular") || subredditOrUserName.equals("all")) {
                 this.sortType = PostDataSource.SORT_TYPE_HOT;
             } else {
                 this.sortType = PostDataSource.SORT_TYPE_BEST;
@@ -164,7 +164,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         this.params = params;
         this.callback = callback;
 
-        if(params.key.equals("") || params.key.equals("null")) {
+        if (params.key.equals("") || params.key.equals("null")) {
             return;
         }
 
@@ -194,7 +194,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    if(sortType.equals(SORT_TYPE_RANDOM)) {
+                    if (sortType.equals(SORT_TYPE_RANDOM)) {
                         ParsePost.parsePost(response.body(), locale, new ParsePost.ParsePostListener() {
                             @Override
                             public void onParsePostSuccess(Post post) {
@@ -216,15 +216,15 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                     @Override
                                     public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                                         String nextPageKey;
-                                        if(lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
+                                        if (lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
                                             nextPageKey = null;
                                         } else {
                                             nextPageKey = lastItem;
                                         }
 
-                                        if(newPosts.size() != 0) {
+                                        if (newPosts.size() != 0) {
                                             hasPostLiveData.postValue(true);
-                                        } else if(nextPageKey != null) {
+                                        } else if (nextPageKey != null) {
                                             loadBestPostsInitial(callback, nextPageKey);
                                             return;
                                         } else {
@@ -265,24 +265,24 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         bestPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
-                        @Override
-                        public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
-                            if(newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
-                                loadBestPostsAfter(params, callback, lastItem);
-                            } else {
-                                paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
-                                callback.onResult(newPosts, lastItem);
-                            }
-                        }
+                                @Override
+                                public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                    if (newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
+                                        loadBestPostsAfter(params, callback, lastItem);
+                                    } else {
+                                        paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
+                                        callback.onResult(newPosts, lastItem);
+                                    }
+                                }
 
-                        @Override
-                        public void onParsePostsListingFail() {
-                            paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing more posts"));
-                        }
-                    });
+                                @Override
+                                public void onParsePostsListingFail() {
+                                    paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing more posts"));
+                                }
+                            });
                 } else {
                     paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                 }
@@ -300,7 +300,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
         Call<String> getPost;
-        if(accessToken == null) {
+        if (accessToken == null) {
             getPost = api.getSubredditBestPosts(subredditOrUserName, sortType, lastItem);
         } else {
             getPost = api.getSubredditBestPostsOauth(subredditOrUserName, sortType, lastItem, RedditUtils.getOAuthHeader(accessToken));
@@ -308,8 +308,8 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                if(response.isSuccessful()) {
-                    if(sortType.equals(SORT_TYPE_RANDOM)) {
+                if (response.isSuccessful()) {
+                    if (sortType.equals(SORT_TYPE_RANDOM)) {
                         ParsePost.parsePost(response.body(), locale, new ParsePost.ParsePostListener() {
                             @Override
                             public void onParsePostSuccess(Post post) {
@@ -331,15 +331,15 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                     @Override
                                     public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                                         String nextPageKey;
-                                        if(lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
+                                        if (lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
                                             nextPageKey = null;
                                         } else {
                                             nextPageKey = lastItem;
                                         }
 
-                                        if(newPosts.size() != 0) {
+                                        if (newPosts.size() != 0) {
                                             hasPostLiveData.postValue(true);
-                                        } else if(nextPageKey != null) {
+                                        } else if (nextPageKey != null) {
                                             loadSubredditPostsInitial(callback, nextPageKey);
                                             return;
                                         } else {
@@ -377,7 +377,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
         Call<String> getPost;
-        if(accessToken == null) {
+        if (accessToken == null) {
             getPost = api.getSubredditBestPosts(subredditOrUserName, sortType, after);
         } else {
             getPost = api.getSubredditBestPostsOauth(subredditOrUserName, sortType, after, RedditUtils.getOAuthHeader(accessToken));
@@ -386,24 +386,24 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
-                        @Override
-                        public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
-                            if(newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
-                                loadSubredditPostsAfter(params, callback, lastItem);
-                            } else {
-                                paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
-                                callback.onResult(newPosts, lastItem);
-                            }
-                        }
+                                @Override
+                                public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                    if (newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
+                                        loadSubredditPostsAfter(params, callback, lastItem);
+                                    } else {
+                                        paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
+                                        callback.onResult(newPosts, lastItem);
+                                    }
+                                }
 
-                        @Override
-                        public void onParsePostsListingFail() {
-                            paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
-                        }
-                    });
+                                @Override
+                                public void onParsePostsListingFail() {
+                                    paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
+                                }
+                            });
                 } else {
                     paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                 }
@@ -421,7 +421,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
         Call<String> getPost;
-        if(accessToken == null) {
+        if (accessToken == null) {
             getPost = api.getUserPosts(subredditOrUserName, lastItem, sortType);
         } else {
             getPost = api.getUserPostsOauth(subredditOrUserName, userWhere, lastItem, sortType,
@@ -430,21 +430,21 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                                     String nextPageKey;
-                                    if(lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
+                                    if (lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
                                         nextPageKey = null;
                                     } else {
                                         nextPageKey = lastItem;
                                     }
 
-                                    if(newPosts.size() != 0) {
+                                    if (newPosts.size() != 0) {
                                         hasPostLiveData.postValue(true);
-                                    } else if(nextPageKey != null) {
+                                    } else if (nextPageKey != null) {
                                         loadUserPostsInitial(callback, nextPageKey);
                                         return;
                                     } else {
@@ -479,7 +479,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
         Call<String> getPost;
-        if(accessToken == null) {
+        if (accessToken == null) {
             getPost = api.getUserPosts(subredditOrUserName, after, sortType);
         } else {
             getPost = api.getUserPostsOauth(subredditOrUserName, userWhere, after, sortType,
@@ -488,24 +488,24 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
-                        @Override
-                        public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
-                            if(newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
-                                loadUserPostsAfter(params, callback, lastItem);
-                            } else {
-                                paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
-                                callback.onResult(newPosts, lastItem);
-                            }
-                        }
+                                @Override
+                                public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                    if (newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
+                                        loadUserPostsAfter(params, callback, lastItem);
+                                    } else {
+                                        paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
+                                        callback.onResult(newPosts, lastItem);
+                                    }
+                                }
 
-                        @Override
-                        public void onParsePostsListingFail() {
-                            paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
-                        }
-                    });
+                                @Override
+                                public void onParsePostsListingFail() {
+                                    paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
+                                }
+                            });
                 } else {
                     paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                 }
@@ -523,14 +523,14 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> getPost;
 
-        if(subredditOrUserName == null) {
-            if(accessToken == null) {
+        if (subredditOrUserName == null) {
+            if (accessToken == null) {
                 getPost = api.searchPosts(query, lastItem, sortType);
             } else {
                 getPost = api.searchPostsOauth(query, lastItem, sortType, RedditUtils.getOAuthHeader(accessToken));
             }
         } else {
-            if(accessToken == null) {
+            if (accessToken == null) {
                 getPost = api.searchPostsInSpecificSubreddit(subredditOrUserName, query, lastItem);
             } else {
                 getPost = api.searchPostsInSpecificSubredditOauth(subredditOrUserName, query, lastItem,
@@ -541,21 +541,21 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                                     String nextPageKey;
-                                    if(lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
+                                    if (lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
                                         nextPageKey = null;
                                     } else {
                                         nextPageKey = lastItem;
                                     }
 
-                                    if(newPosts.size() != 0) {
+                                    if (newPosts.size() != 0) {
                                         hasPostLiveData.postValue(true);
-                                    } else if(nextPageKey != null) {
+                                    } else if (nextPageKey != null) {
                                         loadSearchPostsInitial(callback, nextPageKey);
                                         return;
                                     } else {
@@ -590,14 +590,14 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> getPost;
 
-        if(subredditOrUserName == null) {
-            if(accessToken == null) {
+        if (subredditOrUserName == null) {
+            if (accessToken == null) {
                 getPost = api.searchPosts(query, after, sortType);
             } else {
                 getPost = api.searchPostsOauth(query, after, sortType, RedditUtils.getOAuthHeader(accessToken));
             }
         } else {
-            if(accessToken == null) {
+            if (accessToken == null) {
                 getPost = api.searchPostsInSpecificSubreddit(subredditOrUserName, query, after);
             } else {
                 getPost = api.searchPostsInSpecificSubredditOauth(subredditOrUserName, query, after,
@@ -608,24 +608,24 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         getPost.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
-                        @Override
-                        public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
-                            if(newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
-                                loadSearchPostsAfter(params, callback, lastItem);
-                            } else {
-                                paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
-                                callback.onResult(newPosts, lastItem);
-                            }
-                        }
+                                @Override
+                                public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                    if (newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
+                                        loadSearchPostsAfter(params, callback, lastItem);
+                                    } else {
+                                        paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
+                                        callback.onResult(newPosts, lastItem);
+                                    }
+                                }
 
-                        @Override
-                        public void onParsePostsListingFail() {
-                            paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
-                        }
-                    });
+                                @Override
+                                public void onParsePostsListingFail() {
+                                    paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
+                                }
+                            });
                 } else {
                     paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
                 }

@@ -12,28 +12,18 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FetchComment {
-    public interface FetchCommentListener {
-        void onFetchCommentSuccess(ArrayList<CommentData> expandedComments, String parentId, ArrayList<String> children);
-        void onFetchCommentFailed();
-    }
-
-    public interface FetchMoreCommentListener {
-        void onFetchMoreCommentSuccess(ArrayList<CommentData> expandedComments, int childrenStartingIndex);
-        void onFetchMoreCommentFailed();
-    }
-
     public static void fetchComments(Retrofit retrofit, @Nullable String accessToken, String article, String commentId,
                                      Locale locale, FetchCommentListener fetchCommentListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> comments;
-        if(accessToken == null) {
-            if(commentId == null) {
+        if (accessToken == null) {
+            if (commentId == null) {
                 comments = api.getPostAndCommentsById(article);
             } else {
                 comments = api.getPostAndCommentsSingleThreadById(article, commentId);
             }
         } else {
-            if(commentId == null) {
+            if (commentId == null) {
                 comments = api.getPostAndCommentsByIdOauth(article, RedditUtils.getOAuthHeader(accessToken));
             } else {
                 comments = api.getPostAndCommentsSingleThreadByIdOauth(article, commentId, RedditUtils.getOAuthHeader(accessToken));
@@ -43,7 +33,7 @@ public class FetchComment {
         comments.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     ParseComment.parseComment(response.body(), new ArrayList<>(),
                             locale, new ParseComment.ParseCommentListener() {
                                 @Override
@@ -74,14 +64,14 @@ public class FetchComment {
                                         ArrayList<String> allChildren, int startingIndex,
                                         int depth, Locale locale, FetchMoreCommentListener fetchMoreCommentListener) {
         StringBuilder stringBuilder = new StringBuilder();
-        for(int i = 0; i < 100; i++) {
-            if(allChildren.size() <= startingIndex + i) {
+        for (int i = 0; i < 100; i++) {
+            if (allChildren.size() <= startingIndex + i) {
                 break;
             }
             stringBuilder.append(allChildren.get(startingIndex + i)).append(",");
         }
 
-        if(stringBuilder.length() == 0) {
+        if (stringBuilder.length() == 0) {
             return;
         }
 
@@ -89,7 +79,7 @@ public class FetchComment {
 
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> moreComments;
-        if(accessToken == null) {
+        if (accessToken == null) {
             moreComments = api.getInfo(stringBuilder.toString());
         } else {
             moreComments = api.getInfoOauth(stringBuilder.toString(), RedditUtils.getOAuthHeader(accessToken));
@@ -98,7 +88,7 @@ public class FetchComment {
         moreComments.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     ParseComment.parseMoreComment(response.body(), new ArrayList<>(), locale,
                             depth, new ParseComment.ParseCommentListener() {
                                 @Override
@@ -123,5 +113,17 @@ public class FetchComment {
                 fetchMoreCommentListener.onFetchMoreCommentFailed();
             }
         });
+    }
+
+    public interface FetchCommentListener {
+        void onFetchCommentSuccess(ArrayList<CommentData> expandedComments, String parentId, ArrayList<String> children);
+
+        void onFetchCommentFailed();
+    }
+
+    public interface FetchMoreCommentListener {
+        void onFetchMoreCommentSuccess(ArrayList<CommentData> expandedComments, int childrenStartingIndex);
+
+        void onFetchMoreCommentFailed();
     }
 }

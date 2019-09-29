@@ -245,13 +245,13 @@ public class PostViewModel extends ViewModel {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            if(postType == PostDataSource.TYPE_FRONT_PAGE) {
+            if (postType == PostDataSource.TYPE_FRONT_PAGE) {
                 return (T) new PostViewModel(retrofit, accessToken, locale, postType, sortType, filter,
                         nsfw);
-            } else if(postType == PostDataSource.TYPE_SEARCH){
+            } else if (postType == PostDataSource.TYPE_SEARCH) {
                 return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, query,
                         postType, sortType, filter, nsfw);
-            } else if(postType == PostDataSource.TYPE_SUBREDDIT) {
+            } else if (postType == PostDataSource.TYPE_SUBREDDIT) {
                 return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, postType,
                         sortType, filter, nsfw);
             } else {

@@ -91,19 +91,40 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     private static final String MESSAGE_FULLNAME_STATE = "MFS";
     private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
 
-    @BindView(R.id.coordinator_layout_view_subreddit_detail_activity) CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_view_subreddit_detail) AppBarLayout appBarLayout;
-    @BindView(R.id.collapsing_toolbar_layout_view_subreddit_detail_activity) CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.banner_image_view_view_subreddit_detail_activity) GifImageView bannerImageView;
-    @BindView(R.id.icon_gif_image_view_view_subreddit_detail_activity) GifImageView iconGifImageView;
-    @BindView(R.id.subscribe_subreddit_chip_view_subreddit_detail_activity) Chip subscribeSubredditChip;
-    @BindView(R.id.subreddit_name_text_view_view_subreddit_detail_activity) TextView subredditNameTextView;
-    @BindView(R.id.subscriber_count_text_view_view_subreddit_detail_activity) TextView nSubscribersTextView;
-    @BindView(R.id.online_subscriber_count_text_view_view_subreddit_detail_activity) TextView nOnlineSubscribersTextView;
-    @BindView(R.id.description_text_view_view_subreddit_detail_activity) TextView descriptionTextView;
-    @BindView(R.id.fab_view_subreddit_detail_activity) FloatingActionButton fab;
-
+    @BindView(R.id.coordinator_layout_view_subreddit_detail_activity)
+    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.appbar_layout_view_subreddit_detail)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.collapsing_toolbar_layout_view_subreddit_detail_activity)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.banner_image_view_view_subreddit_detail_activity)
+    GifImageView bannerImageView;
+    @BindView(R.id.icon_gif_image_view_view_subreddit_detail_activity)
+    GifImageView iconGifImageView;
+    @BindView(R.id.subscribe_subreddit_chip_view_subreddit_detail_activity)
+    Chip subscribeSubredditChip;
+    @BindView(R.id.subreddit_name_text_view_view_subreddit_detail_activity)
+    TextView subredditNameTextView;
+    @BindView(R.id.subscriber_count_text_view_view_subreddit_detail_activity)
+    TextView nSubscribersTextView;
+    @BindView(R.id.online_subscriber_count_text_view_view_subreddit_detail_activity)
+    TextView nOnlineSubscribersTextView;
+    @BindView(R.id.description_text_view_view_subreddit_detail_activity)
+    TextView descriptionTextView;
+    @BindView(R.id.fab_view_subreddit_detail_activity)
+    FloatingActionButton fab;
+    @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
+    @Inject
+    SharedPreferences mSharedPreferences;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
@@ -115,29 +136,13 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     private boolean showToast = false;
     private String mMessageFullname;
     private String mNewAccountName;
-
     private RequestManager glide;
     private Fragment mFragment;
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
     private PostTypeBottomSheetFragment postTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment sortTypeBottomSheetFragment;
-
     private SubredditViewModel mSubredditViewModel;
-
-    @Inject
-    @Named("no_oauth")
-    Retrofit mRetrofit;
-
-    @Inject
-    @Named("oauth")
-    Retrofit mOauthRetrofit;
-
-    @Inject
-    RedditDataRoomDatabase mRedditDataRoomDatabase;
-
-    @Inject
-    SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,12 +168,12 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             Resources resources = getResources();
 
-            if(resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
+            if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
                 Window window = getWindow();
                 window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
                 boolean lightNavBar = false;
-                if((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+                if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
                     lightNavBar = true;
                 }
                 boolean finalLightNavBar = lightNavBar;
@@ -178,11 +183,11 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                     @Override
                     public void onStateChanged(AppBarLayout appBarLayout, State state) {
                         if (state == State.COLLAPSED) {
-                            if(finalLightNavBar) {
+                            if (finalLightNavBar) {
                                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                             }
                         } else if (state == State.EXPANDED) {
-                            if(finalLightNavBar) {
+                            if (finalLightNavBar) {
                                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                             }
                         }
@@ -210,7 +215,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 break;
             case 2:
-                if(systemDefault) {
+                if (systemDefault) {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
@@ -220,7 +225,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
 
         subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME_KEY);
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             mMessageFullname = getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME);
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
             getCurrentAccountAndBindView();
@@ -234,7 +239,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
             mMessageFullname = savedInstanceState.getString(MESSAGE_FULLNAME_STATE);
             mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
 
-            if(!mNullAccessToken && mAccessToken == null) {
+            if (!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndBindView();
             } else {
                 bindView(false);
@@ -242,7 +247,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
             }
 
-            if(mFetchSubredditInfoSuccess) {
+            if (mFetchSubredditInfoSuccess) {
                 nOnlineSubscribersTextView.setText(getString(R.string.online_subscribers_number_detail, mNCurrentOnlineSubscribers));
             }
         }
@@ -280,8 +285,8 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                 new SubredditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, subredditName))
                 .get(SubredditViewModel.class);
         mSubredditViewModel.getSubredditLiveData().observe(this, subredditData -> {
-            if(subredditData != null) {
-                if(subredditData.getBannerUrl().equals("")) {
+            if (subredditData != null) {
+                if (subredditData.getBannerUrl().equals("")) {
                     iconGifImageView.setOnClickListener(view -> {
                         //Do nothing as it has no image
                     });
@@ -296,7 +301,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                     });
                 }
 
-                if(subredditData.getIconUrl().equals("")) {
+                if (subredditData.getIconUrl().equals("")) {
                     glide.load(getDrawable(R.drawable.subreddit_default_icon))
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0)))
                             .into(iconGifImageView);
@@ -319,13 +324,13 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                 }
 
                 String subredditFullName = "r/" + subredditData.getName();
-                if(!title.equals(subredditFullName)) {
+                if (!title.equals(subredditFullName)) {
                     getSupportActionBar().setTitle(subredditFullName);
                 }
                 subredditNameTextView.setText(subredditFullName);
                 String nSubscribers = getString(R.string.subscribers_number_detail, subredditData.getNSubscribers());
                 nSubscribersTextView.setText(nSubscribers);
-                if(subredditData.getDescription().equals("")) {
+                if (subredditData.getDescription().equals("")) {
                     descriptionTextView.setVisibility(View.GONE);
                 } else {
                     descriptionTextView.setVisibility(View.VISIBLE);
@@ -335,7 +340,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         });
 
         fab.setOnClickListener(view -> {
-            if(mAccessToken == null) {
+            if (mAccessToken == null) {
                 Toast.makeText(ViewSubredditDetailActivity.this, R.string.login_first, Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -346,14 +351,14 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
 
     private void getCurrentAccountAndBindView() {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
-            if(mNewAccountName != null) {
-                if(account == null || !account.getUsername().equals(mNewAccountName)) {
+            if (mNewAccountName != null) {
+                if (account == null || !account.getUsername().equals(mNewAccountName)) {
                     new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
                         EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
                         Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
 
                         mNewAccountName = null;
-                        if(newAccount == null) {
+                        if (newAccount == null) {
                             mNullAccessToken = true;
                         } else {
                             mAccessToken = newAccount.getAccessToken();
@@ -368,7 +373,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                     bindView(true);
                 }
             } else {
-                if(account == null) {
+                if (account == null) {
                     mNullAccessToken = true;
                 } else {
                     mAccessToken = account.getAccessToken();
@@ -381,7 +386,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     }
 
     private void fetchSubredditData() {
-        if(!mFetchSubredditInfoSuccess) {
+        if (!mFetchSubredditInfoSuccess) {
             FetchSubredditData.fetchSubredditData(mRetrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
                 @Override
                 public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
@@ -400,7 +405,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     }
 
     private void bindView(boolean initializeFragment) {
-        if(mAccessToken != null && mMessageFullname != null) {
+        if (mAccessToken != null && mMessageFullname != null) {
             ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
                 @Override
                 public void readSuccess() {
@@ -415,14 +420,14 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         }
 
         subscribeSubredditChip.setOnClickListener(view -> {
-            if(mAccessToken == null) {
+            if (mAccessToken == null) {
                 Toast.makeText(ViewSubredditDetailActivity.this, R.string.login_first, Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if(subscriptionReady) {
+            if (subscriptionReady) {
                 subscriptionReady = false;
-                if(subscribeSubredditChip.getText().equals(getResources().getString(R.string.subscribe))) {
+                if (subscribeSubredditChip.getText().equals(getResources().getString(R.string.subscribe))) {
                     SubredditSubscription.subscribeToSubreddit(mOauthRetrofit, mRetrofit, mAccessToken,
                             subredditName, mAccountName, mRedditDataRoomDatabase,
                             new SubredditSubscription.SubredditSubscriptionListener() {
@@ -479,7 +484,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                     }
                 }).execute();
 
-        if(initializeFragment) {
+        if (initializeFragment) {
             mFragment = new PostFragment();
             Bundle bundle = new Bundle();
             bundle.putString(PostFragment.EXTRA_NAME, subredditName);
@@ -497,7 +502,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         getMenuInflater().inflate(R.menu.view_subreddit_detail_activity, menu);
         mMenu = menu;
         MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity);
-        if(isInLazyMode) {
+        if (isInLazyMode) {
             lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
             params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
             collapsingToolbarLayout.setLayoutParams(params);
@@ -527,10 +532,10 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                 startActivity(intent);
                 break;
             case R.id.action_refresh_view_subreddit_detail_activity:
-                if(mMenu != null) {
+                if (mMenu != null) {
                     mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity).setTitle(R.string.action_start_lazy_mode);
                 }
-                if(mFragment instanceof FragmentCommunicator) {
+                if (mFragment instanceof FragmentCommunicator) {
                     ((FragmentCommunicator) mFragment).refresh();
                     mFetchSubredditInfoSuccess = false;
                     fetchSubredditData();
@@ -538,7 +543,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                 break;
             case R.id.action_lazy_mode_view_subreddit_detail_activity:
                 MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity);
-                if(isInLazyMode) {
+                if (isInLazyMode) {
                     isInLazyMode = false;
                     ((FragmentCommunicator) mFragment).stopLazyMode();
                     lazyModeItem.setTitle(R.string.action_start_lazy_mode);
@@ -547,7 +552,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
                     collapsingToolbarLayout.setLayoutParams(params);
                 } else {
                     isInLazyMode = true;
-                    if(((FragmentCommunicator) mFragment).startLazyMode()) {
+                    if (((FragmentCommunicator) mFragment).startLazyMode()) {
                         lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
                         appBarLayout.setExpanded(false);
                         params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
@@ -581,10 +586,10 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
     }
 
     private void makeSnackbar(int resId, boolean retry) {
-        if(showToast) {
+        if (showToast) {
             Toast.makeText(this, resId, Toast.LENGTH_SHORT).show();
         } else {
-            if(retry) {
+            if (retry) {
                 Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).setAction(R.string.retry,
                         view -> fetchSubredditData()).show();
             } else {
@@ -634,7 +639,7 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
 
     @Subscribe
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
-        if(!getClass().getName().equals(event.excludeActivityClassName)) {
+        if (!getClass().getName().equals(event.excludeActivityClassName)) {
             finish();
         }
     }
@@ -647,14 +652,9 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
 
     private static class InsertSubredditDataAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        interface InsertSubredditDataAsyncTaskListener {
-            void insertSuccess();
-        }
-
         private SubredditDao mSubredditDao;
         private SubredditData subredditData;
         private InsertSubredditDataAsyncTaskListener insertSubredditDataAsyncTaskListener;
-
         InsertSubredditDataAsyncTask(RedditDataRoomDatabase db, SubredditData subredditData,
                                      InsertSubredditDataAsyncTaskListener insertSubredditDataAsyncTaskListener) {
             mSubredditDao = db.subredditDao();
@@ -671,6 +671,10 @@ public class ViewSubredditDetailActivity extends AppCompatActivity implements So
         @Override
         protected void onPostExecute(Void aVoid) {
             insertSubredditDataAsyncTaskListener.insertSuccess();
+        }
+
+        interface InsertSubredditDataAsyncTaskListener {
+            void insertSuccess();
         }
     }
 }
