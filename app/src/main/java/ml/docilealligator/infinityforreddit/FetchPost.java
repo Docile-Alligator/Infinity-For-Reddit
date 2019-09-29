@@ -9,13 +9,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-class FetchPost {
-    interface FetchPostListener {
+public class FetchPost {
+    public interface FetchPostListener {
         void fetchPostSuccess(Post post);
         void fetchPostFailed();
     }
 
-    static void fetchPost(Retrofit retrofit, String id, String accessToken, Locale locale, FetchPostListener fetchPostListener) {
+    public static void fetchPost(Retrofit retrofit, String id, String accessToken, Locale locale, FetchPostListener fetchPostListener) {
         Call<String> postCall;
         if(accessToken == null) {
             postCall = retrofit.create(RedditAPI.class).getPost(id);

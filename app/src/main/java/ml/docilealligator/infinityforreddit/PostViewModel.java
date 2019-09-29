@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
@@ -60,7 +58,6 @@ public class PostViewModel extends ViewModel {
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
                          String sortType, int filter, boolean nsfw) {
-        Log.i("asfdasdf", "viewmodel: " + sortType);
         postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, subredditName,
                 postType, sortType, filter, nsfw);
 
@@ -152,35 +149,35 @@ public class PostViewModel extends ViewModel {
         });
     }
 
-    LiveData<PagedList<Post>> getPosts() {
+    public LiveData<PagedList<Post>> getPosts() {
         return posts;
     }
 
-    LiveData<NetworkState> getPaginationNetworkState() {
+    public LiveData<NetworkState> getPaginationNetworkState() {
         return paginationNetworkState;
     }
 
-    LiveData<NetworkState> getInitialLoadingState() {
+    public LiveData<NetworkState> getInitialLoadingState() {
         return initialLoadingState;
     }
 
-    LiveData<Boolean> hasPost() {
+    public LiveData<Boolean> hasPost() {
         return hasPostLiveData;
     }
 
-    void refresh() {
+    public void refresh() {
         postDataSourceFactory.getPostDataSource().invalidate();
     }
 
-    void retryLoadingMore() {
+    public void retryLoadingMore() {
         postDataSourceFactory.getPostDataSource().retryLoadingMore();
     }
 
-    void changeSortType(String sortType) {
+    public void changeSortType(String sortType) {
         sortTypeLiveData.postValue(sortType);
     }
 
-    void changeNSFW(boolean nsfw) {
+    public void changeNSFW(boolean nsfw) {
         nsfwLiveData.postValue(nsfw);
     }
 
@@ -209,7 +206,6 @@ public class PostViewModel extends ViewModel {
 
         public Factory(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
                        String sortType, int filter, boolean nsfw) {
-            Log.i("asfdasdf", "viewmodel factory: " + sortType);
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.locale = locale;

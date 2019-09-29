@@ -11,19 +11,19 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-class FetchComment {
-    interface FetchCommentListener {
+public class FetchComment {
+    public interface FetchCommentListener {
         void onFetchCommentSuccess(ArrayList<CommentData> expandedComments, String parentId, ArrayList<String> children);
         void onFetchCommentFailed();
     }
 
-    interface FetchMoreCommentListener {
+    public interface FetchMoreCommentListener {
         void onFetchMoreCommentSuccess(ArrayList<CommentData> expandedComments, int childrenStartingIndex);
         void onFetchMoreCommentFailed();
     }
 
-    static void fetchComments(Retrofit retrofit, @Nullable String accessToken, String article, String commentId,
-                              Locale locale, FetchCommentListener fetchCommentListener) {
+    public static void fetchComments(Retrofit retrofit, @Nullable String accessToken, String article, String commentId,
+                                     Locale locale, FetchCommentListener fetchCommentListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> comments;
         if(accessToken == null) {
@@ -70,9 +70,9 @@ class FetchComment {
         });
     }
 
-    static void fetchMoreComment(Retrofit retrofit, @Nullable String accessToken,
-                                 ArrayList<String> allChildren, int startingIndex,
-                                 int depth, Locale locale, FetchMoreCommentListener fetchMoreCommentListener) {
+    public static void fetchMoreComment(Retrofit retrofit, @Nullable String accessToken,
+                                        ArrayList<String> allChildren, int startingIndex,
+                                        int depth, Locale locale, FetchMoreCommentListener fetchMoreCommentListener) {
         StringBuilder stringBuilder = new StringBuilder();
         for(int i = 0; i < 100; i++) {
             if(allChildren.size() <= startingIndex + i) {

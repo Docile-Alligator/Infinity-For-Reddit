@@ -12,19 +12,19 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-class FetchSubscribedThing {
-    interface FetchSubscribedThingListener {
+public class FetchSubscribedThing {
+    public interface FetchSubscribedThingListener {
         void onFetchSubscribedThingSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                            ArrayList<SubscribedUserData> subscribedUserData,
                                            ArrayList<SubredditData> subredditData);
         void onFetchSubscribedThingFail();
     }
 
-    static void fetchSubscribedThing(final Retrofit retrofit, String accessToken, String accountName,
-                                     final String lastItem, final ArrayList<SubscribedSubredditData> subscribedSubredditData,
-                                     final ArrayList<SubscribedUserData> subscribedUserData,
-                                     final ArrayList<SubredditData> subredditData,
-                                     final FetchSubscribedThingListener fetchSubscribedThingListener) {
+    public static void fetchSubscribedThing(final Retrofit retrofit, String accessToken, String accountName,
+                                            final String lastItem, final ArrayList<SubscribedSubredditData> subscribedSubredditData,
+                                            final ArrayList<SubscribedUserData> subscribedUserData,
+                                            final ArrayList<SubredditData> subredditData,
+                                            final FetchSubscribedThingListener fetchSubscribedThingListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
         Call<String> subredditDataCall = api.getSubscribedThing(lastItem, RedditUtils.getOAuthHeader(accessToken));

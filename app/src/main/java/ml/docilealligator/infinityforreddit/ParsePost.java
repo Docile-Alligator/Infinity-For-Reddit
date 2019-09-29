@@ -12,17 +12,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
+
 /**
  * Created by alex on 3/21/18.
  */
 
-class ParsePost {
+public class ParsePost {
     interface ParsePostsListingListener {
         void onParsePostsListingSuccess(ArrayList<Post> newPostData, String lastItem);
         void onParsePostsListingFail();
     }
 
-    interface ParsePostListener {
+    public interface ParsePostListener {
         void onParsePostSuccess(Post post);
         void onParsePostFail();
     }
@@ -32,7 +34,7 @@ class ParsePost {
         new ParsePostDataAsyncTask(response, locale, nPosts, filter, nsfw, parsePostsListingListener).execute();
     }
 
-    static void parsePost(String response, Locale locale, ParsePostListener parsePostListener) {
+    public static void parsePost(String response, Locale locale, ParsePostListener parsePostListener) {
         new ParsePostDataAsyncTask(response, locale, true, parsePostListener).execute();
     }
 

@@ -18,8 +18,8 @@ import static ml.docilealligator.infinityforreddit.CommentData.VOTE_TYPE_DOWNVOT
 import static ml.docilealligator.infinityforreddit.CommentData.VOTE_TYPE_NO_VOTE;
 import static ml.docilealligator.infinityforreddit.CommentData.VOTE_TYPE_UPVOTE;
 
-class ParseComment {
-    interface ParseCommentListener {
+public class ParseComment {
+    public interface ParseCommentListener {
         void onParseCommentSuccess(ArrayList<CommentData> expandedComments, String parentId,
                                    ArrayList<String> moreChildrenFullnames);
         void onParseCommentFailed();
@@ -30,8 +30,8 @@ class ParseComment {
         void onParseSentCommentFailed(@Nullable String errorMessage);
     }
 
-    static void parseComment(String response, ArrayList<CommentData> commentData, Locale locale,
-                             ParseCommentListener parseCommentListener) {
+    public static void parseComment(String response, ArrayList<CommentData> commentData, Locale locale,
+                                    ParseCommentListener parseCommentListener) {
         try {
             JSONArray childrenArray = new JSONArray(response);
             String parentId = childrenArray.getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY)

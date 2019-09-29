@@ -14,24 +14,24 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 
-class UserFollowing {
-    interface UserFollowingListener {
+public class UserFollowing {
+    public interface UserFollowingListener {
         void onUserFollowingSuccess();
         void onUserFollowingFail();
     }
 
-    static void followUser(Retrofit oauthRetrofit, Retrofit retrofit,
-                           String accessToken, String username, String accountName,
-                           SubscribedUserDao subscribedUserDao,
-                           UserFollowingListener userFollowingListener) {
+    public static void followUser(Retrofit oauthRetrofit, Retrofit retrofit,
+                                  String accessToken, String username, String accountName,
+                                  SubscribedUserDao subscribedUserDao,
+                                  UserFollowingListener userFollowingListener) {
         userFollowing(oauthRetrofit, retrofit, accessToken, username, accountName, "sub",
                 subscribedUserDao, userFollowingListener);
     }
 
-    static void unfollowUser(Retrofit oauthRetrofit, Retrofit retrofit,
-                             String accessToken, String username, String accountName,
-                             SubscribedUserDao subscribedUserDao,
-                             UserFollowingListener userFollowingListener) {
+    public static void unfollowUser(Retrofit oauthRetrofit, Retrofit retrofit,
+                                    String accessToken, String username, String accountName,
+                                    SubscribedUserDao subscribedUserDao,
+                                    UserFollowingListener userFollowingListener) {
         userFollowing(oauthRetrofit, retrofit, accessToken, username, accountName, "unsub",
                 subscribedUserDao, userFollowingListener);
     }

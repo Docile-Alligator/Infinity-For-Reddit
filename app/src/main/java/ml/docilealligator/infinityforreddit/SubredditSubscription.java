@@ -13,24 +13,24 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 
-class SubredditSubscription {
-    interface SubredditSubscriptionListener {
+public class SubredditSubscription {
+    public interface SubredditSubscriptionListener {
         void onSubredditSubscriptionSuccess();
         void onSubredditSubscriptionFail();
     }
 
-    static void subscribeToSubreddit(Retrofit oauthRetrofit, Retrofit retrofit,
-                                     String accessToken, String subredditName, String accountName,
-                                     RedditDataRoomDatabase redditDataRoomDatabase,
-                                     SubredditSubscriptionListener subredditSubscriptionListener) {
+    public static void subscribeToSubreddit(Retrofit oauthRetrofit, Retrofit retrofit,
+                                            String accessToken, String subredditName, String accountName,
+                                            RedditDataRoomDatabase redditDataRoomDatabase,
+                                            SubredditSubscriptionListener subredditSubscriptionListener) {
         subredditSubscription(oauthRetrofit, retrofit, accessToken, subredditName, accountName, "sub",
                 redditDataRoomDatabase, subredditSubscriptionListener);
     }
 
-    static void unsubscribeToSubreddit(Retrofit oauthRetrofit, String accessToken,
-                                       String subredditName, String accountName,
-                                       RedditDataRoomDatabase redditDataRoomDatabase,
-                                       SubredditSubscriptionListener subredditSubscriptionListener) {
+    public static void unsubscribeToSubreddit(Retrofit oauthRetrofit, String accessToken,
+                                              String subredditName, String accountName,
+                                              RedditDataRoomDatabase redditDataRoomDatabase,
+                                              SubredditSubscriptionListener subredditSubscriptionListener) {
         subredditSubscription(oauthRetrofit, null, accessToken, subredditName, accountName, "unsub",
                 redditDataRoomDatabase,subredditSubscriptionListener);
     }

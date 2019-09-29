@@ -1,6 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
-interface FragmentCommunicator {
+public interface FragmentCommunicator {
     void refresh();
     default void changeNSFW(boolean nsfw) {};
     default boolean startLazyMode() {

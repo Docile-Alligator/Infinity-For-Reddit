@@ -15,9 +15,9 @@ import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
 
-import ml.docilealligator.infinityforreddit.ChangeNSFWBlurEvent;
-import ml.docilealligator.infinityforreddit.ChangeNSFWEvent;
-import ml.docilealligator.infinityforreddit.ChangeSpoilerBlurEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;

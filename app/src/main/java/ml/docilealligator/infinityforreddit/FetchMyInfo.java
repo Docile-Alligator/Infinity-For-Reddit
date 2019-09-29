@@ -8,15 +8,15 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 
-class FetchMyInfo {
+public class FetchMyInfo {
 
-    interface FetchUserMyListener {
+    public interface FetchUserMyListener {
         void onFetchMyInfoSuccess(String response);
         void onFetchMyInfoFail();
     }
 
-    static void fetchAccountInfo(final Retrofit retrofit, String accessToken,
-                                 final FetchUserMyListener fetchUserMyListener) {
+    public static void fetchAccountInfo(final Retrofit retrofit, String accessToken,
+                                        final FetchUserMyListener fetchUserMyListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
         Call<String> userInfo = api.getMyInfo(RedditUtils.getOAuthHeader(accessToken));

@@ -10,7 +10,7 @@ import android.widget.Toast;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
-import ml.docilealligator.infinityforreddit.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
 

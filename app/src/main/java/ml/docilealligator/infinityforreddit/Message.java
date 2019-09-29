@@ -1,6 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
-class Message {
+public class Message {
     static final String TYPE_COMMENT = "t1";
     static final String TYPE_ACCOUNT = "t2";
     static final String TYPE_LINK = "t3";

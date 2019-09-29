@@ -48,31 +48,31 @@ public class CommentViewModel extends ViewModel {
         });
     }
 
-    LiveData<PagedList<CommentData>> getComments() {
+    public LiveData<PagedList<CommentData>> getComments() {
         return comments;
     }
 
-    LiveData<NetworkState> getPaginationNetworkState() {
+    public LiveData<NetworkState> getPaginationNetworkState() {
         return paginationNetworkState;
     }
 
-    LiveData<NetworkState> getInitialLoadingState() {
+    public LiveData<NetworkState> getInitialLoadingState() {
         return initialLoadingState;
     }
 
-    LiveData<Boolean> hasComment() {
+    public LiveData<Boolean> hasComment() {
         return hasCommentLiveData;
     }
 
-    void refresh() {
+    public void refresh() {
         commentDataSourceFactory.getCommentDataSource().invalidate();
     }
 
-    void retryLoadingMore() {
+    public void retryLoadingMore() {
         commentDataSourceFactory.getCommentDataSource().retryLoadingMore();
     }
 
-    void changeSortType(String sortType) {
+    public void changeSortType(String sortType) {
         sortTypeLiveData.postValue(sortType);
     }
 

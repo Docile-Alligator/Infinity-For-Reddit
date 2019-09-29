@@ -10,13 +10,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-class DeleteThing {
-    interface DeleteThingListener {
+public class DeleteThing {
+    public interface DeleteThingListener {
         void deleteSuccess();
         void deleteFailed();
     }
 
-    static void delete(Retrofit oauthRetrofit, String fullname, String accessToken, DeleteThingListener deleteThingListener) {
+    public static void delete(Retrofit oauthRetrofit, String fullname, String accessToken, DeleteThingListener deleteThingListener) {
         Map<String, String> params = new HashMap<>();
         params.put(RedditUtils.ID_KEY, fullname);
         oauthRetrofit.create(RedditAPI.class).delete(RedditUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<String>() {

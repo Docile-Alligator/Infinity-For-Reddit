@@ -4,11 +4,11 @@
 
     <Preference
         app:title="@string/settings_acknowledgement_master_title"
-        app:fragment="Settings.AcknowledgementFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.AcknowledgementFragment" />
 
     <Preference
         app:title="@string/settings_credits_master_title"
-        app:fragment="Settings.CreditsPreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.CreditsPreferenceFragment" />
 
     <Preference
         android:key="open_source"

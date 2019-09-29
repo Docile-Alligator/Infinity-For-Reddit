@@ -10,8 +10,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-class FetchSubredditData {
-    interface FetchSubredditDataListener {
+public class FetchSubredditData {
+    public interface FetchSubredditDataListener {
         void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers);
         void onFetchSubredditDataFail();
     }
@@ -21,7 +21,7 @@ class FetchSubredditData {
         void onFetchSubredditListingDataFail();
     }
 
-    static void fetchSubredditData(Retrofit retrofit, String subredditName, final FetchSubredditDataListener fetchSubredditDataListener) {
+    public static void fetchSubredditData(Retrofit retrofit, String subredditName, final FetchSubredditDataListener fetchSubredditDataListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
         Call<String> subredditData = api.getSubredditData(subredditName);

@@ -3,7 +3,7 @@ package ml.docilealligator.infinityforreddit;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-class Flair implements Parcelable {
+public class Flair implements Parcelable {
     private String id;
     private String text;
     private boolean editable;

@@ -11,29 +11,29 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 
-class PostDataSource extends PageKeyedDataSource<String, Post> {
+public class PostDataSource extends PageKeyedDataSource<String, Post> {
 
-    static final int TYPE_FRONT_PAGE = 0;
-    static final int TYPE_SUBREDDIT = 1;
-    static final int TYPE_USER = 2;
-    static final int TYPE_SEARCH = 3;
+    public static final int TYPE_FRONT_PAGE = 0;
+    public static final int TYPE_SUBREDDIT = 1;
+    public static final int TYPE_USER = 2;
+    public static final int TYPE_SEARCH = 3;
 
-    static final String SORT_TYPE_BEST = "best";
-    static final String SORT_TYPE_HOT = "hot";
-    static final String SORT_TYPE_NEW = "new";
-    static final String SORT_TYPE_RANDOM = "random";
-    static final String SORT_TYPE_RISING = "rising";
-    static final String SORT_TYPE_TOP = "top";
-    static final String SORT_TYPE_CONTROVERSIAL = "controversial";
-    static final String SORT_TYPE_RELEVANCE = "relevance";
-    static final String SORT_TYPE_COMMENTS = "comments";
+    public static final String SORT_TYPE_BEST = "best";
+    public static final String SORT_TYPE_HOT = "hot";
+    public static final String SORT_TYPE_NEW = "new";
+    public static final String SORT_TYPE_RANDOM = "random";
+    public static final String SORT_TYPE_RISING = "rising";
+    public static final String SORT_TYPE_TOP = "top";
+    public static final String SORT_TYPE_CONTROVERSIAL = "controversial";
+    public static final String SORT_TYPE_RELEVANCE = "relevance";
+    public static final String SORT_TYPE_COMMENTS = "comments";
 
-    static final String USER_WHERE_SUBMITTED = "submitted";
-    static final String USER_WHERE_UPVOTED = "upvoted";
-    static final String USER_WHERE_DOWNVOTED = "downvoted";
-    static final String USER_WHERE_HIDDEN = "hidden";
-    static final String USER_WHERE_SAVED = "saved";
-    static final String USER_WHERE_GILDED = "gilded";
+    public static final String USER_WHERE_SUBMITTED = "submitted";
+    public static final String USER_WHERE_UPVOTED = "upvoted";
+    public static final String USER_WHERE_DOWNVOTED = "downvoted";
+    public static final String USER_WHERE_HIDDEN = "hidden";
+    public static final String USER_WHERE_SAVED = "saved";
+    public static final String USER_WHERE_GILDED = "gilded";
 
     private Retrofit retrofit;
     private String accessToken;

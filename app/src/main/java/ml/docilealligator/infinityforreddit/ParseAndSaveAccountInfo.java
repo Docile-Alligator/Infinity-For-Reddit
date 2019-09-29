@@ -6,14 +6,14 @@ import android.text.Html;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-class ParseAndSaveAccountInfo {
-    interface ParseAndSaveAccountInfoListener {
+public class ParseAndSaveAccountInfo {
+    public interface ParseAndSaveAccountInfoListener {
         void onParseMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma);
         void onParseMyInfoFail();
     }
 
-    static void parseAndSaveAccountInfo(String response, RedditDataRoomDatabase redditDataRoomDatabase,
-                                        ParseAndSaveAccountInfoListener parseAndSaveAccountInfoListener) {
+    public static void parseAndSaveAccountInfo(String response, RedditDataRoomDatabase redditDataRoomDatabase,
+                                               ParseAndSaveAccountInfoListener parseAndSaveAccountInfoListener) {
         new ParseAndSaveAccountInfoAsyncTask(response, redditDataRoomDatabase, parseAndSaveAccountInfoListener).execute();
     }
 

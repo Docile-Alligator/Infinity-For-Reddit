@@ -45,31 +45,31 @@ public class SubredditListingViewModel extends ViewModel {
         });
     }
 
-    LiveData<PagedList<SubredditData>> getSubreddits() {
+    public LiveData<PagedList<SubredditData>> getSubreddits() {
         return subreddits;
     }
 
-    LiveData<NetworkState> getPaginationNetworkState() {
+    public LiveData<NetworkState> getPaginationNetworkState() {
         return paginationNetworkState;
     }
 
-    LiveData<NetworkState> getInitialLoadingState() {
+    public LiveData<NetworkState> getInitialLoadingState() {
         return initialLoadingState;
     }
 
-    LiveData<Boolean> hasSubredditLiveData() {
+    public LiveData<Boolean> hasSubredditLiveData() {
         return hasSubredditLiveData;
     }
 
-    void refresh() {
+    public void refresh() {
         subredditListingDataSourceFactory.getSubredditListingDataSource().invalidate();
     }
 
-    void retryLoadingMore() {
+    public void retryLoadingMore() {
         subredditListingDataSourceFactory.getSubredditListingDataSource().retryLoadingMore();
     }
 
-    void changeSortType(String sortType) {
+    public void changeSortType(String sortType) {
         sortTypeLiveData.postValue(sortType);
     }
 

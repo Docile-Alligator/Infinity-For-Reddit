@@ -10,14 +10,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-class ReadMessage {
-    interface ReadMessageListener {
+public class ReadMessage {
+    public interface ReadMessageListener {
         void readSuccess();
         void readFailed();
     }
 
-    static void readMessage(Retrofit oauthRetrofit, String accessToken, String commaSeparatedFullnames,
-                            ReadMessageListener readMessageListener) {
+    public static void readMessage(Retrofit oauthRetrofit, String accessToken, String commaSeparatedFullnames,
+                                   ReadMessageListener readMessageListener) {
         Map<String, String> params = new HashMap<>();
         params.put(RedditUtils.ID_KEY, commaSeparatedFullnames);
         oauthRetrofit.create(RedditAPI.class).readMessage(RedditUtils.getOAuthHeader(accessToken), params)

@@ -19,17 +19,17 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-class FetchMessages {
+public class FetchMessages {
 
     interface FetchMessagesListener {
         void fetchSuccess(ArrayList<Message> messages, @Nullable String after);
         void fetchFailed();
     }
 
-    static final String WHERE_INBOX = "inbox";
-    static final String WHERE_UNREAD = "unread";
-    static final String WHERE_SENT = "sent";
-    static final String WHERE_COMMENTS = "comments";
+    public static final String WHERE_INBOX = "inbox";
+    public static final String WHERE_UNREAD = "unread";
+    public static final String WHERE_SENT = "sent";
+    public static final String WHERE_COMMENTS = "comments";
 
     static void fetchMessagesAsync(Retrofit oauthRetrofit, Locale locale, String accessToken, String where,
                                    String after, FetchMessagesListener fetchMessagesListener) {

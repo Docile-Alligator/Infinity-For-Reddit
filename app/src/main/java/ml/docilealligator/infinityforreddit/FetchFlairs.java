@@ -14,13 +14,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-class FetchFlairs {
-    interface FetchFlairsInSubredditListener {
+public class FetchFlairs {
+    public interface FetchFlairsInSubredditListener {
         void fetchSuccessful(ArrayList<Flair> flairs);
         void fetchFailed();
     }
 
-    static void fetchFlairsInSubreddit(Retrofit oauthRetrofit, String accessToken, String subredditName, FetchFlairsInSubredditListener fetchFlairsInSubredditListener) {
+    public static void fetchFlairsInSubreddit(Retrofit oauthRetrofit, String accessToken, String subredditName, FetchFlairsInSubredditListener fetchFlairsInSubredditListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
         Call<String> flairsCall = api.getFlairs(RedditUtils.getOAuthHeader(accessToken), subredditName);

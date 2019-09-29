@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/parent_relative_layout_view_image_activity"
     android:background="@android:color/black"
-    tools:application="ml.docilealligator.infinityforreddit.ViewImageActivity">
+    tools:application="ml.docilealligator.infinityforreddit.Activity.ViewImageActivity">
 
     <ProgressBar
         android:id="@+id/progress_bar_view_image_activity"

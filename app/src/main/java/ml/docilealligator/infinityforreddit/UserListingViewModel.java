@@ -45,31 +45,31 @@ public class UserListingViewModel extends ViewModel {
         });
     }
 
-    LiveData<PagedList<UserData>> getUsers() {
+    public LiveData<PagedList<UserData>> getUsers() {
         return users;
     }
 
-    LiveData<NetworkState> getPaginationNetworkState() {
+    public LiveData<NetworkState> getPaginationNetworkState() {
         return paginationNetworkState;
     }
 
-    LiveData<NetworkState> getInitialLoadingState() {
+    public LiveData<NetworkState> getInitialLoadingState() {
         return initialLoadingState;
     }
 
-    LiveData<Boolean> hasUser() {
+    public LiveData<Boolean> hasUser() {
         return hasUserLiveData;
     }
 
-    void refresh() {
+    public void refresh() {
         userListingDataSourceFactory.getUserListingDataSource().invalidate();
     }
 
-    void retryLoadingMore() {
+    public void retryLoadingMore() {
         userListingDataSourceFactory.getUserListingDataSource().retryLoadingMore();
     }
 
-    void changeSortType(String sortType) {
+    public void changeSortType(String sortType) {
         sortTypeLiveData.postValue(sortType);
     }
 

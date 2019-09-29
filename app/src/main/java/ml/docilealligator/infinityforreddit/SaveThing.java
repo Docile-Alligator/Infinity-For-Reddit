@@ -10,14 +10,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-class SaveThing {
-    interface SaveThingListener {
+public class SaveThing {
+    public interface SaveThingListener {
         void success();
         void failed();
     }
 
-    static void saveThing(Retrofit oauthRetrofit, String accessToken, String fullname,
-                          SaveThingListener saveThingListener) {
+    public static void saveThing(Retrofit oauthRetrofit, String accessToken, String fullname,
+                                 SaveThingListener saveThingListener) {
         Map<String, String> params = new HashMap<>();
         params.put(RedditUtils.ID_KEY, fullname);
         oauthRetrofit.create(RedditAPI.class).save(RedditUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<String>() {
@@ -37,8 +37,8 @@ class SaveThing {
         });
     }
 
-    static void unsaveThing(Retrofit oauthRetrofit, String accessToken, String fullname,
-                          SaveThingListener saveThingListener) {
+    public static void unsaveThing(Retrofit oauthRetrofit, String accessToken, String fullname,
+                                   SaveThingListener saveThingListener) {
         Map<String, String> params = new HashMap<>();
         params.put(RedditUtils.ID_KEY, fullname);
         oauthRetrofit.create(RedditAPI.class).unsave(RedditUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<String>() {

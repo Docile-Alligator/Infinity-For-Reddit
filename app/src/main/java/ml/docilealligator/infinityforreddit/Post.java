@@ -7,14 +7,14 @@ import android.os.Parcelable;
  * Created by alex on 3/1/18.
  */
 
-class Post implements Parcelable {
-    static final int NSFW_TYPE = -1;
-    static final int TEXT_TYPE = 0;
-    static final int IMAGE_TYPE = 1;
-    static final int LINK_TYPE = 2;
-    static final int VIDEO_TYPE = 3;
-    static final int GIF_VIDEO_TYPE = 4;
-    static final int NO_PREVIEW_LINK_TYPE = 5;
+public class Post implements Parcelable {
+    public static final int NSFW_TYPE = -1;
+    public static final int TEXT_TYPE = 0;
+    public static final int IMAGE_TYPE = 1;
+    public static final int LINK_TYPE = 2;
+    public static final int VIDEO_TYPE = 3;
+    public static final int GIF_VIDEO_TYPE = 4;
+    public static final int NO_PREVIEW_LINK_TYPE = 5;
 
     private String id;
     private String fullName;
@@ -49,7 +49,7 @@ class Post implements Parcelable {
     private boolean isCrosspost;
     private String crosspostParentId;
 
-    Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
+    public Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
          String postTime, String title, String previewUrl, String permalink, int score, int postType,
          int voteType, int gilded, int nComments, String flair, boolean hidden, boolean spoiler,
          boolean nsfw, boolean stickied, boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
@@ -79,7 +79,7 @@ class Post implements Parcelable {
         this.isCrosspost = isCrosspost;
     }
 
-    Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
+    public Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
          String postTime, String title, String previewUrl, String url, String permalink, int score,
          int postType, int voteType, int gilded, int nComments, String flair, boolean hidden,
          boolean spoiler, boolean nsfw, boolean stickied, boolean archived, boolean locked,
@@ -111,7 +111,7 @@ class Post implements Parcelable {
         this.isCrosspost = isCrosspost;
     }
 
-    Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
+    public Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
          String postTime, String title, String permalink, int score, int postType, int voteType, int gilded,
          int nComments, String flair, boolean hidden, boolean spoiler, boolean nsfw, boolean stickied,
          boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
@@ -191,43 +191,43 @@ class Post implements Parcelable {
         return id;
     }
 
-    String getFullName() {
+    public String getFullName() {
         return fullName;
     }
 
-    String getSubredditName() {
+    public String getSubredditName() {
         return subredditName;
     }
 
-    String getSubredditNamePrefixed() {
+    public String getSubredditNamePrefixed() {
         return subredditNamePrefixed;
     }
 
-    String getSubredditIconUrl() {
+    public String getSubredditIconUrl() {
         return subredditIconUrl;
     }
 
-    void setSubredditIconUrl(String subredditIconUrl) {
+    public void setSubredditIconUrl(String subredditIconUrl) {
         this.subredditIconUrl = subredditIconUrl;
     }
 
-    String getAuthor() {
+    public String getAuthor() {
         return author;
     }
 
-    String getAuthorNamePrefixed() {
+    public String getAuthorNamePrefixed() {
         return authorNamePrefixed;
     }
 
-    String getAuthorIconUrl() {
+    public String getAuthorIconUrl() {
         return authorIconUrl;
     }
 
-    void setAuthorIconUrl(String authorIconUrl) {
+    public void setAuthorIconUrl(String authorIconUrl) {
         this.authorIconUrl = authorIconUrl;
     }
 
-    String getPostTime() {
+    public String getPostTime() {
         return postTime;
     }
 
@@ -239,31 +239,31 @@ class Post implements Parcelable {
         return title;
     }
 
-    void setSelfText(String selfText) {
+    public void setSelfText(String selfText) {
         this.selfText = selfText;
     }
 
-    String getSelfText() {
+    public String getSelfText() {
         return selfText;
     }
 
-    String getPreviewUrl() {
+    public String getPreviewUrl() {
         return previewUrl;
     }
 
-    String getUrl() {
+    public String getUrl() {
         return url;
     }
 
-    void setVideoUrl(String videoUrl) {
+    public void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
     }
 
-    String getVideoUrl() {
+    public String getVideoUrl() {
         return videoUrl;
     }
 
-    String getPermalink() {
+    public String getPermalink() {
         return permalink;
     }
 
@@ -271,47 +271,47 @@ class Post implements Parcelable {
         return flair;
     }
 
-    void setFlair(String flair) {
+    public void setFlair(String flair) {
         this.flair = flair;
     }
 
-    void setScore(int score) {
+    public void setScore(int score) {
         this.score = score;
     }
 
-    int getScore() {
+    public int getScore() {
         return score;
     }
 
-    int getPostType() {
+    public int getPostType() {
         return postType;
     }
 
-    void setVoteType(int voteType) {
+    public void setVoteType(int voteType) {
         this.voteType = voteType;
     }
 
-    int getVoteType() {
+    public int getVoteType() {
         return voteType;
     }
 
-    int getGilded() {
+    public int getGilded() {
         return gilded;
     }
 
-    void setPreviewWidth(int previewWidth) {
+    public void setPreviewWidth(int previewWidth) {
         this.previewWidth = previewWidth;
     }
 
-    int getPreviewWidth() {
+    public int getPreviewWidth() {
         return previewWidth;
     }
 
-    void setPreviewHeight(int previewHeight) {
+    public void setPreviewHeight(int previewHeight) {
         this.previewHeight = previewHeight;
     }
 
-    int getPreviewHeight() {
+    public int getPreviewHeight() {
         return previewHeight;
     }
 
@@ -323,27 +323,27 @@ class Post implements Parcelable {
         this.nComments = nComments;
     }
 
-    boolean isHidden() {
+    public boolean isHidden() {
         return hidden;
     }
 
-    void setHidden(boolean hidden) {
+    public void setHidden(boolean hidden) {
         this.hidden = hidden;
     }
 
-    boolean isSpoiler() {
+    public boolean isSpoiler() {
         return spoiler;
     }
 
-    void setSpoiler(boolean spoiler) {
+    public void setSpoiler(boolean spoiler) {
         this.spoiler = spoiler;
     }
 
-    boolean isNSFW() {
+    public boolean isNSFW() {
         return nsfw;
     }
 
-    void setNSFW(boolean nsfw) {
+    public void setNSFW(boolean nsfw) {
         this.nsfw = nsfw;
     }
 
@@ -352,27 +352,27 @@ class Post implements Parcelable {
         return 0;
     }
 
-    boolean isStickied() {
+    public boolean isStickied() {
         return stickied;
     }
 
-    boolean isArchived() {
+    public boolean isArchived() {
         return archived;
     }
 
-    boolean isLocked() {
+    public boolean isLocked() {
         return locked;
     }
 
-    boolean isSaved() {
+    public boolean isSaved() {
         return saved;
     }
 
-    void setSaved(boolean saved) {
+    public void setSaved(boolean saved) {
         this.saved = saved;
     }
 
-    boolean isCrosspost() {
+    public boolean isCrosspost() {
         return isCrosspost;
     }
 

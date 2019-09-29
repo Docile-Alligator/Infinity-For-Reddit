@@ -1,19 +1,19 @@
 package ml.docilealligator.infinityforreddit;
 
-class Rule {
+public class Rule {
     private String shortName;
     private String descriptionHtml;
 
-    Rule(String shortName, String descriptionHtml) {
+    public Rule(String shortName, String descriptionHtml) {
         this.shortName = shortName;
         this.descriptionHtml = descriptionHtml;
     }
 
-    String getShortName() {
+    public String getShortName() {
         return shortName;
     }
 
-    String getDescriptionHtml() {
+    public String getDescriptionHtml() {
         return descriptionHtml;
     }
 }

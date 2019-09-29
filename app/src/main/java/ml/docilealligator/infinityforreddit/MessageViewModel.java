@@ -46,27 +46,27 @@ public class MessageViewModel extends ViewModel {
         });
     }
 
-    LiveData<PagedList<Message>> getMessages() {
+    public LiveData<PagedList<Message>> getMessages() {
         return messages;
     }
 
-    LiveData<NetworkState> getPaginationNetworkState() {
+    public LiveData<NetworkState> getPaginationNetworkState() {
         return paginationNetworkState;
     }
 
-    LiveData<NetworkState> getInitialLoadingState() {
+    public LiveData<NetworkState> getInitialLoadingState() {
         return initialLoadingState;
     }
 
-    LiveData<Boolean> hasMessage() {
+    public LiveData<Boolean> hasMessage() {
         return hasMessageLiveData;
     }
 
-    void refresh() {
+    public void refresh() {
         messageDataSourceFactory.getMessageDataSource().invalidate();
     }
 
-    void retryLoadingMore() {
+    public void retryLoadingMore() {
         messageDataSourceFactory.getMessageDataSource().retryLoadingMore();
     }
 

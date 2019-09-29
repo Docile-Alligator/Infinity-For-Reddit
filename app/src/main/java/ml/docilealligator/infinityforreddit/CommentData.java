@@ -5,10 +5,10 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
-class CommentData implements Parcelable {
-    static final int VOTE_TYPE_NO_VOTE = 0;
-    static final int VOTE_TYPE_UPVOTE = 1;
-    static final int VOTE_TYPE_DOWNVOTE = -1;
+public class CommentData implements Parcelable {
+    public static final int VOTE_TYPE_NO_VOTE = 0;
+    public static final int VOTE_TYPE_UPVOTE = 1;
+    public static final int VOTE_TYPE_DOWNVOTE = -1;
 
     private String id;
     private String fullName;
@@ -38,7 +38,7 @@ class CommentData implements Parcelable {
     private boolean isLoadingMoreChildren;
     private boolean loadMoreChildrenFailed;
 
-    CommentData(String id, String fullName, String author, String linkAuthor, String commentTime,
+    public CommentData(String id, String fullName, String author, String linkAuthor, String commentTime,
                 String commentContent, String linkId, String subredditName, String parentId, int score,
                 int voteType, boolean isSubmitter, String distinguished, String permalink,
                 int depth, boolean collapsed, boolean hasReply, boolean scoreHidden, boolean saved) {
@@ -66,7 +66,7 @@ class CommentData implements Parcelable {
         isPlaceHolder = false;
     }
 
-    CommentData(String parentFullName, int depth) {
+    public CommentData(String parentFullName, int depth) {
         this.fullName = parentFullName;
         this.depth = depth;
         isPlaceHolder = true;

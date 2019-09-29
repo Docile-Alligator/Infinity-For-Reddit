@@ -1,6 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
-class NetworkState {
+public class NetworkState {
     public enum Status{
         LOADING,
         SUCCESS,

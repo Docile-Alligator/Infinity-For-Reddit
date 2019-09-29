@@ -8,7 +8,7 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import org.greenrobot.eventbus.EventBus;
 
-import ml.docilealligator.infinityforreddit.ChangeFontSizeEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeFontSizeEvent;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
 

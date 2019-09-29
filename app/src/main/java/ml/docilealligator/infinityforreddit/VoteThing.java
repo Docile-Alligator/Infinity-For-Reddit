@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import java.util.HashMap;
@@ -15,21 +13,21 @@ import retrofit2.Retrofit;
  * Created by alex on 3/14/18.
  */
 
-class VoteThing {
+public class VoteThing {
 
-    interface VoteThingListener {
+    public interface VoteThingListener {
         void onVoteThingSuccess(int position);
         void onVoteThingFail(int position);
     }
 
-    interface VoteThingWithoutPositionListener {
+    public interface VoteThingWithoutPositionListener {
         void onVoteThingSuccess();
         void onVoteThingFail();
     }
 
-    static void voteThing(final Retrofit retrofit, String accessToken,
-                          final VoteThingListener voteThingListener, final String fullName,
-                          final String point, final int position) {
+    public static void voteThing(final Retrofit retrofit, String accessToken,
+                                 final VoteThingListener voteThingListener, final String fullName,
+                                 final String point, final int position) {
             RedditAPI api = retrofit.create(RedditAPI.class);
 
             Map<String, String> params = new HashMap<>();
@@ -55,7 +53,7 @@ class VoteThing {
             });
     }
 
-    static void voteThing(final Retrofit retrofit, String accessToken,
+    public static void voteThing(final Retrofit retrofit, String accessToken,
                           final VoteThingWithoutPositionListener voteThingWithoutPositionListener,
                           final String fullName, final String point) {
             RedditAPI api = retrofit.create(RedditAPI.class);

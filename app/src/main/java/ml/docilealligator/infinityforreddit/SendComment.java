@@ -12,16 +12,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-class SendComment {
+public class SendComment {
 
-    interface SendCommentListener {
+    public interface SendCommentListener {
         void sendCommentSuccess(CommentData commentData);
         void sendCommentFailed(String errorMessage);
     }
 
-    static void sendComment(String commentMarkdown, String thingFullname, int parentDepth,
-                            Locale locale, Retrofit oauthRetrofit, String accessToken,
-                            SendCommentListener sendCommentListener) {
+    public static void sendComment(String commentMarkdown, String thingFullname, int parentDepth,
+                                   Locale locale, Retrofit oauthRetrofit, String accessToken,
+                                   SendCommentListener sendCommentListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
         Map<String, String> headers = RedditUtils.getOAuthHeader(accessToken);
         Map<String, String> params = new HashMap<>();

@@ -30,21 +30,24 @@ import java.io.IOException;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import ml.docilealligator.infinityforreddit.Event.SubmitImagePostEvent;
+import ml.docilealligator.infinityforreddit.Event.SubmitTextOrLinkPostEvent;
+import ml.docilealligator.infinityforreddit.Event.SubmitVideoPostEvent;
 import retrofit2.Retrofit;
 
 public class SubmitPostService extends Service {
-    static final String EXTRA_ACCESS_TOKEN = "EAT";
-    static final String EXTRA_SUBREDDIT_NAME = "ESN";
-    static final String EXTRA_TITLE = "ET";
-    static final String EXTRA_CONTENT = "EC";
-    static final String EXTRA_KIND = "EK";
-    static final String EXTRA_FLAIR = "EF";
-    static final String EXTRA_IS_SPOILER = "EIS";
-    static final String EXTRA_IS_NSFW = "EIN";
-    static final String EXTRA_POST_TYPE = "EPT";
-    static final int EXTRA_POST_TEXT_OR_LINK = 0;
-    static final int EXTRA_POST_TYPE_IMAGE = 1;
-    static final int EXTRA_POST_TYPE_VIDEO = 2;
+    public static final String EXTRA_ACCESS_TOKEN = "EAT";
+    public static final String EXTRA_SUBREDDIT_NAME = "ESN";
+    public static final String EXTRA_TITLE = "ET";
+    public static final String EXTRA_CONTENT = "EC";
+    public static final String EXTRA_KIND = "EK";
+    public static final String EXTRA_FLAIR = "EF";
+    public static final String EXTRA_IS_SPOILER = "EIS";
+    public static final String EXTRA_IS_NSFW = "EIN";
+    public static final String EXTRA_POST_TYPE = "EPT";
+    public static final int EXTRA_POST_TEXT_OR_LINK = 0;
+    public static final int EXTRA_POST_TYPE_IMAGE = 1;
+    public static final int EXTRA_POST_TYPE_VIDEO = 2;
 
     private String mAccessToken;
     private String subredditName;
