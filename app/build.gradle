@@ -42,7 +42,6 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.google.android.exoplayer:exoplayer:2.10.4'
-    implementation 'com.google.android.exoplayer:exoplayer-dash:2.10.4'
     implementation 'androidx.browser:browser:1.0.0'
     implementation 'com.alexvasilkov:gesture-views:2.5.2'
     implementation 'androidx.cardview:cardview:1.0.0'
