@@ -48,30 +48,32 @@ public class PostTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
 
         Activity activity = getActivity();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-                && (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
-            rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        if (activity != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+                    && (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+                rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+            }
+
+            textTypeLinearLayout.setOnClickListener(view -> {
+                ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_TEXT);
+                dismiss();
+            });
+
+            linkTypeLinearLayout.setOnClickListener(view -> {
+                ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_LINK);
+                dismiss();
+            });
+
+            imageTypeLinearLayout.setOnClickListener(view -> {
+                ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_IMAGE);
+                dismiss();
+            });
+
+            videoTypeLinearLayout.setOnClickListener(view -> {
+                ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_VIDEO);
+                dismiss();
+            });
         }
-
-        textTypeLinearLayout.setOnClickListener(view -> {
-            ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_TEXT);
-            dismiss();
-        });
-
-        linkTypeLinearLayout.setOnClickListener(view -> {
-            ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_LINK);
-            dismiss();
-        });
-
-        imageTypeLinearLayout.setOnClickListener(view -> {
-            ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_IMAGE);
-            dismiss();
-        });
-
-        videoTypeLinearLayout.setOnClickListener(view -> {
-            ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_VIDEO);
-            dismiss();
-        });
 
         return rootView;
     }

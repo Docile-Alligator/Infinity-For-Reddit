@@ -12,8 +12,6 @@
 
     <color name="colorPrimaryDarkDayNightTheme">@color/colorPrimaryDark</color>
 
-    <color name="circularProgressBarBackground">#FFFFFF</color>
-
     <color name="dividerColor">#E0E0E0</color>
 
     <color name="grey">#E0E0E0</color>
@@ -70,7 +68,7 @@
     <color name="commentVerticalBar6">#02EE6E</color>
     <color name="commentVerticalBar7">#EE4602</color>
 
-    <color name="greyTabBackgroundColor">@color/colorPrimary</color>
+    <color name="toolbarAndTabBackgroundColor">@color/colorPrimary</color>
 
     <color name="submitter">#EE8A02</color>
 

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/cardViewBackgroundColor">
+    android:background="?attr/cardViewBackgroundColor">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/relative_layout_item_post_detail"

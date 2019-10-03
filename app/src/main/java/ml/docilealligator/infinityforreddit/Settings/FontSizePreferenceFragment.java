@@ -8,7 +8,7 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import org.greenrobot.eventbus.EventBus;
 
-import ml.docilealligator.infinityforreddit.Event.ChangeFontSizeEvent;
+import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
 
@@ -25,7 +25,7 @@ public class FontSizePreferenceFragment extends PreferenceFragmentCompat {
 
             if (fontSizePreference != null) {
                 fontSizePreference.setOnPreferenceChangeListener((preference, newValue) -> {
-                    EventBus.getDefault().post(new ChangeFontSizeEvent());
+                    EventBus.getDefault().post(new RecreateActivityEvent());
                     activity.recreate();
                     return true;
                 });
@@ -33,14 +33,14 @@ public class FontSizePreferenceFragment extends PreferenceFragmentCompat {
 
             if (titleFontSizePreference != null) {
                 titleFontSizePreference.setOnPreferenceChangeListener((preference, newValue) -> {
-                    EventBus.getDefault().post(new ChangeFontSizeEvent());
+                    EventBus.getDefault().post(new RecreateActivityEvent());
                     return true;
                 });
             }
 
             if (contentFontSizePreference != null) {
                 contentFontSizePreference.setOnPreferenceChangeListener((preference, newValue) -> {
-                    EventBus.getDefault().post(new ChangeFontSizeEvent());
+                    EventBus.getDefault().post(new RecreateActivityEvent());
                     return true;
                 });
             }

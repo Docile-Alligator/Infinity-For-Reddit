@@ -3,15 +3,11 @@ package ml.docilealligator.infinityforreddit.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,11 +15,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -41,23 +34,14 @@ import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CommentData;
-import ml.docilealligator.infinityforreddit.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.FontStyle;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SendComment;
-import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.TitleFontStyle;
 import retrofit2.Retrofit;
 
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
-
-public class CommentActivity extends AppCompatActivity {
+public class CommentActivity extends BaseActivity {
 
     public static final String EXTRA_COMMENT_PARENT_TEXT_KEY = "ECPTK";
     public static final String EXTRA_PARENT_FULLNAME_KEY = "EPFK";
@@ -94,50 +78,15 @@ public class CommentActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
-        getTheme().applyStyle(FontStyle.valueOf(mSharedPreferences
-                .getString(SharedPreferencesUtils.FONT_SIZE_KEY, FontStyle.Normal.name())).getResId(), true);
-
-        getTheme().applyStyle(TitleFontStyle.valueOf(mSharedPreferences
-                .getString(SharedPreferencesUtils.TITLE_FONT_SIZE_KEY, TitleFontStyle.Normal.name())).getResId(), true);
-
-        getTheme().applyStyle(ContentFontStyle.valueOf(mSharedPreferences
-                .getString(SharedPreferencesUtils.CONTENT_FONT_SIZE_KEY, ContentFontStyle.Normal.name())).getResId(), true);
+        super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_comment);
 
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Window window = getWindow();
-            if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
-                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-            }
-            window.setNavigationBarColor(ContextCompat.getColor(this, R.color.navBarColor));
-        }
-
-        boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
-        int themeType = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
-        switch (themeType) {
-            case 0:
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                break;
-            case 1:
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                break;
-            case 2:
-                if (systemDefault) {
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
-                } else {
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
-                }
-
-        }
 
         if (savedInstanceState == null) {
             getCurrentAccount();
@@ -184,6 +133,11 @@ public class CommentActivity extends AppCompatActivity {
         if (imm != null) {
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
+    }
+
+    @Override
+    public SharedPreferences getSharedPreferences() {
+        return mSharedPreferences;
     }
 
     private void getCurrentAccount() {

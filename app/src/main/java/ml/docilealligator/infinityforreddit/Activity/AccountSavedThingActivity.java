@@ -13,8 +13,6 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -35,10 +33,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
-import ml.docilealligator.infinityforreddit.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.FontStyle;
 import ml.docilealligator.infinityforreddit.Fragment.CommentsListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
@@ -46,16 +42,9 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.TitleFontStyle;
 import retrofit2.Retrofit;
 
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
-
-public class AccountSavedThingActivity extends AppCompatActivity {
+public class AccountSavedThingActivity extends BaseActivity {
 
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
@@ -89,18 +78,9 @@ public class AccountSavedThingActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
-        getTheme().applyStyle(FontStyle.valueOf(mSharedPreferences
-                .getString(SharedPreferencesUtils.FONT_SIZE_KEY, FontStyle.Normal.name())).getResId(), true);
-
-        getTheme().applyStyle(TitleFontStyle.valueOf(mSharedPreferences
-                .getString(SharedPreferencesUtils.TITLE_FONT_SIZE_KEY, TitleFontStyle.Normal.name())).getResId(), true);
-
-        getTheme().applyStyle(ContentFontStyle.valueOf(mSharedPreferences
-                .getString(SharedPreferencesUtils.CONTENT_FONT_SIZE_KEY, ContentFontStyle.Normal.name())).getResId(), true);
+        super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_account_saved_thing);
 
@@ -149,24 +129,6 @@ public class AccountSavedThingActivity extends AppCompatActivity {
             }
         }
 
-        boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
-        int themeType = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
-        switch (themeType) {
-            case 0:
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                break;
-            case 1:
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                break;
-            case 2:
-                if (systemDefault) {
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
-                } else {
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
-                }
-
-        }
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -185,6 +147,11 @@ public class AccountSavedThingActivity extends AppCompatActivity {
         } else {
             getCurrentAccountAndInitializeViewPager();
         }
+    }
+
+    @Override
+    public SharedPreferences getSharedPreferences() {
+        return mSharedPreferences;
     }
 
     private void getCurrentAccountAndInitializeViewPager() {

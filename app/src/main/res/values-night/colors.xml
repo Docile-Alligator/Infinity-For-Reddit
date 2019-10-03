@@ -5,14 +5,12 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="transparentActionBarAndExoPlayerControllerColor">#88000000</color>
-    
+
     <color name="gold">#FFC107</color>
 
     <color name="primaryTextColor">#FFFFFF</color>
 
     <color name="colorPrimaryDarkDayNightTheme">#1E88E5</color>
-
-    <color name="circularProgressBarBackground">#242424</color>
 
     <color name="dividerColor">#69666C</color>
 
@@ -62,5 +60,5 @@
     <color name="commentVerticalBar6">#00B925</color>
     <color name="commentVerticalBar7">#EE4602</color>
 
-    <color name="greyTabBackgroundColor">#282828</color>
+    <color name="toolbarAndTabBackgroundColor">#282828</color>
 </resources>

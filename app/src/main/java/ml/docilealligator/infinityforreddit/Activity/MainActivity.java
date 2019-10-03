@@ -20,8 +20,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
@@ -68,13 +66,11 @@ import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubscribedThingsAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchToAnonymousAccountAsyncTask;
-import ml.docilealligator.infinityforreddit.ContentFontStyle;
-import ml.docilealligator.infinityforreddit.Event.ChangeFontSizeEvent;
+import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchMyInfo;
 import ml.docilealligator.infinityforreddit.FetchSubscribedThing;
-import ml.docilealligator.infinityforreddit.FontStyle;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SortTypeBottomSheetFragment;
@@ -90,16 +86,10 @@ import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
-import ml.docilealligator.infinityforreddit.TitleFontStyle;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
-
-public class MainActivity extends AppCompatActivity implements SortTypeBottomSheetFragment.SortTypeSelectionCallback,
+public class MainActivity extends BaseActivity implements SortTypeBottomSheetFragment.SortTypeSelectionCallback,
         PostTypeBottomSheetFragment.PostTypeSelectionCallback {
 
     static final String EXTRA_POST_TYPE = "EPT";
@@ -202,20 +192,11 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ((Infinity) getApplication()).getAppComponent().inject(this);
+
         setTheme(R.style.AppTheme_NoActionBarWithTransparentStatusBar);
 
         super.onCreate(savedInstanceState);
-
-        ((Infinity) getApplication()).getAppComponent().inject(this);
-
-        getTheme().applyStyle(FontStyle.valueOf(mSharedPreferences
-                .getString(SharedPreferencesUtils.FONT_SIZE_KEY, FontStyle.Normal.name())).getResId(), true);
-
-        getTheme().applyStyle(TitleFontStyle.valueOf(mSharedPreferences
-                .getString(SharedPreferencesUtils.TITLE_FONT_SIZE_KEY, TitleFontStyle.Normal.name())).getResId(), true);
-
-        getTheme().applyStyle(ContentFontStyle.valueOf(mSharedPreferences
-                .getString(SharedPreferencesUtils.CONTENT_FONT_SIZE_KEY, ContentFontStyle.Normal.name())).getResId(), true);
 
         setContentView(R.layout.activity_main);
 
@@ -273,24 +254,6 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
             }
         }
 
-        boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
-        int themeType = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
-        switch (themeType) {
-            case 0:
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                break;
-            case 1:
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                break;
-            case 2:
-                if (systemDefault) {
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
-                } else {
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
-                }
-
-        }
-
         postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
 
         bestSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
@@ -346,6 +309,11 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
 
             postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
         });
+    }
+
+    @Override
+    public SharedPreferences getSharedPreferences() {
+        return mSharedPreferences;
     }
 
     private void getCurrentAccountAndBindView() {
@@ -944,7 +912,7 @@ public class MainActivity extends AppCompatActivity implements SortTypeBottomShe
     }
 
     @Subscribe
-    public void onChangeFontSizeEvent(ChangeFontSizeEvent changeFontSizeEvent) {
+    public void onRecreateActivityEvent(RecreateActivityEvent recreateActivityEvent) {
         recreate();
     }
 

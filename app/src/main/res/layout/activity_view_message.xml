@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
     tools:context=".Activity.ViewMessageActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_view_message_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/toolbarAndTabBackgroundColor"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -45,7 +47,7 @@
             android:layout_marginBottom="16dp"
             app:mlpb_progress_stoke_width="3dp"
             app:mlpb_progress_color="@color/colorAccent"
-            app:mlpb_background_color="@color/circularProgressBarBackground" />
+            app:mlpb_background_color="?attr/circularProgressBarBackground" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_view_message_activity"

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.text.util.Linkify;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
     private Resources mResources;
     private NetworkState networkState;
     private RetryLoadingMoreCallback mRetryLoadingMoreCallback;
+    private int mMessageBackgroundColor;
 
     public MessageRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, String accessToken,
                                       RetryLoadingMoreCallback retryLoadingMoreCallback) {
@@ -81,6 +83,10 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 .build();
         mAccessToken = accessToken;
         mResources = context.getResources();
+
+        TypedValue typedValue = new TypedValue();
+        mContext.getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
+        mMessageBackgroundColor = typedValue.data;
     }
 
     @NonNull
@@ -126,7 +132,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                     }
 
                     if (message.isNew()) {
-                        ((DataViewHolder) holder).itemView.setBackgroundColor(mResources.getColor(R.color.backgroundColor));
+                        ((DataViewHolder) holder).itemView.setBackgroundColor(mMessageBackgroundColor);
                         message.setNew(false);
 
                         ReadMessage.readMessage(mOauthRetrofit, mAccessToken, message.getFullname(),
@@ -183,7 +189,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
         if (holder instanceof DataViewHolder) {
-            ((DataViewHolder) holder).itemView.setBackgroundColor(mResources.getColor(R.color.backgroundColor));
+            ((DataViewHolder) holder).itemView.setBackgroundColor(mMessageBackgroundColor);
             ((DataViewHolder) holder).titleTextView.setVisibility(View.VISIBLE);
             ((DataViewHolder) holder).authorTextView.setTextColor(mResources.getColor(R.color.primaryTextColor));
         }

@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.util.Linkify;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,6 +107,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private boolean isInitiallyLoadingFailed;
     private boolean mHasMoreComments;
     private boolean loadMoreCommentsFailed;
+    private int mCommentBackgroundColor;
 
     public CommentAndPostRecyclerViewAdapter(Activity activity, Retrofit retrofit, Retrofit oauthRetrofit,
                                              RedditDataRoomDatabase redditDataRoomDatabase, RequestManager glide,
@@ -152,6 +154,10 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         isInitiallyLoadingFailed = false;
         mHasMoreComments = false;
         loadMoreCommentsFailed = false;
+
+        TypedValue typedValue = new TypedValue();
+        mActivity.getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
+        mCommentBackgroundColor = typedValue.data;
     }
 
     @Override
@@ -1204,8 +1210,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             params.width = 0;
             ((CommentViewHolder) holder).verticalBlock.setLayoutParams(params);
             ((CommentViewHolder) holder).itemView.setPadding(0, 0, 0, 0);
-            ((CommentViewHolder) holder).itemView.setBackgroundColor(
-                    mActivity.getResources().getColor(R.color.cardViewBackgroundColor));
+            ((CommentViewHolder) holder).itemView.setBackgroundColor(mCommentBackgroundColor);
         } else if (holder instanceof PostDetailViewHolder) {
             ((PostDetailViewHolder) holder).mUpvoteButton.clearColorFilter();
             ((PostDetailViewHolder) holder).mScoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));

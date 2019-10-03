@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/cardViewBackgroundColor">
+    android:background="?attr/cardViewBackgroundColor">
 
     <View
         android:id="@+id/vertical_block_item_load_more_comments"

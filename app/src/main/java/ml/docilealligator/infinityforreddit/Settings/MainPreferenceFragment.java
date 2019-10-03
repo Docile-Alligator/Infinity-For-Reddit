@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.Settings;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -18,6 +19,7 @@ import javax.inject.Inject;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
+import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
@@ -43,10 +45,21 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
         if (activity != null) {
             ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
+            SwitchPreference amoledDarkSwitch = findPreference(SharedPreferencesUtils.AMOLED_DARK_KEY);
             SwitchPreference nsfwSwitch = findPreference(SharedPreferencesUtils.NSFW_KEY);
             SwitchPreference blurNSFWSwitch = findPreference(SharedPreferencesUtils.BLUR_NSFW_KEY);
             SwitchPreference blurSpoilerSwitch = findPreference(SharedPreferencesUtils.BLUR_SPOILER_KEY);
             ListPreference themePreference = findPreference(SharedPreferencesUtils.THEME_KEY);
+
+            if(amoledDarkSwitch != null) {
+                amoledDarkSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                    if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_NO) {
+                        EventBus.getDefault().post(new RecreateActivityEvent());
+                        activity.recreate();
+                    }
+                    return true;
+                });
+            }
 
             if (nsfwSwitch != null) {
                 nsfwSwitch.setOnPreferenceChangeListener((preference, newValue) -> {

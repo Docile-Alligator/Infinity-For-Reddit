@@ -4,23 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 
 import com.ferfalk.simplesearchview.SimpleSearchView;
 
@@ -31,20 +25,11 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.FontStyle;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.TitleFontStyle;
 
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
-
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends BaseActivity {
 
     static final String EXTRA_QUERY = "EQ";
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
@@ -75,18 +60,9 @@ public class SearchActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
-        getTheme().applyStyle(FontStyle.valueOf(mSharedPreferences
-                .getString(SharedPreferencesUtils.FONT_SIZE_KEY, FontStyle.Normal.name())).getResId(), true);
-
-        getTheme().applyStyle(TitleFontStyle.valueOf(mSharedPreferences
-                .getString(SharedPreferencesUtils.TITLE_FONT_SIZE_KEY, TitleFontStyle.Normal.name())).getResId(), true);
-
-        getTheme().applyStyle(ContentFontStyle.valueOf(mSharedPreferences
-                .getString(SharedPreferencesUtils.CONTENT_FONT_SIZE_KEY, ContentFontStyle.Normal.name())).getResId(), true);
+        super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_search);
 
@@ -94,35 +70,9 @@ public class SearchActivity extends AppCompatActivity {
 
         EventBus.getDefault().register(this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Window window = getWindow();
-            if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
-                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-            }
-            window.setNavigationBarColor(ContextCompat.getColor(this, R.color.navBarColor));
-        }
-
-        boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
-        int themeType = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
-        switch (themeType) {
-            case 0:
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                break;
-            case 1:
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                break;
-            case 2:
-                if (systemDefault) {
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
-                } else {
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
-                }
-
-        }
-
         setSupportActionBar(toolbar);
 
-        boolean searchOnlySubreddits = getIntent().getExtras().getBoolean(EXTRA_SEARCH_ONLY_SUBREDDITS);
+        boolean searchOnlySubreddits = getIntent().getBooleanExtra(EXTRA_SEARCH_ONLY_SUBREDDITS, false);
 
         simpleSearchView.setOnSearchViewListener(new SimpleSearchView.SearchViewListener() {
             @Override
@@ -209,6 +159,11 @@ public class SearchActivity extends AppCompatActivity {
             subredditNameTextView.setText(subredditName);
             subredditIsUser = intent.getExtras().getBoolean(EXTRA_SUBREDDIT_IS_USER);
         }
+    }
+
+    @Override
+    public SharedPreferences getSharedPreferences() {
+        return mSharedPreferences;
     }
 
     @Override

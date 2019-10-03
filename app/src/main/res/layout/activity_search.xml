@@ -4,11 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
     tools:application=".SearchActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/toolbarAndTabBackgroundColor"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <FrameLayout
@@ -34,7 +36,7 @@
                 app:hintColor="#E0E0E0"
                 app:iconsAlpha="1"
                 app:iconsTint="@android:color/white"
-                app:searchBackground="@color/colorPrimary"
+                app:searchBackground="?attr/colorPrimary"
                 app:voiceSearch="true" />
 
         </FrameLayout>

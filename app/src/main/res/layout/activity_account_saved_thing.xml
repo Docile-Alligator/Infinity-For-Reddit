@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
     tools:context=".Activity.AccountPostsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_account_saved_thing_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/toolbarAndTabBackgroundColor"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -35,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@color/greyTabBackgroundColor"
+            android:background="?attr/toolbarAndTabBackgroundColor"
             app:layout_scrollFlags="scroll|enterAlways"
             app:tabGravity="fill"
             app:tabIndicatorColor="@android:color/white"

@@ -5,12 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/coordinator_layout_view_subreddit_detail_activity"
+    android:background="?attr/backgroundColor"
     tools:application=".ViewSubredditDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_view_subreddit_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/toolbarAndTabBackgroundColor"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -50,7 +52,7 @@
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:layout_below="@id/banner_image_view_view_subreddit_detail_activity"
-                    android:background="@color/backgroundColor">
+                    android:background="?attr/backgroundColor">
 
                     <TextView
                         android:id="@+id/subreddit_name_text_view_view_subreddit_detail_activity"

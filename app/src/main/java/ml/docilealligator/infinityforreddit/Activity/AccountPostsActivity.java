@@ -13,8 +13,6 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
@@ -30,10 +28,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
-import ml.docilealligator.infinityforreddit.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.FontStyle;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.Fragment.UserThingSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
@@ -41,15 +37,8 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.TitleFontStyle;
 
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
-
-public class AccountPostsActivity extends AppCompatActivity implements UserThingSortTypeBottomSheetFragment.UserThingSortTypeSelectionCallback {
+public class AccountPostsActivity extends BaseActivity implements UserThingSortTypeBottomSheetFragment.UserThingSortTypeSelectionCallback {
 
     static final String EXTRA_USER_WHERE = "EUW";
 
@@ -80,18 +69,9 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
-        getTheme().applyStyle(FontStyle.valueOf(mSharedPreferences
-                .getString(SharedPreferencesUtils.FONT_SIZE_KEY, FontStyle.Normal.name())).getResId(), true);
-
-        getTheme().applyStyle(TitleFontStyle.valueOf(mSharedPreferences
-                .getString(SharedPreferencesUtils.TITLE_FONT_SIZE_KEY, TitleFontStyle.Normal.name())).getResId(), true);
-
-        getTheme().applyStyle(ContentFontStyle.valueOf(mSharedPreferences
-                .getString(SharedPreferencesUtils.CONTENT_FONT_SIZE_KEY, ContentFontStyle.Normal.name())).getResId(), true);
+        super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_account_posts);
 
@@ -140,24 +120,6 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
             }
         }
 
-        boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
-        int themeType = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
-        switch (themeType) {
-            case 0:
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                break;
-            case 1:
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                break;
-            case 2:
-                if (systemDefault) {
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
-                } else {
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
-                }
-
-        }
-
         mUserWhere = getIntent().getExtras().getString(EXTRA_USER_WHERE);
         if (mUserWhere.equals(PostDataSource.USER_WHERE_UPVOTED)) {
             toolbar.setTitle(R.string.upvoted);
@@ -188,6 +150,11 @@ public class AccountPostsActivity extends AppCompatActivity implements UserThing
         } else {
             getCurrentAccountAndInitializeFragment();
         }
+    }
+
+    @Override
+    public SharedPreferences getSharedPreferences() {
+        return mSharedPreferences;
     }
 
     private void getCurrentAccountAndInitializeFragment() {
