@@ -207,7 +207,11 @@ public class LinkResolverActivity extends AppCompatActivity {
 
         if (!packageNames.isEmpty()) {
             intent.setPackage(packageNames.get(0));
-            startActivity(intent);
+            try {
+                startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show();
+            }
         } else {
             Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show();
         }

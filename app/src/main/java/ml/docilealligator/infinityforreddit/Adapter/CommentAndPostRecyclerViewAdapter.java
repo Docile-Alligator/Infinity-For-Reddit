@@ -979,14 +979,12 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     }
 
     private int getParentPosition(int position) {
-        if (position >= mVisibleComments.size()) {
-            return -1;
-        }
-
-        int childDepth = mVisibleComments.get(position).getDepth();
-        for (int i = position; i >= 0; i--) {
-            if (mVisibleComments.get(i).getDepth() < childDepth) {
-                return i;
+        if (position < mVisibleComments.size()) {
+            int childDepth = mVisibleComments.get(position).getDepth();
+            for (int i = position; i >= 0; i--) {
+                if (mVisibleComments.get(i).getDepth() < childDepth) {
+                    return i;
+                }
             }
         }
         return -1;
@@ -1557,13 +1555,15 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             expandButton.setOnClickListener(view -> {
                 if (expandButton.getVisibility() == View.VISIBLE) {
                     int commentPosition = mIsSingleCommentThreadMode ? getAdapterPosition() - 2 : getAdapterPosition() - 1;
-                    if (mVisibleComments.get(commentPosition).isExpanded()) {
-                        collapseChildren(commentPosition);
-                        expandButton.setImageResource(R.drawable.ic_expand_more_black_20dp);
-                    } else {
-                        expandChildren(commentPosition);
-                        mVisibleComments.get(commentPosition).setExpanded(true);
-                        expandButton.setImageResource(R.drawable.ic_expand_less_black_20dp);
+                    if(commentPosition < mVisibleComments.size()) {
+                        if (mVisibleComments.get(commentPosition).isExpanded()) {
+                            collapseChildren(commentPosition);
+                            expandButton.setImageResource(R.drawable.ic_expand_more_black_20dp);
+                        } else {
+                            expandChildren(commentPosition);
+                            mVisibleComments.get(commentPosition).setExpanded(true);
+                            expandButton.setImageResource(R.drawable.ic_expand_less_black_20dp);
+                        }
                     }
                 }
             });

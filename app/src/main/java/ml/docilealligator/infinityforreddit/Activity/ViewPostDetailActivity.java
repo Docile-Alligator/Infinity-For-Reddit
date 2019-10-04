@@ -640,7 +640,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     }
 
     private void refresh(boolean fetchPost, boolean fetchComments) {
-        if (!isRefreshing) {
+        if (mAdapter != null && !isRefreshing) {
             isRefreshing = true;
             mChildrenStartingIndex = 0;
 
