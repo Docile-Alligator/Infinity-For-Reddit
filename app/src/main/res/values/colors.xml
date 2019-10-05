@@ -24,7 +24,7 @@
 
     <color name="roundedBottomSheetPrimaryBackground">#FFFFFF</color>
 
-    <color name="roundedBottomSheetPrimaryNavigationBarColor">@color/roundedBottomSheetPrimaryBackground</color>
+    <color name="roundedBottomSheetPrimaryNavigationBarColor">@android:color/black</color>
 
     <color name="upvoted">#E91E63</color>
 

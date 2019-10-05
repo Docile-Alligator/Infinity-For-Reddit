@@ -20,6 +20,12 @@
         app:key="amoled_dark"
         app:title="@string/settings_amoled_dark_title" />
 
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="immersive_interface"
+        app:title="@string/settings_immersive_interface_title"
+        app:isPreferenceVisible="false" />
+
     <ListPreference
         app:defaultValue="2.5"
         android:entries="@array/settings_lazy_mode_interval"

@@ -95,7 +95,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:gravity="center"
-                android:textSize="?attr/font_default"
+                android:textSize="?attr/font_12"
+                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/up_vote_button_item_post_comment"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>

@@ -48,6 +48,7 @@ import ml.docilealligator.infinityforreddit.MessageViewModel;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 public class ViewMessageActivity extends BaseActivity {
@@ -106,7 +107,8 @@ public class ViewMessageActivity extends BaseActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1
                 && (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
-                || resources.getBoolean(R.bool.isTablet))) {
+                || resources.getBoolean(R.bool.isTablet))
+                && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {
             Window window = getWindow();
             window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 

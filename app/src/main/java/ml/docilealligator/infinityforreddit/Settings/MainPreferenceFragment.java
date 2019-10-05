@@ -46,6 +46,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
             ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
             SwitchPreference amoledDarkSwitch = findPreference(SharedPreferencesUtils.AMOLED_DARK_KEY);
+            SwitchPreference immersiveInterfaceSwitch = findPreference(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY);
             SwitchPreference nsfwSwitch = findPreference(SharedPreferencesUtils.NSFW_KEY);
             SwitchPreference blurNSFWSwitch = findPreference(SharedPreferencesUtils.BLUR_NSFW_KEY);
             SwitchPreference blurSpoilerSwitch = findPreference(SharedPreferencesUtils.BLUR_SPOILER_KEY);
@@ -59,6 +60,18 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
                     }
                     return true;
                 });
+            }
+
+            if(immersiveInterfaceSwitch != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                    immersiveInterfaceSwitch.setVisible(true);
+                    immersiveInterfaceSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                        EventBus.getDefault().post(new RecreateActivityEvent());
+                        return true;
+                    });
+                } else {
+                    immersiveInterfaceSwitch.setVisible(false);
+                }
             }
 
             if (nsfwSwitch != null) {

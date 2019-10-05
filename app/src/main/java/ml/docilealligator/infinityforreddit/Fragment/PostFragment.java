@@ -157,7 +157,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         Resources resources = getResources();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1
+                && (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
+                || resources.getBoolean(R.bool.isTablet))
+                && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {
             if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
                 int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
                 if (navBarResourceId > 0) {

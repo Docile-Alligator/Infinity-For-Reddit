@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -66,8 +67,8 @@ import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubscribedThingsAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchToAnonymousAccountAsyncTask;
-import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
+import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchMyInfo;
 import ml.docilealligator.infinityforreddit.FetchSubscribedThing;
@@ -206,50 +207,61 @@ public class MainActivity extends BaseActivity implements SortTypeBottomSheetFra
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            Resources resources = getResources();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Window window = getWindow();
+            if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+            }
+            TypedValue typedValue = new TypedValue();
+            getTheme().resolveAttribute(R.attr.navBarColor, typedValue, true);
+            int navBarColor = typedValue.data;
+            window.setNavigationBarColor(navBarColor);
 
-            if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
-                Window window = getWindow();
-                window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+                Resources resources = getResources();
 
-                boolean lightNavBar = false;
-                if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
-                    lightNavBar = true;
-                }
-                boolean finalLightNavBar = lightNavBar;
+                if ((resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet))
+                        && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {
+                    window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
-                View decorView = window.getDecorView();
-                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
-                    @Override
-                    public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                        if (state == State.COLLAPSED) {
-                            if (finalLightNavBar) {
-                                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-                            }
-                        } else if (state == State.EXPANDED) {
-                            if (finalLightNavBar) {
-                                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                    boolean lightNavBar = false;
+                    if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+                        lightNavBar = true;
+                    }
+                    boolean finalLightNavBar = lightNavBar;
+
+                    View decorView = window.getDecorView();
+                    appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                        @Override
+                        public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                            if (state == State.COLLAPSED) {
+                                if (finalLightNavBar) {
+                                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                                }
+                            } else if (state == State.EXPANDED) {
+                                if (finalLightNavBar) {
+                                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                                }
                             }
                         }
+                    });
+
+                    int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+                    if (statusBarResourceId > 0) {
+                        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
+                        params.topMargin = resources.getDimensionPixelSize(statusBarResourceId);
+                        toolbar.setLayoutParams(params);
                     }
-                });
 
-                int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-                if (statusBarResourceId > 0) {
-                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
-                    params.topMargin = resources.getDimensionPixelSize(statusBarResourceId);
-                    toolbar.setLayoutParams(params);
-                }
+                    int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+                    if (navBarResourceId > 0) {
+                        int navBarHeight = resources.getDimensionPixelSize(navBarResourceId);
+                        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+                        params.bottomMargin = navBarHeight;
+                        fab.setLayoutParams(params);
 
-                int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-                if (navBarResourceId > 0) {
-                    int navBarHeight = resources.getDimensionPixelSize(navBarResourceId);
-                    CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
-                    params.bottomMargin = navBarHeight;
-                    fab.setLayoutParams(params);
-
-                    nestedScrollView.setPadding(0, 0, 0, navBarHeight);
+                        nestedScrollView.setPadding(0, 0, 0, navBarHeight);
+                    }
                 }
             }
         }

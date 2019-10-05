@@ -37,6 +37,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
 
 public class AccountPostsActivity extends BaseActivity implements UserThingSortTypeBottomSheetFragment.UserThingSortTypeSelectionCallback {
 
@@ -83,7 +84,8 @@ public class AccountPostsActivity extends BaseActivity implements UserThingSortT
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1
                 && (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
-                || resources.getBoolean(R.bool.isTablet))) {
+                || resources.getBoolean(R.bool.isTablet))
+                && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {
             Window window = getWindow();
             window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 

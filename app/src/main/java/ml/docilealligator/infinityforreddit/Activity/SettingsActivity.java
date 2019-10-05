@@ -1,13 +1,8 @@
 package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -45,7 +40,7 @@ public class SettingsActivity extends BaseActivity implements
 
         ButterKnife.bind(this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             Window window = getWindow();
             if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
                 window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
@@ -54,7 +49,7 @@ public class SettingsActivity extends BaseActivity implements
             getTheme().resolveAttribute(R.attr.navBarColor, typedValue, true);
             int navBarColor = typedValue.data;
             window.setNavigationBarColor(navBarColor);
-        }
+        }*/
 
         setSupportActionBar(toolbar);
 
