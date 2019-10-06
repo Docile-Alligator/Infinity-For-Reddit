@@ -149,25 +149,30 @@ public class LinkResolverActivity extends AppCompatActivity {
     }
 
     private void deepLinkError(Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(uri);
+
         PackageManager pm = getPackageManager();
-        ArrayList<ResolveInfo> resolveInfos = getCustomTabsPackages(pm);
-        if (!resolveInfos.isEmpty()) {
-            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-            // add share action to menu list
-            builder.addDefaultShareMenuItem();
-            builder.setToolbarColor(getResources().getColor(R.color.colorPrimary));
-            CustomTabsIntent customTabsIntent = builder.build();
-            customTabsIntent.intent.setPackage(resolveInfos.get(0).activityInfo.packageName);
-            if (uri.getScheme() == null) {
-                uri = Uri.parse("http://" + uri.toString());
+        List<ResolveInfo> activities = pm.queryIntentActivities(intent, 0);
+        ArrayList<String> packageNames = new ArrayList<>();
+
+        String currentPackageName = getApplicationContext().getPackageName();
+
+        for (ResolveInfo info : activities) {
+            if (!info.activityInfo.packageName.equals(currentPackageName)) {
+                packageNames.add(info.activityInfo.packageName);
             }
+        }
+
+        if (!packageNames.isEmpty()) {
+            intent.setPackage(packageNames.get(0));
             try {
-                customTabsIntent.launchUrl(this, uri);
+                startActivity(intent);
             } catch (ActivityNotFoundException e) {
-                openInBrowser(uri, pm);
+                openInCustomTabs(uri, pm);
             }
         } else {
-            openInBrowser(uri, pm);
+            openInCustomTabs(uri, pm);
         }
     }
 
@@ -190,25 +195,20 @@ public class LinkResolverActivity extends AppCompatActivity {
         return packagesSupportingCustomTabs;
     }
 
-    private void openInBrowser(Uri uri, PackageManager pm) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(uri);
-
-        List<ResolveInfo> activities = pm.queryIntentActivities(intent, 0);
-        ArrayList<String> packageNames = new ArrayList<>();
-
-        String currentPackageName = getApplicationContext().getPackageName();
-
-        for (ResolveInfo info : activities) {
-            if (!info.activityInfo.packageName.equals(currentPackageName)) {
-                packageNames.add(info.activityInfo.packageName);
+    private void openInCustomTabs(Uri uri, PackageManager pm) {
+        ArrayList<ResolveInfo> resolveInfos = getCustomTabsPackages(pm);
+        if (!resolveInfos.isEmpty()) {
+            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+            // add share action to menu list
+            builder.addDefaultShareMenuItem();
+            builder.setToolbarColor(getResources().getColor(R.color.colorPrimary));
+            CustomTabsIntent customTabsIntent = builder.build();
+            customTabsIntent.intent.setPackage(resolveInfos.get(0).activityInfo.packageName);
+            if (uri.getScheme() == null) {
+                uri = Uri.parse("http://" + uri.toString());
             }
-        }
-
-        if (!packageNames.isEmpty()) {
-            intent.setPackage(packageNames.get(0));
             try {
-                startActivity(intent);
+                customTabsIntent.launchUrl(this, uri);
             } catch (ActivityNotFoundException e) {
                 Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show();
             }
