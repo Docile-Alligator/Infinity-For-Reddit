@@ -90,6 +90,8 @@ public class ViewImageActivity extends AppCompatActivity {
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
+        getTheme().applyStyle(R.style.Theme_Default, true);
+
         getTheme().applyStyle(FontStyle.valueOf(mSharedPreferences
                 .getString(SharedPreferencesUtils.FONT_SIZE_KEY, FontStyle.Normal.name())).getResId(), true);
 

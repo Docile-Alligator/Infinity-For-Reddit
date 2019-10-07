@@ -74,6 +74,8 @@ public class ViewVideoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getTheme().applyStyle(R.style.Theme_Default, true);
+
         setContentView(R.layout.activity_view_video);
         ButterKnife.bind(this);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
