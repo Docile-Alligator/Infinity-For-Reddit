@@ -13,7 +13,7 @@ public class Post implements Parcelable {
     public static final int IMAGE_TYPE = 1;
     public static final int LINK_TYPE = 2;
     public static final int VIDEO_TYPE = 3;
-    public static final int GIF_VIDEO_TYPE = 4;
+    public static final int GIF_TYPE = 4;
     public static final int NO_PREVIEW_LINK_TYPE = 5;
     public static final Creator<Post> CREATOR = new Creator<Post>() {
         @Override

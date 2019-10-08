@@ -20,6 +20,10 @@ public class ParseUserData {
     }
 
     private static UserData parseUserDataBase(JSONObject userDataJson) throws JSONException {
+        if(userDataJson == null) {
+            return null;
+        }
+
         userDataJson = userDataJson.getJSONObject(JSONUtils.DATA_KEY);
         String userName = userDataJson.getString(JSONUtils.NAME_KEY);
         String iconImageUrl = userDataJson.getString(JSONUtils.ICON_IMG_KEY);

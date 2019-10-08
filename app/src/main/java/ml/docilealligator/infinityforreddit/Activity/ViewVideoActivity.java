@@ -50,7 +50,6 @@ import ml.docilealligator.infinityforreddit.R;
 
 public class ViewVideoActivity extends AppCompatActivity {
 
-    public static final String TITLE_KEY = "TK";
     public static final String SUBREDDIT_KEY = "SK";
     public static final String ID_KEY = "IK";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;

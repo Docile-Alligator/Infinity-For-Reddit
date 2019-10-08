@@ -148,11 +148,15 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeBotto
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
+
+            mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_filtered_posts_activity, mFragment).commit();
+
             if (!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndBindView(filter, sortType);
             } else {
-                mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_filtered_posts_activity, mFragment).commit();
+                /*mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_filtered_posts_activity, mFragment).commit();*/
                 bindView(filter, sortType, false);
             }
         } else {
@@ -236,7 +240,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeBotto
             case Post.VIDEO_TYPE:
                 toolbar.setSubtitle(R.string.video);
                 break;
-            case Post.GIF_VIDEO_TYPE:
+            case Post.GIF_TYPE:
                 toolbar.setSubtitle(R.string.gif);
         }
 
@@ -333,9 +337,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeBotto
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (mFragment != null) {
-            getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE, mFragment);
-        }
+        getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE, mFragment);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);

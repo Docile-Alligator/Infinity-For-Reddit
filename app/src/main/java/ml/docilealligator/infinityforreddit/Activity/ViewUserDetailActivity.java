@@ -279,9 +279,8 @@ public class ViewUserDetailActivity extends BaseActivity implements UserThingSor
                     glide.load(userData.getBanner()).into(bannerImageView);
                     bannerImageView.setOnClickListener(view -> {
                         Intent intent = new Intent(this, ViewImageActivity.class);
-                        intent.putExtra(ViewImageActivity.TITLE_KEY, title);
                         intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, userData.getBanner());
-                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, username + "-banner");
+                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, username + "-banner.jpg");
                         startActivity(intent);
                     });
                 }
@@ -302,9 +301,8 @@ public class ViewUserDetailActivity extends BaseActivity implements UserThingSor
 
                     iconGifImageView.setOnClickListener(view -> {
                         Intent intent = new Intent(this, ViewImageActivity.class);
-                        intent.putExtra(ViewImageActivity.TITLE_KEY, title);
                         intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, userData.getIconUrl());
-                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, username + "-icon");
+                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, username + "-icon.jpg");
                         startActivity(intent);
                     });
                 }

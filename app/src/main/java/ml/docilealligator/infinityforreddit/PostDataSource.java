@@ -164,7 +164,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         this.params = params;
         this.callback = callback;
 
-        if (params.key.equals("") || params.key.equals("null")) {
+        if ("".equals(params.key) || "null".equals(params.key)) {
             return;
         }
 

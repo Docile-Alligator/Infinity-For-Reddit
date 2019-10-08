@@ -165,7 +165,6 @@ public class LinkResolverActivity extends AppCompatActivity {
         }
 
         if (!packageNames.isEmpty()) {
-            intent.setPackage(packageNames.get(0));
             try {
                 startActivity(intent);
             } catch (ActivityNotFoundException e) {

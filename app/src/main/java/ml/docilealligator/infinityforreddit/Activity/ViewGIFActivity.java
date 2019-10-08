@@ -32,9 +32,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.alexvasilkov.gestures.GestureController;
-import com.alexvasilkov.gestures.State;
-import com.alexvasilkov.gestures.views.GestureImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -56,19 +53,20 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.TitleFontStyle;
+import pl.droidsonroids.gif.GifImageView;
 
-public class ViewImageActivity extends AppCompatActivity {
+public class ViewGIFActivity extends AppCompatActivity {
 
     public static final String IMAGE_URL_KEY = "IUK";
     public static final String FILE_NAME_KEY = "FNK";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
-    @BindView(R.id.parent_relative_layout_view_image_activity)
+    @BindView(R.id.parent_relative_layout_view_gif_activity)
     RelativeLayout mRelativeLayout;
-    @BindView(R.id.progress_bar_view_image_activity)
+    @BindView(R.id.progress_bar_view_gif_activity)
     ProgressBar mProgressBar;
-    @BindView(R.id.image_view_view_image_activity)
-    GestureImageView mImageView;
-    @BindView(R.id.load_image_error_linear_layout_view_image_activity)
+    @BindView(R.id.image_view_view_gif_activity)
+    GifImageView mImageView;
+    @BindView(R.id.load_image_error_linear_layout_view_gif_activity)
     LinearLayout mLoadErrorLinearLayout;
     @Inject
     SharedPreferences mSharedPreferences;
@@ -86,7 +84,6 @@ public class ViewImageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
         getTheme().applyStyle(R.style.Theme_Default, true);
@@ -100,7 +97,7 @@ public class ViewImageActivity extends AppCompatActivity {
         getTheme().applyStyle(ContentFontStyle.valueOf(mSharedPreferences
                 .getString(SharedPreferencesUtils.CONTENT_FONT_SIZE_KEY, ContentFontStyle.Normal.name())).getResId(), true);
 
-        setContentView(R.layout.activity_view_image);
+        setContentView(R.layout.activity_view_gif);
 
         ButterKnife.bind(this);
 
@@ -298,20 +295,6 @@ public class ViewImageActivity extends AppCompatActivity {
             }
         });
 
-        mImageView.getController().addOnStateChangeListener(new GestureController.OnStateChangeListener() {
-            @Override
-            public void onStateChanged(State state) {
-                zoom = state.getZoom();
-            }
-
-            @Override
-            public void onStateReset(State oldState, State newState) {
-
-            }
-        });
-
-        mImageView.getController().getSettings().setMaxZoom(10f).setDoubleTapZoom(2f).setPanEnabled(true);
-
         mImageView.setOnClickListener(view -> {
             if (isActionBarHidden) {
                 getWindow().getDecorView().setSystemUiVisibility(
@@ -352,7 +335,7 @@ public class ViewImageActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         mMenu = menu;
-        getMenuInflater().inflate(R.menu.view_image, menu);
+        getMenuInflater().inflate(R.menu.view_gif_activity, menu);
         return true;
     }
 
@@ -362,7 +345,7 @@ public class ViewImageActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.action_download_view_image:
+            case R.id.action_download_view_gif:
                 if (isDownloading) {
                     return false;
                 }

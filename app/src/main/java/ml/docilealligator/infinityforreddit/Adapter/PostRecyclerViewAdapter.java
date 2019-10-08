@@ -45,6 +45,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Activity.CommentActivity;
 import ml.docilealligator.infinityforreddit.Activity.FilteredThingActivity;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.Activity.ViewGIFActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewImageActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
@@ -146,7 +147,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         if (holder instanceof DataViewHolder) {
             Post post = getItem(position);
             if (post != null) {
-                final String id = post.getFullName();
+                final String fullName = post.getFullName();
+                final String id = post.getId();
                 final String subredditNamePrefixed = post.getSubredditNamePrefixed();
                 String subredditName = subredditNamePrefixed.substring(2);
                 String authorPrefixed = "u/" + post.getAuthor();
@@ -399,9 +401,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         ((DataViewHolder) holder).imageView.setOnClickListener(view -> {
                             Intent intent = new Intent(mContext, ViewImageActivity.class);
                             intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, imageUrl);
-                            intent.putExtra(ViewImageActivity.TITLE_KEY, title);
-                            intent.putExtra(ViewImageActivity.FILE_NAME_KEY, subredditNamePrefixed.substring(2)
-                                    + "-" + id.substring(3));
+                            intent.putExtra(ViewImageActivity.FILE_NAME_KEY, subredditName
+                                    + "-" + id + ".jpg");
                             mContext.startActivity(intent);
                         });
                         break;
@@ -423,16 +424,16 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             mContext.startActivity(intent);
                         });
                         break;
-                    case Post.GIF_VIDEO_TYPE:
+                    case Post.GIF_TYPE:
                         ((DataViewHolder) holder).typeTextView.setText(R.string.gif);
 
                         final Uri gifVideoUri = Uri.parse(post.getVideoUrl());
                         ((DataViewHolder) holder).imageView.setOnClickListener(view -> {
-                            Intent intent = new Intent(mContext, ViewVideoActivity.class);
+                            Intent intent = new Intent(mContext, ViewGIFActivity.class);
                             intent.setData(gifVideoUri);
-                            intent.putExtra(ViewVideoActivity.TITLE_KEY, title);
-                            intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, subredditName);
-                            intent.putExtra(ViewVideoActivity.ID_KEY, id);
+                            intent.putExtra(ViewGIFActivity.FILE_NAME_KEY, subredditName
+                                    + "-" + id + ".gif");
+                            intent.putExtra(ViewGIFActivity.IMAGE_URL_KEY, post.getVideoUrl());
                             mContext.startActivity(intent);
                         });
                         break;
@@ -443,9 +444,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         ((DataViewHolder) holder).imageView.setOnClickListener(view -> {
                             Intent intent = new Intent(mContext, ViewVideoActivity.class);
                             intent.setData(videoUri);
-                            intent.putExtra(ViewVideoActivity.TITLE_KEY, title);
                             intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, subredditName);
-                            intent.putExtra(ViewVideoActivity.ID_KEY, id);
+                            intent.putExtra(ViewVideoActivity.ID_KEY, fullName);
                             mContext.startActivity(intent);
                         });
                         break;
@@ -541,7 +541,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
-                    }, id, newVoteType, holder.getAdapterPosition());
+                    }, fullName, newVoteType, holder.getAdapterPosition());
                 });
 
                 ((DataViewHolder) holder).downvoteButton.setOnClickListener(view -> {
@@ -612,7 +612,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
-                    }, id, newVoteType, holder.getAdapterPosition());
+                    }, fullName, newVoteType, holder.getAdapterPosition());
                 });
 
                 ((DataViewHolder) holder).commentButton.setOnClickListener(view -> {

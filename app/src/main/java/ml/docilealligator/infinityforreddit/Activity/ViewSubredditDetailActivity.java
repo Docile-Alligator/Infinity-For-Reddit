@@ -203,12 +203,15 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             mMessageFullname = savedInstanceState.getString(MESSAGE_FULLNAME_STATE);
             mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
 
+            mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
+
             if (!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndBindView();
             } else {
                 bindView(false);
-                mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
+                /*mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();*/
             }
 
             if (mFetchSubredditInfoSuccess) {
@@ -258,9 +261,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     glide.load(subredditData.getBannerUrl()).into(bannerImageView);
                     bannerImageView.setOnClickListener(view -> {
                         Intent intent = new Intent(ViewSubredditDetailActivity.this, ViewImageActivity.class);
-                        intent.putExtra(ViewImageActivity.TITLE_KEY, title);
                         intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, subredditData.getBannerUrl());
-                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, subredditName + "-banner");
+                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, subredditName + "-banner.jpg");
                         startActivity(intent);
                     });
                 }
@@ -280,9 +282,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                             .into(iconGifImageView);
                     iconGifImageView.setOnClickListener(view -> {
                         Intent intent = new Intent(ViewSubredditDetailActivity.this, ViewImageActivity.class);
-                        intent.putExtra(ViewImageActivity.TITLE_KEY, title);
                         intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, subredditData.getIconUrl());
-                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, subredditName + "-icon");
+                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, subredditName + "-icon.jpg");
                         startActivity(intent);
                     });
                 }

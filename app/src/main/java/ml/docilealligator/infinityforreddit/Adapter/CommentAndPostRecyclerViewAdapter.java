@@ -53,6 +53,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Activity.CommentActivity;
 import ml.docilealligator.infinityforreddit.Activity.FilteredThingActivity;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.Activity.ViewGIFActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewImageActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
@@ -419,9 +420,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     ((PostDetailViewHolder) holder).mImageView.setOnClickListener(view -> {
                         Intent intent = new Intent(mActivity, ViewImageActivity.class);
                         intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, mPost.getUrl());
-                        intent.putExtra(ViewImageActivity.TITLE_KEY, mPost.getTitle());
                         intent.putExtra(ViewImageActivity.FILE_NAME_KEY, mPost.getSubredditNamePrefixed().substring(2)
-                                + "-" + mPost.getId().substring(3));
+                                + "-" + mPost.getId().substring(3) + ".jpg");
                         mActivity.startActivity(intent);
                     });
                     break;
@@ -443,16 +443,14 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         mActivity.startActivity(intent);
                     });
                     break;
-                case Post.GIF_VIDEO_TYPE:
+                case Post.GIF_TYPE:
                     ((PostDetailViewHolder) holder).mTypeTextView.setText("GIF");
 
-                    final Uri gifVideoUri = Uri.parse(mPost.getVideoUrl());
                     ((PostDetailViewHolder) holder).mImageView.setOnClickListener(view -> {
-                        Intent intent = new Intent(mActivity, ViewVideoActivity.class);
-                        intent.setData(gifVideoUri);
-                        intent.putExtra(ViewVideoActivity.TITLE_KEY, mPost.getTitle());
-                        intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, mPost.getSubredditName());
-                        intent.putExtra(ViewVideoActivity.ID_KEY, mPost.getId());
+                        Intent intent = new Intent(mActivity, ViewGIFActivity.class);
+                        intent.putExtra(ViewGIFActivity.FILE_NAME_KEY, mPost.getSubredditName()
+                                + "-" + mPost.getId() + ".gif");
+                        intent.putExtra(ViewGIFActivity.IMAGE_URL_KEY, mPost.getVideoUrl());
                         mActivity.startActivity(intent);
                     });
                     break;
@@ -463,7 +461,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     ((PostDetailViewHolder) holder).mImageView.setOnClickListener(view -> {
                         Intent intent = new Intent(mActivity, ViewVideoActivity.class);
                         intent.setData(videoUri);
-                        intent.putExtra(ViewVideoActivity.TITLE_KEY, mPost.getTitle());
                         intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, mPost.getSubredditName());
                         intent.putExtra(ViewVideoActivity.ID_KEY, mPost.getId());
                         mActivity.startActivity(intent);
@@ -979,7 +976,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     }
 
     private int getParentPosition(int position) {
-        if (position < mVisibleComments.size()) {
+        if (position >= 0 && position < mVisibleComments.size()) {
             int childDepth = mVisibleComments.get(position).getDepth();
             for (int i = position; i >= 0; i--) {
                 if (mVisibleComments.get(i).getDepth() < childDepth) {

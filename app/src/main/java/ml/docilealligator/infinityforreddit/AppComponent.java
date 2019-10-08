@@ -23,6 +23,7 @@ import ml.docilealligator.infinityforreddit.Activity.SearchSubredditsResultActiv
 import ml.docilealligator.infinityforreddit.Activity.SettingsActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubscribedThingListingActivity;
+import ml.docilealligator.infinityforreddit.Activity.ViewGIFActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewImageActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewMessageActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewPostDetailActivity;
@@ -112,4 +113,6 @@ public interface AppComponent {
     void inject(AccountSavedThingActivity accountSavedThingActivity);
 
     void inject(ViewImageActivity viewImageActivity);
+
+    void inject(ViewGIFActivity viewGIFActivity);
 }

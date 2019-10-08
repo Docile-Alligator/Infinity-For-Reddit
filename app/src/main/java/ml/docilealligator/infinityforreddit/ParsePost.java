@@ -151,7 +151,7 @@ public class ParsePost {
             } else if (data.has(JSONUtils.PREVIEW_KEY)) {
                 if (data.getJSONObject(JSONUtils.PREVIEW_KEY).has(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY)) {
                     //Gif video post (HLS)
-                    int postType = Post.GIF_VIDEO_TYPE;
+                    int postType = Post.VIDEO_TYPE;
                     String videoUrl = Html.fromHtml(data.getJSONObject(JSONUtils.PREVIEW_KEY)
                             .getJSONObject(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY).getString(JSONUtils.HLS_URL_KEY)).toString();
 
@@ -174,6 +174,17 @@ public class ParsePost {
 
                         post.setPreviewWidth(previewWidth);
                         post.setPreviewHeight(previewHeight);
+                    } else if (url.endsWith("gif")){
+                        //Gif post
+                        int postType = Post.GIF_TYPE;
+                        post = new Post(id, fullName, subredditName, subredditNamePrefixed, author,
+                                formattedPostTime, title, previewUrl, url, permalink, score, postType,
+                                voteType, gilded, nComments, flair, hidden, spoiler, nsfw, stickied,
+                                archived, locked, saved, isCrosspost);
+
+                        post.setPreviewWidth(previewWidth);
+                        post.setPreviewHeight(previewHeight);
+                        post.setVideoUrl(url);
                     } else {
                         if (url.contains(permalink)) {
                             //Text post but with a preview
