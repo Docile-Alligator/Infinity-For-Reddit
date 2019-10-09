@@ -100,7 +100,7 @@ public class SubredditSubscription {
                                     String accountName, boolean isSubscribing) {
             this.redditDataRoomDatabase = redditDataRoomDatabase;
             this.subscribedSubredditData = new SubscribedSubredditData(subredditData.getId(), subredditData.getName(),
-                    subredditData.getIconUrl(), accountName);
+                    subredditData.getIconUrl(), accountName, false);
             this.accountName = accountName;
             this.isSubscribing = isSubscribing;
         }

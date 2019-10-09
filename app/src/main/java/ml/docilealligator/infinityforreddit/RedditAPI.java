@@ -195,4 +195,8 @@ public interface RedditAPI {
     @FormUrlEncoded
     @POST("/api/unhide")
     Call<String> unhide(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("/api/favorite")
+    Call<String> favoriteThing(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }

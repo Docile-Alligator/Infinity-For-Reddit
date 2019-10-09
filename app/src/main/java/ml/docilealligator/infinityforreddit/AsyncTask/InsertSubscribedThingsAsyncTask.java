@@ -21,10 +21,11 @@ public class InsertSubscribedThingsAsyncTask extends AsyncTask<Void, Void, Void>
     private SubscribedSubredditDao mSubscribedSubredditDao;
     private SubscribedUserDao mUserDao;
     private SubredditDao mSubredditDao;
+    private SubscribedSubredditData mSingleSubscribedSubredditData;
     private List<SubscribedSubredditData> subscribedSubredditData;
     private List<SubscribedUserData> subscribedUserData;
     private List<SubredditData> subredditData;
-    private InsertSubscribedThingListener insertSubscribedThingListener;
+    private InsertSubscribedThingListener mInsertSubscribedThingListener;
     public InsertSubscribedThingsAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase, @Nullable String accountName,
                                            List<SubscribedSubredditData> subscribedSubredditData,
                                            List<SubscribedUserData> subscribedUserData,
@@ -39,7 +40,17 @@ public class InsertSubscribedThingsAsyncTask extends AsyncTask<Void, Void, Void>
         this.subscribedSubredditData = subscribedSubredditData;
         this.subscribedUserData = subscribedUserData;
         this.subredditData = subredditData;
-        this.insertSubscribedThingListener = insertSubscribedThingListener;
+        mInsertSubscribedThingListener = insertSubscribedThingListener;
+    }
+
+    public InsertSubscribedThingsAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase,
+                                           SubscribedSubredditData subscribedSubredditData,
+                                           InsertSubscribedThingListener insertSubscribedThingListener) {
+        mRedditDataRoomDatabase = redditDataRoomDatabase;
+        mSubscribedSubredditDao = redditDataRoomDatabase.subscribedSubredditDao();
+        mAccountName = subscribedSubredditData.getUsername();
+        mSingleSubscribedSubredditData = subscribedSubredditData;
+        mInsertSubscribedThingListener = insertSubscribedThingListener;
     }
 
     @Override
@@ -48,21 +59,25 @@ public class InsertSubscribedThingsAsyncTask extends AsyncTask<Void, Void, Void>
             return null;
         }
 
-        if (subscribedSubredditData != null) {
-            for (SubscribedSubredditData s : subscribedSubredditData) {
-                mSubscribedSubredditDao.insert(s);
+        if(mSingleSubscribedSubredditData != null) {
+            mSubscribedSubredditDao.insert(mSingleSubscribedSubredditData);
+        } else {
+            if (subscribedSubredditData != null) {
+                for (SubscribedSubredditData s : subscribedSubredditData) {
+                    mSubscribedSubredditDao.insert(s);
+                }
             }
-        }
 
-        if (subscribedUserData != null) {
-            for (SubscribedUserData s : subscribedUserData) {
-                mUserDao.insert(s);
+            if (subscribedUserData != null) {
+                for (SubscribedUserData s : subscribedUserData) {
+                    mUserDao.insert(s);
+                }
             }
-        }
 
-        if (subredditData != null) {
-            for (SubredditData s : subredditData) {
-                mSubredditDao.insert(s);
+            if (subredditData != null) {
+                for (SubredditData s : subredditData) {
+                    mSubredditDao.insert(s);
+                }
             }
         }
         return null;
@@ -70,7 +85,7 @@ public class InsertSubscribedThingsAsyncTask extends AsyncTask<Void, Void, Void>
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        insertSubscribedThingListener.insertSuccess();
+        mInsertSubscribedThingListener.insertSuccess();
     }
 
     public interface InsertSubscribedThingListener {

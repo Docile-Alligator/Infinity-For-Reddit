@@ -15,15 +15,21 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 public class SubscribedSubredditViewModel extends AndroidViewModel {
     private SubscribedSubredditRepository mSubscribedSubredditRepository;
     private LiveData<List<SubscribedSubredditData>> mAllSubscribedSubreddits;
+    private LiveData<List<SubscribedSubredditData>> mAllFavoriteSubscribedSubreddits;
 
     public SubscribedSubredditViewModel(Application application, RedditDataRoomDatabase redditDataRoomDatabase, String accountName) {
         super(application);
         mSubscribedSubredditRepository = new SubscribedSubredditRepository(redditDataRoomDatabase, accountName);
         mAllSubscribedSubreddits = mSubscribedSubredditRepository.getAllSubscribedSubreddits();
+        mAllFavoriteSubscribedSubreddits = mSubscribedSubredditRepository.getAllFavoriteSubscribedSubreddits();
     }
 
     public LiveData<List<SubscribedSubredditData>> getAllSubscribedSubreddits() {
         return mAllSubscribedSubreddits;
+    }
+
+    public LiveData<List<SubscribedSubredditData>> getAllFavoriteSubscribedSubreddits() {
+        return mAllFavoriteSubscribedSubreddits;
     }
 
     public void insert(SubscribedSubredditData subscribedSubredditData) {

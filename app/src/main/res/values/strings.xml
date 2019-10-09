@@ -332,4 +332,7 @@
     <string name="comment_saved_failed">Unable to save comment</string>
     <string name="comment_unsaved_success">Comment unsaved</string>
     <string name="comment_unsaved_failed">Unable to unsave comment</string>
+
+    <string name="favorites">Favorites</string>
+    <string name="all">All</string>
 </resources>

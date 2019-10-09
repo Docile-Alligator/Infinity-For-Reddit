@@ -22,12 +22,16 @@ public class SubscribedSubredditData {
     private String iconUrl;
     @ColumnInfo(name = "username")
     private String username;
+    @ColumnInfo(name = "is_favorite")
+    private boolean favorite;
 
-    public SubscribedSubredditData(@NonNull String id, String name, String iconUrl, String username) {
+    public SubscribedSubredditData(@NonNull String id, String name, String iconUrl, String username,
+                                   boolean favorite) {
         this.id = id;
         this.name = name;
         this.iconUrl = iconUrl;
         this.username = username;
+        this.favorite = favorite;
     }
 
     @NonNull
@@ -49,5 +53,13 @@ public class SubscribedSubredditData {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 }

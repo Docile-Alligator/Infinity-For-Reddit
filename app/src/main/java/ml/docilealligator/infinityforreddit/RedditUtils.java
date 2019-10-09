@@ -79,6 +79,8 @@ public class RedditUtils {
     public static final String LINK_KEY = "link";
     public static final String FLAIR_TEMPLATE_ID_KEY = "flair_template_id";
 
+    public static final String MAKE_FAVORITE_KEY = "make_favorite";
+
     public static Map<String, String> getHttpBasicAuthHeader() {
         Map<String, String> params = new HashMap<>();
         String credentials = String.format("%s:%s", RedditUtils.CLIENT_ID, "");

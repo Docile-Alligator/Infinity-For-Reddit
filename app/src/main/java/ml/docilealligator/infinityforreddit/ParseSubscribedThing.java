@@ -87,22 +87,17 @@ class ParseSubscribedThing {
                         }
                     }
                     String id = data.getString(JSONUtils.NAME_KEY);
-                    if (iconUrl.equals("") || iconUrl.equals("null")) {
-                        iconUrl = data.getString(JSONUtils.COMMUNITY_ICON_KEY);
-                        if (iconUrl.equals("null")) {
-                            iconUrl = "";
-                        }
-                    }
+                    boolean isFavorite = data.getBoolean(JSONUtils.USER_HAS_FAVORITED_KEY);
 
                     if (data.getString(JSONUtils.SUBREDDIT_TYPE_KEY)
                             .equals(JSONUtils.SUBREDDIT_TYPE_VALUE_USER)) {
                         //It's a user
-                        newSubscribedUserData.add(new SubscribedUserData(name.substring(2), iconUrl, accountName));
+                        newSubscribedUserData.add(new SubscribedUserData(name.substring(2), iconUrl, accountName, isFavorite));
                     } else {
                         String subredditFullName = data.getString(JSONUtils.DISPLAY_NAME);
                         String description = data.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY).trim();
                         int nSubscribers = data.getInt(JSONUtils.SUBSCRIBERS_KEY);
-                        newSubscribedSubredditData.add(new SubscribedSubredditData(id, name, iconUrl, accountName));
+                        newSubscribedSubredditData.add(new SubscribedSubredditData(id, name, iconUrl, accountName, isFavorite));
                         newSubredditData.add(new SubredditData(id, subredditFullName, iconUrl, bannerImageUrl, description, nSubscribers));
                     }
                 }

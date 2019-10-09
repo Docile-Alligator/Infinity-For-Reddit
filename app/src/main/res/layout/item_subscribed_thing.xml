@@ -17,10 +17,18 @@
 
     <TextView
         android:id="@+id/subreddit_name_text_view_item_subscribed_subreddit"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:textColor="@color/primaryTextColor"
         android:textSize="?attr/font_default"
         android:layout_gravity="center_vertical" />
+
+    <ImageView
+        android:id="@+id/favorite_image_view_item_subscribed_subreddit"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="end|center_vertical"
+        android:layout_marginStart="32dp" />
 
 </LinearLayout>

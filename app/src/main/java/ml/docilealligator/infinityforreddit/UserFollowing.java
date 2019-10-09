@@ -99,7 +99,7 @@ public class UserFollowing {
                                     String accountName, boolean isSubscribing) {
             this.subscribedUserDao = subscribedUserDao;
             this.subscribedUserData = new SubscribedUserData(userData.getName(), userData.getIconUrl(),
-                    accountName);
+                    accountName, false);
             this.accountName = accountName;
             this.isSubscribing = isSubscribing;
         }

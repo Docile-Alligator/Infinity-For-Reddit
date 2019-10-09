@@ -19,11 +19,14 @@ public class SubscribedUserData {
     private String iconUrl;
     @ColumnInfo(name = "username")
     private String username;
+    @ColumnInfo(name = "is_favorite")
+    private boolean favorite;
 
-    public SubscribedUserData(@NonNull String name, String iconUrl, String username) {
+    public SubscribedUserData(@NonNull String name, String iconUrl, String username, boolean favorite) {
         this.name = name;
         this.iconUrl = iconUrl;
         this.username = username;
+        this.favorite = favorite;
     }
 
     @NonNull
@@ -41,5 +44,13 @@ public class SubscribedUserData {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 }

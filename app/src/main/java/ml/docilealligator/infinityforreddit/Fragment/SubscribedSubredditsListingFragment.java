@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +32,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditViewModel;
+import retrofit2.Retrofit;
 
 
 /**
@@ -38,7 +40,8 @@ import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.Subscrib
  */
 public class SubscribedSubredditsListingFragment extends Fragment {
 
-    public static final String EXTRA_ACCOUNT_NAME = "EAT";
+    public static final String EXTRA_ACCOUNT_NAME = "EAN";
+    public static final String EXTRA_ACCESS_TOKEN = "EAT";
     public static final String EXTRA_ACCOUNT_PROFILE_IMAGE_URL = "EAPIU";
     public static final String EXTRA_IS_SUBREDDIT_SELECTION = "EISS";
     public static final String EXTRA_EXTRA_CLEAR_SELECTION = "EECS";
@@ -49,6 +52,9 @@ public class SubscribedSubredditsListingFragment extends Fragment {
     LinearLayout mLinearLayout;
     @BindView(R.id.no_subscriptions_image_view_subreddits_listing_fragment)
     ImageView mImageView;
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     private Activity mActivity;
@@ -82,6 +88,7 @@ public class SubscribedSubredditsListingFragment extends Fragment {
         }
 
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
+        String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
 
         mGlide = Glide.with(this);
 
@@ -92,7 +99,7 @@ public class SubscribedSubredditsListingFragment extends Fragment {
             adapter = new SubscribedSubredditsRecyclerViewAdapter(mActivity, getArguments().getBoolean(EXTRA_EXTRA_CLEAR_SELECTION),
                     (name, iconUrl, subredditIsUser) -> ((SubredditSelectionActivity) mActivity).getSelectedSubreddit(name, iconUrl, subredditIsUser));
         } else {
-            adapter = new SubscribedSubredditsRecyclerViewAdapter(mActivity);
+            adapter = new SubscribedSubredditsRecyclerViewAdapter(mActivity, mOauthRetrofit, mRedditDataRoomDatabase, accessToken);
         }
 
         mRecyclerView.setAdapter(adapter);
@@ -113,6 +120,16 @@ public class SubscribedSubredditsListingFragment extends Fragment {
 
             adapter.addUser(accountName, getArguments().getString(EXTRA_ACCOUNT_PROFILE_IMAGE_URL));
             adapter.setSubscribedSubreddits(subscribedSubredditData);
+        });
+
+        mSubscribedSubredditViewModel.getAllFavoriteSubscribedSubreddits().observe(this, favoriteSubscribedSubredditData -> {
+            if (favoriteSubscribedSubredditData != null && favoriteSubscribedSubredditData.size() > 0) {
+                mLinearLayout.setVisibility(View.GONE);
+                mRecyclerView.setVisibility(View.VISIBLE);
+                mGlide.clear(mImageView);
+            }
+
+            adapter.setFavoriteSubscribedSubreddits(favoriteSubscribedSubredditData);
         });
 
         return rootView;
