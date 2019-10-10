@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,6 +30,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserViewModel;
+import retrofit2.Retrofit;
 
 
 /**
@@ -37,6 +39,7 @@ import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUse
 public class FollowedUsersListingFragment extends Fragment {
 
     public static final String EXTRA_ACCOUNT_NAME = "EAN";
+    public static final String EXTRA_ACCESS_TOKEN = "EAT";
 
     @BindView(R.id.recycler_view_followed_users_listing_fragment)
     RecyclerView mRecyclerView;
@@ -44,6 +47,9 @@ public class FollowedUsersListingFragment extends Fragment {
     LinearLayout mLinearLayout;
     @BindView(R.id.no_subscriptions_image_view_followed_users_listing_fragment)
     ImageView mImageView;
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     private Activity mActivity;
@@ -79,12 +85,14 @@ public class FollowedUsersListingFragment extends Fragment {
         mGlide = Glide.with(this);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
-        FollowedUsersRecyclerViewAdapter adapter = new FollowedUsersRecyclerViewAdapter(mActivity);
+        FollowedUsersRecyclerViewAdapter adapter = new FollowedUsersRecyclerViewAdapter(mActivity,
+                mOauthRetrofit, mRedditDataRoomDatabase, getArguments().getString(EXTRA_ACCESS_TOKEN));
         mRecyclerView.setAdapter(adapter);
 
         mSubscribedUserViewModel = new ViewModelProvider(this,
                 new SubscribedUserViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, getArguments().getString(EXTRA_ACCOUNT_NAME)))
                 .get(SubscribedUserViewModel.class);
+
         mSubscribedUserViewModel.getAllSubscribedUsers().observe(this, subscribedUserData -> {
             if (subscribedUserData == null || subscribedUserData.size() == 0) {
                 mRecyclerView.setVisibility(View.GONE);
@@ -93,8 +101,18 @@ public class FollowedUsersListingFragment extends Fragment {
             } else {
                 mLinearLayout.setVisibility(View.GONE);
                 mRecyclerView.setVisibility(View.VISIBLE);
+                mGlide.clear(mImageView);
             }
             adapter.setSubscribedUsers(subscribedUserData);
+        });
+
+        mSubscribedUserViewModel.getAllFavoriteSubscribedUsers().observe(this, favoriteSubscribedUserData -> {
+            if (favoriteSubscribedUserData != null && favoriteSubscribedUserData.size() > 0) {
+                mLinearLayout.setVisibility(View.GONE);
+                mRecyclerView.setVisibility(View.VISIBLE);
+                mGlide.clear(mImageView);
+            }
+            adapter.setFavoriteSubscribedUsers(favoriteSubscribedUserData);
         });
 
         return rootView;

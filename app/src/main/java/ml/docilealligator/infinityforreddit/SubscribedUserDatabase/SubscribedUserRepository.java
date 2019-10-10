@@ -11,14 +11,20 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 public class SubscribedUserRepository {
     private SubscribedUserDao mSubscribedUserDao;
     private LiveData<List<SubscribedUserData>> mAllSubscribedUsers;
+    private LiveData<List<SubscribedUserData>> mAllFavoriteSubscribedUsers;
 
     SubscribedUserRepository(RedditDataRoomDatabase redditDataRoomDatabase, String accountName) {
         mSubscribedUserDao = redditDataRoomDatabase.subscribedUserDao();
         mAllSubscribedUsers = mSubscribedUserDao.getAllSubscribedUsers(accountName);
+        mAllFavoriteSubscribedUsers = mSubscribedUserDao.getAllFavoriteSubscribedUsers(accountName);
     }
 
     LiveData<List<SubscribedUserData>> getAllSubscribedSubreddits() {
         return mAllSubscribedUsers;
+    }
+
+    LiveData<List<SubscribedUserData>> getAllFavoriteSubscribedSubreddits() {
+        return mAllFavoriteSubscribedUsers;
     }
 
     public void insert(SubscribedUserData subscribedUserData) {

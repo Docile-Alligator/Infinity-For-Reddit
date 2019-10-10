@@ -92,13 +92,13 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
         switch (i) {
             case VIEW_TYPE_FAVORITE_SUBREDDIT_DIVIDER:
                 return new FavoriteSubredditsDividerViewHolder(LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.item_favorite_subreddits_divider, viewGroup, false));
+                        .inflate(R.layout.item_favorite_thing_divider, viewGroup, false));
             case VIEW_TYPE_FAVORITE_SUBREDDIT:
                 return new FavoriteSubredditViewHolder(LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.item_subscribed_thing, viewGroup, false));
             case VIEW_TYPE_SUBREDDIT_DIVIDER:
                 return new AllSubredditsDividerViewHolder(LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.item_favorite_subreddits_divider, viewGroup, false));
+                        .inflate(R.layout.item_favorite_thing_divider, viewGroup, false));
             default:
                 return new SubredditViewHolder(LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.item_subscribed_thing, viewGroup, false));
@@ -153,8 +153,8 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                     if(mSubscribedSubredditData.get(viewHolder.getAdapterPosition() - offset).isFavorite()) {
                         ((SubredditViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
                         mSubscribedSubredditData.get(viewHolder.getAdapterPosition() - offset).setFavorite(false);
-                        FavoriteThing.unfavoriteThing(mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
-                                mSubscribedSubredditData.get(viewHolder.getAdapterPosition() - offset), false,
+                        FavoriteThing.unfavoriteSubreddit(mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
+                                mSubscribedSubredditData.get(viewHolder.getAdapterPosition() - offset),
                                 new FavoriteThing.FavoriteThingListener() {
                                     @Override
                                     public void success() {
@@ -177,8 +177,8 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                     } else {
                         ((SubredditViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
                         mSubscribedSubredditData.get(viewHolder.getAdapterPosition() - offset).setFavorite(true);
-                        FavoriteThing.favoriteThing(mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
-                                mSubscribedSubredditData.get(viewHolder.getAdapterPosition() - offset), false,
+                        FavoriteThing.favoriteSubreddit(mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
+                                mSubscribedSubredditData.get(viewHolder.getAdapterPosition() - offset),
                                 new FavoriteThing.FavoriteThingListener() {
                                     @Override
                                     public void success() {
@@ -232,8 +232,8 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                 if(mFavoriteSubscribedSubredditData.get(viewHolder.getAdapterPosition() - 1).isFavorite()) {
                     ((FavoriteSubredditViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
                     mFavoriteSubscribedSubredditData.get(viewHolder.getAdapterPosition() - 1).setFavorite(false);
-                    FavoriteThing.unfavoriteThing(mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
-                            mFavoriteSubscribedSubredditData.get(viewHolder.getAdapterPosition() - 1), false,
+                    FavoriteThing.unfavoriteSubreddit(mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
+                            mFavoriteSubscribedSubredditData.get(viewHolder.getAdapterPosition() - 1),
                             new FavoriteThing.FavoriteThingListener() {
                                 @Override
                                 public void success() {
@@ -256,8 +256,8 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                 } else {
                     ((FavoriteSubredditViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
                     mFavoriteSubscribedSubredditData.get(viewHolder.getAdapterPosition() - 1).setFavorite(true);
-                    FavoriteThing.favoriteThing(mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
-                            mFavoriteSubscribedSubredditData.get(viewHolder.getAdapterPosition() - 1), false,
+                    FavoriteThing.favoriteSubreddit(mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
+                            mFavoriteSubscribedSubredditData.get(viewHolder.getAdapterPosition() - 1),
                             new FavoriteThing.FavoriteThingListener() {
                                 @Override
                                 public void success() {
@@ -350,11 +350,11 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
     }
 
     class SubredditViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.subreddit_icon_gif_image_view_item_subscribed_subreddit)
+        @BindView(R.id.thing_icon_gif_image_view_item_subscribed_thing)
         GifImageView iconGifImageView;
-        @BindView(R.id.subreddit_name_text_view_item_subscribed_subreddit)
+        @BindView(R.id.thing_name_text_view_item_subscribed_thing)
         TextView subredditNameTextView;
-        @BindView(R.id.favorite_image_view_item_subscribed_subreddit)
+        @BindView(R.id.favorite_image_view_item_subscribed_thing)
         ImageView favoriteImageView;
 
         SubredditViewHolder(View itemView) {
@@ -364,11 +364,11 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
     }
 
     class FavoriteSubredditViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.subreddit_icon_gif_image_view_item_subscribed_subreddit)
+        @BindView(R.id.thing_icon_gif_image_view_item_subscribed_thing)
         GifImageView iconGifImageView;
-        @BindView(R.id.subreddit_name_text_view_item_subscribed_subreddit)
+        @BindView(R.id.thing_name_text_view_item_subscribed_thing)
         TextView subredditNameTextView;
-        @BindView(R.id.favorite_image_view_item_subscribed_subreddit)
+        @BindView(R.id.favorite_image_view_item_subscribed_thing)
         ImageView favoriteImageView;
 
         FavoriteSubredditViewHolder(View itemView) {
@@ -378,7 +378,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
     }
 
     class FavoriteSubredditsDividerViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.divider_text_view_item_favorite_subreddits_divider) TextView dividerTextView;
+        @BindView(R.id.divider_text_view_item_favorite_thing_divider) TextView dividerTextView;
 
         FavoriteSubredditsDividerViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -388,7 +388,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
     }
 
     class AllSubredditsDividerViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.divider_text_view_item_favorite_subreddits_divider) TextView dividerTextView;
+        @BindView(R.id.divider_text_view_item_favorite_thing_divider) TextView dividerTextView;
 
         AllSubredditsDividerViewHolder(@NonNull View itemView) {
             super(itemView);

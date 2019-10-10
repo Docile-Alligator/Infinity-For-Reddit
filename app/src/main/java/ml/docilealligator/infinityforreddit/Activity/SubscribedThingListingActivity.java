@@ -252,6 +252,7 @@ public class SubscribedThingListingActivity extends BaseActivity {
                     FollowedUsersListingFragment fragment = new FollowedUsersListingFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString(FollowedUsersListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
+                    bundle.putString(FollowedUsersListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                     fragment.setArguments(bundle);
                     return fragment;
                 }

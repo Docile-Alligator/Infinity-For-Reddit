@@ -19,6 +19,9 @@ public interface SubscribedUserDao {
     @Query("SELECT * FROM subscribed_users WHERE username = :accountName ORDER BY name COLLATE NOCASE ASC")
     LiveData<List<SubscribedUserData>> getAllSubscribedUsers(String accountName);
 
+    @Query("SELECT * FROM subscribed_users WHERE username = :accountName AND is_favorite = 1 ORDER BY name COLLATE NOCASE ASC")
+    LiveData<List<SubscribedUserData>> getAllFavoriteSubscribedUsers(String accountName);
+
     @Query("SELECT * FROM subscribed_users WHERE name = :name AND username = :accountName COLLATE NOCASE LIMIT 1")
     SubscribedUserData getSubscribedUser(String name, String accountName);
 
