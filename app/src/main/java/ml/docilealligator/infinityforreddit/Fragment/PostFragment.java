@@ -61,6 +61,7 @@ import ml.docilealligator.infinityforreddit.PostViewModel;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.SortType;
 import retrofit2.Retrofit;
 
 
@@ -74,7 +75,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public static final String EXTRA_USER_WHERE = "EUW";
     public static final String EXTRA_QUERY = "EQ";
     public static final String EXTRA_POST_TYPE = "EPT";
-    public static final String EXTRA_SORT_TYPE = "EST";
     public static final String EXTRA_FILTER = "EF";
     public static final int EXTRA_NO_FILTER = -2;
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
@@ -269,7 +269,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
 
         int postType = getArguments().getInt(EXTRA_POST_TYPE);
-        String sortType = getArguments().getString(EXTRA_SORT_TYPE);
+        //String sortType = getArguments().getString(EXTRA_SORT_TYPE);
 
         int filter = getArguments().getInt(EXTRA_FILTER);
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
@@ -282,6 +282,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (postType == PostDataSource.TYPE_SEARCH) {
             String subredditName = getArguments().getString(EXTRA_NAME);
             String query = getArguments().getString(EXTRA_QUERY);
+
+            String sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SEARCH_POST, SortType.Type.RELEVANCE.value);
+            String sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_SEARCH_POST, SortType.Time.ALL.value);
+            SortType sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()), SortType.Time.valueOf(sortTime.toUpperCase()));
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, true, needBlurNsfw, needBlurSpoiler,
@@ -297,7 +301,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                             intent.putExtra(FilteredThingActivity.EXTRA_NAME, subredditName);
                             intent.putExtra(FilteredThingActivity.EXTRA_QUERY, query);
                             intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
-                            intent.putExtra(FilteredThingActivity.EXTRA_SORT_TYPE, sortType);
                             intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
                             startActivity(intent);
                         }
@@ -314,8 +317,36 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
         } else if (postType == PostDataSource.TYPE_SUBREDDIT) {
             String subredditName = getArguments().getString(EXTRA_NAME);
+            String sort;
+            String sortTime = null;
+            SortType sortType;
 
             boolean displaySubredditName = subredditName != null && (subredditName.equals("popular") || subredditName.equals("all"));
+            if(displaySubredditName) {
+                if(subredditName.equals("popular")) {
+                    sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POPULAR_POST, SortType.Type.HOT.value);
+                    if(sort.equals(SortType.Type.CONTROVERSIAL.value) || sort.equals(SortType.Type.TOP.value)) {
+                        sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_POPULAR_POST, SortType.Time.ALL.value);
+                    }
+                } else {
+                    sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_ALL_POST, SortType.Type.HOT.value);
+                    if(sort.equals(SortType.Type.CONTROVERSIAL.value) || sort.equals(SortType.Type.TOP.value)) {
+                        sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_ALL_POST, SortType.Time.ALL.value);
+                    }
+                }
+            } else {
+                sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST, SortType.Type.HOT.value);
+                if(sort.equals(SortType.Type.CONTROVERSIAL.value) || sort.equals(SortType.Type.TOP.value)) {
+                    sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST, SortType.Time.ALL.value);
+                }
+            }
+
+            if(sortTime != null) {
+                sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()), SortType.Time.valueOf(sortTime.toUpperCase()));
+            } else {
+                sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
+            }
+
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, displaySubredditName, needBlurNsfw, needBlurSpoiler,
                     new PostRecyclerViewAdapter.Callback() {
@@ -329,7 +360,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                             Intent intent = new Intent(activity, FilteredThingActivity.class);
                             intent.putExtra(FilteredThingActivity.EXTRA_NAME, subredditName);
                             intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
-                            intent.putExtra(FilteredThingActivity.EXTRA_SORT_TYPE, sortType);
                             intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
                             startActivity(intent);
                         }
@@ -353,6 +383,15 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 mFetchPostInfoLinearLayout.setLayoutParams(params);
             }
 
+            String sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_USER_POST, SortType.Type.NEW.value);
+            SortType sortType;
+            if(sort.equals(SortType.Type.CONTROVERSIAL.value) || sort.equals(SortType.Type.TOP.value)) {
+                String sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_USER_POST, SortType.Time.ALL.value);
+                sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()), SortType.Time.valueOf(sortTime.toUpperCase()));
+            } else {
+                sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
+            }
+
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, true, needBlurNsfw, needBlurSpoiler,
                     new PostRecyclerViewAdapter.Callback() {
@@ -366,7 +405,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                             Intent intent = new Intent(activity, FilteredThingActivity.class);
                             intent.putExtra(FilteredThingActivity.EXTRA_NAME, username);
                             intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
-                            intent.putExtra(FilteredThingActivity.EXTRA_SORT_TYPE, sortType);
                             intent.putExtra(FilteredThingActivity.EXTRA_USER_WHERE, where);
                             intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
                             startActivity(intent);
@@ -383,6 +421,15 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                         filter, nsfw);
             }
         } else {
+            String sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_BEST_POST, SortType.Type.BEST.value);
+            SortType sortType;
+            if(sort.equals(SortType.Type.CONTROVERSIAL.value) || sort.equals(SortType.Type.TOP.value)) {
+                String sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_BEST_POST, SortType.Time.ALL.value);
+                sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()), SortType.Time.valueOf(sortTime.toUpperCase()));
+            } else {
+                sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
+            }
+
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, true, needBlurNsfw, needBlurSpoiler,
                     new PostRecyclerViewAdapter.Callback() {
@@ -396,7 +443,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                             Intent intent = new Intent(activity, FilteredThingActivity.class);
                             intent.putExtra(FilteredThingActivity.EXTRA_NAME, activity.getString(R.string.best));
                             intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
-                            intent.putExtra(FilteredThingActivity.EXTRA_SORT_TYPE, sortType);
                             intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
                             startActivity(intent);
                         }
@@ -444,7 +490,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         return rootView;
     }
 
-    public void changeSortType(String sortType) {
+    public void changeSortType(SortType sortType) {
         mPostViewModel.changeSortType(sortType);
     }
 

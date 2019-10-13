@@ -74,6 +74,7 @@ import ml.docilealligator.infinityforreddit.FetchMyInfo;
 import ml.docilealligator.infinityforreddit.FetchSubscribedThing;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.Fragment.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -84,13 +85,15 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.ReadMessage;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-public class MainActivity extends BaseActivity implements SortTypeBottomSheetFragment.SortTypeSelectionCallback,
+public class MainActivity extends BaseActivity implements SortTypeSelectionCallback,
         PostTypeBottomSheetFragment.PostTypeSelectionCallback {
 
     static final String EXTRA_POST_TYPE = "EPT";
@@ -177,6 +180,7 @@ public class MainActivity extends BaseActivity implements SortTypeBottomSheetFra
     private PostTypeBottomSheetFragment postTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment bestSortTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment popularAndAllSortTypeBottomSheetFragment;
+    private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
@@ -277,6 +281,8 @@ public class MainActivity extends BaseActivity implements SortTypeBottomSheetFra
         Bundle popularBundle = new Bundle();
         popularBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
         popularAndAllSortTypeBottomSheetFragment.setArguments(popularBundle);
+
+        sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
 
         setSupportActionBar(toolbar);
 
@@ -877,8 +883,16 @@ public class MainActivity extends BaseActivity implements SortTypeBottomSheetFra
     }
 
     @Override
-    public void sortTypeSelected(String sortType) {
+    public void sortTypeSelected(SortType sortType) {
         sectionsPagerAdapter.changeSortType(sortType);
+    }
+
+    @Override
+    public void sortTypeSelected(String sortType) {
+        Bundle bundle = new Bundle();
+        bundle.putString(SortTimeBottomSheetFragment.EXTRA_SORT_TYPE, sortType);
+        sortTimeBottomSheetFragment.setArguments(bundle);
+        sortTimeBottomSheetFragment.show(getSupportFragmentManager(), sortTimeBottomSheetFragment.getTag());
     }
 
     @Override
@@ -946,7 +960,6 @@ public class MainActivity extends BaseActivity implements SortTypeBottomSheetFra
                     Bundle bundle = new Bundle();
                     bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
                     bundle.putString(PostFragment.EXTRA_NAME, "popular");
-                    bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_HOT);
                     bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                     bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                     fragment.setArguments(bundle);
@@ -956,7 +969,6 @@ public class MainActivity extends BaseActivity implements SortTypeBottomSheetFra
                     Bundle bundle = new Bundle();
                     bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
                     bundle.putString(PostFragment.EXTRA_NAME, "all");
-                    bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_HOT);
                     bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                     bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                     fragment.setArguments(bundle);
@@ -968,7 +980,6 @@ public class MainActivity extends BaseActivity implements SortTypeBottomSheetFra
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_FRONT_PAGE);
-                bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_BEST);
                 bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 fragment.setArguments(bundle);
@@ -978,7 +989,6 @@ public class MainActivity extends BaseActivity implements SortTypeBottomSheetFra
                 Bundle bundle = new Bundle();
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
                 bundle.putString(PostFragment.EXTRA_NAME, "popular");
-                bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_HOT);
                 bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 fragment.setArguments(bundle);
@@ -988,7 +998,6 @@ public class MainActivity extends BaseActivity implements SortTypeBottomSheetFra
                 Bundle bundle = new Bundle();
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
                 bundle.putString(PostFragment.EXTRA_NAME, "all");
-                bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_HOT);
                 bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 fragment.setArguments(bundle);
@@ -1174,7 +1183,7 @@ public class MainActivity extends BaseActivity implements SortTypeBottomSheetFra
             }
         }
 
-        void changeSortType(String sortType) {
+        void changeSortType(SortType sortType) {
             if (mAccessToken == null) {
                 if (viewPager.getCurrentItem() == 0) {
                     popularPostFragment.changeSortType(sortType);
@@ -1184,12 +1193,27 @@ public class MainActivity extends BaseActivity implements SortTypeBottomSheetFra
             } else {
                 switch (viewPager.getCurrentItem()) {
                     case 0:
+                        mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_BEST_POST, sortType.getType().name()).apply();
+                        if(sortType.getTime() != null) {
+                            mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_BEST_POST, sortType.getTime().name()).apply();
+                        }
+
                         frontPagePostFragment.changeSortType(sortType);
                         break;
                     case 1:
+                        mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POPULAR_POST, sortType.getType().name()).apply();
+                        if(sortType.getTime() != null) {
+                            mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_POPULAR_POST, sortType.getTime().name()).apply();
+                        }
+
                         popularPostFragment.changeSortType(sortType);
                         break;
                     case 2:
+                        mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_ALL_POST, sortType.getType().name()).apply();
+                        if(sortType.getTime() != null) {
+                            mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_ALL_POST, sortType.getTime().name()).apply();
+                        }
+
                         allPostFragment.changeSortType(sortType);
                 }
             }

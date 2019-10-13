@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.Fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
@@ -35,9 +36,10 @@ import ml.docilealligator.infinityforreddit.Adapter.SubredditListingRecyclerView
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
-import ml.docilealligator.infinityforreddit.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SubredditListingViewModel;
 import retrofit2.Retrofit;
 
@@ -72,7 +74,9 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
-    RedditDataRoomDatabase redditDataRoomDatabase;
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
+    @Inject
+    SharedPreferences mSharedPreferences;
     private LinearLayoutManager mLinearLayoutManager;
     private SubredditListingRecyclerViewAdapter mAdapter;
 
@@ -112,8 +116,11 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
 
+        String sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SEARCH_SUBREDDIT, SortType.Type.RELEVANCE.value);
+        SortType sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
+
         mAdapter = new SubredditListingRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit,
-                accessToken, accountName, redditDataRoomDatabase,
+                accessToken, accountName, mRedditDataRoomDatabase,
                 new SubredditListingRecyclerViewAdapter.Callback() {
                     @Override
                     public void retryLoadingMore() {
@@ -134,8 +141,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
         mSubredditListingRecyclerView.setAdapter(mAdapter);
 
-        SubredditListingViewModel.Factory factory = new SubredditListingViewModel.Factory(mRetrofit, query,
-                PostDataSource.SORT_TYPE_RELEVANCE);
+        SubredditListingViewModel.Factory factory = new SubredditListingViewModel.Factory(mRetrofit, query, sortType);
         mSubredditListingViewModel = new ViewModelProvider(this, factory).get(SubredditListingViewModel.class);
         mSubredditListingViewModel.getSubreddits().observe(this, subredditData -> mAdapter.submitList(subredditData));
 
@@ -179,7 +185,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         }
     }
 
-    public void changeSortType(String sortType) {
+    public void changeSortType(SortType sortType) {
         mSubredditListingViewModel.changeSortType(sortType);
     }
 

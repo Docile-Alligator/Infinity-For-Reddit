@@ -31,15 +31,16 @@ import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
-import ml.docilealligator.infinityforreddit.Fragment.UserThingSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 
-public class AccountPostsActivity extends BaseActivity implements UserThingSortTypeBottomSheetFragment.UserThingSortTypeSelectionCallback {
+public class AccountPostsActivity extends BaseActivity implements SortTypeSelectionCallback {
 
     static final String EXTRA_USER_WHERE = "EUW";
 
@@ -177,7 +178,6 @@ public class AccountPostsActivity extends BaseActivity implements UserThingSortT
         bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_USER);
         bundle.putString(PostFragment.EXTRA_USER_NAME, mAccountName);
         bundle.putString(PostFragment.EXTRA_USER_WHERE, mUserWhere);
-        bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_NEW);
         bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
         bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
         mFragment.setArguments(bundle);
@@ -255,10 +255,15 @@ public class AccountPostsActivity extends BaseActivity implements UserThingSortT
     }
 
     @Override
-    public void userThingSortTypeSelected(String sortType) {
+    public void sortTypeSelected(SortType sortType) {
         if (mFragment != null) {
             ((PostFragment) mFragment).changeSortType(sortType);
         }
+    }
+
+    @Override
+    public void sortTypeSelected(String sortType) {
+
     }
 
     @Subscribe

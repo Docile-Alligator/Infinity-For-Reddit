@@ -18,9 +18,9 @@ public class UserListingViewModel extends ViewModel {
     private LiveData<NetworkState> initialLoadingState;
     private LiveData<Boolean> hasUserLiveData;
     private LiveData<PagedList<UserData>> users;
-    private MutableLiveData<String> sortTypeLiveData;
+    private MutableLiveData<SortType> sortTypeLiveData;
 
-    public UserListingViewModel(Retrofit retrofit, String query, String sortType) {
+    public UserListingViewModel(Retrofit retrofit, String query, SortType sortType) {
         userListingDataSourceFactory = new UserListingDataSourceFactory(retrofit, query, sortType);
 
         initialLoadingState = Transformations.switchMap(userListingDataSourceFactory.getUserListingDataSourceMutableLiveData(),
@@ -69,16 +69,16 @@ public class UserListingViewModel extends ViewModel {
         userListingDataSourceFactory.getUserListingDataSource().retryLoadingMore();
     }
 
-    public void changeSortType(String sortType) {
+    public void changeSortType(SortType sortType) {
         sortTypeLiveData.postValue(sortType);
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
         private Retrofit retrofit;
         private String query;
-        private String sortType;
+        private SortType sortType;
 
-        public Factory(Retrofit retrofit, String query, String sortType) {
+        public Factory(Retrofit retrofit, String query, SortType sortType) {
             this.retrofit = retrofit;
             this.query = query;
             this.sortType = sortType;

@@ -26,7 +26,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
     @Nullable
     private String accessToken;
     private String username;
-    private String sortType;
+    private SortType sortType;
     private boolean areSavedComments;
 
     private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
@@ -36,7 +36,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
     private LoadParams<String> params;
     private LoadCallback<String, CommentData> callback;
 
-    CommentDataSource(Retrofit retrofit, Locale locale, @Nullable String accessToken, String username, String sortType,
+    CommentDataSource(Retrofit retrofit, Locale locale, @Nullable String accessToken, String username, SortType sortType,
                       boolean areSavedComments) {
         this.retrofit = retrofit;
         this.locale = locale;
@@ -72,14 +72,30 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> commentsCall;
         if (areSavedComments) {
-            commentsCall = api.getUserSavedCommentsOauth(username, PostDataSource.USER_WHERE_SAVED,
-                    null, sortType, RedditUtils.getOAuthHeader(accessToken));
+            if (sortType.getTime() != null) {
+                commentsCall = api.getUserSavedCommentsOauth(username, PostDataSource.USER_WHERE_SAVED,
+                        null, sortType.getType().value, sortType.getTime().value,
+                        RedditUtils.getOAuthHeader(accessToken));
+            } else {
+                commentsCall = api.getUserSavedCommentsOauth(username, PostDataSource.USER_WHERE_SAVED,
+                        null, sortType.getType().value, RedditUtils.getOAuthHeader(accessToken));
+            }
         } else {
             if (accessToken == null) {
-                commentsCall = api.getUserComments(username, null, sortType);
+                if (sortType.getTime() != null) {
+                    commentsCall = api.getUserComments(username, null, sortType.getType().value,
+                            sortType.getTime().value);
+                } else {
+                    commentsCall = api.getUserComments(username, null, sortType.getType().value);
+                }
             } else {
-                commentsCall = api.getUserCommentsOauth(RedditUtils.getOAuthHeader(accessToken), username,
-                        null, sortType);
+                if (sortType.getTime() != null) {
+                    commentsCall = api.getUserCommentsOauth(RedditUtils.getOAuthHeader(accessToken), username,
+                            null, sortType.getType().value, sortType.getTime().value);
+                } else {
+                    commentsCall = api.getUserCommentsOauth(RedditUtils.getOAuthHeader(accessToken), username,
+                            null, sortType.getType().value);
+                }
             }
         }
         commentsCall.enqueue(new Callback<String>() {
@@ -135,14 +151,29 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> commentsCall;
         if (areSavedComments) {
-            commentsCall = api.getUserSavedCommentsOauth(username, PostDataSource.USER_WHERE_SAVED, params.key,
-                    sortType, RedditUtils.getOAuthHeader(accessToken));
+            if (sortType.getTime() != null) {
+                commentsCall = api.getUserSavedCommentsOauth(username, PostDataSource.USER_WHERE_SAVED, params.key,
+                        sortType.getType().value, sortType.getTime().value, RedditUtils.getOAuthHeader(accessToken));
+            } else {
+                commentsCall = api.getUserSavedCommentsOauth(username, PostDataSource.USER_WHERE_SAVED, params.key,
+                        sortType.getType().value, RedditUtils.getOAuthHeader(accessToken));
+            }
         } else {
             if (accessToken == null) {
-                commentsCall = api.getUserComments(username, params.key, sortType);
+                if (sortType.getTime() != null) {
+                    commentsCall = api.getUserComments(username, params.key, sortType.getType().value,
+                            sortType.getTime().value);
+                } else {
+                    commentsCall = api.getUserComments(username, params.key, sortType.getType().value);
+                }
             } else {
-                commentsCall = api.getUserCommentsOauth(RedditUtils.getOAuthHeader(accessToken),
-                        username, params.key, sortType);
+                if (sortType.getTime() != null) {
+                    commentsCall = api.getUserCommentsOauth(RedditUtils.getOAuthHeader(accessToken),
+                            username, params.key, sortType.getType().value, sortType.getTime().value);
+                } else {
+                    commentsCall = api.getUserCommentsOauth(RedditUtils.getOAuthHeader(accessToken),
+                            username, params.key, sortType.getType().value);
+                }
             }
         }
         commentsCall.enqueue(new Callback<String>() {

@@ -49,6 +49,7 @@ import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.Fragment.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -57,6 +58,8 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.ReadMessage;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditDao;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditViewModel;
@@ -64,7 +67,7 @@ import ml.docilealligator.infinityforreddit.SubredditSubscription;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-public class ViewSubredditDetailActivity extends BaseActivity implements SortTypeBottomSheetFragment.SortTypeSelectionCallback,
+public class ViewSubredditDetailActivity extends BaseActivity implements SortTypeSelectionCallback,
         PostTypeBottomSheetFragment.PostTypeSelectionCallback {
 
     public static final String EXTRA_SUBREDDIT_NAME_KEY = "ESN";
@@ -132,6 +135,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private AppBarLayout.LayoutParams params;
     private PostTypeBottomSheetFragment postTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment sortTypeBottomSheetFragment;
+    private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
     private SubredditViewModel mSubredditViewModel;
 
     @Override
@@ -210,8 +214,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 getCurrentAccountAndBindView();
             } else {
                 bindView(false);
-                /*mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();*/
             }
 
             if (mFetchSubredditInfoSuccess) {
@@ -227,6 +229,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         Bundle bottomSheetBundle = new Bundle();
         bottomSheetBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
         sortTypeBottomSheetFragment.setArguments(bottomSheetBundle);
+
+        sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
@@ -459,7 +463,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             Bundle bundle = new Bundle();
             bundle.putString(PostFragment.EXTRA_NAME, subredditName);
             bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
-            bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_BEST);
             bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
             bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
             mFragment.setArguments(bundle);
@@ -569,8 +572,21 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     }
 
     @Override
-    public void sortTypeSelected(String sortType) {
+    public void sortTypeSelected(SortType sortType) {
+        mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST, sortType.getType().name()).apply();
+        if(sortType.getTime() != null) {
+            mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST, sortType.getTime().name()).apply();
+        }
+
         ((PostFragment) mFragment).changeSortType(sortType);
+    }
+
+    @Override
+    public void sortTypeSelected(String sortType) {
+        Bundle bundle = new Bundle();
+        bundle.putString(SortTimeBottomSheetFragment.EXTRA_SORT_TYPE, sortType);
+        sortTimeBottomSheetFragment.setArguments(bundle);
+        sortTimeBottomSheetFragment.show(getSupportFragmentManager(), sortTimeBottomSheetFragment.getTag());
     }
 
     @Override

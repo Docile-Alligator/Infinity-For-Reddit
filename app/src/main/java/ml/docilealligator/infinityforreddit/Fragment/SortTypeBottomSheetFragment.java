@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.Fragment;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,8 +18,9 @@ import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 
 
 /**
@@ -41,6 +43,7 @@ public class SortTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
     TextView topTypeTextView;
     @BindView(R.id.controversial_type_text_view_sort_type_bottom_sheet_fragment)
     TextView controversialTypeTextView;
+    private Activity activity;
     public SortTypeBottomSheetFragment() {
         // Required empty public constructor
     }
@@ -51,58 +54,56 @@ public class SortTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
         View rootView = inflater.inflate(R.layout.fragment_sort_type_bottom_sheet, container, false);
         ButterKnife.bind(this, rootView);
 
-        Activity activity = getActivity();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
             rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
 
-        if (getArguments().getBoolean(EXTRA_NO_BEST_TYPE)) {
+        if (getArguments() == null || getArguments().getBoolean(EXTRA_NO_BEST_TYPE)) {
             bestTypeTextView.setVisibility(View.GONE);
         } else {
             bestTypeTextView.setOnClickListener(view -> {
-                ((SortTypeSelectionCallback) activity).sortTypeSelected(PostDataSource.SORT_TYPE_BEST);
+                ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.BEST));
                 dismiss();
             });
         }
 
         hotTypeTextView.setOnClickListener(view -> {
-            ((SortTypeSelectionCallback) activity).sortTypeSelected(PostDataSource.SORT_TYPE_HOT);
+            ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.HOT));
             dismiss();
         });
 
         newTypeTextView.setOnClickListener(view -> {
-            ((SortTypeSelectionCallback) activity).sortTypeSelected(PostDataSource.SORT_TYPE_NEW);
+            ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.NEW));
             dismiss();
         });
 
         randomTypeTextView.setOnClickListener(view -> {
-            ((SortTypeSelectionCallback) activity).sortTypeSelected(PostDataSource.SORT_TYPE_RANDOM);
+            ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.RANDOM));
             dismiss();
         });
 
         risingTypeTextView.setOnClickListener(view -> {
-            ((SortTypeSelectionCallback) activity).sortTypeSelected(PostDataSource.SORT_TYPE_RISING);
+            ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.RISING));
             dismiss();
         });
 
         topTypeTextView.setOnClickListener(view -> {
-            ((SortTypeSelectionCallback) activity).sortTypeSelected(PostDataSource.SORT_TYPE_TOP);
+            ((SortTypeSelectionCallback) activity).sortTypeSelected(SortType.Type.TOP.name());
             dismiss();
         });
 
         controversialTypeTextView.setOnClickListener(view -> {
-            ((SortTypeSelectionCallback) activity).sortTypeSelected(PostDataSource.SORT_TYPE_CONTROVERSIAL);
+            ((SortTypeSelectionCallback) activity).sortTypeSelected(SortType.Type.CONTROVERSIAL.name());
             dismiss();
         });
 
         return rootView;
     }
 
-
-    public interface SortTypeSelectionCallback {
-        void sortTypeSelected(String sortType);
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.activity = (Activity) context;
     }
-
 }

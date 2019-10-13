@@ -19,9 +19,9 @@ public class CommentViewModel extends ViewModel {
     private LiveData<NetworkState> initialLoadingState;
     private LiveData<Boolean> hasCommentLiveData;
     private LiveData<PagedList<CommentData>> comments;
-    private MutableLiveData<String> sortTypeLiveData;
+    private MutableLiveData<SortType> sortTypeLiveData;
 
-    public CommentViewModel(Retrofit retrofit, Locale locale, String accessToken, String username, String sortType,
+    public CommentViewModel(Retrofit retrofit, Locale locale, String accessToken, String username, SortType sortType,
                             boolean areSavedComments) {
         commentDataSourceFactory = new CommentDataSourceFactory(retrofit, locale, accessToken, username, sortType,
                 areSavedComments);
@@ -72,7 +72,7 @@ public class CommentViewModel extends ViewModel {
         commentDataSourceFactory.getCommentDataSource().retryLoadingMore();
     }
 
-    public void changeSortType(String sortType) {
+    public void changeSortType(SortType sortType) {
         sortTypeLiveData.postValue(sortType);
     }
 
@@ -81,11 +81,11 @@ public class CommentViewModel extends ViewModel {
         private Locale locale;
         private String accessToken;
         private String username;
-        private String sortType;
+        private SortType sortType;
         private boolean areSavedComments;
 
         public Factory(Retrofit retrofit, Locale locale, String accessToken, String username,
-                       String sortType, boolean areSavedComments) {
+                       SortType sortType, boolean areSavedComments) {
             this.retrofit = retrofit;
             this.locale = locale;
             this.accessToken = accessToken;

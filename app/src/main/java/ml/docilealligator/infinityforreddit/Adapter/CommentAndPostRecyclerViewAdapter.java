@@ -391,7 +391,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     Intent intent = new Intent(mActivity, FilteredThingActivity.class);
                     intent.putExtra(FilteredThingActivity.EXTRA_NAME, mSubredditNamePrefixed.substring(2));
                     intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
-                    intent.putExtra(FilteredThingActivity.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_HOT);
                     intent.putExtra(FilteredThingActivity.EXTRA_FILTER, Post.NSFW_TYPE);
                     mActivity.startActivity(intent);
                 });
@@ -407,7 +406,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 Intent intent = new Intent(mActivity, FilteredThingActivity.class);
                 intent.putExtra(FilteredThingActivity.EXTRA_NAME, mSubredditNamePrefixed.substring(2));
                 intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
-                intent.putExtra(FilteredThingActivity.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_HOT);
                 intent.putExtra(FilteredThingActivity.EXTRA_FILTER, mPost.getPostType());
                 mActivity.startActivity(intent);
 

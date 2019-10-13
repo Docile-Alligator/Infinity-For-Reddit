@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.Fragment;
 
 
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
@@ -30,9 +31,10 @@ import ml.docilealligator.infinityforreddit.Adapter.UserListingRecyclerViewAdapt
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
-import ml.docilealligator.infinityforreddit.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.UserListingViewModel;
 import retrofit2.Retrofit;
 
@@ -66,7 +68,9 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
-    RedditDataRoomDatabase redditDataRoomDatabase;
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
+    @Inject
+    SharedPreferences mSharedPreferences;
     private LinearLayoutManager mLinearLayoutManager;
     private String mQuery;
     private UserListingRecyclerViewAdapter mAdapter;
@@ -103,15 +107,17 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         mQuery = getArguments().getString(EXTRA_QUERY);
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
+        String sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SEARCH_USER, SortType.Type.RELEVANCE.value);
+        SortType sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
 
         mAdapter = new UserListingRecyclerViewAdapter(getActivity(), mOauthRetrofit, mRetrofit,
-                accessToken, accountName, redditDataRoomDatabase.subscribedUserDao(),
+                accessToken, accountName, mRedditDataRoomDatabase.subscribedUserDao(),
                 () -> mUserListingViewModel.retryLoadingMore());
 
         mUserListingRecyclerView.setAdapter(mAdapter);
 
         UserListingViewModel.Factory factory = new UserListingViewModel.Factory(mRetrofit, mQuery,
-                PostDataSource.SORT_TYPE_RELEVANCE);
+                sortType);
         mUserListingViewModel = new ViewModelProvider(this, factory).get(UserListingViewModel.class);
         mUserListingViewModel.getUsers().observe(this, UserData -> mAdapter.submitList(UserData));
 
@@ -155,7 +161,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         }
     }
 
-    public void changeSortType(String sortType) {
+    public void changeSortType(SortType sortType) {
         mUserListingViewModel.changeSortType(sortType);
     }
 

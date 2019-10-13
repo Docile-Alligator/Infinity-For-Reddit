@@ -22,10 +22,10 @@ public class PostViewModel extends ViewModel {
     private LiveData<Boolean> hasPostLiveData;
     private LiveData<PagedList<Post>> posts;
     private MutableLiveData<Boolean> nsfwLiveData;
-    private MutableLiveData<String> sortTypeLiveData;
+    private MutableLiveData<SortType> sortTypeLiveData;
     private NSFWAndSortTypeLiveData nsfwAndSortTypeLiveData;
 
-    public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, int postType, String sortType,
+    public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, int postType, SortType sortType,
                          int filter, boolean nsfw) {
         postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, postType,
                 sortType, filter, nsfw);
@@ -57,7 +57,7 @@ public class PostViewModel extends ViewModel {
     }
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
-                         String sortType, int filter, boolean nsfw) {
+                         SortType sortType, int filter, boolean nsfw) {
         postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, subredditName,
                 postType, sortType, filter, nsfw);
 
@@ -88,7 +88,7 @@ public class PostViewModel extends ViewModel {
     }
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
-                         String sortType, String where, int filter, boolean nsfw) {
+                         SortType sortType, String where, int filter, boolean nsfw) {
         postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, subredditName,
                 postType, sortType, where, filter, nsfw);
 
@@ -119,7 +119,7 @@ public class PostViewModel extends ViewModel {
     }
 
     public PostViewModel(Retrofit retrofit, String accessToken, Locale locale, String subredditName, String query,
-                         int postType, String sortType, int filter, boolean nsfw) {
+                         int postType, SortType sortType, int filter, boolean nsfw) {
         postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, locale, subredditName,
                 query, postType, sortType, filter, nsfw);
 
@@ -173,7 +173,7 @@ public class PostViewModel extends ViewModel {
         postDataSourceFactory.getPostDataSource().retryLoadingMore();
     }
 
-    public void changeSortType(String sortType) {
+    public void changeSortType(SortType sortType) {
         sortTypeLiveData.postValue(sortType);
     }
 
@@ -188,12 +188,12 @@ public class PostViewModel extends ViewModel {
         private String subredditName;
         private String query;
         private int postType;
-        private String sortType;
+        private SortType sortType;
         private String userWhere;
         private int filter;
         private boolean nsfw;
 
-        public Factory(Retrofit retrofit, String accessToken, Locale locale, int postType, String sortType,
+        public Factory(Retrofit retrofit, String accessToken, Locale locale, int postType, SortType sortType,
                        int filter, boolean nsfw) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
@@ -205,7 +205,7 @@ public class PostViewModel extends ViewModel {
         }
 
         public Factory(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
-                       String sortType, int filter, boolean nsfw) {
+                       SortType sortType, int filter, boolean nsfw) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.locale = locale;
@@ -217,7 +217,7 @@ public class PostViewModel extends ViewModel {
         }
 
         public Factory(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
-                       String sortType, String where, int filter, boolean nsfw) {
+                       SortType sortType, String where, int filter, boolean nsfw) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.locale = locale;
@@ -230,7 +230,7 @@ public class PostViewModel extends ViewModel {
         }
 
         public Factory(Retrofit retrofit, String accessToken, Locale locale, String subredditName, String query,
-                       int postType, String sortType, int filter, boolean nsfw) {
+                       int postType, SortType sortType, int filter, boolean nsfw) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.locale = locale;
@@ -261,8 +261,8 @@ public class PostViewModel extends ViewModel {
         }
     }
 
-    private static class NSFWAndSortTypeLiveData extends MediatorLiveData<Pair<Boolean, String>> {
-        public NSFWAndSortTypeLiveData(LiveData<Boolean> nsfw, LiveData<String> sortType) {
+    private static class NSFWAndSortTypeLiveData extends MediatorLiveData<Pair<Boolean, SortType>> {
+        public NSFWAndSortTypeLiveData(LiveData<Boolean> nsfw, LiveData<SortType> sortType) {
             addSource(nsfw, accessToken1 -> setValue(Pair.create(accessToken1, sortType.getValue())));
             addSource(sortType, sortType1 -> setValue(Pair.create(nsfw.getValue(), sortType1)));
         }

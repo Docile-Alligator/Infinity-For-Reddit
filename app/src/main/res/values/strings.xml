@@ -188,6 +188,12 @@
     <string name="sort_relevance">Relevance</string>
     <string name="sort_comments">Comments</string>
     <string name="sort_activity">Activity</string>
+    <string name="sort_time_hour">Hour</string>
+    <string name="sort_time_day">Day</string>
+    <string name="sort_time_week">Week</string>
+    <string name="sort_time_month">Month</string>
+    <string name="sort_time_year">Year</string>
+    <string name="sort_time_all_time">All Time</string>
 
     <string name="open_link_with">Open link with</string>
     <string name="no_browser_found">No browser found</string>

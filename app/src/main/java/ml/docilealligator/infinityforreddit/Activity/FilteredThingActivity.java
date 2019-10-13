@@ -31,6 +31,7 @@ import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SearchPostSortTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.Fragment.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.UserThingSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
@@ -40,15 +41,15 @@ import ml.docilealligator.infinityforreddit.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 
-public class FilteredThingActivity extends BaseActivity implements SortTypeBottomSheetFragment.SortTypeSelectionCallback,
-        SearchPostSortTypeBottomSheetFragment.SearchSortTypeSelectionCallback, UserThingSortTypeBottomSheetFragment.UserThingSortTypeSelectionCallback {
+public class FilteredThingActivity extends BaseActivity implements SortTypeSelectionCallback {
 
     public static final String EXTRA_NAME = "ESN";
     public static final String EXTRA_QUERY = "EQ";
     public static final String EXTRA_FILTER = "EF";
     public static final String EXTRA_POST_TYPE = "EPT";
-    public static final String EXTRA_SORT_TYPE = "EST";
     public static final String EXTRA_USER_WHERE = "EUW";
 
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
@@ -79,6 +80,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeBotto
     private SortTypeBottomSheetFragment subredditSortTypeBottomSheetFragment;
     private UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment;
     private SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment;
+    private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,7 +144,6 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeBotto
         name = getIntent().getStringExtra(EXTRA_NAME);
         postType = getIntent().getIntExtra(EXTRA_POST_TYPE, PostDataSource.TYPE_FRONT_PAGE);
         int filter = getIntent().getIntExtra(EXTRA_FILTER, Post.TEXT_TYPE);
-        String sortType = getIntent().getStringExtra(EXTRA_SORT_TYPE);
 
         if (savedInstanceState != null) {
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
@@ -153,14 +154,12 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeBotto
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_filtered_posts_activity, mFragment).commit();
 
             if (!mNullAccessToken && mAccessToken == null) {
-                getCurrentAccountAndBindView(filter, sortType);
+                getCurrentAccountAndBindView(filter);
             } else {
-                /*mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_filtered_posts_activity, mFragment).commit();*/
-                bindView(filter, sortType, false);
+                bindView(filter, false);
             }
         } else {
-            getCurrentAccountAndBindView(filter, sortType);
+            getCurrentAccountAndBindView(filter);
         }
     }
 
@@ -169,18 +168,18 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeBotto
         return mSharedPreferences;
     }
 
-    private void getCurrentAccountAndBindView(int filter, String sortType) {
+    private void getCurrentAccountAndBindView(int filter) {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
             if (account == null) {
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
             }
-            bindView(filter, sortType, true);
+            bindView(filter, true);
         }).execute();
     }
 
-    private void bindView(int filter, String sortType, boolean initializeFragment) {
+    private void bindView(int filter, boolean initializeFragment) {
         switch (postType) {
             case PostDataSource.TYPE_FRONT_PAGE:
                 getSupportActionBar().setTitle(name);
@@ -223,6 +222,8 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeBotto
                 break;
         }
 
+        sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
+
         switch (filter) {
             case Post.NSFW_TYPE:
                 toolbar.setSubtitle(R.string.nsfw);
@@ -249,7 +250,6 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeBotto
             Bundle bundle = new Bundle();
             bundle.putString(PostFragment.EXTRA_NAME, name);
             bundle.putInt(PostFragment.EXTRA_POST_TYPE, postType);
-            bundle.putString(PostFragment.EXTRA_SORT_TYPE, sortType);
             bundle.putInt(PostFragment.EXTRA_FILTER, filter);
             bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
             if (postType == PostDataSource.TYPE_USER) {
@@ -350,18 +350,16 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeBotto
     }
 
     @Override
-    public void searchSortTypeSelected(String sortType) {
+    public void sortTypeSelected(SortType sortType) {
         ((PostFragment) mFragment).changeSortType(sortType);
     }
 
     @Override
     public void sortTypeSelected(String sortType) {
-        ((PostFragment) mFragment).changeSortType(sortType);
-    }
-
-    @Override
-    public void userThingSortTypeSelected(String sortType) {
-        ((PostFragment) mFragment).changeSortType(sortType);
+        Bundle bundle = new Bundle();
+        bundle.putString(SortTimeBottomSheetFragment.EXTRA_SORT_TYPE, sortType);
+        sortTimeBottomSheetFragment.setArguments(bundle);
+        sortTimeBottomSheetFragment.show(getSupportFragmentManager(), sortTimeBottomSheetFragment.getTag());
     }
 
     @Subscribe

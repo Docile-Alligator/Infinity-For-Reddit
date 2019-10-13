@@ -9,12 +9,12 @@ import retrofit2.Retrofit;
 public class SubredditListingDataSourceFactory extends DataSource.Factory {
     private Retrofit retrofit;
     private String query;
-    private String sortType;
+    private SortType sortType;
 
     private SubredditListingDataSource subredditListingDataSource;
     private MutableLiveData<SubredditListingDataSource> subredditListingDataSourceMutableLiveData;
 
-    SubredditListingDataSourceFactory(Retrofit retrofit, String query, String sortType) {
+    SubredditListingDataSourceFactory(Retrofit retrofit, String query, SortType sortType) {
         this.retrofit = retrofit;
         this.query = query;
         this.sortType = sortType;
@@ -37,7 +37,7 @@ public class SubredditListingDataSourceFactory extends DataSource.Factory {
         return subredditListingDataSource;
     }
 
-    void changeSortType(String sortType) {
+    void changeSortType(SortType sortType) {
         this.sortType = sortType;
     }
 }

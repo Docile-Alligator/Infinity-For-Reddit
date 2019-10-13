@@ -29,4 +29,20 @@ public class SharedPreferencesUtils {
     public static final String CONTENT_FONT_SIZE_KEY = "content_font_size";
     public static final String AMOLED_DARK_KEY = "amoled_dark";
     public static final String IMMERSIVE_INTERFACE_KEY = "immersive_interface";
+    public static final String SORT_TYPE_BEST_POST = "sort_type_best_post";
+    public static final String SORT_TIME_BEST_POST = "sort_time_best_post";
+    public static final String SORT_TYPE_ALL_POST = "sort_type_all_post";
+    public static final String SORT_TIME_ALL_POST = "sort_time_all_post";
+    public static final String SORT_TYPE_POPULAR_POST = "sort_type_popular_post";
+    public static final String SORT_TIME_POPULAR_POST = "sort_time_popular_post";
+    public static final String SORT_TYPE_SEARCH_POST = "sort_type_search_post";
+    public static final String SORT_TIME_SEARCH_POST = "sort_time_search_post";
+    public static final String SORT_TYPE_SUBREDDIT_POST = "sort_type_subreddit_post";
+    public static final String SORT_TIME_SUBREDDIT_POST = "sort_time_subreddit_post";
+    public static final String SORT_TYPE_USER_POST = "sort_type_user_post";
+    public static final String SORT_TIME_USER_POST = "sort_time_user_post";
+    public static final String SORT_TYPE_USER_COMMENT = "sort_type_user_comment";
+    public static final String SORT_TIME_USER_COMMENT = "sort_time_user_comment";
+    public static final String SORT_TYPE_SEARCH_SUBREDDIT = "sort_type_search_subreddit";
+    public static final String SORT_TYPE_SEARCH_USER = "sort_type_search_user";
 }

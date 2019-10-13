@@ -13,7 +13,7 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
 
     private Retrofit retrofit;
     private String query;
-    private String sortType;
+    private SortType sortType;
 
     private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
     private MutableLiveData<NetworkState> initialLoadStateLiveData;
@@ -22,7 +22,7 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
     private LoadParams<String> params;
     private LoadCallback<String, SubredditData> callback;
 
-    SubredditListingDataSource(Retrofit retrofit, String query, String sortType) {
+    SubredditListingDataSource(Retrofit retrofit, String query, SortType sortType) {
         this.retrofit = retrofit;
         this.query = query;
         this.sortType = sortType;
@@ -47,7 +47,7 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull LoadInitialCallback<String, SubredditData> callback) {
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
-        FetchSubredditData.fetchSubredditListingData(retrofit, query, null, sortType,
+        FetchSubredditData.fetchSubredditListingData(retrofit, query, null, sortType.getType().value,
                 new FetchSubredditData.FetchSubredditListingDataListener() {
                     @Override
                     public void onFetchSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
@@ -82,7 +82,7 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
             return;
         }
 
-        FetchSubredditData.fetchSubredditListingData(retrofit, query, params.key, sortType,
+        FetchSubredditData.fetchSubredditListingData(retrofit, query, params.key, sortType.getType().value,
                 new FetchSubredditData.FetchSubredditListingDataListener() {
                     @Override
                     public void onFetchSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {

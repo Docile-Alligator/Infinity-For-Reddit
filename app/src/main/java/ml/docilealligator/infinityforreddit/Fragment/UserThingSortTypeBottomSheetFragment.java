@@ -17,8 +17,9 @@ import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 
 
 /**
@@ -26,7 +27,6 @@ import ml.docilealligator.infinityforreddit.R;
  */
 public class UserThingSortTypeBottomSheetFragment extends RoundedBottomSheetDialogFragment {
 
-    static final String EXTRA_NO_BEST_TYPE = "ENBT";
     @BindView(R.id.new_type_text_view_user_thing_sort_type_bottom_sheet_fragment)
     TextView newTypeTextView;
     @BindView(R.id.hot_type_text_view_user_thing_sort_type_bottom_sheet_fragment)
@@ -55,38 +55,32 @@ public class UserThingSortTypeBottomSheetFragment extends RoundedBottomSheetDial
 
         newTypeTextView.setOnClickListener(view -> {
             if (activity != null) {
-                ((UserThingSortTypeSelectionCallback) activity).userThingSortTypeSelected(PostDataSource.SORT_TYPE_NEW);
+                ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.NEW));
             }
             dismiss();
         });
 
         hotTypeTextView.setOnClickListener(view -> {
             if (activity != null) {
-                ((UserThingSortTypeSelectionCallback) activity).userThingSortTypeSelected(PostDataSource.SORT_TYPE_HOT);
+                ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.HOT));
             }
             dismiss();
         });
 
         topTypeTextView.setOnClickListener(view -> {
             if (activity != null) {
-                ((UserThingSortTypeSelectionCallback) activity).userThingSortTypeSelected(PostDataSource.SORT_TYPE_TOP);
+                ((SortTypeSelectionCallback) activity).sortTypeSelected(SortType.Type.TOP.name());
             }
             dismiss();
         });
 
         controversialTypeTextView.setOnClickListener(view -> {
             if (activity != null) {
-                ((UserThingSortTypeSelectionCallback) activity).userThingSortTypeSelected(PostDataSource.SORT_TYPE_CONTROVERSIAL);
+                ((SortTypeSelectionCallback) activity).sortTypeSelected(SortType.Type.CONTROVERSIAL.name());
             }
             dismiss();
         });
 
         return rootView;
     }
-
-
-    public interface UserThingSortTypeSelectionCallback {
-        void userThingSortTypeSelected(String sortType);
-    }
-
 }

@@ -15,7 +15,7 @@ class PostDataSourceFactory extends DataSource.Factory {
     private String subredditName;
     private String query;
     private int postType;
-    private String sortType;
+    private SortType sortType;
     private String userWhere;
     private int filter;
     private boolean nsfw;
@@ -23,7 +23,7 @@ class PostDataSourceFactory extends DataSource.Factory {
     private PostDataSource postDataSource;
     private MutableLiveData<PostDataSource> postDataSourceLiveData;
 
-    PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, int postType, String sortType,
+    PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, int postType, SortType sortType,
                           int filter, boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
@@ -36,7 +36,7 @@ class PostDataSourceFactory extends DataSource.Factory {
     }
 
     PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, String subredditName,
-                          int postType, String sortType, int filter, boolean nsfw) {
+                          int postType, SortType sortType, int filter, boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
@@ -49,7 +49,7 @@ class PostDataSourceFactory extends DataSource.Factory {
     }
 
     PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, String subredditName,
-                          int postType, String sortType, String where, int filter, boolean nsfw) {
+                          int postType, SortType sortType, String where, int filter, boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
@@ -63,7 +63,7 @@ class PostDataSourceFactory extends DataSource.Factory {
     }
 
     PostDataSourceFactory(Retrofit retrofit, String accessToken, Locale locale, String subredditName,
-                          String query, int postType, String sortType, int filter, boolean nsfw) {
+                          String query, int postType, SortType sortType, int filter, boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
@@ -105,11 +105,11 @@ class PostDataSourceFactory extends DataSource.Factory {
         return postDataSource;
     }
 
-    void changeSortType(String sortType) {
+    void changeSortType(SortType sortType) {
         this.sortType = sortType;
     }
 
-    void changeNSFWAndSortType(boolean nsfw, String sortType) {
+    void changeNSFWAndSortType(boolean nsfw, SortType sortType) {
         this.nsfw = nsfw;
         this.sortType = sortType;
     }

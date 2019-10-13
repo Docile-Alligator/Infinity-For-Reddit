@@ -55,6 +55,7 @@ import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchUserData;
 import ml.docilealligator.infinityforreddit.Fragment.CommentsListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
+import ml.docilealligator.infinityforreddit.Fragment.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.UserThingSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -63,6 +64,8 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.ReadMessage;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserDao;
 import ml.docilealligator.infinityforreddit.User.UserDao;
 import ml.docilealligator.infinityforreddit.User.UserData;
@@ -71,7 +74,7 @@ import ml.docilealligator.infinityforreddit.UserFollowing;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-public class ViewUserDetailActivity extends BaseActivity implements UserThingSortTypeBottomSheetFragment.UserThingSortTypeSelectionCallback {
+public class ViewUserDetailActivity extends BaseActivity implements SortTypeSelectionCallback {
 
     public static final String EXTRA_USER_NAME_KEY = "EUNK";
     public static final String EXTRA_MESSAGE_FULLNAME = "ENF";
@@ -122,6 +125,7 @@ public class ViewUserDetailActivity extends BaseActivity implements UserThingSor
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
     private UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment;
+    private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
@@ -385,6 +389,7 @@ public class ViewUserDetailActivity extends BaseActivity implements UserThingSor
         });
 
         userThingSortTypeBottomSheetFragment = new UserThingSortTypeBottomSheetFragment();
+        sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
     }
 
     @Override
@@ -610,8 +615,13 @@ public class ViewUserDetailActivity extends BaseActivity implements UserThingSor
     }
 
     @Override
-    public void userThingSortTypeSelected(String sortType) {
+    public void sortTypeSelected(SortType sortType) {
         sectionsPagerAdapter.changeSortType(sortType);
+    }
+
+    @Override
+    public void sortTypeSelected(String sortType) {
+        sortTimeBottomSheetFragment.show(getSupportFragmentManager(), sortTimeBottomSheetFragment.getTag());
     }
 
     @Subscribe
@@ -671,7 +681,6 @@ public class ViewUserDetailActivity extends BaseActivity implements UserThingSor
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_USER);
                 bundle.putString(PostFragment.EXTRA_USER_NAME, username);
                 bundle.putString(PostFragment.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_SUBMITTED);
-                bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_NEW);
                 bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 fragment.setArguments(bundle);
@@ -754,13 +763,23 @@ public class ViewUserDetailActivity extends BaseActivity implements UserThingSor
             }
         }
 
-        public void changeSortType(String sortType) {
+        public void changeSortType(SortType sortType) {
             if (viewPager.getCurrentItem() == 0) {
                 if (postFragment != null) {
+                    mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_USER_POST, sortType.getType().name()).apply();
+                    if(sortType.getTime() != null) {
+                        mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_USER_POST, sortType.getTime().name()).apply();
+                    }
+
                     postFragment.changeSortType(sortType);
                 }
             } else {
                 if (commentsListingFragment != null) {
+                    mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_USER_COMMENT, sortType.getType().name()).apply();
+                    if(sortType.getTime() != null) {
+                        mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_USER_COMMENT, sortType.getTime().name()).apply();
+                    }
+
                     commentsListingFragment.changeSortType(sortType);
                 }
             }

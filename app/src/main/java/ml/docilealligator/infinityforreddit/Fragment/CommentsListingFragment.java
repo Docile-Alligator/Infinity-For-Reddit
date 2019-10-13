@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.Fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
@@ -36,9 +37,10 @@ import ml.docilealligator.infinityforreddit.CommentViewModel;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
-import ml.docilealligator.infinityforreddit.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.SortType;
 import retrofit2.Retrofit;
 
 
@@ -76,6 +78,8 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     Retrofit mOauthRetrofit;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
+    @Inject
+    SharedPreferences mSharedPreferences;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private RequestManager mGlide;
@@ -144,6 +148,14 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
                 () -> mCommentViewModel.retryLoadingMore());
 
         String username = getArguments().getString(EXTRA_USERNAME);
+        String sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_USER_COMMENT, SortType.Type.NEW.value);
+        SortType sortType;
+        if(sort.equals(SortType.Type.CONTROVERSIAL.value) || sort.equals(SortType.Type.TOP.value)) {
+            String sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_USER_COMMENT, SortType.Time.ALL.value);
+            sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()), SortType.Time.valueOf(sortTime.toUpperCase()));
+        } else {
+            sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
+        }
 
         mCommentRecyclerView.setAdapter(mAdapter);
 
@@ -151,11 +163,11 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
         if (mAccessToken == null) {
             factory = new CommentViewModel.Factory(mRetrofit,
-                    resources.getConfiguration().locale, mAccessToken, username, PostDataSource.SORT_TYPE_NEW,
+                    resources.getConfiguration().locale, null, username, sortType,
                     getArguments().getBoolean(EXTRA_ARE_SAVED_COMMENTS));
         } else {
             factory = new CommentViewModel.Factory(mOauthRetrofit,
-                    resources.getConfiguration().locale, mAccessToken, username, PostDataSource.SORT_TYPE_NEW,
+                    resources.getConfiguration().locale, mAccessToken, username, sortType,
                     getArguments().getBoolean(EXTRA_ARE_SAVED_COMMENTS));
         }
 
@@ -189,7 +201,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         mCommentViewModel.getPaginationNetworkState().observe(this, networkState -> mAdapter.setNetworkState(networkState));
     }
 
-    public void changeSortType(String sortType) {
+    public void changeSortType(SortType sortType) {
         mCommentViewModel.changeSortType(sortType);
     }
 

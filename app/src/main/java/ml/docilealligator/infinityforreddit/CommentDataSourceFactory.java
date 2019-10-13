@@ -14,14 +14,14 @@ class CommentDataSourceFactory extends DataSource.Factory {
     private Locale locale;
     private String accessToken;
     private String username;
-    private String sortType;
+    private SortType sortType;
     private boolean areSavedComments;
 
     private CommentDataSource commentDataSource;
     private MutableLiveData<CommentDataSource> commentDataSourceLiveData;
 
     CommentDataSourceFactory(Retrofit retrofit, Locale locale, @Nullable String accessToken,
-                             String username, String sortType,
+                             String username, SortType sortType,
                              boolean areSavedComments) {
         this.retrofit = retrofit;
         this.locale = locale;
@@ -49,7 +49,7 @@ class CommentDataSourceFactory extends DataSource.Factory {
         return commentDataSource;
     }
 
-    void changeSortType(String sortType) {
+    void changeSortType(SortType sortType) {
         this.sortType = sortType;
     }
 }

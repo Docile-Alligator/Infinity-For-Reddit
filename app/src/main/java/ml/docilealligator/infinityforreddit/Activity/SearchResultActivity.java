@@ -37,6 +37,7 @@ import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SearchPostSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SearchUserAndSubredditSortTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.Fragment.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SubredditListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.UserListingFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
@@ -45,9 +46,10 @@ import ml.docilealligator.infinityforreddit.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 
-public class SearchResultActivity extends BaseActivity implements SearchPostSortTypeBottomSheetFragment.SearchSortTypeSelectionCallback,
-        SearchUserAndSubredditSortTypeBottomSheetFragment.SearchUserAndSubredditSortTypeSelectionCallback {
+public class SearchResultActivity extends BaseActivity implements SortTypeSelectionCallback {
     static final String EXTRA_QUERY = "QK";
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
 
@@ -73,6 +75,7 @@ public class SearchResultActivity extends BaseActivity implements SearchPostSort
     private String mSubredditName;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment;
+    private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
     private SearchUserAndSubredditSortTypeBottomSheetFragment searchUserAndSubredditSortTypeBottomSheetFragment;
 
     @Override
@@ -145,6 +148,8 @@ public class SearchResultActivity extends BaseActivity implements SearchPostSort
         searchPostSortTypeBottomSheetFragment = new SearchPostSortTypeBottomSheetFragment();
         Bundle bundle = new Bundle();
         searchPostSortTypeBottomSheetFragment.setArguments(bundle);
+
+        sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
 
         searchUserAndSubredditSortTypeBottomSheetFragment = new SearchUserAndSubredditSortTypeBottomSheetFragment();
 
@@ -240,12 +245,20 @@ public class SearchResultActivity extends BaseActivity implements SearchPostSort
     }
 
     @Override
-    public void searchSortTypeSelected(String sortType) {
-        sectionsPagerAdapter.changeSortType(sortType, 0);
+    public void sortTypeSelected(SortType sortType) {
+        sectionsPagerAdapter.changeSortType(sortType);
     }
 
     @Override
-    public void searchUserAndSubredditSortTypeSelected(String sortType, int fragmentPosition) {
+    public void sortTypeSelected(String sortType) {
+        Bundle bundle = new Bundle();
+        bundle.putString(SortTimeBottomSheetFragment.EXTRA_SORT_TYPE, sortType);
+        sortTimeBottomSheetFragment.setArguments(bundle);
+        sortTimeBottomSheetFragment.show(getSupportFragmentManager(), sortTimeBottomSheetFragment.getTag());
+    }
+
+    @Override
+    public void searchUserAndSubredditSortTypeSelected(SortType sortType, int fragmentPosition) {
         sectionsPagerAdapter.changeSortType(sortType, fragmentPosition);
     }
 
@@ -277,7 +290,6 @@ public class SearchResultActivity extends BaseActivity implements SearchPostSort
                     PostFragment mFragment = new PostFragment();
                     Bundle bundle = new Bundle();
                     bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SEARCH);
-                    bundle.putString(PostFragment.EXTRA_SORT_TYPE, PostDataSource.SORT_TYPE_RELEVANCE);
                     bundle.putString(PostFragment.EXTRA_NAME, mSubredditName);
                     bundle.putString(PostFragment.EXTRA_QUERY, mQuery);
                     bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
@@ -343,15 +355,23 @@ public class SearchResultActivity extends BaseActivity implements SearchPostSort
             return fragment;
         }
 
-        void changeSortType(String sortType, int fragmentPosition) {
+        void changeSortType(SortType sortType) {
+            mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SEARCH_POST, sortType.getType().name()).apply();
+            if(sortType.getTime() != null) {
+                mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SEARCH_POST, sortType.getTime().name()).apply();
+            }
+
+            postFragment.changeSortType(sortType);
+        }
+
+        void changeSortType(SortType sortType, int fragmentPosition) {
             switch (fragmentPosition) {
-                case 0:
-                    postFragment.changeSortType(sortType);
-                    break;
                 case 1:
+                    mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SEARCH_SUBREDDIT, sortType.getType().name()).apply();
                     subredditListingFragment.changeSortType(sortType);
                     break;
                 case 2:
+                    mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SEARCH_USER, sortType.getType().name()).apply();
                     userListingFragment.changeSortType(sortType);
             }
         }
