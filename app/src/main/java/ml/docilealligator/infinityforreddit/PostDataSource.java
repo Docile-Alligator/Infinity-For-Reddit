@@ -388,7 +388,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
         Call<String> getPost;
-        if (accessToken != null) {
+        if (accessToken == null) {
             if (sortType.getTime() != null) {
                 getPost = api.getSubredditBestPosts(subredditOrUserName, sortType.getType().value,
                         sortType.getTime().value, after);

@@ -231,6 +231,8 @@
     <string name="post_hide_success">Post hidden</string>
     <string name="post_hide_failed">Unable to hide post</string>
     <string name="post_unhide_success">Post unhidden</string>
+    <string name="thing_favorite_failed">Failed to favorite it</string>
+    <string name="thing_unfavorite_failed">Failed to unfavorite it</string>
     <string name="post_unhide_failed">Unable to unhide post</string>
     <string name="delete_this_post">Delete This Post</string>
     <string name="delete_this_comment">Delete This Comment</string>

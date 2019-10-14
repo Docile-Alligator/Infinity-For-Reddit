@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -136,6 +137,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
                                 @Override
                                 public void failed() {
+                                    Toast.makeText(mContext, R.string.thing_unfavorite_failed, Toast.LENGTH_SHORT).show();
                                     int position = viewHolder.getAdapterPosition() - offset;
                                     if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
                                         mFavoriteSubscribedUserData.get(position).setFavorite(true);
@@ -160,6 +162,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
                                 @Override
                                 public void failed() {
+                                    Toast.makeText(mContext, R.string.thing_favorite_failed, Toast.LENGTH_SHORT).show();
                                     int position = viewHolder.getAdapterPosition() - offset;
                                     if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
                                         mFavoriteSubscribedUserData.get(position).setFavorite(false);
@@ -212,6 +215,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
                                 @Override
                                 public void failed() {
+                                    Toast.makeText(mContext, R.string.thing_unfavorite_failed, Toast.LENGTH_SHORT).show();
                                     int position = viewHolder.getAdapterPosition() - 1;
                                     if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
                                         mFavoriteSubscribedUserData.get(position).setFavorite(true);
@@ -236,6 +240,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
                                 @Override
                                 public void failed() {
+                                    Toast.makeText(mContext, R.string.thing_favorite_failed, Toast.LENGTH_SHORT).show();
                                     int position = viewHolder.getAdapterPosition() - 1;
                                     if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
                                         mFavoriteSubscribedUserData.get(position).setFavorite(false);

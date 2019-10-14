@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -167,6 +168,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
 
                                     @Override
                                     public void failed() {
+                                        Toast.makeText(mContext, R.string.thing_unfavorite_failed, Toast.LENGTH_SHORT).show();
                                         int position = viewHolder.getAdapterPosition() - offset;
                                         if(position >= 0 && mSubscribedSubredditData.size() > position) {
                                             mSubscribedSubredditData.get(position).setFavorite(true);
@@ -191,6 +193,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
 
                                     @Override
                                     public void failed() {
+                                        Toast.makeText(mContext, R.string.thing_favorite_failed, Toast.LENGTH_SHORT).show();
                                         int position = viewHolder.getAdapterPosition() - offset;
                                         if(position >= 0 && mSubscribedSubredditData.size() > position) {
                                             mSubscribedSubredditData.get(position).setFavorite(false);
@@ -246,6 +249,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
 
                                 @Override
                                 public void failed() {
+                                    Toast.makeText(mContext, R.string.thing_unfavorite_failed, Toast.LENGTH_SHORT).show();
                                     int position = viewHolder.getAdapterPosition() - 1;
                                     if(position >= 0 && mFavoriteSubscribedSubredditData.size() > position) {
                                         mFavoriteSubscribedSubredditData.get(position).setFavorite(true);
@@ -270,6 +274,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
 
                                 @Override
                                 public void failed() {
+                                    Toast.makeText(mContext, R.string.thing_favorite_failed, Toast.LENGTH_SHORT).show();
                                     int position = viewHolder.getAdapterPosition() - 1;
                                     if(position >= 0 && mFavoriteSubscribedSubredditData.size() > position) {
                                         mFavoriteSubscribedSubredditData.get(position).setFavorite(false);
