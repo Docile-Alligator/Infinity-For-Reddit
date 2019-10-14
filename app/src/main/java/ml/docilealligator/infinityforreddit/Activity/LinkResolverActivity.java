@@ -149,6 +149,12 @@ public class LinkResolverActivity extends AppCompatActivity {
     }
 
     private void deepLinkError(Uri uri) {
+        String authority = uri.getAuthority();
+        if(authority != null && (authority.contains("reddit.com") || authority.contains("redd.it") || authority.contains("reddit.app.link"))) {
+            openInCustomTabs(uri, getPackageManager());
+            return;
+        }
+
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(uri);
 
