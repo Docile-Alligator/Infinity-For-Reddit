@@ -188,6 +188,10 @@
     <string name="sort_relevance">Relevance</string>
     <string name="sort_comments">Comments</string>
     <string name="sort_activity">Activity</string>
+    <string name="sort_confidence">Confidence</string>
+    <string name="sort_old">Old</string>
+    <string name="sort_qa">QA</string>
+    <string name="sort_live">Live</string>
     <string name="sort_time_hour">Hour</string>
     <string name="sort_time_day">Day</string>
     <string name="sort_time_week">Week</string>
@@ -343,4 +347,7 @@
 
     <string name="favorites">Favorites</string>
     <string name="all">All</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

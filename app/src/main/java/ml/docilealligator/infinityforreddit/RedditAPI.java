@@ -193,16 +193,19 @@ public interface RedditAPI {
 
     @GET("/comments/{id}/placeholder/{singleCommentId}.json?context=8&raw_json=1")
     Call<String> getPostAndCommentsSingleThreadByIdOauth(@Path("id") String id, @Path("singleCommentId") String singleCommentId,
+                                                         @Query("sort") String sortType,
                                                          @HeaderMap Map<String, String> headers);
 
     @GET("/comments/{id}.json?raw_json=1")
-    Call<String> getPostAndCommentsByIdOauth(@Path("id") String id, @HeaderMap Map<String, String> headers);
+    Call<String> getPostAndCommentsByIdOauth(@Path("id") String id, @Query("sort") String sortType,
+                                             @HeaderMap Map<String, String> headers);
 
     @GET("/comments/{id}/placeholder/{singleCommentId}.json?context=8&raw_json=1")
-    Call<String> getPostAndCommentsSingleThreadById(@Path("id") String id, @Path("singleCommentId") String singleCommentId);
+    Call<String> getPostAndCommentsSingleThreadById(@Path("id") String id, @Path("singleCommentId") String singleCommentId,
+                                                    @Query("sort") String sortType);
 
     @GET("/comments/{id}.json?raw_json=1")
-    Call<String> getPostAndCommentsById(@Path("id") String id);
+    Call<String> getPostAndCommentsById(@Path("id") String id, @Query("sort") String sortType);
 
     @Multipart
     @POST(".")

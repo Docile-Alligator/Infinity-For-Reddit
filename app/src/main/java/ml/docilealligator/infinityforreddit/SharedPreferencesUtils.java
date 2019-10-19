@@ -45,4 +45,5 @@ public class SharedPreferencesUtils {
     public static final String SORT_TIME_USER_COMMENT = "sort_time_user_comment";
     public static final String SORT_TYPE_SEARCH_SUBREDDIT = "sort_type_search_subreddit";
     public static final String SORT_TYPE_SEARCH_USER = "sort_type_search_user";
+    public static final String SORT_TYPE_POST_COMMENT = "sort_type_post_comment";
 }

@@ -61,6 +61,7 @@ import ml.docilealligator.infinityforreddit.FetchComment;
 import ml.docilealligator.infinityforreddit.FetchPost;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Fragment.FlairBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.Fragment.PostCommentSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.HidePost;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.ParseComment;
@@ -73,6 +74,8 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.RedditUtils;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -81,7 +84,8 @@ import retrofit2.Retrofit;
 import static ml.docilealligator.infinityforreddit.Activity.CommentActivity.EXTRA_COMMENT_DATA_KEY;
 import static ml.docilealligator.infinityforreddit.Activity.CommentActivity.WRITE_COMMENT_REQUEST_CODE;
 
-public class ViewPostDetailActivity extends BaseActivity implements FlairBottomSheetFragment.FlairSelectionCallback {
+public class ViewPostDetailActivity extends BaseActivity implements FlairBottomSheetFragment.FlairSelectionCallback,
+        SortTypeSelectionCallback {
 
     public static final String EXTRA_POST_DATA = "EPD";
     public static final String EXTRA_POST_LIST_POSITION = "EPLI";
@@ -154,8 +158,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     private boolean mNeedBlurNsfw;
     private boolean mNeedBlurSpoiler;
     private boolean showToast = false;
+    private boolean isSortingComments = false;
     private LinearLayoutManager mLinearLayoutManager;
     private CommentAndPostRecyclerViewAdapter mAdapter;
+    private PostCommentSortTypeBottomSheetFragment postCommentSortTypeBottomSheetFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -251,6 +257,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         if (getIntent().hasExtra(EXTRA_POST_LIST_POSITION)) {
             postListPosition = getIntent().getIntExtra(EXTRA_POST_LIST_POSITION, -1);
         }
+
+        postCommentSortTypeBottomSheetFragment = new PostCommentSortTypeBottomSheetFragment();
     }
 
     @Override
@@ -321,6 +329,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
 
                 mMenu.findItem(R.id.action_comment_view_post_detail_activity).setVisible(true);
+                mMenu.findItem(R.id.action_sort_view_post_detail_activity).setVisible(true);
 
                 if (mAccessToken != null) {
                     if (mPost.isSaved()) {
@@ -418,20 +427,25 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         mProgressBar.setVisibility(View.VISIBLE);
         mGlide.clear(mFetchPostInfoImageView);
 
+        String sortType = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value).toLowerCase();
+
+
         Call<String> postAndComments;
         if (mAccessToken == null) {
             if (isSingleCommentThreadMode && mSingleCommentId != null) {
-                postAndComments = mRetrofit.create(RedditAPI.class).getPostAndCommentsSingleThreadById(subredditId, mSingleCommentId);
+                postAndComments = mRetrofit.create(RedditAPI.class).getPostAndCommentsSingleThreadById(
+                        subredditId, mSingleCommentId, sortType);
             } else {
-                postAndComments = mRetrofit.create(RedditAPI.class).getPostAndCommentsById(subredditId);
+                postAndComments = mRetrofit.create(RedditAPI.class).getPostAndCommentsById(subredditId,
+                        sortType);
             }
         } else {
             if (isSingleCommentThreadMode && mSingleCommentId != null) {
                 postAndComments = mOauthRetrofit.create(RedditAPI.class).getPostAndCommentsSingleThreadByIdOauth(subredditId,
-                        mSingleCommentId, RedditUtils.getOAuthHeader(mAccessToken));
+                        mSingleCommentId, sortType, RedditUtils.getOAuthHeader(mAccessToken));
             } else {
                 postAndComments = mOauthRetrofit.create(RedditAPI.class).getPostAndCommentsByIdOauth(subredditId,
-                        RedditUtils.getOAuthHeader(mAccessToken));
+                        sortType, RedditUtils.getOAuthHeader(mAccessToken));
             }
         }
         postAndComments.enqueue(new Callback<String>() {
@@ -450,6 +464,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                 MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
 
                                 mMenu.findItem(R.id.action_comment_view_post_detail_activity).setVisible(true);
+                                mMenu.findItem(R.id.action_sort_view_post_detail_activity).setVisible(true);
 
                                 if (mAccessToken != null) {
                                     if (post.isSaved()) {
@@ -560,7 +575,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         });
     }
 
-    private void fetchComments(boolean changeRefreshState) {
+    private void fetchComments(boolean changeRefreshState, boolean checkSortState, String sortType) {
         mAdapter.setSingleComment(mSingleCommentId, isSingleCommentThreadMode);
         mAdapter.initiallyLoading();
         String commentId = null;
@@ -569,47 +584,70 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         }
 
         Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
-        FetchComment.fetchComments(retrofit, mAccessToken, mPost.getId(), commentId, mLocale, new FetchComment.FetchCommentListener() {
-            @Override
-            public void onFetchCommentSuccess(ArrayList<CommentData> expandedComments,
-                                              String parentId, ArrayList<String> children) {
-                ViewPostDetailActivity.this.children = children;
-
-                comments = expandedComments;
-                hasMoreChildren = children.size() != 0;
-                mAdapter.addComments(expandedComments, hasMoreChildren);
-
-                if (children.size() > 0) {
-                    mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                        @Override
-                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                            super.onScrolled(recyclerView, dx, dy);
-
-                            if (!isLoadingMoreChildren && loadMoreChildrenSuccess) {
-                                int visibleItemCount = mLinearLayoutManager.getChildCount();
-                                int totalItemCount = mLinearLayoutManager.getItemCount();
-                                int firstVisibleItemPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
-
-                                if ((visibleItemCount + firstVisibleItemPosition >= totalItemCount) && firstVisibleItemPosition >= 0) {
-                                    fetchMoreComments();
-                                }
+        FetchComment.fetchComments(retrofit, mAccessToken, mPost.getId(), commentId, sortType, mLocale,
+                new FetchComment.FetchCommentListener() {
+                    @Override
+                    public void onFetchCommentSuccess(ArrayList<CommentData> expandedComments,
+                                                      String parentId, ArrayList<String> children) {
+                        if (checkSortState && isSortingComments) {
+                            if (changeRefreshState) {
+                                isRefreshing = false;
                             }
-                        }
-                    });
-                }
-                if (changeRefreshState) {
-                    isRefreshing = false;
-                }
-            }
 
-            @Override
-            public void onFetchCommentFailed() {
-                mAdapter.initiallyLoadCommentsFailed();
-                if (changeRefreshState) {
-                    isRefreshing = false;
-                }
-            }
-        });
+                            return;
+                        }
+
+                        ViewPostDetailActivity.this.children = children;
+
+                        comments = expandedComments;
+                        hasMoreChildren = children.size() != 0;
+                        mAdapter.addComments(expandedComments, hasMoreChildren);
+
+                        if (children.size() > 0) {
+                            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                                @Override
+                                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                                    super.onScrolled(recyclerView, dx, dy);
+
+                                    if (!isLoadingMoreChildren && loadMoreChildrenSuccess) {
+                                        int visibleItemCount = mLinearLayoutManager.getChildCount();
+                                        int totalItemCount = mLinearLayoutManager.getItemCount();
+                                        int firstVisibleItemPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
+
+                                        if ((visibleItemCount + firstVisibleItemPosition >= totalItemCount) && firstVisibleItemPosition >= 0) {
+                                            fetchMoreComments();
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                        if (changeRefreshState) {
+                            isRefreshing = false;
+                        }
+                    }
+
+                    @Override
+                    public void onFetchCommentFailed() {
+                        if (checkSortState && isSortingComments) {
+                            if (changeRefreshState) {
+                                isRefreshing = false;
+                            }
+
+                            return;
+                        }
+
+                        mAdapter.initiallyLoadCommentsFailed();
+                        if (changeRefreshState) {
+                            isRefreshing = false;
+                        }
+                    }
+                });
+    }
+
+    private void fetchComments(boolean changeRefreshState) {
+        String sortType = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT,
+                SortType.Type.BEST.value).toLowerCase();
+        fetchComments(changeRefreshState, true, sortType);
     }
 
     void fetchMoreComments() {
@@ -676,6 +714,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                     MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
 
                                     mMenu.findItem(R.id.action_comment_view_post_detail_activity).setVisible(true);
+                                    mMenu.findItem(R.id.action_sort_view_post_detail_activity).setVisible(true);
 
                                     if (mAccessToken != null) {
                                         if (post.isSaved()) {
@@ -970,6 +1009,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
 
             mMenu.findItem(R.id.action_comment_view_post_detail_activity).setVisible(true);
+            mMenu.findItem(R.id.action_sort_view_post_detail_activity).setVisible(true);
 
             if (mAccessToken != null) {
                 if (mPost.isSaved()) {
@@ -1096,6 +1136,11 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                     }
                                 });
                     }
+                }
+                return true;
+            case R.id.action_sort_view_post_detail_activity:
+                if (mPost != null) {
+                    postCommentSortTypeBottomSheetFragment.show(getSupportFragmentManager(), postCommentSortTypeBottomSheetFragment.getTag());
                 }
                 return true;
             case R.id.action_view_crosspost_parent_view_post_detail_activity:
@@ -1285,5 +1330,15 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 showMessage(R.string.update_flair_failed);
             }
         });
+    }
+
+    @Override
+    public void sortTypeSelected(SortType sortType) {
+        mFetchPostInfoLinearLayout.setVisibility(View.GONE);
+        mGlide.clear(mFetchPostInfoImageView);
+        mChildrenStartingIndex = 0;
+        children.clear();
+        fetchComments(false, false, sortType.getType().value);
+        mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.getType().name()).apply();
     }
 }

@@ -32,7 +32,11 @@ public class SortType {
         CONTROVERSIAL("controversial"),
         RELEVANCE("relevance"),
         COMMENTS("comments"),
-        ACTIVITY("activity");
+        ACTIVITY("activity"),
+        CONFIDENCE("confidence"),
+        OLD("old"),
+        QA("qa"),
+        LIVE("live");
 
         public final String value;
 

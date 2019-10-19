@@ -12,21 +12,23 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FetchComment {
-    public static void fetchComments(Retrofit retrofit, @Nullable String accessToken, String article, String commentId,
-                                     Locale locale, FetchCommentListener fetchCommentListener) {
+    public static void fetchComments(Retrofit retrofit, @Nullable String accessToken, String article,
+                                     String commentId, String sortType, Locale locale,
+                                     FetchCommentListener fetchCommentListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> comments;
         if (accessToken == null) {
             if (commentId == null) {
-                comments = api.getPostAndCommentsById(article);
+                comments = api.getPostAndCommentsById(article, sortType);
             } else {
-                comments = api.getPostAndCommentsSingleThreadById(article, commentId);
+                comments = api.getPostAndCommentsSingleThreadById(article, commentId, sortType);
             }
         } else {
             if (commentId == null) {
-                comments = api.getPostAndCommentsByIdOauth(article, RedditUtils.getOAuthHeader(accessToken));
+                comments = api.getPostAndCommentsByIdOauth(article, sortType, RedditUtils.getOAuthHeader(accessToken));
             } else {
-                comments = api.getPostAndCommentsSingleThreadByIdOauth(article, commentId, RedditUtils.getOAuthHeader(accessToken));
+                comments = api.getPostAndCommentsSingleThreadByIdOauth(article, commentId, sortType,
+                        RedditUtils.getOAuthHeader(accessToken));
             }
         }
 
