@@ -120,6 +120,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     @State
     boolean hasMoreChildren;
     @State
+    boolean isFetchingComments = false;
+    @State
     String mMessageFullname;
     @State
     String mNewAccountName;
@@ -410,6 +412,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 if (isRefreshing) {
                     isRefreshing = false;
                     refresh(true, true);
+                } else if (isFetchingComments) {
+                    fetchComments(false);
                 } else {
                     mAdapter.addComments(comments, hasMoreChildren);
                     if (isLoadingMoreChildren) {
@@ -576,6 +580,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     }
 
     private void fetchComments(boolean changeRefreshState, boolean checkSortState, String sortType) {
+        isFetchingComments = true;
         mAdapter.setSingleComment(mSingleCommentId, isSingleCommentThreadMode);
         mAdapter.initiallyLoading();
         String commentId = null;
@@ -624,10 +629,13 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                         if (changeRefreshState) {
                             isRefreshing = false;
                         }
+
+                        isFetchingComments = false;
                     }
 
                     @Override
                     public void onFetchCommentFailed() {
+                        isFetchingComments = false;
                         if (checkSortState && isSortingComments) {
                             if (changeRefreshState) {
                                 isRefreshing = false;
@@ -1337,7 +1345,9 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         mFetchPostInfoLinearLayout.setVisibility(View.GONE);
         mGlide.clear(mFetchPostInfoImageView);
         mChildrenStartingIndex = 0;
-        children.clear();
+        if (children != null) {
+            children.clear();
+        }
         fetchComments(false, false, sortType.getType().value);
         mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.getType().name()).apply();
     }
