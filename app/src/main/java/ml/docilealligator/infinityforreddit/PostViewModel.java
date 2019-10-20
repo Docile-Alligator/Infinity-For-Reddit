@@ -216,6 +216,7 @@ public class PostViewModel extends ViewModel {
             this.nsfw = nsfw;
         }
 
+        //User posts
         public Factory(Retrofit retrofit, String accessToken, Locale locale, String subredditName, int postType,
                        SortType sortType, String where, int filter, boolean nsfw) {
             this.retrofit = retrofit;

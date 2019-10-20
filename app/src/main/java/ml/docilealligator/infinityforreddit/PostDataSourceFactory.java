@@ -105,10 +105,6 @@ class PostDataSourceFactory extends DataSource.Factory {
         return postDataSource;
     }
 
-    void changeSortType(SortType sortType) {
-        this.sortType = sortType;
-    }
-
     void changeNSFWAndSortType(boolean nsfw, SortType sortType) {
         this.nsfw = nsfw;
         this.sortType = sortType;

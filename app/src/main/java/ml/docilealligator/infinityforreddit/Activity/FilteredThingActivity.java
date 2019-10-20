@@ -71,6 +71,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String name;
+    private String userWhere;
     private int postType;
     private Fragment mFragment;
     private Menu mMenu;
@@ -144,6 +145,13 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
         name = getIntent().getStringExtra(EXTRA_NAME);
         postType = getIntent().getIntExtra(EXTRA_POST_TYPE, PostDataSource.TYPE_FRONT_PAGE);
         int filter = getIntent().getIntExtra(EXTRA_FILTER, Post.TEXT_TYPE);
+
+        if (postType == PostDataSource.TYPE_USER) {
+            userWhere = getIntent().getStringExtra(EXTRA_USER_WHERE);
+            if (userWhere != null && !PostDataSource.USER_WHERE_SUBMITTED.equals(userWhere) && mMenu != null) {
+                mMenu.findItem(R.id.action_sort_filtered_thing_activity).setVisible(false);
+            }
+        }
 
         if (savedInstanceState != null) {
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
@@ -248,14 +256,16 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
         if (initializeFragment) {
             mFragment = new PostFragment();
             Bundle bundle = new Bundle();
-            bundle.putString(PostFragment.EXTRA_NAME, name);
             bundle.putInt(PostFragment.EXTRA_POST_TYPE, postType);
             bundle.putInt(PostFragment.EXTRA_FILTER, filter);
             bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
             if (postType == PostDataSource.TYPE_USER) {
-                bundle.putString(PostFragment.EXTRA_USER_WHERE, getIntent().getStringExtra(EXTRA_USER_WHERE));
-            }
-            if (postType == PostDataSource.TYPE_SEARCH) {
+                bundle.putString(PostFragment.EXTRA_USER_NAME, name);
+                bundle.putString(PostFragment.EXTRA_USER_WHERE, userWhere);
+            } else if (postType == PostDataSource.TYPE_SUBREDDIT) {
+                bundle.putString(PostFragment.EXTRA_NAME, name);
+            } else if (postType == PostDataSource.TYPE_SEARCH) {
+                bundle.putString(PostFragment.EXTRA_NAME, name);
                 bundle.putString(PostFragment.EXTRA_QUERY, getIntent().getStringExtra(EXTRA_QUERY));
             }
             mFragment.setArguments(bundle);
@@ -276,6 +286,10 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
             lazyModeItem.setTitle(R.string.action_start_lazy_mode);
             params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
             collapsingToolbarLayout.setLayoutParams(params);
+        }
+
+        if (userWhere != null && !PostDataSource.USER_WHERE_SUBMITTED.equals(userWhere)) {
+            mMenu.findItem(R.id.action_sort_filtered_thing_activity).setVisible(false);
         }
         return true;
     }
