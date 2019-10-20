@@ -4,15 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
-import androidx.room.PrimaryKey;
 
 import ml.docilealligator.infinityforreddit.Account.Account;
 
-@Entity(tableName = "subscribed_subreddits", foreignKeys = @ForeignKey(entity = Account.class, parentColumns = "username",
+@Entity(tableName = "subscribed_subreddits", primaryKeys = {"id", "username"},
+        foreignKeys = @ForeignKey(entity = Account.class, parentColumns = "username",
         childColumns = "username", onDelete = ForeignKey.CASCADE))
 public class SubscribedSubredditData {
-
-    @PrimaryKey
     @NonNull
     @ColumnInfo(name = "id")
     private String id;
@@ -20,12 +18,13 @@ public class SubscribedSubredditData {
     private String name;
     @ColumnInfo(name = "icon")
     private String iconUrl;
+    @NonNull
     @ColumnInfo(name = "username")
     private String username;
     @ColumnInfo(name = "is_favorite")
     private boolean favorite;
 
-    public SubscribedSubredditData(@NonNull String id, String name, String iconUrl, String username,
+    public SubscribedSubredditData(@NonNull String id, String name, String iconUrl, @NonNull String username,
                                    boolean favorite) {
         this.id = id;
         this.name = name;
@@ -47,11 +46,12 @@ public class SubscribedSubredditData {
         return iconUrl;
     }
 
+    @NonNull
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(@NonNull String username) {
         this.username = username;
     }
 
