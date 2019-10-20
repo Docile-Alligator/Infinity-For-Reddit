@@ -1,100 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
     android:paddingBottom="8dp"
+    android:overScrollMode="never"
     tools:context=".Fragment.SortTimeBottomSheetFragment">
 
-    <TextView
-        android:id="@+id/hour_text_view_sort_time_bottom_sheet_fragment"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/sort_time_hour"
-        android:textColor="@color/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?attr/selectableItemBackground" />
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/day_text_view_sort_time_bottom_sheet_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/sort_time_day"
-        android:textColor="@color/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?attr/selectableItemBackground" />
+        <TextView
+            android:id="@+id/hour_text_view_sort_time_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sort_time_hour"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
 
-    <TextView
-        android:id="@+id/week_text_view_sort_time_bottom_sheet_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/sort_time_week"
-        android:textColor="@color/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?attr/selectableItemBackground" />
+        <TextView
+            android:id="@+id/day_text_view_sort_time_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sort_time_day"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
 
-    <TextView
-        android:id="@+id/month_text_view_sort_time_bottom_sheet_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/sort_time_month"
-        android:textColor="@color/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?attr/selectableItemBackground" />
+        <TextView
+            android:id="@+id/week_text_view_sort_time_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sort_time_week"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
 
-    <TextView
-        android:id="@+id/year_text_view_sort_time_bottom_sheet_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/sort_time_year"
-        android:textColor="@color/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?attr/selectableItemBackground" />
+        <TextView
+            android:id="@+id/month_text_view_sort_time_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sort_time_month"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
 
-    <TextView
-        android:id="@+id/all_time_text_view_sort_time_bottom_sheet_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/sort_time_all_time"
-        android:textColor="@color/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?attr/selectableItemBackground" />
+        <TextView
+            android:id="@+id/year_text_view_sort_time_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sort_time_year"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/all_time_text_view_sort_time_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sort_time_all_time"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
