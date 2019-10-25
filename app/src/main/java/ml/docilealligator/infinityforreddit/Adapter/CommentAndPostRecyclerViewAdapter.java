@@ -661,7 +661,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if (comment.hasReply()) {
                 if (comment.isExpanded()) {
-                    ((CommentViewHolder) holder).expandButton.setImageResource(R.drawable.ic_expand_less_black_20dp);
+                    ((CommentViewHolder) holder).expandButton.setImageResource(R.drawable.ic_expand_less_black_22dp);
                 } else {
                     ((CommentViewHolder) holder).expandButton.setImageResource(R.drawable.ic_expand_more_black_20dp);
                 }
@@ -1741,7 +1741,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         } else {
                             expandChildren(commentPosition);
                             mVisibleComments.get(commentPosition).setExpanded(true);
-                            expandButton.setImageResource(R.drawable.ic_expand_less_black_20dp);
+                            expandButton.setImageResource(R.drawable.ic_expand_less_black_22dp);
                         }
                     }
                 }

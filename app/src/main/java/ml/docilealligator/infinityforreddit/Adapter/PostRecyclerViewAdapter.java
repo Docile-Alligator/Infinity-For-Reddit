@@ -42,7 +42,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.docilealligator.infinityforreddit.Activity.CommentActivity;
 import ml.docilealligator.infinityforreddit.Activity.FilteredThingActivity;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewGIFActivity;
@@ -469,6 +468,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         break;
                     case Post.TEXT_TYPE:
                         ((DataViewHolder) holder).typeTextView.setText(R.string.text);
+                        if (post.getSelfText() != null && !post.getSelfText().equals("")) {
+                            ((DataViewHolder) holder).contentTextView.setVisibility(View.VISIBLE);
+                            ((DataViewHolder) holder).contentTextView.setText(post.getSelfText());
+                        }
                         break;
                 }
 
@@ -612,20 +615,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
                     }, fullName, newVoteType, holder.getAdapterPosition());
-                });
-
-                ((DataViewHolder) holder).commentButton.setOnClickListener(view -> {
-                    if (mAccessToken == null) {
-                        Toast.makeText(mContext, R.string.login_first, Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    Intent intent = new Intent(mContext, CommentActivity.class);
-                    intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, post.getFullName());
-                    intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, post.getTitle());
-                    intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, false);
-                    intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, 0);
-                    mContext.startActivity(intent);
                 });
 
                 ((DataViewHolder) holder).commentsCountTextView.setText(Integer.toString(post.getnComments()));
@@ -801,6 +790,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             ((DataViewHolder) holder).imageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
             ((DataViewHolder) holder).noPreviewLinkImageView.setVisibility(View.GONE);
+            ((DataViewHolder) holder).contentTextView.setVisibility(View.GONE);
             ((DataViewHolder) holder).upvoteButton.clearColorFilter();
             ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.defaultTextColor));
             ((DataViewHolder) holder).downvoteButton.clearColorFilter();
@@ -860,14 +850,14 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         RelativeLayout errorRelativeLayout;
         @BindView(R.id.image_view_no_preview_link_item_post)
         ImageView noPreviewLinkImageView;
+        @BindView(R.id.content_text_view_item_post)
+        TextView contentTextView;
         @BindView(R.id.plus_button_item_post)
         ImageView upvoteButton;
         @BindView(R.id.score_text_view_item_post)
         TextView scoreTextView;
         @BindView(R.id.minus_button_item_post)
         ImageView downvoteButton;
-        @BindView(R.id.comment_button_item_post)
-        ImageView commentButton;
         @BindView(R.id.comments_count_item_post)
         TextView commentsCountTextView;
         @BindView(R.id.save_button_item_post)

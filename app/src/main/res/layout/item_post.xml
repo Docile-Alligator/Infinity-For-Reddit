@@ -80,7 +80,19 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:textSize="?attr/title_font_18"
-            android:textColor="@color/primaryTextColor"/>
+            android:textColor="@color/primaryTextColor" />
+
+        <TextView
+            android:id="@+id/content_text_view_item_post"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:maxLines="4"
+            android:visibility="gone"
+            android:textSize="?attr/content_font_default"
+            android:ellipsize="end" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -336,9 +348,6 @@
                 android:padding="12dp"
                 android:src="@drawable/ic_comment_white_24dp"
                 android:tint="@android:color/tab_indicator_text"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
