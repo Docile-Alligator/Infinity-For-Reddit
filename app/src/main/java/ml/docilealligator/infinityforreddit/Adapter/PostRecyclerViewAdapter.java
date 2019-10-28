@@ -311,7 +311,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
 
                 if (gilded > 0) {
-                    ((DataViewHolder) holder).gildedImageView.setVisibility(View.VISIBLE);
                     ((DataViewHolder) holder).gildedNumberTextView.setVisibility(View.VISIBLE);
                     String gildedNumber = mContext.getResources().getString(R.string.gilded_count, gilded);
                     ((DataViewHolder) holder).gildedNumberTextView.setText(gildedNumber);
@@ -332,10 +331,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         });
                     }
                     ((DataViewHolder) holder).nsfwTextView.setVisibility(View.VISIBLE);
-                }
-
-                if (spoiler || flair != null) {
-                    ((DataViewHolder) holder).spoilerFlairLinearLayout.setVisibility(View.VISIBLE);
                 }
 
                 if (spoiler) {
@@ -776,13 +771,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mGlide.clear(((DataViewHolder) holder).iconGifImageView);
             ((DataViewHolder) holder).stickiedPostImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).relativeLayout.setVisibility(View.GONE);
-            ((DataViewHolder) holder).gildedImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).gildedNumberTextView.setVisibility(View.GONE);
             ((DataViewHolder) holder).crosspostImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).archivedImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).lockedImageView.setVisibility(View.GONE);
             ((DataViewHolder) holder).nsfwTextView.setVisibility(View.GONE);
-            ((DataViewHolder) holder).spoilerFlairLinearLayout.setVisibility(View.GONE);
             ((DataViewHolder) holder).spoilerTextView.setVisibility(View.GONE);
             ((DataViewHolder) holder).flairTextView.setVisibility(View.GONE);
             ((DataViewHolder) holder).linkTextView.setVisibility(View.GONE);
@@ -820,8 +813,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         TextView titleTextView;
         @BindView(R.id.type_text_view_item_post)
         CustomTextView typeTextView;
-        @BindView(R.id.gilded_image_view_item_post)
-        ImageView gildedImageView;
         @BindView(R.id.gilded_number_text_view_item_post)
         TextView gildedNumberTextView;
         @BindView(R.id.archived_image_view_item_post)
@@ -832,8 +823,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         ImageView crosspostImageView;
         @BindView(R.id.nsfw_text_view_item_post)
         CustomTextView nsfwTextView;
-        @BindView(R.id.spoiler_flair_linear_layout_item_post)
-        LinearLayout spoilerFlairLinearLayout;
         @BindView(R.id.spoiler_custom_text_view_item_post)
         CustomTextView spoilerTextView;
         @BindView(R.id.flair_custom_text_view_item_post)

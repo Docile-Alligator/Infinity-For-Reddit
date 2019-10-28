@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -359,7 +358,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ((PostDetailViewHolder) holder).mPostTimeTextView.setText(mPost.getPostTime());
 
             if (mPost.getGilded() > 0) {
-                ((PostDetailViewHolder) holder).mGildedImageView.setVisibility(View.VISIBLE);
                 ((PostDetailViewHolder) holder).mGildedNumberTextView.setVisibility(View.VISIBLE);
                 String gildedNumber = mActivity.getResources().getString(R.string.gilded_count, mPost.getGilded());
                 ((PostDetailViewHolder) holder).mGildedNumberTextView.setText(gildedNumber);
@@ -371,10 +369,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if (mPost.isLocked()) {
                 ((PostDetailViewHolder) holder).mLockedImageView.setVisibility(View.VISIBLE);
-            }
-
-            if (mPost.isSpoiler() || mPost.getFlair() != null) {
-                ((PostDetailViewHolder) holder).spoilerFlairlinearLayout.setVisibility(View.VISIBLE);
             }
 
             if (mPost.isSpoiler()) {
@@ -1392,7 +1386,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ((PostDetailViewHolder) holder).mUpvoteButton.clearColorFilter();
             ((PostDetailViewHolder) holder).mScoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
             ((PostDetailViewHolder) holder).mDownvoteButton.clearColorFilter();
-            ((PostDetailViewHolder) holder).spoilerFlairlinearLayout.setVisibility(View.GONE);
             ((PostDetailViewHolder) holder).flairTextView.setVisibility(View.GONE);
             ((PostDetailViewHolder) holder).spoilerTextView.setVisibility(View.GONE);
             ((PostDetailViewHolder) holder).mNSFWTextView.setVisibility(View.GONE);
@@ -1448,8 +1441,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         TextView mContentMarkdownView;
         @BindView(R.id.type_text_view_item_post_detail)
         CustomTextView mTypeTextView;
-        @BindView(R.id.gilded_image_view_item_post_detail)
-        ImageView mGildedImageView;
         @BindView(R.id.gilded_number_text_view_item_post_detail)
         TextView mGildedNumberTextView;
         @BindView(R.id.crosspost_image_view_item_post_detail)
@@ -1460,8 +1451,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         ImageView mLockedImageView;
         @BindView(R.id.nsfw_text_view_item_post_detail)
         CustomTextView mNSFWTextView;
-        @BindView(R.id.spoiler_flair_linear_layout_item_post_detail)
-        LinearLayout spoilerFlairlinearLayout;
         @BindView(R.id.spoiler_custom_text_view_item_post_detail)
         CustomTextView spoilerTextView;
         @BindView(R.id.flair_custom_text_view_item_post_detail)

@@ -97,6 +97,9 @@ public class AcknowledgementFragment extends Fragment {
         acknowledgements.add(new Acknowledgement("Android-State",
                 "A utility library for Android to save objects in a Bundle without any boilerplate",
                 Uri.parse("https://github.com/evernote/android-state")));
+        acknowledgements.add(new Acknowledgement("FlowLayout",
+                "A FlowLayout for Android, which allows child views flow to next row when there is no enough space.",
+                Uri.parse("https://github.com/nex3z/FlowLayout")));
 
         AcknowledgementRecyclerViewAdapter adapter = new AcknowledgementRecyclerViewAdapter(activity, acknowledgements);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));

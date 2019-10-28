@@ -85,10 +85,13 @@
         android:visibility="gone"
         android:textSize="?attr/content_font_default" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.nex3z.flowlayout.FlowLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="16dp"
+        app:flChildSpacing="16dp"
+        app:flChildSpacingForLastRow="align"
+        app:flRowSpacing="8dp">
 
         <com.libRG.CustomTextView
             android:id="@+id/type_text_view_item_post_detail"
@@ -97,112 +100,17 @@
             android:padding="4dp"
             android:textSize="?attr/font_12"
             android:textColor="@android:color/white"
-            app:chipBackgroundColor="@color/backgroundColorPrimaryDark"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:lib_setRoundedBGColor="@color/backgroundColorPrimaryDark"
             app:lib_setRoundedBorderColor="@color/backgroundColorPrimaryDark"
             app:lib_setRadius="3dp"
             app:lib_setRoundedView="true"
             app:lib_setShape="rectangle" />
 
-        <ImageView
-            android:id="@+id/gilded_image_view_item_post_detail"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/gold"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/type_text_view_item_post_detail"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/gilded_number_text_view_item_post_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:textColor="@color/gold"
-            android:textSize="?attr/font_default"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/gilded_image_view_item_post_detail"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/archived_image_view_item_post_detail"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_archive_outline"
-            android:tint="@color/archivedTint"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/crosspost_image_view_item_post_detail"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/locked_image_view_item_post_detail"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_outline_lock"
-            android:tint="@color/lockedIconTint"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/nsfw_text_view_item_post_detail"
-            app:layout_constraintStart_toEndOf="@+id/archived_image_view_item_post_detail"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0" />
-
-        <ImageView
-            android:id="@+id/crosspost_image_view_item_post_detail"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/crosspost"
-            android:tint="@color/colorAccent"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/gilded_number_text_view_item_post_detail"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.libRG.CustomTextView
-            android:id="@+id/nsfw_text_view_item_post_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:text="@string/nsfw"
-            android:textSize="?attr/font_12"
-            android:textColor="@android:color/white"
-            android:visibility="gone"
-            app:chipBackgroundColor="@color/colorAccent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="1"
-            app:lib_setRoundedBGColor="@color/colorAccent"
-            app:lib_setRoundedBorderColor="@color/colorAccent"
-            app:lib_setRadius="3dp"
-            app:lib_setRoundedView="true"
-            app:lib_setShape="rectangle" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <LinearLayout
-        android:id="@+id/spoiler_flair_linear_layout_item_post_detail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:visibility="gone">
-
         <com.libRG.CustomTextView
             android:id="@+id/spoiler_custom_text_view_item_post_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="16dp"
             android:text="@string/spoiler"
             android:textSize="?attr/font_12"
             android:textColor="@android:color/white"
@@ -215,11 +123,25 @@
             app:lib_setShape="rectangle" />
 
         <com.libRG.CustomTextView
+            android:id="@+id/nsfw_text_view_item_post_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="@string/nsfw"
+            android:textSize="?attr/font_12"
+            android:textColor="@android:color/white"
+            android:visibility="gone"
+            app:lib_setRoundedBGColor="@color/colorAccent"
+            app:lib_setRoundedBorderColor="@color/colorAccent"
+            app:lib_setRadius="3dp"
+            app:lib_setRoundedView="true"
+            app:lib_setShape="rectangle" />
+
+        <com.libRG.CustomTextView
             android:id="@+id/flair_custom_text_view_item_post_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="16dp"
             android:padding="4dp"
             android:textSize="?attr/font_12"
             android:textColor="@android:color/white"
@@ -230,7 +152,41 @@
             app:lib_setRoundedView="true"
             app:lib_setShape="rectangle" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/gilded_number_text_view_item_post_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gold"
+            android:textSize="?attr/font_default"
+            android:drawableStart="@drawable/gold"
+            android:drawablePadding="4dp"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/archived_image_view_item_post_detail"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_archive_outline"
+            android:tint="@color/archivedTint"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/locked_image_view_item_post_detail"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_outline_lock"
+            android:tint="@color/lockedIconTint"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/crosspost_image_view_item_post_detail"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/crosspost"
+            android:tint="@color/colorAccent"
+            android:visibility="gone" />
+
+    </com.nex3z.flowlayout.FlowLayout>
 
     <TextView
         android:id="@+id/link_text_view_item_post_detail"

@@ -79,5 +79,5 @@ dependencies {
     annotationProcessor 'com.evernote:android-state-processor:1.4.1'
     implementation 'androidx.work:work-runtime:2.2.0'
     implementation 'androidx.preference:preference:1.1.0'
-    implementation 'org.sufficientlysecure:html-textview:3.6'
+    implementation 'com.nex3z:flow-layout:1.3.0'
 }
