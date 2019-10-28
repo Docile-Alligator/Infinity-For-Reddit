@@ -121,8 +121,8 @@ public class ParsePost {
                     } else {
                         String selfTextPlain = Utils.trimTrailingWhitespace(
                                 Html.fromHtml(data.getString(JSONUtils.SELFTEXT_HTML_KEY))).toString();
-                        if (selfTextPlain.length() > 150) {
-                            selfTextPlain = selfTextPlain.substring(150);
+                        if (selfTextPlain.length() > 250) {
+                            selfTextPlain = selfTextPlain.substring(0, 250);
                         }
                         post.setSelfTextPlainTrimmed(selfTextPlain);
                     }
@@ -217,8 +217,8 @@ public class ParsePost {
                                 } else {
                                     String selfTextPlain = Utils.trimTrailingWhitespace(
                                             Html.fromHtml(data.getString(JSONUtils.SELFTEXT_HTML_KEY))).toString();
-                                    if (selfTextPlain.length() > 150) {
-                                        selfTextPlain = selfTextPlain.substring(150);
+                                    if (selfTextPlain.length() > 250) {
+                                        selfTextPlain = selfTextPlain.substring(0, 250);
                                     }
                                     post.setSelfTextPlainTrimmed(selfTextPlain);
                                 }
