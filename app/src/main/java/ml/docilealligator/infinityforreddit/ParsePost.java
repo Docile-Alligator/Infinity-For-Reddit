@@ -116,6 +116,16 @@ public class ParsePost {
                     post.setSelfText("");
                 } else {
                     post.setSelfText(Utils.addSubredditAndUserLink(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
+                    if (data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
+                        post.setSelfTextPlainTrimmed("");
+                    } else {
+                        String selfTextPlain = Utils.trimTrailingWhitespace(
+                                Html.fromHtml(data.getString(JSONUtils.SELFTEXT_HTML_KEY))).toString();
+                        if (selfTextPlain.length() > 150) {
+                            selfTextPlain = selfTextPlain.substring(150);
+                        }
+                        post.setSelfTextPlainTrimmed(selfTextPlain);
+                    }
                 }
             } else {
                 //No preview link post
@@ -202,6 +212,16 @@ public class ParsePost {
                                 post.setSelfText("");
                             } else {
                                 post.setSelfText(Utils.addSubredditAndUserLink(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
+                                if (data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
+                                    post.setSelfTextPlainTrimmed("");
+                                } else {
+                                    String selfTextPlain = Utils.trimTrailingWhitespace(
+                                            Html.fromHtml(data.getString(JSONUtils.SELFTEXT_HTML_KEY))).toString();
+                                    if (selfTextPlain.length() > 150) {
+                                        selfTextPlain = selfTextPlain.substring(150);
+                                    }
+                                    post.setSelfTextPlainTrimmed(selfTextPlain);
+                                }
                             }
                         } else {
                             //Link post

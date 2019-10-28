@@ -7,11 +7,11 @@ import android.content.Context;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-class NotificationUtils {
-    static final String CHANNEL_SUBMIT_POST = "Submit Post";
+public class NotificationUtils {
+    public static final String CHANNEL_SUBMIT_POST = "Submit Post";
     static final String CHANNEL_ID_NEW_MESSAGES = "new_messages";
     static final String CHANNEL_NEW_MESSAGES = "New Messages";
-    static final int SUBMIT_POST_SERVICE_NOTIFICATION_ID = 10000;
+    public static final int SUBMIT_POST_SERVICE_NOTIFICATION_ID = 10000;
 
     private static final int SUMMARY_BASE_ID_UNREAD_MESSAGE = 0;
     private static final int NOTIFICATION_BASE_ID_UNREAD_MESSAGE = 1;

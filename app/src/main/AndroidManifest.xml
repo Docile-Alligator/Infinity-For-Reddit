@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ml.docilealligator.infinityforreddit">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="22" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <uses-permission-sdk-23 android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name=".Infinity"
         android:allowBackup="true"
@@ -249,17 +257,9 @@
         </provider>
 
         <service
-            android:name=".SubmitPostService"
+            android:name=".Service.SubmitPostService"
             android:enabled="true"
             android:exported="false" />
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="22" />
-
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
-    <uses-permission-sdk-23 android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>

@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Service;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -33,6 +33,11 @@ import javax.inject.Named;
 import ml.docilealligator.infinityforreddit.Event.SubmitImagePostEvent;
 import ml.docilealligator.infinityforreddit.Event.SubmitTextOrLinkPostEvent;
 import ml.docilealligator.infinityforreddit.Event.SubmitVideoPostEvent;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.NotificationUtils;
+import ml.docilealligator.infinityforreddit.Post;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.SubmitPost;
 import retrofit2.Retrofit;
 
 public class SubmitPostService extends Service {

@@ -14,6 +14,7 @@ public class JSONUtils {
     public static final String NAME_KEY = "name";
     public static final String SUBREDDIT_NAME_PREFIX_KEY = "subreddit_name_prefixed";
     public static final String SELFTEXT_KEY = "selftext";
+    public static final String SELFTEXT_HTML_KEY = "selftext_html";
     public static final String AUTHOR_KEY = "author";
     public static final String LINK_AUTHOR_KEY = "link_author";
     public static final String LINK_FLAIR_TEXT_KEY = "link_flair_text";

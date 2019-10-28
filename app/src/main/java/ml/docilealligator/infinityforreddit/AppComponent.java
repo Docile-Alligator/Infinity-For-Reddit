@@ -36,6 +36,7 @@ import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SubredditListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SubscribedSubredditsListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.UserListingFragment;
+import ml.docilealligator.infinityforreddit.Service.SubmitPostService;
 import ml.docilealligator.infinityforreddit.Settings.MainPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.NotificationPreferenceFragment;
 

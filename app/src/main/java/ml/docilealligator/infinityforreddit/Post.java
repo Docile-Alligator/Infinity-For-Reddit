@@ -37,6 +37,7 @@ public class Post implements Parcelable {
     private String postTime;
     private String title;
     private String selfText;
+    private String selfTextPlainTrimmed;
     private String previewUrl;
     private String url;
     private String videoUrl;
@@ -162,6 +163,7 @@ public class Post implements Parcelable {
         postTime = in.readString();
         title = in.readString();
         selfText = in.readString();
+        selfTextPlainTrimmed = in.readString();
         previewUrl = in.readString();
         url = in.readString();
         videoUrl = in.readString();
@@ -243,6 +245,14 @@ public class Post implements Parcelable {
 
     public void setSelfText(String selfText) {
         this.selfText = selfText;
+    }
+
+    public String getSelfTextPlainTrimmed() {
+        return selfTextPlainTrimmed;
+    }
+
+    public void setSelfTextPlainTrimmed(String selfTextPlainTrimmed) {
+        this.selfTextPlainTrimmed = selfTextPlainTrimmed;
     }
 
     public String getPreviewUrl() {
@@ -395,6 +405,7 @@ public class Post implements Parcelable {
         parcel.writeString(postTime);
         parcel.writeString(title);
         parcel.writeString(selfText);
+        parcel.writeString(selfTextPlainTrimmed);
         parcel.writeString(previewUrl);
         parcel.writeString(url);
         parcel.writeString(videoUrl);

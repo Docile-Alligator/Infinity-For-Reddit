@@ -468,9 +468,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         break;
                     case Post.TEXT_TYPE:
                         ((DataViewHolder) holder).typeTextView.setText(R.string.text);
-                        if (post.getSelfText() != null && !post.getSelfText().equals("")) {
+                        if (post.getSelfTextPlainTrimmed() != null && !post.getSelfTextPlainTrimmed().equals("")) {
                             ((DataViewHolder) holder).contentTextView.setVisibility(View.VISIBLE);
-                            ((DataViewHolder) holder).contentTextView.setText(post.getSelfText());
+                            ((DataViewHolder) holder).contentTextView.setText(post.getSelfTextPlainTrimmed());
                         }
                         break;
                 }
