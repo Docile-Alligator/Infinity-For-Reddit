@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
@@ -64,11 +66,13 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     private String mAccountName;
     private int mTextColorPrimaryDark;
     private int mColorAccent;
+    private boolean mVoteButtonsOnTheRight;
     private NetworkState networkState;
     private RetryLoadingMoreCallback mRetryLoadingMoreCallback;
 
     public CommentsListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
                                               String accessToken, String accountName,
+                                              boolean voteButtonsOnTheRight,
                                               RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         mContext = context;
@@ -94,6 +98,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 .build();
         mAccessToken = accessToken;
         mAccountName = accountName;
+        mVoteButtonsOnTheRight = voteButtonsOnTheRight;
         mRetryLoadingMoreCallback = retryLoadingMoreCallback;
         mTextColorPrimaryDark = mContext.getResources().getColor(R.color.colorPrimaryDarkDayNightTheme);
         mColorAccent = mContext.getResources().getColor(R.color.colorAccent);
@@ -407,6 +412,8 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         TextView commentTimeTextView;
         @BindView(R.id.comment_markdown_view_item_post_comment)
         TextView commentMarkdownView;
+        @BindView(R.id.bottom_constraint_layout_item_post_comment)
+        ConstraintLayout bottomConstraintLayout;
         @BindView(R.id.up_vote_button_item_post_comment)
         ImageView upvoteButton;
         @BindView(R.id.score_text_view_item_post_comment)
@@ -417,6 +424,8 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         ImageView moreButton;
         @BindView(R.id.save_button_item_post_comment)
         ImageView saveButton;
+        @BindView(R.id.expand_button_item_post_comment)
+        ImageView expandButton;
         @BindView(R.id.share_button_item_post_comment)
         ImageView shareButton;
         @BindView(R.id.reply_button_item_post_comment)
@@ -425,6 +434,29 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         DataViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            if (mVoteButtonsOnTheRight) {
+                ConstraintSet constraintSet = new ConstraintSet();
+                constraintSet.clone(bottomConstraintLayout);
+                constraintSet.clear(upvoteButton.getId(), ConstraintSet.START);
+                constraintSet.clear(scoreTextView.getId(), ConstraintSet.START);
+                constraintSet.clear(downvoteButton.getId(), ConstraintSet.START);
+                constraintSet.clear(expandButton.getId(), ConstraintSet.END);
+                constraintSet.clear(saveButton.getId(), ConstraintSet.END);
+                constraintSet.clear(replyButton.getId(), ConstraintSet.END);
+                constraintSet.clear(shareButton.getId(), ConstraintSet.END);
+                constraintSet.connect(upvoteButton.getId(), ConstraintSet.END, scoreTextView.getId(), ConstraintSet.START);
+                constraintSet.connect(scoreTextView.getId(), ConstraintSet.END, downvoteButton.getId(), ConstraintSet.START);
+                constraintSet.connect(downvoteButton.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+                constraintSet.connect(moreButton.getId(), ConstraintSet.START, expandButton.getId(), ConstraintSet.END);
+                constraintSet.connect(moreButton.getId(), ConstraintSet.END, upvoteButton.getId(), ConstraintSet.END);
+                constraintSet.connect(expandButton.getId(), ConstraintSet.START, saveButton.getId(), ConstraintSet.END);
+                constraintSet.connect(saveButton.getId(), ConstraintSet.START, replyButton.getId(), ConstraintSet.END);
+                constraintSet.connect(replyButton.getId(), ConstraintSet.START, shareButton.getId(), ConstraintSet.END);
+                constraintSet.connect(shareButton.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+                constraintSet.setHorizontalBias(moreButton.getId(), 0);
+                constraintSet.applyTo(bottomConstraintLayout);
+            }
         }
     }
 

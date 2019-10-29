@@ -143,9 +143,10 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     private void bindView(Resources resources) {
         mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
 
+        boolean voteButtonsOnTheRight = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
         mAdapter = new CommentsListingRecyclerViewAdapter(activity, mOauthRetrofit,
                 getArguments().getString(EXTRA_ACCESS_TOKEN), getArguments().getString(EXTRA_ACCOUNT_NAME),
-                () -> mCommentViewModel.retryLoadingMore());
+                voteButtonsOnTheRight, () -> mCommentViewModel.retryLoadingMore());
 
         String username = getArguments().getString(EXTRA_USERNAME);
         String sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_USER_COMMENT, SortType.Type.NEW.value);

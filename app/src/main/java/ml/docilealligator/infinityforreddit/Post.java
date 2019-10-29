@@ -323,11 +323,11 @@ public class Post implements Parcelable {
         this.previewHeight = previewHeight;
     }
 
-    public int getnComments() {
+    public int getNComments() {
         return nComments;
     }
 
-    public void setnComments(int nComments) {
+    public void setNComments(int nComments) {
         this.nComments = nComments;
     }
 

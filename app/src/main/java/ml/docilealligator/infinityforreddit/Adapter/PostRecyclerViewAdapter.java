@@ -616,7 +616,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     }, fullName, newVoteType, holder.getAdapterPosition());
                 });
 
-                ((DataViewHolder) holder).commentsCountTextView.setText(Integer.toString(post.getnComments()));
+                ((DataViewHolder) holder).commentsCountTextView.setText(Integer.toString(post.getNComments()));
 
                 if (post.isSaved()) {
                     ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);

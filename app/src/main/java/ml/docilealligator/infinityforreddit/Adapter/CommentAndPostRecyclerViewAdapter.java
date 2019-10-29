@@ -510,7 +510,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 mActivity.startActivityForResult(intent, WRITE_COMMENT_REQUEST_CODE);
             });
 
-            ((PostDetailViewHolder) holder).commentsCountTextView.setText(Integer.toString(mPost.getnComments()));
+            ((PostDetailViewHolder) holder).commentsCountTextView.setText(Integer.toString(mPost.getNComments()));
 
             if (mPost.isSaved()) {
                 ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
@@ -1697,6 +1697,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         TextView commentTimeTextView;
         @BindView(R.id.comment_markdown_view_item_post_comment)
         TextView commentMarkdownView;
+        @BindView(R.id.bottom_constraint_layout_item_post_comment)
+        ConstraintLayout bottomConstraintLayout;
         @BindView(R.id.up_vote_button_item_post_comment)
         ImageView upVoteButton;
         @BindView(R.id.score_text_view_item_post_comment)
@@ -1768,6 +1770,29 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 expandButton.performClick();
                 return true;
             });
+
+            if (mVoteButtonsOnTheRight) {
+                ConstraintSet constraintSet = new ConstraintSet();
+                constraintSet.clone(bottomConstraintLayout);
+                constraintSet.clear(upVoteButton.getId(), ConstraintSet.START);
+                constraintSet.clear(scoreTextView.getId(), ConstraintSet.START);
+                constraintSet.clear(downVoteButton.getId(), ConstraintSet.START);
+                constraintSet.clear(expandButton.getId(), ConstraintSet.END);
+                constraintSet.clear(saveButton.getId(), ConstraintSet.END);
+                constraintSet.clear(replyButton.getId(), ConstraintSet.END);
+                constraintSet.clear(shareButton.getId(), ConstraintSet.END);
+                constraintSet.connect(upVoteButton.getId(), ConstraintSet.END, scoreTextView.getId(), ConstraintSet.START);
+                constraintSet.connect(scoreTextView.getId(), ConstraintSet.END, downVoteButton.getId(), ConstraintSet.START);
+                constraintSet.connect(downVoteButton.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+                constraintSet.connect(moreButton.getId(), ConstraintSet.START, expandButton.getId(), ConstraintSet.END);
+                constraintSet.connect(moreButton.getId(), ConstraintSet.END, upVoteButton.getId(), ConstraintSet.END);
+                constraintSet.connect(expandButton.getId(), ConstraintSet.START, saveButton.getId(), ConstraintSet.END);
+                constraintSet.connect(saveButton.getId(), ConstraintSet.START, replyButton.getId(), ConstraintSet.END);
+                constraintSet.connect(replyButton.getId(), ConstraintSet.START, shareButton.getId(), ConstraintSet.END);
+                constraintSet.connect(shareButton.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+                constraintSet.setHorizontalBias(moreButton.getId(), 0);
+                constraintSet.applyTo(bottomConstraintLayout);
+            }
         }
     }
 
