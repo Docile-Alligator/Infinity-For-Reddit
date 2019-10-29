@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linear_layout_item_comment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -23,40 +22,65 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp">
-
-            <TextView
-                android:id="@+id/author_text_view_item_post_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryDarkDayNightTheme"
-                android:textSize="?attr/font_default"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
             <ImageView
                 android:id="@+id/author_type_image_view_item_comment"
                 android:layout_width="?attr/font_default"
                 android:layout_height="?attr/font_default"
-                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 android:visibility="gone"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/author_flair_text_view_item_post_comment"
+                app:layout_constraintEnd_toStartOf="@id/author_text_view_item_post_comment"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/author_text_view_item_post_comment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/colorPrimaryDarkDayNightTheme"
+                android:textSize="?attr/font_default"
+                app:layout_constraintBottom_toTopOf="@id/author_flair_text_view_item_post_comment"
+                app:layout_constraintEnd_toStartOf="@+id/barrier"
+                app:layout_constraintStart_toEndOf="@id/author_type_image_view_item_comment"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/author_flair_text_view_item_post_comment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/authorFlairTextColor"
+                android:textSize="?attr/font_default"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/author_text_view_item_post_comment" />
+                app:layout_constraintEnd_toStartOf="@+id/barrier"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/author_text_view_item_post_comment" />
 
             <TextView
                 android:id="@+id/comment_time_text_view_item_post_comment"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:gravity="end"
                 android:textSize="?attr/font_default"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/author_type_image_view_item_comment"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintHorizontal_bias="1" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="start"
+                app:constraint_referenced_ids="comment_time_text_view_item_post_comment" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -70,127 +94,6 @@
             android:layout_marginBottom="8dp"
             android:textColor="@color/primaryTextColor"
             android:textSize="?attr/content_font_default" />
-
-        <!--<androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/bottom_constraint_layout_item_post_comment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp">
-
-            <ImageView
-                android:id="@+id/up_vote_button_item_post_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_arrow_upward_grey_24dp"
-                app:layout_constraintEnd_toStartOf="@id/score_text_view_item_post_comment"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-            <TextView
-                android:id="@+id/score_text_view_item_post_comment"
-                android:layout_width="64dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="?attr/font_12"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/down_vote_button_item_post_comment"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-            <ImageView
-                android:id="@+id/down_vote_button_item_post_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_arrow_downward_grey_24dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-            <ImageView
-                android:id="@+id/more_button_item_post_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_more_vert_grey_24dp"
-                android:visibility="gone"
-                app:layout_constraintStart_toEndOf="@+id/expand_button_item_post_comment"
-                app:layout_constraintEnd_toStartOf="@id/up_vote_button_item_post_comment"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0" />
-
-            <ImageView
-                android:id="@+id/expand_button_item_post_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_expand_less_grey_24dp"
-                android:visibility="gone"
-                app:layout_constraintStart_toEndOf="@+id/save_button_item_post_comment"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-            <ImageView
-                android:id="@+id/save_button_item_post_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                app:layout_constraintStart_toEndOf="@+id/reply_button_item_post_comment"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-            <ImageView
-                android:id="@+id/reply_button_item_post_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_reply_grey_24dp"
-                app:layout_constraintStart_toEndOf="@id/share_button_item_post_comment"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-            <ImageView
-                android:id="@+id/share_button_item_post_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/ic_share_grey_24dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottom_constraint_layout_item_post_comment"

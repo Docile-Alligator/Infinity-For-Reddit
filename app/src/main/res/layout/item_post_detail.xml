@@ -7,62 +7,68 @@
     android:background="?attr/cardViewBackgroundColor">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/relative_layout_item_post_detail"
+        android:id="@+id/constraint_layout_item_post_detail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="16dp">
 
-        <RelativeLayout
-            android:id="@+id/subreddit_icon_name_relative_layout_item_post_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            app:layout_constrainedWidth="true"
+        <ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView
+            android:id="@+id/icon_gif_image_view_item_post_detail"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/post_time_text_view_item_post_detail"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView
-                android:id="@+id/icon_gif_image_view_item_post_detail"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_centerVertical="true" />
+        <TextView
+            android:id="@+id/subreddit_text_view_item_post_detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/colorAccent"
+            android:textSize="?attr/font_default"
+            android:maxLines="2"
+            android:ellipsize="end"
+            app:layout_constraintStart_toEndOf="@+id/icon_gif_image_view_item_post_detail"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0" />
 
-            <TextView
-                android:id="@+id/subreddit_text_view_item_post_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@id/icon_gif_image_view_item_post_detail"
-                android:textColor="@color/colorAccent"
-                android:textSize="?attr/font_default" />
-
-            <TextView
-                android:id="@+id/user_text_view_item_post_detail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_alignParentBottom="true"
-                android:layout_below="@id/subreddit_text_view_item_post_detail"
-                android:layout_toEndOf="@id/icon_gif_image_view_item_post_detail"
-                android:textColor="@color/colorPrimaryDarkDayNightTheme"
-                android:textSize="?attr/font_default" />
-
-        </RelativeLayout>
+        <TextView
+            android:id="@+id/user_text_view_item_post_detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@color/colorPrimaryDarkDayNightTheme"
+            android:textSize="?attr/font_default"
+            android:maxLines="2"
+            android:ellipsize="end"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/icon_gif_image_view_item_post_detail"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/subreddit_text_view_item_post_detail"
+            app:layout_constraintHorizontal_bias="0" />
 
         <TextView
             android:id="@+id/post_time_text_view_item_post_detail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginEnd="16dp"
             android:gravity="end"
             android:textSize="?attr/font_default"
+            app:layout_constraintHorizontal_bias="1"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/subreddit_icon_name_relative_layout_item_post_detail"
+            app:layout_constraintStart_toEndOf="@id/guideline"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.6" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

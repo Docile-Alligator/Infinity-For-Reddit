@@ -23,6 +23,7 @@ public class CommentData implements Parcelable {
     private String id;
     private String fullName;
     private String author;
+    private String authorFlair;
     private String linkAuthor;
     private String commentTime;
     private String commentContent;
@@ -47,13 +48,14 @@ public class CommentData implements Parcelable {
     private boolean isLoadingMoreChildren;
     private boolean loadMoreChildrenFailed;
 
-    public CommentData(String id, String fullName, String author, String linkAuthor, String commentTime,
+    public CommentData(String id, String fullName, String author, String authorFlair, String linkAuthor, String commentTime,
                        String commentContent, String linkId, String subredditName, String parentId, int score,
                        int voteType, boolean isSubmitter, String distinguished, String permalink,
                        int depth, boolean collapsed, boolean hasReply, boolean scoreHidden, boolean saved) {
         this.id = id;
         this.fullName = fullName;
         this.author = author;
+        this.authorFlair = authorFlair;
         this.linkAuthor = linkAuthor;
         this.commentTime = commentTime;
         this.commentContent = commentContent;
@@ -87,6 +89,7 @@ public class CommentData implements Parcelable {
         id = in.readString();
         fullName = in.readString();
         author = in.readString();
+        authorFlair = in.readString();
         linkAuthor = in.readString();
         commentTime = in.readString();
         commentContent = in.readString();
@@ -125,6 +128,10 @@ public class CommentData implements Parcelable {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getAuthorFlair() {
+        return authorFlair;
     }
 
     public String getLinkAuthor() {
@@ -308,6 +315,7 @@ public class CommentData implements Parcelable {
         parcel.writeString(id);
         parcel.writeString(fullName);
         parcel.writeString(author);
+        parcel.writeString(authorFlair);
         parcel.writeString(linkAuthor);
         parcel.writeString(commentTime);
         parcel.writeString(commentContent);

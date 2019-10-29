@@ -112,6 +112,12 @@ public class ParseComment {
         String id = singleCommentData.getString(JSONUtils.ID_KEY);
         String fullName = singleCommentData.getString(JSONUtils.NAME_KEY);
         String author = singleCommentData.getString(JSONUtils.AUTHOR_KEY);
+        String authorFlair;
+        if (!singleCommentData.has(JSONUtils.AUTHOR_FLAIR_TEXT_KEY) || singleCommentData.isNull(JSONUtils.AUTHOR_FLAIR_TEXT_KEY)) {
+            authorFlair = "";
+        } else {
+            authorFlair = singleCommentData.getString(JSONUtils.AUTHOR_FLAIR_TEXT_KEY);
+        }
         String linkAuthor = singleCommentData.has(JSONUtils.LINK_AUTHOR_KEY) ? singleCommentData.getString(JSONUtils.LINK_AUTHOR_KEY) : null;
         String linkId = singleCommentData.getString(JSONUtils.LINK_ID_KEY).substring(3);
         String subredditName = singleCommentData.getString(JSONUtils.SUBREDDIT_KEY);
@@ -147,9 +153,9 @@ public class ParseComment {
         boolean collapsed = singleCommentData.getBoolean(JSONUtils.COLLAPSED_KEY);
         boolean hasReply = !(singleCommentData.get(JSONUtils.REPLIES_KEY) instanceof String);
 
-        return new CommentData(id, fullName, author, linkAuthor, formattedSubmitTime, commentContent,
-                linkId, subredditName, parentId, score, voteType, isSubmitter, distinguished,
-                permalink, depth, collapsed, hasReply, scoreHidden, saved);
+        return new CommentData(id, fullName, author, authorFlair, linkAuthor, formattedSubmitTime,
+                commentContent, linkId, subredditName, parentId, score, voteType, isSubmitter,
+                distinguished, permalink, depth, collapsed, hasReply, scoreHidden, saved);
     }
 
     @Nullable

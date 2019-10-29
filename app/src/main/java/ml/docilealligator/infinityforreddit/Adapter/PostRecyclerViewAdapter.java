@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -247,7 +246,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     ((DataViewHolder) holder).nameTextView.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
                     ((DataViewHolder) holder).nameTextView.setText(subredditNamePrefixed);
 
-                    ((DataViewHolder) holder).iconNameLinearLayout.setOnClickListener(view -> {
+                    ((DataViewHolder) holder).nameTextView.setOnClickListener(view -> {
                         if (canStartActivity) {
                             canStartActivity = false;
                             if (post.getSubredditNamePrefixed().startsWith("u/")) {
@@ -263,6 +262,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             }
                         }
                     });
+
+                    ((DataViewHolder) holder).iconGifImageView.setOnClickListener(view ->
+                            ((DataViewHolder) holder).nameTextView.performClick());
                 } else {
                     if (post.getAuthorIconUrl() == null) {
                         String authorName = post.getAuthor().equals("[deleted]") ? post.getSubredditNamePrefixed().substring(2) : post.getAuthor();
@@ -300,7 +302,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     ((DataViewHolder) holder).nameTextView.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDarkDayNightTheme));
                     ((DataViewHolder) holder).nameTextView.setText(authorPrefixed);
 
-                    ((DataViewHolder) holder).iconNameLinearLayout.setOnClickListener(view -> {
+                    ((DataViewHolder) holder).nameTextView.setOnClickListener(view -> {
                         if (canStartActivity) {
                             canStartActivity = false;
                             Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
@@ -308,6 +310,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             mContext.startActivity(intent);
                         }
                     });
+
+                    ((DataViewHolder) holder).iconGifImageView.setOnClickListener(view ->
+                            ((DataViewHolder) holder).nameTextView.performClick());
                 }
 
                 ((DataViewHolder) holder).postTimeTextView.setText(postTime);
@@ -807,8 +812,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     class DataViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.card_view_item_post)
         MaterialCardView cardView;
-        @BindView(R.id.icon_name_linear_layout_view_item_post)
-        LinearLayout iconNameLinearLayout;
         @BindView(R.id.icon_gif_image_view_item_post)
         AspectRatioGifImageView iconGifImageView;
         @BindView(R.id.name_text_view_item_post)

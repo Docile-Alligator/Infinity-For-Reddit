@@ -582,6 +582,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             String authorPrefixed = "u/" + comment.getAuthor();
             ((CommentViewHolder) holder).authorTextView.setText(authorPrefixed);
 
+            if (comment.getAuthorFlair() != null && !comment.getAuthorFlair().equals("")) {
+                ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.VISIBLE);
+                ((CommentViewHolder) holder).authorFlairTextView.setText(comment.getAuthorFlair());
+            }
+
             if (comment.isSubmitter()) {
                 ((CommentViewHolder) holder).authorTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.submitter));
                 ((CommentViewHolder) holder).authorTypeImageView.setVisibility(View.VISIBLE);
@@ -1374,6 +1379,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ((CommentViewHolder) holder).authorTextView.setTextColor(
                     ContextCompat.getColor(mActivity, R.color.colorPrimaryDarkDayNightTheme));
             mGlide.clear(((CommentViewHolder) holder).authorTypeImageView);
+            ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.GONE);
             ((CommentViewHolder) holder).authorTypeImageView.setVisibility(View.GONE);
             ((CommentViewHolder) holder).moreButton.setVisibility(View.GONE);
             ((CommentViewHolder) holder).expandButton.setVisibility(View.GONE);
@@ -1691,6 +1697,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     class CommentViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.author_text_view_item_post_comment)
         TextView authorTextView;
+        @BindView(R.id.author_flair_text_view_item_post_comment)
+        TextView authorFlairTextView;
         @BindView(R.id.author_type_image_view_item_comment)
         ImageView authorTypeImageView;
         @BindView(R.id.comment_time_text_view_item_post_comment)

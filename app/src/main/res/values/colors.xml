@@ -77,4 +77,6 @@
     <color name="spoilerBackgroundColor">#EE02EB</color>
 
     <color name="flairBackgroundColor">#00AA8C</color>
+
+    <color name="authorFlairTextColor">#EE02C4</color>
 </resources>

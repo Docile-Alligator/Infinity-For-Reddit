@@ -36,9 +36,9 @@ public class LinkResolverActivity extends AppCompatActivity {
 
     private static final String POST_PATTERN = "/r/\\w+/comments/\\w+/{0,1}\\w+/{0,1}";
     private static final String COMMENT_PATTERN = "/r/\\w+/comments/\\w+/{0,1}\\w+/\\w+/{0,1}";
-    private static final String SUBREDDIT_PATTERN = "/r/\\w+/{0,1}";
+    private static final String SUBREDDIT_PATTERN = "/[rR]/\\w+/{0,1}";
     private static final String USER_PATTERN_1 = "/user/\\w+/{0,1}";
-    private static final String USER_PATTERN_2 = "/u/\\w+/{0,1}";
+    private static final String USER_PATTERN_2 = "/[uU]/\\w+/{0,1}";
 
     @Inject
     SharedPreferences mSharedPreferences;
