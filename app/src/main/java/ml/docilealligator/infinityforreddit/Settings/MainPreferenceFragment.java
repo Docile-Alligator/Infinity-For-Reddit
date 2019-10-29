@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeVoteButtonsPositionEvent;
 import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
@@ -47,12 +48,13 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
 
             SwitchPreference amoledDarkSwitch = findPreference(SharedPreferencesUtils.AMOLED_DARK_KEY);
             SwitchPreference immersiveInterfaceSwitch = findPreference(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY);
+            SwitchPreference voteButtonsOnTheRightSwitch = findPreference(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY);
             SwitchPreference nsfwSwitch = findPreference(SharedPreferencesUtils.NSFW_KEY);
             SwitchPreference blurNSFWSwitch = findPreference(SharedPreferencesUtils.BLUR_NSFW_KEY);
             SwitchPreference blurSpoilerSwitch = findPreference(SharedPreferencesUtils.BLUR_SPOILER_KEY);
             ListPreference themePreference = findPreference(SharedPreferencesUtils.THEME_KEY);
 
-            if(amoledDarkSwitch != null) {
+            if (amoledDarkSwitch != null) {
                 amoledDarkSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                     if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_NO) {
                         EventBus.getDefault().post(new RecreateActivityEvent());
@@ -62,7 +64,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
                 });
             }
 
-            if(immersiveInterfaceSwitch != null) {
+            if (immersiveInterfaceSwitch != null) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
                     immersiveInterfaceSwitch.setVisible(true);
                     immersiveInterfaceSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -72,6 +74,13 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
                 } else {
                     immersiveInterfaceSwitch.setVisible(false);
                 }
+            }
+
+            if (voteButtonsOnTheRightSwitch != null) {
+                voteButtonsOnTheRightSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                    EventBus.getDefault().post(new ChangeVoteButtonsPositionEvent((Boolean) newValue));
+                    return true;
+                });
             }
 
             if (nsfwSwitch != null) {

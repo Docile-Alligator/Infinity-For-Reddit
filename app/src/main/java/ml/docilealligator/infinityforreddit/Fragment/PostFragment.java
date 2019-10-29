@@ -51,6 +51,7 @@ import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity
 import ml.docilealligator.infinityforreddit.Adapter.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeVoteButtonsPositionEvent;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -275,6 +276,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         boolean nsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_KEY, false);
         boolean needBlurNsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_NSFW_KEY, true);
         boolean needBlurSpoiler = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_SPOILER_KEY, false);
+        boolean voteButtonsOnTheRight = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
 
         PostViewModel.Factory factory;
 
@@ -288,7 +290,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, true, needBlurNsfw, needBlurSpoiler,
-                    new PostRecyclerViewAdapter.Callback() {
+                    voteButtonsOnTheRight, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -348,7 +350,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, displaySubredditName, needBlurNsfw, needBlurSpoiler,
-                    new PostRecyclerViewAdapter.Callback() {
+                    voteButtonsOnTheRight, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -393,7 +395,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, true, needBlurNsfw, needBlurSpoiler,
-                    new PostRecyclerViewAdapter.Callback() {
+                    voteButtonsOnTheRight, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -431,7 +433,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, true, needBlurNsfw, needBlurSpoiler,
-                    new PostRecyclerViewAdapter.Callback() {
+                    voteButtonsOnTheRight, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -623,6 +625,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 mAdapter.notifyItemChanged(event.positionInList);
             }
         }
+    }
+
+    @Subscribe
+    public void onChangeVoteButtonsPositionEvent(ChangeVoteButtonsPositionEvent event) {
+        mAdapter.setVoteButtonsPosition(event.voteButtonsOnTheRight);
+        refreshAdapter();
     }
 
     @Subscribe

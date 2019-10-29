@@ -20,6 +20,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
@@ -96,6 +98,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean canStartActivity = true;
     private int mPostType;
     private boolean mDisplaySubredditName;
+    private boolean mVoteButtonsOnTheRight;
     private boolean mNeedBlurNSFW;
     private boolean mNeedBlurSpoiler;
     private NetworkState networkState;
@@ -104,7 +107,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     public PostRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, Retrofit retrofit,
                                    RedditDataRoomDatabase redditDataRoomDatabase, String accessToken,
                                    int postType, boolean displaySubredditName, boolean needBlurNSFW,
-                                   boolean needBlurSpoiler, Callback callback) {
+                                   boolean needBlurSpoiler, boolean voteButtonsOnTheRight, Callback callback) {
         super(DIFF_CALLBACK);
         if (context != null) {
             mContext = context;
@@ -115,6 +118,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mDisplaySubredditName = displaySubredditName;
             mNeedBlurNSFW = needBlurNSFW;
             mNeedBlurSpoiler = needBlurSpoiler;
+            mVoteButtonsOnTheRight = voteButtonsOnTheRight;
             mGlide = Glide.with(mContext.getApplicationContext());
             mRedditDataRoomDatabase = redditDataRoomDatabase;
             mUserDao = redditDataRoomDatabase.userDao();
@@ -615,9 +619,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 ((DataViewHolder) holder).commentsCountTextView.setText(Integer.toString(post.getnComments()));
 
                 if (post.isSaved()) {
-                    ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                    ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                 } else {
-                    ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                    ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                 }
 
                 ((DataViewHolder) holder).saveButton.setOnClickListener(view -> {
@@ -627,13 +631,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     }
 
                     if (post.isSaved()) {
-                        ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                        ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                         SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, post.getFullName(),
                                 new SaveThing.SaveThingListener() {
                                     @Override
                                     public void success() {
                                         post.setSaved(false);
-                                        ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                                        ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                         Toast.makeText(mContext, R.string.post_unsaved_success, Toast.LENGTH_SHORT).show();
                                         EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                                     }
@@ -641,19 +645,19 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     @Override
                                     public void failed() {
                                         post.setSaved(true);
-                                        ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                                        ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                         Toast.makeText(mContext, R.string.post_unsaved_failed, Toast.LENGTH_SHORT).show();
                                         EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                                     }
                                 });
                     } else {
-                        ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                        ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                         SaveThing.saveThing(mOauthRetrofit, mAccessToken, post.getFullName(),
                                 new SaveThing.SaveThingListener() {
                                     @Override
                                     public void success() {
                                         post.setSaved(true);
-                                        ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                                        ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                         Toast.makeText(mContext, R.string.post_saved_success, Toast.LENGTH_SHORT).show();
                                         EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                                     }
@@ -661,7 +665,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     @Override
                                     public void failed() {
                                         post.setSaved(false);
-                                        ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                                        ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                         Toast.makeText(mContext, R.string.post_saved_failed, Toast.LENGTH_SHORT).show();
                                         EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                                     }
@@ -734,6 +738,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             return super.getItemCount() + 1;
         }
         return super.getItemCount();
+    }
+
+    public void setVoteButtonsPosition(boolean voteButtonsOnTheRight) {
+        mVoteButtonsOnTheRight = voteButtonsOnTheRight;
     }
 
     public void setBlurNSFW(boolean needBlurNSFW) {
@@ -841,6 +849,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         ImageView noPreviewLinkImageView;
         @BindView(R.id.content_text_view_item_post)
         TextView contentTextView;
+        @BindView(R.id.bottom_constraint_layout_item_post)
+        ConstraintLayout bottomConstraintLayout;
         @BindView(R.id.plus_button_item_post)
         ImageView upvoteButton;
         @BindView(R.id.score_text_view_item_post)
@@ -860,6 +870,25 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             scoreTextView.setOnClickListener(view -> {
                 //Do nothing in order to prevent clicking this to start ViewPostDetailActivity
             });
+
+            if (mVoteButtonsOnTheRight) {
+                ConstraintSet constraintSet = new ConstraintSet();
+                constraintSet.clone(bottomConstraintLayout);
+                constraintSet.clear(upvoteButton.getId(), ConstraintSet.START);
+                constraintSet.clear(scoreTextView.getId(), ConstraintSet.START);
+                constraintSet.clear(downvoteButton.getId(), ConstraintSet.START);
+                constraintSet.clear(saveButton.getId(), ConstraintSet.END);
+                constraintSet.clear(shareButton.getId(), ConstraintSet.END);
+                constraintSet.connect(upvoteButton.getId(), ConstraintSet.END, scoreTextView.getId(), ConstraintSet.START);
+                constraintSet.connect(scoreTextView.getId(), ConstraintSet.END, downvoteButton.getId(), ConstraintSet.START);
+                constraintSet.connect(downvoteButton.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+                constraintSet.connect(commentsCountTextView.getId(), ConstraintSet.START, saveButton.getId(), ConstraintSet.END);
+                constraintSet.connect(commentsCountTextView.getId(), ConstraintSet.END, upvoteButton.getId(), ConstraintSet.START);
+                constraintSet.connect(saveButton.getId(), ConstraintSet.START, shareButton.getId(), ConstraintSet.END);
+                constraintSet.connect(shareButton.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+                constraintSet.setHorizontalBias(commentsCountTextView.getId(), 0);
+                constraintSet.applyTo(bottomConstraintLayout);
+            }
         }
     }
 

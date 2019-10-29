@@ -295,9 +295,9 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 });
 
                 if (comment.isSaved()) {
-                    ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_20dp);
+                    ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                 } else {
-                    ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_20dp);
+                    ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                 }
 
                 ((DataViewHolder) holder).saveButton.setOnClickListener(view -> {
@@ -307,14 +307,14 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                             @Override
                             public void success() {
                                 comment.setSaved(false);
-                                ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_20dp);
+                                ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                 Toast.makeText(mContext, R.string.comment_unsaved_success, Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void failed() {
                                 comment.setSaved(true);
-                                ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_20dp);
+                                ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                 Toast.makeText(mContext, R.string.comment_unsaved_failed, Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -324,14 +324,14 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                             @Override
                             public void success() {
                                 comment.setSaved(true);
-                                ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_20dp);
+                                ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                 Toast.makeText(mContext, R.string.comment_saved_success, Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void failed() {
                                 comment.setSaved(false);
-                                ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_20dp);
+                                ((DataViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                 Toast.makeText(mContext, R.string.comment_saved_failed, Toast.LENGTH_SHORT).show();
                             }
                         });

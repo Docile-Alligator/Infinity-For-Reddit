@@ -23,6 +23,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -102,6 +104,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private boolean mIsSingleCommentThreadMode;
     private boolean mNeedBlurNSFW;
     private boolean mNeedBlurSpoiler;
+    private boolean mVoteButtonsOnTheRight;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
     private boolean isInitiallyLoadingFailed;
@@ -113,7 +116,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                              RedditDataRoomDatabase redditDataRoomDatabase, RequestManager glide,
                                              String accessToken, String accountName, Post post, Locale locale,
                                              String singleCommentId, boolean isSingleCommentThreadMode,
-                                             boolean needBlurNSFW, boolean needBlurSpoiler,
+                                             boolean needBlurNSFW, boolean needBlurSpoiler, boolean voteButtonsOnTheRight,
                                              CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
         mActivity = activity;
         mRetrofit = retrofit;
@@ -149,6 +152,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mIsSingleCommentThreadMode = isSingleCommentThreadMode;
         mNeedBlurNSFW = needBlurNSFW;
         mNeedBlurSpoiler = needBlurSpoiler;
+        mVoteButtonsOnTheRight = voteButtonsOnTheRight;
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
         isInitiallyLoadingFailed = false;
@@ -492,7 +496,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     break;
             }
 
-            ((PostDetailViewHolder) holder).commentButton.setOnClickListener(view -> {
+            ((PostDetailViewHolder) holder).commentsCountTextView.setOnClickListener(view -> {
                 if (mAccessToken == null) {
                     Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                     return;
@@ -509,9 +513,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ((PostDetailViewHolder) holder).commentsCountTextView.setText(Integer.toString(mPost.getnComments()));
 
             if (mPost.isSaved()) {
-                ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
             } else {
-                ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
             }
 
             ((PostDetailViewHolder) holder).saveButton.setOnClickListener(view -> {
@@ -521,13 +525,13 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 }
 
                 if (mPost.isSaved()) {
-                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                     SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
                             new SaveThing.SaveThingListener() {
                                 @Override
                                 public void success() {
                                     mPost.setSaved(false);
-                                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                     Toast.makeText(mActivity, R.string.post_unsaved_success, Toast.LENGTH_SHORT).show();
                                     mCommentRecyclerViewAdapterCallback.updatePost(mPost);
                                 }
@@ -535,19 +539,19 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                 @Override
                                 public void failed() {
                                     mPost.setSaved(true);
-                                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                     Toast.makeText(mActivity, R.string.post_unsaved_failed, Toast.LENGTH_SHORT).show();
                                     mCommentRecyclerViewAdapterCallback.updatePost(mPost);
                                 }
                             });
                 } else {
-                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                     SaveThing.saveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
                             new SaveThing.SaveThingListener() {
                                 @Override
                                 public void success() {
                                     mPost.setSaved(true);
-                                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_24px);
+                                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                     Toast.makeText(mActivity, R.string.post_saved_success, Toast.LENGTH_SHORT).show();
                                     mCommentRecyclerViewAdapterCallback.updatePost(mPost);
                                 }
@@ -555,7 +559,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                 @Override
                                 public void failed() {
                                     mPost.setSaved(false);
-                                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_baseline_bookmark_border_24px);
+                                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                     Toast.makeText(mActivity, R.string.post_saved_failed, Toast.LENGTH_SHORT).show();
                                     mCommentRecyclerViewAdapterCallback.updatePost(mPost);
                                 }
@@ -655,9 +659,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if (comment.hasReply()) {
                 if (comment.isExpanded()) {
-                    ((CommentViewHolder) holder).expandButton.setImageResource(R.drawable.ic_expand_less_black_22dp);
+                    ((CommentViewHolder) holder).expandButton.setImageResource(R.drawable.ic_expand_less_grey_24dp);
                 } else {
-                    ((CommentViewHolder) holder).expandButton.setImageResource(R.drawable.ic_expand_more_black_20dp);
+                    ((CommentViewHolder) holder).expandButton.setImageResource(R.drawable.ic_expand_more_grey_24dp);
                 }
                 ((CommentViewHolder) holder).expandButton.setVisibility(View.VISIBLE);
             }
@@ -839,9 +843,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             });
 
             if (comment.isSaved()) {
-                ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_20dp);
+                ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
             } else {
-                ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_20dp);
+                ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
             }
 
             ((CommentViewHolder) holder).saveButton.setOnClickListener(view -> {
@@ -851,14 +855,14 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         @Override
                         public void success() {
                             comment.setSaved(false);
-                            ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_20dp);
+                            ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                             Toast.makeText(mActivity, R.string.comment_unsaved_success, Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void failed() {
                             comment.setSaved(true);
-                            ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_20dp);
+                            ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                             Toast.makeText(mActivity, R.string.comment_unsaved_failed, Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -868,14 +872,14 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         @Override
                         public void success() {
                             comment.setSaved(true);
-                            ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_20dp);
+                            ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                             Toast.makeText(mActivity, R.string.comment_saved_success, Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void failed() {
                             comment.setSaved(false);
-                            ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_20dp);
+                            ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                             Toast.makeText(mActivity, R.string.comment_saved_failed, Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -1469,14 +1473,14 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         AspectRatioImageView mImageView;
         @BindView(R.id.image_view_no_preview_link_item_post_detail)
         ImageView mNoPreviewLinkImageView;
+        @BindView(R.id.bottom_constraint_layout_item_post_detail)
+        ConstraintLayout mBottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_detail)
         ImageView mUpvoteButton;
         @BindView(R.id.score_text_view_item_post_detail)
         TextView mScoreTextView;
         @BindView(R.id.minus_button_item_post_detail)
         ImageView mDownvoteButton;
-        @BindView(R.id.comment_button_item_post_detail)
-        ImageView commentButton;
         @BindView(R.id.comments_count_item_post_detail)
         TextView commentsCountTextView;
         @BindView(R.id.save_button_item_post_detail)
@@ -1662,6 +1666,25 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     }
                 }, mPost.getFullName(), newVoteType);
             });
+
+            if (mVoteButtonsOnTheRight) {
+                ConstraintSet constraintSet = new ConstraintSet();
+                constraintSet.clone(mBottomConstraintLayout);
+                constraintSet.clear(mUpvoteButton.getId(), ConstraintSet.START);
+                constraintSet.clear(mScoreTextView.getId(), ConstraintSet.START);
+                constraintSet.clear(mDownvoteButton.getId(), ConstraintSet.START);
+                constraintSet.clear(saveButton.getId(), ConstraintSet.END);
+                constraintSet.clear(mShareButton.getId(), ConstraintSet.END);
+                constraintSet.connect(mUpvoteButton.getId(), ConstraintSet.END, mScoreTextView.getId(), ConstraintSet.START);
+                constraintSet.connect(mScoreTextView.getId(), ConstraintSet.END, mDownvoteButton.getId(), ConstraintSet.START);
+                constraintSet.connect(mDownvoteButton.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+                constraintSet.connect(commentsCountTextView.getId(), ConstraintSet.START, saveButton.getId(), ConstraintSet.END);
+                constraintSet.connect(commentsCountTextView.getId(), ConstraintSet.END, mUpvoteButton.getId(), ConstraintSet.START);
+                constraintSet.connect(saveButton.getId(), ConstraintSet.START, mShareButton.getId(), ConstraintSet.END);
+                constraintSet.connect(mShareButton.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+                constraintSet.setHorizontalBias(commentsCountTextView.getId(), 0);
+                constraintSet.applyTo(mBottomConstraintLayout);
+            }
         }
     }
 
@@ -1726,11 +1749,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     if(commentPosition < mVisibleComments.size()) {
                         if (mVisibleComments.get(commentPosition).isExpanded()) {
                             collapseChildren(commentPosition);
-                            expandButton.setImageResource(R.drawable.ic_expand_more_black_20dp);
+                            expandButton.setImageResource(R.drawable.ic_expand_more_grey_24dp);
                         } else {
                             expandChildren(commentPosition);
                             mVisibleComments.get(commentPosition).setExpanded(true);
-                            expandButton.setImageResource(R.drawable.ic_expand_less_black_22dp);
+                            expandButton.setImageResource(R.drawable.ic_expand_less_grey_24dp);
                         }
                     }
                 }

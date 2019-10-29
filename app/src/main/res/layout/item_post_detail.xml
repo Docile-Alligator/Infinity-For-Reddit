@@ -248,70 +248,17 @@
         android:tint="@android:color/tab_indicator_text"
         android:visibility="gone" />
 
-    <!--<RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/plus_button_item_post_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:background="?actionBarItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="16dp"
-            android:src="@drawable/ic_arrow_upward_black_24dp"
-            android:tint="@android:color/tab_indicator_text" />
-
-        <TextView
-            android:id="@+id/score_text_view_item_post_detail"
-            android:layout_width="64dp"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/plus_button_item_post_detail"
-            android:gravity="center"
-            android:textSize="?attr/font_default" />
-
-        <ImageView
-            android:id="@+id/minus_button_item_post_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/score_text_view_item_post_detail"
-            android:background="?actionBarItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="16dp"
-            android:src="@drawable/ic_arrow_downward_black_24dp"
-            android:tint="@android:color/tab_indicator_text" />
-
-        <ImageView
-            android:id="@+id/share_button_item_post_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:background="?actionBarItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="16dp"
-            android:src="@drawable/ic_outline_share_24px"
-            android:tint="@android:color/tab_indicator_text" />
-
-    </RelativeLayout>-->
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/bottom_constraint_layout_item_post_detail">
 
         <ImageView
             android:id="@+id/plus_button_item_post_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="12dp"
-            android:src="@drawable/ic_arrow_upward_black_24dp"
+            android:src="@drawable/ic_arrow_upward_grey_24dp"
             android:tint="@android:color/tab_indicator_text"
             android:background="?actionBarItemBackground"
             android:clickable="true"
@@ -323,7 +270,7 @@
         <TextView
             android:id="@+id/score_text_view_item_post_detail"
             android:layout_width="64dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="?attr/font_12"
             android:textStyle="bold"
@@ -336,7 +283,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="12dp"
-            android:src="@drawable/ic_arrow_downward_black_24dp"
+            android:src="@drawable/ic_arrow_downward_grey_24dp"
             android:tint="@android:color/tab_indicator_text"
             android:background="?actionBarItemBackground"
             android:clickable="true"
@@ -345,31 +292,19 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/score_text_view_item_post_detail" />
 
-        <ImageView
-            android:id="@+id/comment_button_item_post_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:src="@drawable/ic_comment_white_24dp"
-            android:tint="@android:color/tab_indicator_text"
-            android:background="?actionBarItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/minus_button_item_post_detail" />
-
         <TextView
             android:id="@+id/comments_count_item_post_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:gravity="center_vertical"
             android:textSize="?attr/font_12"
             android:textStyle="bold"
-            app:layout_constraintHorizontal_bias="0"
+            android:drawableStart="@drawable/ic_comment_grey_24dp"
+            android:drawablePadding="12dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/comment_button_item_post_detail" />
+            app:layout_constraintStart_toEndOf="@id/minus_button_item_post_detail" />
 
         <ImageView
             android:id="@+id/save_button_item_post_detail"
@@ -391,15 +326,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="12dp"
-            android:src="@drawable/ic_outline_share_24px"
-            android:tint="@android:color/tab_indicator_text"
+            android:src="@drawable/ic_share_grey_24dp"
             android:background="?actionBarItemBackground"
             android:clickable="true"
             android:focusable="true"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

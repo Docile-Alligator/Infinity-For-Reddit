@@ -159,6 +159,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     private String mSingleCommentId;
     private boolean mNeedBlurNsfw;
     private boolean mNeedBlurSpoiler;
+    private boolean mVoteButtonsOnTheRight;
     private boolean showToast = false;
     private boolean isSortingComments = false;
     private LinearLayoutManager mLinearLayoutManager;
@@ -232,6 +233,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
         mNeedBlurNsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_NSFW_KEY, true);
         mNeedBlurSpoiler = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_SPOILER_KEY, false);
+        mVoteButtonsOnTheRight = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
 
         mGlide = Glide.with(this);
         mLocale = getResources().getConfiguration().locale;
@@ -239,7 +241,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        mSingleCommentId = getIntent().hasExtra(EXTRA_SINGLE_COMMENT_ID) ? getIntent().getExtras().getString(EXTRA_SINGLE_COMMENT_ID) : null;
+        mSingleCommentId = getIntent().getStringExtra(EXTRA_SINGLE_COMMENT_ID);
         if (savedInstanceState == null) {
             if (mSingleCommentId != null) {
                 isSingleCommentThreadMode = true;
@@ -336,10 +338,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 if (mAccessToken != null) {
                     if (mPost.isSaved()) {
                         saveItem.setVisible(true);
-                        saveItem.setIcon(R.drawable.ic_baseline_bookmark_24px);
+                        saveItem.setIcon(R.drawable.ic_bookmark_black_24dp);
                     } else {
                         saveItem.setVisible(true);
-                        saveItem.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
+                        saveItem.setIcon(R.drawable.ic_bookmark_border_black_24dp);
                     }
 
                     if (mPost.isHidden()) {
@@ -385,6 +387,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
                     mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mAccountName, mPost,
                     mLocale, mSingleCommentId, isSingleCommentThreadMode, mNeedBlurNsfw, mNeedBlurSpoiler,
+                    mVoteButtonsOnTheRight,
                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                         @Override
                         public void updatePost(Post post) {
@@ -473,10 +476,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                 if (mAccessToken != null) {
                                     if (post.isSaved()) {
                                         saveItem.setVisible(true);
-                                        saveItem.setIcon(R.drawable.ic_baseline_bookmark_24px);
+                                        saveItem.setIcon(R.drawable.ic_bookmark_black_24dp);
                                     } else {
                                         saveItem.setVisible(true);
-                                        saveItem.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
+                                        saveItem.setIcon(R.drawable.ic_bookmark_border_black_24dp);
                                     }
 
                                     if (post.isHidden()) {
@@ -505,6 +508,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                     mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mGlide,
                                     mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId,
                                     isSingleCommentThreadMode, mNeedBlurNsfw, mNeedBlurSpoiler,
+                                    mVoteButtonsOnTheRight,
                                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                                         @Override
                                         public void updatePost(Post post) {
@@ -727,10 +731,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                     if (mAccessToken != null) {
                                         if (post.isSaved()) {
                                             saveItem.setVisible(true);
-                                            saveItem.setIcon(R.drawable.ic_baseline_bookmark_24px);
+                                            saveItem.setIcon(R.drawable.ic_bookmark_black_24dp);
                                         } else {
                                             saveItem.setVisible(true);
-                                            saveItem.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
+                                            saveItem.setIcon(R.drawable.ic_bookmark_border_black_24dp);
                                         }
 
                                         if (post.isHidden()) {
@@ -962,10 +966,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             if (mMenu != null) {
                 if (event.post.isSaved()) {
                     mMenu.findItem(R.id.action_save_view_post_detail_activity).setIcon(getResources()
-                            .getDrawable(R.drawable.ic_baseline_bookmark_24px));
+                            .getDrawable(R.drawable.ic_bookmark_black_24dp));
                 } else {
                     mMenu.findItem(R.id.action_save_view_post_detail_activity).setIcon(getResources()
-                            .getDrawable(R.drawable.ic_baseline_bookmark_border_24px));
+                            .getDrawable(R.drawable.ic_bookmark_border_black_24dp));
                 }
             }
             mAdapter.updatePost(mPost);
@@ -1022,10 +1026,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             if (mAccessToken != null) {
                 if (mPost.isSaved()) {
                     saveItem.setVisible(true);
-                    saveItem.setIcon(R.drawable.ic_baseline_bookmark_24px);
+                    saveItem.setIcon(R.drawable.ic_bookmark_black_24dp);
                 } else {
                     saveItem.setVisible(true);
-                    saveItem.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
+                    saveItem.setIcon(R.drawable.ic_bookmark_border_black_24dp);
                 }
 
                 if (mPost.isHidden()) {
@@ -1104,13 +1108,13 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             case R.id.action_save_view_post_detail_activity:
                 if (mPost != null && mAccessToken != null) {
                     if (mPost.isSaved()) {
-                        item.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
+                        item.setIcon(R.drawable.ic_bookmark_border_black_24dp);
                         SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
                                 new SaveThing.SaveThingListener() {
                                     @Override
                                     public void success() {
                                         mPost.setSaved(false);
-                                        item.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
+                                        item.setIcon(R.drawable.ic_bookmark_border_black_24dp);
                                         showMessage(R.string.post_unsaved_success);
                                         EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                     }
@@ -1118,19 +1122,19 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                     @Override
                                     public void failed() {
                                         mPost.setSaved(true);
-                                        item.setIcon(R.drawable.ic_baseline_bookmark_24px);
+                                        item.setIcon(R.drawable.ic_bookmark_black_24dp);
                                         showMessage(R.string.post_unsaved_failed);
                                         EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                     }
                                 });
                     } else {
-                        item.setIcon(R.drawable.ic_baseline_bookmark_24px);
+                        item.setIcon(R.drawable.ic_bookmark_black_24dp);
                         SaveThing.saveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
                                 new SaveThing.SaveThingListener() {
                                     @Override
                                     public void success() {
                                         mPost.setSaved(true);
-                                        item.setIcon(R.drawable.ic_baseline_bookmark_24px);
+                                        item.setIcon(R.drawable.ic_bookmark_black_24dp);
                                         showMessage(R.string.post_saved_success);
                                         EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                     }
@@ -1138,7 +1142,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                     @Override
                                     public void failed() {
                                         mPost.setSaved(false);
-                                        item.setIcon(R.drawable.ic_baseline_bookmark_border_24px);
+                                        item.setIcon(R.drawable.ic_bookmark_border_black_24dp);
                                         showMessage(R.string.post_saved_failed);
                                         EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                     }

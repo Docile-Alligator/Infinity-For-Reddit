@@ -287,6 +287,7 @@
     <string name="settings_theme_system_default_summary">Device default</string>
     <string name="settings_amoled_dark_title">Amoled Dark</string>
     <string name="settings_immersive_interface_title">Immersive Interface</string>
+    <string name="settings_vote_buttons_on_the_right_title">Vote Buttons on the Right</string>
     <string name="settings_lazy_mode_interval_title">Lazy Mode Interval</string>
     <string name="settings_font_size_title">Font Size</string>
     <string name="settings_title_font_size_title">Title Font Size</string>

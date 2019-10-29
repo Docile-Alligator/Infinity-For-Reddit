@@ -26,6 +26,17 @@
         app:title="@string/settings_immersive_interface_title"
         app:isPreferenceVisible="false" />
 
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="vote_buttons_on_the_right"
+        app:title="@string/settings_vote_buttons_on_the_right_title"
+        app:isPreferenceVisible="true" />
+
+    <Preference
+        app:title="@string/settings_font_size_title"
+        app:icon="@drawable/ic_font_size_24dp"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.FontSizePreferenceFragment" />
+
     <ListPreference
         app:defaultValue="2.5"
         android:entries="@array/settings_lazy_mode_interval"
@@ -34,11 +45,6 @@
         app:icon="@drawable/ic_outline_access_time_24px"
         app:title="@string/settings_lazy_mode_interval_title"
         app:useSimpleSummaryProvider="true" />
-
-    <Preference
-        app:title="@string/settings_font_size_title"
-        app:icon="@drawable/ic_font_size_24dp"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.FontSizePreferenceFragment" />
 
     <SwitchPreference
         app:defaultValue="false"
