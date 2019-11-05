@@ -145,11 +145,13 @@ public class SubredditSelectionActivity extends BaseActivity {
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
             mAccountProfileImageUrl = savedInstanceState.getString(ACCOUNT_PROFILE_IMAGE_URL);
 
+            mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, mFragment).commit();
+
             if (!mNullAccessToken && mAccountName == null) {
                 getCurrentAccountAndBindView();
             } else {
-                mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, mFragment).commit();
+                bindView(false);
             }
         }
     }
@@ -168,24 +170,26 @@ public class SubredditSelectionActivity extends BaseActivity {
                 mAccountName = account.getUsername();
                 mAccountProfileImageUrl = account.getProfileImageUrl();
             }
-            bindView();
+            bindView(true);
         }).execute();
     }
 
-    private void bindView() {
+    private void bindView(boolean initializeFragment) {
         loadSubscriptions();
 
-        mFragment = new SubscribedSubredditsListingFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
-        bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCOUNT_PROFILE_IMAGE_URL, mAccountProfileImageUrl);
-        bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_IS_SUBREDDIT_SELECTION, true);
-        if (getIntent().hasExtra(EXTRA_EXTRA_CLEAR_SELECTION)) {
-            bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_EXTRA_CLEAR_SELECTION,
-                    getIntent().getExtras().getBoolean(EXTRA_EXTRA_CLEAR_SELECTION));
+        if (initializeFragment) {
+            mFragment = new SubscribedSubredditsListingFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
+            bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCOUNT_PROFILE_IMAGE_URL, mAccountProfileImageUrl);
+            bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_IS_SUBREDDIT_SELECTION, true);
+            if (getIntent().hasExtra(EXTRA_EXTRA_CLEAR_SELECTION)) {
+                bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_EXTRA_CLEAR_SELECTION,
+                        getIntent().getExtras().getBoolean(EXTRA_EXTRA_CLEAR_SELECTION));
+            }
+            mFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, mFragment).commit();
         }
-        mFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, mFragment).commit();
     }
 
     private void loadSubscriptions() {

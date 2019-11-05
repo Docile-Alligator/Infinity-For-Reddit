@@ -890,6 +890,55 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     });
                 }
             });
+
+            ((CommentViewHolder) holder).authorTextView.setOnClickListener(view -> {
+                Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
+                if (mIsSingleCommentThreadMode) {
+                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mVisibleComments.get(holder.getAdapterPosition() - 2).getAuthor());
+                } else {
+                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mVisibleComments.get(holder.getAdapterPosition() - 1).getAuthor());
+                }
+                mActivity.startActivity(intent);
+            });
+
+            ((CommentViewHolder) holder).shareButton.setOnClickListener(view -> {
+                try {
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    String extraText = mIsSingleCommentThreadMode ? mVisibleComments.get(holder.getAdapterPosition() - 2).getPermalink()
+                            : mVisibleComments.get(holder.getAdapterPosition() - 1).getPermalink();
+                    intent.putExtra(Intent.EXTRA_TEXT, extraText);
+                    mActivity.startActivity(Intent.createChooser(intent, mActivity.getString(R.string.share)));
+                } catch (ActivityNotFoundException e) {
+                    Toast.makeText(mActivity, R.string.no_activity_found_for_share, Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            ((CommentViewHolder) holder).expandButton.setOnClickListener(view -> {
+                if (((CommentViewHolder) holder).expandButton.getVisibility() == View.VISIBLE) {
+                    int commentPosition = mIsSingleCommentThreadMode ? holder.getAdapterPosition() - 2 : holder.getAdapterPosition() - 1;
+                    if(commentPosition < mVisibleComments.size()) {
+                        if (mVisibleComments.get(commentPosition).isExpanded()) {
+                            collapseChildren(commentPosition);
+                            ((CommentViewHolder) holder).expandButton.setImageResource(R.drawable.ic_expand_more_grey_24dp);
+                        } else {
+                            expandChildren(commentPosition);
+                            mVisibleComments.get(commentPosition).setExpanded(true);
+                            ((CommentViewHolder) holder).expandButton.setImageResource(R.drawable.ic_expand_less_grey_24dp);
+                        }
+                    }
+                }
+            });
+
+            ((CommentViewHolder) holder).commentMarkdownView.setOnLongClickListener(view -> {
+                ((CommentViewHolder) holder).expandButton.performClick();
+                return true;
+            });
+
+            ((CommentViewHolder) holder).itemView.setOnLongClickListener(view -> {
+                ((CommentViewHolder) holder).expandButton.performClick();
+                return true;
+            });
         } else if (holder instanceof LoadMoreChildCommentsViewHolder) {
             CommentData placeholder;
             placeholder = mIsSingleCommentThreadMode ? mVisibleComments.get(holder.getAdapterPosition() - 2)
@@ -1729,55 +1778,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         CommentViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
-            authorTextView.setOnClickListener(view -> {
-                Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
-                if (mIsSingleCommentThreadMode) {
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mVisibleComments.get(getAdapterPosition() - 2).getAuthor());
-                } else {
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mVisibleComments.get(getAdapterPosition() - 1).getAuthor());
-                }
-                mActivity.startActivity(intent);
-            });
-
-            shareButton.setOnClickListener(view -> {
-                try {
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("text/plain");
-                    String extraText = mIsSingleCommentThreadMode ? mVisibleComments.get(getAdapterPosition() - 2).getPermalink()
-                            : mVisibleComments.get(getAdapterPosition() - 1).getPermalink();
-                    intent.putExtra(Intent.EXTRA_TEXT, extraText);
-                    mActivity.startActivity(Intent.createChooser(intent, mActivity.getString(R.string.share)));
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(mActivity, R.string.no_activity_found_for_share, Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            expandButton.setOnClickListener(view -> {
-                if (expandButton.getVisibility() == View.VISIBLE) {
-                    int commentPosition = mIsSingleCommentThreadMode ? getAdapterPosition() - 2 : getAdapterPosition() - 1;
-                    if(commentPosition < mVisibleComments.size()) {
-                        if (mVisibleComments.get(commentPosition).isExpanded()) {
-                            collapseChildren(commentPosition);
-                            expandButton.setImageResource(R.drawable.ic_expand_more_grey_24dp);
-                        } else {
-                            expandChildren(commentPosition);
-                            mVisibleComments.get(commentPosition).setExpanded(true);
-                            expandButton.setImageResource(R.drawable.ic_expand_less_grey_24dp);
-                        }
-                    }
-                }
-            });
-
-            commentMarkdownView.setOnLongClickListener(view -> {
-                expandButton.performClick();
-                return true;
-            });
-
-            itemView.setOnLongClickListener(view -> {
-                expandButton.performClick();
-                return true;
-            });
 
             if (mVoteButtonsOnTheRight) {
                 ConstraintSet constraintSet = new ConstraintSet();
