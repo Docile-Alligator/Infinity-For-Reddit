@@ -73,6 +73,7 @@ import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchMyInfo;
 import ml.docilealligator.infinityforreddit.FetchSubscribedThing;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
+import ml.docilealligator.infinityforreddit.Fragment.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SortTypeBottomSheetFragment;
@@ -94,7 +95,7 @@ import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
 public class MainActivity extends BaseActivity implements SortTypeSelectionCallback,
-        PostTypeBottomSheetFragment.PostTypeSelectionCallback {
+        PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {
 
     static final String EXTRA_POST_TYPE = "EPT";
     static final String EXTRA_MESSSAGE_FULLNAME = "ENF";
@@ -181,6 +182,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private SortTypeBottomSheetFragment bestSortTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment popularAndAllSortTypeBottomSheetFragment;
     private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
+    private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
@@ -283,6 +285,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         popularAndAllSortTypeBottomSheetFragment.setArguments(popularBundle);
 
         sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
+        postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
 
         setSupportActionBar(toolbar);
 
@@ -845,6 +848,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     }
                 }
                 return true;
+            case R.id.action_change_post_layout_main_activity:
+                postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
         }
         return false;
     }
@@ -915,6 +920,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 intent = new Intent(MainActivity.this, PostVideoActivity.class);
                 startActivity(intent);
         }
+    }
+
+    @Override
+    public void postLayoutSelected(int postLayout) {
+        sectionsPagerAdapter.changePostLayout(postLayout);
     }
 
     public void postScrollUp() {
@@ -1259,6 +1269,42 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             }
             if (allPostFragment != null) {
                 allPostFragment.changeNSFW(nsfw);
+            }
+        }
+
+        void changePostLayout(int postLayout) {
+            if (mAccessToken == null) {
+                if (viewPager.getCurrentItem() == 0) {
+                    if (popularPostFragment != null) {
+                        mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_POPULAR_POST, postLayout).apply();
+                        ((FragmentCommunicator) popularPostFragment).changePostLayout(postLayout);
+                    }
+                } else {
+                    if (allPostFragment != null) {
+                        mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_ALL_POST, postLayout).apply();
+                        ((FragmentCommunicator) allPostFragment).changePostLayout(postLayout);
+                    }
+                }
+            } else {
+                switch (viewPager.getCurrentItem()) {
+                    case 0:
+                        if (frontPagePostFragment != null) {
+                            mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, postLayout).apply();
+                            ((FragmentCommunicator) frontPagePostFragment).changePostLayout(postLayout);
+                        }
+                        break;
+                    case 1:
+                        if (popularPostFragment != null) {
+                            mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_POPULAR_POST, postLayout).apply();
+                            ((FragmentCommunicator) popularPostFragment).changePostLayout(postLayout);
+                        }
+                        break;
+                    case 2:
+                        if (allPostFragment != null) {
+                            mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_ALL_POST, postLayout).apply();
+                            ((FragmentCommunicator) allPostFragment).changePostLayout(postLayout);
+                        }
+                }
             }
         }
     }

@@ -47,4 +47,12 @@ public class SharedPreferencesUtils {
     public static final String SORT_TYPE_SEARCH_SUBREDDIT = "sort_type_search_subreddit";
     public static final String SORT_TYPE_SEARCH_USER = "sort_type_search_user";
     public static final String SORT_TYPE_POST_COMMENT = "sort_type_post_comment";
+    public static final String POST_LAYOUT_FRONT_PAGE_POST = "post_layout_best_post";
+    public static final String POST_LAYOUT_POPULAR_POST = "post_layout_popular_post";
+    public static final String POST_LAYOUT_ALL_POST = "post_layout_all_post";
+    public static final String POST_LAYOUT_SUBREDDIT_POST = "post_layout_subreddit_post";
+    public static final String POST_LAYOUT_USER_POST = "post_layout_user_post";
+    public static final String POST_LAYOUT_SEARCH_POST = "post_layout_search_post";
+    public static final int POST_LAYOUT_CARD = 0;
+    public static final int POST_LAYOUT_COMPACT = 1;
 }

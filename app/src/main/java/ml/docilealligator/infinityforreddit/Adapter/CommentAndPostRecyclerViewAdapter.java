@@ -606,7 +606,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             mMarkwon.setMarkdown(((CommentViewHolder) holder).commentMarkdownView, comment.getCommentContent());
             ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
 
-            ((CommentViewHolder) holder).itemView.setPadding(comment.getDepth() * 16, 0, 0, 0);
+            ((CommentViewHolder) holder).itemView.setPadding(comment.getDepth() * 8, 0, 0, 0);
             if (comment.getDepth() > 0) {
                 switch (comment.getDepth() % 7) {
                     case 0:
@@ -639,7 +639,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         break;
                 }
                 ViewGroup.LayoutParams params = ((CommentViewHolder) holder).verticalBlock.getLayoutParams();
-                params.width = 16;
+                params.width = 8;
                 ((CommentViewHolder) holder).verticalBlock.setLayoutParams(params);
             }
 
@@ -944,7 +944,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             placeholder = mIsSingleCommentThreadMode ? mVisibleComments.get(holder.getAdapterPosition() - 2)
                     : mVisibleComments.get(holder.getAdapterPosition() - 1);
 
-            ((LoadMoreChildCommentsViewHolder) holder).itemView.setPadding(placeholder.getDepth() * 16, 0, 0, 0);
+            ((LoadMoreChildCommentsViewHolder) holder).itemView.setPadding(placeholder.getDepth() * 8, 0, 0, 0);
             if (placeholder.getDepth() > 0) {
                 switch (placeholder.getDepth() % 7) {
                     case 0:
@@ -978,7 +978,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 }
 
                 ViewGroup.LayoutParams params = ((LoadMoreChildCommentsViewHolder) holder).verticalBlock.getLayoutParams();
-                params.width = 16;
+                params.width = 8;
                 ((LoadMoreChildCommentsViewHolder) holder).verticalBlock.setLayoutParams(params);
             }
 

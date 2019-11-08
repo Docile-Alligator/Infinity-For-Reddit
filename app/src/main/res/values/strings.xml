@@ -41,6 +41,7 @@
     <string name="action_mark_spoiler">Mark Spoiler</string>
     <string name="action_unmark_spoiler">Unmark Spoiler</string>
     <string name="action_edit_flair">Edit Flair</string>
+    <string name="action_change_post_layout">Change Post Layout</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -349,6 +350,6 @@
     <string name="favorites">Favorites</string>
     <string name="all">All</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="post_layout_card">Card Layout</string>
+    <string name="post_layout_compact">Compact Layout</string>
 </resources>

@@ -23,4 +23,6 @@ public interface FragmentCommunicator {
         return false;
     }
 
+    default void changePostLayout(int postLayout) { }
+
 }

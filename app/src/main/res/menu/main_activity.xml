@@ -36,4 +36,10 @@
         android:orderInCategory="5"
         android:title="@string/action_start_lazy_mode"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_change_post_layout_main_activity"
+        android:orderInCategory="6"
+        android:title="@string/action_change_post_layout"
+        app:showAsAction="never" />
 </menu>

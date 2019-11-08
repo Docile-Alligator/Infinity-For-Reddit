@@ -28,6 +28,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.PagedList;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
@@ -118,6 +119,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private LazyModeRunnable lazyModeRunnable;
     private CountDownTimer resumeLazyModeCountDownTimer;
     private float lazyModeInterval;
+    private int postLayout;
 
     public PostFragment() {
         // Required empty public constructor
@@ -287,9 +289,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             String sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SEARCH_POST, SortType.Type.RELEVANCE.name());
             String sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_SEARCH_POST, SortType.Time.ALL.name());
             SortType sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
+            postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, SharedPreferencesUtils.POST_LAYOUT_CARD);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    accessToken, postType, true, needBlurNsfw, needBlurSpoiler,
+                    accessToken, postType, postLayout, true, needBlurNsfw, needBlurSpoiler,
                     voteButtonsOnTheRight, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
@@ -329,17 +332,20 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
                         sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_POPULAR_POST, SortType.Time.ALL.name());
                     }
+                    postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_POPULAR_POST, SharedPreferencesUtils.POST_LAYOUT_CARD);
                 } else {
                     sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_ALL_POST, SortType.Type.HOT.name());
                     if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
                         sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_ALL_POST, SortType.Time.ALL.name());
                     }
+                    postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_ALL_POST, SharedPreferencesUtils.POST_LAYOUT_CARD);
                 }
             } else {
                 sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST, SortType.Type.HOT.name());
                 if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
                     sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST, SortType.Time.ALL.name());
                 }
+                postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST, SharedPreferencesUtils.POST_LAYOUT_CARD);
             }
 
             if(sortTime != null) {
@@ -349,7 +355,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    accessToken, postType, displaySubredditName, needBlurNsfw, needBlurSpoiler,
+                    accessToken, postType, postLayout, displaySubredditName, needBlurNsfw, needBlurSpoiler,
                     voteButtonsOnTheRight, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
@@ -392,9 +398,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             } else {
                 sortType = new SortType(SortType.Type.valueOf(sort));
             }
+            postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST, SharedPreferencesUtils.POST_LAYOUT_CARD);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    accessToken, postType, true, needBlurNsfw, needBlurSpoiler,
+                    accessToken, postType, postLayout, true, needBlurNsfw, needBlurSpoiler,
                     voteButtonsOnTheRight, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
@@ -430,9 +437,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             } else {
                 sortType = new SortType(SortType.Type.valueOf(sort));
             }
+            postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, SharedPreferencesUtils.POST_LAYOUT_CARD);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    accessToken, postType, true, needBlurNsfw, needBlurSpoiler,
+                    accessToken, postType, postLayout, true, needBlurNsfw, needBlurSpoiler,
                     voteButtonsOnTheRight, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
@@ -606,6 +614,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Override
     public boolean isInLazyMode() {
         return isInLazyMode;
+    }
+
+    @Override
+    public void changePostLayout(int postLayout) {
+        if (mAdapter != null) {
+            mAdapter.setPostLayout(postLayout);
+            refreshAdapter();
+        }
     }
 
     @Subscribe

@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.Fragment;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
@@ -36,6 +38,7 @@ public class PostTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
     LinearLayout imageTypeLinearLayout;
     @BindView(R.id.video_type_linear_layout_post_type_bottom_sheet_fragment)
     LinearLayout videoTypeLinearLayout;
+    private Activity activity;
     public PostTypeBottomSheetFragment() {
         // Required empty public constructor
     }
@@ -46,38 +49,39 @@ public class PostTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
         View rootView = inflater.inflate(R.layout.fragment_post_type_bottom_sheet, container, false);
         ButterKnife.bind(this, rootView);
 
-        Activity activity = getActivity();
-
-        if (activity != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-                    && (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
-                rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-            }
-
-            textTypeLinearLayout.setOnClickListener(view -> {
-                ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_TEXT);
-                dismiss();
-            });
-
-            linkTypeLinearLayout.setOnClickListener(view -> {
-                ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_LINK);
-                dismiss();
-            });
-
-            imageTypeLinearLayout.setOnClickListener(view -> {
-                ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_IMAGE);
-                dismiss();
-            });
-
-            videoTypeLinearLayout.setOnClickListener(view -> {
-                ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_VIDEO);
-                dismiss();
-            });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+                && (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+            rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
+
+        textTypeLinearLayout.setOnClickListener(view -> {
+            ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_TEXT);
+            dismiss();
+        });
+
+        linkTypeLinearLayout.setOnClickListener(view -> {
+            ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_LINK);
+            dismiss();
+        });
+
+        imageTypeLinearLayout.setOnClickListener(view -> {
+            ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_IMAGE);
+            dismiss();
+        });
+
+        videoTypeLinearLayout.setOnClickListener(view -> {
+            ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_VIDEO);
+            dismiss();
+        });
 
         return rootView;
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.activity = (Activity) context;
+    }
 
     public interface PostTypeSelectionCallback {
         void postTypeSelected(int postType);

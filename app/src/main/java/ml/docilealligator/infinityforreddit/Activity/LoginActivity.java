@@ -43,6 +43,8 @@ public class LoginActivity extends BaseActivity {
 
     @BindView(R.id.toolbar_login_activity)
     Toolbar toolbar;
+    @BindView(R.id.webview_login_activity)
+    WebView webView;
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
@@ -68,7 +70,6 @@ public class LoginActivity extends BaseActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        WebView webView = findViewById(R.id.webview_login_activity);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
 
