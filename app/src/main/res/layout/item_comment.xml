@@ -58,7 +58,7 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="@color/authorFlairTextColor"
-                android:textSize="?attr/font_default"
+                android:textSize="?attr/font_12"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/barrier"

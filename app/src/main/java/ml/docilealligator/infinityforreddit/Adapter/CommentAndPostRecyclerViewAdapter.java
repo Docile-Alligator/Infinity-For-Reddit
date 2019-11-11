@@ -585,6 +585,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             if (comment.getAuthorFlair() != null && !comment.getAuthorFlair().equals("")) {
                 ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.VISIBLE);
                 ((CommentViewHolder) holder).authorFlairTextView.setText(comment.getAuthorFlair());
+                ((CommentViewHolder) holder).authorFlairTextView.setOnClickListener(view -> ((CommentViewHolder) holder).authorTextView.performClick());
             }
 
             if (comment.isSubmitter()) {

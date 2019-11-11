@@ -82,9 +82,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
         @Override
         public boolean areContentsTheSame(@NonNull Post post, @NonNull Post t1) {
-            return post.getTitle().equals(t1.getTitle()) && !(post.getSelfText() != null && t1.getSelfText() != null
-                    && !post.getSelfText().equals(t1.getSelfText()))
-                    && post.getScore() == t1.getScore() && post.getVoteType() == t1.getVoteType();
+            return false;
         }
     };
     private Context mContext;

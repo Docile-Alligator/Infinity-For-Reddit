@@ -48,6 +48,7 @@ import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
+import ml.docilealligator.infinityforreddit.Fragment.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SortTypeBottomSheetFragment;
@@ -68,7 +69,7 @@ import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
 public class ViewSubredditDetailActivity extends BaseActivity implements SortTypeSelectionCallback,
-        PostTypeBottomSheetFragment.PostTypeSelectionCallback {
+        PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {
 
     public static final String EXTRA_SUBREDDIT_NAME_KEY = "ESN";
     public static final String EXTRA_MESSAGE_FULLNAME = "ENF";
@@ -136,6 +137,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private PostTypeBottomSheetFragment postTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment sortTypeBottomSheetFragment;
     private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
+    private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
     private SubredditViewModel mSubredditViewModel;
 
     @Override
@@ -231,6 +233,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         sortTypeBottomSheetFragment.setArguments(bottomSheetBundle);
 
         sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
+
+        postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
@@ -534,6 +538,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                         isInLazyMode = false;
                     }
                 }
+                break;
+            case R.id.action_change_post_layout_view_subreddit_detail_activity:
+                postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
         }
         return false;
     }
@@ -615,6 +622,14 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         }
     }
 
+    @Override
+    public void postLayoutSelected(int postLayout) {
+        if (mFragment != null) {
+            mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST, postLayout).apply();
+            ((FragmentCommunicator) mFragment).changePostLayout(postLayout);
+        }
+    }
+
     public void postScrollUp() {
         fab.show();
     }
@@ -634,7 +649,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
         ((FragmentCommunicator) mFragment).changeNSFW(changeNSFWEvent.nsfw);
     }
-
 
     private static class InsertSubredditDataAsyncTask extends AsyncTask<Void, Void, Void> {
 
