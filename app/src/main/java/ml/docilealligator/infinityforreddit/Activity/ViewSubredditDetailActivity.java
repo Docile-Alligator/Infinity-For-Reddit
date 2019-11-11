@@ -507,7 +507,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_IS_USER, false);
                 intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, false);
                 startActivity(intent);
-                break;
+                return true;
             case R.id.action_refresh_view_subreddit_detail_activity:
                 if (mMenu != null) {
                     mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity).setTitle(R.string.action_start_lazy_mode);
@@ -517,7 +517,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     mFetchSubredditInfoSuccess = false;
                     fetchSubredditData();
                 }
-                break;
+                return true;
             case R.id.action_lazy_mode_view_subreddit_detail_activity:
                 MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity);
                 if (isInLazyMode) {
@@ -538,9 +538,10 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                         isInLazyMode = false;
                     }
                 }
-                break;
+                return true;
             case R.id.action_change_post_layout_view_subreddit_detail_activity:
                 postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+                return true;
         }
         return false;
     }

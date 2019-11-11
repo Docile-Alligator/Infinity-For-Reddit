@@ -181,6 +181,17 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     }
                 });
 
+                ((PostViewHolder) holder).subredditTextView.setText(subredditNamePrefixed);
+                ((PostViewHolder) holder).userTextView.setText(authorPrefixed);
+                ((PostViewHolder) holder).userTextView.setOnClickListener(view -> {
+                    if (canStartActivity) {
+                        canStartActivity = false;
+                        Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
+                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, post.getAuthor());
+                        mContext.startActivity(intent);
+                    }
+                });
+
                 if (mDisplaySubredditName) {
                     if (authorPrefixed.equals(subredditNamePrefixed)) {
                         if (post.getAuthorIconUrl() == null) {
@@ -249,10 +260,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         }
                     }
 
-                    ((PostViewHolder) holder).nameTextView.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
-                    ((PostViewHolder) holder).nameTextView.setText(subredditNamePrefixed);
+                    ((PostViewHolder) holder).subredditTextView.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
 
-                    ((PostViewHolder) holder).nameTextView.setOnClickListener(view -> {
+                    ((PostViewHolder) holder).subredditTextView.setOnClickListener(view -> {
                         if (canStartActivity) {
                             canStartActivity = false;
                             if (post.getSubredditNamePrefixed().startsWith("u/")) {
@@ -270,7 +280,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     });
 
                     ((PostViewHolder) holder).iconGifImageView.setOnClickListener(view ->
-                            ((PostViewHolder) holder).nameTextView.performClick());
+                            ((PostViewHolder) holder).subredditTextView.performClick());
                 } else {
                     if (post.getAuthorIconUrl() == null) {
                         String authorName = post.getAuthor().equals("[deleted]") ? post.getSubredditNamePrefixed().substring(2) : post.getAuthor();
@@ -305,10 +315,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                 .into(((PostViewHolder) holder).iconGifImageView);
                     }
 
-                    ((PostViewHolder) holder).nameTextView.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDarkDayNightTheme));
-                    ((PostViewHolder) holder).nameTextView.setText(authorPrefixed);
+                    ((PostViewHolder) holder).subredditTextView.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDarkDayNightTheme));
 
-                    ((PostViewHolder) holder).nameTextView.setOnClickListener(view -> {
+                    ((PostViewHolder) holder).subredditTextView.setOnClickListener(view -> {
                         if (canStartActivity) {
                             canStartActivity = false;
                             Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
@@ -318,7 +327,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     });
 
                     ((PostViewHolder) holder).iconGifImageView.setOnClickListener(view ->
-                            ((PostViewHolder) holder).nameTextView.performClick());
+                            ((PostViewHolder) holder).subredditTextView.performClick());
                 }
 
                 ((PostViewHolder) holder).postTimeTextView.setText(postTime);
@@ -1392,7 +1401,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         @BindView(R.id.icon_gif_image_view_item_post)
         AspectRatioGifImageView iconGifImageView;
         @BindView(R.id.name_text_view_item_post)
-        TextView nameTextView;
+        TextView subredditTextView;
+        @BindView(R.id.user_text_view_item_post)
+        TextView userTextView;
         @BindView(R.id.stickied_post_image_view_item_post)
         ImageView stickiedPostImageView;
         @BindView(R.id.post_time_text_view_best_item_post)

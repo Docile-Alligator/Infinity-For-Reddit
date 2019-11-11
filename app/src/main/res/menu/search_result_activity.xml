@@ -20,4 +20,10 @@
         android:orderInCategory="3"
         android:title="@string/action_refresh"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_change_post_layout_search_result_activity"
+        android:orderInCategory="4"
+        android:title="@string/action_change_post_layout"
+        app:showAsAction="never" />
 </menu>

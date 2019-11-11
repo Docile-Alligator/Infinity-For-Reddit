@@ -55,6 +55,7 @@ import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchUserData;
 import ml.docilealligator.infinityforreddit.Fragment.CommentsListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
+import ml.docilealligator.infinityforreddit.Fragment.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.UserThingSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
@@ -74,7 +75,8 @@ import ml.docilealligator.infinityforreddit.UserFollowing;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-public class ViewUserDetailActivity extends BaseActivity implements SortTypeSelectionCallback {
+public class ViewUserDetailActivity extends BaseActivity implements SortTypeSelectionCallback,
+        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {
 
     public static final String EXTRA_USER_NAME_KEY = "EUNK";
     public static final String EXTRA_MESSAGE_FULLNAME = "ENF";
@@ -126,6 +128,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     private AppBarLayout.LayoutParams params;
     private UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment;
     private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
+    private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
@@ -390,6 +393,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
         userThingSortTypeBottomSheetFragment = new UserThingSortTypeBottomSheetFragment();
         sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
+        postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
     }
 
     @Override
@@ -579,6 +583,9 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                     }
                 }
                 return true;
+            case R.id.action_change_post_layout_view_user_detail_activity:
+                postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+                return true;
         }
         return false;
     }
@@ -625,6 +632,11 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         bundle.putString(SortTimeBottomSheetFragment.EXTRA_SORT_TYPE, sortType);
         sortTimeBottomSheetFragment.setArguments(bundle);
         sortTimeBottomSheetFragment.show(getSupportFragmentManager(), sortTimeBottomSheetFragment.getTag());
+    }
+
+    @Override
+    public void postLayoutSelected(int postLayout) {
+        sectionsPagerAdapter.changePostLayout(postLayout);
     }
 
     @Subscribe
@@ -791,6 +803,13 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         public void changeNSFW(boolean nsfw) {
             if (postFragment != null) {
                 postFragment.changeNSFW(nsfw);
+            }
+        }
+
+        void changePostLayout(int postLayout) {
+            if (postFragment != null) {
+                mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST, postLayout).apply();
+                ((FragmentCommunicator) postFragment).changePostLayout(postLayout);
             }
         }
     }

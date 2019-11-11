@@ -31,6 +31,7 @@ import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
+import ml.docilealligator.infinityforreddit.Fragment.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.PostDataSource;
@@ -40,7 +41,7 @@ import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 
-public class AccountPostsActivity extends BaseActivity implements SortTypeSelectionCallback {
+public class AccountPostsActivity extends BaseActivity implements SortTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {
 
     static final String EXTRA_USER_WHERE = "EUW";
 
@@ -68,6 +69,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     private Fragment mFragment;
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
+    private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +140,8 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
+
+        postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
 
         if (savedInstanceState != null) {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
@@ -229,6 +233,9 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
                     }
                 }
                 return true;
+            case R.id.action_change_post_layout_account_posts_activity:
+                postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+                return true;
             case android.R.id.home:
                 finish();
                 return true;
@@ -274,5 +281,13 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     @Subscribe
     public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
         ((FragmentCommunicator) mFragment).changeNSFW(changeNSFWEvent.nsfw);
+    }
+
+    @Override
+    public void postLayoutSelected(int postLayout) {
+        if (mFragment != null) {
+            mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST, postLayout).apply();
+            ((FragmentCommunicator) mFragment).changePostLayout(postLayout);
+        }
     }
 }

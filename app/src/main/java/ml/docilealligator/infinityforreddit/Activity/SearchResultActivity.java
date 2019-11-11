@@ -35,6 +35,7 @@ import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
+import ml.docilealligator.infinityforreddit.Fragment.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SearchPostSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SearchUserAndSubredditSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SortTimeBottomSheetFragment;
@@ -49,7 +50,8 @@ import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 
-public class SearchResultActivity extends BaseActivity implements SortTypeSelectionCallback {
+public class SearchResultActivity extends BaseActivity implements SortTypeSelectionCallback,
+        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {
     static final String EXTRA_QUERY = "QK";
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
 
@@ -77,6 +79,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     private SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment;
     private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
     private SearchUserAndSubredditSortTypeBottomSheetFragment searchUserAndSubredditSortTypeBottomSheetFragment;
+    private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +156,8 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
 
         searchUserAndSubredditSortTypeBottomSheetFragment = new SearchUserAndSubredditSortTypeBottomSheetFragment();
 
+        postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
+
         // Get the intent, verify the action and get the query
         Intent intent = getIntent();
         String query = intent.getStringExtra(EXTRA_QUERY);
@@ -226,6 +231,9 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             case R.id.action_refresh_search_result_activity:
                 sectionsPagerAdapter.refresh();
                 return true;
+            case R.id.action_change_post_layout_search_result_activity:
+                postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -260,6 +268,11 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     @Override
     public void searchUserAndSubredditSortTypeSelected(SortType sortType, int fragmentPosition) {
         sectionsPagerAdapter.changeSortType(sortType, fragmentPosition);
+    }
+
+    @Override
+    public void postLayoutSelected(int postLayout) {
+        sectionsPagerAdapter.changePostLayout(postLayout);
     }
 
     @Subscribe
@@ -393,6 +406,13 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         public void changeNSFW(boolean nsfw) {
             if (postFragment != null) {
                 postFragment.changeNSFW(nsfw);
+            }
+        }
+
+        void changePostLayout(int postLayout) {
+            if (postFragment != null) {
+                mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, postLayout).apply();
+                ((FragmentCommunicator) postFragment).changePostLayout(postLayout);
             }
         }
     }

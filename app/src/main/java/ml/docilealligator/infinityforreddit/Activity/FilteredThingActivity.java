@@ -30,6 +30,7 @@ import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
+import ml.docilealligator.infinityforreddit.Fragment.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SearchPostSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SortTypeBottomSheetFragment;
@@ -44,7 +45,8 @@ import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 
-public class FilteredThingActivity extends BaseActivity implements SortTypeSelectionCallback {
+public class FilteredThingActivity extends BaseActivity implements SortTypeSelectionCallback,
+        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {
 
     public static final String EXTRA_NAME = "ESN";
     public static final String EXTRA_QUERY = "EQ";
@@ -82,6 +84,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
     private UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment;
     private SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment;
     private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
+    private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,6 +172,8 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
         } else {
             getCurrentAccountAndBindView(filter);
         }
+
+        postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
     }
 
     @Override
@@ -344,6 +349,9 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
                     }
                 }
                 return true;
+            case R.id.action_change_post_layout_filtered_post_activity:
+                postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+                return true;
         }
         return false;
     }
@@ -366,6 +374,26 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
     @Override
     public void sortTypeSelected(SortType sortType) {
         ((PostFragment) mFragment).changeSortType(sortType);
+    }
+
+    @Override
+    public void postLayoutSelected(int postLayout) {
+        if (mFragment != null) {
+            switch (postType) {
+                case PostDataSource.TYPE_FRONT_PAGE:
+                    mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, postLayout).apply();
+                    break;
+                case PostDataSource.TYPE_SUBREDDIT:
+                    mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST, postLayout).apply();
+                    break;
+                case PostDataSource.TYPE_USER:
+                    mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST, postLayout).apply();
+                    break;
+                case PostDataSource.TYPE_SEARCH:
+                    mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, postLayout).apply();
+            }
+            ((FragmentCommunicator) mFragment).changePostLayout(postLayout);
+        }
     }
 
     @Override
