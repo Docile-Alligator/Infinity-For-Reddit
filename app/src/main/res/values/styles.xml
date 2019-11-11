@@ -95,6 +95,7 @@
 
     <style name="FontStyle.Small">
         <item name="font_default">12sp</item>
+        <item name="font_10">10sp</item>
         <item name="font_12">12sp</item>
         <item name="font_16">14sp</item>
         <item name="font_18">16sp</item>
@@ -103,6 +104,7 @@
 
     <style name="FontStyle.Normal">
         <item name="font_default">14sp</item>
+        <item name="font_10">10sp</item>
         <item name="font_12">12sp</item>
         <item name="font_16">16sp</item>
         <item name="font_18">18sp</item>
@@ -111,6 +113,7 @@
 
     <style name="FontStyle.Large">
         <item name="font_default">16sp</item>
+        <item name="font_10">12sp</item>
         <item name="font_12">14sp</item>
         <item name="font_16">18sp</item>
         <item name="font_18">20sp</item>
@@ -119,6 +122,7 @@
 
     <style name="FontStyle.XLarge">
         <item name="font_default">18sp</item>
+        <item name="font_10">14sp</item>
         <item name="font_12">16sp</item>
         <item name="font_16">20sp</item>
         <item name="font_18">22sp</item>

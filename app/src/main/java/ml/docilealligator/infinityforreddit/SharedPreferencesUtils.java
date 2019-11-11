@@ -50,8 +50,8 @@ public class SharedPreferencesUtils {
     public static final String POST_LAYOUT_FRONT_PAGE_POST = "post_layout_best_post";
     public static final String POST_LAYOUT_POPULAR_POST = "post_layout_popular_post";
     public static final String POST_LAYOUT_ALL_POST = "post_layout_all_post";
-    public static final String POST_LAYOUT_SUBREDDIT_POST = "post_layout_subreddit_post";
-    public static final String POST_LAYOUT_USER_POST = "post_layout_user_post";
+    public static final String POST_LAYOUT_SUBREDDIT_POST_BASE = "post_layout_subreddit_post_";
+    public static final String POST_LAYOUT_USER_POST_BASE = "post_layout_user_post_";
     public static final String POST_LAYOUT_SEARCH_POST = "post_layout_search_post";
     public static final int POST_LAYOUT_CARD = 0;
     public static final int POST_LAYOUT_COMPACT = 1;

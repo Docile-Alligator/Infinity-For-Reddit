@@ -286,7 +286,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     @Override
     public void postLayoutSelected(int postLayout) {
         if (mFragment != null) {
-            mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST, postLayout).apply();
+            mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + mAccountName, postLayout).apply();
             ((FragmentCommunicator) mFragment).changePostLayout(postLayout);
         }
     }

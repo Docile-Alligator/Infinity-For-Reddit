@@ -4,6 +4,7 @@
 
     <declare-styleable name="FontStyle">
         <attr name="font_default" format="dimension"/>
+        <attr name="font_10" format="dimension" />
         <attr name="font_12" format="dimension"/>
         <attr name="font_16" format="dimension"/>
         <attr name="font_18" format="dimension"/>

@@ -626,7 +626,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     @Override
     public void postLayoutSelected(int postLayout) {
         if (mFragment != null) {
-            mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST, postLayout).apply();
+            mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, postLayout).apply();
             ((FragmentCommunicator) mFragment).changePostLayout(postLayout);
         }
     }

@@ -345,7 +345,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
                     sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST, SortType.Time.ALL.name());
                 }
-                postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST, SharedPreferencesUtils.POST_LAYOUT_CARD);
+                postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, SharedPreferencesUtils.POST_LAYOUT_CARD);
             }
 
             if(sortTime != null) {
@@ -398,7 +398,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             } else {
                 sortType = new SortType(SortType.Type.valueOf(sort));
             }
-            postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST, SharedPreferencesUtils.POST_LAYOUT_CARD);
+            postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, SharedPreferencesUtils.POST_LAYOUT_CARD);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, postLayout, true, needBlurNsfw, needBlurSpoiler,

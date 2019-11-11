@@ -260,8 +260,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         }
                     }
 
-                    ((PostViewHolder) holder).subredditTextView.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
-
                     ((PostViewHolder) holder).subredditTextView.setOnClickListener(view -> {
                         if (canStartActivity) {
                             canStartActivity = false;
@@ -273,7 +271,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             } else {
                                 Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
                                 intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
-                                        post.getSubredditNamePrefixed().substring(2));
+                                        post.getSubredditName());
                                 mContext.startActivity(intent);
                             }
                         }
@@ -315,19 +313,24 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                 .into(((PostViewHolder) holder).iconGifImageView);
                     }
 
-                    ((PostViewHolder) holder).subredditTextView.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryDarkDayNightTheme));
-
                     ((PostViewHolder) holder).subredditTextView.setOnClickListener(view -> {
                         if (canStartActivity) {
                             canStartActivity = false;
-                            Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
-                            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, post.getAuthor());
-                            mContext.startActivity(intent);
+                            if (post.getSubredditNamePrefixed().startsWith("u/")) {
+                                Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
+                                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, post.getAuthor());
+                                mContext.startActivity(intent);
+                            } else {
+                                Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
+                                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
+                                        post.getSubredditName());
+                                mContext.startActivity(intent);
+                            }
                         }
                     });
 
                     ((PostViewHolder) holder).iconGifImageView.setOnClickListener(view ->
-                            ((PostViewHolder) holder).subredditTextView.performClick());
+                            ((PostViewHolder) holder).userTextView.performClick());
                 }
 
                 ((PostViewHolder) holder).postTimeTextView.setText(postTime);

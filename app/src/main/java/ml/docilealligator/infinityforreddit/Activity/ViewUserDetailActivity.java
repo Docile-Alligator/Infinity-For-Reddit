@@ -808,7 +808,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
         void changePostLayout(int postLayout) {
             if (postFragment != null) {
-                mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST, postLayout).apply();
+                mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, postLayout).apply();
                 ((FragmentCommunicator) postFragment).changePostLayout(postLayout);
             }
         }
