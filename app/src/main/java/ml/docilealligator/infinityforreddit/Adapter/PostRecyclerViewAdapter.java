@@ -1251,7 +1251,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
     private void loadImage(final RecyclerView.ViewHolder holder, final Post post) {
         if (holder instanceof PostViewHolder) {
-            RequestBuilder imageRequestBuilder = mGlide.load(post.getPreviewUrl()).listener(new RequestListener<Drawable>() {
+            RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(post.getPreviewUrl()).listener(new RequestListener<Drawable>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                     ((PostViewHolder) holder).progressBar.setVisibility(View.GONE);
@@ -1279,9 +1279,24 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 imageRequestBuilder.into(((PostViewHolder) holder).imageView);
             }
         } else if (holder instanceof PostCompactViewHolder) {
-            RequestBuilder imageRequestBuilder = mGlide.load(post.getPreviewUrl()).error(R.drawable.ic_error_outline_black_24dp);
+            String previewUrl = post.getThumbnailPreviewUrl().equals("") ? post.getPreviewUrl() : post.getThumbnailPreviewUrl();
+            RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(previewUrl)
+                    .error(R.drawable.ic_error_outline_black_24dp).listener(new RequestListener<Drawable>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    ((PostCompactViewHolder) holder).progressBar.setVisibility(View.GONE);
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    ((PostCompactViewHolder) holder).progressBar.setVisibility(View.GONE);
+                    return false;
+                }
+            });
             if ((post.isNSFW() && mNeedBlurNSFW) || post.isSpoiler() && mNeedBlurSpoiler) {
-                imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 2)))
+                imageRequestBuilder
+                        .transform(new BlurTransformation(50, 2))
                         .into(((PostCompactViewHolder) holder).imageView);
             } else {
                 imageRequestBuilder.into(((PostCompactViewHolder) holder).imageView);

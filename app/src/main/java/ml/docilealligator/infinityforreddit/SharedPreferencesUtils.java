@@ -55,4 +55,5 @@ public class SharedPreferencesUtils {
     public static final String POST_LAYOUT_SEARCH_POST = "post_layout_search_post";
     public static final int POST_LAYOUT_CARD = 0;
     public static final int POST_LAYOUT_COMPACT = 1;
+    public static final String PULL_NOTIFICATION_TIME = "pull_notification_time";
 }

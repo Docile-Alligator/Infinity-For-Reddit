@@ -80,15 +80,15 @@ public class PullNotificationWorker extends Worker {
                         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
                         int messageSize = messages.size() >= 5 ? 5 : messages.size();
-                        long currentTime = Calendar.getInstance().getTimeInMillis();
-                        long notificationInterval = Long.parseLong(
-                                mSharedPreferences.getString(SharedPreferencesUtils.NOTIFICATION_INTERVAL_KEY, "1"))
-                                * 1000 * 60 * 60;
+                        long lastNotificationTime = mSharedPreferences.getLong(SharedPreferencesUtils.PULL_NOTIFICATION_TIME, -1L);
                         boolean hasValidMessage = false;
+
+                        long currentTime = Calendar.getInstance().getTimeInMillis();
+                        mSharedPreferences.edit().putLong(SharedPreferencesUtils.PULL_NOTIFICATION_TIME, currentTime).apply();
 
                         for (int messageIndex = messageSize - 1; messageIndex >= 0; messageIndex--) {
                             Message message = messages.get(messageIndex);
-                            if (currentTime - message.getTimeUTC() > notificationInterval) {
+                            if (message.getTimeUTC() <= lastNotificationTime) {
                                 continue;
                             }
 

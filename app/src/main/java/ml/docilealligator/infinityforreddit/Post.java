@@ -39,6 +39,7 @@ public class Post implements Parcelable {
     private String selfText;
     private String selfTextPlainTrimmed;
     private String previewUrl;
+    private String thumbnailPreviewUrl;
     private String url;
     private String videoUrl;
     private String permalink;
@@ -61,7 +62,7 @@ public class Post implements Parcelable {
     private String crosspostParentId;
 
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
-                String postTime, String title, String previewUrl, String permalink, int score, int postType,
+                String postTime, String title, String previewUrl, String thumbnailPreviewUrl, String permalink, int score, int postType,
                 int voteType, int gilded, int nComments, String flair, boolean hidden, boolean spoiler,
                 boolean nsfw, boolean stickied, boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
         this.id = id;
@@ -73,6 +74,7 @@ public class Post implements Parcelable {
         this.postTime = postTime;
         this.title = title;
         this.previewUrl = previewUrl;
+        this.thumbnailPreviewUrl = thumbnailPreviewUrl;
         this.permalink = RedditUtils.API_BASE_URI + permalink;
         this.score = score;
         this.postType = postType;
@@ -91,7 +93,7 @@ public class Post implements Parcelable {
     }
 
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
-                String postTime, String title, String previewUrl, String url, String permalink, int score,
+                String postTime, String title, String previewUrl, String thumbnailPreviewUrl, String url, String permalink, int score,
                 int postType, int voteType, int gilded, int nComments, String flair, boolean hidden,
                 boolean spoiler, boolean nsfw, boolean stickied, boolean archived, boolean locked,
                 boolean saved, boolean isCrosspost) {
@@ -104,6 +106,7 @@ public class Post implements Parcelable {
         this.postTime = postTime;
         this.title = title;
         this.previewUrl = previewUrl;
+        this.thumbnailPreviewUrl = thumbnailPreviewUrl;
         this.url = url;
         this.permalink = RedditUtils.API_BASE_URI + permalink;
         this.score = score;
@@ -165,6 +168,7 @@ public class Post implements Parcelable {
         selfText = in.readString();
         selfTextPlainTrimmed = in.readString();
         previewUrl = in.readString();
+        thumbnailPreviewUrl = in.readString();
         url = in.readString();
         videoUrl = in.readString();
         permalink = in.readString();
@@ -257,6 +261,10 @@ public class Post implements Parcelable {
 
     public String getPreviewUrl() {
         return previewUrl;
+    }
+
+    public String getThumbnailPreviewUrl() {
+        return thumbnailPreviewUrl;
     }
 
     public String getUrl() {
@@ -407,6 +415,7 @@ public class Post implements Parcelable {
         parcel.writeString(selfText);
         parcel.writeString(selfTextPlainTrimmed);
         parcel.writeString(previewUrl);
+        parcel.writeString(thumbnailPreviewUrl);
         parcel.writeString(url);
         parcel.writeString(videoUrl);
         parcel.writeString(permalink);
