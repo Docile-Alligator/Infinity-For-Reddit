@@ -33,10 +33,14 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.github.thunder413.datetimeutils.DateTimeStyle;
+import com.github.thunder413.datetimeutils.DateTimeUtils;
 import com.google.android.material.card.MaterialCardView;
 import com.libRG.CustomTextView;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -99,6 +103,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean mVoteButtonsOnTheRight;
     private boolean mNeedBlurNSFW;
     private boolean mNeedBlurSpoiler;
+    private boolean mShowElapsedTime;
     private NetworkState networkState;
     private Callback mCallback;
 
@@ -106,7 +111,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                    RedditDataRoomDatabase redditDataRoomDatabase, String accessToken,
                                    int postType, int postLayout, boolean displaySubredditName,
                                    boolean needBlurNSFW, boolean needBlurSpoiler, boolean voteButtonsOnTheRight,
-                                   Callback callback) {
+                                   boolean showElapsedTime, Callback callback) {
         super(DIFF_CALLBACK);
         if (context != null) {
             mContext = context;
@@ -118,6 +123,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mNeedBlurNSFW = needBlurNSFW;
             mNeedBlurSpoiler = needBlurSpoiler;
             mVoteButtonsOnTheRight = voteButtonsOnTheRight;
+            mShowElapsedTime = showElapsedTime;
             mPostLayout = postLayout;
             mGlide = Glide.with(mContext.getApplicationContext());
             mRedditDataRoomDatabase = redditDataRoomDatabase;
@@ -333,7 +339,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             ((PostViewHolder) holder).userTextView.performClick());
                 }
 
-                ((PostViewHolder) holder).postTimeTextView.setText(postTime);
+                if (mShowElapsedTime) {
+                    ((PostViewHolder) holder).postTimeTextView.setText(DateTimeUtils
+                            .getTimeAgo(mContext, new Date(post.getPostTimeMillis()), DateTimeStyle.AGO_SHORT_STRING));
+                } else {
+                    ((PostViewHolder) holder).postTimeTextView.setText(postTime);
+                }
+
                 ((PostViewHolder) holder).titleTextView.setText(title);
                 ((PostViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
 
@@ -877,7 +889,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             ((PostCompactViewHolder) holder).nameTextView.performClick());
                 }
 
-                ((PostCompactViewHolder) holder).postTimeTextView.setText(postTime);
+                if (mShowElapsedTime) {
+                    ((PostCompactViewHolder) holder).postTimeTextView.setText(DateTimeUtils
+                            .getTimeAgo(mContext, new Date(post.getPostTimeMillis()), DateTimeStyle.AGO_SHORT_STRING));
+                } else {
+                    ((PostCompactViewHolder) holder).postTimeTextView.setText(postTime);
+                }
+
                 ((PostCompactViewHolder) holder).titleTextView.setText(title);
                 ((PostCompactViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
 
@@ -1340,6 +1358,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
     public void setBlurSpoiler(boolean needBlurSpoiler) {
         mNeedBlurSpoiler = needBlurSpoiler;
+    }
+
+    public void setShowElapsedTime(boolean showElapsedTime) {
+        mShowElapsedTime = showElapsedTime;
     }
 
     private boolean hasExtraRow() {

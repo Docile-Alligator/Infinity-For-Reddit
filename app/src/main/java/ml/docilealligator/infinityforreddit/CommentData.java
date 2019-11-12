@@ -26,6 +26,7 @@ public class CommentData implements Parcelable {
     private String authorFlair;
     private String linkAuthor;
     private String commentTime;
+    private long commentTimeMillis;
     private String commentContent;
     private String linkId;
     private String subredditName;
@@ -49,7 +50,7 @@ public class CommentData implements Parcelable {
     private boolean loadMoreChildrenFailed;
 
     public CommentData(String id, String fullName, String author, String authorFlair, String linkAuthor, String commentTime,
-                       String commentContent, String linkId, String subredditName, String parentId, int score,
+                       long commentTimeMillis, String commentContent, String linkId, String subredditName, String parentId, int score,
                        int voteType, boolean isSubmitter, String distinguished, String permalink,
                        int depth, boolean collapsed, boolean hasReply, boolean scoreHidden, boolean saved) {
         this.id = id;
@@ -58,6 +59,7 @@ public class CommentData implements Parcelable {
         this.authorFlair = authorFlair;
         this.linkAuthor = linkAuthor;
         this.commentTime = commentTime;
+        this.commentTimeMillis = commentTimeMillis;
         this.commentContent = commentContent;
         this.linkId = linkId;
         this.subredditName = subredditName;
@@ -92,6 +94,7 @@ public class CommentData implements Parcelable {
         authorFlair = in.readString();
         linkAuthor = in.readString();
         commentTime = in.readString();
+        commentTimeMillis = in.readLong();
         commentContent = in.readString();
         linkId = in.readString();
         subredditName = in.readString();
@@ -140,6 +143,10 @@ public class CommentData implements Parcelable {
 
     public String getCommentTime() {
         return commentTime;
+    }
+
+    public long getCommentTimeMillis() {
+        return commentTimeMillis;
     }
 
     public String getCommentContent() {
@@ -318,6 +325,7 @@ public class CommentData implements Parcelable {
         parcel.writeString(authorFlair);
         parcel.writeString(linkAuthor);
         parcel.writeString(commentTime);
+        parcel.writeLong(commentTimeMillis);
         parcel.writeString(commentContent);
         parcel.writeString(linkId);
         parcel.writeString(subredditName);

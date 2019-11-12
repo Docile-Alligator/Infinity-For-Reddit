@@ -44,6 +44,7 @@ public class Post implements Parcelable {
     private String videoUrl;
     private String permalink;
     private String flair;
+    private long postTimeMillis;
     private int score;
     private int postType;
     private int voteType;
@@ -61,10 +62,12 @@ public class Post implements Parcelable {
     private boolean isCrosspost;
     private String crosspostParentId;
 
-    public Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
-                String postTime, String title, String previewUrl, String thumbnailPreviewUrl, String permalink, int score, int postType,
+    public Post(String id, String fullName, String subredditName, String subredditNamePrefixed,
+                String author, String postTime, long postTimeMillis, String title, String previewUrl,
+                String thumbnailPreviewUrl, String permalink, int score, int postType,
                 int voteType, int gilded, int nComments, String flair, boolean hidden, boolean spoiler,
-                boolean nsfw, boolean stickied, boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
+                boolean nsfw, boolean stickied, boolean archived, boolean locked, boolean saved,
+                boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -72,6 +75,7 @@ public class Post implements Parcelable {
         this.author = author;
         this.authorNamePrefixed = "u/" + author;
         this.postTime = postTime;
+        this.postTimeMillis = postTimeMillis;
         this.title = title;
         this.previewUrl = previewUrl;
         this.thumbnailPreviewUrl = thumbnailPreviewUrl;
@@ -92,8 +96,9 @@ public class Post implements Parcelable {
         this.isCrosspost = isCrosspost;
     }
 
-    public Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
-                String postTime, String title, String previewUrl, String thumbnailPreviewUrl, String url, String permalink, int score,
+    public Post(String id, String fullName, String subredditName, String subredditNamePrefixed,
+                String author, String postTime, long postTimeMillis, String title, String previewUrl,
+                String thumbnailPreviewUrl, String url, String permalink, int score,
                 int postType, int voteType, int gilded, int nComments, String flair, boolean hidden,
                 boolean spoiler, boolean nsfw, boolean stickied, boolean archived, boolean locked,
                 boolean saved, boolean isCrosspost) {
@@ -104,6 +109,7 @@ public class Post implements Parcelable {
         this.author = author;
         this.authorNamePrefixed = "u/" + author;
         this.postTime = postTime;
+        this.postTimeMillis = postTimeMillis;
         this.title = title;
         this.previewUrl = previewUrl;
         this.thumbnailPreviewUrl = thumbnailPreviewUrl;
@@ -126,7 +132,7 @@ public class Post implements Parcelable {
     }
 
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed, String author,
-                String postTime, String title, String permalink, int score, int postType, int voteType, int gilded,
+                String postTime, long postTimeMillis, String title, String permalink, int score, int postType, int voteType, int gilded,
                 int nComments, String flair, boolean hidden, boolean spoiler, boolean nsfw, boolean stickied,
                 boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
         this.id = id;
@@ -136,6 +142,7 @@ public class Post implements Parcelable {
         this.author = author;
         this.authorNamePrefixed = "u/" + author;
         this.postTime = postTime;
+        this.postTimeMillis = postTimeMillis;
         this.title = title;
         this.permalink = RedditUtils.API_BASE_URI + permalink;
         this.score = score;
@@ -164,6 +171,7 @@ public class Post implements Parcelable {
         authorNamePrefixed = in.readString();
         authorIconUrl = in.readString();
         postTime = in.readString();
+        postTimeMillis = in.readLong();
         title = in.readString();
         selfText = in.readString();
         selfTextPlainTrimmed = in.readString();
@@ -233,6 +241,10 @@ public class Post implements Parcelable {
 
     public String getPostTime() {
         return postTime;
+    }
+
+    public long getPostTimeMillis() {
+        return postTimeMillis;
     }
 
     public String getTitle() {
@@ -411,6 +423,7 @@ public class Post implements Parcelable {
         parcel.writeString(authorNamePrefixed);
         parcel.writeString(authorIconUrl);
         parcel.writeString(postTime);
+        parcel.writeLong(postTimeMillis);
         parcel.writeString(title);
         parcel.writeString(selfText);
         parcel.writeString(selfTextPlainTrimmed);

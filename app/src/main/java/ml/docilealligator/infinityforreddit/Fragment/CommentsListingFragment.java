@@ -83,8 +83,9 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private RequestManager mGlide;
-    private Activity activity;
+    private Activity mActivity;
     private CommentsListingRecyclerViewAdapter mAdapter;
+    private boolean mShowElapsedTime;
 
     public CommentsListingFragment() {
         // Required empty public constructor
@@ -96,11 +97,11 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_comments_listing, container, false);
 
-        ((Infinity) activity.getApplication()).getAppComponent().inject(this);
+        ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
 
-        mGlide = Glide.with(activity);
+        mGlide = Glide.with(mActivity);
 
         Resources resources = getResources();
 
@@ -112,6 +113,8 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
                 }
             }
         }
+
+        mShowElapsedTime = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
 
         if (savedInstanceState == null) {
             getCurrentAccountAndBindView(resources);
@@ -141,12 +144,12 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     }
 
     private void bindView(Resources resources) {
-        mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
 
         boolean voteButtonsOnTheRight = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
-        mAdapter = new CommentsListingRecyclerViewAdapter(activity, mOauthRetrofit,
+        mAdapter = new CommentsListingRecyclerViewAdapter(mActivity, mOauthRetrofit,
                 getArguments().getString(EXTRA_ACCESS_TOKEN), getArguments().getString(EXTRA_ACCOUNT_NAME),
-                voteButtonsOnTheRight, () -> mCommentViewModel.retryLoadingMore());
+                voteButtonsOnTheRight, mShowElapsedTime, () -> mCommentViewModel.retryLoadingMore());
 
         String username = getArguments().getString(EXTRA_USERNAME);
         String sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_USER_COMMENT, SortType.Type.NEW.value);
@@ -209,7 +212,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.activity = (Activity) context;
+        this.mActivity = (Activity) context;
     }
 
     @Override
@@ -227,7 +230,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     }
 
     private void showErrorView(int stringResId) {
-        if (activity != null && isAdded()) {
+        if (mActivity != null && isAdded()) {
             mProgressBar.setVisibility(View.GONE);
             mFetchCommentInfoLinearLayout.setVisibility(View.VISIBLE);
             mFetchCommentInfoTextView.setText(stringResId);

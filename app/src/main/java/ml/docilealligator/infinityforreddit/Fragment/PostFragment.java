@@ -28,7 +28,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.PagedList;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,6 +50,7 @@ import ml.docilealligator.infinityforreddit.Activity.MainActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.Adapter.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeShowElapsedTimeEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVoteButtonsPositionEvent;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToPostList;
@@ -279,6 +279,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         boolean needBlurNsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_NSFW_KEY, true);
         boolean needBlurSpoiler = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_SPOILER_KEY, false);
         boolean voteButtonsOnTheRight = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
+        boolean showElapsedTime = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
 
         PostViewModel.Factory factory;
 
@@ -293,7 +294,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, postLayout, true, needBlurNsfw, needBlurSpoiler,
-                    voteButtonsOnTheRight, new PostRecyclerViewAdapter.Callback() {
+                    voteButtonsOnTheRight, showElapsedTime, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -356,7 +357,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, postLayout, displaySubredditName, needBlurNsfw, needBlurSpoiler,
-                    voteButtonsOnTheRight, new PostRecyclerViewAdapter.Callback() {
+                    voteButtonsOnTheRight, showElapsedTime, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -402,7 +403,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, postLayout, true, needBlurNsfw, needBlurSpoiler,
-                    voteButtonsOnTheRight, new PostRecyclerViewAdapter.Callback() {
+                    voteButtonsOnTheRight, showElapsedTime, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -441,7 +442,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, postLayout, true, needBlurNsfw, needBlurSpoiler,
-                    voteButtonsOnTheRight, new PostRecyclerViewAdapter.Callback() {
+                    voteButtonsOnTheRight, showElapsedTime, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -641,6 +642,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 mAdapter.notifyItemChanged(event.positionInList);
             }
         }
+    }
+
+    @Subscribe
+    public void onChangeShowElapsedTime(ChangeShowElapsedTimeEvent event) {
+        mAdapter.setShowElapsedTime(event.showElapsedTime);
+        refreshAdapter();
     }
 
     @Subscribe

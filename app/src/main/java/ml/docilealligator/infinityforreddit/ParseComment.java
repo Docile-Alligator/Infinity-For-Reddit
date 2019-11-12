@@ -154,8 +154,8 @@ public class ParseComment {
         boolean hasReply = !(singleCommentData.get(JSONUtils.REPLIES_KEY) instanceof String);
 
         return new CommentData(id, fullName, author, authorFlair, linkAuthor, formattedSubmitTime,
-                commentContent, linkId, subredditName, parentId, score, voteType, isSubmitter,
-                distinguished, permalink, depth, collapsed, hasReply, scoreHidden, saved);
+                submitTime, commentContent, linkId, subredditName, parentId, score, voteType,
+                isSubmitter, distinguished, permalink, depth, collapsed, hasReply, scoreHidden, saved);
     }
 
     @Nullable

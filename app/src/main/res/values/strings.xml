@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Infinity</string>
+    <string name="application_name">Infinity</string>
     <string name="login_activity_label">Login</string>
     <string name="search_activity_label">Search</string>
     <string name="comment_activity_label">Send Comment</string>
@@ -289,6 +289,7 @@
     <string name="settings_amoled_dark_title">Amoled Dark</string>
     <string name="settings_immersive_interface_title">Immersive Interface</string>
     <string name="settings_vote_buttons_on_the_right_title">Vote Buttons on the Right</string>
+    <string name="settings_show_elapsed_time">Show Elpased Time in Posts and Comments</string>
     <string name="settings_lazy_mode_interval_title">Lazy Mode Interval</string>
     <string name="settings_font_size_title">Font Size</string>
     <string name="settings_title_font_size_title">Title Font Size</string>

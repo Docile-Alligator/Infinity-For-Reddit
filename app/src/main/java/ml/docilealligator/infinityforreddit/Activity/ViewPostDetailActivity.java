@@ -160,6 +160,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     private boolean mNeedBlurNsfw;
     private boolean mNeedBlurSpoiler;
     private boolean mVoteButtonsOnTheRight;
+    private boolean mShowElapsedTime;
     private boolean showToast = false;
     private boolean isSortingComments = false;
     private LinearLayoutManager mLinearLayoutManager;
@@ -234,6 +235,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         mNeedBlurNsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_NSFW_KEY, true);
         mNeedBlurSpoiler = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_SPOILER_KEY, false);
         mVoteButtonsOnTheRight = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
+        mShowElapsedTime = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
 
         mGlide = Glide.with(this);
         mLocale = getResources().getConfiguration().locale;
@@ -387,7 +389,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
                     mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mAccountName, mPost,
                     mLocale, mSingleCommentId, isSingleCommentThreadMode, mNeedBlurNsfw, mNeedBlurSpoiler,
-                    mVoteButtonsOnTheRight,
+                    mVoteButtonsOnTheRight, mShowElapsedTime,
                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                         @Override
                         public void updatePost(Post post) {
@@ -508,7 +510,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                     mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mGlide,
                                     mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId,
                                     isSingleCommentThreadMode, mNeedBlurNsfw, mNeedBlurSpoiler,
-                                    mVoteButtonsOnTheRight,
+                                    mVoteButtonsOnTheRight, mShowElapsedTime,
                                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                                         @Override
                                         public void updatePost(Post post) {

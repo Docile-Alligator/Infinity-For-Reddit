@@ -35,10 +35,13 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.github.thunder413.datetimeutils.DateTimeStyle;
+import com.github.thunder413.datetimeutils.DateTimeUtils;
 import com.libRG.CustomTextView;
 import com.santalu.aspectratioimageview.AspectRatioImageView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -105,6 +108,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private boolean mNeedBlurNSFW;
     private boolean mNeedBlurSpoiler;
     private boolean mVoteButtonsOnTheRight;
+    private boolean mShowElapsedTime;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
     private boolean isInitiallyLoadingFailed;
@@ -117,6 +121,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                              String accessToken, String accountName, Post post, Locale locale,
                                              String singleCommentId, boolean isSingleCommentThreadMode,
                                              boolean needBlurNSFW, boolean needBlurSpoiler, boolean voteButtonsOnTheRight,
+                                             boolean showElapsedTime,
                                              CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
         mActivity = activity;
         mRetrofit = retrofit;
@@ -153,6 +158,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mNeedBlurNSFW = needBlurNSFW;
         mNeedBlurSpoiler = needBlurSpoiler;
         mVoteButtonsOnTheRight = voteButtonsOnTheRight;
+        mShowElapsedTime = showElapsedTime;
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
         isInitiallyLoadingFailed = false;
@@ -359,7 +365,12 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ((PostDetailViewHolder) holder).mSubredditTextView.setText(mPost.getSubredditNamePrefixed());
             ((PostDetailViewHolder) holder).mUserTextView.setText(mPost.getAuthorNamePrefixed());
 
-            ((PostDetailViewHolder) holder).mPostTimeTextView.setText(mPost.getPostTime());
+            if (mShowElapsedTime) {
+                ((PostDetailViewHolder) holder).mPostTimeTextView.setText(
+                        DateTimeUtils.getTimeAgo(mActivity, new Date(mPost.getPostTimeMillis()), DateTimeStyle.AGO_SHORT_STRING));
+            } else {
+                ((PostDetailViewHolder) holder).mPostTimeTextView.setText(mPost.getPostTime());
+            }
 
             if (mPost.getGilded() > 0) {
                 ((PostDetailViewHolder) holder).mGildedNumberTextView.setVisibility(View.VISIBLE);
@@ -602,7 +613,12 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 ((CommentViewHolder) holder).authorTypeImageView.setImageResource(R.drawable.ic_verified_user_14dp);
             }
 
-            ((CommentViewHolder) holder).commentTimeTextView.setText(comment.getCommentTime());
+            if (mShowElapsedTime) {
+                ((CommentViewHolder) holder).commentTimeTextView.setText(
+                        DateTimeUtils.getTimeAgo(mActivity, new Date(comment.getCommentTimeMillis()), DateTimeStyle.AGO_SHORT_STRING));
+            } else {
+                ((CommentViewHolder) holder).commentTimeTextView.setText(comment.getCommentTime());
+            }
 
             mMarkwon.setMarkdown(((CommentViewHolder) holder).commentMarkdownView, comment.getCommentContent());
             ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));

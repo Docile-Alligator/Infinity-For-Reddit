@@ -56,4 +56,5 @@ public class SharedPreferencesUtils {
     public static final int POST_LAYOUT_CARD = 0;
     public static final int POST_LAYOUT_COMPACT = 1;
     public static final String PULL_NOTIFICATION_TIME = "pull_notification_time";
+    public static final String SHOW_ELAPSED_TIME_KEY = "show_elapsed_time";
 }

@@ -18,6 +18,7 @@ import javax.inject.Inject;
 
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeShowElapsedTimeEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVoteButtonsPositionEvent;
 import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
@@ -49,6 +50,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
             SwitchPreference amoledDarkSwitch = findPreference(SharedPreferencesUtils.AMOLED_DARK_KEY);
             SwitchPreference immersiveInterfaceSwitch = findPreference(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY);
             SwitchPreference voteButtonsOnTheRightSwitch = findPreference(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY);
+            SwitchPreference showElapsedTimeSwitch = findPreference(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY);
             SwitchPreference nsfwSwitch = findPreference(SharedPreferencesUtils.NSFW_KEY);
             SwitchPreference blurNSFWSwitch = findPreference(SharedPreferencesUtils.BLUR_NSFW_KEY);
             SwitchPreference blurSpoilerSwitch = findPreference(SharedPreferencesUtils.BLUR_SPOILER_KEY);
@@ -79,6 +81,13 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
             if (voteButtonsOnTheRightSwitch != null) {
                 voteButtonsOnTheRightSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                     EventBus.getDefault().post(new ChangeVoteButtonsPositionEvent((Boolean) newValue));
+                    return true;
+                });
+            }
+
+            if (showElapsedTimeSwitch != null) {
+                showElapsedTimeSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                    EventBus.getDefault().post(new ChangeShowElapsedTimeEvent((Boolean) newValue));
                     return true;
                 });
             }

@@ -24,6 +24,11 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.github.thunder413.datetimeutils.DateTimeStyle;
+import com.github.thunder413.datetimeutils.DateTimeUtils;
+
+import java.util.Date;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;
@@ -67,13 +72,14 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     private int mTextColorPrimaryDark;
     private int mColorAccent;
     private boolean mVoteButtonsOnTheRight;
+    private boolean mShowElapsedTime;
     private NetworkState networkState;
     private RetryLoadingMoreCallback mRetryLoadingMoreCallback;
 
     public CommentsListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
                                               String accessToken, String accountName,
                                               boolean voteButtonsOnTheRight,
-                                              RetryLoadingMoreCallback retryLoadingMoreCallback) {
+                                              boolean showElapsedTime, RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         mContext = context;
         mOauthRetrofit = oauthRetrofit;
@@ -99,6 +105,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         mAccessToken = accessToken;
         mAccountName = accountName;
         mVoteButtonsOnTheRight = voteButtonsOnTheRight;
+        mShowElapsedTime = showElapsedTime;
         mRetryLoadingMoreCallback = retryLoadingMoreCallback;
         mTextColorPrimaryDark = mContext.getResources().getColor(R.color.colorPrimaryDarkDayNightTheme);
         mColorAccent = mContext.getResources().getColor(R.color.colorAccent);
@@ -139,7 +146,12 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     });
                 }
 
-                ((DataViewHolder) holder).commentTimeTextView.setText(comment.getCommentTime());
+                if (mShowElapsedTime) {
+                    ((DataViewHolder) holder).commentTimeTextView.setText(
+                            DateTimeUtils.getTimeAgo(mContext, new Date(comment.getCommentTimeMillis()), DateTimeStyle.AGO_SHORT_STRING));
+                } else {
+                    ((DataViewHolder) holder).commentTimeTextView.setText(comment.getCommentTime());
+                }
 
                 mMarkwon.setMarkdown(((DataViewHolder) holder).commentMarkdownView, comment.getCommentContent());
 

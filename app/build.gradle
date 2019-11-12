@@ -6,8 +6,8 @@ android {
         applicationId "ml.docilealligator.infinityforreddit"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 20
-        versionName "1.4.1"
+        versionCode 21
+        versionName "1.5.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -80,4 +80,5 @@ dependencies {
     implementation 'androidx.work:work-runtime:2.2.0'
     implementation 'androidx.preference:preference:1.1.0'
     implementation 'com.nex3z:flow-layout:1.3.0'
+    implementation 'com.github.thunder413:DateTimeUtils:3.0'
 }
