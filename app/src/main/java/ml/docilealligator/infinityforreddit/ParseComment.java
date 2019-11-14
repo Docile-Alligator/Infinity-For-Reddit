@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
+
 import static ml.docilealligator.infinityforreddit.CommentData.VOTE_TYPE_DOWNVOTE;
 import static ml.docilealligator.infinityforreddit.CommentData.VOTE_TYPE_NO_VOTE;
 import static ml.docilealligator.infinityforreddit.CommentData.VOTE_TYPE_UPVOTE;

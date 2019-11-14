@@ -13,6 +13,8 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
+import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 
 /**
  * Created by alex on 3/21/18.

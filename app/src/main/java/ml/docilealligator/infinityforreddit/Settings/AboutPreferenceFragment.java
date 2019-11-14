@@ -12,7 +12,7 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
 /**
  * A simple {@link PreferenceFragmentCompat} subclass.

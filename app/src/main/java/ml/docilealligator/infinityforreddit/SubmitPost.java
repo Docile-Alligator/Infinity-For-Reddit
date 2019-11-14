@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
+import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;

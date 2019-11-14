@@ -17,7 +17,7 @@ import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
 /**
  * A simple {@link Fragment} subclass.

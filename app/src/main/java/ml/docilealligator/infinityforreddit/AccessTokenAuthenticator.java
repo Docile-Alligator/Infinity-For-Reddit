@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ml.docilealligator.infinityforreddit.Account.Account;
+import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
 import okhttp3.Authenticator;
 import okhttp3.Headers;
 import okhttp3.Request;

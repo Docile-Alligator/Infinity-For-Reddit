@@ -44,7 +44,7 @@ import ml.docilealligator.infinityforreddit.CommentData;
 import ml.docilealligator.infinityforreddit.Fragment.ModifyCommentBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.VoteThing;
 import retrofit2.Retrofit;

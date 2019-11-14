@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
+import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

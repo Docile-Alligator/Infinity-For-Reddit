@@ -40,7 +40,7 @@ import ml.docilealligator.infinityforreddit.Fragment.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
 import ml.docilealligator.infinityforreddit.Service.SubmitPostService;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
+import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
 
 class ParseSubscribedThing {
     static void parseSubscribedSubreddits(String response, String accountName,

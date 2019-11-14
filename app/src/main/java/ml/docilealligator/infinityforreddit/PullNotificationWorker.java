@@ -28,6 +28,8 @@ import javax.inject.Named;
 import ml.docilealligator.infinityforreddit.Account.Account;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewMessageActivity;
+import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;

@@ -6,6 +6,8 @@ import android.text.Html;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
+
 public class ParseAndSaveAccountInfo {
     public static void parseAndSaveAccountInfo(String response, RedditDataRoomDatabase redditDataRoomDatabase,
                                                ParseAndSaveAccountInfoListener parseAndSaveAccountInfoListener) {

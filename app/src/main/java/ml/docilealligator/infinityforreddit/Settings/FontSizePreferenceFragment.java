@@ -10,7 +10,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
 public class FontSizePreferenceFragment extends PreferenceFragmentCompat {
     @Override

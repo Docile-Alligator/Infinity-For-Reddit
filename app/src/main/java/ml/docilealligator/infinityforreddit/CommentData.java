@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
+import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+
 public class CommentData implements Parcelable {
     public static final int VOTE_TYPE_NO_VOTE = 0;
     public static final int VOTE_TYPE_UPVOTE = 1;

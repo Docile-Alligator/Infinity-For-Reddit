@@ -9,6 +9,8 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
+import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

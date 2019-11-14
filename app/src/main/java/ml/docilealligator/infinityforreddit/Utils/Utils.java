@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Utils;
 
 public class Utils {
     public static String addSubredditAndUserLink(String markdown) {

@@ -3,6 +3,8 @@ package ml.docilealligator.infinityforreddit;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+
 /**
  * Created by alex on 3/1/18.
  */

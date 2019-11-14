@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Utils;
 
 /**
  * Created by alex on 2/23/18.

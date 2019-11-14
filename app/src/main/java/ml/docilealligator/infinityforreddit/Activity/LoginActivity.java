@@ -33,7 +33,7 @@ import ml.docilealligator.infinityforreddit.ParseAndSaveAccountInfo;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditAPI;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
