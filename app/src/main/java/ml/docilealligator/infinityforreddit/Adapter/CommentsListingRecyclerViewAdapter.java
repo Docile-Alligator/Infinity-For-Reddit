@@ -24,11 +24,6 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.thunder413.datetimeutils.DateTimeStyle;
-import com.github.thunder413.datetimeutils.DateTimeUtils;
-
-import java.util.Date;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;
@@ -44,8 +39,9 @@ import ml.docilealligator.infinityforreddit.CommentData;
 import ml.docilealligator.infinityforreddit.Fragment.ModifyCommentBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
 import ml.docilealligator.infinityforreddit.SaveThing;
+import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import ml.docilealligator.infinityforreddit.VoteThing;
 import retrofit2.Retrofit;
 
@@ -148,7 +144,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
                 if (mShowElapsedTime) {
                     ((DataViewHolder) holder).commentTimeTextView.setText(
-                            DateTimeUtils.getTimeAgo(mContext, new Date(comment.getCommentTimeMillis()), DateTimeStyle.AGO_SHORT_STRING));
+                            Utils.getElapsedTime(mContext, comment.getCommentTimeMillis()));
                 } else {
                     ((DataViewHolder) holder).commentTimeTextView.setText(comment.getCommentTime());
                 }

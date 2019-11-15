@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -34,9 +33,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.livefront.bridge.Bridge;
 import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrConfig;
-import com.r0adkll.slidr.model.SlidrListener;
-import com.r0adkll.slidr.model.SlidrPosition;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -186,16 +182,9 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
         EventBus.getDefault().register(this);
 
-        SlidrConfig config = new SlidrConfig.Builder()
-                .sensitivity(1f)
-                .scrimColor(Color.BLACK)
-                .scrimStartAlpha(0.8f)
-                .scrimEndAlpha(0f)
-                .velocityThreshold(2400)
-                .distanceThreshold(0.25f)
-                .build();
-
-        Slidr.attach(this);
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL, true)) {
+            Slidr.attach(this);
+        }
 
         Resources resources = getResources();
 

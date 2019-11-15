@@ -36,6 +36,11 @@
         app:key="show_elapsed_time"
         app:title="@string/settings_show_elapsed_time"/>
 
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="swipe_to_go_back_from_post_detail"
+        app:title="@string/swipe_to_go_back_from_post_detail"/>
+
     <Preference
         app:title="@string/settings_font_size_title"
         app:icon="@drawable/ic_font_size_24dp"

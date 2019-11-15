@@ -33,14 +33,10 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.github.thunder413.datetimeutils.DateTimeStyle;
-import com.github.thunder413.datetimeutils.DateTimeUtils;
 import com.google.android.material.card.MaterialCardView;
 import com.libRG.CustomTextView;
 
 import org.greenrobot.eventbus.EventBus;
-
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,10 +59,11 @@ import ml.docilealligator.infinityforreddit.Post;
 import ml.docilealligator.infinityforreddit.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
 import ml.docilealligator.infinityforreddit.SaveThing;
-import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.User.UserDao;
+import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import ml.docilealligator.infinityforreddit.VoteThing;
 import retrofit2.Retrofit;
 
@@ -340,8 +337,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
 
                 if (mShowElapsedTime) {
-                    ((PostViewHolder) holder).postTimeTextView.setText(DateTimeUtils
-                            .getTimeAgo(mContext, new Date(post.getPostTimeMillis()), DateTimeStyle.AGO_SHORT_STRING));
+                    ((PostViewHolder) holder).postTimeTextView.setText(
+                            Utils.getElapsedTime(mContext, post.getPostTimeMillis()));
                 } else {
                     ((PostViewHolder) holder).postTimeTextView.setText(postTime);
                 }
@@ -890,8 +887,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
 
                 if (mShowElapsedTime) {
-                    ((PostCompactViewHolder) holder).postTimeTextView.setText(DateTimeUtils
-                            .getTimeAgo(mContext, new Date(post.getPostTimeMillis()), DateTimeStyle.AGO_SHORT_STRING));
+                    ((PostCompactViewHolder) holder).postTimeTextView.setText(
+                            Utils.getElapsedTime(mContext, post.getPostTimeMillis()));
                 } else {
                     ((PostCompactViewHolder) holder).postTimeTextView.setText(postTime);
                 }

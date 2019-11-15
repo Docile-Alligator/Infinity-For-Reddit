@@ -290,6 +290,7 @@
     <string name="settings_immersive_interface_title">Immersive Interface</string>
     <string name="settings_vote_buttons_on_the_right_title">Vote Buttons on the Right</string>
     <string name="settings_show_elapsed_time">Show Elpased Time in Posts and Comments</string>
+    <string name="swipe_to_go_back_from_post_detail">Swipe Right to Go Back From Comments</string>
     <string name="settings_lazy_mode_interval_title">Lazy Mode Interval</string>
     <string name="settings_font_size_title">Font Size</string>
     <string name="settings_title_font_size_title">Title Font Size</string>
@@ -353,4 +354,16 @@
 
     <string name="post_layout_card">Card Layout</string>
     <string name="post_layout_compact">Compact Layout</string>
+    
+    <string name="elapsed_time_just_now">Just Now</string>
+    <string name="elapsed_time_a_minute_ago">1 Minute</string>
+    <string name="elapsed_time_minutes_ago">%1$d Minutes</string>
+    <string name="elapsed_time_an_hour_ago">1 Hour</string>
+    <string name="elapsed_time_hours_ago">%1$d Hours</string>
+    <string name="elapsed_time_yesterday">Yesterday</string>
+    <string name="elapsed_time_days_ago">%1$d Days</string>
+    <string name="elapsed_time_a_month_ago">1 Month</string>
+    <string name="elapsed_time_months_ago">%1$d Months</string>
+    <string name="elapsed_time_a_year_ago">1 Year</string>
+    <string name="elapsed_time_years_ago">%1$d Years</string>
 </resources>

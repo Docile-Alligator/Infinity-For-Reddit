@@ -35,13 +35,10 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.github.thunder413.datetimeutils.DateTimeStyle;
-import com.github.thunder413.datetimeutils.DateTimeUtils;
 import com.libRG.CustomTextView;
 import com.santalu.aspectratioimageview.AspectRatioImageView;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -73,8 +70,9 @@ import ml.docilealligator.infinityforreddit.Post;
 import ml.docilealligator.infinityforreddit.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
 import ml.docilealligator.infinityforreddit.SaveThing;
+import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import ml.docilealligator.infinityforreddit.VoteThing;
 import retrofit2.Retrofit;
 
@@ -367,7 +365,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if (mShowElapsedTime) {
                 ((PostDetailViewHolder) holder).mPostTimeTextView.setText(
-                        DateTimeUtils.getTimeAgo(mActivity, new Date(mPost.getPostTimeMillis()), DateTimeStyle.AGO_SHORT_STRING));
+                        Utils.getElapsedTime(mActivity, mPost.getPostTimeMillis()));
             } else {
                 ((PostDetailViewHolder) holder).mPostTimeTextView.setText(mPost.getPostTime());
             }
@@ -615,7 +613,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if (mShowElapsedTime) {
                 ((CommentViewHolder) holder).commentTimeTextView.setText(
-                        DateTimeUtils.getTimeAgo(mActivity, new Date(comment.getCommentTimeMillis()), DateTimeStyle.AGO_SHORT_STRING));
+                        Utils.getElapsedTime(mActivity, comment.getCommentTimeMillis()));
             } else {
                 ((CommentViewHolder) holder).commentTimeTextView.setText(comment.getCommentTime());
             }
