@@ -238,7 +238,7 @@
         <activity
             android:name=".Activity.ViewPostDetailActivity"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBarWithTransparentBackground" />
         <activity
             android:name=".Activity.ViewSubredditDetailActivity"
             android:parentActivityName=".Activity.MainActivity"

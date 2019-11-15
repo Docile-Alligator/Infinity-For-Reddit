@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -32,6 +33,10 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.livefront.bridge.Bridge;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrConfig;
+import com.r0adkll.slidr.model.SlidrListener;
+import com.r0adkll.slidr.model.SlidrPosition;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -71,11 +76,11 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.ReadMessage;
 import ml.docilealligator.infinityforreddit.RedditAPI;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
 import ml.docilealligator.infinityforreddit.SaveThing;
-import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
+import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -180,6 +185,17 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
+
+        SlidrConfig config = new SlidrConfig.Builder()
+                .sensitivity(1f)
+                .scrimColor(Color.BLACK)
+                .scrimStartAlpha(0.8f)
+                .scrimEndAlpha(0f)
+                .velocityThreshold(2400)
+                .distanceThreshold(0.25f)
+                .build();
+
+        Slidr.attach(this);
 
         Resources resources = getResources();
 

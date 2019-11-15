@@ -32,10 +32,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -62,8 +62,8 @@ import ml.docilealligator.infinityforreddit.PostDataSource;
 import ml.docilealligator.infinityforreddit.PostViewModel;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 
@@ -84,10 +84,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
     private static final String RECYCLER_VIEW_POSITION_STATE = "RVPS";
 
+    @BindView(R.id.swipe_refresh_layout_post_fragment)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view_post_fragment)
     RecyclerView mPostRecyclerView;
-    @BindView(R.id.progress_bar_post_fragment)
-    CircleProgressBar mProgressBar;
     @BindView(R.id.fetch_post_info_linear_layout_post_fragment)
     LinearLayout mFetchPostInfoLinearLayout;
     @BindView(R.id.fetch_post_info_image_view_post_fragment)
@@ -130,6 +130,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         super.onResume();
         if (mPostRecyclerView.getAdapter() != null) {
             ((PostRecyclerViewAdapter) mPostRecyclerView.getAdapter()).setCanStartActivity(true);
+        }
+        if (isInLazyMode && isLazyModePaused) {
+            resumeLazyMode(false);
         }
     }
 
@@ -225,6 +228,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 resumeLazyMode(true);
             }
         };
+
+        mSwipeRefreshLayout.setOnRefreshListener(() -> {
+            mPostViewModel.refresh();
+        });
+
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
 
         if (savedInstanceState != null) {
             int recyclerViewPosition = savedInstanceState.getInt(RECYCLER_VIEW_POSITION_STATE);
@@ -465,11 +474,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         mPostRecyclerView.setAdapter(mAdapter);
 
         mPostViewModel = new ViewModelProvider(this, factory).get(PostViewModel.class);
-        mPostViewModel.getPosts().observe(this, posts -> mAdapter.submitList(posts));
+        mPostViewModel.getPosts().observe(this, posts -> {
+            mAdapter.submitList(posts);
+        });
 
         mPostViewModel.hasPost().observe(this, hasPost -> {
             this.hasPost = hasPost;
-            mProgressBar.setVisibility(View.GONE);
+            mSwipeRefreshLayout.setRefreshing(false);
             if (hasPost) {
                 mFetchPostInfoLinearLayout.setVisibility(View.GONE);
             } else {
@@ -485,13 +496,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         mPostViewModel.getInitialLoadingState().observe(this, networkState -> {
             if (networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
-                mProgressBar.setVisibility(View.GONE);
+                mSwipeRefreshLayout.setRefreshing(false);
             } else if (networkState.getStatus().equals(NetworkState.Status.FAILED)) {
-                mProgressBar.setVisibility(View.GONE);
+                mSwipeRefreshLayout.setRefreshing(false);
                 mFetchPostInfoLinearLayout.setOnClickListener(view -> refresh());
                 showErrorView(R.string.load_posts_error);
             } else {
-                mProgressBar.setVisibility(View.VISIBLE);
+                mSwipeRefreshLayout.setRefreshing(true);
             }
         });
 
@@ -541,7 +552,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     private void showErrorView(int stringResId) {
         if (activity != null && isAdded()) {
-            mProgressBar.setVisibility(View.GONE);
+            mSwipeRefreshLayout.setRefreshing(false);
             mFetchPostInfoLinearLayout.setVisibility(View.VISIBLE);
             mFetchPostInfoTextView.setText(stringResId);
             mGlide.load(R.drawable.error_image).into(mFetchPostInfoImageView);
@@ -689,16 +700,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        if (isInLazyMode && isLazyModePaused) {
-            resumeLazyMode(false);
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         if (isInLazyMode) {
             pauseLazyMode(false);
         }

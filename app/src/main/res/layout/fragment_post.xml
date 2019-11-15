@@ -5,22 +5,19 @@
     android:layout_height="match_parent"
     tools:application="ml.docilealligator.infinityforreddit.Fragment.PostFragment">
 
-    <com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar
-        android:id="@+id/progress_bar_post_fragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        app:mlpb_progress_stoke_width="3dp"
-        app:mlpb_progress_color="@color/colorAccent"
-        app:mlpb_background_color="?attr/circularProgressBarBackground"
-        android:layout_gravity="center_horizontal"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_post_fragment"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout_post_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false" />
+        android:background="@color/backgroundColor">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_post_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/fetch_post_info_linear_layout_post_fragment"
