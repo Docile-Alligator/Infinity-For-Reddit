@@ -58,4 +58,5 @@ public class SharedPreferencesUtils {
     public static final String PULL_NOTIFICATION_TIME = "pull_notification_time";
     public static final String SHOW_ELAPSED_TIME_KEY = "show_elapsed_time";
     public static final String SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL = "swipe_to_go_back_from_post_detail";
+    public static final String VOLUME_KEYS_NAVIGATE_COMMENTS = "volume_keys_navigate_comments";
 }

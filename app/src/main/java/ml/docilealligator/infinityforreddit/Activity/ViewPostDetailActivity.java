@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +24,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -30,6 +32,7 @@ import com.bumptech.glide.RequestManager;
 import com.evernote.android.state.State;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.livefront.bridge.Bridge;
 import com.r0adkll.slidr.Slidr;
@@ -142,6 +145,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     ImageView mFetchPostInfoImageView;
     @BindView(R.id.fetch_post_info_text_view_view_post_detail_activity)
     TextView mFetchPostInfoTextView;
+    @BindView(R.id.fab_view_post_detail_activity)
+    FloatingActionButton fab;
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
@@ -164,8 +169,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     private boolean mShowElapsedTime;
     private boolean showToast = false;
     private boolean isSortingComments = false;
+    private boolean mVolumeKeysNavigateComments;
     private LinearLayoutManager mLinearLayoutManager;
     private CommentAndPostRecyclerViewAdapter mAdapter;
+    private RecyclerView.SmoothScroller mSmoothScroller;
     private PostCommentSortTypeBottomSheetFragment postCommentSortTypeBottomSheetFragment;
 
     @Override
@@ -241,12 +248,19 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         mNeedBlurSpoiler = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_SPOILER_KEY, false);
         mVoteButtonsOnTheRight = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
         mShowElapsedTime = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
+        mVolumeKeysNavigateComments = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOLUME_KEYS_NAVIGATE_COMMENTS, false);
 
         mGlide = Glide.with(this);
         mLocale = getResources().getConfiguration().locale;
 
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mSmoothScroller = new LinearSmoothScroller(this) {
+            @Override
+            protected int getVerticalSnapPreference() {
+                return LinearSmoothScroller.SNAP_TO_START;
+            }
+        };
 
         mSingleCommentId = getIntent().getStringExtra(EXTRA_SINGLE_COMMENT_ID);
         if (savedInstanceState == null) {
@@ -433,6 +447,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 }
             }
         }
+
+        fab.setOnClickListener(view -> scrollToNextParentComment());
     }
 
 
@@ -965,6 +981,38 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         refresh(false, true);
     }
 
+    public void scrollToNextParentComment() {
+        if (mLinearLayoutManager != null) {
+            int currentPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
+            if (mAdapter != null) {
+                int nextParentPosition = mAdapter.getNextParentCommentPosition(currentPosition);
+                if (nextParentPosition < 0) {
+                    return;
+                }
+                mSmoothScroller.setTargetPosition(nextParentPosition);
+                if (mLinearLayoutManager != null) {
+                    mLinearLayoutManager.startSmoothScroll(mSmoothScroller);
+                }
+            }
+        }
+    }
+
+    public void scrollToPreviousParentComment() {
+        if (mLinearLayoutManager != null) {
+            int currentPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
+            if (mAdapter != null) {
+                int nextParentPosition = mAdapter.getPreviousParentCommentPosition(currentPosition);
+                if (nextParentPosition < 0) {
+                    return;
+                }
+                mSmoothScroller.setTargetPosition(nextParentPosition);
+                if (mLinearLayoutManager != null) {
+                    mLinearLayoutManager.startSmoothScroll(mSmoothScroller);
+                }
+            }
+        }
+    }
+
     @Subscribe
     public void onPostUpdateEvent(PostUpdateEventToDetailActivity event) {
         if (mPost.getId().equals(event.post.getId())) {
@@ -1294,7 +1342,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 refresh(true, false);
             }
         } else if (requestCode == EDIT_COMMENT_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
+            if (data != null && resultCode == RESULT_OK) {
                 mAdapter.editComment(data.getStringExtra(EditCommentActivity.EXTRA_EDITED_COMMENT_CONTENT),
                         data.getExtras().getInt(EditCommentActivity.EXTRA_EDITED_COMMENT_POSITION));
             }
@@ -1322,6 +1370,21 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         EventBus.getDefault().unregister(this);
         super.onDestroy();
         Bridge.clear(this);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (mVolumeKeysNavigateComments) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_VOLUME_UP:
+                    scrollToPreviousParentComment();
+                    return true;
+                case KeyEvent.KEYCODE_VOLUME_DOWN:
+                    scrollToNextParentComment();
+                    return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

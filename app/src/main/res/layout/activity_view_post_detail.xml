@@ -70,4 +70,14 @@
 
     </LinearLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_view_post_detail_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@color/backgroundColorPrimary"
+        app:tint="@android:color/white"
+        app:srcCompat="@drawable/ic_keyboard_arrow_down_24dp" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

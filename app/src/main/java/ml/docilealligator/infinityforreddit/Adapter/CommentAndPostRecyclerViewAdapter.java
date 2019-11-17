@@ -1437,6 +1437,44 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mNeedBlurSpoiler = needBlurSpoiler;
     }
 
+    public int getNextParentCommentPosition(int currentPosition) {
+        if (mVisibleComments != null && !mVisibleComments.isEmpty()) {
+            if (mIsSingleCommentThreadMode) {
+                for (int i = currentPosition + 1; i - 2 < mVisibleComments.size(); i++) {
+                    if (mVisibleComments.get(i - 2).getDepth() == 0) {
+                        return i;
+                    }
+                }
+            } else {
+                for (int i = currentPosition + 1; i - 1 < mVisibleComments.size(); i++) {
+                    if (mVisibleComments.get(i - 1).getDepth() == 0) {
+                        return i;
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
+    public int getPreviousParentCommentPosition(int currentPosition) {
+        if (mVisibleComments != null && !mVisibleComments.isEmpty()) {
+            if (mIsSingleCommentThreadMode) {
+                for (int i = currentPosition + 1; i - 2 >= 0; i--) {
+                    if (mVisibleComments.get(i - 2).getDepth() == 0) {
+                        return i;
+                    }
+                }
+            } else {
+                for (int i = currentPosition - 1; i - 1 >= 0; i--) {
+                    if (mVisibleComments.get(i - 1).getDepth() == 0) {
+                        return i;
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof CommentViewHolder) {
