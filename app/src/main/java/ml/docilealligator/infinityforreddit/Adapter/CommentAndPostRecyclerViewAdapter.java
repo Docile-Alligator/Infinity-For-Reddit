@@ -10,7 +10,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.util.Linkify;
 import android.util.TypedValue;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -860,6 +862,38 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     public void onVoteThingFail(int position1) {
                     }
                 }, mVisibleComments.get(commentPosition).getFullName(), newVoteType, holder.getAdapterPosition());
+            });
+
+            ((CommentViewHolder) holder).commentMarkdownView.setOnTouchListener(new View.OnTouchListener() {
+                private GestureDetector gestureDetector = new GestureDetector(mActivity, new GestureDetector.SimpleOnGestureListener() {
+                    @Override
+                    public boolean onDoubleTap(MotionEvent e) {
+                        ((CommentViewHolder) holder).upVoteButton.performClick();
+                        return super.onDoubleTap(e);
+                    }
+                });
+
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    gestureDetector.onTouchEvent(motionEvent);
+                    return true;
+                }
+            });
+
+            ((CommentViewHolder) holder).itemView.setOnTouchListener(new View.OnTouchListener() {
+                private GestureDetector gestureDetector = new GestureDetector(mActivity, new GestureDetector.SimpleOnGestureListener() {
+                    @Override
+                    public boolean onDoubleTap(MotionEvent e) {
+                        ((CommentViewHolder) holder).upVoteButton.performClick();
+                        return super.onDoubleTap(e);
+                    }
+                });
+
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    gestureDetector.onTouchEvent(motionEvent);
+                    return true;
+                }
             });
 
             if (comment.isSaved()) {
