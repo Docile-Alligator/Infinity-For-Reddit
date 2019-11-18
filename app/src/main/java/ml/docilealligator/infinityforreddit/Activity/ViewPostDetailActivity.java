@@ -170,6 +170,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     private boolean showToast = false;
     private boolean isSortingComments = false;
     private boolean mVolumeKeysNavigateComments;
+    private boolean mIsSmoothScrolling = false;
     private LinearLayoutManager mLinearLayoutManager;
     private CommentAndPostRecyclerViewAdapter mAdapter;
     private RecyclerView.SmoothScroller mSmoothScroller;
@@ -255,6 +256,61 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+
+        if (children != null && children.size() > 0) {
+            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if (!mIsSmoothScrolling) {
+                        if (dy > 0) {
+                            fab.hide();
+                        } else {
+                            fab.show();
+                        }
+                    }
+
+                    if (!isLoadingMoreChildren && loadMoreChildrenSuccess) {
+                        int visibleItemCount = mLinearLayoutManager.getChildCount();
+                        int totalItemCount = mLinearLayoutManager.getItemCount();
+                        int firstVisibleItemPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
+
+                        if ((visibleItemCount + firstVisibleItemPosition >= totalItemCount) && firstVisibleItemPosition >= 0) {
+                            fetchMoreComments();
+                        }
+                    }
+                }
+
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        mIsSmoothScrolling = false;
+                    }
+                }
+            });
+        } else {
+            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if (!mIsSmoothScrolling) {
+                        if (dy > 0) {
+                            fab.hide();
+                        } else {
+                            fab.show();
+                        }
+                    }
+                }
+
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        mIsSmoothScrolling = false;
+                    }
+                }
+            });
+        }
+
         mSmoothScroller = new LinearSmoothScroller(this) {
             @Override
             protected int getVerticalSnapPreference() {
@@ -563,10 +619,18 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                             mAdapter.addComments(expandedComments, hasMoreChildren);
 
                                             if (children.size() > 0) {
+                                                mRecyclerView.clearOnScrollListeners();
                                                 mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                                                     @Override
                                                     public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                                                         super.onScrolled(recyclerView, dx, dy);
+                                                        if (!mIsSmoothScrolling) {
+                                                            if (dy > 0) {
+                                                                fab.hide();
+                                                            } else {
+                                                                fab.show();
+                                                            }
+                                                        }
 
                                                         if (!isLoadingMoreChildren && loadMoreChildrenSuccess) {
                                                             int visibleItemCount = mLinearLayoutManager.getChildCount();
@@ -576,6 +640,13 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                                             if ((visibleItemCount + firstVisibleItemPosition >= totalItemCount) && firstVisibleItemPosition >= 0) {
                                                                 fetchMoreComments();
                                                             }
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                                                        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                                                            mIsSmoothScrolling = false;
                                                         }
                                                     }
                                                 });
@@ -636,10 +707,18 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                         mAdapter.addComments(expandedComments, hasMoreChildren);
 
                         if (children.size() > 0) {
+                            mRecyclerView.clearOnScrollListeners();
                             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                                 @Override
                                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                                     super.onScrolled(recyclerView, dx, dy);
+                                    if (!mIsSmoothScrolling) {
+                                        if (dy > 0) {
+                                            fab.hide();
+                                        } else {
+                                            fab.show();
+                                        }
+                                    }
 
                                     if (!isLoadingMoreChildren && loadMoreChildrenSuccess) {
                                         int visibleItemCount = mLinearLayoutManager.getChildCount();
@@ -649,6 +728,13 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                         if ((visibleItemCount + firstVisibleItemPosition >= totalItemCount) && firstVisibleItemPosition >= 0) {
                                             fetchMoreComments();
                                         }
+                                    }
+                                }
+
+                                @Override
+                                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                                        mIsSmoothScrolling = false;
                                     }
                                 }
                             });
@@ -991,6 +1077,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 }
                 mSmoothScroller.setTargetPosition(nextParentPosition);
                 if (mLinearLayoutManager != null) {
+                    mIsSmoothScrolling = true;
                     mLinearLayoutManager.startSmoothScroll(mSmoothScroller);
                 }
             }
@@ -1007,6 +1094,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 }
                 mSmoothScroller.setTargetPosition(nextParentPosition);
                 if (mLinearLayoutManager != null) {
+                    mIsSmoothScrolling = true;
                     mLinearLayoutManager.startSmoothScroll(mSmoothScroller);
                 }
             }
