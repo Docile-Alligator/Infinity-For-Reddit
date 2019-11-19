@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.util.Linkify;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -307,38 +305,6 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         public void onVoteThingFail(int position1) {
                         }
                     }, comment.getFullName(), newVoteType, holder.getAdapterPosition());
-                });
-
-                ((DataViewHolder) holder).commentMarkdownView.setOnTouchListener(new View.OnTouchListener() {
-                    private GestureDetector gestureDetector = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
-                        @Override
-                        public boolean onDoubleTap(MotionEvent e) {
-                            ((DataViewHolder) holder).upvoteButton.performClick();
-                            return super.onDoubleTap(e);
-                        }
-                    });
-
-                    @Override
-                    public boolean onTouch(View view, MotionEvent motionEvent) {
-                        gestureDetector.onTouchEvent(motionEvent);
-                        return true;
-                    }
-                });
-
-                ((DataViewHolder) holder).itemView.setOnTouchListener(new View.OnTouchListener() {
-                    private GestureDetector gestureDetector = new GestureDetector(mContext, new GestureDetector.SimpleOnGestureListener() {
-                        @Override
-                        public boolean onDoubleTap(MotionEvent e) {
-                            ((DataViewHolder) holder).upvoteButton.performClick();
-                            return super.onDoubleTap(e);
-                        }
-                    });
-
-                    @Override
-                    public boolean onTouch(View view, MotionEvent motionEvent) {
-                        gestureDetector.onTouchEvent(motionEvent);
-                        return true;
-                    }
                 });
 
                 if (comment.isSaved()) {

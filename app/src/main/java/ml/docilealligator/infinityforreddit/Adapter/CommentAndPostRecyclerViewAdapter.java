@@ -864,38 +864,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 }, mVisibleComments.get(commentPosition).getFullName(), newVoteType, holder.getAdapterPosition());
             });
 
-            ((CommentViewHolder) holder).commentMarkdownView.setOnTouchListener(new View.OnTouchListener() {
-                private GestureDetector gestureDetector = new GestureDetector(mActivity, new GestureDetector.SimpleOnGestureListener() {
-                    @Override
-                    public boolean onDoubleTap(MotionEvent e) {
-                        ((CommentViewHolder) holder).upVoteButton.performClick();
-                        return super.onDoubleTap(e);
-                    }
-                });
-
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    gestureDetector.onTouchEvent(motionEvent);
-                    return true;
-                }
-            });
-
-            ((CommentViewHolder) holder).itemView.setOnTouchListener(new View.OnTouchListener() {
-                private GestureDetector gestureDetector = new GestureDetector(mActivity, new GestureDetector.SimpleOnGestureListener() {
-                    @Override
-                    public boolean onDoubleTap(MotionEvent e) {
-                        ((CommentViewHolder) holder).upVoteButton.performClick();
-                        return super.onDoubleTap(e);
-                    }
-                });
-
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    gestureDetector.onTouchEvent(motionEvent);
-                    return true;
-                }
-            });
-
             if (comment.isSaved()) {
                 ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
             } else {
