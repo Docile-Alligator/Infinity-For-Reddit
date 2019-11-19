@@ -12,8 +12,9 @@ public class Utils {
     private static final long MONTH_MILLIS = 30 * DAY_MILLIS;
     private static final long YEAR_MILLIS = 12 * MONTH_MILLIS;
 
-    public static String addSubredditAndUserLink(String markdown) {
-        return markdown.replaceAll("((?<=[\\s])|^)/{0,1}[rRuU]/\\w+/{0,1}", "[$0]($0)");
+    public static String modifyMarkdown(String markdown) {
+        return markdown.replaceAll("((?<=[\\s])|^)/{0,1}[rRuU]/\\w+/{0,1}", "[$0]($0)")
+                .replaceAll("\\^\\w+", "$0^");
     }
 
     public static CharSequence trimTrailingWhitespace(CharSequence source) {

@@ -235,7 +235,7 @@ public class RulesActivity extends BaseActivity {
                     String shortName = rulesArray.getJSONObject(i).getString(JSONUtils.SHORT_NAME_KEY);
                     String description = null;
                     if (rulesArray.getJSONObject(i).has(JSONUtils.DESCRIPTION_KEY)) {
-                        description = Utils.addSubredditAndUserLink(rulesArray.getJSONObject(i).getString(JSONUtils.DESCRIPTION_KEY));
+                        description = Utils.modifyMarkdown(rulesArray.getJSONObject(i).getString(JSONUtils.DESCRIPTION_KEY));
                     }
                     rules.add(new Rule(shortName, description));
                 }

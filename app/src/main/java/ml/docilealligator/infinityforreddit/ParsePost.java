@@ -126,7 +126,7 @@ public class ParsePost {
                 if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                     post.setSelfText("");
                 } else {
-                    post.setSelfText(Utils.addSubredditAndUserLink(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
+                    post.setSelfText(Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
                     if (data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
                         post.setSelfTextPlainTrimmed("");
                     } else {
@@ -147,7 +147,7 @@ public class ParsePost {
                 if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                     post.setSelfText("");
                 } else {
-                    post.setSelfText(Utils.addSubredditAndUserLink(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
+                    post.setSelfText(Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
                 }
             }
         } else {
@@ -222,7 +222,7 @@ public class ParsePost {
                             if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                                 post.setSelfText("");
                             } else {
-                                post.setSelfText(Utils.addSubredditAndUserLink(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
+                                post.setSelfText(Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
                                 if (data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
                                     post.setSelfTextPlainTrimmed("");
                                 } else {
@@ -245,7 +245,7 @@ public class ParsePost {
                             if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                                 post.setSelfText("");
                             } else {
-                                post.setSelfText(Utils.addSubredditAndUserLink(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
+                                post.setSelfText(Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
                             }
 
                             post.setPreviewWidth(previewWidth);

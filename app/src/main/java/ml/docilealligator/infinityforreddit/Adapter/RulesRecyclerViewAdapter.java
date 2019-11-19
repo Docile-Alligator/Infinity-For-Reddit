@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
+import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Rule;
@@ -48,6 +50,12 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
                 })
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(SimpleExtPlugin.create(plugin ->
+                                plugin.addExtension(1, '^', (configuration, props) -> {
+                                    return new SuperscriptSpan();
+                                })
+                        )
+                )
                 .build();
     }
 

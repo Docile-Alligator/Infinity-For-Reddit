@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +33,7 @@ import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.linkify.LinkifyPlugin;
+import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CommentData;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
@@ -116,6 +118,12 @@ public class CommentActivity extends BaseActivity {
                     }
                 })
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .usePlugin(SimpleExtPlugin.create(plugin ->
+                                plugin.addExtension(1, '^', (configuration, props) -> {
+                                    return new SuperscriptSpan();
+                                })
+                        )
+                )
                 .build();
         markwon.setMarkdown(commentParentMarkwonView, intent.getStringExtra(EXTRA_COMMENT_PARENT_TEXT_KEY));
         parentFullname = intent.getStringExtra(EXTRA_PARENT_FULLNAME_KEY);

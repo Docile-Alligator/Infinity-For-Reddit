@@ -129,7 +129,7 @@ public class ParseComment {
         String distinguished = singleCommentData.getString(JSONUtils.DISTINGUISHED_KEY);
         String commentContent = "";
         if (!singleCommentData.isNull(JSONUtils.BODY_KEY)) {
-            commentContent = Utils.addSubredditAndUserLink(singleCommentData.getString(JSONUtils.BODY_KEY).trim());
+            commentContent = Utils.modifyMarkdown(singleCommentData.getString(JSONUtils.BODY_KEY).trim());
         }
         String permalink = Html.fromHtml(singleCommentData.getString(JSONUtils.PERMALINK_KEY)).toString();
         int score = singleCommentData.getInt(JSONUtils.SCORE_KEY);

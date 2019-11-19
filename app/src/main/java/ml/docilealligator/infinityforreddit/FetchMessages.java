@@ -74,7 +74,7 @@ public class FetchMessages {
                 String author = rawMessageJSON.getString(JSONUtils.AUTHOR_KEY);
                 String parentFullname = rawMessageJSON.getString(JSONUtils.PARENT_ID_KEY);
                 String title = rawMessageJSON.has(JSONUtils.LINK_TITLE_KEY) ? rawMessageJSON.getString(JSONUtils.LINK_TITLE_KEY) : null;
-                String body = Utils.addSubredditAndUserLink(rawMessageJSON.getString(JSONUtils.BODY_KEY));
+                String body = Utils.modifyMarkdown(rawMessageJSON.getString(JSONUtils.BODY_KEY));
                 String context = rawMessageJSON.getString(JSONUtils.CONTEXT_KEY);
                 String distinguished = rawMessageJSON.getString(JSONUtils.DISTINGUISHED_KEY);
                 boolean wasComment = rawMessageJSON.getBoolean(JSONUtils.WAS_COMMENT_KEY);
