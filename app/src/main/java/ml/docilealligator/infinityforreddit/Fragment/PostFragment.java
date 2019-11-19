@@ -26,7 +26,6 @@ import android.widget.Toast;
 import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.PagedList;
@@ -231,9 +230,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
         };
 
-        mSwipeRefreshLayout.setOnRefreshListener(() -> {
-            mPostViewModel.refresh();
-        });
+        mSwipeRefreshLayout.setOnRefreshListener(() -> mPostViewModel.refresh());
 
         TypedValue typedValue = new TypedValue();
         activity.getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
