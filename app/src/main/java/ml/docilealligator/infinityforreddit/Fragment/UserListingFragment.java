@@ -1,11 +1,14 @@
 package ml.docilealligator.infinityforreddit.Fragment;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +16,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
-import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -33,9 +37,9 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.UserListingViewModel;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 
@@ -52,8 +56,8 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
     CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.recycler_view_user_listing_fragment)
     RecyclerView mUserListingRecyclerView;
-    @BindView(R.id.progress_bar_user_listing_fragment)
-    CircleProgressBar mProgressBar;
+    @BindView(R.id.swipe_refresh_layout_user_listing_fragment)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.fetch_user_listing_info_linear_layout_user_listing_fragment)
     LinearLayout mFetchUserListingInfoLinearLayout;
     @BindView(R.id.fetch_user_listing_info_image_view_user_listing_fragment)
@@ -74,6 +78,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
     private LinearLayoutManager mLinearLayoutManager;
     private String mQuery;
     private UserListingRecyclerViewAdapter mAdapter;
+    private Activity mActivity;
 
     public UserListingFragment() {
         // Required empty public constructor
@@ -86,7 +91,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_user_listing, container, false);
 
-        ((Infinity) getActivity().getApplication()).getAppComponent().inject(this);
+        ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
 
@@ -122,7 +127,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         mUserListingViewModel.getUsers().observe(this, UserData -> mAdapter.submitList(UserData));
 
         mUserListingViewModel.hasUser().observe(this, hasUser -> {
-            mProgressBar.setVisibility(View.GONE);
+            mSwipeRefreshLayout.setRefreshing(false);
             if (hasUser) {
                 mFetchUserListingInfoLinearLayout.setVisibility(View.GONE);
             } else {
@@ -135,13 +140,13 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
 
         mUserListingViewModel.getInitialLoadingState().observe(this, networkState -> {
             if (networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
-                mProgressBar.setVisibility(View.GONE);
+                mSwipeRefreshLayout.setRefreshing(false);
             } else if (networkState.getStatus().equals(NetworkState.Status.FAILED)) {
-                mProgressBar.setVisibility(View.GONE);
+                mSwipeRefreshLayout.setRefreshing(false);
                 mFetchUserListingInfoLinearLayout.setOnClickListener(view -> refresh());
                 showErrorView(R.string.search_users_error);
             } else {
-                mProgressBar.setVisibility(View.VISIBLE);
+                mSwipeRefreshLayout.setRefreshing(true);
             }
         });
 
@@ -149,12 +154,25 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
             mAdapter.setNetworkState(networkState);
         });
 
+        mSwipeRefreshLayout.setOnRefreshListener(() -> mUserListingViewModel.refresh());
+
+        TypedValue typedValue = new TypedValue();
+        mActivity.getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(typedValue.data);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+
         return rootView;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mActivity = (Activity) context;
     }
 
     private void showErrorView(int stringResId) {
         if (getActivity() != null && isAdded()) {
-            mProgressBar.setVisibility(View.GONE);
+            mSwipeRefreshLayout.setRefreshing(false);
             mFetchUserListingInfoLinearLayout.setVisibility(View.VISIBLE);
             mFetchUserListingInfoTextView.setText(stringResId);
             Glide.with(this).load(R.drawable.error_image).into(mFetchUserListingInfoImageView);

@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,12 +23,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -65,10 +66,10 @@ public class ViewMessageActivity extends BaseActivity {
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_view_message_activity)
     Toolbar toolbar;
-    @BindView(R.id.progress_bar_view_message_activity)
-    CircleProgressBar mProgressBar;
+    @BindView(R.id.swipe_refresh_layout_view_message_activity)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view_view_message_activity)
-    RecyclerView recyclerView;
+    RecyclerView mRecyclerView;
     @BindView(R.id.fetch_messages_info_linear_layout_view_message_activity)
     LinearLayout mFetchMessageInfoLinearLayout;
     @BindView(R.id.fetch_messages_info_image_view_view_message_activity)
@@ -146,7 +147,7 @@ public class ViewMessageActivity extends BaseActivity {
 
             int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
             if (navBarResourceId > 0) {
-                recyclerView.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
+                mRecyclerView.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
             }
         }
 
@@ -211,10 +212,10 @@ public class ViewMessageActivity extends BaseActivity {
         mAdapter = new MessageRecyclerViewAdapter(this, mOauthRetrofit, mAccessToken,
                 () -> mMessageViewModel.retryLoadingMore());
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setAdapter(mAdapter);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, layoutManager.getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
 
         MessageViewModel.Factory factory = new MessageViewModel.Factory(mOauthRetrofit,
                 getResources().getConfiguration().locale, mAccessToken, FetchMessages.WHERE_INBOX);
@@ -222,7 +223,7 @@ public class ViewMessageActivity extends BaseActivity {
         mMessageViewModel.getMessages().observe(this, messages -> mAdapter.submitList(messages));
 
         mMessageViewModel.hasMessage().observe(this, hasMessage -> {
-            mProgressBar.setVisibility(View.GONE);
+            mSwipeRefreshLayout.setRefreshing(false);
             if (hasMessage) {
                 mFetchMessageInfoLinearLayout.setVisibility(View.GONE);
             } else {
@@ -235,9 +236,9 @@ public class ViewMessageActivity extends BaseActivity {
 
         mMessageViewModel.getInitialLoadingState().observe(this, networkState -> {
             if (networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
-                mProgressBar.setVisibility(View.GONE);
+                mSwipeRefreshLayout.setRefreshing(false);
             } else if (networkState.getStatus().equals(NetworkState.Status.FAILED)) {
-                mProgressBar.setVisibility(View.GONE);
+                mSwipeRefreshLayout.setRefreshing(false);
                 mFetchMessageInfoLinearLayout.setOnClickListener(view -> {
                     mFetchMessageInfoLinearLayout.setVisibility(View.GONE);
                     mMessageViewModel.refresh();
@@ -245,17 +246,24 @@ public class ViewMessageActivity extends BaseActivity {
                 });
                 showErrorView(R.string.load_messages_failed);
             } else {
-                mProgressBar.setVisibility(View.VISIBLE);
+                mSwipeRefreshLayout.setRefreshing(true);
             }
         });
 
         mMessageViewModel.getPaginationNetworkState().observe(this, networkState -> {
             mAdapter.setNetworkState(networkState);
         });
+
+        mSwipeRefreshLayout.setOnRefreshListener(this::onRefresh);
+
+        TypedValue typedValue = new TypedValue();
+        getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(typedValue.data);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
     }
 
     private void showErrorView(int stringResId) {
-        mProgressBar.setVisibility(View.GONE);
+        mSwipeRefreshLayout.setRefreshing(false);
         mFetchMessageInfoLinearLayout.setVisibility(View.VISIBLE);
         mFetchMessageInfoTextView.setText(stringResId);
         mGlide.load(R.drawable.error_image).into(mFetchMessageInfoImageView);
@@ -299,5 +307,9 @@ public class ViewMessageActivity extends BaseActivity {
         if (!getClass().getName().equals(event.excludeActivityClassName)) {
             finish();
         }
+    }
+
+    private void onRefresh() {
+        mMessageViewModel.refresh();
     }
 }

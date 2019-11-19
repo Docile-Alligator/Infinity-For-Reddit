@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.PagedList;
@@ -233,6 +235,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mPostViewModel.refresh();
         });
 
+        TypedValue typedValue = new TypedValue();
+        activity.getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(typedValue.data);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
 
         if (savedInstanceState != null) {

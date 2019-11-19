@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +22,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -39,8 +40,8 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 
@@ -59,10 +60,10 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
     @BindView(R.id.coordinator_layout_comments_listing_fragment)
     CoordinatorLayout mCoordinatorLayout;
+    @BindView(R.id.swipe_refresh_layout_view_comments_listing_fragment)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view_comments_listing_fragment)
     RecyclerView mCommentRecyclerView;
-    @BindView(R.id.progress_bar_comments_listing_fragment)
-    CircleProgressBar mProgressBar;
     @BindView(R.id.fetch_comments_info_linear_layout_comments_listing_fragment)
     LinearLayout mFetchCommentInfoLinearLayout;
     @BindView(R.id.fetch_comments_info_image_view_comments_listing_fragment)
@@ -179,7 +180,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         mCommentViewModel.getComments().observe(this, comments -> mAdapter.submitList(comments));
 
         mCommentViewModel.hasComment().observe(this, hasComment -> {
-            mProgressBar.setVisibility(View.GONE);
+            mSwipeRefreshLayout.setRefreshing(false);
             if (hasComment) {
                 mFetchCommentInfoLinearLayout.setVisibility(View.GONE);
             } else {
@@ -192,17 +193,24 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
         mCommentViewModel.getInitialLoadingState().observe(this, networkState -> {
             if (networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
-                mProgressBar.setVisibility(View.GONE);
+                mSwipeRefreshLayout.setRefreshing(false);
             } else if (networkState.getStatus().equals(NetworkState.Status.FAILED)) {
-                mProgressBar.setVisibility(View.GONE);
+                mSwipeRefreshLayout.setRefreshing(false);
                 mFetchCommentInfoLinearLayout.setOnClickListener(view -> refresh());
                 showErrorView(R.string.load_comments_failed);
             } else {
-                mProgressBar.setVisibility(View.VISIBLE);
+                mSwipeRefreshLayout.setRefreshing(true);
             }
         });
 
         mCommentViewModel.getPaginationNetworkState().observe(this, networkState -> mAdapter.setNetworkState(networkState));
+
+        mSwipeRefreshLayout.setOnRefreshListener(() -> mCommentViewModel.refresh());
+
+        TypedValue typedValue = new TypedValue();
+        mActivity.getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(typedValue.data);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
     }
 
     public void changeSortType(SortType sortType) {
@@ -231,7 +239,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
     private void showErrorView(int stringResId) {
         if (mActivity != null && isAdded()) {
-            mProgressBar.setVisibility(View.GONE);
+            mSwipeRefreshLayout.setRefreshing(false);
             mFetchCommentInfoLinearLayout.setVisibility(View.VISIBLE);
             mFetchCommentInfoTextView.setText(stringResId);
             mGlide.load(R.drawable.error_image).into(mFetchCommentInfoImageView);

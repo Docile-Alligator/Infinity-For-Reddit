@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +16,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +26,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -135,8 +136,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_view_post_detail_activity)
     Toolbar toolbar;
-    @BindView(R.id.progress_bar_view_post_detail_activity)
-    ProgressBar mProgressBar;
+    @BindView(R.id.swipe_refresh_layout_view_post_detail_activity)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view_view_post_detail)
     RecyclerView mRecyclerView;
     @BindView(R.id.fetch_post_info_linear_layout_view_post_detail_activity)
@@ -310,6 +311,13 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 }
             });
         }
+
+        mSwipeRefreshLayout.setOnRefreshListener(() -> refresh(true, true));
+
+        TypedValue typedValue = new TypedValue();
+        getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(typedValue.data);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
 
         mSmoothScroller = new LinearSmoothScroller(this) {
             @Override
@@ -510,7 +518,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
     private void fetchPostAndCommentsById(String subredditId) {
         mFetchPostInfoLinearLayout.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
+        mSwipeRefreshLayout.setRefreshing(true);
         mGlide.clear(mFetchPostInfoImageView);
 
         String sortType = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value).toLowerCase();
@@ -537,7 +545,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         postAndComments.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                mProgressBar.setVisibility(View.GONE);
+                mSwipeRefreshLayout.setRefreshing(false);
 
                 if (response.isSuccessful()) {
                     ParsePost.parsePost(response.body(), mLocale, new ParsePost.ParsePostListener() {
@@ -860,6 +868,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
                                     mMenu.findItem(R.id.action_view_crosspost_parent_view_post_detail_activity).setVisible(mPost.getCrosspostParentId() != null);
                                 }
+                                mSwipeRefreshLayout.setRefreshing(false);
                             }
 
                             @Override
@@ -873,7 +882,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     }
 
     private void showErrorView(String subredditId) {
-        mProgressBar.setVisibility(View.GONE);
+        mSwipeRefreshLayout.setRefreshing(false);
         mFetchPostInfoLinearLayout.setVisibility(View.VISIBLE);
         mFetchPostInfoLinearLayout.setOnClickListener(view -> fetchPostAndCommentsById(subredditId));
         mFetchPostInfoTextView.setText(R.string.load_post_error);
