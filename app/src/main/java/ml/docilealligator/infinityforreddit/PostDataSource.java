@@ -196,9 +196,9 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                             public void onParsePostSuccess(Post post) {
                                 ArrayList<Post> singlePostList = new ArrayList<>();
                                 singlePostList.add(post);
+                                callback.onResult(singlePostList, null, null);
                                 hasPostLiveData.postValue(true);
                                 initialLoadStateLiveData.postValue(NetworkState.LOADED);
-                                callback.onResult(singlePostList, null, null);
                             }
 
                             @Override
@@ -219,16 +219,17 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                         }
 
                                         if (newPosts.size() != 0) {
+                                            callback.onResult(newPosts, null, nextPageKey);
                                             hasPostLiveData.postValue(true);
                                         } else if (nextPageKey != null) {
                                             loadBestPostsInitial(callback, nextPageKey);
                                             return;
                                         } else {
+                                            callback.onResult(newPosts, null, nextPageKey);
                                             hasPostLiveData.postValue(false);
                                         }
 
                                         initialLoadStateLiveData.postValue(NetworkState.LOADED);
-                                        callback.onResult(newPosts, null, nextPageKey);
                                     }
 
                                     @Override
@@ -275,8 +276,8 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                     if (newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
                                         loadBestPostsAfter(params, callback, lastItem);
                                     } else {
-                                        paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                                         callback.onResult(newPosts, lastItem);
+                                        paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                                     }
                                 }
 
@@ -327,9 +328,9 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                             public void onParsePostSuccess(Post post) {
                                 ArrayList<Post> singlePostList = new ArrayList<>();
                                 singlePostList.add(post);
+                                callback.onResult(singlePostList, null, null);
                                 hasPostLiveData.postValue(true);
                                 initialLoadStateLiveData.postValue(NetworkState.LOADED);
-                                callback.onResult(singlePostList, null, null);
                             }
 
                             @Override
@@ -350,16 +351,17 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                         }
 
                                         if (newPosts.size() != 0) {
+                                            callback.onResult(newPosts, null, nextPageKey);
                                             hasPostLiveData.postValue(true);
                                         } else if (nextPageKey != null) {
                                             loadSubredditPostsInitial(callback, nextPageKey);
                                             return;
                                         } else {
+                                            callback.onResult(newPosts, null, nextPageKey);
                                             hasPostLiveData.postValue(false);
                                         }
 
                                         initialLoadStateLiveData.postValue(NetworkState.LOADED);
-                                        callback.onResult(newPosts, null, nextPageKey);
                                     }
 
                                     @Override
@@ -417,8 +419,8 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                     if (newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
                                         loadSubredditPostsAfter(params, callback, lastItem);
                                     } else {
-                                        paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                                         callback.onResult(newPosts, lastItem);
+                                        paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                                     }
                                 }
 
@@ -476,16 +478,17 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                     }
 
                                     if (newPosts.size() != 0) {
+                                        callback.onResult(newPosts, null, nextPageKey);
                                         hasPostLiveData.postValue(true);
                                     } else if (nextPageKey != null) {
                                         loadUserPostsInitial(callback, nextPageKey);
                                         return;
                                     } else {
+                                        callback.onResult(newPosts, null, nextPageKey);
                                         hasPostLiveData.postValue(false);
                                     }
 
                                     initialLoadStateLiveData.postValue(NetworkState.LOADED);
-                                    callback.onResult(newPosts, null, nextPageKey);
                                 }
 
                                 @Override
@@ -539,8 +542,8 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                     if (newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
                                         loadUserPostsAfter(params, callback, lastItem);
                                     } else {
-                                        paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                                         callback.onResult(newPosts, lastItem);
+                                        paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                                     }
                                 }
 
@@ -620,16 +623,17 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                     }
 
                                     if (newPosts.size() != 0) {
+                                        callback.onResult(newPosts, null, nextPageKey);
                                         hasPostLiveData.postValue(true);
                                     } else if (nextPageKey != null) {
                                         loadSearchPostsInitial(callback, nextPageKey);
                                         return;
                                     } else {
+                                        callback.onResult(newPosts, null, nextPageKey);
                                         hasPostLiveData.postValue(false);
                                     }
 
                                     initialLoadStateLiveData.postValue(NetworkState.LOADED);
-                                    callback.onResult(newPosts, null, nextPageKey);
                                 }
 
                                 @Override
@@ -703,8 +707,8 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                     if (newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
                                         loadSearchPostsAfter(params, callback, lastItem);
                                     } else {
-                                        paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                                         callback.onResult(newPosts, lastItem);
+                                        paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                                     }
                                 }
 

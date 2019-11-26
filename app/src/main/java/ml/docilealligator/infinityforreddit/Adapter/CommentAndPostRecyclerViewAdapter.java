@@ -258,7 +258,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder.getItemViewType() == VIEW_TYPE_POST_DETAIL) {
+        if (holder instanceof PostDetailViewHolder) {
             ((PostDetailViewHolder) holder).mTitleTextView.setText(mPost.getTitle());
             if (mPost.getSubredditNamePrefixed().startsWith("u/")) {
                 if (mPost.getAuthorIconUrl() == null) {
@@ -583,7 +583,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             });
                 }
             });
-        } else if (holder.getItemViewType() == VIEW_TYPE_COMMENT) {
+        } else if (holder instanceof CommentViewHolder) {
             CommentData comment;
             if (mIsSingleCommentThreadMode) {
                 comment = mVisibleComments.get(holder.getAdapterPosition() - 2);
@@ -763,54 +763,48 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     return;
                 }
 
-                int commentPosition = mIsSingleCommentThreadMode ? holder.getAdapterPosition() - 2 : holder.getAdapterPosition() - 1;
-
-                int previousVoteType = mVisibleComments.get(commentPosition).getVoteType();
+                int previousVoteType = comment.getVoteType();
                 String newVoteType;
 
                 ((CommentViewHolder) holder).downVoteButton.clearColorFilter();
 
                 if (previousVoteType != CommentData.VOTE_TYPE_UPVOTE) {
                     //Not upvoted before
-                    mVisibleComments.get(commentPosition).setVoteType(CommentData.VOTE_TYPE_UPVOTE);
+                    comment.setVoteType(CommentData.VOTE_TYPE_UPVOTE);
                     newVoteType = RedditUtils.DIR_UPVOTE;
                     ((CommentViewHolder) holder).upVoteButton.setColorFilter(ContextCompat.getColor(mActivity, R.color.upvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                     ((CommentViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.upvoted));
                 } else {
                     //Upvoted before
-                    mVisibleComments.get(commentPosition).setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
+                    comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
                     newVoteType = RedditUtils.DIR_UNVOTE;
                     ((CommentViewHolder) holder).upVoteButton.clearColorFilter();
                     ((CommentViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
                 }
 
-                ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(mVisibleComments.get(commentPosition).getScore() + mVisibleComments.get(commentPosition).getVoteType()));
+                ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
 
                 VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                     @Override
                     public void onVoteThingSuccess(int position) {
                         if (newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
-                            if (commentPosition < mVisibleComments.size()) {
-                                mVisibleComments.get(commentPosition).setVoteType(CommentData.VOTE_TYPE_UPVOTE);
-                            }
+                            comment.setVoteType(CommentData.VOTE_TYPE_UPVOTE);
                             ((CommentViewHolder) holder).upVoteButton.setColorFilter(ContextCompat.getColor(mActivity, R.color.upvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                             ((CommentViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.upvoted));
                         } else {
-                            if (commentPosition < mVisibleComments.size()) {
-                                mVisibleComments.get(commentPosition).setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
-                            }
+                            comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
                             ((CommentViewHolder) holder).upVoteButton.clearColorFilter();
                             ((CommentViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
                         }
 
                         ((CommentViewHolder) holder).downVoteButton.clearColorFilter();
-                        ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(mVisibleComments.get(commentPosition).getScore() + mVisibleComments.get(commentPosition).getVoteType()));
+                        ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
                     }
 
                     @Override
                     public void onVoteThingFail(int position) {
                     }
-                }, mVisibleComments.get(commentPosition).getFullName(), newVoteType, holder.getAdapterPosition());
+                }, comment.getFullName(), newVoteType, holder.getAdapterPosition());
             });
 
             ((CommentViewHolder) holder).downVoteButton.setOnClickListener(view -> {
@@ -824,50 +818,48 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     return;
                 }
 
-                int commentPosition = mIsSingleCommentThreadMode ? holder.getAdapterPosition() - 2 : holder.getAdapterPosition() - 1;
-
-                int previousVoteType = mVisibleComments.get(commentPosition).getVoteType();
+                int previousVoteType = comment.getVoteType();
                 String newVoteType;
 
                 ((CommentViewHolder) holder).upVoteButton.clearColorFilter();
 
                 if (previousVoteType != CommentData.VOTE_TYPE_DOWNVOTE) {
                     //Not downvoted before
-                    mVisibleComments.get(commentPosition).setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
+                    comment.setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
                     newVoteType = RedditUtils.DIR_DOWNVOTE;
                     ((CommentViewHolder) holder).downVoteButton.setColorFilter(ContextCompat.getColor(mActivity, R.color.downvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                     ((CommentViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.downvoted));
                 } else {
                     //Downvoted before
-                    mVisibleComments.get(commentPosition).setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
+                    comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
                     newVoteType = RedditUtils.DIR_UNVOTE;
                     ((CommentViewHolder) holder).downVoteButton.clearColorFilter();
                     ((CommentViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
                 }
 
-                ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(mVisibleComments.get(commentPosition).getScore() + mVisibleComments.get(commentPosition).getVoteType()));
+                ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
 
                 VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                     @Override
                     public void onVoteThingSuccess(int position1) {
                         if (newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {
-                            mVisibleComments.get(commentPosition).setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
+                            comment.setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
                             ((CommentViewHolder) holder).downVoteButton.setColorFilter(ContextCompat.getColor(mActivity, R.color.downvoted), android.graphics.PorterDuff.Mode.SRC_IN);
                             ((CommentViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.downvoted));
                         } else {
-                            mVisibleComments.get(commentPosition).setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
+                            comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
                             ((CommentViewHolder) holder).downVoteButton.clearColorFilter();
                             ((CommentViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
                         }
 
                         ((CommentViewHolder) holder).upVoteButton.clearColorFilter();
-                        ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(mVisibleComments.get(commentPosition).getScore() + mVisibleComments.get(commentPosition).getVoteType()));
+                        ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
                     }
 
                     @Override
                     public void onVoteThingFail(int position1) {
                     }
-                }, mVisibleComments.get(commentPosition).getFullName(), newVoteType, holder.getAdapterPosition());
+                }, comment.getFullName(), newVoteType, holder.getAdapterPosition());
             });
 
             if (comment.isSaved()) {
@@ -916,11 +908,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             ((CommentViewHolder) holder).authorTextView.setOnClickListener(view -> {
                 Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
-                if (mIsSingleCommentThreadMode) {
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mVisibleComments.get(holder.getAdapterPosition() - 2).getAuthor());
-                } else {
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mVisibleComments.get(holder.getAdapterPosition() - 1).getAuthor());
-                }
+                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, comment.getAuthor());
                 mActivity.startActivity(intent);
             });
 
@@ -928,8 +916,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 try {
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setType("text/plain");
-                    String extraText = mIsSingleCommentThreadMode ? mVisibleComments.get(holder.getAdapterPosition() - 2).getPermalink()
-                            : mVisibleComments.get(holder.getAdapterPosition() - 1).getPermalink();
+                    String extraText = comment.getPermalink();
                     intent.putExtra(Intent.EXTRA_TEXT, extraText);
                     mActivity.startActivity(Intent.createChooser(intent, mActivity.getString(R.string.share)));
                 } catch (ActivityNotFoundException e) {
@@ -940,7 +927,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ((CommentViewHolder) holder).expandButton.setOnClickListener(view -> {
                 if (((CommentViewHolder) holder).expandButton.getVisibility() == View.VISIBLE) {
                     int commentPosition = mIsSingleCommentThreadMode ? holder.getAdapterPosition() - 2 : holder.getAdapterPosition() - 1;
-                    if(commentPosition < mVisibleComments.size()) {
+                    if(commentPosition >= 0 && commentPosition < mVisibleComments.size()) {
                         if (mVisibleComments.get(commentPosition).isExpanded()) {
                             collapseChildren(commentPosition);
                             ((CommentViewHolder) holder).expandButton.setImageResource(R.drawable.ic_expand_more_grey_24dp);
@@ -1419,20 +1406,22 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     }
 
     public void deleteComment(int position) {
-        if (mVisibleComments.get(position).hasReply()) {
-            mVisibleComments.get(position).setAuthor("[deleted]");
-            mVisibleComments.get(position).setCommentContent("[deleted]");
-            if (mIsSingleCommentThreadMode) {
-                notifyItemChanged(position + 2);
+        if (mVisibleComments != null && position >= 0 && position < mVisibleComments.size()) {
+            if (mVisibleComments.get(position).hasReply()) {
+                mVisibleComments.get(position).setAuthor("[deleted]");
+                mVisibleComments.get(position).setCommentContent("[deleted]");
+                if (mIsSingleCommentThreadMode) {
+                    notifyItemChanged(position + 2);
+                } else {
+                    notifyItemChanged(position + 1);
+                }
             } else {
-                notifyItemChanged(position + 1);
-            }
-        } else {
-            mVisibleComments.remove(position);
-            if (mIsSingleCommentThreadMode) {
-                notifyItemRemoved(position + 2);
-            } else {
-                notifyItemRemoved(position + 1);
+                mVisibleComments.remove(position);
+                if (mIsSingleCommentThreadMode) {
+                    notifyItemRemoved(position + 2);
+                } else {
+                    notifyItemRemoved(position + 1);
+                }
             }
         }
     }
@@ -1448,7 +1437,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     public int getNextParentCommentPosition(int currentPosition) {
         if (mVisibleComments != null && !mVisibleComments.isEmpty()) {
             if (mIsSingleCommentThreadMode) {
-                for (int i = currentPosition + 1; i - 2 < mVisibleComments.size(); i++) {
+                for (int i = currentPosition + 1; i - 2 < mVisibleComments.size() && i - 2 >= 0; i++) {
                     if (mVisibleComments.get(i - 2).getDepth() == 0) {
                         return i;
                     }

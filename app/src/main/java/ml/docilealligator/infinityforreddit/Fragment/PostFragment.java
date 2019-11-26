@@ -476,9 +476,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         mPostRecyclerView.setAdapter(mAdapter);
 
         mPostViewModel = new ViewModelProvider(this, factory).get(PostViewModel.class);
-        mPostViewModel.getPosts().observe(this, posts -> {
-            mAdapter.submitList(posts);
-        });
+        mPostViewModel.getPosts().observe(this, posts -> mAdapter.submitList(posts));
 
         mPostViewModel.hasPost().observe(this, hasPost -> {
             this.hasPost = hasPost;
@@ -542,14 +540,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void refresh() {
+        mPostViewModel.refresh();
         if (isInLazyMode) {
             stopLazyMode();
         }
 
-        mAdapter.setNetworkState(null);
+        mAdapter.removeFooter();
         mFetchPostInfoLinearLayout.setVisibility(View.GONE);
         hasPost = false;
-        mPostViewModel.refresh();
     }
 
     private void showErrorView(int stringResId) {

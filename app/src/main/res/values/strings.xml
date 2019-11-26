@@ -51,6 +51,7 @@
 
     <string name="tap_to_retry">Error loading image. Tap to retry.</string>
     <string name="load_posts_error">Error loading posts.\nTap to retry.</string>
+    <string name="load_more_posts_error">Error loading posts.</string>
     <string name="load_post_error">Error loading this post.\nTap to retry.</string>
     <string name="search_subreddits_error">Error searching subreddits.\nTap to retry.</string>
     <string name="search_users_error">Error searching users.\nTap to retry.</string>

@@ -1372,13 +1372,21 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         boolean newExtraRow = hasExtraRow();
         if (previousExtraRow != newExtraRow) {
             if (previousExtraRow) {
-                notifyItemRemoved(super.getItemCount());
+                notifyItemRemoved(getItemCount() - 1);
             } else {
                 notifyItemInserted(super.getItemCount());
             }
         } else if (newExtraRow && !previousState.equals(newNetworkState)) {
             notifyItemChanged(getItemCount() - 1);
         }
+    }
+
+    public void removeFooter() {
+        if (hasExtraRow()) {
+            notifyItemRemoved(getItemCount() -  1);
+        }
+
+        networkState = null;
     }
 
     @Override
@@ -1609,7 +1617,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         ErrorViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            errorTextView.setText(R.string.load_posts_error);
+            errorTextView.setText(R.string.load_more_posts_error);
             retryButton.setOnClickListener(view -> mCallback.retryLoadingMore());
         }
     }
