@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -76,6 +77,7 @@ public class CommentActivity extends BaseActivity {
     private String parentFullname;
     private int parentDepth;
     private int parentPosition;
+    private boolean isSubmitting = false;
     private boolean isReplying;
 
     @Override
@@ -177,53 +179,70 @@ public class CommentActivity extends BaseActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                onBackPressed();
                 return true;
             case R.id.action_send_comment_activity:
-                if (commentEditText.getText() == null || commentEditText.getText().toString().equals("")) {
-                    Snackbar.make(coordinatorLayout, R.string.comment_content_required, Snackbar.LENGTH_SHORT).show();
-                    return true;
+                if (!isSubmitting) {
+                    isSubmitting = true;
+                    if (commentEditText.getText() == null || commentEditText.getText().toString().equals("")) {
+                        Snackbar.make(coordinatorLayout, R.string.comment_content_required, Snackbar.LENGTH_SHORT).show();
+                        return true;
+                    }
+
+                    item.setEnabled(false);
+                    item.getIcon().setAlpha(130);
+                    Snackbar sendingSnackbar = Snackbar.make(coordinatorLayout, R.string.sending_comment, Snackbar.LENGTH_INDEFINITE);
+                    sendingSnackbar.show();
+
+                    SendComment.sendComment(commentEditText.getText().toString(), parentFullname, parentDepth,
+                            getResources().getConfiguration().locale, mOauthRetrofit,
+                            mAccessToken,
+                            new SendComment.SendCommentListener() {
+                                @Override
+                                public void sendCommentSuccess(CommentData commentData) {
+                                    isSubmitting = false;
+                                    item.setEnabled(true);
+                                    item.getIcon().setAlpha(255);
+                                    Toast.makeText(CommentActivity.this, R.string.send_comment_success, Toast.LENGTH_SHORT).show();
+                                    Intent returnIntent = new Intent();
+                                    returnIntent.putExtra(EXTRA_COMMENT_DATA_KEY, commentData);
+                                    returnIntent.putExtra(EXTRA_PARENT_FULLNAME_KEY, parentFullname);
+                                    if (isReplying) {
+                                        returnIntent.putExtra(EXTRA_PARENT_POSITION_KEY, parentPosition);
+                                    }
+                                    setResult(RESULT_OK, returnIntent);
+                                    finish();
+                                }
+
+                                @Override
+                                public void sendCommentFailed(@Nullable String errorMessage) {
+                                    isSubmitting = false;
+                                    sendingSnackbar.dismiss();
+                                    item.setEnabled(true);
+                                    item.getIcon().setAlpha(255);
+
+                                    if (errorMessage == null) {
+                                        Snackbar.make(coordinatorLayout, R.string.send_comment_failed, Snackbar.LENGTH_SHORT).show();
+                                    } else {
+                                        Snackbar.make(coordinatorLayout, errorMessage, Snackbar.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
                 }
-
-                item.setEnabled(false);
-                item.getIcon().setAlpha(130);
-                Snackbar sendingSnackbar = Snackbar.make(coordinatorLayout, R.string.sending_comment, Snackbar.LENGTH_INDEFINITE);
-                sendingSnackbar.show();
-
-                SendComment.sendComment(commentEditText.getText().toString(), parentFullname, parentDepth,
-                        getResources().getConfiguration().locale, mOauthRetrofit,
-                        mAccessToken,
-                        new SendComment.SendCommentListener() {
-                            @Override
-                            public void sendCommentSuccess(CommentData commentData) {
-                                Toast.makeText(CommentActivity.this, R.string.send_comment_success, Toast.LENGTH_SHORT).show();
-                                Intent returnIntent = new Intent();
-                                returnIntent.putExtra(EXTRA_COMMENT_DATA_KEY, commentData);
-                                returnIntent.putExtra(EXTRA_PARENT_FULLNAME_KEY, parentFullname);
-                                if (isReplying) {
-                                    returnIntent.putExtra(EXTRA_PARENT_POSITION_KEY, parentPosition);
-                                }
-                                setResult(RESULT_OK, returnIntent);
-                                finish();
-                            }
-
-                            @Override
-                            public void sendCommentFailed(@Nullable String errorMessage) {
-                                sendingSnackbar.dismiss();
-                                item.setEnabled(true);
-                                item.getIcon().setAlpha(255);
-
-                                if (errorMessage == null) {
-                                    Snackbar.make(coordinatorLayout, R.string.send_comment_failed, Snackbar.LENGTH_SHORT).show();
-                                } else {
-                                    Snackbar.make(coordinatorLayout, errorMessage, Snackbar.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
                 return true;
         }
 
         return false;
+    }
+
+    private void promptAlertDialog(int titleResId, int messageResId) {
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                .setTitle(titleResId)
+                .setMessage(messageResId)
+                .setPositiveButton(R.string.yes, (dialogInterface, i)
+                        -> finish())
+                .setNegativeButton(R.string.no, null)
+                .show();
     }
 
     @Override
@@ -231,6 +250,19 @@ public class CommentActivity extends BaseActivity {
         super.onSaveInstanceState(outState);
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isSubmitting) {
+            promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_edit_comment_detail);
+        } else {
+            if (commentEditText.getText().toString().equals("")) {
+                finish();
+            } else {
+                promptAlertDialog(R.string.discard, R.string.discard_detail);
+            }
+        }
     }
 
     @Override

@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -61,6 +62,7 @@ public class EditCommentActivity extends BaseActivity {
     SharedPreferences mSharedPreferences;
     private String mFullName;
     private String mAccessToken;
+    private String mCommentContent;
     private boolean isSubmitting = false;
 
     @Override
@@ -80,7 +82,8 @@ public class EditCommentActivity extends BaseActivity {
 
         mFullName = getIntent().getStringExtra(EXTRA_FULLNAME);
         mAccessToken = getIntent().getStringExtra(EXTRA_ACCESS_TOKEN);
-        contentEditText.setText(getIntent().getStringExtra(EXTRA_CONTENT));
+        mCommentContent = getIntent().getStringExtra(EXTRA_CONTENT);
+        contentEditText.setText(mCommentContent);
 
         contentEditText.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -153,10 +156,33 @@ public class EditCommentActivity extends BaseActivity {
             }
             return true;
         } else if (item.getItemId() == android.R.id.home) {
-            finish();
+            onBackPressed();
             return true;
         }
         return false;
+    }
+
+    private void promptAlertDialog(int titleResId, int messageResId) {
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                .setTitle(titleResId)
+                .setMessage(messageResId)
+                .setPositiveButton(R.string.yes, (dialogInterface, i)
+                        -> finish())
+                .setNegativeButton(R.string.no, null)
+                .show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isSubmitting) {
+            promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_edit_comment_detail);
+        } else {
+            if (contentEditText.getText().toString().equals(mCommentContent)) {
+                finish();
+            } else {
+                promptAlertDialog(R.string.discard, R.string.discard_detail);
+            }
+        }
     }
 
     @Override

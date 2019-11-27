@@ -318,11 +318,11 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
         switch (item.getItemId()) {
             case android.R.id.home:
                 if (isPosting) {
-                    promptAlertDialog(R.string.exit_when_submit_post, R.string.exit_when_submit_post_detail);
+                    promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
                     return true;
                 } else {
                     if (!titleEditText.getText().toString().equals("") || !contentEditText.getText().toString().equals("")) {
-                        promptAlertDialog(R.string.discard_post, R.string.discard_post_detail);
+                        promptAlertDialog(R.string.discard, R.string.discard_detail);
                         return true;
                     }
                 }
@@ -379,10 +379,10 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
     @Override
     public void onBackPressed() {
         if (isPosting) {
-            promptAlertDialog(R.string.exit_when_submit_post, R.string.exit_when_submit_post_detail);
+            promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
         } else {
             if (!titleEditText.getText().toString().equals("") || !contentEditText.getText().toString().equals("")) {
-                promptAlertDialog(R.string.discard_post, R.string.discard_post_detail);
+                promptAlertDialog(R.string.discard, R.string.discard_detail);
             } else {
                 finish();
             }

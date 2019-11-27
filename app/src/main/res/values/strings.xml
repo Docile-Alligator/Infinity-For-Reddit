@@ -116,7 +116,7 @@
     <string name="lazy_mode_stop">Lazy Mode stopped</string>
 
     <string name="write_comment_hint">Your interesting thought here</string>
-    <string name="comment_content_required">Where is your interesting thought</string>
+    <string name="comment_content_required">Where is your interesting thought?</string>
     <string name="sending_comment">Sending</string>
     <string name="send_comment_success">Comment sent</string>
     <string name="send_comment_failed">Could not send this comment</string>
@@ -330,10 +330,12 @@
 
     <string name="no_link_available">Cannot get the link</string>
 
-    <string name="exit_when_submit_post">Leave?</string>
+    <string name="exit_when_submit">Leave?</string>
     <string name="exit_when_submit_post_detail">The post will still be submitted even if you leave here.</string>
-    <string name="discard_post">Discard?</string>
-    <string name="discard_post_detail">All the draft will NOT be saved.</string>
+    <string name="exit_when_edit_post_detail">The post may still be submitted even if you leave here.</string>
+    <string name="exit_when_edit_comment_detail">The comment may still be submitted even if you leave here.</string>
+    <string name="discard">Discard?</string>
+    <string name="discard_detail">All the draft will NOT be saved.</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
