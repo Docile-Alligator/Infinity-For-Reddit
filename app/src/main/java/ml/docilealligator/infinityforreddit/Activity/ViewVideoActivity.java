@@ -4,6 +4,8 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -14,6 +16,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -44,14 +47,17 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import java.io.File;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
 
 public class ViewVideoActivity extends AppCompatActivity {
 
-    public static final String SUBREDDIT_KEY = "SK";
-    public static final String ID_KEY = "IK";
+    public static final String EXTRA_VIDEO_DOWNLOAD_URL = "EVDU";
+    public static final String EXTRA_SUBREDDIT = "ES";
+    public static final String EXTRA_ID = "EI";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
     @BindView(R.id.relative_layout_view_video_activity)
     RelativeLayout relativeLayout;
@@ -65,6 +71,8 @@ public class ViewVideoActivity extends AppCompatActivity {
     private Menu mMenu;
     private Swipe swipe;
 
+    private String videoDownloadUrl;
+    private String videoFileName;
     private boolean wasPlaying;
     private boolean isDownloading = false;
     private float totalLengthY = 0.0f;
@@ -101,6 +109,8 @@ public class ViewVideoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         mVideoUri = intent.getData();
+        videoDownloadUrl = intent.getStringExtra(EXTRA_VIDEO_DOWNLOAD_URL);
+        videoFileName = intent.getStringExtra(EXTRA_SUBREDDIT) + "-" + intent.getStringExtra(EXTRA_ID) + ".mp4";
 
         final float pxHeight = getResources().getDisplayMetrics().heightPixels;
 
@@ -285,12 +295,12 @@ public class ViewVideoActivity extends AppCompatActivity {
         wasPlaying = true;
     }
 
-    /*@Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_video, menu);
         mMenu = menu;
         return true;
-    }*/
+    }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -364,6 +374,48 @@ public class ViewVideoActivity extends AppCompatActivity {
 
     private void download() {
         isDownloading = false;
+
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(videoDownloadUrl));
+        request.setTitle(videoFileName);
+
+        request.allowScanningByMediaScanner();
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+        //Android Q support
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, videoFileName);
+        } else {
+            String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+            File directory = new File(path + "/Infinity/");
+            boolean saveToInfinityFolder = true;
+            if (!directory.exists()) {
+                if (!directory.mkdir()) {
+                    saveToInfinityFolder = false;
+                }
+            } else {
+                if (directory.isFile()) {
+                    if (!(directory.delete() && directory.mkdir())) {
+                        saveToInfinityFolder = false;
+                    }
+                }
+            }
+
+            if (saveToInfinityFolder) {
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES + "/Infinity/", videoFileName);
+            } else {
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, videoFileName);
+            }
+        }
+
+        DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+
+        if (manager == null) {
+            Toast.makeText(this, R.string.download_failed, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        manager.enqueue(request);
+        Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 
     @Override

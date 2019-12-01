@@ -21,6 +21,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
+
         <activity
             android:name=".Activity.ViewGIFActivity"
             android:parentActivityName=".Activity.MainActivity"

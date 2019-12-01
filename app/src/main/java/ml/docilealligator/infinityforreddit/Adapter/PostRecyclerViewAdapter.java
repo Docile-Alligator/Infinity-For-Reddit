@@ -473,8 +473,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         ((PostViewHolder) holder).imageView.setOnClickListener(view -> {
                             Intent intent = new Intent(mContext, ViewVideoActivity.class);
                             intent.setData(videoUri);
-                            intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, subredditName);
-                            intent.putExtra(ViewVideoActivity.ID_KEY, fullName);
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
+                            intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, subredditName);
+                            intent.putExtra(ViewVideoActivity.EXTRA_ID, fullName);
                             mContext.startActivity(intent);
                         });
                         break;
@@ -1021,8 +1022,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         ((PostCompactViewHolder) holder).imageView.setOnClickListener(view -> {
                             Intent intent = new Intent(mContext, ViewVideoActivity.class);
                             intent.setData(videoUri);
-                            intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, subredditName);
-                            intent.putExtra(ViewVideoActivity.ID_KEY, fullName);
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
+                            intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, subredditName);
+                            intent.putExtra(ViewVideoActivity.EXTRA_ID, fullName);
                             mContext.startActivity(intent);
                         });
                         break;

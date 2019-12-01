@@ -54,8 +54,8 @@ import ml.docilealligator.infinityforreddit.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.FontStyle;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.TitleFontStyle;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
 public class ViewImageActivity extends AppCompatActivity {
 

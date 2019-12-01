@@ -230,7 +230,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
         };
 
-        mSwipeRefreshLayout.setOnRefreshListener(() -> mPostViewModel.refresh());
+        mSwipeRefreshLayout.setOnRefreshListener(this::refresh);
 
         TypedValue typedValue = new TypedValue();
         activity.getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
@@ -540,14 +540,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void refresh() {
-        mPostViewModel.refresh();
-        if (isInLazyMode) {
-            stopLazyMode();
-        }
-
         mAdapter.removeFooter();
         mFetchPostInfoLinearLayout.setVisibility(View.GONE);
         hasPost = false;
+        if (isInLazyMode) {
+            stopLazyMode();
+        }
+        mPostViewModel.refresh();
     }
 
     private void showErrorView(int stringResId) {

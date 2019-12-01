@@ -474,8 +474,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     ((PostDetailViewHolder) holder).mImageView.setOnClickListener(view -> {
                         Intent intent = new Intent(mActivity, ViewVideoActivity.class);
                         intent.setData(videoUri);
-                        intent.putExtra(ViewVideoActivity.SUBREDDIT_KEY, mPost.getSubredditName());
-                        intent.putExtra(ViewVideoActivity.ID_KEY, mPost.getId());
+                        intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
+                        intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, mPost.getSubredditName());
+                        intent.putExtra(ViewVideoActivity.EXTRA_ID, mPost.getId());
                         mActivity.startActivity(intent);
                     });
                     break;

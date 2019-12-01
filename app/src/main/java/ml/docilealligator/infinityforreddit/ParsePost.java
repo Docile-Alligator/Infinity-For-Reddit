@@ -161,6 +161,7 @@ public class ParsePost {
                 JSONObject redditVideoObject = data.getJSONObject(JSONUtils.MEDIA_KEY).getJSONObject(JSONUtils.REDDIT_VIDEO_KEY);
                 int postType = Post.VIDEO_TYPE;
                 String videoUrl = Html.fromHtml(redditVideoObject.getString(JSONUtils.HLS_URL_KEY)).toString();
+                String videoDownloadUrl = redditVideoObject.getString(JSONUtils.FALLBACK_URL_KEY);
 
                 post = new Post(id, fullName, subredditName, subredditNamePrefixed, author, formattedPostTime, postTimeMillis,
                         title, previewUrl, thumbnailPreviewUrl, permalink, score, postType, voteType,
@@ -169,12 +170,15 @@ public class ParsePost {
                 post.setPreviewWidth(previewWidth);
                 post.setPreviewHeight(previewHeight);
                 post.setVideoUrl(videoUrl);
+                post.setVideoDownloadUrl(videoDownloadUrl);
             } else if (data.has(JSONUtils.PREVIEW_KEY)) {
                 if (data.getJSONObject(JSONUtils.PREVIEW_KEY).has(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY)) {
                     //Gif video post (HLS)
                     int postType = Post.VIDEO_TYPE;
                     String videoUrl = Html.fromHtml(data.getJSONObject(JSONUtils.PREVIEW_KEY)
                             .getJSONObject(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY).getString(JSONUtils.HLS_URL_KEY)).toString();
+                    String videoDownloadUrl = data.getJSONObject(JSONUtils.PREVIEW_KEY)
+                            .getJSONObject(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY).getString(JSONUtils.FALLBACK_URL_KEY);
 
                     post = new Post(id, fullName, subredditName, subredditNamePrefixed, author,
                             formattedPostTime, postTimeMillis, title, previewUrl, thumbnailPreviewUrl, permalink, score,
@@ -183,6 +187,7 @@ public class ParsePost {
                     post.setPreviewWidth(previewWidth);
                     post.setPreviewHeight(previewHeight);
                     post.setVideoUrl(videoUrl);
+                    post.setVideoDownloadUrl(videoDownloadUrl);
                 } else {
                     if (url.endsWith("jpg") || url.endsWith("png")) {
                         //Image post

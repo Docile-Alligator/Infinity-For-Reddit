@@ -77,7 +77,6 @@ import ml.docilealligator.infinityforreddit.Fragment.PostLayoutBottomSheetFragme
 import ml.docilealligator.infinityforreddit.Fragment.PostTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SortTypeBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.ParseAndSaveAccountInfo;
 import ml.docilealligator.infinityforreddit.PostDataSource;
@@ -85,12 +84,12 @@ import ml.docilealligator.infinityforreddit.PullNotificationWorker;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.ReadMessage;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
@@ -1076,18 +1075,18 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (mAccessToken == null) {
                 switch (viewPager.getCurrentItem()) {
                     case 0:
-                        return ((FragmentCommunicator) popularPostFragment).startLazyMode();
+                        return popularPostFragment.startLazyMode();
                     case 1:
-                        return ((FragmentCommunicator) allPostFragment).startLazyMode();
+                        return allPostFragment.startLazyMode();
                 }
             } else {
                 switch (viewPager.getCurrentItem()) {
                     case 0:
-                        return ((FragmentCommunicator) frontPagePostFragment).startLazyMode();
+                        return frontPagePostFragment.startLazyMode();
                     case 1:
-                        return ((FragmentCommunicator) popularPostFragment).startLazyMode();
+                        return popularPostFragment.startLazyMode();
                     case 2:
-                        return ((FragmentCommunicator) allPostFragment).startLazyMode();
+                        return allPostFragment.startLazyMode();
                 }
             }
 
@@ -1098,22 +1097,22 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (mAccessToken == null) {
                 switch (getCurrentLazyModeFragmentPosition()) {
                     case 0:
-                        ((FragmentCommunicator) popularPostFragment).stopLazyMode();
+                        popularPostFragment.stopLazyMode();
                         break;
                     case 1:
-                        ((FragmentCommunicator) allPostFragment).stopLazyMode();
+                        allPostFragment.stopLazyMode();
                         break;
                 }
             } else {
                 switch (getCurrentLazyModeFragmentPosition()) {
                     case 0:
-                        ((FragmentCommunicator) frontPagePostFragment).stopLazyMode();
+                        frontPagePostFragment.stopLazyMode();
                         break;
                     case 1:
-                        ((FragmentCommunicator) popularPostFragment).stopLazyMode();
+                        popularPostFragment.stopLazyMode();
                         break;
                     case 2:
-                        ((FragmentCommunicator) allPostFragment).stopLazyMode();
+                        allPostFragment.stopLazyMode();
                         break;
                 }
             }
@@ -1123,22 +1122,22 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (mAccessToken == null) {
                 switch (getCurrentLazyModeFragmentPosition()) {
                     case 0:
-                        ((FragmentCommunicator) popularPostFragment).resumeLazyMode(false);
+                        popularPostFragment.resumeLazyMode(false);
                         break;
                     case 1:
-                        ((FragmentCommunicator) allPostFragment).resumeLazyMode(false);
+                        allPostFragment.resumeLazyMode(false);
                         break;
                 }
             } else {
                 switch (getCurrentLazyModeFragmentPosition()) {
                     case 0:
-                        ((FragmentCommunicator) frontPagePostFragment).resumeLazyMode(false);
+                        frontPagePostFragment.resumeLazyMode(false);
                         break;
                     case 1:
-                        ((FragmentCommunicator) popularPostFragment).resumeLazyMode(false);
+                        popularPostFragment.resumeLazyMode(false);
                         break;
                     case 2:
-                        ((FragmentCommunicator) allPostFragment).resumeLazyMode(false);
+                        allPostFragment.resumeLazyMode(false);
                         break;
                 }
             }
@@ -1148,21 +1147,21 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (mAccessToken == null) {
                 switch (getCurrentLazyModeFragmentPosition()) {
                     case 0:
-                        ((FragmentCommunicator) popularPostFragment).pauseLazyMode(false);
+                        popularPostFragment.pauseLazyMode(false);
                         break;
                     case 1:
-                        ((FragmentCommunicator) allPostFragment).pauseLazyMode(false);
+                        allPostFragment.pauseLazyMode(false);
                 }
             } else {
                 switch (getCurrentLazyModeFragmentPosition()) {
                     case 0:
-                        ((FragmentCommunicator) frontPagePostFragment).pauseLazyMode(false);
+                        frontPagePostFragment.pauseLazyMode(false);
                         break;
                     case 1:
-                        ((FragmentCommunicator) popularPostFragment).pauseLazyMode(false);
+                        popularPostFragment.pauseLazyMode(false);
                         break;
                     case 2:
-                        ((FragmentCommunicator) allPostFragment).pauseLazyMode(false);
+                        allPostFragment.pauseLazyMode(false);
                 }
             }
         }
@@ -1171,9 +1170,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (mAccessToken == null) {
                 if (!isInLazyMode) {
                     return -1;
-                } else if (popularPostFragment != null && ((FragmentCommunicator) popularPostFragment).isInLazyMode()) {
+                } else if (popularPostFragment != null && popularPostFragment.isInLazyMode()) {
                     return 0;
-                } else if (allPostFragment != null && ((FragmentCommunicator) allPostFragment).isInLazyMode()) {
+                } else if (allPostFragment != null && allPostFragment.isInLazyMode()) {
                     return 1;
                 } else {
                     return -1;
@@ -1181,11 +1180,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             } else {
                 if (!isInLazyMode) {
                     return -1;
-                } else if (frontPagePostFragment != null && ((FragmentCommunicator) frontPagePostFragment).isInLazyMode()) {
+                } else if (frontPagePostFragment != null && frontPagePostFragment.isInLazyMode()) {
                     return 0;
-                } else if (popularPostFragment != null && ((FragmentCommunicator) popularPostFragment).isInLazyMode()) {
+                } else if (popularPostFragment != null && popularPostFragment.isInLazyMode()) {
                     return 1;
-                } else if (allPostFragment != null && ((FragmentCommunicator) allPostFragment).isInLazyMode()) {
+                } else if (allPostFragment != null && allPostFragment.isInLazyMode()) {
                     return 2;
                 } else {
                     return -1;
@@ -1233,28 +1232,28 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (mAccessToken == null) {
                 if (viewPager.getCurrentItem() == 0) {
                     if (popularPostFragment != null) {
-                        ((FragmentCommunicator) popularPostFragment).refresh();
+                        popularPostFragment.refresh();
                     }
                 } else {
                     if (allPostFragment != null) {
-                        ((FragmentCommunicator) allPostFragment).refresh();
+                        allPostFragment.refresh();
                     }
                 }
             } else {
                 switch (viewPager.getCurrentItem()) {
                     case 0:
                         if (frontPagePostFragment != null) {
-                            ((FragmentCommunicator) frontPagePostFragment).refresh();
+                            frontPagePostFragment.refresh();
                         }
                         break;
                     case 1:
                         if (popularPostFragment != null) {
-                            ((FragmentCommunicator) popularPostFragment).refresh();
+                            popularPostFragment.refresh();
                         }
                         break;
                     case 2:
                         if (allPostFragment != null) {
-                            ((FragmentCommunicator) allPostFragment).refresh();
+                            allPostFragment.refresh();
                         }
                 }
             }
@@ -1277,12 +1276,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 if (viewPager.getCurrentItem() == 0) {
                     if (popularPostFragment != null) {
                         mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_POPULAR_POST, postLayout).apply();
-                        ((FragmentCommunicator) popularPostFragment).changePostLayout(postLayout);
+                        popularPostFragment.changePostLayout(postLayout);
                     }
                 } else {
                     if (allPostFragment != null) {
                         mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_ALL_POST, postLayout).apply();
-                        ((FragmentCommunicator) allPostFragment).changePostLayout(postLayout);
+                        allPostFragment.changePostLayout(postLayout);
                     }
                 }
             } else {
@@ -1290,19 +1289,19 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     case 0:
                         if (frontPagePostFragment != null) {
                             mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, postLayout).apply();
-                            ((FragmentCommunicator) frontPagePostFragment).changePostLayout(postLayout);
+                            frontPagePostFragment.changePostLayout(postLayout);
                         }
                         break;
                     case 1:
                         if (popularPostFragment != null) {
                             mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_POPULAR_POST, postLayout).apply();
-                            ((FragmentCommunicator) popularPostFragment).changePostLayout(postLayout);
+                            popularPostFragment.changePostLayout(postLayout);
                         }
                         break;
                     case 2:
                         if (allPostFragment != null) {
                             mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_ALL_POST, postLayout).apply();
-                            ((FragmentCommunicator) allPostFragment).changePostLayout(postLayout);
+                            allPostFragment.changePostLayout(postLayout);
                         }
                 }
             }

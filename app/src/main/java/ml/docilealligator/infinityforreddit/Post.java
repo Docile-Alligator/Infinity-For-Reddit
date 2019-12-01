@@ -44,6 +44,7 @@ public class Post implements Parcelable {
     private String thumbnailPreviewUrl;
     private String url;
     private String videoUrl;
+    private String videoDownloadUrl;
     private String permalink;
     private String flair;
     private long postTimeMillis;
@@ -181,6 +182,7 @@ public class Post implements Parcelable {
         thumbnailPreviewUrl = in.readString();
         url = in.readString();
         videoUrl = in.readString();
+        videoDownloadUrl = in.readString();
         permalink = in.readString();
         flair = in.readString();
         score = in.readInt();
@@ -291,6 +293,14 @@ public class Post implements Parcelable {
 
     public void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
+    }
+
+    public String getVideoDownloadUrl() {
+        return videoDownloadUrl;
+    }
+
+    public void setVideoDownloadUrl(String videoDownloadUrl) {
+        this.videoDownloadUrl = videoDownloadUrl;
     }
 
     public String getPermalink() {
@@ -433,6 +443,7 @@ public class Post implements Parcelable {
         parcel.writeString(thumbnailPreviewUrl);
         parcel.writeString(url);
         parcel.writeString(videoUrl);
+        parcel.writeString(videoDownloadUrl);
         parcel.writeString(permalink);
         parcel.writeString(flair);
         parcel.writeInt(score);
