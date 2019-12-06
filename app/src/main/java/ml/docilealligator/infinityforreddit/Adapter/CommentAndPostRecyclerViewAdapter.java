@@ -917,8 +917,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 try {
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setType("text/plain");
-                    String extraText = comment.getPermalink();
-                    intent.putExtra(Intent.EXTRA_TEXT, extraText);
+                    intent.putExtra(Intent.EXTRA_TEXT, comment.getPermalink());
                     mActivity.startActivity(Intent.createChooser(intent, mActivity.getString(R.string.share)));
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(mActivity, R.string.no_activity_found_for_share, Toast.LENGTH_SHORT).show();
@@ -1623,8 +1622,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 try {
                     Intent intent = new Intent(Intent.ACTION_SEND);
                     intent.setType("text/plain");
-                    String extraText = mPost.getTitle() + "\n" + mPost.getPermalink();
-                    intent.putExtra(Intent.EXTRA_TEXT, extraText);
+                    intent.putExtra(Intent.EXTRA_TEXT, mPost.getPermalink());
                     mActivity.startActivity(Intent.createChooser(intent, mActivity.getString(R.string.share)));
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(mActivity, R.string.no_activity_found_for_share, Toast.LENGTH_SHORT).show();

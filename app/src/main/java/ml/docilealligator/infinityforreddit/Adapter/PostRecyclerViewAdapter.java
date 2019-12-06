@@ -710,8 +710,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     try {
                         Intent intent = new Intent(Intent.ACTION_SEND);
                         intent.setType("text/plain");
-                        String extraText = title + "\n" + permalink;
-                        intent.putExtra(Intent.EXTRA_TEXT, extraText);
+                        intent.putExtra(Intent.EXTRA_TEXT, permalink);
                         mContext.startActivity(Intent.createChooser(intent, mContext.getString(R.string.share)));
                     } catch (ActivityNotFoundException e) {
                         Toast.makeText(mContext, R.string.no_activity_found_for_share, Toast.LENGTH_SHORT).show();
@@ -1255,8 +1254,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     try {
                         Intent intent = new Intent(Intent.ACTION_SEND);
                         intent.setType("text/plain");
-                        String extraText = title + "\n" + permalink;
-                        intent.putExtra(Intent.EXTRA_TEXT, extraText);
+                        intent.putExtra(Intent.EXTRA_TEXT, permalink);
                         mContext.startActivity(Intent.createChooser(intent, mContext.getString(R.string.share)));
                     } catch (ActivityNotFoundException e) {
                         Toast.makeText(mContext, R.string.no_activity_found_for_share, Toast.LENGTH_SHORT).show();

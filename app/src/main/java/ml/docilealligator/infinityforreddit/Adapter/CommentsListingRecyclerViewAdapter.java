@@ -204,8 +204,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     try {
                         Intent intent = new Intent(Intent.ACTION_SEND);
                         intent.setType("text/plain");
-                        String extraText = comment.getPermalink();
-                        intent.putExtra(Intent.EXTRA_TEXT, extraText);
+                        intent.putExtra(Intent.EXTRA_TEXT, comment.getPermalink());
                         mContext.startActivity(Intent.createChooser(intent, mContext.getString(R.string.share)));
                     } catch (ActivityNotFoundException e) {
                         Toast.makeText(mContext, R.string.no_activity_found_for_share, Toast.LENGTH_SHORT).show();
