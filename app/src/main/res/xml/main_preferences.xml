@@ -46,6 +46,11 @@
         app:key="volume_keys_navigate_comments"
         app:title="@string/settings_volume_keys_navigate_comments_title" />
 
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="volume_keys_navigate_posts"
+        app:title="@string/settings_volume_keys_navigate_posts_title" />
+
     <Preference
         app:title="@string/settings_font_size_title"
         app:icon="@drawable/ic_font_size_24dp"

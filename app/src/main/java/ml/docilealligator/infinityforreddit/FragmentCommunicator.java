@@ -3,6 +3,8 @@ package ml.docilealligator.infinityforreddit;
 public interface FragmentCommunicator {
     void refresh();
 
+    default boolean handleKeyDown(int keyCode) { return false; }
+
     default void changeNSFW(boolean nsfw) {
     }
 

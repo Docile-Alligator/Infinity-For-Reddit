@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -320,6 +321,11 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
             postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return ((FragmentCommunicator)(mFragment)).handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
     }
 
     @Override

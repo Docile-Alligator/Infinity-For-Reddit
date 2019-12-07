@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,6 +122,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private CountDownTimer resumeLazyModeCountDownTimer;
     private float lazyModeInterval;
     private int postLayout;
+    private boolean mIsSmoothScrolling = false;
 
     public PostFragment() {
         // Required empty public constructor
@@ -135,6 +137,32 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (isInLazyMode && isLazyModePaused) {
             resumeLazyMode(false);
         }
+    }
+
+    private boolean scrollPostsByCount(int count) {
+        mIsSmoothScrolling = true;
+        if (mLinearLayoutManager != null) {
+            int pos = mLinearLayoutManager.findFirstVisibleItemPosition();
+            int targetPosition = pos + count;
+            mLinearLayoutManager.scrollToPositionWithOffset(targetPosition, 0);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean handleKeyDown(int keyCode) {
+        boolean volumeKeysNavigatePosts = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOLUME_KEYS_NAVIGATE_POSTS, false);
+        if (volumeKeysNavigatePosts) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_VOLUME_UP:
+                    return scrollPostsByCount(-1);
+                case KeyEvent.KEYCODE_VOLUME_DOWN:
+                    return scrollPostsByCount(1);
+            }
+        }
+        return false;
     }
 
     @Override
@@ -159,6 +187,16 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 return LinearSmoothScroller.SNAP_TO_START;
             }
         };
+
+        mPostRecyclerView.clearOnScrollListeners();
+        mPostRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    mIsSmoothScrolling = false;
+                }
+            }
+        });
 
         window = activity.getWindow();
 
@@ -260,10 +298,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mPostRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                    if (dy > 0) {
-                        ((MainActivity) activity).postScrollDown();
-                    } else if (dy < 0) {
-                        ((MainActivity) activity).postScrollUp();
+                    if (!mIsSmoothScrolling) {
+                        if (dy > 0) {
+                            ((MainActivity) activity).postScrollDown();
+                        } else if (dy < 0) {
+                            ((MainActivity) activity).postScrollUp();
+                        }
                     }
 
                 }

@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -864,6 +865,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return sectionsPagerAdapter.handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
+    }
+
+    @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(FETCH_USER_INFO_STATE, mFetchUserInfoSuccess);
@@ -1069,6 +1075,27 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 }
             }
             return fragment;
+        }
+
+        boolean handleKeyDown(int keyCode) {
+            if (mAccessToken == null) {
+                switch (viewPager.getCurrentItem()) {
+                    case 0:
+                        return popularPostFragment.handleKeyDown(keyCode);
+                    case 1:
+                        return allPostFragment.handleKeyDown(keyCode);
+                }
+            } else {
+                switch (viewPager.getCurrentItem()) {
+                    case 0:
+                        return frontPagePostFragment.handleKeyDown(keyCode);
+                    case 1:
+                        return popularPostFragment.handleKeyDown(keyCode);
+                    case 2:
+                        return allPostFragment.handleKeyDown(keyCode);
+                }
+            }
+            return false;
         }
 
         boolean startLazyMode() {
