@@ -122,7 +122,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private CountDownTimer resumeLazyModeCountDownTimer;
     private float lazyModeInterval;
     private int postLayout;
-    private boolean mIsSmoothScrolling = false;
 
     public PostFragment() {
         // Required empty public constructor
@@ -140,7 +139,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     }
 
     private boolean scrollPostsByCount(int count) {
-        mIsSmoothScrolling = true;
         if (mLinearLayoutManager != null) {
             int pos = mLinearLayoutManager.findFirstVisibleItemPosition();
             int targetPosition = pos + count;
@@ -187,16 +185,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 return LinearSmoothScroller.SNAP_TO_START;
             }
         };
-
-        mPostRecyclerView.clearOnScrollListeners();
-        mPostRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    mIsSmoothScrolling = false;
-                }
-            }
-        });
 
         window = activity.getWindow();
 
@@ -298,12 +286,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mPostRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                    if (!mIsSmoothScrolling) {
-                        if (dy > 0) {
-                            ((MainActivity) activity).postScrollDown();
-                        } else if (dy < 0) {
-                            ((MainActivity) activity).postScrollUp();
-                        }
+                    if (dy > 0) {
+                        ((MainActivity) activity).postScrollDown();
+                    } else if (dy < 0) {
+                        ((MainActivity) activity).postScrollUp();
                     }
 
                 }
