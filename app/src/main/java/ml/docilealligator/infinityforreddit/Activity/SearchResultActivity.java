@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -168,6 +169,11 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             mQuery = query;
             setTitle(query);
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return sectionsPagerAdapter.handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -366,6 +372,10 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     break;
             }
             return fragment;
+        }
+
+        public boolean handleKeyDown(int keyCode) {
+            return viewPager.getCurrentItem() == 0 && postFragment.handleKeyDown(keyCode);
         }
 
         void changeSortType(SortType sortType) {

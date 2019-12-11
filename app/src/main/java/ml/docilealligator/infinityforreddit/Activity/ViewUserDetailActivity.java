@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -397,6 +398,11 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return sectionsPagerAdapter.handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
+    }
+
+    @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
     }
@@ -739,6 +745,10 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                     commentsListingFragment = (CommentsListingFragment) fragment;
             }
             return fragment;
+        }
+
+        public boolean handleKeyDown(int keyCode) {
+            return viewPager.getCurrentItem() == 0 && postFragment.handleKeyDown(keyCode);
         }
 
         public void refresh() {
