@@ -53,6 +53,7 @@ public class JSONUtils {
     public static final String BANNER_IMG_KEY = "banner_img";
     public static final String BANNER_BACKGROUND_IMAGE_KEY = "banner_background_image";
     public static final String ICON_IMG_KEY = "icon_img";
+    public static final String ICON_URL_KEY = "icon_url";
     public static final String COMMUNITY_ICON_KEY = "community_icon";
     public static final String LINK_KARMA_KEY = "link_karma";
     public static final String COMMENT_KARMA_KEY = "comment_karma";
@@ -77,6 +78,7 @@ public class JSONUtils {
     public static final String RULES_KEY = "rules";
     public static final String SHORT_NAME_KEY = "short_name";
     public static final String DESCRIPTION_KEY = "description";
+    public static final String DESCRIPTION_HTML_KEY = "description_html";
     public static final String ARCHIVED_KEY = "archived";
     public static final String LOCKEC_KEY = "locked";
     public static final String SAVED_KEY = "saved";
@@ -90,4 +92,13 @@ public class JSONUtils {
     public static final String HIDDEN_KEY = "hidden";
     public static final String USER_HAS_FAVORITED_KEY = "user_has_favorited";
     public static final String RESOLUTIONS_KEY = "resolutions";
+    public static final String NUM_SUBSCRIBERS_KEY = "num_subscribers";
+    public static final String COPIED_FROM_KEY = "copied_from";
+    public static final String VISIBILITY_KEY = "visibility";
+    public static final String OVER_18_KEY = "over_18";
+    public static final String OWNER_KEY = "owner";
+    public static final String IS_SUBSCRIBER_KEY = "is_subscriber";
+    public static final String IS_FAVORITED_KEY = "is_favorited";
+    public static final String SUBREDDITS_KEY = "subreddits";
+    public static final String PATH_KEY = "path";
 }

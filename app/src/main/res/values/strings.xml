@@ -16,6 +16,7 @@
     <string name="view_message_activity_label">Inbox</string>
     <string name="settings_activity_label">Settings</string>
     <string name="account_saved_thing_activity">Saved</string>
+    <string name="multi_reddit_listing_activity">MultiReddit</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -359,7 +360,7 @@
 
     <string name="post_layout_card">Card Layout</string>
     <string name="post_layout_compact">Compact Layout</string>
-    
+
     <string name="elapsed_time_just_now">Just Now</string>
     <string name="elapsed_time_a_minute_ago">1 Minute</string>
     <string name="elapsed_time_minutes_ago">%1$d Minutes</string>

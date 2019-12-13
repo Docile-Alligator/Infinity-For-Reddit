@@ -808,8 +808,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_subscriptions_main_activity:
-                Intent subscriptionsIntent = new Intent(this, SubscribedThingListingActivity.class);
-                startActivity(subscriptionsIntent);
+                /*Intent subscriptionsIntent = new Intent(this, SubscribedThingListingActivity.class);
+                startActivity(subscriptionsIntent);*/
+                Intent multiIntent = new Intent(this, MultiRedditListingActivity.class);
+                startActivity(multiIntent);
                 return true;
             case R.id.action_sort_main_activity:
                 if (viewPager.getCurrentItem() == 1 || viewPager.getCurrentItem() == 2) {

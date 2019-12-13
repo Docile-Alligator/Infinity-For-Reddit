@@ -52,9 +52,9 @@ public class FollowedUsersListingFragment extends Fragment {
     Retrofit mOauthRetrofit;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
+    SubscribedUserViewModel mSubscribedUserViewModel;
     private Activity mActivity;
     private RequestManager mGlide;
-    private SubscribedUserViewModel mSubscribedUserViewModel;
 
     public FollowedUsersListingFragment() {
         // Required empty public constructor

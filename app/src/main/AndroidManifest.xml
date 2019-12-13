@@ -21,7 +21,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
-
+        <activity android:name=".Activity.MultiRedditListingActivity"
+            android:label="@string/multi_reddit_listing_activity"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.ViewGIFActivity"
             android:parentActivityName=".Activity.MainActivity"

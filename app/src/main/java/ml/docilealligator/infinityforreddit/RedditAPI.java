@@ -261,4 +261,11 @@ public interface RedditAPI {
     @FormUrlEncoded
     @POST("/api/favorite")
     Call<String> favoriteThing(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @GET("/api/multi/mine")
+    Call<String> getMyMultiReddits(@HeaderMap Map<String, String> headers);
+
+    @FormUrlEncoded
+    @POST("/api/multi/favorite?raw_json=1&gilding_detail=1")
+    Call<String> favoriteMultiReddit(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }

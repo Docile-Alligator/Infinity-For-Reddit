@@ -81,6 +81,8 @@ public class RedditUtils {
 
     public static final String MAKE_FAVORITE_KEY = "make_favorite";
 
+    public static final String MULTIPATH_KEY = "multipath";
+
     public static Map<String, String> getHttpBasicAuthHeader() {
         Map<String, String> params = new HashMap<>();
         String credentials = String.format("%s:%s", RedditUtils.CLIENT_ID, "");
