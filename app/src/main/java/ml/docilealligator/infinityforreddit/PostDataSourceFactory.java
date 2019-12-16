@@ -85,7 +85,7 @@ class PostDataSourceFactory extends DataSource.Factory {
         } else if (postType == PostDataSource.TYPE_SEARCH) {
             postDataSource = new PostDataSource(retrofit, accessToken, locale, subredditName, query,
                     postType, sortType, filter, nsfw);
-        } else if (postType == PostDataSource.TYPE_SUBREDDIT) {
+        } else if (postType == PostDataSource.TYPE_SUBREDDIT || postType == PostDataSource.TYPE_MULTI_REDDIT) {
             postDataSource = new PostDataSource(retrofit, accessToken, locale, subredditName, postType,
                     sortType, filter, nsfw);
         } else {

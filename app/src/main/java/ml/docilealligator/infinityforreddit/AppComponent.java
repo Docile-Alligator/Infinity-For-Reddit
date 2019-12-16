@@ -27,6 +27,7 @@ import ml.docilealligator.infinityforreddit.Activity.SubscribedThingListingActiv
 import ml.docilealligator.infinityforreddit.Activity.ViewGIFActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewImageActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewMessageActivity;
+import ml.docilealligator.infinityforreddit.Activity.ViewMultiRedditDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
@@ -119,4 +120,6 @@ public interface AppComponent {
     void inject(ViewGIFActivity viewGIFActivity);
 
     void inject(MultiRedditListingActivity multiRedditListingActivity);
+
+    void inject(ViewMultiRedditDetailActivity viewMultiRedditDetailActivity);
 }

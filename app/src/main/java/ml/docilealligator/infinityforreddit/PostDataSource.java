@@ -18,6 +18,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     public static final int TYPE_SUBREDDIT = 1;
     public static final int TYPE_USER = 2;
     public static final int TYPE_SEARCH = 3;
+    public static final int TYPE_MULTI_REDDIT = 4;
 
     public static final String USER_WHERE_SUBMITTED = "submitted";
     public static final String USER_WHERE_UPVOTED = "upvoted";
@@ -36,6 +37,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     private boolean nsfw;
     private int filter;
     private String userWhere;
+    private String multiRedditPath;
 
     private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
     private MutableLiveData<NetworkState> initialLoadStateLiveData;
@@ -58,18 +60,22 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         this.nsfw = nsfw;
     }
 
-    PostDataSource(Retrofit retrofit, String accessToken, Locale locale, String subredditOrUserName, int postType,
+    PostDataSource(Retrofit retrofit, String accessToken, Locale locale, String path, int postType,
                    SortType sortType, int filter, boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.locale = locale;
-        this.subredditOrUserName = subredditOrUserName;
+        if (postType == TYPE_SUBREDDIT) {
+            this.subredditOrUserName = path;
+        } else {
+            multiRedditPath = path;
+        }
         paginationNetworkStateLiveData = new MutableLiveData<>();
         initialLoadStateLiveData = new MutableLiveData<>();
         hasPostLiveData = new MutableLiveData<>();
         this.postType = postType;
         if (sortType == null) {
-            if (subredditOrUserName.equals("popular") || subredditOrUserName.equals("all")) {
+            if (path.equals("popular") || path.equals("all")) {
                 this.sortType = new SortType(SortType.Type.HOT);
             } else {
                 this.sortType = new SortType(SortType.Type.BEST);
@@ -142,6 +148,9 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             case TYPE_SEARCH:
                 loadSearchPostsInitial(callback, null);
                 break;
+            case TYPE_MULTI_REDDIT:
+                loadMultiRedditPostsInitial(callback, null);
+                break;
         }
     }
 
@@ -173,6 +182,9 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                 break;
             case TYPE_SEARCH:
                 loadSearchPostsAfter(params, callback, null);
+                break;
+            case TYPE_MULTI_REDDIT:
+                loadMultiRedditPostsAfter(params, callback, null);
                 break;
         }
     }
@@ -706,6 +718,129 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                 public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
                                     if (newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
                                         loadSearchPostsAfter(params, callback, lastItem);
+                                    } else {
+                                        callback.onResult(newPosts, lastItem);
+                                        paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
+                                    }
+                                }
+
+                                @Override
+                                public void onParsePostsListingFail() {
+                                    paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
+                                }
+                            });
+                } else {
+                    paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                String errorMessage = t.getMessage();
+                paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
+            }
+        });
+    }
+
+    private void loadMultiRedditPostsInitial(@NonNull final LoadInitialCallback<String, Post> callback, String lastItem) {
+        RedditAPI api = retrofit.create(RedditAPI.class);
+        Call<String> getPost;
+        if (accessToken == null) {
+            if (sortType.getTime() != null) {
+                getPost = api.getMultiRedditPosts(multiRedditPath, lastItem, sortType.getType().value,
+                        sortType.getTime().value);
+            } else {
+                getPost = api.getMultiRedditPosts(multiRedditPath, lastItem, sortType.getType().value);
+            }
+        } else {
+            if (sortType.getTime() != null) {
+                getPost = api.getMultiRedditPostsOauth(multiRedditPath, lastItem, sortType.getType().value,
+                        sortType.getTime().value, RedditUtils.getOAuthHeader(accessToken));
+            } else {
+                getPost = api.getMultiRedditPostsOauth(multiRedditPath, lastItem, sortType.getType().value,
+                        RedditUtils.getOAuthHeader(accessToken));
+            }
+        }
+
+        getPost.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
+                if (response.isSuccessful()) {
+                    ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
+                            new ParsePost.ParsePostsListingListener() {
+                                @Override
+                                public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                    String nextPageKey;
+                                    if (lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
+                                        nextPageKey = null;
+                                    } else {
+                                        nextPageKey = lastItem;
+                                    }
+
+                                    if (newPosts.size() != 0) {
+                                        callback.onResult(newPosts, null, nextPageKey);
+                                        hasPostLiveData.postValue(true);
+                                    } else if (nextPageKey != null) {
+                                        loadMultiRedditPostsInitial(callback, nextPageKey);
+                                        return;
+                                    } else {
+                                        callback.onResult(newPosts, null, nextPageKey);
+                                        hasPostLiveData.postValue(false);
+                                    }
+
+                                    initialLoadStateLiveData.postValue(NetworkState.LOADED);
+                                }
+
+                                @Override
+                                public void onParsePostsListingFail() {
+                                    initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
+                                }
+                            });
+                } else {
+                    initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                String errorMessage = t.getMessage();
+                initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
+            }
+        });
+    }
+
+    private void loadMultiRedditPostsAfter(@NonNull LoadParams<String> params, @NonNull final LoadCallback<String, Post> callback, String lastItem) {
+        String after = lastItem == null ? params.key : lastItem;
+
+        RedditAPI api = retrofit.create(RedditAPI.class);
+
+        Call<String> getPost;
+        if (accessToken == null) {
+            if (sortType.getTime() != null) {
+                getPost = api.getMultiRedditPosts(multiRedditPath, after, sortType.getType().value,
+                        sortType.getTime().value);
+            } else {
+                getPost = api.getMultiRedditPosts(multiRedditPath, after, sortType.getType().value);
+            }
+        } else {
+            if (sortType.getTime() != null) {
+                getPost = api.getMultiRedditPostsOauth(multiRedditPath, after, sortType.getType().value,
+                        sortType.getTime().value, RedditUtils.getOAuthHeader(accessToken));
+            } else {
+                getPost = api.getMultiRedditPostsOauth(multiRedditPath, after, sortType.getType().value,
+                        RedditUtils.getOAuthHeader(accessToken));
+            }
+        }
+        getPost.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
+                if (response.isSuccessful()) {
+                    ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
+                            new ParsePost.ParsePostsListingListener() {
+                                @Override
+                                public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                    if (newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
+                                        loadMultiRedditPostsAfter(params, callback, lastItem);
                                     } else {
                                         callback.onResult(newPosts, lastItem);
                                         paginationNetworkStateLiveData.postValue(NetworkState.LOADED);

@@ -252,7 +252,7 @@ public class PostViewModel extends ViewModel {
             } else if (postType == PostDataSource.TYPE_SEARCH) {
                 return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, query,
                         postType, sortType, filter, nsfw);
-            } else if (postType == PostDataSource.TYPE_SUBREDDIT) {
+            } else if (postType == PostDataSource.TYPE_SUBREDDIT || postType == PostDataSource.TYPE_MULTI_REDDIT) {
                 return (T) new PostViewModel(retrofit, accessToken, locale, subredditName, postType,
                         sortType, filter, nsfw);
             } else {

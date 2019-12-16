@@ -1,5 +1,8 @@
 package ml.docilealligator.infinityforreddit.MultiReddit;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -13,7 +16,7 @@ import ml.docilealligator.infinityforreddit.Account.Account;
 @Entity(tableName = "multi_reddits", primaryKeys = {"path", "username"},
         foreignKeys = @ForeignKey(entity = Account.class, parentColumns = "username",
                 childColumns = "username", onDelete = ForeignKey.CASCADE))
-public class MultiReddit {
+public class MultiReddit implements Parcelable {
     @NonNull
     @ColumnInfo(name = "path")
     private String path;
@@ -66,10 +69,10 @@ public class MultiReddit {
         this.isFavorite = isFavorite;
     }
 
-    public MultiReddit(@NonNull String path, String displayName, String name, String description, String copiedFrom,
-                       String iconUrl, String visibility, @NonNull String owner,
-                       int nSubscribers, long createdUTC, boolean over18, boolean isSubscriber,
-                       boolean isFavorite, ArrayList<String> subreddits) {
+    public MultiReddit(@NonNull String path, @NonNull String displayName, @NonNull String name,
+                       String description, String copiedFrom, String iconUrl, String visibility,
+                       @NonNull String owner, int nSubscribers, long createdUTC, boolean over18,
+                       boolean isSubscriber, boolean isFavorite, ArrayList<String> subreddits) {
         this.displayName = displayName;
         this.name = name;
         this.description = description;
@@ -86,6 +89,35 @@ public class MultiReddit {
         this.subreddits = subreddits;
     }
 
+    protected MultiReddit(Parcel in) {
+        path = in.readString();
+        displayName = in.readString();
+        name = in.readString();
+        description = in.readString();
+        copiedFrom = in.readString();
+        iconUrl = in.readString();
+        visibility = in.readString();
+        owner = in.readString();
+        nSubscribers = in.readInt();
+        createdUTC = in.readLong();
+        over18 = in.readByte() != 0;
+        isSubscriber = in.readByte() != 0;
+        isFavorite = in.readByte() != 0;
+        subreddits = in.readArrayList(MultiReddit.class.getClassLoader());
+    }
+
+    public static final Creator<MultiReddit> CREATOR = new Creator<MultiReddit>() {
+        @Override
+        public MultiReddit createFromParcel(Parcel in) {
+            return new MultiReddit(in);
+        }
+
+        @Override
+        public MultiReddit[] newArray(int size) {
+            return new MultiReddit[size];
+        }
+    };
+
     @NonNull
     public String getPath() {
         return path;
@@ -95,19 +127,21 @@ public class MultiReddit {
         this.path = path;
     }
 
+    @NonNull
     public String getDisplayName() {
         return displayName;
     }
 
-    public void setDisplayName(String displayName) {
+    public void setDisplayName(@NonNull String displayName) {
         this.displayName = displayName;
     }
 
+    @NonNull
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(@NonNull String name) {
         this.name = name;
     }
 
@@ -197,5 +231,28 @@ public class MultiReddit {
 
     public void setSubreddits(ArrayList<String> subreddits) {
         this.subreddits = subreddits;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(path);
+        parcel.writeString(displayName);
+        parcel.writeString(name);
+        parcel.writeString(description);
+        parcel.writeString(copiedFrom);
+        parcel.writeString(iconUrl);
+        parcel.writeString(visibility);
+        parcel.writeString(owner);
+        parcel.writeInt(nSubscribers);
+        parcel.writeLong(createdUTC);
+        parcel.writeByte((byte) (over18 ? 1 : 0));
+        parcel.writeByte((byte) (isSubscriber ? 1 : 0));
+        parcel.writeByte((byte) (isFavorite ? 1 : 0));
+        parcel.writeStringList(subreddits);
     }
 }

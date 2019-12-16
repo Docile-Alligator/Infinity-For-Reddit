@@ -268,4 +268,24 @@ public interface RedditAPI {
     @FormUrlEncoded
     @POST("/api/multi/favorite?raw_json=1&gilding_detail=1")
     Call<String> favoriteMultiReddit(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @GET("/api/multi/user/{username}")
+    Call<String> getUserMultiReddits(@Path("username") String username);
+
+    @GET("{multipath}?raw_json=1")
+    Call<String> getMultiRedditPosts(@Path(value = "multipath", encoded = true) String multiPath, @Query("after") String after,
+                                     @Query("sort") String sortType);
+
+    @GET("{multipath}?raw_json=1")
+    Call<String> getMultiRedditPosts(@Path(value = "multipath", encoded = true) String multiPath, @Query("after") String after,
+                                     @Query("sort") String sortType, @Query("t") String sortTime);
+
+    @GET("{multipath}.json?raw_json=1")
+    Call<String> getMultiRedditPostsOauth(@Path(value = "multipath", encoded = true) String multiPath, @Query("after") String after,
+                                          @Query("sort") String sortType, @Query("t") String sortTime,
+                                          @HeaderMap Map<String, String> headers);
+
+    @GET("{multipath}.json?raw_json=1")
+    Call<String> getMultiRedditPostsOauth(@Path(value = "multipath", encoded = true) String multiPath, @Query("after") String after,
+                                          @Query("sort") String sortType, @HeaderMap Map<String, String> headers);
 }

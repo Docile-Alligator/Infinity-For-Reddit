@@ -79,4 +79,8 @@
     <color name="flairBackgroundColor">#00AA8C</color>
 
     <color name="authorFlairTextColor">#EE02C4</color>
+
+    <color name="usernameColor">#0D47A1</color>
+
+    <color name="subredditNameColor">#FF4081</color>
 </resources>

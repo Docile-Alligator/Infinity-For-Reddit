@@ -21,7 +21,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
+import ml.docilealligator.infinityforreddit.Activity.ViewMultiRedditDetailActivity;
 import ml.docilealligator.infinityforreddit.MultiReddit.FavoriteMultiReddit;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.R;
@@ -101,20 +101,21 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
             int offset = (mFavoriteMultiReddits != null && mFavoriteMultiReddits.size() > 0) ?
                     mFavoriteMultiReddits.size() + 2 : 0;
 
-            name = mMultiReddits.get(holder.getAdapterPosition() - offset).getName();
-            iconUrl = mMultiReddits.get(holder.getAdapterPosition() - offset).getIconUrl();
-            if(mMultiReddits.get(holder.getAdapterPosition() - offset).isFavorite()) {
+            MultiReddit multiReddit = mMultiReddits.get(holder.getAdapterPosition() - offset);
+            name = multiReddit.getName();
+            iconUrl = multiReddit.getIconUrl();
+            if(multiReddit.isFavorite()) {
                 ((MultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
             } else {
                 ((MultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
             }
 
             ((MultiRedditViewHolder) holder).favoriteImageView.setOnClickListener(view -> {
-                if(mMultiReddits.get(holder.getAdapterPosition() - offset).isFavorite()) {
+                if(multiReddit.isFavorite()) {
                     ((MultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
-                    mMultiReddits.get(holder.getAdapterPosition() - offset).setFavorite(false);
+                    multiReddit.setFavorite(false);
                     FavoriteMultiReddit.favoriteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
-                            false, mMultiReddits.get(holder.getAdapterPosition() - offset),
+                            false, multiReddit,
                             new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                 @Override
                                 public void success() {
@@ -138,9 +139,9 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                     );
                 } else {
                     ((MultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
-                    mMultiReddits.get(holder.getAdapterPosition() - offset).setFavorite(true);
+                    multiReddit.setFavorite(true);
                     FavoriteMultiReddit.favoriteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
-                            true, mMultiReddits.get(holder.getAdapterPosition() - offset),
+                            true, multiReddit,
                             new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                 @Override
                                 public void success() {
@@ -165,8 +166,8 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                 }
             });
             holder.itemView.setOnClickListener(view -> {
-                Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
-                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, name);
+                Intent intent = new Intent(mContext, ViewMultiRedditDetailActivity.class);
+                intent.putExtra(ViewMultiRedditDetailActivity.EXTRA_MULTIREDDIT_DATA, multiReddit);
                 mContext.startActivity(intent);
             });
 
@@ -183,20 +184,21 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
             }
             ((MultiRedditViewHolder) holder).multiRedditNameTextView.setText(name);
         } else if (holder instanceof FavoriteMultiRedditViewHolder) {
-            String name = mFavoriteMultiReddits.get(holder.getAdapterPosition() - 1).getName();
-            String iconUrl = mFavoriteMultiReddits.get(holder.getAdapterPosition() - 1).getIconUrl();
-            if(mFavoriteMultiReddits.get(holder.getAdapterPosition() - 1).isFavorite()) {
+            MultiReddit multiReddit = mFavoriteMultiReddits.get(holder.getAdapterPosition() - 1);
+            String name = multiReddit.getName();
+            String iconUrl = multiReddit.getIconUrl();
+            if(multiReddit.isFavorite()) {
                 ((FavoriteMultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
             } else {
                 ((FavoriteMultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
             }
 
             ((FavoriteMultiRedditViewHolder) holder).favoriteImageView.setOnClickListener(view -> {
-                if(mFavoriteMultiReddits.get(holder.getAdapterPosition() - 1).isFavorite()) {
+                if(multiReddit.isFavorite()) {
                     ((FavoriteMultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
-                    mFavoriteMultiReddits.get(holder.getAdapterPosition() - 1).setFavorite(false);
+                    multiReddit.setFavorite(false);
                     FavoriteMultiReddit.favoriteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
-                            false, mFavoriteMultiReddits.get(holder.getAdapterPosition() - 1),
+                            false, multiReddit,
                             new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                 @Override
                                 public void success() {
@@ -220,9 +222,9 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                     );
                 } else {
                     ((FavoriteMultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
-                    mFavoriteMultiReddits.get(holder.getAdapterPosition() - 1).setFavorite(true);
+                    multiReddit.setFavorite(true);
                     FavoriteMultiReddit.favoriteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
-                            true, mFavoriteMultiReddits.get(holder.getAdapterPosition() - 1),
+                            true, multiReddit,
                             new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                 @Override
                                 public void success() {
@@ -247,8 +249,8 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                 }
             });
             holder.itemView.setOnClickListener(view -> {
-                Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
-                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, name);
+                Intent intent = new Intent(mContext, ViewMultiRedditDetailActivity.class);
+                intent.putExtra(ViewMultiRedditDetailActivity.EXTRA_MULTIREDDIT_DATA, multiReddit);
                 mContext.startActivity(intent);
             });
 

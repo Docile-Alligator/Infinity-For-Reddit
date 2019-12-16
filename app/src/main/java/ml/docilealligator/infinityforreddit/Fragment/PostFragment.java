@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -417,6 +418,51 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             } else {
                 factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
                         getResources().getConfiguration().locale, subredditName, postType, sortType,
+                        filter, nsfw);
+            }
+        } else if(postType == PostDataSource.TYPE_MULTI_REDDIT) {
+            String multiRedditName = getArguments().getString(EXTRA_NAME);
+            String sort;
+            String sortTime = null;
+            SortType sortType;
+
+            sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_ALL_POST, SortType.Type.HOT.name());
+            if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
+                sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_ALL_POST, SortType.Time.ALL.name());
+            }
+            postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_ALL_POST, SharedPreferencesUtils.POST_LAYOUT_CARD);
+
+            if(sortTime != null) {
+                sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
+            } else {
+                sortType = new SortType(SortType.Type.valueOf(sort));
+            }
+
+            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
+                    accessToken, postType, postLayout, true, needBlurNsfw, needBlurSpoiler,
+                    voteButtonsOnTheRight, showElapsedTime, new PostRecyclerViewAdapter.Callback() {
+                @Override
+                public void retryLoadingMore() {
+                    mPostViewModel.retryLoadingMore();
+                }
+
+                @Override
+                public void typeChipClicked(int filter) {
+                    Intent intent = new Intent(activity, FilteredThingActivity.class);
+                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, multiRedditName);
+                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
+                    startActivity(intent);
+                }
+            });
+
+            if (accessToken == null) {
+                factory = new PostViewModel.Factory(mRetrofit, accessToken,
+                        getResources().getConfiguration().locale, multiRedditName, postType, sortType,
+                        filter, nsfw);
+            } else {
+                factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
+                        getResources().getConfiguration().locale, multiRedditName, postType, sortType,
                         filter, nsfw);
             }
         } else if (postType == PostDataSource.TYPE_USER) {
