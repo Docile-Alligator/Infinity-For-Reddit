@@ -1,11 +1,15 @@
 package ml.docilealligator.infinityforreddit.Activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -16,6 +20,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.chip.Chip;
@@ -25,17 +32,20 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SortTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import pl.droidsonroids.gif.GifImageView;
@@ -88,7 +98,10 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     private String multiPath;
     private boolean isInLazyMode = false;
     private boolean showToast = false;
+    private RequestManager glide;
     private Fragment mFragment;
+    private Menu mMenu;
+    private AppBarLayout.LayoutParams params;
     private SortTypeBottomSheetFragment sortTypeBottomSheetFragment;
     private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
     private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
@@ -172,6 +185,29 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
 
         postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
+
+        params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
+
+        //Get status bar height
+        int statusBarHeight = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            statusBarHeight = getResources().getDimensionPixelSize(resourceId);
+        }
+
+        toolbar.setTitle(multiReddit.getDisplayName());
+        ViewGroup.MarginLayoutParams toolbarParams = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
+        toolbarParams.topMargin = statusBarHeight;
+        toolbar.setLayoutParams(toolbarParams);
+        setSupportActionBar(toolbar);
+
+        glide = Glide.with(this);
+
+        glide.load(multiReddit.getIconUrl())
+                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0)))
+                .error(glide.load(R.drawable.subreddit_default_icon)
+                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0))))
+                .into(iconGifImageView);
     }
 
     private void getCurrentAccountAndInitializeFragment() {
@@ -198,6 +234,74 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.view_multi_reddit_detail_activity, menu);
+        mMenu = menu;
+        MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_multi_reddit_detail_activity);
+        if (isInLazyMode) {
+            lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+            collapsingToolbarLayout.setLayoutParams(params);
+        } else {
+            lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
+                    AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
+            collapsingToolbarLayout.setLayoutParams(params);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_sort_view_multi_reddit_detail_activity:
+                sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
+                return true;
+            case R.id.action_search_view_multi_reddit_detail_activity:
+                Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, false);
+                startActivity(intent);
+                return true;
+            case R.id.action_refresh_view_multi_reddit_detail_activity:
+                if (mMenu != null) {
+                    mMenu.findItem(R.id.action_lazy_mode_view_multi_reddit_detail_activity).setTitle(R.string.action_start_lazy_mode);
+                }
+                if (mFragment instanceof FragmentCommunicator) {
+                    ((FragmentCommunicator) mFragment).refresh();
+                }
+                return true;
+            case R.id.action_lazy_mode_view_multi_reddit_detail_activity:
+                MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_multi_reddit_detail_activity);
+                if (isInLazyMode) {
+                    isInLazyMode = false;
+                    ((FragmentCommunicator) mFragment).stopLazyMode();
+                    lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
+                            AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
+                    collapsingToolbarLayout.setLayoutParams(params);
+                } else {
+                    isInLazyMode = true;
+                    if (((FragmentCommunicator) mFragment).startLazyMode()) {
+                        lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+                        appBarLayout.setExpanded(false);
+                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                        collapsingToolbarLayout.setLayoutParams(params);
+                    } else {
+                        isInLazyMode = false;
+                    }
+                }
+                return true;
+            case R.id.action_change_post_layout_view_multi_reddit_detail_activity:
+                postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+                return true;
+        }
+        return false;
+    }
+
+    @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
@@ -208,12 +312,33 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
-        return mSharedPreferences;
+    public void sortTypeSelected(SortType sortType) {
+        mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST, sortType.getType().name()).apply();
+        if(sortType.getTime() != null) {
+            mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST, sortType.getTime().name()).apply();
+        }
+
+        ((PostFragment) mFragment).changeSortType(sortType);
+    }
+
+    @Override
+    public void sortTypeSelected(String sortType) {
+        Bundle bundle = new Bundle();
+        bundle.putString(SortTimeBottomSheetFragment.EXTRA_SORT_TYPE, sortType);
+        sortTimeBottomSheetFragment.setArguments(bundle);
+        sortTimeBottomSheetFragment.show(getSupportFragmentManager(), sortTimeBottomSheetFragment.getTag());
     }
 
     @Override
     public void postLayoutSelected(int postLayout) {
+        if (mFragment != null) {
+            //mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + multiPath, postLayout).apply();
+            ((FragmentCommunicator) mFragment).changePostLayout(postLayout);
+        }
+    }
 
+    @Override
+    public SharedPreferences getSharedPreferences() {
+        return mSharedPreferences;
     }
 }
