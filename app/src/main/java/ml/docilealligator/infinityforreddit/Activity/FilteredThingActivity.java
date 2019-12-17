@@ -233,6 +233,21 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
                     subredditSortTypeBottomSheetFragment.setArguments(bottomSheetBundle);
                 }
                 break;
+            case PostDataSource.TYPE_MULTI_REDDIT:
+                String multiRedditName;
+                if (name.endsWith("/")) {
+                    multiRedditName = name.substring(0, name.length() - 1);
+                    multiRedditName = multiRedditName.substring(multiRedditName.lastIndexOf("/") + 1);
+                } else {
+                    multiRedditName = name.substring(name.lastIndexOf("/") + 1);
+                }
+                getSupportActionBar().setTitle(multiRedditName);
+
+                subredditSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
+                Bundle bottomSheetBundle = new Bundle();
+                bottomSheetBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
+                subredditSortTypeBottomSheetFragment.setArguments(bottomSheetBundle);
+                break;
             case PostDataSource.TYPE_USER:
                 String usernamePrefixed = "u/" + name;
                 getSupportActionBar().setTitle(usernamePrefixed);
@@ -273,7 +288,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
             if (postType == PostDataSource.TYPE_USER) {
                 bundle.putString(PostFragment.EXTRA_USER_NAME, name);
                 bundle.putString(PostFragment.EXTRA_USER_WHERE, userWhere);
-            } else if (postType == PostDataSource.TYPE_SUBREDDIT) {
+            } else if (postType == PostDataSource.TYPE_SUBREDDIT || postType == PostDataSource.TYPE_MULTI_REDDIT) {
                 bundle.putString(PostFragment.EXTRA_NAME, name);
             } else if (postType == PostDataSource.TYPE_SEARCH) {
                 bundle.putString(PostFragment.EXTRA_NAME, name);
