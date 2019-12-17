@@ -420,16 +420,19 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                         filter, nsfw);
             }
         } else if(postType == PostDataSource.TYPE_MULTI_REDDIT) {
-            String multiRedditName = getArguments().getString(EXTRA_NAME);
+            String multiRedditPath = getArguments().getString(EXTRA_NAME);
             String sort;
             String sortTime = null;
             SortType sortType;
 
-            sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_ALL_POST, SortType.Type.HOT.name());
+            sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiRedditPath,
+                    SortType.Type.HOT.name());
             if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
-                sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_ALL_POST, SortType.Time.ALL.name());
+                sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_MULTI_REDDIT_POST_BASE + multiRedditPath,
+                        SortType.Time.ALL.name());
             }
-            postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_ALL_POST, SharedPreferencesUtils.POST_LAYOUT_CARD);
+            postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + multiRedditPath,
+                    SharedPreferencesUtils.POST_LAYOUT_CARD);
 
             if(sortTime != null) {
                 sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
@@ -448,7 +451,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 @Override
                 public void typeChipClicked(int filter) {
                     Intent intent = new Intent(activity, FilteredThingActivity.class);
-                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, multiRedditName);
+                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, multiRedditPath);
                     intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
                     startActivity(intent);
@@ -457,11 +460,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             if (accessToken == null) {
                 factory = new PostViewModel.Factory(mRetrofit, accessToken,
-                        getResources().getConfiguration().locale, multiRedditName, postType, sortType,
+                        getResources().getConfiguration().locale, multiRedditPath, postType, sortType,
                         filter, nsfw);
             } else {
                 factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                        getResources().getConfiguration().locale, multiRedditName, postType, sortType,
+                        getResources().getConfiguration().locale, multiRedditPath, postType, sortType,
                         filter, nsfw);
             }
         } else if (postType == PostDataSource.TYPE_USER) {
@@ -586,6 +589,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (mFetchPostInfoLinearLayout.getVisibility() != View.GONE) {
             mFetchPostInfoLinearLayout.setVisibility(View.GONE);
             mGlide.clear(mFetchPostInfoImageView);
+        }
+        mAdapter.removeFooter();
+        hasPost = false;
+        if (isInLazyMode) {
+            stopLazyMode();
         }
         mPostViewModel.changeSortType(sortType);
     }

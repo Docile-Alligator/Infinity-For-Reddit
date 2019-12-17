@@ -166,6 +166,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         sortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
         Bundle bottomSheetBundle = new Bundle();
         bottomSheetBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
+        bottomSheetBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_RANDOM_TYPE, true);
         sortTypeBottomSheetFragment.setArguments(bottomSheetBundle);
 
         sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
@@ -173,13 +174,6 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
-
-        //Get status bar height
-        int statusBarHeight = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            statusBarHeight = getResources().getDimensionPixelSize(resourceId);
-        }
     }
 
     private void getCurrentAccountAndInitializeFragment() {
@@ -285,9 +279,11 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
 
     @Override
     public void sortTypeSelected(SortType sortType) {
-        mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST, sortType.getType().name()).apply();
+        mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiPath,
+                sortType.getType().name()).apply();
         if(sortType.getTime() != null) {
-            mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST, sortType.getTime().name()).apply();
+            mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_MULTI_REDDIT_POST_BASE+ multiPath,
+                    sortType.getTime().name()).apply();
         }
 
         ((PostFragment) mFragment).changeSortType(sortType);
@@ -304,7 +300,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     @Override
     public void postLayoutSelected(int postLayout) {
         if (mFragment != null) {
-            //mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + multiPath, postLayout).apply();
+            mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + multiPath, postLayout).apply();
             ((FragmentCommunicator) mFragment).changePostLayout(postLayout);
         }
     }

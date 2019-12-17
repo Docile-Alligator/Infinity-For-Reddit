@@ -40,6 +40,8 @@ public class SharedPreferencesUtils {
     public static final String SORT_TIME_SEARCH_POST = "sort_time_search_post";
     public static final String SORT_TYPE_SUBREDDIT_POST = "sort_type_subreddit_post";
     public static final String SORT_TIME_SUBREDDIT_POST = "sort_time_subreddit_post";
+    public static final String SORT_TYPE_MULTI_REDDIT_POST_BASE = "sort_type_multi_reddit_post_";
+    public static final String SORT_TIME_MULTI_REDDIT_POST_BASE = "sort_time_multi_reddit_post_";
     public static final String SORT_TYPE_USER_POST = "sort_type_user_post";
     public static final String SORT_TIME_USER_POST = "sort_time_user_post";
     public static final String SORT_TYPE_USER_COMMENT = "sort_type_user_comment";
@@ -51,6 +53,7 @@ public class SharedPreferencesUtils {
     public static final String POST_LAYOUT_POPULAR_POST = "post_layout_popular_post";
     public static final String POST_LAYOUT_ALL_POST = "post_layout_all_post";
     public static final String POST_LAYOUT_SUBREDDIT_POST_BASE = "post_layout_subreddit_post_";
+    public static final String POST_LAYOUT_MULTI_REDDIT_POST_BASE = "post_layout_multi_reddit_post_";
     public static final String POST_LAYOUT_USER_POST_BASE = "post_layout_user_post_";
     public static final String POST_LAYOUT_SEARCH_POST = "post_layout_search_post";
     public static final int POST_LAYOUT_CARD = 0;
