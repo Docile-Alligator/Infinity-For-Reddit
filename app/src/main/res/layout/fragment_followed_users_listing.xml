@@ -5,11 +5,18 @@
     android:layout_height="match_parent"
     tools:application=".FollowedUsersListingFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_followed_users_listing_fragment"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout_followed_users_listing_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_followed_users_listing_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/no_subscriptions_linear_layout_followed_users_listing_fragment"

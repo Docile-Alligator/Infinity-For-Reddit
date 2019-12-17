@@ -68,10 +68,14 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         if (postType == TYPE_SUBREDDIT) {
             this.subredditOrUserName = path;
         } else {
-            if (path.endsWith("/")) {
-                multiRedditPath = path + sortType.getType().value;
+            if (sortType != null) {
+                if (path.endsWith("/")) {
+                    multiRedditPath = path + sortType.getType().value;
+                } else {
+                    multiRedditPath = path + "/" + sortType.getType().value;
+                }
             } else {
-                multiRedditPath = path + "/" + sortType.getType().value;
+                multiRedditPath = path;
             }
         }
         paginationNetworkStateLiveData = new MutableLiveData<>();

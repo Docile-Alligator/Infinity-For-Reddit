@@ -5,11 +5,18 @@
     android:layout_height="match_parent"
     tools:application=".SubscribedSubredditsListingFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_subscribed_subreddits_listing_fragment"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout_subscribed_subreddits_listing_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_subscribed_subreddits_listing_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/no_subscriptions_linear_layout_subreddits_listing_fragment"

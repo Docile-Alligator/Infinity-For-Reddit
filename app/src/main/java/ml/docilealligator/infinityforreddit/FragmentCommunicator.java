@@ -1,9 +1,12 @@
 package ml.docilealligator.infinityforreddit;
 
 public interface FragmentCommunicator {
-    void refresh();
+    default void refresh() {
+    }
 
-    default boolean handleKeyDown(int keyCode) { return false; }
+    default boolean handleKeyDown(int keyCode) {
+        return false;
+    }
 
     default void changeNSFW(boolean nsfw) {
     }
@@ -25,6 +28,9 @@ public interface FragmentCommunicator {
         return false;
     }
 
-    default void changePostLayout(int postLayout) { }
+    default void changePostLayout(int postLayout) {
+    }
 
+    default void stopRefreshProgressbar() {
+    }
 }

@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -25,7 +27,9 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.Activity.SubscribedThingListingActivity;
 import ml.docilealligator.infinityforreddit.Adapter.FollowedUsersRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
@@ -36,11 +40,13 @@ import retrofit2.Retrofit;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FollowedUsersListingFragment extends Fragment {
+public class FollowedUsersListingFragment extends Fragment implements FragmentCommunicator {
 
     public static final String EXTRA_ACCOUNT_NAME = "EAN";
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
 
+    @BindView(R.id.swipe_refresh_layout_followed_users_listing_fragment)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view_followed_users_listing_fragment)
     RecyclerView mRecyclerView;
     @BindView(R.id.no_subscriptions_linear_layout_followed_users_listing_fragment)
@@ -84,6 +90,16 @@ public class FollowedUsersListingFragment extends Fragment {
 
         mGlide = Glide.with(this);
 
+        if (mActivity instanceof SubscribedThingListingActivity) {
+            mSwipeRefreshLayout.setOnRefreshListener(() -> ((SubscribedThingListingActivity) mActivity).loadSubscriptions(true));
+            TypedValue typedValue = new TypedValue();
+            mActivity.getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
+            mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(typedValue.data);
+            mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        } else {
+            mSwipeRefreshLayout.setEnabled(false);
+        }
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         FollowedUsersRecyclerViewAdapter adapter = new FollowedUsersRecyclerViewAdapter(mActivity,
                 mOauthRetrofit, mRedditDataRoomDatabase, getArguments().getString(EXTRA_ACCESS_TOKEN));
@@ -94,6 +110,7 @@ public class FollowedUsersListingFragment extends Fragment {
                 .get(SubscribedUserViewModel.class);
 
         mSubscribedUserViewModel.getAllSubscribedUsers().observe(this, subscribedUserData -> {
+            mSwipeRefreshLayout.setRefreshing(false);
             if (subscribedUserData == null || subscribedUserData.size() == 0) {
                 mRecyclerView.setVisibility(View.GONE);
                 mLinearLayout.setVisibility(View.VISIBLE);
@@ -107,6 +124,7 @@ public class FollowedUsersListingFragment extends Fragment {
         });
 
         mSubscribedUserViewModel.getAllFavoriteSubscribedUsers().observe(this, favoriteSubscribedUserData -> {
+            mSwipeRefreshLayout.setRefreshing(false);
             if (favoriteSubscribedUserData != null && favoriteSubscribedUserData.size() > 0) {
                 mLinearLayout.setVisibility(View.GONE);
                 mRecyclerView.setVisibility(View.VISIBLE);
@@ -118,4 +136,8 @@ public class FollowedUsersListingFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void stopRefreshProgressbar() {
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
 }

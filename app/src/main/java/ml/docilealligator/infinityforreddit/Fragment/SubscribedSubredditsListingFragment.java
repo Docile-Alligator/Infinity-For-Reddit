@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -27,7 +29,9 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Activity.SubredditSelectionActivity;
+import ml.docilealligator.infinityforreddit.Activity.SubscribedThingListingActivity;
 import ml.docilealligator.infinityforreddit.Adapter.SubscribedSubredditsRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
@@ -38,7 +42,7 @@ import retrofit2.Retrofit;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SubscribedSubredditsListingFragment extends Fragment {
+public class SubscribedSubredditsListingFragment extends Fragment implements FragmentCommunicator {
 
     public static final String EXTRA_ACCOUNT_NAME = "EAN";
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
@@ -46,6 +50,8 @@ public class SubscribedSubredditsListingFragment extends Fragment {
     public static final String EXTRA_IS_SUBREDDIT_SELECTION = "EISS";
     public static final String EXTRA_EXTRA_CLEAR_SELECTION = "EECS";
 
+    @BindView(R.id.swipe_refresh_layout_subscribed_subreddits_listing_fragment)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view_subscribed_subreddits_listing_fragment)
     RecyclerView mRecyclerView;
     @BindView(R.id.no_subscriptions_linear_layout_subreddits_listing_fragment)
@@ -92,6 +98,16 @@ public class SubscribedSubredditsListingFragment extends Fragment {
 
         mGlide = Glide.with(this);
 
+        if (mActivity instanceof SubscribedThingListingActivity) {
+            mSwipeRefreshLayout.setOnRefreshListener(() -> ((SubscribedThingListingActivity) mActivity).loadSubscriptions(true));
+            TypedValue typedValue = new TypedValue();
+            mActivity.getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
+            mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(typedValue.data);
+            mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        } else {
+            mSwipeRefreshLayout.setEnabled(false);
+        }
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
 
         SubscribedSubredditsRecyclerViewAdapter adapter;
@@ -108,6 +124,7 @@ public class SubscribedSubredditsListingFragment extends Fragment {
                 new SubscribedSubredditViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, accountName))
                 .get(SubscribedSubredditViewModel.class);
         mSubscribedSubredditViewModel.getAllSubscribedSubreddits().observe(this, subscribedSubredditData -> {
+            mSwipeRefreshLayout.setRefreshing(false);
             if (subscribedSubredditData == null || subscribedSubredditData.size() == 0) {
                 mRecyclerView.setVisibility(View.GONE);
                 mLinearLayout.setVisibility(View.VISIBLE);
@@ -123,6 +140,7 @@ public class SubscribedSubredditsListingFragment extends Fragment {
         });
 
         mSubscribedSubredditViewModel.getAllFavoriteSubscribedSubreddits().observe(this, favoriteSubscribedSubredditData -> {
+            mSwipeRefreshLayout.setRefreshing(false);
             if (favoriteSubscribedSubredditData != null && favoriteSubscribedSubredditData.size() > 0) {
                 mLinearLayout.setVisibility(View.GONE);
                 mRecyclerView.setVisibility(View.VISIBLE);
@@ -133,5 +151,10 @@ public class SubscribedSubredditsListingFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    @Override
+    public void stopRefreshProgressbar() {
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 }

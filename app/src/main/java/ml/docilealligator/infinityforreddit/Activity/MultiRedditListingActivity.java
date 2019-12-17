@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,14 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -55,6 +58,8 @@ public class MultiRedditListingActivity extends BaseActivity {
     AppBarLayout mAppBarLayout;
     @BindView(R.id.toolbar_multi_reddit_listing_activity)
     Toolbar mToolbar;
+    @BindView(R.id.swipe_refresh_layout_multi_reddit_listing_activity)
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view_multi_reddit_listing_activity)
     RecyclerView mRecyclerView;
     @BindView(R.id.fetch_multi_reddit_listing_info_linear_layout_multi_reddit_listing_activity)
@@ -137,6 +142,13 @@ public class MultiRedditListingActivity extends BaseActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mSwipeRefreshLayout.setOnRefreshListener(this::loadMultiReddits);
+
+        TypedValue typedValue = new TypedValue();
+        getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(typedValue.data);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+
         if (savedInstanceState != null) {
             mInsertSuccess = savedInstanceState.getBoolean(INSERT_MULTI_REDDIT_STATE);
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
@@ -202,15 +214,21 @@ public class MultiRedditListingActivity extends BaseActivity {
     }
 
     private void loadMultiReddits() {
+        mSwipeRefreshLayout.setRefreshing(true);
         GetMultiReddit.getMyMultiReddits(mOauthRetrofit, mAccessToken, new GetMultiReddit.GetMultiRedditListener() {
             @Override
             public void success(ArrayList<MultiReddit> multiReddits) {
-                new InsertMultiRedditAsyncTask(mRedditDataRoomDatabase, multiReddits, () -> mInsertSuccess = true).execute();
+                new InsertMultiRedditAsyncTask(mRedditDataRoomDatabase, multiReddits, () -> {
+                    mInsertSuccess = true;
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }).execute();
             }
 
             @Override
             public void failed() {
                 mInsertSuccess = false;
+                mSwipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(MultiRedditListingActivity.this, R.string.error_loading_multi_reddit_list, Toast.LENGTH_SHORT).show();
             }
         });
     }

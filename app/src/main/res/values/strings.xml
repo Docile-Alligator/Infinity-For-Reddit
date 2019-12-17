@@ -375,4 +375,6 @@
     <string name="elapsed_time_years_ago">%1$d Years</string>
 
     <string name="error_getting_multi_reddit_data">Error getting multireddit data</string>
+    <string name="error_loading_multi_reddit_list">Cannot sync multireddits</string>
+    <string name="error_loading_subscriptions">Cannot sync subscriptions</string>
 </resources>

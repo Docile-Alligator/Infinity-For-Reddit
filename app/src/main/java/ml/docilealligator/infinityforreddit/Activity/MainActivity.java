@@ -965,7 +965,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         private PostFragment allPostFragment;
 
         SectionsPagerAdapter(FragmentManager fm) {
-            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+            super(fm);
         }
 
         @NonNull

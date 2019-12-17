@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -38,13 +39,14 @@ import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchSubscribedThing;
 import ml.docilealligator.infinityforreddit.Fragment.FollowedUsersListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SubscribedSubredditsListingFragment;
+import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 public class SubscribedThingListingActivity extends BaseActivity {
@@ -170,7 +172,7 @@ public class SubscribedThingListingActivity extends BaseActivity {
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
 
-        loadSubscriptions();
+        loadSubscriptions(false);
     }
 
     @Override
@@ -198,8 +200,8 @@ public class SubscribedThingListingActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    private void loadSubscriptions() {
-        if (!mInsertSuccess) {
+    public void loadSubscriptions(boolean forceLoad) {
+        if (!(!forceLoad && mInsertSuccess)) {
             FetchSubscribedThing.fetchSubscribedThing(mOauthRetrofit, mAccessToken, mAccountName, null,
                     new ArrayList<>(), new ArrayList<>(),
                     new ArrayList<>(),
@@ -214,12 +216,18 @@ public class SubscribedThingListingActivity extends BaseActivity {
                                     subscribedSubredditData,
                                     subscribedUserData,
                                     subredditData,
-                                    () -> mInsertSuccess = true).execute();
+                                    () -> {
+                                        mInsertSuccess = true;
+                                        sectionsPagerAdapter.stopRefreshProgressbar();
+                                    }).execute();
                         }
 
                         @Override
                         public void onFetchSubscribedThingFail() {
                             mInsertSuccess = false;
+                            sectionsPagerAdapter.stopRefreshProgressbar();
+                            Toast.makeText(SubscribedThingListingActivity.this,
+                                    R.string.error_loading_subscriptions, Toast.LENGTH_SHORT).show();
                         }
                     });
         }
@@ -231,6 +239,9 @@ public class SubscribedThingListingActivity extends BaseActivity {
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        private SubscribedSubredditsListingFragment subscribedSubredditsListingFragment;
+        private FollowedUsersListingFragment followedUsersListingFragment;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -279,7 +290,23 @@ public class SubscribedThingListingActivity extends BaseActivity {
         @NonNull
         @Override
         public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            return super.instantiateItem(container, position);
+            Fragment fragment = (Fragment) super.instantiateItem(container, position);
+            if (position == 0) {
+                subscribedSubredditsListingFragment = (SubscribedSubredditsListingFragment) fragment;
+            } else if (position == 1) {
+                followedUsersListingFragment = (FollowedUsersListingFragment) fragment;
+            }
+
+            return fragment;
+        }
+
+        public void stopRefreshProgressbar() {
+            if (subscribedSubredditsListingFragment != null) {
+                ((FragmentCommunicator) subscribedSubredditsListingFragment).stopRefreshProgressbar();
+            }
+            if (followedUsersListingFragment != null) {
+                ((FragmentCommunicator) followedUsersListingFragment).stopRefreshProgressbar();
+            }
         }
     }
 }
