@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,19 +19,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.chip.Chip;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
@@ -48,7 +42,6 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
-import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
 public class ViewMultiRedditDetailActivity extends BaseActivity implements SortTypeSelectionCallback,
@@ -64,24 +57,12 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
 
     @BindView(R.id.coordinator_layout_view_multi_reddit_detail_activity)
     CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_view_multi_reddit_detail)
+    @BindView(R.id.appbar_layout_view_multi_reddit_detail_activity)
     AppBarLayout appBarLayout;
     @BindView(R.id.collapsing_toolbar_layout_view_multi_reddit_detail_activity)
     CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.toolbar)
+    @BindView(R.id.toolbar_view_multi_reddit_detail_activity)
     Toolbar toolbar;
-    @BindView(R.id.icon_gif_image_view_view_multi_reddit_detail_activity)
-    GifImageView iconGifImageView;
-    @BindView(R.id.duplicate_multi_reddit_chip_view_multi_reddit_detail_activity)
-    Chip duplicateSubredditChip;
-    @BindView(R.id.multi_reddit_name_text_view_view_multi_reddit_detail_activity)
-    TextView multiRedditNameTextView;
-    @BindView(R.id.owner_text_view_view_multi_reddit_detail_activity)
-    TextView ownerTextView;
-    @BindView(R.id.subreddits_count_view_multi_reddit_detail_activity)
-    TextView subredditsCountTextView;
-    @BindView(R.id.description_text_view_view_multi_reddit_detail_activity)
-    TextView descriptionTextView;
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
@@ -97,8 +78,6 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     private String mAccountName;
     private String multiPath;
     private boolean isInLazyMode = false;
-    private boolean showToast = false;
-    private RequestManager glide;
     private Fragment mFragment;
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
@@ -114,40 +93,45 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
 
         ButterKnife.bind(this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            Resources resources = getResources();
+        Resources resources = getResources();
 
-            if ((resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet))
-                    && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {
-                Window window = getWindow();
-                window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1
+                && (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
+                || resources.getBoolean(R.bool.isTablet))
+                && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {
+            Window window = getWindow();
+            window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
-                boolean lightNavBar = false;
-                if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
-                    lightNavBar = true;
-                }
-                boolean finalLightNavBar = lightNavBar;
+            boolean lightNavBar = false;
+            if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+                lightNavBar = true;
+            }
+            boolean finalLightNavBar = lightNavBar;
 
-                View decorView = window.getDecorView();
-                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
-                    @Override
-                    public void onStateChanged(AppBarLayout appBarLayout, AppBarStateChangeListener.State state) {
-                        if (state == State.COLLAPSED) {
-                            if (finalLightNavBar) {
-                                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-                            }
-                        } else if (state == State.EXPANDED) {
-                            if (finalLightNavBar) {
-                                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-                            }
+            View decorView = window.getDecorView();
+            if (finalLightNavBar) {
+                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+            }
+            appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                @Override
+                public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                    if (state == State.COLLAPSED) {
+                        if (finalLightNavBar) {
+                            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                        }
+                    } else if (state == State.EXPANDED) {
+                        if (finalLightNavBar) {
+                            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                         }
                     }
-                });
-
-                int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-                if (navBarResourceId > 0) {
-                    showToast = true;
                 }
+            });
+
+            int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+            if (statusBarResourceId > 0) {
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
+                params.topMargin = getResources().getDimensionPixelSize(statusBarResourceId);
+                toolbar.setLayoutParams(params);
             }
         }
 
@@ -158,8 +142,10 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
             return;
         }
         multiPath = multiReddit.getPath();
-        multiRedditNameTextView.setText(multiReddit.getDisplayName());
-        ownerTextView.setText(multiReddit.getOwner());
+
+        toolbar.setTitle(multiReddit.getDisplayName());
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState != null) {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
@@ -194,20 +180,6 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         if (resourceId > 0) {
             statusBarHeight = getResources().getDimensionPixelSize(resourceId);
         }
-
-        toolbar.setTitle(multiReddit.getDisplayName());
-        ViewGroup.MarginLayoutParams toolbarParams = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
-        toolbarParams.topMargin = statusBarHeight;
-        toolbar.setLayoutParams(toolbarParams);
-        setSupportActionBar(toolbar);
-
-        glide = Glide.with(this);
-
-        glide.load(multiReddit.getIconUrl())
-                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0)))
-                .error(glide.load(R.drawable.subreddit_default_icon)
-                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0))))
-                .into(iconGifImageView);
     }
 
     private void getCurrentAccountAndInitializeFragment() {

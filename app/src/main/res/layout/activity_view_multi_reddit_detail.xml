@@ -9,7 +9,7 @@
     tools:context=".Activity.ViewMultiRedditDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar_layout_view_multi_reddit_detail"
+        android:id="@+id/appbar_layout_view_multi_reddit_detail_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/toolbarAndTabBackgroundColor"
@@ -19,89 +19,14 @@
             android:id="@+id/collapsing_toolbar_layout_view_multi_reddit_detail_activity"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?attr/backgroundColor"
+            app:layout_scrollFlags="scroll|enterAlways"
             app:titleEnabled="false"
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
-            app:toolbarId="@+id/toolbar">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <pl.droidsonroids.gif.GifImageView
-                    android:id="@+id/icon_gif_image_view_view_multi_reddit_detail_activity"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:elevation="4dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:layout_below="@id/icon_gif_image_view_view_multi_reddit_detail_activity"
-                    android:background="?attr/backgroundColor">
-
-                    <TextView
-                        android:id="@+id/multi_reddit_name_text_view_view_multi_reddit_detail_activity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="16dp"
-                        android:textSize="?attr/font_18"
-                        android:textColor="@color/colorAccent"
-                        android:layout_gravity="center_horizontal"/>
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/duplicate_multi_reddit_chip_view_multi_reddit_detail_activity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/white"
-                        android:layout_gravity="center_horizontal"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/owner_text_view_view_multi_reddit_detail_activity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/usernameColor"
-                            android:textSize="?attr/font_default"/>
-
-                        <TextView
-                            android:id="@+id/subreddits_count_view_multi_reddit_detail_activity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/primaryTextColor"
-                            android:textSize="?attr/font_default"/>
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/description_text_view_view_multi_reddit_detail_activity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:textColor="@color/primaryTextColor"
-                        android:textSize="?attr/font_default"
-                        android:visibility="gone"/>
-
-                </LinearLayout>
-
-            </RelativeLayout>
+            app:toolbarId="@+id/toolbar_view_multi_reddit_detail_activity">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
+                android:id="@+id/toolbar_view_multi_reddit_detail_activity"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:navigationIcon="?attr/homeAsUpIndicator" />
 
