@@ -68,7 +68,11 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         if (postType == TYPE_SUBREDDIT) {
             this.subredditOrUserName = path;
         } else {
-            multiRedditPath = path;
+            if (path.endsWith("/")) {
+                multiRedditPath = path + sortType.getType().value;
+            } else {
+                multiRedditPath = path + "/" + sortType.getType().value;
+            }
         }
         paginationNetworkStateLiveData = new MutableLiveData<>();
         initialLoadStateLiveData = new MutableLiveData<>();
@@ -747,17 +751,16 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         Call<String> getPost;
         if (accessToken == null) {
             if (sortType.getTime() != null) {
-                getPost = api.getMultiRedditPosts(multiRedditPath, lastItem, sortType.getType().value,
-                        sortType.getTime().value);
+                getPost = api.getMultiRedditPosts(multiRedditPath, lastItem, sortType.getTime().value);
             } else {
-                getPost = api.getMultiRedditPosts(multiRedditPath, lastItem, sortType.getType().value);
+                getPost = api.getMultiRedditPosts(multiRedditPath, lastItem);
             }
         } else {
             if (sortType.getTime() != null) {
-                getPost = api.getMultiRedditPostsOauth(multiRedditPath, lastItem, sortType.getType().value,
+                getPost = api.getMultiRedditPostsOauth(multiRedditPath, lastItem,
                         sortType.getTime().value, RedditUtils.getOAuthHeader(accessToken));
             } else {
-                getPost = api.getMultiRedditPostsOauth(multiRedditPath, lastItem, sortType.getType().value,
+                getPost = api.getMultiRedditPostsOauth(multiRedditPath, lastItem,
                         RedditUtils.getOAuthHeader(accessToken));
             }
         }
@@ -817,17 +820,17 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         Call<String> getPost;
         if (accessToken == null) {
             if (sortType.getTime() != null) {
-                getPost = api.getMultiRedditPosts(multiRedditPath, after, sortType.getType().value,
+                getPost = api.getMultiRedditPosts(multiRedditPath, after,
                         sortType.getTime().value);
             } else {
-                getPost = api.getMultiRedditPosts(multiRedditPath, after, sortType.getType().value);
+                getPost = api.getMultiRedditPosts(multiRedditPath, after);
             }
         } else {
             if (sortType.getTime() != null) {
-                getPost = api.getMultiRedditPostsOauth(multiRedditPath, after, sortType.getType().value,
+                getPost = api.getMultiRedditPostsOauth(multiRedditPath, after,
                         sortType.getTime().value, RedditUtils.getOAuthHeader(accessToken));
             } else {
-                getPost = api.getMultiRedditPostsOauth(multiRedditPath, after, sortType.getType().value,
+                getPost = api.getMultiRedditPostsOauth(multiRedditPath, after,
                         RedditUtils.getOAuthHeader(accessToken));
             }
         }

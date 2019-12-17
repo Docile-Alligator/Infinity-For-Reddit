@@ -273,19 +273,19 @@ public interface RedditAPI {
     Call<String> getUserMultiReddits(@Path("username") String username);
 
     @GET("{multipath}?raw_json=1")
-    Call<String> getMultiRedditPosts(@Path(value = "multipath", encoded = true) String multiPath, @Query("after") String after,
-                                     @Query("sort") String sortType);
+    Call<String> getMultiRedditPosts(@Path(value = "multipath", encoded = true) String multiPath,
+                                     @Query("after") String after);
 
     @GET("{multipath}?raw_json=1")
-    Call<String> getMultiRedditPosts(@Path(value = "multipath", encoded = true) String multiPath, @Query("after") String after,
-                                     @Query("sort") String sortType, @Query("t") String sortTime);
+    Call<String> getMultiRedditPosts(@Path(value = "multipath", encoded = true) String multiPath,
+                                     @Query("after") String after, @Query("t") String sortTime);
 
     @GET("{multipath}.json?raw_json=1")
-    Call<String> getMultiRedditPostsOauth(@Path(value = "multipath", encoded = true) String multiPath, @Query("after") String after,
-                                          @Query("sort") String sortType, @Query("t") String sortTime,
+    Call<String> getMultiRedditPostsOauth(@Path(value = "multipath", encoded = true) String multiPath,
+                                          @Query("after") String after, @Query("t") String sortTime,
                                           @HeaderMap Map<String, String> headers);
 
     @GET("{multipath}.json?raw_json=1")
-    Call<String> getMultiRedditPostsOauth(@Path(value = "multipath", encoded = true) String multiPath, @Query("after") String after,
-                                          @Query("sort") String sortType, @HeaderMap Map<String, String> headers);
+    Call<String> getMultiRedditPostsOauth(@Path(value = "multipath", encoded = true) String multiPath,
+                                          @Query("after") String after, @HeaderMap Map<String, String> headers);
 }
