@@ -165,6 +165,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     FloatingActionButton fab;
     @BindView(R.id.bottom_navigation_main_activity)
     BottomAppBar bottomNavigationView;
+    @BindView(R.id.linear_layout_bottom_app_bar_main_activity)
+    LinearLayout linearLayoutBottomAppBar;
     @BindView(R.id.subscriptions_bottom_app_bar_main_activity)
     TextView subscriptionsBottomAppBar;
     @BindView(R.id.multi_reddit_bottom_app_bar_main_activity)
@@ -269,10 +271,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
                     if (navBarResourceId > 0) {
                         int navBarHeight = resources.getDimensionPixelSize(navBarResourceId);
-                        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
-                        params.bottomMargin = navBarHeight;
-                        fab.setLayoutParams(params);
-
+                        linearLayoutBottomAppBar.setPadding(0,
+                                (int) (6 * resources.getDisplayMetrics().density), 0, navBarHeight);
                         nestedScrollView.setPadding(0, 0, 0, navBarHeight);
                     }
                 }
@@ -473,6 +473,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
             @Override
             public void onPageSelected(int position) {
+                bottomNavigationView.performShow();
                 fab.show();
                 if (isInLazyMode) {
                     if (position == sectionsPagerAdapter.getCurrentLazyModeFragmentPosition()) {

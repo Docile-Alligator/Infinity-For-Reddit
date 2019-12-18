@@ -61,14 +61,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:gravity="center"
         android:visibility="gone"
         app:backgroundTint="?attr/backgroundColor"
-        app:layout_anchorGravity="start"
-        app:fabAnimationMode="scale"
         app:fabAlignmentMode="center">
 
         <LinearLayout
+            android:id="@+id/linear_layout_bottom_app_bar_main_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:weightSum="3"
