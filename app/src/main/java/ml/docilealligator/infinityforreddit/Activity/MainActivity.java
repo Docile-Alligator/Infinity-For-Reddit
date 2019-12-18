@@ -45,6 +45,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -162,6 +163,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     TabLayout tabLayout;
     @BindView(R.id.fab_main_activity)
     FloatingActionButton fab;
+    @BindView(R.id.bottom_navigation_main_activity)
+    BottomAppBar bottomNavigationView;
+    @BindView(R.id.subscriptions_bottom_app_bar_main_activity)
+    TextView subscriptionsBottomAppBar;
+    @BindView(R.id.multi_reddit_bottom_app_bar_main_activity)
+    TextView multiRedditBottomAppBar;
     AccountViewModel accountViewModel;
     @Inject
     @Named("oauth")
@@ -353,20 +360,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         mNewAccountName = null;
                         if (newAccount == null) {
                             mNullAccessToken = true;
-
-                            if (mMenu != null) {
-                                mMenu.findItem(R.id.action_subscriptions_main_activity).setVisible(false);
-                            }
                         } else {
                             mAccessToken = newAccount.getAccessToken();
                             mAccountName = newAccount.getUsername();
                             mProfileImageUrl = newAccount.getProfileImageUrl();
                             mBannerImageUrl = newAccount.getBannerImageUrl();
                             mKarma = newAccount.getKarma();
-
-                            if (mMenu != null) {
-                                mMenu.findItem(R.id.action_subscriptions_main_activity).setVisible(true);
-                            }
                         }
 
                         if (enableNotification) {
@@ -395,10 +394,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     mBannerImageUrl = account.getBannerImageUrl();
                     mKarma = account.getKarma();
 
-                    if (mMenu != null) {
-                        mMenu.findItem(R.id.action_subscriptions_main_activity).setVisible(true);
-                    }
-
                     if (enableNotification) {
                         Constraints constraints = new Constraints.Builder()
                                 .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -421,20 +416,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             } else {
                 if (account == null) {
                     mNullAccessToken = true;
-
-                    if (mMenu != null) {
-                        mMenu.findItem(R.id.action_subscriptions_main_activity).setVisible(false);
-                    }
                 } else {
                     mAccessToken = account.getAccessToken();
                     mAccountName = account.getUsername();
                     mProfileImageUrl = account.getProfileImageUrl();
                     mBannerImageUrl = account.getBannerImageUrl();
                     mKarma = account.getKarma();
-
-                    if (mMenu != null) {
-                        mMenu.findItem(R.id.action_subscriptions_main_activity).setVisible(true);
-                    }
                 }
 
                 if (enableNotification) {
@@ -462,6 +449,21 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private void bindView() {
         if (isDestroyed()) {
             return;
+        }
+
+        if (mAccessToken == null) {
+            bottomNavigationView.setVisibility(View.GONE);
+        } else {
+            bottomNavigationView.setVisibility(View.VISIBLE);
+            subscriptionsBottomAppBar.setOnClickListener(view -> {
+                Intent intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
+                startActivity(intent);
+            });
+
+            multiRedditBottomAppBar.setOnClickListener(view -> {
+                Intent intent = new Intent(MainActivity.this, MultiRedditListingActivity.class);
+                startActivity(intent);
+            });
         }
 
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -783,13 +785,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         getMenuInflater().inflate(R.menu.main_activity, menu);
         mMenu = menu;
         MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);
-        MenuItem subscriptionsItem = mMenu.findItem(R.id.action_subscriptions_main_activity);
-
-        if (mAccessToken != null) {
-            subscriptionsItem.setVisible(true);
-        } else {
-            subscriptionsItem.setVisible(false);
-        }
 
         if (isInLazyMode) {
             lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
@@ -807,12 +802,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_subscriptions_main_activity:
-                /*Intent subscriptionsIntent = new Intent(this, SubscribedThingListingActivity.class);
-                startActivity(subscriptionsIntent);*/
-                Intent multiIntent = new Intent(this, MultiRedditListingActivity.class);
-                startActivity(multiIntent);
-                return true;
             case R.id.action_sort_main_activity:
                 if (viewPager.getCurrentItem() == 1 || viewPager.getCurrentItem() == 2) {
                     popularAndAllSortTypeBottomSheetFragment.show(getSupportFragmentManager(), popularAndAllSortTypeBottomSheetFragment.getTag());
@@ -935,11 +924,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     }
 
     public void postScrollUp() {
+        bottomNavigationView.performShow();
         fab.show();
     }
 
     public void postScrollDown() {
         fab.hide();
+        bottomNavigationView.performHide();
     }
 
     @Subscribe

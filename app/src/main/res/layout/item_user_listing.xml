@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/baseline_add_white_24"
+        android:src="@drawable/ic_add_24dp"
         android:tint="@color/colorPrimaryDarkDayNightTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

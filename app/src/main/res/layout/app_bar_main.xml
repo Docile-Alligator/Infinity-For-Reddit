@@ -56,14 +56,63 @@
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottom_navigation_main_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        app:backgroundTint="?attr/backgroundColor"
+        app:layout_anchorGravity="start"
+        app:fabAnimationMode="scale"
+        app:fabAlignmentMode="center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:paddingStart="0dp"
+            android:paddingEnd="16dp">
+
+            <TextView
+                android:id="@+id/subscriptions_bottom_app_bar_main_activity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:drawableTop="@drawable/ic_outline_check_circle_outline_bottom_app_bar_24dp"
+                android:text="@string/subscriptions"
+                android:textColor="@color/defaultTextColor"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"/>
+
+            <TextView
+                android:id="@+id/multi_reddit_bottom_app_bar_main_activity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:drawableTop="@drawable/ic_outline_check_circle_outline_bottom_app_bar_24dp"
+                android:text="@string/multi_reddit_listing_activity"
+                android:textColor="@color/defaultTextColor"
+                android:background="?attr/selectableItemBackgroundBorderless"/>
+
+        </LinearLayout>
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_main_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="@color/backgroundColorPrimary"
-        app:tint="@android:color/white"
-        app:srcCompat="@drawable/baseline_add_white_24" />
+        app:backgroundTint="?attr/backgroundColor"
+        app:srcCompat="@drawable/ic_add_bottom_app_bar_24dp"
+        app:tint="@null"
+        app:layout_anchor="@id/bottom_navigation_main_activity" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
