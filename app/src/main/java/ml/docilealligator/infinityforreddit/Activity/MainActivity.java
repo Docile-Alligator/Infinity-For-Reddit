@@ -329,14 +329,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             getCurrentAccountAndBindView();
         }
 
-        fab.setOnClickListener(view -> {
-            if (mAccessToken == null) {
-                Toast.makeText(MainActivity.this, R.string.login_first, Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
-        });
+        fab.setOnClickListener(view -> postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag()));
     }
 
     @Override
@@ -453,8 +446,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
         if (mAccessToken == null) {
             bottomNavigationView.setVisibility(View.GONE);
+            fab.setVisibility(View.GONE);
         } else {
             bottomNavigationView.setVisibility(View.VISIBLE);
+            fab.setVisibility(View.VISIBLE);
             subscriptionsBottomAppBar.setOnClickListener(view -> {
                 Intent intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
                 startActivity(intent);
@@ -924,13 +919,17 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     }
 
     public void postScrollUp() {
-        bottomNavigationView.performShow();
-        fab.show();
+        if (mAccessToken != null) {
+            bottomNavigationView.performShow();
+            fab.show();
+        }
     }
 
     public void postScrollDown() {
-        fab.hide();
-        bottomNavigationView.performHide();
+        if (mAccessToken != null) {
+            fab.hide();
+            bottomNavigationView.performHide();
+        }
     }
 
     @Subscribe
