@@ -89,8 +89,7 @@
                 app:layout_constraintBottom_toTopOf="@id/flow_layout_item_post_compact"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/barrier2"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="asdfas fas dfa sdfa sdfa sdfasdfasdf asdfasdfasdf" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.nex3z.flowlayout.FlowLayout
                 android:id="@+id/flow_layout_item_post_compact"
@@ -214,9 +213,7 @@
                 app:layout_constraintTop_toBottomOf="@id/flow_layout_item_post_compact"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/barrier2"
-                app:layout_constraintBottom_toBottomOf="parent"
-                tools:text="www.example.com"
-                tools:visibility="visible" />
+                app:layout_constraintBottom_toBottomOf="parent" />
 
             <RelativeLayout
                 android:id="@+id/image_view_wrapper_item_post_compact"
@@ -227,8 +224,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/barrier2"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="visible">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -256,7 +252,8 @@
                     android:id="@+id/progress_bar_item_post_compact"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:layout_centerInParent="true" />
+                    android:layout_centerInParent="true"
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
@@ -273,16 +270,14 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/barrier2"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="visible" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="start"
-                app:constraint_referenced_ids="image_view_wrapper_item_post_compact,image_view_no_preview_link_item_post_compact"
-                tools:layout_editor_absoluteX="411dp" />
+                app:constraint_referenced_ids="image_view_wrapper_item_post_compact,image_view_no_preview_link_item_post_compact" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
