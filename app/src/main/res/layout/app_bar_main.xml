@@ -69,9 +69,7 @@
             android:id="@+id/linear_layout_bottom_app_bar_main_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="3"
-            android:paddingStart="0dp"
-            android:paddingEnd="16dp">
+            android:weightSum="3">
 
             <TextView
                 android:id="@+id/subscriptions_bottom_app_bar_main_activity"
@@ -95,6 +93,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginEnd="16dp"
                 android:gravity="center"
                 android:drawableTop="@drawable/ic_multi_reddit_24dp"
                 android:text="@string/multi_reddit_listing_activity"
