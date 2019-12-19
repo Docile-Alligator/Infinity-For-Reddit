@@ -465,6 +465,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             intent.putExtra(ViewGIFActivity.IMAGE_URL_KEY, post.getVideoUrl());
                             mContext.startActivity(intent);
                         });
+
+                        ((PostViewHolder) holder).playButtonImageView.setVisibility(View.VISIBLE);
                         break;
                     case Post.VIDEO_TYPE:
                         ((PostViewHolder) holder).typeTextView.setText(R.string.video);
@@ -478,6 +480,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             intent.putExtra(ViewVideoActivity.EXTRA_ID, fullName);
                             mContext.startActivity(intent);
                         });
+
+                        ((PostViewHolder) holder).playButtonImageView.setVisibility(View.VISIBLE);
                         break;
                     case Post.NO_PREVIEW_LINK_TYPE:
                         ((PostViewHolder) holder).typeTextView.setText(R.string.link);
@@ -943,7 +947,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                 if (post.getPostType() != Post.TEXT_TYPE && post.getPostType() != Post.NO_PREVIEW_LINK_TYPE) {
                     ((PostCompactViewHolder) holder).relativeLayout.setVisibility(View.VISIBLE);
-                    ((PostCompactViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
+                    if (post.getPostType() != Post.GIF_TYPE && post.getPostType() != Post.VIDEO_TYPE) {
+                        ((PostCompactViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
+                    }
                     ((PostCompactViewHolder) holder).imageView.setVisibility(View.VISIBLE);
                     loadImage(holder, post);
                 }
@@ -1013,6 +1019,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             intent.putExtra(ViewGIFActivity.IMAGE_URL_KEY, post.getVideoUrl());
                             mContext.startActivity(intent);
                         });
+
+                        ((PostCompactViewHolder) holder).playButtonImageView.setVisibility(View.VISIBLE);
                         break;
                     case Post.VIDEO_TYPE:
                         ((PostCompactViewHolder) holder).typeTextView.setText(R.string.video);
@@ -1026,6 +1034,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             intent.putExtra(ViewVideoActivity.EXTRA_ID, fullName);
                             mContext.startActivity(intent);
                         });
+
+                        ((PostCompactViewHolder) holder).playButtonImageView.setVisibility(View.VISIBLE);
                         break;
                     case Post.NO_PREVIEW_LINK_TYPE:
                         ((PostCompactViewHolder) holder).typeTextView.setText(R.string.link);
@@ -1406,6 +1416,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             ((PostViewHolder) holder).linkTextView.setVisibility(View.GONE);
             ((PostViewHolder) holder).progressBar.setVisibility(View.GONE);
             ((PostViewHolder) holder).imageView.setVisibility(View.GONE);
+            ((PostViewHolder) holder).playButtonImageView.setVisibility(View.GONE);
             ((PostViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
             ((PostViewHolder) holder).noPreviewLinkImageView.setVisibility(View.GONE);
             ((PostViewHolder) holder).contentTextView.setVisibility(View.GONE);
@@ -1427,6 +1438,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             ((PostCompactViewHolder) holder).linkTextView.setVisibility(View.GONE);
             ((PostCompactViewHolder) holder).progressBar.setVisibility(View.GONE);
             ((PostCompactViewHolder) holder).imageView.setVisibility(View.GONE);
+            ((PostCompactViewHolder) holder).playButtonImageView.setVisibility(View.GONE);
             ((PostCompactViewHolder) holder).noPreviewLinkImageView.setVisibility(View.GONE);
             ((PostCompactViewHolder) holder).upvoteButton.clearColorFilter();
             ((PostCompactViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.defaultTextColor));
@@ -1479,6 +1491,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         ProgressBar progressBar;
         @BindView(R.id.image_view_best_post_item)
         AspectRatioGifImageView imageView;
+        @BindView(R.id.play_button_image_view_item_post)
+        ImageView playButtonImageView;
         @BindView(R.id.load_image_error_relative_layout_item_post)
         RelativeLayout errorRelativeLayout;
         @BindView(R.id.image_view_no_preview_link_item_post)
@@ -1563,6 +1577,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         ProgressBar progressBar;
         @BindView(R.id.image_view_best_post_item)
         ImageView imageView;
+        @BindView(R.id.play_button_image_view_item_post_compact)
+        ImageView playButtonImageView;
         @BindView(R.id.image_view_no_preview_link_item_post_compact)
         ImageView noPreviewLinkImageView;
         @BindView(R.id.bottom_constraint_layout_item_post_compact)

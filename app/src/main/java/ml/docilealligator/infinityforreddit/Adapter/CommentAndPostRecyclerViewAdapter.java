@@ -466,6 +466,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         intent.putExtra(ViewGIFActivity.IMAGE_URL_KEY, mPost.getVideoUrl());
                         mActivity.startActivity(intent);
                     });
+
+                    ((PostDetailViewHolder) holder).mPlayButtonImageView.setVisibility(View.VISIBLE);
                     break;
                 case Post.VIDEO_TYPE:
                     ((PostDetailViewHolder) holder).mTypeTextView.setText("VIDEO");
@@ -479,6 +481,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         intent.putExtra(ViewVideoActivity.EXTRA_ID, mPost.getId());
                         mActivity.startActivity(intent);
                     });
+
+                    ((PostDetailViewHolder) holder).mPlayButtonImageView.setVisibility(View.VISIBLE);
                     break;
                 case Post.NO_PREVIEW_LINK_TYPE:
                     ((PostDetailViewHolder) holder).mTypeTextView.setText("LINK");
@@ -1576,6 +1580,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         TextView mLoadImageErrorTextView;
         @BindView(R.id.image_view_item_post_detail)
         AspectRatioImageView mImageView;
+        @BindView(R.id.play_button_image_view_item_post_detail)
+        ImageView mPlayButtonImageView;
         @BindView(R.id.image_view_no_preview_link_item_post_detail)
         ImageView mNoPreviewLinkImageView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail)

@@ -210,12 +210,28 @@
         android:layout_height="wrap_content"
         android:visibility="gone">
 
-        <com.santalu.aspectratioimageview.AspectRatioImageView
-            android:id="@+id/image_view_item_post_detail"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="fitStart"/>
+            android:layout_height="wrap_content">
+
+            <com.santalu.aspectratioimageview.AspectRatioImageView
+                android:id="@+id/image_view_item_post_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitStart"/>
+
+            <ImageView
+                android:id="@+id/play_button_image_view_item_post_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_gravity="start"
+                android:background="@drawable/play_button_round_background"
+                android:src="@drawable/ic_play_circle_36dp"
+                android:visibility="gone" />
+
+        </FrameLayout>
 
         <RelativeLayout
             android:id="@+id/load_wrapper_item_post_detail"

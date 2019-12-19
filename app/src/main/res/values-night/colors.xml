@@ -22,6 +22,8 @@
 
     <color name="backgroundColorPrimaryDark">#1565C0</color>
 
+    <color name="backgroundColorInverse">#FFFFFF</color>
+
     <color name="roundedBottomSheetPrimaryBackground">#242424</color>
 
     <color name="voteAndReplyUnavailableVoteButtonColor">#3C3C3C</color>

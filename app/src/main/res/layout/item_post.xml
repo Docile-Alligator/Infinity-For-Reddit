@@ -231,18 +231,34 @@
             android:layout_height="wrap_content"
             android:visibility="gone">
 
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView
+                    android:id="@+id/image_view_best_post_item"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitStart" />
+
+                <ImageView
+                    android:id="@+id/play_button_image_view_item_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:layout_gravity="start"
+                    android:background="@drawable/play_button_round_background"
+                    android:src="@drawable/ic_play_circle_36dp"
+                    android:visibility="gone" />
+
+            </FrameLayout>
+
             <ProgressBar
                 android:id="@+id/progress_bar_item_post"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true" />
-
-            <ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView
-                android:id="@+id/image_view_best_post_item"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:scaleType="fitStart" />
 
             <RelativeLayout
                 android:id="@+id/load_image_error_relative_layout_item_post"
