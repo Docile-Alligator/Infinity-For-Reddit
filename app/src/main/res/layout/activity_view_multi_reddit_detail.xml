@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinator_layout_view_multi_reddit_detail_activity"
     android:background="?attr/backgroundColor"
     tools:context=".Activity.ViewMultiRedditDetailActivity">
 
@@ -37,7 +36,7 @@
     <FrameLayout
         android:id="@+id/frame_layout_view_multi_reddit_detail_activity"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

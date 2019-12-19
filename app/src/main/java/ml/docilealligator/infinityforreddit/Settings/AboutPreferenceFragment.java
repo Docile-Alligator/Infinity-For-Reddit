@@ -28,6 +28,7 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
         Preference emailPreference = findPreference(SharedPreferencesUtils.EMAIL_KEY);
         Preference redditAccountPreference = findPreference(SharedPreferencesUtils.REDDIT_ACCOUNT_KEY);
         Preference subredditPreference = findPreference(SharedPreferencesUtils.SUBREDDIT_KEY);
+        Preference sharePreference = findPreference(SharedPreferencesUtils.SHARE_KEY);
 
         Activity activity = getActivity();
 
@@ -83,6 +84,20 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
                     Intent intent = new Intent(activity, LinkResolverActivity.class);
                     intent.setData(Uri.parse("https://www.reddit.com/r/Infinity_For_Reddit"));
                     startActivity(intent);
+                    return true;
+                });
+            }
+
+            if (sharePreference != null) {
+                sharePreference.setOnPreferenceClickListener(preference -> {
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_this_app));
+                    if (intent.resolveActivity(activity.getPackageManager()) != null) {
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(activity, R.string.no_app, Toast.LENGTH_SHORT).show();
+                    }
                     return true;
                 });
             }

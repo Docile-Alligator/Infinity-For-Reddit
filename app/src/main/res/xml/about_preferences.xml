@@ -35,4 +35,9 @@
         app:title="@string/settings_subreddit_title"
         app:summary="@string/settings_subreddit_summary" />
 
+    <Preference
+        android:key="share"
+        app:title="@string/settings_share_title"
+        app:summary="@string/settings_share_summary" />
+
 </PreferenceScreen>

@@ -82,6 +82,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
     private SortTypeBottomSheetFragment bestSortTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment popularAndAllSortTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment subredditSortTypeBottomSheetFragment;
+    private SortTypeBottomSheetFragment multiRedditSortTypeBottomSheetFragment;
     private UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment;
     private SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment;
     private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
@@ -228,9 +229,9 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
                     getSupportActionBar().setTitle(subredditNamePrefixed);
 
                     subredditSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-                    Bundle bottomSheetBundle = new Bundle();
-                    bottomSheetBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-                    subredditSortTypeBottomSheetFragment.setArguments(bottomSheetBundle);
+                    Bundle subredditSheetBundle = new Bundle();
+                    subredditSheetBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
+                    subredditSortTypeBottomSheetFragment.setArguments(subredditSheetBundle);
                 }
                 break;
             case PostDataSource.TYPE_MULTI_REDDIT:
@@ -243,10 +244,11 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
                 }
                 getSupportActionBar().setTitle(multiRedditName);
 
-                subredditSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-                Bundle bottomSheetBundle = new Bundle();
-                bottomSheetBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-                subredditSortTypeBottomSheetFragment.setArguments(bottomSheetBundle);
+                multiRedditSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
+                Bundle multiRedditBundle = new Bundle();
+                multiRedditBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
+                multiRedditBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_RANDOM_TYPE, true);
+                multiRedditSortTypeBottomSheetFragment.setArguments(multiRedditBundle);
                 break;
             case PostDataSource.TYPE_USER:
                 String usernamePrefixed = "u/" + name;
@@ -340,6 +342,9 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
                         } else {
                             subredditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), subredditSortTypeBottomSheetFragment.getTag());
                         }
+                        break;
+                    case PostDataSource.TYPE_MULTI_REDDIT:
+                        multiRedditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), multiRedditSortTypeBottomSheetFragment.getTag());
                         break;
                     case PostDataSource.TYPE_USER:
                         userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());

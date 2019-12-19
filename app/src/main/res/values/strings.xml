@@ -330,6 +330,8 @@
     <string name="settings_reddit_account_summary">u/Hostilenemy</string>
     <string name="settings_subreddit_title">Subreddit</string>
     <string name="settings_subreddit_summary">r/Infinity_For_Reddit</string>
+    <string name="settings_share_title">Share</string>
+    <string name="settings_share_summary">Share this app to other people if you enjoy it</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -350,6 +352,7 @@
     <string name="share">Share</string>
 
     <string name="no_email_client">No Email client found</string>
+    <string name="no_app">No app available</string>
 
     <string name="comment_saved_success">Comment saved</string>
     <string name="comment_saved_failed">Unable to save comment</string>
@@ -377,4 +380,6 @@
     <string name="error_getting_multi_reddit_data">Error getting multireddit data</string>
     <string name="error_loading_multi_reddit_list">Cannot sync multireddits</string>
     <string name="error_loading_subscriptions">Cannot sync subscriptions</string>
+
+    <string name="share_this_app">Check out Infinity for Reddit, an awesome Reddit client!\nhttps://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit</string>
 </resources>

@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -55,8 +54,6 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
 
-    @BindView(R.id.coordinator_layout_view_multi_reddit_detail_activity)
-    CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_view_multi_reddit_detail_activity)
     AppBarLayout appBarLayout;
     @BindView(R.id.collapsing_toolbar_layout_view_multi_reddit_detail_activity)
