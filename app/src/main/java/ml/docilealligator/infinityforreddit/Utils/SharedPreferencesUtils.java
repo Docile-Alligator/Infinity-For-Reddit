@@ -30,6 +30,7 @@ public class SharedPreferencesUtils {
     public static final String CONTENT_FONT_SIZE_KEY = "content_font_size";
     public static final String AMOLED_DARK_KEY = "amoled_dark";
     public static final String IMMERSIVE_INTERFACE_KEY = "immersive_interface";
+    public static final String BOTTOM_APP_BAR_KEY = "bottom_app_bar";
     public static final String VOTE_BUTTONS_ON_THE_RIGHT_KEY = "vote_buttons_on_the_right";
     public static final String SORT_TYPE_BEST_POST = "sort_type_best_post";
     public static final String SORT_TIME_BEST_POST = "sort_time_best_post";

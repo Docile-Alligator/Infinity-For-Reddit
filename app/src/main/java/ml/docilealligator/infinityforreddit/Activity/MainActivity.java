@@ -3,11 +3,14 @@ package ml.docilealligator.infinityforreddit.Activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -139,6 +143,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     LinearLayout profileLinearLayout;
     @BindView(R.id.subscriptions_linear_layout_main_activity)
     LinearLayout subscriptionLinearLayout;
+    @BindView(R.id.multi_reddits_linear_layout_main_activity)
+    LinearLayout multiRedditsLinearLayout;
     @BindView(R.id.inbox_linear_layout_main_activity)
     LinearLayout inboxLinearLayout;
     @BindView(R.id.post_label_main_activity)
@@ -448,7 +454,17 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             bottomNavigationView.setVisibility(View.GONE);
             fab.setVisibility(View.GONE);
         } else {
-            bottomNavigationView.setVisibility(View.VISIBLE);
+            if (mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false)) {
+                bottomNavigationView.setVisibility(View.VISIBLE);
+            } else {
+                CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+                lp.setAnchorId(View.NO_ID);
+                lp.gravity = Gravity.END | Gravity.BOTTOM;
+                fab.setLayoutParams(lp);
+                fab.setImageTintList(ColorStateList.valueOf(Color.WHITE));
+                fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.backgroundColorPrimary)));
+            }
+
             fab.setVisibility(View.VISIBLE);
             subscriptionsBottomAppBar.setOnClickListener(view -> {
                 Intent intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
@@ -603,6 +619,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             accountLabelTextView.setVisibility(View.GONE);
             profileLinearLayout.setVisibility(View.GONE);
             subscriptionLinearLayout.setVisibility(View.GONE);
+            multiRedditsLinearLayout.setVisibility(View.GONE);
             inboxLinearLayout.setVisibility(View.GONE);
             postLabelTextView.setVisibility(View.GONE);
             upvotedLinearLayout.setVisibility(View.GONE);
@@ -638,6 +655,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
         subscriptionLinearLayout.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubscribedThingListingActivity.class);
+            startActivity(intent);
+            drawer.closeDrawers();
+        });
+
+        multiRedditsLinearLayout.setOnClickListener(view -> {
+            Intent intent = new Intent(this, MultiRedditListingActivity.class);
             startActivity(intent);
             drawer.closeDrawers();
         });
@@ -956,7 +979,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         private PostFragment allPostFragment;
 
         SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
+            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
         @NonNull

@@ -105,6 +105,32 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/multi_reddits_linear_layout_main_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginEnd="32dp"
+                            android:src="@drawable/ic_multi_reddit_24dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/multi_reddit"
+                            android:textColor="@color/primaryTextColor"
+                            android:textSize="?attr/font_default" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/inbox_linear_layout_main_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

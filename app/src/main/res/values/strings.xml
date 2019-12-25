@@ -16,7 +16,7 @@
     <string name="view_message_activity_label">Inbox</string>
     <string name="settings_activity_label">Settings</string>
     <string name="account_saved_thing_activity">Saved</string>
-    <string name="multi_reddit_listing_activity">MultiReddit</string>
+    <string name="multi_reddit_listing_activity">Multireddit</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -79,6 +79,7 @@
     <string name="profile">Profile</string>
     <string name="following">Following</string>
     <string name="subscriptions">Subscriptions</string>
+    <string name="multi_reddit">Multireddit</string>
     <string name="inbox">Inbox</string>
     <string name="upvoted">Upvoted</string>
     <string name="downvoted">Downvoted</string>
@@ -291,6 +292,7 @@
     <string name="settings_theme_system_default_summary">Device default</string>
     <string name="settings_amoled_dark_title">Amoled Dark</string>
     <string name="settings_immersive_interface_title">Immersive Interface</string>
+    <string name="settings_enable_bottom_app_bar_title">Enable Bottom Navigation</string>
     <string name="settings_vote_buttons_on_the_right_title">Vote Buttons on the Right</string>
     <string name="settings_volume_keys_navigate_comments_title">Use Volume Keys to Navigate Comments in Posts</string>
     <string name="settings_volume_keys_navigate_posts_title">Use Volume Keys to Navigate Posts</string>

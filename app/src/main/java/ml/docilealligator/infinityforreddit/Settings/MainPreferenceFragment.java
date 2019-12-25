@@ -49,6 +49,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
 
             SwitchPreference amoledDarkSwitch = findPreference(SharedPreferencesUtils.AMOLED_DARK_KEY);
             SwitchPreference immersiveInterfaceSwitch = findPreference(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY);
+            SwitchPreference bottomAppBarSwitch = findPreference(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY);
             SwitchPreference voteButtonsOnTheRightSwitch = findPreference(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY);
             SwitchPreference showElapsedTimeSwitch = findPreference(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY);
             SwitchPreference nsfwSwitch = findPreference(SharedPreferencesUtils.NSFW_KEY);
@@ -76,6 +77,13 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
                 } else {
                     immersiveInterfaceSwitch.setVisible(false);
                 }
+            }
+
+            if (bottomAppBarSwitch != null) {
+                bottomAppBarSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                    EventBus.getDefault().post(new RecreateActivityEvent());
+                    return true;
+                });
             }
 
             if (voteButtonsOnTheRightSwitch != null) {
