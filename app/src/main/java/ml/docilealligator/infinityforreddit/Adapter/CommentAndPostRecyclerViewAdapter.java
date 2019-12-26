@@ -27,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestBuilder;
@@ -39,6 +40,8 @@ import com.bumptech.glide.request.target.Target;
 import com.libRG.CustomTextView;
 import com.santalu.aspectratioimageview.AspectRatioImageView;
 
+import org.commonmark.ext.gfm.tables.TableBlock;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -49,6 +52,9 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
+import io.noties.markwon.recycler.MarkwonAdapter;
+import io.noties.markwon.recycler.table.TableEntry;
+import io.noties.markwon.recycler.table.TableEntryPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -97,6 +103,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private RequestManager mGlide;
     private Markwon mMarkwon;
+    private final MarkwonAdapter mMarkwonAdapter;
     private String mAccessToken;
     private String mAccountName;
     private Post mPost;
@@ -152,7 +159,14 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                 })
                         )
                 )
+                .usePlugin(TableEntryPlugin.create(mActivity))
                 .build();
+        mMarkwonAdapter = MarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
+                .include(TableBlock.class, TableEntry.create(builder -> builder
+                        .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
+                        .textLayoutIsRoot(R.layout.view_table_entry_cell)))
+                .build();
+        mMarkwonAdapter.setMarkdown(mMarkwon, "");
         mAccessToken = accessToken;
         mAccountName = accountName;
         mPost = post;
@@ -493,7 +507,10 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
                     if (mPost.getSelfText() != null && !mPost.getSelfText().equals("")) {
                         ((PostDetailViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
-                        mMarkwon.setMarkdown(((PostDetailViewHolder) holder).mContentMarkdownView, mPost.getSelfText());
+                        ((PostDetailViewHolder) holder).mContentMarkdownView.setLayoutManager(new LinearLayoutManager(mActivity));
+                        ((PostDetailViewHolder) holder).mContentMarkdownView.setAdapter(mMarkwonAdapter);
+                        mMarkwonAdapter.setMarkdown(mMarkwon, mPost.getSelfText());
+                        mMarkwonAdapter.notifyDataSetChanged();
                     }
 
                     ((PostDetailViewHolder) holder).mNoPreviewLinkImageView.setVisibility(View.VISIBLE);
@@ -513,7 +530,10 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
                     if (!mPost.getSelfText().equals("")) {
                         ((PostDetailViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
-                        mMarkwon.setMarkdown(((PostDetailViewHolder) holder).mContentMarkdownView, mPost.getSelfText());
+                        ((PostDetailViewHolder) holder).mContentMarkdownView.setLayoutManager(new LinearLayoutManager(mActivity));
+                        ((PostDetailViewHolder) holder).mContentMarkdownView.setAdapter(mMarkwonAdapter);
+                        mMarkwonAdapter.setMarkdown(mMarkwon, mPost.getSelfText());
+                        mMarkwonAdapter.notifyDataSetChanged();
                     }
                     break;
             }
@@ -1550,8 +1570,10 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         TextView mPostTimeTextView;
         @BindView(R.id.title_text_view_item_post_detail)
         TextView mTitleTextView;
+        /*@BindView(R.id.content_markdown_view_item_post_detail)
+        TextView mContentMarkdownView;*/
         @BindView(R.id.content_markdown_view_item_post_detail)
-        TextView mContentMarkdownView;
+        RecyclerView mContentMarkdownView;
         @BindView(R.id.type_text_view_item_post_detail)
         CustomTextView mTypeTextView;
         @BindView(R.id.gilded_number_text_view_item_post_detail)

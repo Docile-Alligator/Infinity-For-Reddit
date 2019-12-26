@@ -81,15 +81,11 @@
         android:textColor="@color/primaryTextColor"
         android:textSize="?attr/title_font_18" />
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/content_markdown_view_item_post_detail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:layout_marginTop="16dp"
-        android:visibility="gone"
-        android:textSize="?attr/content_font_default" />
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
     <com.nex3z.flowlayout.FlowLayout
         android:layout_width="match_parent"
