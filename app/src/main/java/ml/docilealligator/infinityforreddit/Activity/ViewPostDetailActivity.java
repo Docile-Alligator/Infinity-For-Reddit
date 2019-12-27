@@ -37,6 +37,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.livefront.bridge.Bridge;
 import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrConfig;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -192,7 +193,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         EventBus.getDefault().register(this);
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL, true)) {
-            Slidr.attach(this);
+            SlidrConfig config = new SlidrConfig.Builder().sensitivity(0.1f).build();
+            Slidr.attach(this, config);
         }
 
         Resources resources = getResources();

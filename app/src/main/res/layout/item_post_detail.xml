@@ -85,6 +85,7 @@
         android:id="@+id/content_markdown_view_item_post_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
         android:visibility="gone" />
 
     <com.nex3z.flowlayout.FlowLayout
