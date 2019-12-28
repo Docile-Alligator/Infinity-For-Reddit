@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -957,16 +956,12 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             collapseChildren(commentPosition);
                             ((CommentViewHolder) holder).expandButton.setImageResource(R.drawable.ic_expand_more_grey_24dp);
                         } else {
-                            //expandChildren(commentPosition);
+                            comment.setExpanded(true);
                             ArrayList<CommentData> newList = new ArrayList<>();
-                            eC(mVisibleComments.get(commentPosition).getChildren(), newList, 0);
+                            expandChildren(mVisibleComments.get(commentPosition).getChildren(), newList, 0);
                             mVisibleComments.get(commentPosition).setExpanded(true);
                             mVisibleComments.addAll(commentPosition + 1, newList);
-                            Log.i("adfasdf", "s " + newList.size());
-                            for (CommentData c : newList) {
-                                Log.i("adfasdf", "s " + c.getAuthor());
-                            }
-                            Log.i("adfasdf", "s " + commentPosition);
+
                             if (mIsSingleCommentThreadMode) {
                                 notifyItemRangeInserted(commentPosition + 3, newList.size());
                             } else {
@@ -1269,33 +1264,14 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         return -1;
     }
 
-    private void expandChildren(int position) {
-        CommentData comment = mVisibleComments.get(position);
-        if (!comment.isExpanded()) {
-            comment.setExpanded(true);
-            ArrayList<CommentData> children = comment.getChildren();
-            if (children != null && children.size() > 0) {
-                for (int i = 0; i < children.size(); i++) {
-                    children.get(i).setExpanded(false);
-                }
-                mVisibleComments.addAll(position + 1, children);
-                if (mIsSingleCommentThreadMode) {
-                    notifyItemRangeInserted(position + 3, children.size());
-                } else {
-                    notifyItemRangeInserted(position + 2, children.size());
-                }
-            }
-        }
-    }
-
-    private void eC(ArrayList<CommentData> comments, ArrayList<CommentData> newList, int position) {
+    private void expandChildren(ArrayList<CommentData> comments, ArrayList<CommentData> newList, int position) {
         if (comments != null && comments.size() > 0) {
             newList.addAll(position, comments);
-            int newPosition = position + 1;
             for (int i = 0; i < comments.size(); i++) {
+                position++;
                 if (comments.get(i).getChildren() != null && comments.get(i).getChildren().size() > 0) {
-                    eC(comments.get(i).getChildren(), newList, newPosition);
-                    newPosition += comments.get(i).getChildren().size();
+                    expandChildren(comments.get(i).getChildren(), newList, position);
+                    position = position + comments.get(i).getChildren().size();
                 }
                 comments.get(i).setExpanded(true);
             }
@@ -1386,11 +1362,16 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mVisibleComments.get(parentPosition).addChild(comment);
         mVisibleComments.get(parentPosition).setHasReply(true);
         if (!mVisibleComments.get(parentPosition).isExpanded()) {
-            expandChildren(parentPosition);
+            ArrayList<CommentData> newList = new ArrayList<>();
+            expandChildren(mVisibleComments.get(parentPosition).getChildren(), newList, 0);
+            mVisibleComments.get(parentPosition).setExpanded(true);
+            mVisibleComments.addAll(parentPosition + 1, newList);
             if (mIsSingleCommentThreadMode) {
                 notifyItemChanged(parentPosition + 2);
+                notifyItemRangeInserted(parentPosition + 3, newList.size());
             } else {
                 notifyItemChanged(parentPosition + 1);
+                notifyItemRangeInserted(parentPosition + 2, newList.size());
             }
         } else {
             mVisibleComments.add(parentPosition + 1, comment);
