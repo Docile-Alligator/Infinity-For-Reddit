@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -956,8 +957,21 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             collapseChildren(commentPosition);
                             ((CommentViewHolder) holder).expandButton.setImageResource(R.drawable.ic_expand_more_grey_24dp);
                         } else {
-                            expandChildren(commentPosition);
+                            //expandChildren(commentPosition);
+                            ArrayList<CommentData> newList = new ArrayList<>();
+                            eC(mVisibleComments.get(commentPosition).getChildren(), newList, 0);
                             mVisibleComments.get(commentPosition).setExpanded(true);
+                            mVisibleComments.addAll(commentPosition + 1, newList);
+                            Log.i("adfasdf", "s " + newList.size());
+                            for (CommentData c : newList) {
+                                Log.i("adfasdf", "s " + c.getAuthor());
+                            }
+                            Log.i("adfasdf", "s " + commentPosition);
+                            if (mIsSingleCommentThreadMode) {
+                                notifyItemRangeInserted(commentPosition + 3, newList.size());
+                            } else {
+                                notifyItemRangeInserted(commentPosition + 2, newList.size());
+                            }
                             ((CommentViewHolder) holder).expandButton.setImageResource(R.drawable.ic_expand_less_grey_24dp);
                         }
                     }
@@ -1270,6 +1284,20 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 } else {
                     notifyItemRangeInserted(position + 2, children.size());
                 }
+            }
+        }
+    }
+
+    private void eC(ArrayList<CommentData> comments, ArrayList<CommentData> newList, int position) {
+        if (comments != null && comments.size() > 0) {
+            newList.addAll(position, comments);
+            int newPosition = position + 1;
+            for (int i = 0; i < comments.size(); i++) {
+                if (comments.get(i).getChildren() != null && comments.get(i).getChildren().size() > 0) {
+                    eC(comments.get(i).getChildren(), newList, newPosition);
+                    newPosition += comments.get(i).getChildren().size();
+                }
+                comments.get(i).setExpanded(true);
             }
         }
     }
