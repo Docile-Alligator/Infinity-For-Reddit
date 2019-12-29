@@ -72,6 +72,7 @@ import ml.docilealligator.infinityforreddit.AsyncTask.LoadSubredditIconAsyncTask
 import ml.docilealligator.infinityforreddit.AsyncTask.LoadUserDataAsyncTask;
 import ml.docilealligator.infinityforreddit.CommentData;
 import ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView;
+import ml.docilealligator.infinityforreddit.CustomView.MarkwonLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.FetchComment;
 import ml.docilealligator.infinityforreddit.Fragment.ModifyCommentBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Post;
@@ -507,7 +508,18 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
                     if (mPost.getSelfText() != null && !mPost.getSelfText().equals("")) {
                         ((PostDetailViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
-                        ((PostDetailViewHolder) holder).mContentMarkdownView.setLayoutManager(new LinearLayoutManager(mActivity));
+                        LinearLayoutManager linearLayoutManager = new MarkwonLinearLayoutManager(mActivity, new MarkwonLinearLayoutManager.HorizontalScrollViewScrolledListener() {
+                            @Override
+                            public void onScrolledLeft() {
+                                ((ViewPostDetailActivity) mActivity).lockSwipeRightToGoBack();
+                            }
+
+                            @Override
+                            public void onScrolledRight() {
+                                ((ViewPostDetailActivity) mActivity).unlockSwipeRightToGoBack();
+                            }
+                        });
+                        ((PostDetailViewHolder) holder).mContentMarkdownView.setLayoutManager(linearLayoutManager);
                         ((PostDetailViewHolder) holder).mContentMarkdownView.setAdapter(mMarkwonAdapter);
                         mMarkwonAdapter.setMarkdown(mMarkwon, mPost.getSelfText());
                         mMarkwonAdapter.notifyDataSetChanged();
@@ -530,7 +542,18 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
                     if (!mPost.getSelfText().equals("")) {
                         ((PostDetailViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
-                        ((PostDetailViewHolder) holder).mContentMarkdownView.setLayoutManager(new LinearLayoutManager(mActivity));
+                        LinearLayoutManager linearLayoutManager = new MarkwonLinearLayoutManager(mActivity, new MarkwonLinearLayoutManager.HorizontalScrollViewScrolledListener() {
+                            @Override
+                            public void onScrolledLeft() {
+                                ((ViewPostDetailActivity) mActivity).lockSwipeRightToGoBack();
+                            }
+
+                            @Override
+                            public void onScrolledRight() {
+                                ((ViewPostDetailActivity) mActivity).unlockSwipeRightToGoBack();
+                            }
+                        });
+                        ((PostDetailViewHolder) holder).mContentMarkdownView.setLayoutManager(linearLayoutManager);
                         ((PostDetailViewHolder) holder).mContentMarkdownView.setAdapter(mMarkwonAdapter);
                         mMarkwonAdapter.setMarkdown(mMarkwon, mPost.getSelfText());
                         mMarkwonAdapter.notifyDataSetChanged();

@@ -37,7 +37,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.livefront.bridge.Bridge;
 import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrConfig;
+import com.r0adkll.slidr.model.SlidrInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -176,7 +176,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     private LinearLayoutManager mLinearLayoutManager;
     private CommentAndPostRecyclerViewAdapter mAdapter;
     private RecyclerView.SmoothScroller mSmoothScroller;
-    private PostCommentSortTypeBottomSheetFragment postCommentSortTypeBottomSheetFragment;
+    private PostCommentSortTypeBottomSheetFragment mPostCommentSortTypeBottomSheetFragment;
+    private SlidrInterface mSlidrInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,8 +194,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         EventBus.getDefault().register(this);
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL, true)) {
-            SlidrConfig config = new SlidrConfig.Builder().sensitivity(0.1f).build();
-            Slidr.attach(this, config);
+            mSlidrInterface = Slidr.attach(this);
         }
 
         Resources resources = getResources();
@@ -349,7 +349,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             postListPosition = getIntent().getIntExtra(EXTRA_POST_LIST_POSITION, -1);
         }
 
-        postCommentSortTypeBottomSheetFragment = new PostCommentSortTypeBottomSheetFragment();
+        mPostCommentSortTypeBottomSheetFragment = new PostCommentSortTypeBottomSheetFragment();
     }
 
     @Override
@@ -1306,7 +1306,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 return true;
             case R.id.action_sort_view_post_detail_activity:
                 if (mPost != null) {
-                    postCommentSortTypeBottomSheetFragment.show(getSupportFragmentManager(), postCommentSortTypeBottomSheetFragment.getTag());
+                    mPostCommentSortTypeBottomSheetFragment.show(getSupportFragmentManager(), mPostCommentSortTypeBottomSheetFragment.getTag());
                 }
                 return true;
             case R.id.action_view_crosspost_parent_view_post_detail_activity:
@@ -1523,5 +1523,13 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         }
         fetchComments(false, false, sortType.getType().value);
         mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.getType().name()).apply();
+    }
+
+    public void lockSwipeRightToGoBack() {
+        mSlidrInterface.lock();
+    }
+
+    public void unlockSwipeRightToGoBack() {
+        mSlidrInterface.unlock();
     }
 }
