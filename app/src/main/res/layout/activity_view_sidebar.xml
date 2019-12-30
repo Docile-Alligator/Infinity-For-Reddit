@@ -36,8 +36,7 @@
         android:id="@+id/markdown_recycler_view_view_sidebar_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
+        android:padding="16dp"
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 

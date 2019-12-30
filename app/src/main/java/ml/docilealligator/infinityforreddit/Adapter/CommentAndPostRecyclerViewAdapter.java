@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Spanned;
 import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
 import android.util.TypedValue;
@@ -136,8 +137,14 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mOauthRetrofit = oauthRetrofit;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mGlide = glide;
+        int markdownColor = ContextCompat.getColor(activity, R.color.defaultTextColor);
         mMarkwon = Markwon.builder(mActivity)
                 .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
+                        textView.setTextColor(markdownColor);
+                    }
+
                     @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                         builder.linkResolver((view, link) -> {

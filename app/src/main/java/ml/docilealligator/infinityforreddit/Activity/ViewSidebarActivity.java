@@ -7,17 +7,21 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Spanned;
 import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
+import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -110,6 +114,17 @@ public class ViewSidebarActivity extends BaseActivity {
                 params.topMargin = getResources().getDimensionPixelSize(statusBarResourceId);
                 toolbar.setLayoutParams(params);
             }
+
+            int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+            if (navBarResourceId > 0) {
+                int dp = 16;
+                int px = (int) TypedValue.applyDimension(
+                        TypedValue.COMPLEX_UNIT_DIP,
+                        dp,
+                        resources.getDisplayMetrics()
+                );
+                markdownRecyclerView.setPadding(px, px, px, resources.getDimensionPixelSize(navBarResourceId));
+            }
         }
 
         String subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME);
@@ -123,8 +138,14 @@ public class ViewSidebarActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        int markdownColor = ContextCompat.getColor(this, R.color.defaultTextColor);
         Markwon markwon = Markwon.builder(this)
                 .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
+                        textView.setTextColor(markdownColor);
+                    }
+
                     @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                         builder.linkResolver((view, link) -> {
