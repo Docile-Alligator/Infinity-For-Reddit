@@ -43,6 +43,7 @@
     <string name="action_unmark_spoiler">Unmark Spoiler</string>
     <string name="action_edit_flair">Edit Flair</string>
     <string name="action_change_post_layout">Change Post Layout</string>
+    <string name="action_view_side_bar">View Sidebar</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -384,4 +385,6 @@
     <string name="error_loading_subscriptions">Cannot sync subscriptions</string>
 
     <string name="share_this_app">Check out Infinity for Reddit, an awesome Reddit client!\nhttps://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit</string>
+
+    <string name="error_getting_subreddit_name">Error getting subreddit name</string>
 </resources>

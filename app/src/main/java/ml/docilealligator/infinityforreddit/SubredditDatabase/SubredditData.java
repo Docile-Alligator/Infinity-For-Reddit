@@ -19,15 +19,19 @@ public class SubredditData {
     private String bannerUrl;
     @ColumnInfo(name = "description")
     private String description;
+    @ColumnInfo(name = "sidebar_description")
+    private String sidebarDescription;
     @ColumnInfo(name = "subscribers_count")
     private int nSubscribers;
 
-    public SubredditData(@NonNull String id, String name, String iconUrl, String bannerUrl, String description, int nSubscribers) {
+    public SubredditData(@NonNull String id, String name, String iconUrl, String bannerUrl,
+                         String description, String sidebarDescription, int nSubscribers) {
         this.id = id;
         this.name = name;
         this.iconUrl = iconUrl;
         this.bannerUrl = bannerUrl;
         this.description = description;
+        this.sidebarDescription = sidebarDescription;
         this.nSubscribers = nSubscribers;
     }
 
@@ -50,6 +54,10 @@ public class SubredditData {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getSidebarDescription() {
+        return sidebarDescription;
     }
 
     public int getNSubscribers() {

@@ -23,7 +23,7 @@ import ml.docilealligator.infinityforreddit.User.UserDao;
 import ml.docilealligator.infinityforreddit.User.UserData;
 
 @Database(entities = {Account.class, SubredditData.class, SubscribedSubredditData.class, UserData.class,
-        SubscribedUserData.class, MultiReddit.class}, version = 4)
+        SubscribedUserData.class, MultiReddit.class}, version = 5)
 public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static RedditDataRoomDatabase INSTANCE;
 
@@ -33,7 +33,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             RedditDataRoomDatabase.class, "reddit_data")
-                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
                             .build();
                 }
             }
@@ -96,6 +96,14 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                     "visibility TEXT, over_18 INTEGER NOT NULL, is_subscriber INTEGER NOT NULL, " +
                     "is_favorite INTEGER NOT NULL, PRIMARY KEY(path, username), " +
                     "FOREIGN KEY(username) REFERENCES accounts(username) ON DELETE CASCADE)");
+        }
+    };
+
+    private static final Migration MIGRATION_4_5 = new Migration(4, 5) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE subreddits"
+                    + " ADD COLUMN sidebar_description TEXT");
         }
     };
 }

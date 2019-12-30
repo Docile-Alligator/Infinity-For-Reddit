@@ -548,6 +548,11 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             case R.id.action_change_post_layout_view_subreddit_detail_activity:
                 postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
                 return true;
+            case R.id.action_view_side_bar_view_subreddit_detail_activity:
+                Intent sidebarIntent = new Intent(this, ViewSidebarActivity.class);
+                sidebarIntent.putExtra(ViewSidebarActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                startActivity(sidebarIntent);
+                return true;
         }
         return false;
     }
