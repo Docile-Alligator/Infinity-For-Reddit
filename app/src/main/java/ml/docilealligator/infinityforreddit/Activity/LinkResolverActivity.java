@@ -39,6 +39,7 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String SUBREDDIT_PATTERN = "/[rR]/\\w+/{0,1}";
     private static final String USER_PATTERN_1 = "/user/\\w+/{0,1}";
     private static final String USER_PATTERN_2 = "/[uU]/\\w+/{0,1}";
+    private static final String SIDEBAR_PATTERN = "/[rR]/\\w+/about/sidebar";
 
     @Inject
     SharedPreferences mSharedPreferences;
@@ -138,6 +139,10 @@ public class LinkResolverActivity extends AppCompatActivity {
                     intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, path.substring(3));
                     intent.putExtra(ViewUserDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
                     intent.putExtra(ViewUserDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
+                    startActivity(intent);
+                } else if (path.matches(SIDEBAR_PATTERN)) {
+                    Intent intent = new Intent(this, ViewSidebarActivity.class);
+                    intent.putExtra(ViewSidebarActivity.EXTRA_SUBREDDIT_NAME, path.substring(3, path.length() - 14));
                     startActivity(intent);
                 } else {
                     deepLinkError(uri);
