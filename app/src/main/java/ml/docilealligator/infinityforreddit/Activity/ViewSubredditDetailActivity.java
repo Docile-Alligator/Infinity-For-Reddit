@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -44,6 +43,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.AsyncTask.CheckIsSubscribedToSubredditAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubredditDataAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
@@ -61,7 +61,6 @@ import ml.docilealligator.infinityforreddit.ReadMessage;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
-import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditDao;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditViewModel;
 import ml.docilealligator.infinityforreddit.SubredditSubscription;
@@ -662,7 +661,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         ((FragmentCommunicator) mFragment).changeNSFW(changeNSFWEvent.nsfw);
     }
 
-    private static class InsertSubredditDataAsyncTask extends AsyncTask<Void, Void, Void> {
+    /*private static class InsertSubredditDataAsyncTask extends AsyncTask<Void, Void, Void> {
 
         private SubredditDao mSubredditDao;
         private SubredditData subredditData;
@@ -688,5 +687,5 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         interface InsertSubredditDataAsyncTaskListener {
             void insertSuccess();
         }
-    }
+    }*/
 }

@@ -92,6 +92,7 @@
     <string name="online_subscribers_number_detail">Online: %1$d</string>
     <string name="cannot_fetch_subreddit_info">Cannot fetch subreddit info</string>
     <string name="cannot_fetch_user_info">Cannot fetch user info</string>
+    <string name="cannot_fetch_sidebar">Cannot fetch sidebar</string>
 
     <string name="gilded_count">x%1$d</string>
     <string name="title_activity_view_user_detail">ViewUserDetailActivity</string>

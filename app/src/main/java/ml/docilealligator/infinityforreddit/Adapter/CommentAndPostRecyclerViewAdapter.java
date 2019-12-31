@@ -104,7 +104,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private Retrofit mOauthRetrofit;
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private RequestManager mGlide;
-    private Markwon mMarkwon;
+    private Markwon mPostDetailMarkwon;
+    private Markwon mCommentMarkwon;
     private final MarkwonAdapter mMarkwonAdapter;
     private String mAccessToken;
     private String mAccountName;
@@ -138,7 +139,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mGlide = glide;
         int markdownColor = ContextCompat.getColor(activity, R.color.defaultTextColor);
-        mMarkwon = Markwon.builder(mActivity)
+        mPostDetailMarkwon = Markwon.builder(mActivity)
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
                     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
@@ -169,12 +170,37 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 )
                 .usePlugin(TableEntryPlugin.create(mActivity))
                 .build();
+        mCommentMarkwon = Markwon.builder(mActivity)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                        builder.linkResolver((view, link) -> {
+                            Intent intent = new Intent(mActivity, LinkResolverActivity.class);
+                            Uri uri = Uri.parse(link);
+                            if (uri.getScheme() == null && uri.getHost() == null) {
+                                intent.setData(LinkResolverActivity.getRedditUriByPath(link));
+                            } else {
+                                intent.setData(uri);
+                            }
+                            mActivity.startActivity(intent);
+                        }).urlProcessor(new UrlProcessorRelativeToAbsolute("https://www.reddit.com"));
+                    }
+                })
+                .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .usePlugin(SimpleExtPlugin.create(plugin ->
+                                plugin.addExtension(1, '^', (configuration, props) -> {
+                                    return new SuperscriptSpan();
+                                })
+                        )
+                )
+                .build();
         mMarkwonAdapter = MarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
                 .include(TableBlock.class, TableEntry.create(builder -> builder
                         .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
                         .textLayoutIsRoot(R.layout.view_table_entry_cell)))
                 .build();
-        mMarkwonAdapter.setMarkdown(mMarkwon, "");
+        mMarkwonAdapter.setMarkdown(mPostDetailMarkwon, "");
         mAccessToken = accessToken;
         mAccountName = accountName;
         mPost = post;
@@ -528,7 +554,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         });
                         ((PostDetailViewHolder) holder).mContentMarkdownView.setLayoutManager(linearLayoutManager);
                         ((PostDetailViewHolder) holder).mContentMarkdownView.setAdapter(mMarkwonAdapter);
-                        mMarkwonAdapter.setMarkdown(mMarkwon, mPost.getSelfText());
+                        mMarkwonAdapter.setMarkdown(mPostDetailMarkwon, mPost.getSelfText());
                         mMarkwonAdapter.notifyDataSetChanged();
                     }
 
@@ -562,7 +588,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         });
                         ((PostDetailViewHolder) holder).mContentMarkdownView.setLayoutManager(linearLayoutManager);
                         ((PostDetailViewHolder) holder).mContentMarkdownView.setAdapter(mMarkwonAdapter);
-                        mMarkwonAdapter.setMarkdown(mMarkwon, mPost.getSelfText());
+                        mMarkwonAdapter.setMarkdown(mPostDetailMarkwon, mPost.getSelfText());
                         mMarkwonAdapter.notifyDataSetChanged();
                     }
                     break;
@@ -681,7 +707,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 ((CommentViewHolder) holder).commentTimeTextView.setText(comment.getCommentTime());
             }
 
-            mMarkwon.setMarkdown(((CommentViewHolder) holder).commentMarkdownView, comment.getCommentContent());
+            mCommentMarkwon.setMarkdown(((CommentViewHolder) holder).commentMarkdownView, comment.getCommentContent());
             ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
 
             ((CommentViewHolder) holder).itemView.setPadding(comment.getDepth() * 8, 0, 0, 0);
