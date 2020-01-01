@@ -5,6 +5,8 @@ import android.animation.Animator;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.app.DownloadManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -319,6 +321,13 @@ public class ViewVideoActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                return true;
+            case R.id.action_copy_link_view_image:
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText(getString(R.string.reddit_media_url), videoDownloadUrl);
+                clipboard.setPrimaryClip(clip);
+                Toast copyToast = Toast.makeText(this, getString(R.string.action_copy_link_success), Toast.LENGTH_SHORT);
+                copyToast.show();
                 return true;
             case R.id.action_download_view_video:
                 isDownloading = true;

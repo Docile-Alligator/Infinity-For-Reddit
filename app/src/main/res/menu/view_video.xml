@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+      xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_download_view_video"
-        android:orderInCategory="1"
-        android:title="@string/action_download"
-        android:icon="@drawable/ic_file_download_white_24dp"
-        app:showAsAction="always" />
+            android:id="@+id/action_download_view_video"
+            android:orderInCategory="2"
+            android:title="@string/action_download"
+            android:icon="@drawable/ic_file_download_white_24dp"
+            app:showAsAction="always"/>
+    <item
+            android:id="@+id/action_copy_link_view_image"
+            android:orderInCategory="1"
+            android:title="@string/action_copy_link"
+            android:icon="@drawable/ic_link_white"
+            app:showAsAction="always"/>
 </menu>
