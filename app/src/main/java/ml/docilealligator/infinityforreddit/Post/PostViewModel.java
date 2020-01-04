@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Post;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
@@ -13,6 +13,8 @@ import androidx.paging.PagedList;
 
 import java.util.Locale;
 
+import ml.docilealligator.infinityforreddit.NetworkState;
+import ml.docilealligator.infinityforreddit.SortType;
 import retrofit2.Retrofit;
 
 public class PostViewModel extends ViewModel {

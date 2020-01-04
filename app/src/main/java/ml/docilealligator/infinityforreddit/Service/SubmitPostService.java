@@ -35,7 +35,7 @@ import ml.docilealligator.infinityforreddit.Event.SubmitTextOrLinkPostEvent;
 import ml.docilealligator.infinityforreddit.Event.SubmitVideoPostEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NotificationUtils;
-import ml.docilealligator.infinityforreddit.Post;
+import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SubmitPost;
 import retrofit2.Retrofit;

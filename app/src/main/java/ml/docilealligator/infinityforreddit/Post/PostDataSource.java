@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Post;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -7,6 +7,10 @@ import androidx.paging.PageKeyedDataSource;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import ml.docilealligator.infinityforreddit.NetworkState;
+import ml.docilealligator.infinityforreddit.ParsePost;
+import ml.docilealligator.infinityforreddit.RedditAPI;
+import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
 import retrofit2.Call;
 import retrofit2.Callback;

@@ -61,7 +61,7 @@ import ml.docilealligator.infinityforreddit.Fragment.SortTimeBottomSheetFragment
 import ml.docilealligator.infinityforreddit.Fragment.UserThingSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.PostDataSource;
+import ml.docilealligator.infinityforreddit.Post.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.ReadMessage;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;

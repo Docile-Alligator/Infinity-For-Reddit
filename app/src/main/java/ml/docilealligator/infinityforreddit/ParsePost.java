@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
+import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 
@@ -21,8 +22,8 @@ import ml.docilealligator.infinityforreddit.Utils.Utils;
  */
 
 public class ParsePost {
-    static void parsePosts(String response, Locale locale, int nPosts, int filter, boolean nsfw,
-                           ParsePostsListingListener parsePostsListingListener) {
+    public static void parsePosts(String response, Locale locale, int nPosts, int filter, boolean nsfw,
+                                  ParsePostsListingListener parsePostsListingListener) {
         new ParsePostDataAsyncTask(response, locale, nPosts, filter, nsfw, parsePostsListingListener).execute();
     }
 
@@ -284,7 +285,7 @@ public class ParsePost {
         return post;
     }
 
-    interface ParsePostsListingListener {
+    public interface ParsePostsListingListener {
         void onParsePostsListingSuccess(ArrayList<Post> newPostData, String lastItem);
 
         void onParsePostsListingFail();

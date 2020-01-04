@@ -85,7 +85,7 @@ import ml.docilealligator.infinityforreddit.Fragment.SortTimeBottomSheetFragment
 import ml.docilealligator.infinityforreddit.Fragment.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.ParseAndSaveAccountInfo;
-import ml.docilealligator.infinityforreddit.PostDataSource;
+import ml.docilealligator.infinityforreddit.Post.PostDataSource;
 import ml.docilealligator.infinityforreddit.PullNotificationWorker;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.ReadMessage;
@@ -211,6 +211,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private String mNewAccountName;
     private Menu mMenu;
     private boolean isInLazyMode = false;
+    private boolean showBottomAppBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -309,6 +310,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         toggle.syncState();
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
+
+        showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false);
 
         if (savedInstanceState != null) {
             mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
@@ -454,7 +457,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             bottomNavigationView.setVisibility(View.GONE);
             fab.setVisibility(View.GONE);
         } else {
-            if (mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false)) {
+            if (showBottomAppBar) {
                 bottomNavigationView.setVisibility(View.VISIBLE);
             } else {
                 CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
@@ -489,8 +492,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
             @Override
             public void onPageSelected(int position) {
-                bottomNavigationView.performShow();
-                fab.show();
+                if (mAccessToken != null && showBottomAppBar) {
+                    bottomNavigationView.performShow();
+                    fab.show();
+                }
                 if (isInLazyMode) {
                     if (position == sectionsPagerAdapter.getCurrentLazyModeFragmentPosition()) {
                         sectionsPagerAdapter.resumeLazyMode();
@@ -943,14 +948,14 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     }
 
     public void postScrollUp() {
-        if (mAccessToken != null) {
+        if (mAccessToken != null && showBottomAppBar) {
             bottomNavigationView.performShow();
             fab.show();
         }
     }
 
     public void postScrollDown() {
-        if (mAccessToken != null) {
+        if (mAccessToken != null && showBottomAppBar) {
             fab.hide();
             bottomNavigationView.performHide();
         }

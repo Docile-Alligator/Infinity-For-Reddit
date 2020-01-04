@@ -59,9 +59,9 @@ import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
-import ml.docilealligator.infinityforreddit.Post;
-import ml.docilealligator.infinityforreddit.PostDataSource;
-import ml.docilealligator.infinityforreddit.PostViewModel;
+import ml.docilealligator.infinityforreddit.Post.Post;
+import ml.docilealligator.infinityforreddit.Post.PostDataSource;
+import ml.docilealligator.infinityforreddit.Post.PostViewModel;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
@@ -318,8 +318,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         boolean voteButtonsOnTheRight = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
         boolean showElapsedTime = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
 
-        PostViewModel.Factory factory;
-
         if (postType == PostDataSource.TYPE_SEARCH) {
             String subredditName = getArguments().getString(EXTRA_NAME);
             String query = getArguments().getString(EXTRA_QUERY);
@@ -349,13 +347,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     });
 
             if (accessToken == null) {
-                factory = new PostViewModel.Factory(mRetrofit, accessToken,
+                mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(mRetrofit, null,
                         getResources().getConfiguration().locale, subredditName, query, postType,
-                        sortType, filter, nsfw);
+                        sortType, filter, nsfw)).get(PostViewModel.class);
             } else {
-                factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
+                mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(mOauthRetrofit, accessToken,
                         getResources().getConfiguration().locale, subredditName, query, postType,
-                        sortType, filter, nsfw);
+                        sortType, filter, nsfw)).get(PostViewModel.class);
             }
         } else if (postType == PostDataSource.TYPE_SUBREDDIT) {
             String subredditName = getArguments().getString(EXTRA_NAME);
@@ -411,13 +409,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     });
 
             if (accessToken == null) {
-                factory = new PostViewModel.Factory(mRetrofit, accessToken,
+                mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(mRetrofit, accessToken,
                         getResources().getConfiguration().locale, subredditName, postType, sortType,
-                        filter, nsfw);
+                        filter, nsfw)).get(PostViewModel.class);
             } else {
-                factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
+                mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(mOauthRetrofit, accessToken,
                         getResources().getConfiguration().locale, subredditName, postType, sortType,
-                        filter, nsfw);
+                        filter, nsfw)).get(PostViewModel.class);
             }
         } else if(postType == PostDataSource.TYPE_MULTI_REDDIT) {
             String multiRedditPath = getArguments().getString(EXTRA_NAME);
@@ -459,13 +457,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             });
 
             if (accessToken == null) {
-                factory = new PostViewModel.Factory(mRetrofit, accessToken,
+                mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(mRetrofit, null,
                         getResources().getConfiguration().locale, multiRedditPath, postType, sortType,
-                        filter, nsfw);
+                        filter, nsfw)).get(PostViewModel.class);
             } else {
-                factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
+                mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(mOauthRetrofit, accessToken,
                         getResources().getConfiguration().locale, multiRedditPath, postType, sortType,
-                        filter, nsfw);
+                        filter, nsfw)).get(PostViewModel.class);
             }
         } else if (postType == PostDataSource.TYPE_USER) {
             String username = getArguments().getString(EXTRA_USER_NAME);
@@ -506,13 +504,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     });
 
             if (accessToken == null) {
-                factory = new PostViewModel.Factory(mRetrofit, accessToken,
+                mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(mRetrofit, accessToken,
                         getResources().getConfiguration().locale, username, postType, sortType, where,
-                        filter, nsfw);
+                        filter, nsfw)).get(PostViewModel.class);
             } else {
-                factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
+                mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(mOauthRetrofit, accessToken,
                         getResources().getConfiguration().locale, username, postType, sortType, where,
-                        filter, nsfw);
+                        filter, nsfw)).get(PostViewModel.class);
             }
         } else {
             String sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_BEST_POST, SortType.Type.BEST.name());
@@ -543,13 +541,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                         }
                     });
 
-            factory = new PostViewModel.Factory(mOauthRetrofit, accessToken,
-                    getResources().getConfiguration().locale, postType, sortType, filter, nsfw);
+            mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(mOauthRetrofit, accessToken,
+                    getResources().getConfiguration().locale, postType, sortType, filter, nsfw)).get(PostViewModel.class);
         }
 
         mPostRecyclerView.setAdapter(mAdapter);
-
-        mPostViewModel = new ViewModelProvider(this, factory).get(PostViewModel.class);
         mPostViewModel.getPosts().observe(this, posts -> mAdapter.submitList(posts));
 
         mPostViewModel.hasPost().observe(this, hasPost -> {

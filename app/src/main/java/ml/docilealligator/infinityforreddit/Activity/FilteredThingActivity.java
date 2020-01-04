@@ -38,8 +38,8 @@ import ml.docilealligator.infinityforreddit.Fragment.SortTypeBottomSheetFragment
 import ml.docilealligator.infinityforreddit.Fragment.UserThingSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.Post;
-import ml.docilealligator.infinityforreddit.PostDataSource;
+import ml.docilealligator.infinityforreddit.Post.Post;
+import ml.docilealligator.infinityforreddit.Post.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;

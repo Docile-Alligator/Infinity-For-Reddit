@@ -72,7 +72,7 @@ import ml.docilealligator.infinityforreddit.HidePost;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.ParseComment;
 import ml.docilealligator.infinityforreddit.ParsePost;
-import ml.docilealligator.infinityforreddit.Post;
+import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.ReadMessage;
 import ml.docilealligator.infinityforreddit.RedditAPI;

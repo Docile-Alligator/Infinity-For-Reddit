@@ -1,6 +1,6 @@
 package ml.docilealligator.infinityforreddit.Event;
 
-import ml.docilealligator.infinityforreddit.Post;
+import ml.docilealligator.infinityforreddit.Post.Post;
 
 public class PostUpdateEventToPostList {
     public final Post post;
