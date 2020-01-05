@@ -65,4 +65,5 @@ public class SharedPreferencesUtils {
     public static final String SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL = "swipe_to_go_back_from_post_detail";
     public static final String VOLUME_KEYS_NAVIGATE_COMMENTS = "volume_keys_navigate_comments";
     public static final String VOLUME_KEYS_NAVIGATE_POSTS = "volume_keys_navigate_posts";
+    public static final String MUTE_VIDEO = "mute_video";
 }

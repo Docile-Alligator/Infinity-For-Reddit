@@ -7,6 +7,7 @@ import android.animation.ValueAnimator;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.PorterDuff;
@@ -22,6 +23,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -37,10 +39,12 @@ import com.github.pwittchen.swipe.library.rx2.Swipe;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -49,9 +53,13 @@ import com.google.android.exoplayer2.util.Util;
 
 import java.io.File;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
 public class ViewVideoActivity extends AppCompatActivity {
 
@@ -59,10 +67,13 @@ public class ViewVideoActivity extends AppCompatActivity {
     public static final String EXTRA_SUBREDDIT = "ES";
     public static final String EXTRA_ID = "EI";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
+    private static final String IS_MUTE_STATE = "IMS";
     @BindView(R.id.relative_layout_view_video_activity)
     RelativeLayout relativeLayout;
     @BindView(R.id.player_view_view_video_activity)
     PlayerView videoPlayerView;
+    @BindView(R.id.mute_exo_playback_control_view)
+    ImageButton muteButton;
 
     private Uri mVideoUri;
     private SimpleExoPlayer player;
@@ -75,8 +86,12 @@ public class ViewVideoActivity extends AppCompatActivity {
     private String videoFileName;
     private boolean wasPlaying;
     private boolean isDownloading = false;
+    private boolean isMute = false;
     private float totalLengthY = 0.0f;
     private float touchY = -1.0f;
+
+    @Inject
+    SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +99,9 @@ public class ViewVideoActivity extends AppCompatActivity {
         getTheme().applyStyle(R.style.Theme_Default, true);
 
         setContentView(R.layout.activity_view_video);
+
+        ((Infinity) getApplication()).getAppComponent().inject(this);
+
         ButterKnife.bind(this);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
@@ -293,6 +311,53 @@ public class ViewVideoActivity extends AppCompatActivity {
         player.setRepeatMode(Player.REPEAT_MODE_ALL);
         player.setPlayWhenReady(true);
         wasPlaying = true;
+
+        boolean muteVideo = mSharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_VIDEO, false);
+
+        if (savedInstanceState != null) {
+            isMute = savedInstanceState.getBoolean(IS_MUTE_STATE);
+            if (isMute) {
+                player.setVolume(0f);
+                muteButton.setImageResource(R.drawable.ic_unmute_24dp);
+            } else {
+                player.setVolume(1f);
+                muteButton.setImageResource(R.drawable.ic_mute_24dp);
+            }
+        } else if (muteVideo) {
+            isMute = true;
+            player.setVolume(0f);
+            muteButton.setImageResource(R.drawable.ic_unmute_24dp);
+        } else {
+            muteButton.setImageResource(R.drawable.ic_mute_24dp);
+        }
+
+        player.addListener(new Player.EventListener() {
+            @Override
+            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+                if (!trackGroups.isEmpty()) {
+                    for (int i = 0; i < trackGroups.length; i++) {
+                        String mimeType = trackGroups.get(i).getFormat(0).sampleMimeType;
+                        if (mimeType != null && mimeType.contains("audio")) {
+                            muteButton.setVisibility(View.VISIBLE);
+                            muteButton.setOnClickListener(view -> {
+                                if (isMute) {
+                                    isMute = false;
+                                    player.setVolume(1f);
+                                    muteButton.setImageResource(R.drawable.ic_mute_24dp);
+                                } else {
+                                    isMute = true;
+                                    player.setVolume(0f);
+                                    muteButton.setImageResource(R.drawable.ic_unmute_24dp);
+                                }
+                            });
+                            break;
+                        }
+                    }
+                } else {
+                    muteButton.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     @Override
@@ -422,5 +487,11 @@ public class ViewVideoActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         overridePendingTransition(0, 0);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(IS_MUTE_STATE, isMute);
     }
 }

@@ -56,6 +56,12 @@
         app:key="volume_keys_navigate_posts"
         app:title="@string/settings_volume_keys_navigate_posts_title" />
 
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="mute_video"
+        android:icon="@drawable/ic_mute_preferences_24dp"
+        app:title="@string/settings_mute_video_title" />
+
     <Preference
         app:title="@string/settings_font_size_title"
         app:icon="@drawable/ic_font_size_24dp"

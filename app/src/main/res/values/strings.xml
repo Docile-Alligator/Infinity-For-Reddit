@@ -298,6 +298,7 @@
     <string name="settings_vote_buttons_on_the_right_title">Vote Buttons on the Right</string>
     <string name="settings_volume_keys_navigate_comments_title">Use Volume Keys to Navigate Comments in Posts</string>
     <string name="settings_volume_keys_navigate_posts_title">Use Volume Keys to Navigate Posts</string>
+    <string name="settings_mute_video_title">Mute Video</string>
     <string name="settings_show_elapsed_time">Show Elapsed Time in Posts and Comments</string>
     <string name="swipe_to_go_back_from_post_detail">Swipe Right to Go Back From Comments</string>
     <string name="settings_lazy_mode_interval_title">Lazy Mode Interval</string>

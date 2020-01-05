@@ -32,6 +32,7 @@ import ml.docilealligator.infinityforreddit.Activity.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSidebarActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
+import ml.docilealligator.infinityforreddit.Activity.ViewVideoActivity;
 import ml.docilealligator.infinityforreddit.Fragment.CommentsListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.FollowedUsersListingFragment;
@@ -125,4 +126,6 @@ public interface AppComponent {
     void inject(ViewMultiRedditDetailActivity viewMultiRedditDetailActivity);
 
     void inject(ViewSidebarActivity viewSidebarActivity);
+
+    void inject(ViewVideoActivity viewVideoActivity);
 }
