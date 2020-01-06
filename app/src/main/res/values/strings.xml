@@ -389,4 +389,18 @@
     <string name="share_this_app">Check out Infinity for Reddit, an awesome Reddit client!\nhttps://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit</string>
 
     <string name="error_getting_subreddit_name">Error getting subreddit name</string>
+
+    <string name="share_post_link">Share Post Link</string>
+    <string name="share_image_link">Share Image Link</string>
+    <string name="share_gif_link">Share Gif Link</string>
+    <string name="share_video_link">Share Video Link</string>
+    <string name="share_link">Share Link</string>
+    <string name="copy_post_link">Copy Post Link</string>
+    <string name="copy_image_link">Copy Image Link</string>
+    <string name="copy_gif_link">Copy Gif Link</string>
+    <string name="copy_video_link">Copy Video Link</string>
+    <string name="copy_link">Copy Link</string>
+
+    <string name="copy_success">Copied</string>
+    <string name="copy_failed">Cannot copy the link</string>
 </resources>

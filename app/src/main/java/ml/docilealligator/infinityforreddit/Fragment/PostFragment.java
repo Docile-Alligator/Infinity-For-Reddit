@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -108,7 +109,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Inject
     SharedPreferences mSharedPreferences;
     private RequestManager mGlide;
-    private Activity activity;
+    private AppCompatActivity activity;
     private LinearLayoutManager mLinearLayoutManager;
     private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
     private boolean isInLazyMode = false;
@@ -597,7 +598,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.activity = (Activity) context;
+        this.activity = (AppCompatActivity) context;
     }
 
     @Override

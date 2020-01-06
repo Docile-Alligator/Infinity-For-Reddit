@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -31,13 +31,13 @@ public class PostTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
     public static final int TYPE_IMAGE = 2;
     public static final int TYPE_VIDEO = 3;
     @BindView(R.id.text_type_linear_layout_post_type_bottom_sheet_fragment)
-    LinearLayout textTypeLinearLayout;
+    TextView textTypeTextView;
     @BindView(R.id.link_type_linear_layout_post_type_bottom_sheet_fragment)
-    LinearLayout linkTypeLinearLayout;
+    TextView linkTypeTextView;
     @BindView(R.id.image_type_linear_layout_post_type_bottom_sheet_fragment)
-    LinearLayout imageTypeLinearLayout;
+    TextView imageTypeTextView;
     @BindView(R.id.video_type_linear_layout_post_type_bottom_sheet_fragment)
-    LinearLayout videoTypeLinearLayout;
+    TextView videoTypeTextView;
     private Activity activity;
     public PostTypeBottomSheetFragment() {
         // Required empty public constructor
@@ -54,22 +54,22 @@ public class PostTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
             rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
 
-        textTypeLinearLayout.setOnClickListener(view -> {
+        textTypeTextView.setOnClickListener(view -> {
             ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_TEXT);
             dismiss();
         });
 
-        linkTypeLinearLayout.setOnClickListener(view -> {
+        linkTypeTextView.setOnClickListener(view -> {
             ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_LINK);
             dismiss();
         });
 
-        imageTypeLinearLayout.setOnClickListener(view -> {
+        imageTypeTextView.setOnClickListener(view -> {
             ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_IMAGE);
             dismiss();
         });
 
-        videoTypeLinearLayout.setOnClickListener(view -> {
+        videoTypeTextView.setOnClickListener(view -> {
             ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_VIDEO);
             dismiss();
         });

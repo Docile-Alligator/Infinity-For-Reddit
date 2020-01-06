@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.Adapter;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.ColorFilter;
@@ -76,6 +75,7 @@ import ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.CustomView.MarkwonLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.FetchComment;
 import ml.docilealligator.infinityforreddit.Fragment.ModifyCommentBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.Fragment.ShareLinkBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.Post.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
@@ -99,7 +99,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private static final int VIEW_TYPE_LOAD_MORE_COMMENTS_FAILED = 7;
     private static final int VIEW_TYPE_VIEW_ALL_COMMENTS = 8;
 
-    private Activity mActivity;
+    private AppCompatActivity mActivity;
     private Retrofit mRetrofit;
     private Retrofit mOauthRetrofit;
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
@@ -125,8 +125,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private boolean mHasMoreComments;
     private boolean loadMoreCommentsFailed;
     private int mCommentBackgroundColor;
+    private ShareLinkBottomSheetFragment mShareLinkBottomSheetFragment;
 
-    public CommentAndPostRecyclerViewAdapter(Activity activity, Retrofit retrofit, Retrofit oauthRetrofit,
+    public CommentAndPostRecyclerViewAdapter(AppCompatActivity activity, Retrofit retrofit, Retrofit oauthRetrofit,
                                              RedditDataRoomDatabase redditDataRoomDatabase, RequestManager glide,
                                              String accessToken, String accountName, Post post, Locale locale,
                                              String singleCommentId, boolean isSingleCommentThreadMode,
@@ -222,6 +223,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         TypedValue typedValue = new TypedValue();
         mActivity.getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
         mCommentBackgroundColor = typedValue.data;
+
+        mShareLinkBottomSheetFragment = new ShareLinkBottomSheetFragment();
     }
 
     @Override
@@ -1635,8 +1638,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         TextView mPostTimeTextView;
         @BindView(R.id.title_text_view_item_post_detail)
         TextView mTitleTextView;
-        /*@BindView(R.id.content_markdown_view_item_post_detail)
-        TextView mContentMarkdownView;*/
         @BindView(R.id.content_markdown_view_item_post_detail)
         RecyclerView mContentMarkdownView;
         @BindView(R.id.type_text_view_item_post_detail)
@@ -1712,14 +1713,24 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             });
 
             mShareButton.setOnClickListener(view -> {
-                try {
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_TEXT, mPost.getPermalink());
-                    mActivity.startActivity(Intent.createChooser(intent, mActivity.getString(R.string.share)));
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(mActivity, R.string.no_activity_found_for_share, Toast.LENGTH_SHORT).show();
+                Bundle bundle = new Bundle();
+                bundle.putString(ShareLinkBottomSheetFragment.EXTRA_POST_LINK, mPost.getPermalink());
+                if (mPost.getPostType() != Post.TEXT_TYPE) {
+                    bundle.putInt(ShareLinkBottomSheetFragment.EXTRA_MEDIA_TYPE, mPost.getPostType());
+                    switch (mPost.getPostType()) {
+                        case Post.IMAGE_TYPE:
+                        case Post.GIF_TYPE:
+                        case Post.LINK_TYPE:
+                        case Post.NO_PREVIEW_LINK_TYPE:
+                            bundle.putString(ShareLinkBottomSheetFragment.EXTRA_MEDIA_LINK, mPost.getUrl());
+                            break;
+                        case Post.VIDEO_TYPE:
+                            bundle.putString(ShareLinkBottomSheetFragment.EXTRA_MEDIA_LINK, mPost.getVideoDownloadUrl());
+                            break;
+                    }
                 }
+                mShareLinkBottomSheetFragment.setArguments(bundle);
+                mShareLinkBottomSheetFragment.show(mActivity.getSupportFragmentManager(), mShareLinkBottomSheetFragment.getTag());
             });
 
             mUpvoteButton.setOnClickListener(view -> {

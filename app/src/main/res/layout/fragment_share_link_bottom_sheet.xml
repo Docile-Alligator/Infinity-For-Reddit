@@ -11,7 +11,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/text_type_linear_layout_post_type_bottom_sheet_fragment"
+            android:id="@+id/share_post_link_text_view_share_link_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -19,25 +19,7 @@
             android:paddingBottom="16dp"
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
-            android:text="@string/bottom_sheet_post_text"
-            android:textColor="@color/primaryTextColor"
-            android:textSize="?attr/font_default"
-            android:drawableStart="@drawable/ic_outline_text_24px"
-            android:drawablePadding="48dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground" />
-
-        <TextView
-            android:id="@+id/link_type_linear_layout_post_type_bottom_sheet_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:paddingStart="32dp"
-            android:paddingEnd="32dp"
-            android:text="@string/bottom_sheet_post_link"
+            android:text="@string/share_post_link"
             android:textColor="@color/primaryTextColor"
             android:textSize="?attr/font_default"
             android:drawableStart="@drawable/ic_link"
@@ -47,7 +29,7 @@
             android:background="?attr/selectableItemBackground" />
 
         <TextView
-            android:id="@+id/video_type_linear_layout_post_type_bottom_sheet_fragment"
+            android:id="@+id/copy_post_link_text_view_share_link_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -55,17 +37,17 @@
             android:paddingBottom="16dp"
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
-            android:text="@string/bottom_sheet_post_link"
+            android:text="@string/copy_post_link"
             android:textColor="@color/primaryTextColor"
             android:textSize="?attr/font_default"
-            android:drawableStart="@drawable/ic_outline_video_24dp"
+            android:drawableStart="@drawable/ic_copy_24dp"
             android:drawablePadding="48dp"
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackground" />
 
         <TextView
-            android:id="@+id/image_type_linear_layout_post_type_bottom_sheet_fragment"
+            android:id="@+id/share_media_link_text_view_share_link_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -73,14 +55,32 @@
             android:paddingBottom="16dp"
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
-            android:text="@string/bottom_sheet_post_video"
             android:textColor="@color/primaryTextColor"
             android:textSize="?attr/font_default"
-            android:drawableStart="@drawable/ic_image_24dp"
+            android:drawableStart="@drawable/ic_link"
             android:drawablePadding="48dp"
             android:clickable="true"
             android:focusable="true"
-            android:background="?attr/selectableItemBackground" />
+            android:background="?attr/selectableItemBackground"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/copy_media_link_text_view_share_link_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:drawableStart="@drawable/ic_copy_24dp"
+            android:drawablePadding="48dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
+            android:visibility="gone" />
 
     </LinearLayout>
 
