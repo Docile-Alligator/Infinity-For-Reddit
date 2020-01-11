@@ -41,6 +41,24 @@
         app:key="show_elapsed_time"
         app:title="@string/settings_show_elapsed_time" />
 
+    <ListPreference
+        app:defaultValue="0"
+        android:entries="@array/settings_default_post_layout"
+        app:entryValues="@array/settings_default_post_layout_values"
+        app:key="default_post_layout"
+        app:title="@string/settings_default_post_layout"
+        app:useSimpleSummaryProvider="true" />
+
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="show_divider_in_compact_layout"
+        app:title="@string/settings_show_divider_in_compact_layout" />
+
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="swipe_to_go_back_from_post_detail"
+        app:title="@string/swipe_to_go_back_from_post_detail" />
+
     <SwitchPreference
         app:defaultValue="true"
         app:key="swipe_to_go_back_from_post_detail"

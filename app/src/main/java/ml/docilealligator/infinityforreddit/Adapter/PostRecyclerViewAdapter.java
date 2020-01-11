@@ -102,6 +102,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean mNeedBlurNSFW;
     private boolean mNeedBlurSpoiler;
     private boolean mShowElapsedTime;
+    private boolean mShowDividerInCompactLayout;
     private NetworkState networkState;
     private Callback mCallback;
     private ShareLinkBottomSheetFragment mShareLinkBottomSheetFragment;
@@ -110,7 +111,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                    RedditDataRoomDatabase redditDataRoomDatabase, String accessToken,
                                    int postType, int postLayout, boolean displaySubredditName,
                                    boolean needBlurNSFW, boolean needBlurSpoiler, boolean voteButtonsOnTheRight,
-                                   boolean showElapsedTime, Callback callback) {
+                                   boolean showElapsedTime, boolean showDividerInCompactLayout, Callback callback) {
         super(DIFF_CALLBACK);
         if (activity != null) {
             mActivity = activity;
@@ -123,6 +124,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mNeedBlurSpoiler = needBlurSpoiler;
             mVoteButtonsOnTheRight = voteButtonsOnTheRight;
             mShowElapsedTime = showElapsedTime;
+            mShowDividerInCompactLayout = showDividerInCompactLayout;
             mPostLayout = postLayout;
             mGlide = Glide.with(mActivity.getApplicationContext());
             mRedditDataRoomDatabase = redditDataRoomDatabase;
@@ -891,6 +893,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     ((PostCompactViewHolder) holder).postTimeTextView.setText(postTime);
                 }
 
+                if (mShowDividerInCompactLayout) {
+                    ((PostCompactViewHolder) holder).divider.setVisibility(View.VISIBLE);
+                } else {
+                    ((PostCompactViewHolder) holder).divider.setVisibility(View.GONE);
+                }
+
                 ((PostCompactViewHolder) holder).titleTextView.setText(title);
                 ((PostCompactViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
 
@@ -1377,6 +1385,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         mShowElapsedTime = showElapsedTime;
     }
 
+    public void setShowDividerInCompactLayout(boolean showDividerInCompactLayout) {
+        mShowDividerInCompactLayout = showDividerInCompactLayout;
+    }
+
     private boolean hasExtraRow() {
         return networkState != null && networkState.getStatus() != NetworkState.Status.SUCCESS;
     }
@@ -1601,6 +1613,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         ImageView saveButton;
         @BindView(R.id.share_button_item_post_compact)
         ImageView shareButton;
+        @BindView(R.id.divider_item_post_compact)
+        View divider;
 
         PostCompactViewHolder(View itemView) {
             super(itemView);

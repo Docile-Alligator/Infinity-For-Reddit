@@ -62,6 +62,8 @@ public class SharedPreferencesUtils {
     public static final int POST_LAYOUT_COMPACT = 1;
     public static final String PULL_NOTIFICATION_TIME = "pull_notification_time";
     public static final String SHOW_ELAPSED_TIME_KEY = "show_elapsed_time";
+    public static final String DEFAULT_POST_LAYOUT_KEY = "default_post_layout";
+    public static final String SHOW_DIVIDER_IN_COMPACT_LAYOUT = "show_divider_in_compact_layout";
     public static final String SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL = "swipe_to_go_back_from_post_detail";
     public static final String VOLUME_KEYS_NAVIGATE_COMMENTS = "volume_keys_navigate_comments";
     public static final String VOLUME_KEYS_NAVIGATE_POSTS = "volume_keys_navigate_posts";

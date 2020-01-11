@@ -53,10 +53,12 @@ import ml.docilealligator.infinityforreddit.Activity.MainActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.Adapter.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangePostLayoutEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeShowElapsedTimeEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVoteButtonsPositionEvent;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToPostList;
+import ml.docilealligator.infinityforreddit.Event.ShowDividerInCompactLayoutPreferenceEvent;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
@@ -318,6 +320,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         boolean needBlurSpoiler = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_SPOILER_KEY, false);
         boolean voteButtonsOnTheRight = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
         boolean showElapsedTime = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
+        boolean showDividerInCompactLayout = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_DIVIDER_IN_COMPACT_LAYOUT, true);
+        int defaultPostLayout = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY, "0"));
 
         if (postType == PostDataSource.TYPE_SEARCH) {
             String subredditName = getArguments().getString(EXTRA_NAME);
@@ -326,11 +330,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             String sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SEARCH_POST, SortType.Type.RELEVANCE.name());
             String sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_SEARCH_POST, SortType.Time.ALL.name());
             SortType sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
-            postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, SharedPreferencesUtils.POST_LAYOUT_CARD);
+            postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, postLayout, true, needBlurNsfw, needBlurSpoiler,
-                    voteButtonsOnTheRight, showElapsedTime, new PostRecyclerViewAdapter.Callback() {
+                    voteButtonsOnTheRight, showElapsedTime, showDividerInCompactLayout, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -369,20 +373,20 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
                         sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_POPULAR_POST, SortType.Time.ALL.name());
                     }
-                    postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_POPULAR_POST, SharedPreferencesUtils.POST_LAYOUT_CARD);
+                    postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_POPULAR_POST, defaultPostLayout);
                 } else {
                     sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_ALL_POST, SortType.Type.HOT.name());
                     if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
                         sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_ALL_POST, SortType.Time.ALL.name());
                     }
-                    postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_ALL_POST, SharedPreferencesUtils.POST_LAYOUT_CARD);
+                    postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_ALL_POST, defaultPostLayout);
                 }
             } else {
                 sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST, SortType.Type.HOT.name());
                 if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
                     sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST, SortType.Time.ALL.name());
                 }
-                postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, SharedPreferencesUtils.POST_LAYOUT_CARD);
+                postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, defaultPostLayout);
             }
 
             if(sortTime != null) {
@@ -393,7 +397,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, postLayout, displaySubredditName, needBlurNsfw, needBlurSpoiler,
-                    voteButtonsOnTheRight, showElapsedTime, new PostRecyclerViewAdapter.Callback() {
+                    voteButtonsOnTheRight, showElapsedTime, showDividerInCompactLayout, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -431,7 +435,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                         SortType.Time.ALL.name());
             }
             postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + multiRedditPath,
-                    SharedPreferencesUtils.POST_LAYOUT_CARD);
+                    defaultPostLayout);
 
             if(sortTime != null) {
                 sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
@@ -441,7 +445,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, postLayout, true, needBlurNsfw, needBlurSpoiler,
-                    voteButtonsOnTheRight, showElapsedTime, new PostRecyclerViewAdapter.Callback() {
+                    voteButtonsOnTheRight, showElapsedTime, showDividerInCompactLayout, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -483,11 +487,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             } else {
                 sortType = new SortType(SortType.Type.valueOf(sort));
             }
-            postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, SharedPreferencesUtils.POST_LAYOUT_CARD);
+            postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, postLayout, true, needBlurNsfw, needBlurSpoiler,
-                    voteButtonsOnTheRight, showElapsedTime, new PostRecyclerViewAdapter.Callback() {
+                    voteButtonsOnTheRight, showElapsedTime, showDividerInCompactLayout, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -522,11 +526,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             } else {
                 sortType = new SortType(SortType.Type.valueOf(sort));
             }
-            postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, SharedPreferencesUtils.POST_LAYOUT_CARD);
+            postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, postLayout, true, needBlurNsfw, needBlurSpoiler,
-                    voteButtonsOnTheRight, showElapsedTime, new PostRecyclerViewAdapter.Callback() {
+                    voteButtonsOnTheRight, showElapsedTime, showDividerInCompactLayout, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -751,6 +755,17 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Subscribe
     public void onChangeSpoilerBlurEvent(ChangeSpoilerBlurEvent event) {
         mAdapter.setBlurSpoiler(event.needBlurSpoiler);
+        refreshAdapter();
+    }
+
+    @Subscribe
+    public void onChangePostLayoutEvent(ChangePostLayoutEvent event) {
+        changePostLayout(event.postLayout);
+    }
+
+    @Subscribe
+    public void onShowDividerInCompactLayoutPreferenceEvent(ShowDividerInCompactLayoutPreferenceEvent event) {
+        mAdapter.setShowDividerInCompactLayout(event.showDividerInCompactLayout);
         refreshAdapter();
     }
 

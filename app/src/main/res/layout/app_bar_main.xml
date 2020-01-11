@@ -109,9 +109,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:visibility="gone"
-        app:backgroundTint="?attr/backgroundColor"
+        app:backgroundTint="@color/backgroundColorPrimary"
         app:srcCompat="@drawable/ic_add_bottom_app_bar_24dp"
-        app:tint="@null"
+        app:tint="@android:color/white"
         app:layout_anchor="@id/bottom_navigation_main_activity" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -3,10 +3,8 @@ package ml.docilealligator.infinityforreddit.Activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -27,7 +25,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -464,8 +461,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 lp.setAnchorId(View.NO_ID);
                 lp.gravity = Gravity.END | Gravity.BOTTOM;
                 fab.setLayoutParams(lp);
-                fab.setImageTintList(ColorStateList.valueOf(Color.WHITE));
-                fab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.backgroundColorPrimary)));
             }
 
             fab.setVisibility(View.VISIBLE);
