@@ -405,4 +405,10 @@
 
     <string name="copy_success">Copied</string>
     <string name="copy_failed">Cannot copy the link</string>
+    <string name="copy_text">Copy</string>
+    <string name="copy_all">Copy All</string>
+    <string name="copy_markdown">Copy Markdown</string>
+    <string name="copy_raw_text">Copy Raw Text</string>
+    <string name="copy_all_markdown">Copy All Markdown</string>
+    <string name="copy_all_raw_text">Copy All Raw Text</string>
 </resources>

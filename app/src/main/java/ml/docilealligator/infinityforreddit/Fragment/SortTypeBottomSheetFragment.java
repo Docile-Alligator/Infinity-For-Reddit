@@ -109,6 +109,6 @@ public class SortTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.activity = (Activity) context;
+        activity = (Activity) context;
     }
 }

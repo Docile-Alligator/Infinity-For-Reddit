@@ -74,6 +74,7 @@ import ml.docilealligator.infinityforreddit.CommentData;
 import ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.CustomView.MarkwonLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.FetchComment;
+import ml.docilealligator.infinityforreddit.Fragment.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.ModifyCommentBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.ShareLinkBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Post.Post;
@@ -126,6 +127,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private boolean loadMoreCommentsFailed;
     private int mCommentBackgroundColor;
     private ShareLinkBottomSheetFragment mShareLinkBottomSheetFragment;
+    private CopyTextBottomSheetFragment mCopyTextBottomSheetFragment;
 
     public CommentAndPostRecyclerViewAdapter(AppCompatActivity activity, Retrofit retrofit, Retrofit oauthRetrofit,
                                              RedditDataRoomDatabase redditDataRoomDatabase, RequestManager glide,
@@ -145,6 +147,14 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     @Override
                     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
                         textView.setTextColor(markdownColor);
+                        textView.setOnLongClickListener(view -> {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, mPost.getSelfTextPlain());
+                            bundle.putString(CopyTextBottomSheetFragment.EXTRA_MARKDOWN, mPost.getSelfText());
+                            mCopyTextBottomSheetFragment.setArguments(bundle);
+                            mCopyTextBottomSheetFragment.show(mActivity.getSupportFragmentManager(), mCopyTextBottomSheetFragment.getTag());
+                            return true;
+                        });
                     }
 
                     @Override
@@ -225,6 +235,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mCommentBackgroundColor = typedValue.data;
 
         mShareLinkBottomSheetFragment = new ShareLinkBottomSheetFragment();
+        mCopyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
     }
 
     @Override

@@ -79,7 +79,11 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textColor="@color/primaryTextColor"
-        android:textSize="?attr/title_font_18" />
+        android:textSize="?attr/title_font_18"
+        android:textIsSelectable="true"
+        android:enabled="true"
+        android:focusable="true"
+        android:longClickable="true" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/content_markdown_view_item_post_detail"
