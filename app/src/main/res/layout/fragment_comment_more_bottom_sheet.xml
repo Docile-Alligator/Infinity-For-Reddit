@@ -1,0 +1,86 @@
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:overScrollMode="never"
+    android:paddingBottom="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/edit_text_view_comment_more_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableStart="@drawable/ic_edit_24dp"
+            android:drawablePadding="48dp"
+            android:focusable="true"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="16dp"
+            android:text="@string/edit"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/delete_text_view_comment_more_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableStart="@drawable/ic_delete_24dp"
+            android:drawablePadding="48dp"
+            android:focusable="true"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="16dp"
+            android:text="@string/delete"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/save_text_view_comment_more_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableStart="@drawable/ic_share_24dp"
+            android:drawablePadding="48dp"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="16dp"
+            android:text="@string/share"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="?attr/font_default" />
+
+        <TextView
+            android:id="@+id/copy_text_view_comment_more_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableStart="@drawable/ic_copy_24dp"
+            android:drawablePadding="48dp"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="16dp"
+            android:text="@string/copy_text"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="?attr/font_default" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

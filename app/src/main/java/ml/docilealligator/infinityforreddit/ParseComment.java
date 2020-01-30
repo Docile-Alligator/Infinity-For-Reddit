@@ -127,10 +127,12 @@ public class ParseComment {
         String parentId = singleCommentData.getString(JSONUtils.PARENT_ID_KEY);
         boolean isSubmitter = singleCommentData.getBoolean(JSONUtils.IS_SUBMITTER_KEY);
         String distinguished = singleCommentData.getString(JSONUtils.DISTINGUISHED_KEY);
-        String commentContent = "";
+        String commentMarkdown = "";
         if (!singleCommentData.isNull(JSONUtils.BODY_KEY)) {
-            commentContent = Utils.modifyMarkdown(singleCommentData.getString(JSONUtils.BODY_KEY).trim());
+            commentMarkdown = Utils.modifyMarkdown(singleCommentData.getString(JSONUtils.BODY_KEY).trim());
         }
+        String commentRawText = Utils.trimTrailingWhitespace(
+                Html.fromHtml(singleCommentData.getString(JSONUtils.BODY_HTML_KEY))).toString();
         String permalink = Html.fromHtml(singleCommentData.getString(JSONUtils.PERMALINK_KEY)).toString();
         int score = singleCommentData.getInt(JSONUtils.SCORE_KEY);
         int voteType;
@@ -157,8 +159,9 @@ public class ParseComment {
         boolean hasReply = !(singleCommentData.get(JSONUtils.REPLIES_KEY) instanceof String);
 
         return new CommentData(id, fullName, author, authorFlair, linkAuthor, formattedSubmitTime,
-                submitTime, commentContent, linkId, subredditName, parentId, score, voteType,
-                isSubmitter, distinguished, permalink, depth, collapsed, hasReply, scoreHidden, saved);
+                submitTime, commentMarkdown, commentRawText, linkId, subredditName, parentId, score,
+                voteType, isSubmitter, distinguished, permalink, depth, collapsed, hasReply,
+                scoreHidden, saved);
     }
 
     @Nullable

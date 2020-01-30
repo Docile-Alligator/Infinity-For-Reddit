@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.Adapter;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -38,7 +37,7 @@ import ml.docilealligator.infinityforreddit.Activity.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.CommentData;
-import ml.docilealligator.infinityforreddit.Fragment.ModifyCommentBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.Fragment.CommentMoreBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveThing;
@@ -59,7 +58,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
         @Override
         public boolean areContentsTheSame(@NonNull CommentData commentData, @NonNull CommentData t1) {
-            return commentData.getCommentContent().equals(t1.getCommentContent());
+            return commentData.getCommentMarkdown().equals(t1.getCommentMarkdown());
         }
     };
     private Context mContext;
@@ -157,7 +156,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     ((DataViewHolder) holder).commentTimeTextView.setText(comment.getCommentTime());
                 }
 
-                mMarkwon.setMarkdown(((DataViewHolder) holder).commentMarkdownView, comment.getCommentContent());
+                mMarkwon.setMarkdown(((DataViewHolder) holder).commentMarkdownView, comment.getCommentMarkdown());
 
                 ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
 
@@ -174,19 +173,17 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         break;
                 }
 
-                if (comment.getAuthor().equals(mAccountName)) {
-                    ((DataViewHolder) holder).moreButton.setVisibility(View.VISIBLE);
-                    ((DataViewHolder) holder).moreButton.setOnClickListener(view -> {
-                        ModifyCommentBottomSheetFragment modifyCommentBottomSheetFragment = new ModifyCommentBottomSheetFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString(ModifyCommentBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
-                        bundle.putString(ModifyCommentBottomSheetFragment.EXTRA_COMMENT_CONTENT, comment.getCommentContent());
-                        bundle.putString(ModifyCommentBottomSheetFragment.EXTRA_COMMENT_FULLNAME, comment.getFullName());
-                        bundle.putInt(ModifyCommentBottomSheetFragment.EXTRA_POSITION, holder.getAdapterPosition() - 1);
-                        modifyCommentBottomSheetFragment.setArguments(bundle);
-                        modifyCommentBottomSheetFragment.show(((AppCompatActivity) mContext).getSupportFragmentManager(), modifyCommentBottomSheetFragment.getTag());
-                    });
-                }
+                ((DataViewHolder) holder).moreButton.setOnClickListener(view -> {
+                    Bundle bundle = new Bundle();
+                    if (comment.getAuthor().equals(mAccountName)) {
+                        bundle.putString(CommentMoreBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                    }
+                    bundle.putParcelable(CommentMoreBottomSheetFragment.EXTRA_COMMENT, comment);
+                    bundle.putInt(CommentMoreBottomSheetFragment.EXTRA_POSITION, holder.getAdapterPosition() - 1);
+                    CommentMoreBottomSheetFragment commentMoreBottomSheetFragment = new CommentMoreBottomSheetFragment();
+                    commentMoreBottomSheetFragment.setArguments(bundle);
+                    commentMoreBottomSheetFragment.show(((AppCompatActivity) mContext).getSupportFragmentManager(), commentMoreBottomSheetFragment.getTag());
+                });
 
                 ((DataViewHolder) holder).linearLayout.setOnClickListener(view -> {
                     Intent intent = new Intent(mContext, ViewPostDetailActivity.class);
@@ -199,17 +196,6 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
                 ((DataViewHolder) holder).commentMarkdownView.setOnClickListener(view ->
                         ((DataViewHolder) holder).linearLayout.callOnClick());
-
-                ((DataViewHolder) holder).shareButton.setOnClickListener(view -> {
-                    try {
-                        Intent intent = new Intent(Intent.ACTION_SEND);
-                        intent.setType("text/plain");
-                        intent.putExtra(Intent.EXTRA_TEXT, comment.getPermalink());
-                        mContext.startActivity(Intent.createChooser(intent, mContext.getString(R.string.share)));
-                    } catch (ActivityNotFoundException e) {
-                        Toast.makeText(mContext, R.string.no_activity_found_for_share, Toast.LENGTH_SHORT).show();
-                    }
-                });
 
                 ((DataViewHolder) holder).replyButton.setVisibility(View.GONE);
 
@@ -441,8 +427,6 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         ImageView saveButton;
         @BindView(R.id.expand_button_item_post_comment)
         ImageView expandButton;
-        @BindView(R.id.share_button_item_post_comment)
-        ImageView shareButton;
         @BindView(R.id.reply_button_item_post_comment)
         ImageView replyButton;
 
@@ -457,18 +441,14 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 constraintSet.clear(scoreTextView.getId(), ConstraintSet.START);
                 constraintSet.clear(downvoteButton.getId(), ConstraintSet.START);
                 constraintSet.clear(expandButton.getId(), ConstraintSet.END);
-                constraintSet.clear(saveButton.getId(), ConstraintSet.END);
                 constraintSet.clear(replyButton.getId(), ConstraintSet.END);
-                constraintSet.clear(shareButton.getId(), ConstraintSet.END);
                 constraintSet.connect(upvoteButton.getId(), ConstraintSet.END, scoreTextView.getId(), ConstraintSet.START);
                 constraintSet.connect(scoreTextView.getId(), ConstraintSet.END, downvoteButton.getId(), ConstraintSet.START);
                 constraintSet.connect(downvoteButton.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
                 constraintSet.connect(moreButton.getId(), ConstraintSet.START, expandButton.getId(), ConstraintSet.END);
                 constraintSet.connect(moreButton.getId(), ConstraintSet.END, upvoteButton.getId(), ConstraintSet.END);
-                constraintSet.connect(expandButton.getId(), ConstraintSet.START, saveButton.getId(), ConstraintSet.END);
-                constraintSet.connect(saveButton.getId(), ConstraintSet.START, replyButton.getId(), ConstraintSet.END);
-                constraintSet.connect(replyButton.getId(), ConstraintSet.START, shareButton.getId(), ConstraintSet.END);
-                constraintSet.connect(shareButton.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+                constraintSet.connect(expandButton.getId(), ConstraintSet.START, replyButton.getId(), ConstraintSet.END);
+                constraintSet.connect(replyButton.getId(), ConstraintSet.START, replyButton.getId(), ConstraintSet.END);
                 constraintSet.setHorizontalBias(moreButton.getId(), 0);
                 constraintSet.applyTo(bottomConstraintLayout);
             }

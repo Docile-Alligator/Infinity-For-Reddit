@@ -154,7 +154,6 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:src="@drawable/ic_more_vert_grey_24dp"
-                android:visibility="gone"
                 app:layout_constraintEnd_toStartOf="@+id/expand_button_item_post_comment"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
@@ -198,11 +197,11 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:src="@drawable/ic_reply_grey_24dp"
-                app:layout_constraintEnd_toStartOf="@id/share_button_item_post_comment"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <ImageView
+            <!--<ImageView
                 android:id="@+id/share_button_item_post_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -214,7 +213,7 @@
                 android:src="@drawable/ic_share_grey_24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent"/>-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

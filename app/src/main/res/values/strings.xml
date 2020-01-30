@@ -411,4 +411,7 @@
     <string name="copy_raw_text">Copy Raw Text</string>
     <string name="copy_all_markdown">Copy All Markdown</string>
     <string name="copy_all_raw_text">Copy All Raw Text</string>
+
+    <string name="save_comment">Save comment</string>
+    <string name="unsave_comment">Unsave comment</string>
 </resources>

@@ -43,6 +43,7 @@ public class JSONUtils {
     public static final String REDDIT_VIDEO_PREVIEW_KEY = "reddit_video_preview";
     public static final String STICKIED_KEY = "stickied";
     public static final String BODY_KEY = "body";
+    public static final String BODY_HTML_KEY = "body_html";
     public static final String COLLAPSED_KEY = "collapsed";
     public static final String IS_SUBMITTER_KEY = "is_submitter";
     public static final String REPLIES_KEY = "replies";

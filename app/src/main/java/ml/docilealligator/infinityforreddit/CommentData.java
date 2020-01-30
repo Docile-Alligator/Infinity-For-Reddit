@@ -29,7 +29,8 @@ public class CommentData implements Parcelable {
     private String linkAuthor;
     private String commentTime;
     private long commentTimeMillis;
-    private String commentContent;
+    private String commentMarkdown;
+    private String commentRawText;
     private String linkId;
     private String subredditName;
     private String parentId;
@@ -51,9 +52,10 @@ public class CommentData implements Parcelable {
     private boolean isLoadingMoreChildren;
     private boolean loadMoreChildrenFailed;
 
-    public CommentData(String id, String fullName, String author, String authorFlair, String linkAuthor, String commentTime,
-                       long commentTimeMillis, String commentContent, String linkId, String subredditName, String parentId, int score,
-                       int voteType, boolean isSubmitter, String distinguished, String permalink,
+    public CommentData(String id, String fullName, String author, String authorFlair, String linkAuthor,
+                       String commentTime, long commentTimeMillis, String commentMarkdown,
+                       String commentRawText, String linkId, String subredditName, String parentId,
+                       int score, int voteType, boolean isSubmitter, String distinguished, String permalink,
                        int depth, boolean collapsed, boolean hasReply, boolean scoreHidden, boolean saved) {
         this.id = id;
         this.fullName = fullName;
@@ -62,7 +64,8 @@ public class CommentData implements Parcelable {
         this.linkAuthor = linkAuthor;
         this.commentTime = commentTime;
         this.commentTimeMillis = commentTimeMillis;
-        this.commentContent = commentContent;
+        this.commentMarkdown = commentMarkdown;
+        this.commentRawText = commentRawText;
         this.linkId = linkId;
         this.subredditName = subredditName;
         this.parentId = parentId;
@@ -97,7 +100,8 @@ public class CommentData implements Parcelable {
         linkAuthor = in.readString();
         commentTime = in.readString();
         commentTimeMillis = in.readLong();
-        commentContent = in.readString();
+        commentMarkdown = in.readString();
+        commentRawText = in.readString();
         linkId = in.readString();
         subredditName = in.readString();
         parentId = in.readString();
@@ -151,12 +155,20 @@ public class CommentData implements Parcelable {
         return commentTimeMillis;
     }
 
-    public String getCommentContent() {
-        return commentContent;
+    public String getCommentMarkdown() {
+        return commentMarkdown;
     }
 
-    public void setCommentContent(String commentContent) {
-        this.commentContent = commentContent;
+    public void setCommentMarkdown(String commentMarkdown) {
+        this.commentMarkdown = commentMarkdown;
+    }
+
+    public String getCommentRawText() {
+        return commentRawText;
+    }
+
+    public void setCommentRawText(String commentRawText) {
+        this.commentRawText = commentRawText;
     }
 
     public String getLinkId() {
@@ -328,7 +340,8 @@ public class CommentData implements Parcelable {
         parcel.writeString(linkAuthor);
         parcel.writeString(commentTime);
         parcel.writeLong(commentTimeMillis);
-        parcel.writeString(commentContent);
+        parcel.writeString(commentMarkdown);
+        parcel.writeString(commentRawText);
         parcel.writeString(linkId);
         parcel.writeString(subredditName);
         parcel.writeString(parentId);
