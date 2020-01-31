@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Preference
-        app:icon="@drawable/ic_outline_notifications_24px"
+        app:icon="@drawable/ic_outline_notifications_24dp"
         app:title="@string/settings_notification_master_title"
         app:fragment="ml.docilealligator.infinityforreddit.Settings.NotificationPreferenceFragment" />
 
@@ -20,70 +20,27 @@
         app:key="amoled_dark"
         app:title="@string/settings_amoled_dark_title" />
 
-    <SwitchPreference
-        app:defaultValue="true"
-        app:key="immersive_interface"
-        app:title="@string/settings_immersive_interface_title"
-        app:isPreferenceVisible="false" />
+    <Preference
+        app:icon="@drawable/ic_interface_24dp"
+        app:title="@string/settings_interface_title"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.InterfacePreferenceFragment" />
+
+    <Preference
+        app:icon="@drawable/ic_gesture_24dp"
+        app:title="@string/settings_gestures_and_buttons_title"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.GesturesAndButtonsPreferenceFragment" />
 
     <SwitchPreference
         app:defaultValue="false"
-        app:key="bottom_app_bar"
-        app:title="@string/settings_enable_bottom_app_bar_title" />
-
-    <SwitchPreference
-        app:defaultValue="false"
-        app:key="vote_buttons_on_the_right"
-        app:title="@string/settings_vote_buttons_on_the_right_title" />
-
-    <SwitchPreference
-        app:defaultValue="false"
-        app:key="show_elapsed_time"
-        app:title="@string/settings_show_elapsed_time" />
-
-    <ListPreference
-        app:defaultValue="0"
-        android:entries="@array/settings_default_post_layout"
-        app:entryValues="@array/settings_default_post_layout_values"
-        app:key="default_post_layout"
-        app:title="@string/settings_default_post_layout"
-        app:useSimpleSummaryProvider="true" />
-
-    <SwitchPreference
-        app:defaultValue="true"
-        app:key="show_divider_in_compact_layout"
-        app:title="@string/settings_show_divider_in_compact_layout" />
-
-    <SwitchPreference
-        app:defaultValue="true"
-        app:key="swipe_to_go_back_from_post_detail"
-        app:title="@string/swipe_to_go_back_from_post_detail" />
-
-    <SwitchPreference
-        app:defaultValue="true"
-        app:key="swipe_to_go_back_from_post_detail"
-        app:title="@string/swipe_to_go_back_from_post_detail" />
-
-    <SwitchPreference
-        app:defaultValue="false"
-        app:key="volume_keys_navigate_comments"
-        app:title="@string/settings_volume_keys_navigate_comments_title" />
-
-    <SwitchPreference
-        app:defaultValue="false"
-        app:key="volume_keys_navigate_posts"
-        app:title="@string/settings_volume_keys_navigate_posts_title" />
+        app:icon="@drawable/ic_link"
+        app:key="open_link_in_app"
+        app:title="@string/settings_open_link_in_app_title" />
 
     <SwitchPreference
         app:defaultValue="false"
         app:key="mute_video"
         android:icon="@drawable/ic_mute_preferences_24dp"
         app:title="@string/settings_mute_video_title" />
-
-    <Preference
-        app:title="@string/settings_font_size_title"
-        app:icon="@drawable/ic_font_size_24dp"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.FontSizePreferenceFragment" />
 
     <ListPreference
         app:defaultValue="2.5"

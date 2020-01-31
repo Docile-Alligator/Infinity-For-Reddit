@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Settings.AboutPreferenceFragment;
+import ml.docilealligator.infinityforreddit.Settings.InterfacePreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.MainPreferenceFragment;
 
 public class SettingsActivity extends BaseActivity implements
@@ -66,6 +67,8 @@ public class SettingsActivity extends BaseActivity implements
                 setTitle(R.string.settings_activity_label);
             } else if (getSupportFragmentManager().findFragmentById(R.id.frame_layout_settings_activity) instanceof AboutPreferenceFragment) {
                 setTitle(R.string.settings_about_master_title);
+            } else if (getSupportFragmentManager().findFragmentById(R.id.frame_layout_settings_activity) instanceof InterfacePreferenceFragment) {
+                setTitle(R.string.settings_interface_title);
             }
         });
     }

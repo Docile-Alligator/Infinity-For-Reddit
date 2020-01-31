@@ -293,6 +293,9 @@
     <string name="settings_theme_dark_theme_summary">Dark Theme</string>
     <string name="settings_theme_system_default_summary">Device default</string>
     <string name="settings_amoled_dark_title">Amoled Dark</string>
+    <string name="settings_interface_title">Interface</string>
+    <string name="settings_gestures_and_buttons_title">Gestures &amp; Buttons</string>
+    <string name="settings_open_link_in_app_title">Open Link In App</string>
     <string name="settings_immersive_interface_title">Immersive Interface</string>
     <string name="settings_enable_bottom_app_bar_title">Enable Bottom Navigation</string>
     <string name="settings_vote_buttons_on_the_right_title">Vote Buttons on the Right</string>
@@ -302,7 +305,7 @@
     <string name="settings_show_elapsed_time">Show Elapsed Time in Posts and Comments</string>
     <string name="settings_default_post_layout">Default Post Layout</string>
     <string name="settings_show_divider_in_compact_layout">Show Divider in Compact Layout</string>
-    <string name="swipe_to_go_back_from_post_detail">Swipe Right to Go Back From Comments</string>
+    <string name="settings_swipe_to_go_back_from_post_detail_title">Swipe Right to Go Back From Comments</string>
     <string name="settings_lazy_mode_interval_title">Lazy Mode Interval</string>
     <string name="settings_font_size_title">Font Size</string>
     <string name="settings_title_font_size_title">Title Font Size</string>
@@ -414,4 +417,7 @@
 
     <string name="save_comment">Save comment</string>
     <string name="unsave_comment">Unsave comment</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -154,16 +154,21 @@ public class LinkResolverActivity extends AppCompatActivity {
     }
 
     private void deepLinkError(Uri uri) {
+        PackageManager pm = getPackageManager();
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.OPEN_LINK_IN_APP, false)) {
+            openInCustomTabs(uri, pm);
+            return;
+        }
+
         String authority = uri.getAuthority();
         if(authority != null && (authority.contains("reddit.com") || authority.contains("redd.it") || authority.contains("reddit.app.link"))) {
-            openInCustomTabs(uri, getPackageManager());
+            openInCustomTabs(uri, pm);
             return;
         }
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(uri);
 
-        PackageManager pm = getPackageManager();
         List<ResolveInfo> activities = pm.queryIntentActivities(intent, 0);
         ArrayList<String> packageNames = new ArrayList<>();
 

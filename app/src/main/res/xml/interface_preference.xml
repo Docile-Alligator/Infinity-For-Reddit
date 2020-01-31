@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        app:title="@string/settings_font_size_title"
+        app:icon="@drawable/ic_font_size_24dp"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.FontSizePreferenceFragment" />
+
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="immersive_interface"
+        app:title="@string/settings_immersive_interface_title"
+        app:isPreferenceVisible="false" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="bottom_app_bar"
+        app:title="@string/settings_enable_bottom_app_bar_title" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="vote_buttons_on_the_right"
+        app:title="@string/settings_vote_buttons_on_the_right_title" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="show_elapsed_time"
+        app:title="@string/settings_show_elapsed_time" />
+
+    <ListPreference
+        app:defaultValue="0"
+        android:entries="@array/settings_default_post_layout"
+        app:entryValues="@array/settings_default_post_layout_values"
+        app:key="default_post_layout"
+        app:title="@string/settings_default_post_layout"
+        app:useSimpleSummaryProvider="true" />
+
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="show_divider_in_compact_layout"
+        app:title="@string/settings_show_divider_in_compact_layout" />
+
+</PreferenceScreen>

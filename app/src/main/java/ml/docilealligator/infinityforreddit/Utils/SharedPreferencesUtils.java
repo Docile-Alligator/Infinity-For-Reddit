@@ -68,4 +68,5 @@ public class SharedPreferencesUtils {
     public static final String VOLUME_KEYS_NAVIGATE_COMMENTS = "volume_keys_navigate_comments";
     public static final String VOLUME_KEYS_NAVIGATE_POSTS = "volume_keys_navigate_posts";
     public static final String MUTE_VIDEO = "mute_video";
+    public static final String OPEN_LINK_IN_APP = "open_link_in_app";
 }

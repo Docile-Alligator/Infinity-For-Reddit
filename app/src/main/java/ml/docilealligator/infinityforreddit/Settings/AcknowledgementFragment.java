@@ -2,12 +2,14 @@ package ml.docilealligator.infinityforreddit.Settings;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,9 +25,9 @@ import ml.docilealligator.infinityforreddit.R;
  */
 public class AcknowledgementFragment extends Fragment {
 
-
     @BindView(R.id.recycler_view_acknowledgement_fragment)
     RecyclerView recyclerView;
+    private Activity activity;
 
     public AcknowledgementFragment() {
         // Required empty public constructor
@@ -36,8 +38,6 @@ public class AcknowledgementFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_acknowledgement, container, false);
         ButterKnife.bind(this, rootView);
-
-        Activity activity = getActivity();
 
         ArrayList<Acknowledgement> acknowledgements = new ArrayList<>();
         acknowledgements.add(new Acknowledgement("ExoPlayer",
@@ -106,5 +106,11 @@ public class AcknowledgementFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         return rootView;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        activity = (Activity) context;
     }
 }

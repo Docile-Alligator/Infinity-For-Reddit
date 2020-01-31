@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="swipe_to_go_back_from_post_detail"
+        app:title="@string/settings_swipe_to_go_back_from_post_detail_title" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="volume_keys_navigate_comments"
+        app:title="@string/settings_volume_keys_navigate_comments_title" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="volume_keys_navigate_posts"
+        app:title="@string/settings_volume_keys_navigate_posts_title" />
+
+</PreferenceScreen>
