@@ -1003,17 +1003,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 mActivity.startActivity(intent);
             });
 
-            /*((CommentViewHolder) holder).shareButton.setOnClickListener(view -> {
-                try {
-                    Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.setType("text/plain");
-                    intent.putExtra(Intent.EXTRA_TEXT, comment.getPermalink());
-                    mActivity.startActivity(Intent.createChooser(intent, mActivity.getString(R.string.share)));
-                } catch (ActivityNotFoundException e) {
-                    Toast.makeText(mActivity, R.string.no_activity_found_for_share, Toast.LENGTH_SHORT).show();
-                }
-            });*/
-
             ((CommentViewHolder) holder).expandButton.setOnClickListener(view -> {
                 if (((CommentViewHolder) holder).expandButton.getVisibility() == View.VISIBLE) {
                     int commentPosition = mIsSingleCommentThreadMode ? holder.getAdapterPosition() - 2 : holder.getAdapterPosition() - 1;
@@ -1579,7 +1568,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             mGlide.clear(((CommentViewHolder) holder).authorTypeImageView);
             ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.GONE);
             ((CommentViewHolder) holder).authorTypeImageView.setVisibility(View.GONE);
-            //((CommentViewHolder) holder).moreButton.setVisibility(View.GONE);
             ((CommentViewHolder) holder).expandButton.setVisibility(View.GONE);
             ((CommentViewHolder) holder).upVoteButton.clearColorFilter();
             ((CommentViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));

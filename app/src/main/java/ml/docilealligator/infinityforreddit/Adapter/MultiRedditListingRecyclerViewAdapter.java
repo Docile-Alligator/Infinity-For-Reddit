@@ -42,18 +42,19 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
     private RequestManager mGlide;
 
     private String mAccessToken;
+    private String mAccountName;
     private List<MultiReddit> mMultiReddits;
     private List<MultiReddit> mFavoriteMultiReddits;
 
     public MultiRedditListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
                                                  RedditDataRoomDatabase redditDataRoomDatabase,
-                                                 String accessToken) {
+                                                 String accessToken, String accountName) {
         mContext = context;
         mGlide = Glide.with(context.getApplicationContext());
         mOauthRetrofit = oauthRetrofit;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mAccessToken = accessToken;
-
+        mAccountName = accountName;
     }
 
     @Override
@@ -114,8 +115,8 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                 if(multiReddit.isFavorite()) {
                     ((MultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
                     multiReddit.setFavorite(false);
-                    FavoriteMultiReddit.favoriteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
-                            false, multiReddit,
+                    FavoriteMultiReddit.favoriteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase,
+                            mAccessToken, mAccountName, false, multiReddit,
                             new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                 @Override
                                 public void success() {
@@ -140,8 +141,8 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                 } else {
                     ((MultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
                     multiReddit.setFavorite(true);
-                    FavoriteMultiReddit.favoriteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
-                            true, multiReddit,
+                    FavoriteMultiReddit.favoriteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase,
+                            mAccessToken, mAccountName, true, multiReddit,
                             new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                 @Override
                                 public void success() {
@@ -197,8 +198,8 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                 if(multiReddit.isFavorite()) {
                     ((FavoriteMultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
                     multiReddit.setFavorite(false);
-                    FavoriteMultiReddit.favoriteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
-                            false, multiReddit,
+                    FavoriteMultiReddit.favoriteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase,
+                            mAccessToken, mAccountName, false, multiReddit,
                             new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                 @Override
                                 public void success() {
@@ -223,8 +224,8 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                 } else {
                     ((FavoriteMultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
                     multiReddit.setFavorite(true);
-                    FavoriteMultiReddit.favoriteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
-                            true, multiReddit,
+                    FavoriteMultiReddit.favoriteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase,
+                            mAccessToken, mAccountName, true, multiReddit,
                             new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                 @Override
                                 public void success() {

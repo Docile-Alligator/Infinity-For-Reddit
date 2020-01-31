@@ -183,7 +183,7 @@ public class MultiRedditListingActivity extends BaseActivity {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         MultiRedditListingRecyclerViewAdapter adapter = new MultiRedditListingRecyclerViewAdapter(this,
-                mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken);
+                mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken, mAccountName);
         mRecyclerView.setAdapter(adapter);
 
         mMultiRedditViewModel = new ViewModelProvider(this,
@@ -218,7 +218,7 @@ public class MultiRedditListingActivity extends BaseActivity {
         GetMultiReddit.getMyMultiReddits(mOauthRetrofit, mAccessToken, new GetMultiReddit.GetMultiRedditListener() {
             @Override
             public void success(ArrayList<MultiReddit> multiReddits) {
-                new InsertMultiRedditAsyncTask(mRedditDataRoomDatabase, multiReddits, () -> {
+                new InsertMultiRedditAsyncTask(mRedditDataRoomDatabase, multiReddits, mAccountName, () -> {
                     mInsertSuccess = true;
                     mSwipeRefreshLayout.setRefreshing(false);
                 }).execute();

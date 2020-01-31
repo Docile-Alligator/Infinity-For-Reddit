@@ -22,8 +22,8 @@ public class FavoriteMultiReddit {
     }
 
     public static void favoriteMultiReddit(Retrofit oauthRetrofit, RedditDataRoomDatabase redditDataRoomDatabase,
-                                           String accessToken, boolean makeFavorite, MultiReddit multiReddit,
-                                           FavoriteMultiRedditListener favoriteMultiRedditListener) {
+                                           String accessToken, String accountName, boolean makeFavorite,
+                                           MultiReddit multiReddit, FavoriteMultiRedditListener favoriteMultiRedditListener) {
         Map<String, String> params = new HashMap<>();
         params.put(RedditUtils.MULTIPATH_KEY, multiReddit.getPath());
         params.put(RedditUtils.MAKE_FAVORITE_KEY, String.valueOf(makeFavorite));
@@ -36,7 +36,7 @@ public class FavoriteMultiReddit {
                     multiReddit.setFavorite(true);
                     ArrayList<MultiReddit> singleMultiRedditList = new ArrayList<>();
                     singleMultiRedditList.add(multiReddit);
-                    new InsertMultiRedditAsyncTask(redditDataRoomDatabase, singleMultiRedditList,
+                    new InsertMultiRedditAsyncTask(redditDataRoomDatabase, singleMultiRedditList, accountName,
                             favoriteMultiRedditListener::success).execute();
                 } else {
                     favoriteMultiRedditListener.failed();

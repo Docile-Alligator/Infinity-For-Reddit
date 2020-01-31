@@ -16,6 +16,9 @@ public interface MultiRedditDao {
     @Query("SELECT * FROM multi_reddits WHERE username = :username ORDER BY name COLLATE NOCASE ASC")
     LiveData<List<MultiReddit>> getAllMultiReddits(String username);
 
+    @Query("SELECT * FROM multi_reddits WHERE username = :username ORDER BY name COLLATE NOCASE ASC")
+    List<MultiReddit> getAllMultiRedditsList(String username);
+
     @Query("SELECT * FROM multi_reddits WHERE username = :username AND is_favorite ORDER BY name COLLATE NOCASE ASC")
     LiveData<List<MultiReddit>> getAllFavoriteMultiReddits(String username);
 
@@ -24,4 +27,7 @@ public interface MultiRedditDao {
 
     @Query("DELETE FROM multi_reddits WHERE name = :name AND username = :username")
     void deleteMultiReddit(String name, String username);
+
+    @Query("DELETE FROM multi_reddits WHERE username = :username")
+    void deleteAllUserMultiReddits(String username);
 }
