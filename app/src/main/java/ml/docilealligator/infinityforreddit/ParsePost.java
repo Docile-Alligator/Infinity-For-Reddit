@@ -141,15 +141,28 @@ public class ParsePost {
                     }
                 }
             } else {
-                //No preview link post
-                int postType = Post.NO_PREVIEW_LINK_TYPE;
-                post = new Post(id, fullName, subredditName, subredditNamePrefixed, author, formattedPostTime, postTimeMillis,
-                        title, previewUrl, thumbnailPreviewUrl, url, permalink, score, postType, voteType,
-                        gilded, nComments, flair, hidden, spoiler, nsfw, stickied, archived, locked, saved, isCrosspost);
-                if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
-                    post.setSelfText("");
+                if (url.endsWith("jpg") || url.endsWith("png")) {
+                    //Image post
+                    int postType = Post.IMAGE_TYPE;
+
+                    post = new Post(id, fullName, subredditName, subredditNamePrefixed, author,
+                            formattedPostTime, postTimeMillis, title, url, thumbnailPreviewUrl, url, permalink,
+                            score, postType, voteType, gilded, nComments, flair, hidden, spoiler,
+                            nsfw, stickied, archived, locked, saved, isCrosspost);
+
+                    post.setPreviewWidth(previewWidth);
+                    post.setPreviewHeight(previewHeight);
                 } else {
-                    post.setSelfText(Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
+                    //No preview link post
+                    int postType = Post.NO_PREVIEW_LINK_TYPE;
+                    post = new Post(id, fullName, subredditName, subredditNamePrefixed, author, formattedPostTime, postTimeMillis,
+                            title, previewUrl, thumbnailPreviewUrl, url, permalink, score, postType, voteType,
+                            gilded, nComments, flair, hidden, spoiler, nsfw, stickied, archived, locked, saved, isCrosspost);
+                    if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
+                        post.setSelfText("");
+                    } else {
+                        post.setSelfText(Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
+                    }
                 }
             }
         } else {

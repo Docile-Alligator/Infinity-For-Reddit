@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -97,6 +98,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean canStartActivity = true;
     private int mPostType;
     private int mPostLayout;
+    private float mScale;
     private boolean mDisplaySubredditName;
     private boolean mVoteButtonsOnTheRight;
     private boolean mNeedBlurNSFW;
@@ -126,6 +128,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mShowElapsedTime = showElapsedTime;
             mShowDividerInCompactLayout = showDividerInCompactLayout;
             mPostLayout = postLayout;
+            mScale = activity.getResources().getDisplayMetrics().density;
             mGlide = Glide.with(mActivity.getApplicationContext());
             mRedditDataRoomDatabase = redditDataRoomDatabase;
             mUserDao = redditDataRoomDatabase.userDao();
@@ -170,7 +173,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 String authorPrefixed = "u/" + post.getAuthor();
                 final String postTime = post.getPostTime();
                 final String title = post.getTitle();
-                final String permalink = post.getPermalink();
                 int voteType = post.getVoteType();
                 int gilded = post.getGilded();
                 boolean nsfw = post.isNSFW();
@@ -439,6 +441,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     + "-" + id + ".jpg");
                             mActivity.startActivity(intent);
                         });
+
+                        if (post.getPreviewWidth() <= 0 || post.getPreviewHeight() <= 0) {
+                            ((PostViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                            ((PostViewHolder) holder).imageView.getLayoutParams().height = (int) (400 * mScale);
+                        }
                         break;
                     case Post.LINK_TYPE:
                         ((PostViewHolder) holder).typeTextView.setText(R.string.link);
@@ -727,7 +734,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 String authorPrefixed = "u/" + post.getAuthor();
                 final String postTime = post.getPostTime();
                 final String title = post.getTitle();
-                final String permalink = post.getPermalink();
                 int voteType = post.getVoteType();
                 int gilded = post.getGilded();
                 boolean nsfw = post.isNSFW();
@@ -1433,6 +1439,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             ((PostViewHolder) holder).flairTextView.setVisibility(View.GONE);
             ((PostViewHolder) holder).linkTextView.setVisibility(View.GONE);
             ((PostViewHolder) holder).progressBar.setVisibility(View.GONE);
+            ((PostViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.FIT_START);
+            ((PostViewHolder) holder).imageView.getLayoutParams().height = FrameLayout.LayoutParams.WRAP_CONTENT;
             ((PostViewHolder) holder).imageView.setVisibility(View.GONE);
             ((PostViewHolder) holder).playButtonImageView.setVisibility(View.GONE);
             ((PostViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);

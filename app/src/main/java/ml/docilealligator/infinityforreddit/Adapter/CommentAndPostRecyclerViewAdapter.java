@@ -125,6 +125,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private boolean mHasMoreComments;
     private boolean loadMoreCommentsFailed;
     private int mCommentBackgroundColor;
+    private float mScale;
     private ShareLinkBottomSheetFragment mShareLinkBottomSheetFragment;
     private CopyTextBottomSheetFragment mCopyTextBottomSheetFragment;
 
@@ -228,6 +229,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         isInitiallyLoadingFailed = false;
         mHasMoreComments = false;
         loadMoreCommentsFailed = false;
+        mScale = activity.getResources().getDisplayMetrics().density;
 
         TypedValue typedValue = new TypedValue();
         mActivity.getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
@@ -498,6 +500,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                 + "-" + mPost.getId().substring(3) + ".jpg");
                         mActivity.startActivity(intent);
                     });
+
+                    if (mPost.getPreviewWidth() <= 0 || mPost.getPreviewHeight() <= 0) {
+                        ((PostDetailViewHolder) holder).mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        ((PostDetailViewHolder) holder).mImageView.getLayoutParams().height = (int) (400 * mScale);
+                    }
                     break;
                 case Post.LINK_TYPE:
                     ((PostDetailViewHolder) holder).mTypeTextView.setText("LINK");

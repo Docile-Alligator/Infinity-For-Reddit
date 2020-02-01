@@ -419,7 +419,4 @@
 
     <string name="save_comment">Save comment</string>
     <string name="unsave_comment">Unsave comment</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
