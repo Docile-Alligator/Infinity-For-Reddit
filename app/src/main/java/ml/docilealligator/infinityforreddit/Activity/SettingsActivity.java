@@ -41,17 +41,6 @@ public class SettingsActivity extends BaseActivity implements
 
         ButterKnife.bind(this);
 
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Window window = getWindow();
-            if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
-                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-            }
-            TypedValue typedValue = new TypedValue();
-            getTheme().resolveAttribute(R.attr.navBarColor, typedValue, true);
-            int navBarColor = typedValue.data;
-            window.setNavigationBarColor(navBarColor);
-        }*/
-
         setSupportActionBar(toolbar);
 
         if (savedInstanceState == null) {

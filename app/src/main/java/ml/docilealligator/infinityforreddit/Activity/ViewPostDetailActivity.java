@@ -173,6 +173,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     private boolean isSortingComments = false;
     private boolean mVolumeKeysNavigateComments;
     private boolean mIsSmoothScrolling = false;
+    private boolean mLockFab;
+    private boolean mSwipeUpToHideFab;
     private LinearLayoutManager mLinearLayoutManager;
     private CommentAndPostRecyclerViewAdapter mAdapter;
     private RecyclerView.SmoothScroller mSmoothScroller;
@@ -253,6 +255,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         mVoteButtonsOnTheRight = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
         mShowElapsedTime = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
         mVolumeKeysNavigateComments = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOLUME_KEYS_NAVIGATE_COMMENTS, false);
+        mLockFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
+        mSwipeUpToHideFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
 
         mGlide = Glide.with(this);
         mLocale = getResources().getConfiguration().locale;
@@ -265,11 +269,19 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
-                    if (!mIsSmoothScrolling) {
+                    if (!mIsSmoothScrolling && !mLockFab) {
                         if (dy > 0) {
-                            fab.hide();
+                            if (mSwipeUpToHideFab) {
+                                fab.show();
+                            } else {
+                                fab.hide();
+                            }
                         } else {
-                            fab.show();
+                            if (mSwipeUpToHideFab) {
+                                fab.hide();
+                            } else {
+                                fab.show();
+                            }
                         }
                     }
 
@@ -296,11 +308,19 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
-                    if (!mIsSmoothScrolling) {
+                    if (!mIsSmoothScrolling && !mLockFab) {
                         if (dy > 0) {
-                            fab.hide();
+                            if (mSwipeUpToHideFab) {
+                                fab.show();
+                            } else {
+                                fab.hide();
+                            }
                         } else {
-                            fab.show();
+                            if (mSwipeUpToHideFab) {
+                                fab.hide();
+                            } else {
+                                fab.show();
+                            }
                         }
                     }
                 }
@@ -634,11 +654,19 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                                     @Override
                                                     public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                                                         super.onScrolled(recyclerView, dx, dy);
-                                                        if (!mIsSmoothScrolling) {
+                                                        if (!mIsSmoothScrolling && !mLockFab) {
                                                             if (dy > 0) {
-                                                                fab.hide();
+                                                                if (mSwipeUpToHideFab) {
+                                                                    fab.show();
+                                                                } else {
+                                                                    fab.hide();
+                                                                }
                                                             } else {
-                                                                fab.show();
+                                                                if (mSwipeUpToHideFab) {
+                                                                    fab.hide();
+                                                                } else {
+                                                                    fab.show();
+                                                                }
                                                             }
                                                         }
 
@@ -722,11 +750,19 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                 @Override
                                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                                     super.onScrolled(recyclerView, dx, dy);
-                                    if (!mIsSmoothScrolling) {
+                                    if (!mIsSmoothScrolling && !mLockFab) {
                                         if (dy > 0) {
-                                            fab.hide();
+                                            if (mSwipeUpToHideFab) {
+                                                fab.show();
+                                            } else {
+                                                fab.hide();
+                                            }
                                         } else {
-                                            fab.show();
+                                            if (mSwipeUpToHideFab) {
+                                                fab.hide();
+                                            } else {
+                                                fab.show();
+                                            }
                                         }
                                     }
 

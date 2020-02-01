@@ -69,4 +69,6 @@ public class SharedPreferencesUtils {
     public static final String VOLUME_KEYS_NAVIGATE_POSTS = "volume_keys_navigate_posts";
     public static final String MUTE_VIDEO = "mute_video";
     public static final String OPEN_LINK_IN_APP = "open_link_in_app";
+    public static final String LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON = "lock_jump_to_next_top_level_comment_button";
+    public static final String SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON = "swipe_up_to_hide_jump_to_next_top_level_comments_button";
 }

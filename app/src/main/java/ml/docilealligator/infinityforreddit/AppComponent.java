@@ -41,6 +41,7 @@ import ml.docilealligator.infinityforreddit.Fragment.SubredditListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SubscribedSubredditsListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.UserListingFragment;
 import ml.docilealligator.infinityforreddit.Service.SubmitPostService;
+import ml.docilealligator.infinityforreddit.Settings.GesturesAndButtonsPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.MainPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.NotificationPreferenceFragment;
 
@@ -128,4 +129,6 @@ public interface AppComponent {
     void inject(ViewSidebarActivity viewSidebarActivity);
 
     void inject(ViewVideoActivity viewVideoActivity);
+
+    void inject(GesturesAndButtonsPreferenceFragment gesturesAndButtonsPreferenceFragment);
 }

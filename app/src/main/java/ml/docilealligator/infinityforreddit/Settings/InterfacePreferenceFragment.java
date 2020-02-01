@@ -1,12 +1,9 @@
 package ml.docilealligator.infinityforreddit.Settings;
 
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -26,7 +23,6 @@ import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
  * A simple {@link Fragment} subclass.
  */
 public class InterfacePreferenceFragment extends PreferenceFragmentCompat {
-    private Activity activity;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -85,11 +81,5 @@ public class InterfacePreferenceFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        activity = (Activity) context;
     }
 }
