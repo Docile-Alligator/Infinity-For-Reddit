@@ -14,8 +14,8 @@ import retrofit2.Retrofit;
 
 public class FetchComment {
     public static void fetchComments(Retrofit retrofit, @Nullable String accessToken, String article,
-                                     String commentId, String sortType, Locale locale,
-                                     FetchCommentListener fetchCommentListener) {
+                                     String commentId, String sortType, boolean expandChildren,
+                                     Locale locale, FetchCommentListener fetchCommentListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> comments;
         if (accessToken == null) {
@@ -38,7 +38,7 @@ public class FetchComment {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
                     ParseComment.parseComment(response.body(), new ArrayList<>(),
-                            locale, new ParseComment.ParseCommentListener() {
+                            locale, expandChildren, new ParseComment.ParseCommentListener() {
                                 @Override
                                 public void onParseCommentSuccess(ArrayList<CommentData> expandedComments,
                                                                   String parentId, ArrayList<String> moreChildrenFullnames) {
@@ -65,7 +65,8 @@ public class FetchComment {
 
     public static void fetchMoreComment(Retrofit retrofit, @Nullable String accessToken,
                                         ArrayList<String> allChildren, int startingIndex,
-                                        int depth, Locale locale, FetchMoreCommentListener fetchMoreCommentListener) {
+                                        int depth, boolean expandChildren, Locale locale,
+                                        FetchMoreCommentListener fetchMoreCommentListener) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < 100; i++) {
             if (allChildren.size() <= startingIndex + i) {
@@ -93,7 +94,7 @@ public class FetchComment {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
                     ParseComment.parseMoreComment(response.body(), new ArrayList<>(), locale,
-                            depth, new ParseComment.ParseCommentListener() {
+                            depth, expandChildren, new ParseComment.ParseCommentListener() {
                                 @Override
                                 public void onParseCommentSuccess(ArrayList<CommentData> expandedComments,
                                                                   String parentId, ArrayList<String> moreChildrenFullnames) {

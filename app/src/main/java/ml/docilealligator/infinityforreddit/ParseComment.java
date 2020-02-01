@@ -23,14 +23,14 @@ import static ml.docilealligator.infinityforreddit.CommentData.VOTE_TYPE_UPVOTE;
 
 public class ParseComment {
     public static void parseComment(String response, ArrayList<CommentData> commentData, Locale locale,
-                                    ParseCommentListener parseCommentListener) {
+                                    boolean expandChildren, ParseCommentListener parseCommentListener) {
         try {
             JSONArray childrenArray = new JSONArray(response);
             String parentId = childrenArray.getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY)
                     .getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.NAME_KEY);
             childrenArray = childrenArray.getJSONObject(1).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
 
-            new ParseCommentAsyncTask(childrenArray, commentData, locale, parentId, 0, parseCommentListener).execute();
+            new ParseCommentAsyncTask(childrenArray, commentData, locale, parentId, 0, expandChildren, parseCommentListener).execute();
         } catch (JSONException e) {
             e.printStackTrace();
             parseCommentListener.onParseCommentFailed();
@@ -38,10 +38,10 @@ public class ParseComment {
     }
 
     static void parseMoreComment(String response, ArrayList<CommentData> commentData, Locale locale,
-                                 int depth, ParseCommentListener parseCommentListener) {
+                                 int depth, boolean expandChildren, ParseCommentListener parseCommentListener) {
         try {
             JSONArray childrenArray = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-            new ParseCommentAsyncTask(childrenArray, commentData, locale, null, depth, parseCommentListener).execute();
+            new ParseCommentAsyncTask(childrenArray, commentData, locale, null, depth, expandChildren, parseCommentListener).execute();
         } catch (JSONException e) {
             e.printStackTrace();
             parseCommentListener.onParseCommentFailed();
@@ -215,11 +215,13 @@ public class ParseComment {
         private Locale locale;
         private String parentId;
         private int depth;
+        private boolean expandChildren;
         private ParseCommentListener parseCommentListener;
         private boolean parseFailed;
 
         ParseCommentAsyncTask(JSONArray commentsJSONArray, ArrayList<CommentData> comments, Locale locale,
-                              @Nullable String parentId, int depth, ParseCommentListener parseCommentListener) {
+                              @Nullable String parentId, int depth, boolean expandChildren,
+                              ParseCommentListener parseCommentListener) {
             this.commentsJSONArray = commentsJSONArray;
             this.comments = comments;
             newComments = new ArrayList<>();
@@ -228,6 +230,7 @@ public class ParseComment {
             this.locale = locale;
             this.parentId = parentId;
             this.depth = depth;
+            this.expandChildren = expandChildren;
             parseFailed = false;
             this.parseCommentListener = parseCommentListener;
         }
@@ -236,7 +239,9 @@ public class ParseComment {
         protected Void doInBackground(Void... voids) {
             try {
                 parseCommentRecursion(commentsJSONArray, newComments, moreChildrenFullnames, depth, locale);
-                expandChildren(newComments, expandedNewComments);
+                if (expandChildren) {
+                    expandChildren(newComments, expandedNewComments);
+                }
             } catch (JSONException e) {
                 parseFailed = true;
             }
@@ -246,7 +251,11 @@ public class ParseComment {
         @Override
         protected void onPostExecute(Void aVoid) {
             if (!parseFailed) {
-                comments.addAll(expandedNewComments);
+                if (expandChildren) {
+                    comments.addAll(expandedNewComments);
+                } else {
+                    comments.addAll(newComments);
+                }
                 parseCommentListener.onParseCommentSuccess(comments, parentId, moreChildrenFullnames);
             } else {
                 parseCommentListener.onParseCommentFailed();

@@ -119,6 +119,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private boolean mNeedBlurSpoiler;
     private boolean mVoteButtonsOnTheRight;
     private boolean mShowElapsedTime;
+    private boolean mExpandChildren;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
     private boolean isInitiallyLoadingFailed;
@@ -134,7 +135,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                              String accessToken, String accountName, Post post, Locale locale,
                                              String singleCommentId, boolean isSingleCommentThreadMode,
                                              boolean needBlurNSFW, boolean needBlurSpoiler, boolean voteButtonsOnTheRight,
-                                             boolean showElapsedTime,
+                                             boolean showElapsedTime, boolean expandChildren,
                                              CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
         mActivity = activity;
         mRetrofit = retrofit;
@@ -224,6 +225,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mNeedBlurSpoiler = needBlurSpoiler;
         mVoteButtonsOnTheRight = voteButtonsOnTheRight;
         mShowElapsedTime = showElapsedTime;
+        mExpandChildren = expandChildren;
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
         isInitiallyLoadingFailed = false;
@@ -1107,7 +1109,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
                     Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
                     FetchComment.fetchMoreComment(retrofit, mAccessToken, parentComment.getMoreChildrenFullnames(),
-                            parentComment.getMoreChildrenStartingIndex(), parentComment.getDepth() + 1, mLocale,
+                            parentComment.getMoreChildrenStartingIndex(), parentComment.getDepth() + 1,
+                            mExpandChildren, mLocale,
                             new FetchComment.FetchMoreCommentListener() {
                                 @Override
                                 public void onFetchMoreCommentSuccess(ArrayList<CommentData> expandedComments,

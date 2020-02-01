@@ -175,6 +175,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     private boolean mIsSmoothScrolling = false;
     private boolean mLockFab;
     private boolean mSwipeUpToHideFab;
+    private boolean mExpandChildren;
     private LinearLayoutManager mLinearLayoutManager;
     private CommentAndPostRecyclerViewAdapter mAdapter;
     private RecyclerView.SmoothScroller mSmoothScroller;
@@ -257,6 +258,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         mVolumeKeysNavigateComments = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOLUME_KEYS_NAVIGATE_COMMENTS, false);
         mLockFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
         mSwipeUpToHideFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
+        mExpandChildren = !mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_TOP_LEVEL_COMMENTS_FIRST, false);
 
         mGlide = Glide.with(this);
         mLocale = getResources().getConfiguration().locale;
@@ -494,7 +496,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
                     mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mAccountName, mPost,
                     mLocale, mSingleCommentId, isSingleCommentThreadMode, mNeedBlurNsfw, mNeedBlurSpoiler,
-                    mVoteButtonsOnTheRight, mShowElapsedTime,
+                    mVoteButtonsOnTheRight, mShowElapsedTime, mExpandChildren,
                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                         @Override
                         public void updatePost(Post post) {
@@ -617,7 +619,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                     mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mGlide,
                                     mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId,
                                     isSingleCommentThreadMode, mNeedBlurNsfw, mNeedBlurSpoiler,
-                                    mVoteButtonsOnTheRight, mShowElapsedTime,
+                                    mVoteButtonsOnTheRight, mShowElapsedTime, mExpandChildren,
                                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                                         @Override
                                         public void updatePost(Post post) {
@@ -640,7 +642,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                             mRecyclerView.setAdapter(mAdapter);
 
                             ParseComment.parseComment(response.body(), new ArrayList<>(), mLocale,
-                                    new ParseComment.ParseCommentListener() {
+                                    mExpandChildren, new ParseComment.ParseCommentListener() {
                                         @Override
                                         public void onParseCommentSuccess(ArrayList<CommentData> expandedComments, String parentId, ArrayList<String> moreChildrenFullnames) {
                                             ViewPostDetailActivity.this.children = moreChildrenFullnames;
@@ -725,8 +727,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         }
 
         Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
-        FetchComment.fetchComments(retrofit, mAccessToken, mPost.getId(), commentId, sortType, mLocale,
-                new FetchComment.FetchCommentListener() {
+        FetchComment.fetchComments(retrofit, mAccessToken, mPost.getId(), commentId, sortType, mExpandChildren,
+                mLocale, new FetchComment.FetchCommentListener() {
                     @Override
                     public void onFetchCommentSuccess(ArrayList<CommentData> expandedComments,
                                                       String parentId, ArrayList<String> children) {
@@ -826,7 +828,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
         Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
         FetchComment.fetchMoreComment(retrofit, mAccessToken, children, mChildrenStartingIndex,
-                0, mLocale, new FetchComment.FetchMoreCommentListener() {
+                0, mExpandChildren, mLocale, new FetchComment.FetchMoreCommentListener() {
                     @Override
                     public void onFetchMoreCommentSuccess(ArrayList<CommentData> expandedComments, int childrenStartingIndex) {
                         hasMoreChildren = childrenStartingIndex < children.size();
