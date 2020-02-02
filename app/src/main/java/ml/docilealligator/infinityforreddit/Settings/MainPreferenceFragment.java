@@ -11,6 +11,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
@@ -46,6 +47,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
         SwitchPreference amoledDarkSwitch = findPreference(SharedPreferencesUtils.AMOLED_DARK_KEY);
+        SwitchPreference confirmToExitSwitch = findPreference(SharedPreferencesUtils.CONFIRM_TO_EXIT);
         SwitchPreference nsfwSwitch = findPreference(SharedPreferencesUtils.NSFW_KEY);
         SwitchPreference blurNSFWSwitch = findPreference(SharedPreferencesUtils.BLUR_NSFW_KEY);
         SwitchPreference blurSpoilerSwitch = findPreference(SharedPreferencesUtils.BLUR_SPOILER_KEY);
@@ -58,6 +60,16 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
                     activity.recreate();
                 }
                 return true;
+            });
+        }
+
+        if (confirmToExitSwitch != null) {
+            confirmToExitSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    EventBus.getDefault().post(new RecreateActivityEvent());
+                    return true;
+                }
             });
         }
 

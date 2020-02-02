@@ -47,6 +47,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -70,6 +71,7 @@ import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubscribedThingsAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchToAnonymousAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.Event.ChangeConfirmToExitEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
@@ -209,6 +211,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private Menu mMenu;
     private boolean isInLazyMode = false;
     private boolean showBottomAppBar;
+    private boolean mConfirmToExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -309,6 +312,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
         showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false);
+        mConfirmToExit = mSharedPreferences.getBoolean(SharedPreferencesUtils.CONFIRM_TO_EXIT, false);
 
         if (savedInstanceState != null) {
             mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
@@ -870,7 +874,16 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (mConfirmToExit) {
+                new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                        .setTitle(R.string.exit_app)
+                        .setPositiveButton(R.string.yes, (dialogInterface, i)
+                                -> finish())
+                        .setNegativeButton(R.string.no, null)
+                        .show();
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 
@@ -971,6 +984,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Subscribe
     public void onRecreateActivityEvent(RecreateActivityEvent recreateActivityEvent) {
         recreate();
+    }
+
+    @Subscribe
+    public void onChangeConfirmToExitEvent(ChangeConfirmToExitEvent changeConfirmToExitEvent) {
+        mConfirmToExit = changeConfirmToExitEvent.confirmToExit;
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {

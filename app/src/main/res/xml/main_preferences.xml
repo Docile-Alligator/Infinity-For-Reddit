@@ -44,8 +44,9 @@
 
     <SwitchPreference
         app:defaultValue="false"
-        app:key="show_top_level_comments_first"
-        app:title="@string/settings_show_top_level_comments_first_title" />
+        app:key="confirm_to_exit"
+        app:icon="@drawable/ic_exit_24dp"
+        app:title="@string/settings_confirm_to_exit" />
 
     <ListPreference
         app:defaultValue="2.5"

@@ -41,4 +41,9 @@
         app:key="show_divider_in_compact_layout"
         app:title="@string/settings_show_divider_in_compact_layout" />
 
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="show_top_level_comments_first"
+        app:title="@string/settings_show_top_level_comments_first_title" />
+
 </PreferenceScreen>
