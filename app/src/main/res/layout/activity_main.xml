@@ -200,6 +200,19 @@
                         android:background="@color/dividerColor" />
 
                     <TextView
+                        android:id="@+id/night_mode_toggle_text_view_main_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="16dp"
+                        android:drawablePadding="32dp"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="?attr/font_default"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <TextView
                         android:id="@+id/settings_text_view_main_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

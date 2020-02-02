@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
@@ -99,6 +100,9 @@ import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
 public class MainActivity extends BaseActivity implements SortTypeSelectionCallback,
         PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {
 
@@ -140,29 +144,31 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @BindView(R.id.account_label_main_activity)
     TextView accountLabelTextView;
     @BindView(R.id.profile_text_view_main_activity)
-    TextView profileLinearLayout;
+    TextView profileTextView;
     @BindView(R.id.subscriptions_text_view_main_activity)
-    TextView subscriptionLinearLayout;
+    TextView subscriptionTextView;
     @BindView(R.id.multi_reddits_text_view_main_activity)
-    TextView multiRedditsLinearLayout;
+    TextView multiRedditsTextView;
     @BindView(R.id.inbox_text_view_main_activity)
-    TextView inboxLinearLayout;
+    TextView inboxTextView;
     @BindView(R.id.post_label_main_activity)
     TextView postLabelTextView;
     @BindView(R.id.upvoted_text_view_main_activity)
-    TextView upvotedLinearLayout;
+    TextView upvotedTextView;
     @BindView(R.id.downvoted_text_view_main_activity)
-    TextView downvotedLinearLayout;
+    TextView downvotedTextView;
     @BindView(R.id.hidden_text_view_main_activity)
-    TextView hiddenLinearLayout;
+    TextView hiddenTextView;
     @BindView(R.id.saved_text_view_main_activity)
-    TextView savedLinearLayout;
+    TextView savedTextView;
     @BindView(R.id.gilded_text_view_main_activity)
-    TextView gildedLinearLayout;
+    TextView gildedTextView;
     @BindView(R.id.divider_main_activity)
     View divider;
+    @BindView(R.id.night_mode_toggle_text_view_main_activity)
+    TextView nightModeToggleTextView;
     @BindView(R.id.settings_text_view_main_activity)
-    TextView settingsLinearLayout;
+    TextView settingsTextView;
     @BindView(R.id.account_recycler_view_main_activity)
     RecyclerView accountRecyclerView;
     @BindView(R.id.tab_layout_main_activity)
@@ -640,16 +646,16 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             mKarmaTextView.setText(R.string.press_here_to_login);
             mAccountNameTextView.setText(R.string.anonymous_account);
             accountLabelTextView.setVisibility(View.GONE);
-            profileLinearLayout.setVisibility(View.GONE);
-            subscriptionLinearLayout.setVisibility(View.GONE);
-            multiRedditsLinearLayout.setVisibility(View.GONE);
-            inboxLinearLayout.setVisibility(View.GONE);
+            profileTextView.setVisibility(View.GONE);
+            subscriptionTextView.setVisibility(View.GONE);
+            multiRedditsTextView.setVisibility(View.GONE);
+            inboxTextView.setVisibility(View.GONE);
             postLabelTextView.setVisibility(View.GONE);
-            upvotedLinearLayout.setVisibility(View.GONE);
-            downvotedLinearLayout.setVisibility(View.GONE);
-            hiddenLinearLayout.setVisibility(View.GONE);
-            savedLinearLayout.setVisibility(View.GONE);
-            gildedLinearLayout.setVisibility(View.GONE);
+            upvotedTextView.setVisibility(View.GONE);
+            downvotedTextView.setVisibility(View.GONE);
+            hiddenTextView.setVisibility(View.GONE);
+            savedTextView.setVisibility(View.GONE);
+            gildedTextView.setVisibility(View.GONE);
             divider.setVisibility(View.GONE);
         }
 
@@ -669,66 +675,94 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             glide.load(mBannerImageUrl).into(mBannerImageView);
         }
 
-        profileLinearLayout.setOnClickListener(view -> {
+        profileTextView.setOnClickListener(view -> {
             Intent intent = new Intent(this, ViewUserDetailActivity.class);
             intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mAccountName);
             startActivity(intent);
             drawer.closeDrawers();
         });
 
-        subscriptionLinearLayout.setOnClickListener(view -> {
+        subscriptionTextView.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubscribedThingListingActivity.class);
             startActivity(intent);
             drawer.closeDrawers();
         });
 
-        multiRedditsLinearLayout.setOnClickListener(view -> {
+        multiRedditsTextView.setOnClickListener(view -> {
             Intent intent = new Intent(this, MultiRedditListingActivity.class);
             startActivity(intent);
             drawer.closeDrawers();
         });
 
-        inboxLinearLayout.setOnClickListener(view -> {
+        inboxTextView.setOnClickListener(view -> {
             Intent intent = new Intent(this, ViewMessageActivity.class);
             startActivity(intent);
             drawer.closeDrawers();
         });
 
-        upvotedLinearLayout.setOnClickListener(view -> {
+        upvotedTextView.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AccountPostsActivity.class);
             intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_UPVOTED);
             startActivity(intent);
             drawer.closeDrawers();
         });
 
-        downvotedLinearLayout.setOnClickListener(view -> {
+        downvotedTextView.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AccountPostsActivity.class);
             intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_DOWNVOTED);
             startActivity(intent);
             drawer.closeDrawers();
         });
 
-        hiddenLinearLayout.setOnClickListener(view -> {
+        hiddenTextView.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AccountPostsActivity.class);
             intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_HIDDEN);
             startActivity(intent);
             drawer.closeDrawers();
         });
 
-        savedLinearLayout.setOnClickListener(view -> {
+        savedTextView.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AccountSavedThingActivity.class);
             startActivity(intent);
             drawer.closeDrawers();
         });
 
-        gildedLinearLayout.setOnClickListener(view -> {
+        gildedTextView.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AccountPostsActivity.class);
             intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_GILDED);
             startActivity(intent);
             drawer.closeDrawers();
         });
 
-        settingsLinearLayout.setOnClickListener(view -> {
+        if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+            nightModeToggleTextView.setText(R.string.dark_theme);
+            nightModeToggleTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_dark_theme_24dp, 0, 0, 0);
+        } else {
+            nightModeToggleTextView.setText(R.string.light_theme);
+            nightModeToggleTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_light_theme_24dp, 0, 0, 0);
+        }
+
+        nightModeToggleTextView.setOnClickListener(view -> {
+            if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+                mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "1").apply();
+                nightModeToggleTextView.setText(R.string.dark_theme);
+                nightModeToggleTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_dark_theme_24dp, 0, 0, 0);
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
+                    getTheme().applyStyle(R.style.Theme_Default_AmoledDark, true);
+                } else {
+                    getTheme().applyStyle(R.style.Theme_Default_NormalDark, true);
+                }
+            } else {
+                mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "0").apply();
+                nightModeToggleTextView.setText(R.string.light_theme);
+                nightModeToggleTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_light_theme_24dp, 0, 0, 0);
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                getTheme().applyStyle(R.style.Theme_Default, true);
+            }
+        });
+
+        settingsTextView.setOnClickListener(view -> {
             drawer.closeDrawers();
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);

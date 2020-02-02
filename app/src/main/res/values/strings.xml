@@ -289,7 +289,7 @@
     <string name="settings_notification_enable_notification_title">Enable Notifications</string>
     <string name="settings_notification_interval_title">Check Notifications Interval</string>
     <string name="settings_theme_title">Theme</string>
-    <string name="settings_theme_light__theme_summary">Light Theme</string>
+    <string name="settings_theme_light_theme_summary">Light Theme</string>
     <string name="settings_theme_dark_theme_summary">Dark Theme</string>
     <string name="settings_theme_system_default_summary">Device default</string>
     <string name="settings_amoled_dark_title">Amoled Dark</string>
@@ -424,4 +424,7 @@
     <string name="unsave_comment">Unsave comment</string>
 
     <string name="exit_app">Exit?</string>
+
+    <string name="light_theme">Light Theme</string>
+    <string name="dark_theme">Dark Theme</string>
 </resources>
