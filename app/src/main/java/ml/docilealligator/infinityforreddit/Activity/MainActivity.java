@@ -166,16 +166,20 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     RecyclerView accountRecyclerView;
     @BindView(R.id.tab_layout_main_activity)
     TabLayout tabLayout;
-    @BindView(R.id.fab_main_activity)
-    FloatingActionButton fab;
     @BindView(R.id.bottom_navigation_main_activity)
     BottomAppBar bottomNavigationView;
     @BindView(R.id.linear_layout_bottom_app_bar_main_activity)
     LinearLayout linearLayoutBottomAppBar;
     @BindView(R.id.subscriptions_bottom_app_bar_main_activity)
-    TextView subscriptionsBottomAppBar;
+    ImageView subscriptionsBottomAppBar;
     @BindView(R.id.multi_reddit_bottom_app_bar_main_activity)
-    TextView multiRedditBottomAppBar;
+    ImageView multiRedditBottomAppBar;
+    @BindView(R.id.message_bottom_app_bar_main_activity)
+    ImageView messageBottomAppBar;
+    @BindView(R.id.profile_bottom_app_bar_main_activity)
+    ImageView profileBottomAppBar;
+    @BindView(R.id.fab_main_activity)
+    FloatingActionButton fab;
     AccountViewModel accountViewModel;
     @Inject
     @Named("oauth")
@@ -338,8 +342,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
             getCurrentAccountAndBindView();
         }
-
-        fab.setOnClickListener(view -> postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag()));
     }
 
     @Override
@@ -460,6 +462,26 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         } else {
             if (showBottomAppBar) {
                 bottomNavigationView.setVisibility(View.VISIBLE);
+                subscriptionsBottomAppBar.setOnClickListener(view -> {
+                    Intent intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
+                    startActivity(intent);
+                });
+
+                multiRedditBottomAppBar.setOnClickListener(view -> {
+                    Intent intent = new Intent(MainActivity.this, MultiRedditListingActivity.class);
+                    startActivity(intent);
+                });
+
+                messageBottomAppBar.setOnClickListener(view -> {
+                    Intent intent = new Intent(this, ViewMessageActivity.class);
+                    startActivity(intent);
+                });
+
+                profileBottomAppBar.setOnClickListener(view -> {
+                    Intent intent = new Intent(this, ViewUserDetailActivity.class);
+                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mAccountName);
+                    startActivity(intent);
+                });
             } else {
                 CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
                 lp.setAnchorId(View.NO_ID);
@@ -467,16 +489,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 fab.setLayoutParams(lp);
             }
 
+            fab.setOnClickListener(view -> postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag()));
             fab.setVisibility(View.VISIBLE);
-            subscriptionsBottomAppBar.setOnClickListener(view -> {
-                Intent intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
-                startActivity(intent);
-            });
-
-            multiRedditBottomAppBar.setOnClickListener(view -> {
-                Intent intent = new Intent(MainActivity.this, MultiRedditListingActivity.class);
-                startActivity(intent);
-            });
         }
 
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -491,8 +505,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
             @Override
             public void onPageSelected(int position) {
-                if (mAccessToken != null && showBottomAppBar) {
-                    bottomNavigationView.performShow();
+                if (mAccessToken != null) {
+                    if (showBottomAppBar) {
+                        bottomNavigationView.performShow();
+                    }
                     fab.show();
                 }
                 if (isInLazyMode) {
@@ -956,16 +972,20 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     }
 
     public void postScrollUp() {
-        if (mAccessToken != null && showBottomAppBar) {
-            bottomNavigationView.performShow();
+        if (mAccessToken != null) {
+            if (showBottomAppBar) {
+                bottomNavigationView.performShow();
+            }
             fab.show();
         }
     }
 
     public void postScrollDown() {
-        if (mAccessToken != null && showBottomAppBar) {
+        if (mAccessToken != null) {
             fab.hide();
-            bottomNavigationView.performHide();
+            if (showBottomAppBar) {
+                bottomNavigationView.performHide();
+            }
         }
     }
 

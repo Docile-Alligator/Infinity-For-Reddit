@@ -69,16 +69,29 @@
             android:id="@+id/linear_layout_bottom_app_bar_main_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="3">
+            android:weightSum="5">
 
-            <TextView
+            <ImageView
                 android:id="@+id/subscriptions_bottom_app_bar_main_activity"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:drawableTop="@drawable/ic_subscritptions_bottom_app_bar_24dp"
-                android:text="@string/subscriptions"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:src="@drawable/ic_subscritptions_bottom_app_bar_24dp"
+                android:textColor="@color/primaryTextColor"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <ImageView
+                android:id="@+id/multi_reddit_bottom_app_bar_main_activity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:src="@drawable/ic_multi_reddit_24dp"
                 android:textColor="@color/primaryTextColor"
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
@@ -88,17 +101,30 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"/>
 
-            <TextView
-                android:id="@+id/multi_reddit_bottom_app_bar_main_activity"
+            <ImageView
+                android:id="@+id/message_bottom_app_bar_main_activity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:src="@drawable/ic_inbox_24dp"
+                android:textColor="@color/primaryTextColor"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <ImageView
+                android:id="@+id/profile_bottom_app_bar_main_activity"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="16dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:gravity="center"
-                android:drawableTop="@drawable/ic_multi_reddit_24dp"
-                android:text="@string/multi_reddit_listing_activity"
+                android:src="@drawable/ic_account_circle_24dp"
                 android:textColor="@color/primaryTextColor"
-                android:background="?attr/selectableItemBackgroundBorderless"/>
+                android:background="?attr/selectableItemBackgroundBorderless" />
 
         </LinearLayout>
     </com.google.android.material.bottomappbar.BottomAppBar>

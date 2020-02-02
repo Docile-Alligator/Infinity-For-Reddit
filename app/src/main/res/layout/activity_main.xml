@@ -64,7 +64,7 @@
                             android:layout_height="24dp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_outline_account_circle_24px"
+                            android:src="@drawable/ic_account_circle_24dp"
                             android:tint="@color/primaryTextColor"/>
 
                         <TextView
@@ -144,7 +144,7 @@
                             android:layout_height="24dp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_outline_inbox_24px"
+                            android:src="@drawable/ic_inbox_24dp"
                             android:tint="@color/primaryTextColor"/>
 
                         <TextView

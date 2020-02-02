@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +30,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -107,6 +111,18 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     TextView nOnlineSubscribersTextView;
     @BindView(R.id.description_text_view_view_subreddit_detail_activity)
     TextView descriptionTextView;
+    @BindView(R.id.bottom_navigation_view_subreddit_detail_activity)
+    BottomAppBar bottomNavigationView;
+    @BindView(R.id.linear_layout_bottom_app_bar_view_subreddit_detail_activity)
+    LinearLayout linearLayoutBottomAppBar;
+    @BindView(R.id.subscriptions_bottom_app_bar_view_subreddit_detail_activity)
+    ImageView subscriptionsBottomAppBar;
+    @BindView(R.id.multi_reddit_bottom_app_bar_view_subreddit_detail_activity)
+    ImageView multiRedditBottomAppBar;
+    @BindView(R.id.message_bottom_app_bar_view_subreddit_detail_activity)
+    ImageView messageBottomAppBar;
+    @BindView(R.id.profile_bottom_app_bar_view_subreddit_detail_activity)
+    ImageView profileBottomAppBar;
     @BindView(R.id.fab_view_subreddit_detail_activity)
     FloatingActionButton fab;
     @Inject
@@ -128,6 +144,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private boolean subscriptionReady = false;
     private boolean isInLazyMode = false;
     private boolean showToast = false;
+    private boolean showBottomAppBar;
     private String mMessageFullname;
     private String mNewAccountName;
     private RequestManager glide;
@@ -254,6 +271,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         toolbar.setLayoutParams(toolbarParams);
         setSupportActionBar(toolbar);
 
+        showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false);
+
         glide = Glide.with(this);
 
         mSubredditViewModel = new ViewModelProvider(this,
@@ -310,15 +329,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     descriptionTextView.setText(subredditData.getDescription());
                 }
             }
-        });
-
-        fab.setOnClickListener(view -> {
-            if (mAccessToken == null) {
-                Toast.makeText(ViewSubredditDetailActivity.this, R.string.login_first, Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
         });
     }
 
@@ -388,18 +398,55 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     }
 
     private void bindView(boolean initializeFragment) {
-        if (mAccessToken != null && mMessageFullname != null) {
-            ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
-                @Override
-                public void readSuccess() {
-                    mMessageFullname = null;
-                }
+        if (mAccessToken != null) {
+            if (mMessageFullname != null) {
+                ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
+                    @Override
+                    public void readSuccess() {
+                        mMessageFullname = null;
+                    }
 
-                @Override
-                public void readFailed() {
+                    @Override
+                    public void readFailed() {
 
-                }
-            });
+                    }
+                });
+            }
+
+            if (showBottomAppBar) {
+                bottomNavigationView.setVisibility(View.VISIBLE);
+                subscriptionsBottomAppBar.setOnClickListener(view -> {
+                    Intent intent = new Intent(ViewSubredditDetailActivity.this, SubscribedThingListingActivity.class);
+                    startActivity(intent);
+                });
+
+                multiRedditBottomAppBar.setOnClickListener(view -> {
+                    Intent intent = new Intent(ViewSubredditDetailActivity.this, MultiRedditListingActivity.class);
+                    startActivity(intent);
+                });
+
+                messageBottomAppBar.setOnClickListener(view -> {
+                    Intent intent = new Intent(this, ViewMessageActivity.class);
+                    startActivity(intent);
+                });
+
+                profileBottomAppBar.setOnClickListener(view -> {
+                    Intent intent = new Intent(this, ViewUserDetailActivity.class);
+                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mAccountName);
+                    startActivity(intent);
+                });
+            } else {
+                CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+                lp.setAnchorId(View.NO_ID);
+                lp.gravity = Gravity.END | Gravity.BOTTOM;
+                fab.setLayoutParams(lp);
+            }
+
+            fab.setOnClickListener(view -> postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag()));
+            fab.setVisibility(View.VISIBLE);
+        } else {
+            bottomNavigationView.setVisibility(View.GONE);
+            fab.setVisibility(View.GONE);
         }
 
         subscribeSubredditChip.setOnClickListener(view -> {
@@ -642,11 +689,21 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     }
 
     public void postScrollUp() {
-        fab.show();
+        if (mAccessToken != null) {
+            if (showBottomAppBar) {
+                bottomNavigationView.performShow();
+            }
+            fab.show();
+        }
     }
 
     public void postScrollDown() {
-        fab.hide();
+        if (mAccessToken != null) {
+            fab.hide();
+            if (showBottomAppBar) {
+                bottomNavigationView.performHide();
+            }
+        }
     }
 
     @Subscribe
@@ -660,32 +717,4 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
         ((FragmentCommunicator) mFragment).changeNSFW(changeNSFWEvent.nsfw);
     }
-
-    /*private static class InsertSubredditDataAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        private SubredditDao mSubredditDao;
-        private SubredditData subredditData;
-        private InsertSubredditDataAsyncTaskListener insertSubredditDataAsyncTaskListener;
-        InsertSubredditDataAsyncTask(RedditDataRoomDatabase db, SubredditData subredditData,
-                                     InsertSubredditDataAsyncTaskListener insertSubredditDataAsyncTaskListener) {
-            mSubredditDao = db.subredditDao();
-            this.subredditData = subredditData;
-            this.insertSubredditDataAsyncTaskListener = insertSubredditDataAsyncTaskListener;
-        }
-
-        @Override
-        protected Void doInBackground(final Void... params) {
-            mSubredditDao.insert(subredditData);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            insertSubredditDataAsyncTaskListener.insertSuccess();
-        }
-
-        interface InsertSubredditDataAsyncTaskListener {
-            void insertSuccess();
-        }
-    }*/
 }
