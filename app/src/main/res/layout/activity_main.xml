@@ -50,112 +50,65 @@
                         android:text="@string/label_account"
                         android:textSize="?attr/font_default" />
 
-                    <LinearLayout
-                        android:id="@+id/profile_linear_layout_main_activity"
+                    <TextView
+                        android:id="@+id/profile_text_view_main_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="16dp"
+                        android:drawableStart="@drawable/ic_account_circle_24dp"
+                        android:drawablePadding="32dp"
+                        android:text="@string/profile"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="?attr/font_default"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
-                        android:focusable="true"
-                        android:padding="16dp">
+                        android:focusable="true" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_account_circle_24dp"
-                            android:tint="@color/primaryTextColor"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/profile"
-                            android:textColor="@color/primaryTextColor"
-                            android:textSize="?attr/font_default" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/subscriptions_linear_layout_main_activity"
+                    <TextView
+                        android:id="@+id/subscriptions_text_view_main_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="16dp"
+                        android:drawableStart="@drawable/ic_subscritptions_bottom_app_bar_24dp"
+                        android:drawablePadding="32dp"
+                        android:text="@string/subscriptions"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="?attr/font_default"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
-                        android:focusable="true"
-                        android:padding="16dp">
+                        android:focusable="true" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_subscritptions_24dp"
-                            android:tint="@color/primaryTextColor"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/subscriptions"
-                            android:textColor="@color/primaryTextColor"
-                            android:textSize="?attr/font_default" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/multi_reddits_linear_layout_main_activity"
+                    <TextView
+                        android:id="@+id/multi_reddits_text_view_main_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="16dp"
+                        android:drawableStart="@drawable/ic_multi_reddit_24dp"
+                        android:drawablePadding="32dp"
+                        android:text="@string/multi_reddit"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="?attr/font_default"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
-                        android:focusable="true"
-                        android:padding="16dp">
+                        android:focusable="true" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_multi_reddit_24dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/multi_reddit"
-                            android:textColor="@color/primaryTextColor"
-                            android:textSize="?attr/font_default" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/inbox_linear_layout_main_activity"
+                    <TextView
+                        android:id="@+id/inbox_text_view_main_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="16dp"
+                        android:drawableStart="@drawable/ic_inbox_24dp"
+                        android:drawablePadding="32dp"
+                        android:text="@string/inbox"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="?attr/font_default"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
-                        android:focusable="true"
-                        android:padding="16dp">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_inbox_24dp"
-                            android:tint="@color/primaryTextColor"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/inbox"
-                            android:textColor="@color/primaryTextColor"
-                            android:textSize="?attr/font_default" />
-
-                    </LinearLayout>
+                        android:focusable="true" />
 
                     <TextView
                         android:id="@+id/post_label_main_activity"
@@ -165,140 +118,80 @@
                         android:text="@string/label_post"
                         android:textSize="?attr/font_default" />
 
-                    <LinearLayout
-                        android:id="@+id/upvoted_linear_layout_main_activity"
+                    <TextView
+                        android:id="@+id/upvoted_text_view_main_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="16dp"
+                        android:drawableStart="@drawable/ic_arrow_upward_black_24dp"
+                        android:drawablePadding="32dp"
+                        android:text="@string/upvoted"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="?attr/font_default"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
-                        android:focusable="true"
-                        android:padding="16dp">
+                        android:focusable="true" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_arrow_upward_black_24dp"
-                            android:tint="@color/primaryTextColor"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/upvoted"
-                            android:textColor="@color/primaryTextColor"
-                            android:textSize="?attr/font_default" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/downvoted_linear_layout_main_activity"
+                    <TextView
+                        android:id="@+id/downvoted_text_view_main_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="16dp"
+                        android:drawableStart="@drawable/ic_arrow_downward_black_24dp"
+                        android:drawablePadding="32dp"
+                        android:text="@string/downvoted"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="?attr/font_default"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
-                        android:focusable="true"
-                        android:padding="16dp">
+                        android:focusable="true" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_arrow_downward_black_24dp"
-                            android:tint="@color/primaryTextColor"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/downvoted"
-                            android:textColor="@color/primaryTextColor"
-                            android:textSize="?attr/font_default" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/hidden_linear_layout_main_activity"
+                    <TextView
+                        android:id="@+id/hidden_text_view_main_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="16dp"
+                        android:drawableStart="@drawable/ic_outline_lock_24dp"
+                        android:drawablePadding="32dp"
+                        android:text="@string/hidden"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="?attr/font_default"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
-                        android:focusable="true"
-                        android:padding="16dp">
+                        android:focusable="true" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_outline_lock"
-                            android:tint="@color/primaryTextColor"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/hidden"
-                            android:textColor="@color/primaryTextColor"
-                            android:textSize="?attr/font_default" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/saved_linear_layout_main_activity"
+                    <TextView
+                        android:id="@+id/saved_text_view_main_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="16dp"
+                        android:drawableStart="@drawable/ic_outline_bookmarks_24dp"
+                        android:drawablePadding="32dp"
+                        android:text="@string/saved"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="?attr/font_default"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
-                        android:focusable="true"
-                        android:padding="16dp">
+                        android:focusable="true" />
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_outline_bookmarks_24px"
-                            android:tint="@color/primaryTextColor"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/saved"
-                            android:textColor="@color/primaryTextColor"
-                            android:textSize="?attr/font_default" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/gilded_linear_layout_main_activity"
+                    <TextView
+                        android:id="@+id/gilded_text_view_main_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="16dp"
+                        android:drawableStart="@drawable/ic_star_border_24dp"
+                        android:drawablePadding="32dp"
+                        android:text="@string/gilded"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="?attr/font_default"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
-                        android:focusable="true"
-                        android:padding="16dp">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_outline_star_border_24px"
-                            android:tint="@color/primaryTextColor"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/gilded"
-                            android:textColor="@color/primaryTextColor"
-                            android:textSize="?attr/font_default" />
-
-                    </LinearLayout>
+                        android:focusable="true" />
 
                     <View
                         android:id="@+id/divider_main_activity"
@@ -306,32 +199,20 @@
                         android:layout_height="1dp"
                         android:background="@color/dividerColor" />
 
-                    <LinearLayout
-                        android:id="@+id/settings_linear_layout_main_activity"
+                    <TextView
+                        android:id="@+id/settings_text_view_main_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="16dp"
+                        android:drawableStart="@drawable/ic_settings_24dp"
+                        android:drawablePadding="32dp"
+                        android:text="@string/settings"
+                        android:textColor="@color/primaryTextColor"
+                        android:textSize="?attr/font_default"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
-                        android:focusable="true"
-                        android:padding="16dp">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="32dp"
-                            android:src="@drawable/ic_outline_settings_24px"
-                            android:tint="@color/primaryTextColor"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:text="@string/settings"
-                            android:textColor="@color/primaryTextColor"
-                            android:textSize="?attr/font_default" />
-
-                    </LinearLayout>
+                        android:focusable="true" />
 
                 </LinearLayout>
 

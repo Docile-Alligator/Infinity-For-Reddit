@@ -80,7 +80,6 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:src="@drawable/ic_subscritptions_bottom_app_bar_24dp"
-                android:textColor="@color/primaryTextColor"
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
             <ImageView
@@ -92,7 +91,6 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:src="@drawable/ic_multi_reddit_24dp"
-                android:textColor="@color/primaryTextColor"
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
             <TextView
@@ -110,7 +108,6 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:src="@drawable/ic_inbox_24dp"
-                android:textColor="@color/primaryTextColor"
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
             <ImageView
@@ -123,7 +120,6 @@
                 android:paddingBottom="8dp"
                 android:gravity="center"
                 android:src="@drawable/ic_account_circle_24dp"
-                android:textColor="@color/primaryTextColor"
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
         </LinearLayout>

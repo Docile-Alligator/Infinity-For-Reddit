@@ -139,30 +139,30 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     LinearLayout allDrawerItemsLinearLayout;
     @BindView(R.id.account_label_main_activity)
     TextView accountLabelTextView;
-    @BindView(R.id.profile_linear_layout_main_activity)
-    LinearLayout profileLinearLayout;
-    @BindView(R.id.subscriptions_linear_layout_main_activity)
-    LinearLayout subscriptionLinearLayout;
-    @BindView(R.id.multi_reddits_linear_layout_main_activity)
-    LinearLayout multiRedditsLinearLayout;
-    @BindView(R.id.inbox_linear_layout_main_activity)
-    LinearLayout inboxLinearLayout;
+    @BindView(R.id.profile_text_view_main_activity)
+    TextView profileLinearLayout;
+    @BindView(R.id.subscriptions_text_view_main_activity)
+    TextView subscriptionLinearLayout;
+    @BindView(R.id.multi_reddits_text_view_main_activity)
+    TextView multiRedditsLinearLayout;
+    @BindView(R.id.inbox_text_view_main_activity)
+    TextView inboxLinearLayout;
     @BindView(R.id.post_label_main_activity)
     TextView postLabelTextView;
-    @BindView(R.id.upvoted_linear_layout_main_activity)
-    LinearLayout upvotedLinearLayout;
-    @BindView(R.id.downvoted_linear_layout_main_activity)
-    LinearLayout downvotedLinearLayout;
-    @BindView(R.id.hidden_linear_layout_main_activity)
-    LinearLayout hiddenLinearLayout;
-    @BindView(R.id.saved_linear_layout_main_activity)
-    LinearLayout savedLinearLayout;
-    @BindView(R.id.gilded_linear_layout_main_activity)
-    LinearLayout gildedLinearLayout;
+    @BindView(R.id.upvoted_text_view_main_activity)
+    TextView upvotedLinearLayout;
+    @BindView(R.id.downvoted_text_view_main_activity)
+    TextView downvotedLinearLayout;
+    @BindView(R.id.hidden_text_view_main_activity)
+    TextView hiddenLinearLayout;
+    @BindView(R.id.saved_text_view_main_activity)
+    TextView savedLinearLayout;
+    @BindView(R.id.gilded_text_view_main_activity)
+    TextView gildedLinearLayout;
     @BindView(R.id.divider_main_activity)
     View divider;
-    @BindView(R.id.settings_linear_layout_main_activity)
-    LinearLayout settingsLinearLayout;
+    @BindView(R.id.settings_text_view_main_activity)
+    TextView settingsLinearLayout;
     @BindView(R.id.account_recycler_view_main_activity)
     RecyclerView accountRecyclerView;
     @BindView(R.id.tab_layout_main_activity)

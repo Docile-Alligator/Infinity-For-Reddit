@@ -201,7 +201,7 @@
                 android:id="@+id/locked_image_view_item_post"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_outline_lock"
+                android:src="@drawable/ic_outline_lock_24dp"
                 android:tint="@color/lockedIconTint"
                 android:visibility="gone" />
 
