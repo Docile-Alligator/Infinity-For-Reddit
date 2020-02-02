@@ -73,4 +73,5 @@ public class SharedPreferencesUtils {
     public static final String SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON = "swipe_up_to_hide_jump_to_next_top_level_comments_button";
     public static final String SHOW_TOP_LEVEL_COMMENTS_FIRST = "show_top_level_comments_first";
     public static final String CONFIRM_TO_EXIT = "confirm_to_exit";
+    public static final String LOCK_BOTTOM_APP_BAR = "lock_bottom_app_bar";
 }

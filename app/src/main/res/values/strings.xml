@@ -309,7 +309,8 @@
     <string name="settings_show_divider_in_compact_layout">Show Divider in Compact Layout</string>
     <string name="settings_swipe_to_go_back_from_post_detail_title">Swipe Right to Go Back From Comments</string>
     <string name="settings_lock_jump_to_next_top_level_comment_button_title">Lock Jump to Next Top-level Comment Button</string>
-    <string name="settings_swipe_up_to_hide_jump_to_next_top_level_comment_button_title">Swipe Up to Hide Jump to Next Top Level Comment Button</string>
+    <string name="settings_lock_bottom_app_bar_title">Lock Bottom Navigation Bar</string>
+    <string name="settings_swipe_up_to_hide_jump_to_next_top_level_comment_button_title">Swipe Up to Hide Jump to Next Top-level Comment Button</string>
     <string name="settings_lazy_mode_interval_title">Lazy Mode Interval</string>
     <string name="settings_font_size_title">Font Size</string>
     <string name="settings_title_font_size_title">Title Font Size</string>

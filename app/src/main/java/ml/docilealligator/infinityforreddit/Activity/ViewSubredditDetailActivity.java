@@ -145,6 +145,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private boolean isInLazyMode = false;
     private boolean showToast = false;
     private boolean showBottomAppBar;
+    private boolean lockBottomAppBar;
     private String mMessageFullname;
     private String mNewAccountName;
     private RequestManager glide;
@@ -272,6 +273,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         setSupportActionBar(toolbar);
 
         showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false);
+        lockBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR, false);
 
         glide = Glide.with(this);
 
@@ -690,17 +692,21 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     public void postScrollUp() {
         if (mAccessToken != null) {
-            if (showBottomAppBar) {
+            if (showBottomAppBar && !lockBottomAppBar) {
                 bottomNavigationView.performShow();
             }
-            fab.show();
+            if (!(showBottomAppBar && lockBottomAppBar)) {
+                fab.show();
+            }
         }
     }
 
     public void postScrollDown() {
         if (mAccessToken != null) {
-            fab.hide();
-            if (showBottomAppBar) {
+            if (!(showBottomAppBar && lockBottomAppBar)) {
+                fab.hide();
+            }
+            if (showBottomAppBar && !lockBottomAppBar) {
                 bottomNavigationView.performHide();
             }
         }

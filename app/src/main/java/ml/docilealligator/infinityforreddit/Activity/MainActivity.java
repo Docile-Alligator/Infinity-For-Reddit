@@ -72,6 +72,7 @@ import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubscribedThingsAsyn
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchToAnonymousAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.Event.ChangeConfirmToExitEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeLockBottomAppBarEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
@@ -216,6 +217,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private boolean isInLazyMode = false;
     private boolean showBottomAppBar;
     private boolean mConfirmToExit;
+    private boolean mLockBottomAppBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -317,6 +319,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
         showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false);
         mConfirmToExit = mSharedPreferences.getBoolean(SharedPreferencesUtils.CONFIRM_TO_EXIT, false);
+        mLockBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR, false);
 
         if (savedInstanceState != null) {
             mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
@@ -973,17 +976,21 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     public void postScrollUp() {
         if (mAccessToken != null) {
-            if (showBottomAppBar) {
+            if (showBottomAppBar && !mLockBottomAppBar) {
                 bottomNavigationView.performShow();
             }
-            fab.show();
+            if (!(showBottomAppBar && mLockBottomAppBar)) {
+                fab.show();
+            }
         }
     }
 
     public void postScrollDown() {
         if (mAccessToken != null) {
-            fab.hide();
-            if (showBottomAppBar) {
+            if (!(showBottomAppBar && mLockBottomAppBar)) {
+                fab.hide();
+            }
+            if (showBottomAppBar && !mLockBottomAppBar) {
                 bottomNavigationView.performHide();
             }
         }
@@ -1009,6 +1016,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Subscribe
     public void onChangeConfirmToExitEvent(ChangeConfirmToExitEvent changeConfirmToExitEvent) {
         mConfirmToExit = changeConfirmToExitEvent.confirmToExit;
+    }
+
+    @Subscribe
+    public void onChangeLockBottomAppBar(ChangeLockBottomAppBarEvent changeLockBottomAppBarEvent) {
+        mLockBottomAppBar = changeLockBottomAppBarEvent.lockBottomAppBar;
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {

@@ -11,8 +11,11 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
+import org.greenrobot.eventbus.EventBus;
+
 import javax.inject.Inject;
 
+import ml.docilealligator.infinityforreddit.Event.ChangeLockBottomAppBarEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
@@ -33,10 +36,12 @@ public class GesturesAndButtonsPreferenceFragment extends PreferenceFragmentComp
 
         SwitchPreference lockJumpToNextTopLevelCommentButtonSwitch =
                 findPreference(SharedPreferencesUtils.LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON);
+        SwitchPreference lockBottomAppBarSwitch = findPreference(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR);
         SwitchPreference swipeUpToHideJumpToNextTopLevelCommentButtonSwitch =
                 findPreference(SharedPreferencesUtils.SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON);
 
-        if (lockJumpToNextTopLevelCommentButtonSwitch != null && swipeUpToHideJumpToNextTopLevelCommentButtonSwitch != null) {
+        if (lockJumpToNextTopLevelCommentButtonSwitch != null && lockBottomAppBarSwitch != null &&
+                swipeUpToHideJumpToNextTopLevelCommentButtonSwitch != null) {
             lockJumpToNextTopLevelCommentButtonSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                 if ((Boolean) newValue) {
                     swipeUpToHideJumpToNextTopLevelCommentButtonSwitch.setVisible(false);
@@ -45,6 +50,14 @@ public class GesturesAndButtonsPreferenceFragment extends PreferenceFragmentComp
                 }
                 return true;
             });
+
+            if (sharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false)) {
+                lockBottomAppBarSwitch.setVisible(true);
+                lockBottomAppBarSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                    EventBus.getDefault().post(new ChangeLockBottomAppBarEvent((Boolean) newValue));
+                    return true;
+                });
+            }
 
             if (!sharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false)) {
                 swipeUpToHideJumpToNextTopLevelCommentButtonSwitch.setVisible(true);
