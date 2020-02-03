@@ -67,6 +67,10 @@ public class FetchComment {
                                         ArrayList<String> allChildren, int startingIndex,
                                         int depth, boolean expandChildren, Locale locale,
                                         FetchMoreCommentListener fetchMoreCommentListener) {
+        if (allChildren == null) {
+            return;
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < 100; i++) {
             if (allChildren.size() <= startingIndex + i) {

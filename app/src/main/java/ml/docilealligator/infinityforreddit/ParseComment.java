@@ -95,12 +95,15 @@ public class ParseComment {
         }
     }
 
-    private static void expandChildren(ArrayList<CommentData> comments, ArrayList<CommentData> visibleComments) {
+    private static void expandChildren(ArrayList<CommentData> comments, ArrayList<CommentData> visibleComments,
+                                       boolean setExpanded) {
         for (CommentData c : comments) {
             visibleComments.add(c);
             if (c.hasReply()) {
-                c.setExpanded(true);
-                expandChildren(c.getChildren(), visibleComments);
+                if (setExpanded) {
+                    c.setExpanded(true);
+                }
+                expandChildren(c.getChildren(), visibleComments, setExpanded);
             }
             if (c.hasMoreChildrenFullnames() && c.getMoreChildrenFullnames().size() > c.getMoreChildrenStartingIndex()) {
                 //Add a load more placeholder
@@ -239,9 +242,7 @@ public class ParseComment {
         protected Void doInBackground(Void... voids) {
             try {
                 parseCommentRecursion(commentsJSONArray, newComments, moreChildrenFullnames, depth, locale);
-                if (expandChildren) {
-                    expandChildren(newComments, expandedNewComments);
-                }
+                expandChildren(newComments, expandedNewComments, expandChildren);
             } catch (JSONException e) {
                 parseFailed = true;
             }
