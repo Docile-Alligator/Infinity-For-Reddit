@@ -1564,10 +1564,14 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     }
 
     public void lockSwipeRightToGoBack() {
-        mSlidrInterface.lock();
+        if (mSlidrInterface != null) {
+            mSlidrInterface.lock();
+        }
     }
 
     public void unlockSwipeRightToGoBack() {
-        mSlidrInterface.unlock();
+        if (mSlidrInterface != null) {
+            mSlidrInterface.unlock();
+        }
     }
 }

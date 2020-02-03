@@ -180,7 +180,11 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return ((FragmentCommunicator) mFragment).handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
+        if (mFragment != null) {
+            return ((FragmentCommunicator) mFragment).handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

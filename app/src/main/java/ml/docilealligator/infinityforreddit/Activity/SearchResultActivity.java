@@ -173,7 +173,10 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return sectionsPagerAdapter.handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
+        if (sectionsPagerAdapter != null) {
+            return sectionsPagerAdapter.handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

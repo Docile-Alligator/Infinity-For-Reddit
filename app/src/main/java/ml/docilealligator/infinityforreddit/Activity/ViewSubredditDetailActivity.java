@@ -336,7 +336,11 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return ((FragmentCommunicator)(mFragment)).handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
+        if (mFragment != null) {
+            return ((FragmentCommunicator)(mFragment)).handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -645,7 +649,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST, sortType.getTime().name()).apply();
         }
 
-        ((PostFragment) mFragment).changeSortType(sortType);
+        if (mFragment != null) {
+            ((PostFragment) mFragment).changeSortType(sortType);
+        }
     }
 
     @Override
