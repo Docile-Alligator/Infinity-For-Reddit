@@ -11,7 +11,7 @@ import androidx.preference.SwitchPreference;
 
 import org.greenrobot.eventbus.EventBus;
 
-import ml.docilealligator.infinityforreddit.Event.ChangePostLayoutEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeDefaultPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeShowElapsedTimeEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVoteButtonsPositionEvent;
 import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
@@ -70,7 +70,7 @@ public class InterfacePreferenceFragment extends PreferenceFragmentCompat {
 
         if (defaultPostLayoutSwitch != null) {
             defaultPostLayoutSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
-                EventBus.getDefault().post(new ChangePostLayoutEvent(Integer.parseInt((String) newValue)));
+                EventBus.getDefault().post(new ChangeDefaultPostLayoutEvent(Integer.parseInt((String) newValue)));
                 return true;
             });
         }

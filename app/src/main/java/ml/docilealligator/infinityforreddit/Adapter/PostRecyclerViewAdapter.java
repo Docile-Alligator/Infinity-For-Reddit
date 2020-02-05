@@ -1297,7 +1297,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
 
             if ((post.isNSFW() && mNeedBlurNSFW) || post.isSpoiler() && mNeedBlurSpoiler) {
-                imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 2)))
+                imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                         .into(((PostViewHolder) holder).imageView);
             } else {
                 imageRequestBuilder.into(((PostViewHolder) holder).imageView);
@@ -1320,7 +1320,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
             if ((post.isNSFW() && mNeedBlurNSFW) || post.isSpoiler() && mNeedBlurSpoiler) {
                 imageRequestBuilder
-                        .transform(new BlurTransformation(50, 2))
+                        .transform(new BlurTransformation(50, 10))
                         .into(((PostCompactViewHolder) holder).imageView);
             } else {
                 imageRequestBuilder.into(((PostCompactViewHolder) holder).imageView);

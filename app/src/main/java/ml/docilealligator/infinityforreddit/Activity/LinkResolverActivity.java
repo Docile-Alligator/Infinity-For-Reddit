@@ -155,17 +155,21 @@ public class LinkResolverActivity extends AppCompatActivity {
 
     private void deepLinkError(Uri uri) {
         PackageManager pm = getPackageManager();
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.OPEN_LINK_IN_APP, false)) {
-            openInCustomTabs(uri, pm);
-            return;
-        }
 
         String authority = uri.getAuthority();
         if(authority != null && (authority.contains("reddit.com") || authority.contains("redd.it") || authority.contains("reddit.app.link"))) {
-            openInCustomTabs(uri, pm);
+            openInCustomTabs(uri, pm, false);
             return;
         }
 
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.OPEN_LINK_IN_APP, false)) {
+            openInCustomTabs(uri, pm, true);
+        } else {
+            openInBrowser(uri, pm, true);
+        }
+    }
+
+    private void openInBrowser(Uri uri, PackageManager pm, boolean handleError) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(uri);
 
@@ -184,12 +188,21 @@ public class LinkResolverActivity extends AppCompatActivity {
             try {
                 startActivity(intent);
             } catch (ActivityNotFoundException e) {
-                openInCustomTabs(uri, pm);
+                if (handleError) {
+                    openInCustomTabs(uri, pm, false);
+                } else {
+                    Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show();
+                }
             }
         } else {
-            openInCustomTabs(uri, pm);
+            if (handleError) {
+                openInCustomTabs(uri, pm, false);
+            } else {
+                Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show();
+            }
         }
     }
+
 
     private ArrayList<ResolveInfo> getCustomTabsPackages(PackageManager pm) {
         // Get default VIEW intent handler.
@@ -210,7 +223,7 @@ public class LinkResolverActivity extends AppCompatActivity {
         return packagesSupportingCustomTabs;
     }
 
-    private void openInCustomTabs(Uri uri, PackageManager pm) {
+    private void openInCustomTabs(Uri uri, PackageManager pm, boolean handleError) {
         ArrayList<ResolveInfo> resolveInfos = getCustomTabsPackages(pm);
         if (!resolveInfos.isEmpty()) {
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
@@ -225,10 +238,18 @@ public class LinkResolverActivity extends AppCompatActivity {
             try {
                 customTabsIntent.launchUrl(this, uri);
             } catch (ActivityNotFoundException e) {
-                Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show();
+                if (handleError) {
+                    openInBrowser(uri, pm, false);
+                } else {
+                    Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show();
+                }
             }
         } else {
-            Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show();
+            if (handleError) {
+                openInBrowser(uri, pm, false);
+            } else {
+                Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

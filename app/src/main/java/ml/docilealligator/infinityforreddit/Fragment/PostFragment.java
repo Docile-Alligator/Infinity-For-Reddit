@@ -52,6 +52,7 @@ import ml.docilealligator.infinityforreddit.Activity.FilteredThingActivity;
 import ml.docilealligator.infinityforreddit.Activity.MainActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.Adapter.PostRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.Event.ChangeDefaultPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangePostLayoutEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeShowElapsedTimeEvent;
@@ -114,6 +115,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private AppCompatActivity activity;
     private LinearLayoutManager mLinearLayoutManager;
     private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
+    private int postType;
     private boolean isInLazyMode = false;
     private boolean isLazyModePaused = false;
     private boolean hasPost = false;
@@ -311,7 +313,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             });
         }
 
-        int postType = getArguments().getInt(EXTRA_POST_TYPE);
+        postType = getArguments().getInt(EXTRA_POST_TYPE);
 
         int filter = getArguments().getInt(EXTRA_FILTER);
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
@@ -767,6 +769,40 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void onShowDividerInCompactLayoutPreferenceEvent(ShowDividerInCompactLayoutPreferenceEvent event) {
         mAdapter.setShowDividerInCompactLayout(event.showDividerInCompactLayout);
         refreshAdapter();
+    }
+
+    @Subscribe
+    public void onChangeDefaultPostLayoutEvent(ChangeDefaultPostLayoutEvent changeDefaultPostLayoutEvent) {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            switch (postType) {
+                case PostDataSource.TYPE_SUBREDDIT:
+                    if (!mSharedPreferences.contains(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + bundle.getString(EXTRA_NAME))) {
+                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout);
+                    }
+                    break;
+                case PostDataSource.TYPE_USER:
+                    if (!mSharedPreferences.contains(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + bundle.getString(EXTRA_USER_NAME))) {
+                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout);
+                    }
+                    break;
+                case PostDataSource.TYPE_MULTI_REDDIT:
+                    if (!mSharedPreferences.contains(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + bundle.getString(EXTRA_NAME))) {
+                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout);
+                    }
+                    break;
+                case PostDataSource.TYPE_SEARCH:
+                    if (!mSharedPreferences.contains(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST)) {
+                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout);
+                    }
+                    break;
+                case PostDataSource.TYPE_FRONT_PAGE:
+                    if (!mSharedPreferences.contains(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST)) {
+                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout);
+                    }
+                    break;
+            }
+        }
     }
 
     private void refreshAdapter() {
