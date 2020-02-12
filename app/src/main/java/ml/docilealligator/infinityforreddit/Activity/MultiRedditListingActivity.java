@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.Activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -26,6 +27,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -39,7 +41,7 @@ import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertMultiRedditAsyncTask;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.MultiReddit.GetMultiReddit;
+import ml.docilealligator.infinityforreddit.MultiReddit.FetchMultiReddit;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiRedditViewModel;
 import ml.docilealligator.infinityforreddit.R;
@@ -68,6 +70,8 @@ public class MultiRedditListingActivity extends BaseActivity {
     ImageView mErrorImageView;
     @BindView(R.id.fetch_multi_reddit_listing_info_text_view_multi_reddit_listing_activity)
     TextView mErrorTextView;
+    @BindView(R.id.fab_multi_reddit_listing_activity)
+    FloatingActionButton fab;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -181,10 +185,26 @@ public class MultiRedditListingActivity extends BaseActivity {
 
         mGlide = Glide.with(this);
 
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(MultiRedditListingActivity.this, CreateMultiRedditActivity.class);
+            startActivity(intent);
+        });
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         MultiRedditListingRecyclerViewAdapter adapter = new MultiRedditListingRecyclerViewAdapter(this,
                 mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken, mAccountName);
         mRecyclerView.setAdapter(adapter);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    fab.hide();
+                } else {
+                    fab.show();
+                }
+            }
+        });
 
         mMultiRedditViewModel = new ViewModelProvider(this,
                 new MultiRedditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, mAccountName))
@@ -215,7 +235,7 @@ public class MultiRedditListingActivity extends BaseActivity {
 
     private void loadMultiReddits() {
         mSwipeRefreshLayout.setRefreshing(true);
-        GetMultiReddit.getMyMultiReddits(mOauthRetrofit, mAccessToken, new GetMultiReddit.GetMultiRedditListener() {
+        FetchMultiReddit.fetchMyMultiReddits(mOauthRetrofit, mAccessToken, new FetchMultiReddit.FetchMultiRedditListener() {
             @Override
             public void success(ArrayList<MultiReddit> multiReddits) {
                 new InsertMultiRedditAsyncTask(mRedditDataRoomDatabase, multiReddits, mAccountName, () -> {

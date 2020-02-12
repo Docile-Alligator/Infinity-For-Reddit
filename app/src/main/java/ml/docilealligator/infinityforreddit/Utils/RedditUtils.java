@@ -82,6 +82,7 @@ public class RedditUtils {
     public static final String MAKE_FAVORITE_KEY = "make_favorite";
 
     public static final String MULTIPATH_KEY = "multipath";
+    public static final String MODEL_KEY = "model";
 
     public static Map<String, String> getHttpBasicAuthHeader() {
         Map<String, String> params = new HashMap<>();

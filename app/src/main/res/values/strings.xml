@@ -15,8 +15,9 @@
     <string name="edit_comment_activity_label">Edit Comment</string>
     <string name="view_message_activity_label">Inbox</string>
     <string name="settings_activity_label">Settings</string>
-    <string name="account_saved_thing_activity">Saved</string>
-    <string name="multi_reddit_listing_activity">Multireddit</string>
+    <string name="account_saved_thing_activity_label">Saved</string>
+    <string name="multi_reddit_listing_activity_label">Multireddit</string>
+    <string name="create_multi_reddit_activity_label">Create Multireddit</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -427,4 +428,12 @@
 
     <string name="light_theme">Light Theme</string>
     <string name="dark_theme">Dark Theme</string>
+
+    <string name="multi_reddit_name_hint">Name (Max 50 Characters)</string>
+    <string name="multi_reddit_description_hint">Description</string>
+    <string name="private_multi_reddit">Private</string>
+    <string name="select_subreddit">Select Subreddit</string>
+    <string name="no_multi_reddit_name">Where is the name?</string>
+    <string name="create_multi_reddit_failed">Cannot create this multireddit</string>
+    <string name="duplicate_multi_reddit">This multireddit already exists</string>
 </resources>

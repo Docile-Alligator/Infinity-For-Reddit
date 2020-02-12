@@ -288,4 +288,8 @@ public interface RedditAPI {
     @GET("{multipath}.json?raw_json=1")
     Call<String> getMultiRedditPostsOauth(@Path(value = "multipath", encoded = true) String multiPath,
                                           @Query("after") String after, @HeaderMap Map<String, String> headers);
+
+    @FormUrlEncoded
+    @POST("/api/multi/multipath")
+    Call<String> createMultiReddit(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }

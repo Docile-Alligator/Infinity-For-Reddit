@@ -134,7 +134,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
 
         MultiReddit multiReddit = getIntent().getParcelableExtra(EXTRA_MULTIREDDIT_DATA);
         if (multiReddit == null) {
-            Toast.makeText(this, R.string.multi_reddit_listing_activity, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.multi_reddit_listing_activity_label, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }

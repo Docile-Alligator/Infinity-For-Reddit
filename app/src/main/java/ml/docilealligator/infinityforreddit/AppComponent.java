@@ -6,6 +6,7 @@ import dagger.Component;
 import ml.docilealligator.infinityforreddit.Activity.AccountPostsActivity;
 import ml.docilealligator.infinityforreddit.Activity.AccountSavedThingActivity;
 import ml.docilealligator.infinityforreddit.Activity.CommentActivity;
+import ml.docilealligator.infinityforreddit.Activity.CreateMultiRedditActivity;
 import ml.docilealligator.infinityforreddit.Activity.EditCommentActivity;
 import ml.docilealligator.infinityforreddit.Activity.EditPostActivity;
 import ml.docilealligator.infinityforreddit.Activity.FilteredThingActivity;
@@ -131,4 +132,6 @@ public interface AppComponent {
     void inject(ViewVideoActivity viewVideoActivity);
 
     void inject(GesturesAndButtonsPreferenceFragment gesturesAndButtonsPreferenceFragment);
+
+    void inject(CreateMultiRedditActivity createMultiRedditActivity);
 }
