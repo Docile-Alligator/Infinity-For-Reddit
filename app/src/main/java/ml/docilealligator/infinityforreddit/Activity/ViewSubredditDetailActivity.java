@@ -202,14 +202,20 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
                 int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
                 if (navBarResourceId > 0) {
+                    int navBarHeight = resources.getDimensionPixelSize(navBarResourceId);
                     CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
-                    params.bottomMargin = resources.getDimensionPixelSize(navBarResourceId);
+                    params.bottomMargin = navBarHeight;
                     fab.setLayoutParams(params);
+                    linearLayoutBottomAppBar.setPadding(0,
+                            (int) (6 * resources.getDisplayMetrics().density), 0, navBarHeight);
 
                     showToast = true;
                 }
             }
         }
+
+        showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false);
+        lockBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR, false);
 
         subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME_KEY);
 
@@ -271,9 +277,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         toolbarParams.topMargin = statusBarHeight;
         toolbar.setLayoutParams(toolbarParams);
         setSupportActionBar(toolbar);
-
-        showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false);
-        lockBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR, false);
 
         glide = Glide.with(this);
 
