@@ -34,4 +34,10 @@
         android:orderInCategory="5"
         android:title="@string/action_change_post_layout"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_delte_view_multi_reddit_detail_activity"
+        android:orderInCategory="6"
+        android:title="@string/action_delete_multi_reddit"
+        app:showAsAction="never" />
 </menu>

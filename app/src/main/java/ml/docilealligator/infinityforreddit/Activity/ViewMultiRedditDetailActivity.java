@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -34,6 +35,7 @@ import ml.docilealligator.infinityforreddit.Fragment.SortTimeBottomSheetFragment
 import ml.docilealligator.infinityforreddit.Fragment.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.MultiReddit.DeleteMultiReddit;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.Post.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
@@ -259,6 +261,31 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                 return true;
             case R.id.action_change_post_layout_view_multi_reddit_detail_activity:
                 postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+                return true;
+            case R.id.action_delte_view_multi_reddit_detail_activity:
+                new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                        .setTitle(R.string.delete)
+                        .setMessage(R.string.delete_multi_reddit_dialog_message)
+                        .setPositiveButton(R.string.delete, (dialogInterface, i)
+                                -> {
+                            DeleteMultiReddit.deleteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase,
+                                    mAccessToken, mAccountName, multiPath, new DeleteMultiReddit.DeleteMultiRedditListener() {
+                                        @Override
+                                        public void success() {
+                                            Toast.makeText(ViewMultiRedditDetailActivity.this,
+                                                    R.string.delete_multi_reddit_success, Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }
+
+                                        @Override
+                                        public void failed() {
+                                            Toast.makeText(ViewMultiRedditDetailActivity.this,
+                                                    R.string.delete_multi_reddit_failed, Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        })
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
                 return true;
         }
         return false;

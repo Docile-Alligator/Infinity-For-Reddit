@@ -47,6 +47,7 @@
     <string name="action_change_post_layout">Change Post Layout</string>
     <string name="action_view_side_bar">View Sidebar</string>
     <string name="action_save">Save</string>
+    <string name="action_delete_multi_reddit">Delete Multireddit</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -440,4 +441,7 @@
     <string name="duplicate_multi_reddit">This multireddit already exists</string>
     <string name="logged_out">You are logged out</string>
     <string name="subreddit_selected">%1$s selected</string>
+    <string name="delete_multi_reddit_success">Delete successfully</string>
+    <string name="delete_multi_reddit_failed">Delete failed</string>
+    <string name="delete_multi_reddit_dialog_message">Are you sure?</string>
 </resources>

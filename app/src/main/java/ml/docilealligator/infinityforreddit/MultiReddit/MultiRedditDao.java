@@ -25,8 +25,8 @@ public interface MultiRedditDao {
     @Query("SELECT * FROM multi_reddits WHERE name = :name AND username = :username COLLATE NOCASE LIMIT 1")
     MultiReddit getMultiReddit(String name, String username);
 
-    @Query("DELETE FROM multi_reddits WHERE name = :name AND username = :username")
-    void deleteMultiReddit(String name, String username);
+    @Query("DELETE FROM multi_reddits WHERE path = :multipath AND username = :username")
+    void deleteMultiReddit(String multipath, String username);
 
     @Query("DELETE FROM multi_reddits WHERE username = :username")
     void deleteAllUserMultiReddits(String username);

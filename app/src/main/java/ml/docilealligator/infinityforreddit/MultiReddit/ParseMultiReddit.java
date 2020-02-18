@@ -81,29 +81,6 @@ public class ParseMultiReddit {
             if (!parseFailed) {
                 for (int i = 0; i < arrayResponse.length(); i++) {
                     try {
-                        /*String displayName = singleMultiReddit.getString(JSONUtils.DISPLAY_NAME);
-                        String name = singleMultiReddit.getString(JSONUtils.NAME_KEY);
-                        String description = singleMultiReddit.getString(JSONUtils.DESCRIPTION_HTML_KEY);
-                        int nSubscribers = singleMultiReddit.getInt(JSONUtils.NUM_SUBSCRIBERS_KEY);
-                        String copiedFrom = singleMultiReddit.getString(JSONUtils.COPIED_FROM_KEY);
-                        String iconUrl = singleMultiReddit.getString(JSONUtils.ICON_URL_KEY);
-                        long createdUTC = singleMultiReddit.getLong(JSONUtils.CREATED_UTC_KEY);
-                        String visibility = singleMultiReddit.getString(JSONUtils.VISIBILITY_KEY);
-                        boolean over18 = singleMultiReddit.getBoolean(JSONUtils.OVER_18_KEY);
-                        String path = singleMultiReddit.getString(JSONUtils.PATH_KEY);
-                        String owner = singleMultiReddit.getString(JSONUtils.OWNER_KEY);
-                        boolean isSubscriber = singleMultiReddit.getBoolean(JSONUtils.IS_SUBSCRIBER_KEY);
-                        boolean isFavorited = singleMultiReddit.getBoolean(JSONUtils.IS_FAVORITED_KEY);
-
-                        JSONArray subredditsArray = singleMultiReddit.getJSONArray(JSONUtils.SUBREDDITS_KEY);
-                        ArrayList<String> subreddits = new ArrayList<>();
-                        for (int j = 0; j < subredditsArray.length(); j++) {
-                            subreddits.add(subredditsArray.getJSONObject(j).getString(JSONUtils.NAME_KEY));
-                        }
-
-                        MultiReddit multiReddit = new MultiReddit(path, displayName, name, description, copiedFrom,
-                                iconUrl, visibility, owner, nSubscribers, createdUTC, over18, isSubscriber,
-                                isFavorited, subreddits);*/
                         multiReddits.add(parseMultiReddit(arrayResponse.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY)));
                     } catch (JSONException e) {
                         e.printStackTrace();

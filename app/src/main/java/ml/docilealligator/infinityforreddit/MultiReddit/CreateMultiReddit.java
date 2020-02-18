@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit.MultiReddit;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import java.util.HashMap;
@@ -36,7 +34,6 @@ public class CreateMultiReddit {
                             new ParseMultiReddit.ParseMultiRedditListener() {
                         @Override
                         public void success() {
-                            Log.i("asfasfas", response.body());
                             createMultiRedditListener.success();
                         }
 
