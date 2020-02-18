@@ -67,13 +67,6 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
         this.itemClickListener = itemClickListener;
     }
 
-    /*public SubscribedSubredditsRecyclerViewAdapter(Context context, boolean hasClearSelectionRow, ItemClickListener itemClickListener) {
-        mContext = context;
-        this.hasClearSelectionRow = hasClearSelectionRow;
-        glide = Glide.with(context.getApplicationContext());
-        this.itemClickListener = itemClickListener;
-    }*/
-
     @Override
     public int getItemViewType(int position) {
         if (mFavoriteSubscribedSubredditData != null && mFavoriteSubscribedSubredditData.size() > 0) {

@@ -49,8 +49,8 @@ public class InsertMultiRedditAsyncTask extends AsyncTask<Void, Void, Void> {
     }
 
     private void compareTwoMultiRedditList(List<MultiReddit> newMultiReddits,
-                                              List<MultiReddit> oldMultiReddits,
-                                              List<String> deletedMultiReddits, int i1, int i2) {
+                                           List<MultiReddit> oldMultiReddits,
+                                           List<String> deletedMultiReddits, int i1, int i2) {
         if (newMultiReddits.size() <= i1 && oldMultiReddits.size() <= i2) {
             return;
         }

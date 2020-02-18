@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_save_subreddit_multiselection_activity"
+        android:orderInCategory="1"
+        android:title="@string/action_save"
+        android:icon="@drawable/ic_check_circle_menu_item_24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_search_subreddit_multiselection_activity"
+        android:orderInCategory="2"
+        android:title="@string/action_search"
+        android:icon="@drawable/ic_search_white_24dp"
+        app:showAsAction="ifRoom" />
+</menu>

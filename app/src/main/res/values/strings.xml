@@ -18,6 +18,7 @@
     <string name="account_saved_thing_activity_label">Saved</string>
     <string name="multi_reddit_listing_activity_label">Multireddit</string>
     <string name="create_multi_reddit_activity_label">Create Multireddit</string>
+    <string name="subreddit_multiselection_activity_label">Select Subreddits</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -45,6 +46,7 @@
     <string name="action_edit_flair">Edit Flair</string>
     <string name="action_change_post_layout">Change Post Layout</string>
     <string name="action_view_side_bar">View Sidebar</string>
+    <string name="action_save">Save</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -436,4 +438,6 @@
     <string name="no_multi_reddit_name">Where is the name?</string>
     <string name="create_multi_reddit_failed">Cannot create this multireddit</string>
     <string name="duplicate_multi_reddit">This multireddit already exists</string>
+    <string name="logged_out">You are logged out</string>
+    <string name="subreddit_selected">%1$s selected</string>
 </resources>

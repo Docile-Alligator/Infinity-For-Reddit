@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?attr/selectableItemBackground">
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/icon_gif_image_view_item_subscribed_subreddit_multiselection"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="32dp" />
+
+    <TextView
+        android:id="@+id/name_text_view_item_subscribed_subreddit_multiselection"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="32dp"
+        android:textColor="@color/primaryTextColor"
+        android:textSize="?attr/font_default" />
+
+    <CheckBox
+        android:id="@+id/checkbox_item_subscribed_subreddit_multiselection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical" />
+
+</LinearLayout>

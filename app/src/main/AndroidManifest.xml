@@ -21,7 +21,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
-        <activity android:name=".Activity.CreateMultiRedditActivity"
+        <activity
+            android:name=".Activity.SubredditMultiselectionActivity"
+            android:label="@string/subreddit_multiselection_activity_label"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".Activity.CreateMultiRedditActivity"
             android:label="@string/create_multi_reddit_activity_label"
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"

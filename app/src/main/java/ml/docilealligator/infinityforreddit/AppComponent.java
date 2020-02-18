@@ -24,6 +24,7 @@ import ml.docilealligator.infinityforreddit.Activity.SearchResultActivity;
 import ml.docilealligator.infinityforreddit.Activity.SearchSubredditsResultActivity;
 import ml.docilealligator.infinityforreddit.Activity.SettingsActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubredditSelectionActivity;
+import ml.docilealligator.infinityforreddit.Activity.SubredditMultiselectionActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubscribedThingListingActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewGIFActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewImageActivity;
@@ -134,4 +135,6 @@ public interface AppComponent {
     void inject(GesturesAndButtonsPreferenceFragment gesturesAndButtonsPreferenceFragment);
 
     void inject(CreateMultiRedditActivity createMultiRedditActivity);
+
+    void inject(SubredditMultiselectionActivity subredditMultiselectionActivity);
 }

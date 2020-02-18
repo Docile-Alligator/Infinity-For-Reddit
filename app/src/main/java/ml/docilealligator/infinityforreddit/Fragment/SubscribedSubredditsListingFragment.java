@@ -82,9 +82,8 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
 
         ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
-        Resources resources = getResources();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            Resources resources = getResources();
             if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
                 int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
                 if (navBarResourceId > 0) {
