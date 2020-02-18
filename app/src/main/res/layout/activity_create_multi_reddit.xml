@@ -8,23 +8,37 @@
     tools:context=".Activity.CreateMultiRedditActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout_create_multi_reddit_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/toolbarAndTabBackgroundColor"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_create_multi_reddit_activity"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:navigationIcon="?attr/homeAsUpIndicator" />
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:titleEnabled="false"
+            app:toolbarId="@+id/toolbar_subscribed_subreddits_multiselection_activity">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_create_multi_reddit_activity"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:navigationIcon="?attr/homeAsUpIndicator" />
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scroll_view_create_multi_reddit_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -41,7 +55,13 @@
                 android:inputType="textMultiLine"
                 android:textSize="?attr/font_default"
                 android:background="#00000000"
-                android:textColor="@color/primaryTextColor" />
+                android:textColor="@color/primaryTextColor"
+                android:maxLength="50" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/dividerColor" />
 
             <EditText
                 android:id="@+id/description_edit_text_create_multi_reddit_activity"
@@ -53,6 +73,11 @@
                 android:textSize="?attr/font_default"
                 android:background="#00000000"
                 android:textColor="@color/primaryTextColor" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/dividerColor" />
 
             <LinearLayout
                 android:id="@+id/visibility_wrapper_linear_layout_create_multi_reddit_activity"

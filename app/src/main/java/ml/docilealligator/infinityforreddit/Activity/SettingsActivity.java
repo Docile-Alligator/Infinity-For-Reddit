@@ -51,6 +51,7 @@ public class SettingsActivity extends BaseActivity implements
         } else {
             setTitle(savedInstanceState.getCharSequence(TITLE_STATE));
         }
+
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                 setTitle(R.string.settings_activity_label);
