@@ -17,6 +17,10 @@ public class JSONUtils {
     public static final String SELFTEXT_HTML_KEY = "selftext_html";
     public static final String AUTHOR_KEY = "author";
     public static final String AUTHOR_FLAIR_TEXT_KEY = "author_flair_text";
+    public static final String AUTHOR_FLAIR_RICHTEXT_KEY = "author_flair_richtext";
+    public static final String E_KEY = "e";
+    public static final String T_KEY = "t";
+    public static final String U_KEY = "u";
     public static final String LINK_AUTHOR_KEY = "link_author";
     public static final String LINK_FLAIR_TEXT_KEY = "link_flair_text";
     public static final String SCORE_KEY = "score";
@@ -29,9 +33,6 @@ public class JSONUtils {
     public static final String IMAGES_KEY = "images";
     public static final String WIDTH_KEY = "width";
     public static final String HEIGHT_KEY = "height";
-    public static final String VARIANTS_KEY = "variants";
-    public static final String GIF_KEY = "gif";
-    public static final String MP4_KEY = "mp4";
     public static final String SOURCE_KEY = "source";
     public static final String URL_KEY = "url";
     public static final String MEDIA_KEY = "media";

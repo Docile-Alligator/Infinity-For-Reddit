@@ -118,11 +118,18 @@ public class ParseComment {
         String id = singleCommentData.getString(JSONUtils.ID_KEY);
         String fullName = singleCommentData.getString(JSONUtils.NAME_KEY);
         String author = singleCommentData.getString(JSONUtils.AUTHOR_KEY);
-        String authorFlair;
-        if (!singleCommentData.has(JSONUtils.AUTHOR_FLAIR_TEXT_KEY) || singleCommentData.isNull(JSONUtils.AUTHOR_FLAIR_TEXT_KEY)) {
-            authorFlair = "";
-        } else {
-            authorFlair = singleCommentData.getString(JSONUtils.AUTHOR_FLAIR_TEXT_KEY);
+        StringBuilder authorFlairHTMLBuilder = new StringBuilder();
+        if (singleCommentData.has(JSONUtils.AUTHOR_FLAIR_RICHTEXT_KEY)) {
+            JSONArray flairArray = singleCommentData.getJSONArray(JSONUtils.AUTHOR_FLAIR_RICHTEXT_KEY);
+            for (int i = 0; i < flairArray.length(); i++) {
+                JSONObject flairObject = flairArray.getJSONObject(i);
+                String e = flairObject.getString(JSONUtils.E_KEY);
+                if (e.equals("text")) {
+                    authorFlairHTMLBuilder.append(flairObject.getString(JSONUtils.T_KEY));
+                } else if (e.equals("emoji")) {
+                    authorFlairHTMLBuilder.append("<img src=\"").append(flairObject.getString(JSONUtils.U_KEY)).append("\">");
+                }
+            }
         }
         String linkAuthor = singleCommentData.has(JSONUtils.LINK_AUTHOR_KEY) ? singleCommentData.getString(JSONUtils.LINK_AUTHOR_KEY) : null;
         String linkId = singleCommentData.getString(JSONUtils.LINK_ID_KEY).substring(3);
@@ -161,10 +168,10 @@ public class ParseComment {
         boolean collapsed = singleCommentData.getBoolean(JSONUtils.COLLAPSED_KEY);
         boolean hasReply = !(singleCommentData.get(JSONUtils.REPLIES_KEY) instanceof String);
 
-        return new CommentData(id, fullName, author, authorFlair, linkAuthor, formattedSubmitTime,
-                submitTime, commentMarkdown, commentRawText, linkId, subredditName, parentId, score,
-                voteType, isSubmitter, distinguished, permalink, depth, collapsed, hasReply,
-                scoreHidden, saved);
+        return new CommentData(id, fullName, author, authorFlairHTMLBuilder.toString(), linkAuthor,
+                formattedSubmitTime, submitTime, commentMarkdown, commentRawText, linkId, subredditName,
+                parentId, score, voteType, isSubmitter, distinguished, permalink, depth, collapsed,
+                hasReply, scoreHidden, saved);
     }
 
     @Nullable

@@ -6,6 +6,8 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spannable;
 import android.text.Spanned;
 import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
@@ -81,6 +83,7 @@ import ml.docilealligator.infinityforreddit.Post.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SaveThing;
+import ml.docilealligator.infinityforreddit.Utils.GlideImageGetter;
 import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 import ml.docilealligator.infinityforreddit.VoteThing;
@@ -704,7 +707,14 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if (comment.getAuthorFlair() != null && !comment.getAuthorFlair().equals("")) {
                 ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.VISIBLE);
-                ((CommentViewHolder) holder).authorFlairTextView.setText(comment.getAuthorFlair());
+                Spannable flairHTML;
+                GlideImageGetter glideImageGetter = new GlideImageGetter(((CommentViewHolder) holder).authorFlairTextView);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    flairHTML = (Spannable) Html.fromHtml(comment.getAuthorFlair(), Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
+                } else {
+                    flairHTML = (Spannable) Html.fromHtml(comment.getAuthorFlair(), glideImageGetter, null);
+                }
+                ((CommentViewHolder) holder).authorFlairTextView.setText(flairHTML);
                 ((CommentViewHolder) holder).authorFlairTextView.setOnClickListener(view -> ((CommentViewHolder) holder).authorTextView.performClick());
             }
 
