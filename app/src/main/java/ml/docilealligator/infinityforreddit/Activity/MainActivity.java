@@ -18,16 +18,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -44,7 +41,6 @@ import androidx.work.WorkManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -63,15 +59,12 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.docilealligator.infinityforreddit.Account.Account;
 import ml.docilealligator.infinityforreddit.Account.AccountViewModel;
-import ml.docilealligator.infinityforreddit.Adapter.AccountRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.Adapter.NavigationDrawerRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubscribedThingsAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
-import ml.docilealligator.infinityforreddit.AsyncTask.SwitchToAnonymousAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.Event.ChangeConfirmToExitEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeLockBottomAppBarEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
@@ -95,13 +88,10 @@ import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
+import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditViewModel;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
-import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
-
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public class MainActivity extends BaseActivity implements SortTypeSelectionCallback,
         PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {
@@ -137,7 +127,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.nested_scroll_view_main_activity)
+    @BindView(R.id.nav_drawer_recycler_view_main_activity)
+    RecyclerView navDrawerRecyclerView;
+    /*@BindView(R.id.nested_scroll_view_main_activity)
     NestedScrollView nestedScrollView;
     @BindView(R.id.all_drawer_items_linear_layout_main_activity)
     LinearLayout allDrawerItemsLinearLayout;
@@ -170,7 +162,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @BindView(R.id.settings_text_view_main_activity)
     TextView settingsTextView;
     @BindView(R.id.account_recycler_view_main_activity)
-    RecyclerView accountRecyclerView;
+    RecyclerView accountRecyclerView;*/
     @BindView(R.id.tab_layout_main_activity)
     TabLayout tabLayout;
     @BindView(R.id.bottom_navigation_main_activity)
@@ -187,6 +179,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     ImageView profileBottomAppBar;
     @BindView(R.id.fab_main_activity)
     FloatingActionButton fab;
+    SubscribedSubredditViewModel subscribedSubredditViewModel;
     AccountViewModel accountViewModel;
     @Inject
     @Named("oauth")
@@ -196,11 +189,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Inject
     SharedPreferences mSharedPreferences;
     private SectionsPagerAdapter sectionsPagerAdapter;
-    private TextView mAccountNameTextView;
+    /*private TextView mAccountNameTextView;
     private TextView mKarmaTextView;
     private GifImageView mProfileImageView;
     private ImageView mBannerImageView;
-    private ImageView mDropIconImageView;
+    private ImageView mDropIconImageView;*/
     private RequestManager glide;
     private AppBarLayout.LayoutParams params;
     private PostTypeBottomSheetFragment postTypeBottomSheetFragment;
@@ -208,6 +201,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private SortTypeBottomSheetFragment popularAndAllSortTypeBottomSheetFragment;
     private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
     private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
+    private NavigationDrawerRecyclerViewAdapter adapter;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
@@ -292,7 +286,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         int navBarHeight = resources.getDimensionPixelSize(navBarResourceId);
                         linearLayoutBottomAppBar.setPadding(0,
                                 (int) (6 * resources.getDisplayMetrics().density), 0, navBarHeight);
-                        nestedScrollView.setPadding(0, 0, 0, navBarHeight);
+                        //nestedScrollView.setPadding(0, 0, 0, navBarHeight);
+                        navDrawerRecyclerView.setPadding(0, 0, 0, navBarHeight);
                     }
                 }
             }
@@ -502,6 +497,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             fab.setVisibility(View.VISIBLE);
         }
 
+        adapter = new NavigationDrawerRecyclerViewAdapter(this, mAccountName, mProfileImageUrl, mBannerImageUrl, mKarma);
+        navDrawerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        navDrawerRecyclerView.setAdapter(adapter);
+
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(3);
@@ -538,7 +537,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
         glide = Glide.with(this);
 
-        AccountRecyclerViewAdapter adapter = new AccountRecyclerViewAdapter(this, glide, mAccountName,
+        /*AccountRecyclerViewAdapter adapter = new AccountRecyclerViewAdapter(this, glide, mAccountName,
                 new AccountRecyclerViewAdapter.ItemSelectedListener() {
                     @Override
                     public void accountSelected(Account account) {
@@ -574,11 +573,17 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                                     finish();
                                 }).execute();
                     }
-                });
+                });*/
 
-        accountRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        /*accountRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         accountRecyclerView.setNestedScrollingEnabled(false);
-        accountRecyclerView.setAdapter(adapter);
+        accountRecyclerView.setAdapter(adapter);*/
+
+        subscribedSubredditViewModel = new ViewModelProvider(this,
+                new SubscribedSubredditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, mAccountName))
+                .get(SubscribedSubredditViewModel.class);
+        subscribedSubredditViewModel.getAllSubscribedSubreddits().observe(this,
+                subscribedSubredditData -> adapter.setSubscribedSubreddits(subscribedSubredditData));
 
         accountViewModel = new ViewModelProvider(this,
                 new AccountViewModel.Factory(getApplication(), mRedditDataRoomDatabase, mAccountName)).get(AccountViewModel.class);
@@ -593,7 +598,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             }
         }
 
-        View header = findViewById(R.id.nav_header_main_activity);
+        /*View header = findViewById(R.id.nav_header_main_activity);
         mAccountNameTextView = header.findViewById(R.id.name_text_view_nav_header_main);
         mKarmaTextView = header.findViewById(R.id.karma_text_view_nav_header_main);
         mProfileImageView = header.findViewById(R.id.profile_image_view_nav_header_main);
@@ -622,13 +627,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 accountRecyclerView.setVisibility(View.VISIBLE);
                 allDrawerItemsLinearLayout.setVisibility(View.GONE);
             }
-        });
+        });*/
 
         loadUserData();
 
         if (mAccessToken != null) {
-            mKarmaTextView.setText(getString(R.string.karma_info, mKarma));
-            mAccountNameTextView.setText(mAccountName);
+            /*mKarmaTextView.setText(getString(R.string.karma_info, mKarma));
+            mAccountNameTextView.setText(mAccountName);*/
             if (mMessageFullname != null) {
                 ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
                     @Override
@@ -643,7 +648,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 });
             }
         } else {
-            mKarmaTextView.setText(R.string.press_here_to_login);
+            /*mKarmaTextView.setText(R.string.press_here_to_login);
             mAccountNameTextView.setText(R.string.anonymous_account);
             accountLabelTextView.setVisibility(View.GONE);
             profileTextView.setVisibility(View.GONE);
@@ -656,10 +661,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             hiddenTextView.setVisibility(View.GONE);
             savedTextView.setVisibility(View.GONE);
             gildedTextView.setVisibility(View.GONE);
-            divider.setVisibility(View.GONE);
+            divider.setVisibility(View.GONE);*/
         }
 
-        if (mProfileImageUrl != null && !mProfileImageUrl.equals("")) {
+        /*if (mProfileImageUrl != null && !mProfileImageUrl.equals("")) {
             glide.load(mProfileImageUrl)
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0)))
                     .error(glide.load(R.drawable.subreddit_default_icon)
@@ -673,9 +678,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
         if (mBannerImageUrl != null && !mBannerImageUrl.equals("")) {
             glide.load(mBannerImageUrl).into(mBannerImageView);
-        }
+        }*/
 
-        profileTextView.setOnClickListener(view -> {
+        /*profileTextView.setOnClickListener(view -> {
             Intent intent = new Intent(this, ViewUserDetailActivity.class);
             intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mAccountName);
             startActivity(intent);
@@ -766,7 +771,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             drawer.closeDrawers();
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
-        });
+        });*/
     }
 
     private void loadSubscriptions() {
@@ -804,7 +809,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     ParseAndSaveAccountInfo.parseAndSaveAccountInfo(response, mRedditDataRoomDatabase, new ParseAndSaveAccountInfo.ParseAndSaveAccountInfoListener() {
                         @Override
                         public void onParseMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
-                            mAccountNameTextView.setText(name);
+                            /*mAccountNameTextView.setText(name);
                             if (profileImageUrl != null && !profileImageUrl.equals("")) {
                                 glide.load(profileImageUrl)
                                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
@@ -818,14 +823,14 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                             }
                             if (bannerImageUrl != null && !bannerImageUrl.equals("")) {
                                 glide.load(bannerImageUrl).into(mBannerImageView);
-                            }
+                            }*/
 
                             mAccountName = name;
                             mProfileImageUrl = profileImageUrl;
                             mBannerImageUrl = bannerImageUrl;
                             mKarma = karma;
 
-                            mKarmaTextView.setText(getString(R.string.karma_info, karma));
+                            //mKarmaTextView.setText(getString(R.string.karma_info, karma));
 
                             mFetchUserInfoSuccess = true;
                         }
