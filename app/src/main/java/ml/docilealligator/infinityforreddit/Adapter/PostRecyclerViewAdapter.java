@@ -1425,6 +1425,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+        super.onViewRecycled(holder);
         if (holder instanceof PostViewHolder) {
             mGlide.clear(((PostViewHolder) holder).imageView);
             mGlide.clear(((PostViewHolder) holder).iconGifImageView);

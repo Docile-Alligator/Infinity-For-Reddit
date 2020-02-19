@@ -40,8 +40,6 @@ import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -134,40 +132,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     Toolbar toolbar;
     @BindView(R.id.nav_drawer_recycler_view_main_activity)
     RecyclerView navDrawerRecyclerView;
-    /*@BindView(R.id.nested_scroll_view_main_activity)
-    NestedScrollView nestedScrollView;
-    @BindView(R.id.all_drawer_items_linear_layout_main_activity)
-    LinearLayout allDrawerItemsLinearLayout;
-    @BindView(R.id.account_label_main_activity)
-    TextView accountLabelTextView;
-    @BindView(R.id.profile_text_view_main_activity)
-    TextView profileTextView;
-    @BindView(R.id.subscriptions_text_view_main_activity)
-    TextView subscriptionTextView;
-    @BindView(R.id.multi_reddits_text_view_main_activity)
-    TextView multiRedditsTextView;
-    @BindView(R.id.inbox_text_view_main_activity)
-    TextView inboxTextView;
-    @BindView(R.id.post_label_main_activity)
-    TextView postLabelTextView;
-    @BindView(R.id.upvoted_text_view_main_activity)
-    TextView upvotedTextView;
-    @BindView(R.id.downvoted_text_view_main_activity)
-    TextView downvotedTextView;
-    @BindView(R.id.hidden_text_view_main_activity)
-    TextView hiddenTextView;
-    @BindView(R.id.saved_text_view_main_activity)
-    TextView savedTextView;
-    @BindView(R.id.gilded_text_view_main_activity)
-    TextView gildedTextView;
-    @BindView(R.id.divider_main_activity)
-    View divider;
-    @BindView(R.id.night_mode_toggle_text_view_main_activity)
-    TextView nightModeToggleTextView;
-    @BindView(R.id.settings_text_view_main_activity)
-    TextView settingsTextView;
-    @BindView(R.id.account_recycler_view_main_activity)
-    RecyclerView accountRecyclerView;*/
     @BindView(R.id.tab_layout_main_activity)
     TabLayout tabLayout;
     @BindView(R.id.bottom_navigation_main_activity)
@@ -194,12 +158,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Inject
     SharedPreferences mSharedPreferences;
     private SectionsPagerAdapter sectionsPagerAdapter;
-    /*private TextView mAccountNameTextView;
-    private TextView mKarmaTextView;
-    private GifImageView mProfileImageView;
-    private ImageView mBannerImageView;
-    private ImageView mDropIconImageView;*/
-    private RequestManager glide;
     private AppBarLayout.LayoutParams params;
     private PostTypeBottomSheetFragment postTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment bestSortTypeBottomSheetFragment;
@@ -291,7 +249,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         int navBarHeight = resources.getDimensionPixelSize(navBarResourceId);
                         linearLayoutBottomAppBar.setPadding(0,
                                 (int) (6 * resources.getDisplayMetrics().density), 0, navBarHeight);
-                        //nestedScrollView.setPadding(0, 0, 0, navBarHeight);
                         navDrawerRecyclerView.setPadding(0, 0, 0, navBarHeight);
                     }
                 }
@@ -637,50 +594,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
         loadSubscriptions();
 
-        glide = Glide.with(this);
-
-        /*AccountRecyclerViewAdapter adapter = new AccountRecyclerViewAdapter(this, glide, mAccountName,
-                new AccountRecyclerViewAdapter.ItemSelectedListener() {
-                    @Override
-                    public void accountSelected(Account account) {
-                        new SwitchAccountAsyncTask(mRedditDataRoomDatabase, account.getUsername(), newAccount -> {
-                            Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                        }).execute();
-                    }
-
-                    @Override
-                    public void addAccountSelected() {
-                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                        startActivityForResult(intent, LOGIN_ACTIVITY_REQUEST_CODE);
-                    }
-
-                    @Override
-                    public void anonymousSelected() {
-                        new SwitchToAnonymousAccountAsyncTask(mRedditDataRoomDatabase, false,
-                                () -> {
-                                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }).execute();
-                    }
-
-                    @Override
-                    public void logoutSelected() {
-                        new SwitchToAnonymousAccountAsyncTask(mRedditDataRoomDatabase, true,
-                                () -> {
-                                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
-                                }).execute();
-                    }
-                });*/
-
-        /*accountRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        accountRecyclerView.setNestedScrollingEnabled(false);
-        accountRecyclerView.setAdapter(adapter);*/
-
         subscribedSubredditViewModel = new ViewModelProvider(this,
                 new SubscribedSubredditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, mAccountName))
                 .get(SubscribedSubredditViewModel.class);
@@ -700,42 +613,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             }
         }
 
-        /*View header = findViewById(R.id.nav_header_main_activity);
-        mAccountNameTextView = header.findViewById(R.id.name_text_view_nav_header_main);
-        mKarmaTextView = header.findViewById(R.id.karma_text_view_nav_header_main);
-        mProfileImageView = header.findViewById(R.id.profile_image_view_nav_header_main);
-        mBannerImageView = header.findViewById(R.id.banner_image_view_nav_header_main);
-        mDropIconImageView = header.findViewById(R.id.account_switcher_image_view_nav_header_main);
-
-        if (mDrawerOnAccountSwitch) {
-            mDropIconImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_arrow_drop_up_24px));
-            accountRecyclerView.setVisibility(View.VISIBLE);
-            allDrawerItemsLinearLayout.setVisibility(View.GONE);
-        } else {
-            mDropIconImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_arrow_drop_down_24px));
-            accountRecyclerView.setVisibility(View.GONE);
-            allDrawerItemsLinearLayout.setVisibility(View.VISIBLE);
-        }
-
-        header.setOnClickListener(view -> {
-            if (mDrawerOnAccountSwitch) {
-                mDrawerOnAccountSwitch = false;
-                mDropIconImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_arrow_drop_down_24px));
-                accountRecyclerView.setVisibility(View.GONE);
-                allDrawerItemsLinearLayout.setVisibility(View.VISIBLE);
-            } else {
-                mDrawerOnAccountSwitch = true;
-                mDropIconImageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_arrow_drop_up_24px));
-                accountRecyclerView.setVisibility(View.VISIBLE);
-                allDrawerItemsLinearLayout.setVisibility(View.GONE);
-            }
-        });*/
-
         loadUserData();
 
         if (mAccessToken != null) {
-            /*mKarmaTextView.setText(getString(R.string.karma_info, mKarma));
-            mAccountNameTextView.setText(mAccountName);*/
             if (mMessageFullname != null) {
                 ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
                     @Override
@@ -749,131 +629,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     }
                 });
             }
-        } else {
-            /*mKarmaTextView.setText(R.string.press_here_to_login);
-            mAccountNameTextView.setText(R.string.anonymous_account);
-            accountLabelTextView.setVisibility(View.GONE);
-            profileTextView.setVisibility(View.GONE);
-            subscriptionTextView.setVisibility(View.GONE);
-            multiRedditsTextView.setVisibility(View.GONE);
-            inboxTextView.setVisibility(View.GONE);
-            postLabelTextView.setVisibility(View.GONE);
-            upvotedTextView.setVisibility(View.GONE);
-            downvotedTextView.setVisibility(View.GONE);
-            hiddenTextView.setVisibility(View.GONE);
-            savedTextView.setVisibility(View.GONE);
-            gildedTextView.setVisibility(View.GONE);
-            divider.setVisibility(View.GONE);*/
         }
-
-        /*if (mProfileImageUrl != null && !mProfileImageUrl.equals("")) {
-            glide.load(mProfileImageUrl)
-                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0)))
-                    .error(glide.load(R.drawable.subreddit_default_icon)
-                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0))))
-                    .into(mProfileImageView);
-        } else {
-            glide.load(R.drawable.subreddit_default_icon)
-                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0)))
-                    .into(mProfileImageView);
-        }
-
-        if (mBannerImageUrl != null && !mBannerImageUrl.equals("")) {
-            glide.load(mBannerImageUrl).into(mBannerImageView);
-        }*/
-
-        /*profileTextView.setOnClickListener(view -> {
-            Intent intent = new Intent(this, ViewUserDetailActivity.class);
-            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mAccountName);
-            startActivity(intent);
-            drawer.closeDrawers();
-        });
-
-        subscriptionTextView.setOnClickListener(view -> {
-            Intent intent = new Intent(this, SubscribedThingListingActivity.class);
-            startActivity(intent);
-            drawer.closeDrawers();
-        });
-
-        multiRedditsTextView.setOnClickListener(view -> {
-            Intent intent = new Intent(this, MultiRedditListingActivity.class);
-            startActivity(intent);
-            drawer.closeDrawers();
-        });
-
-        inboxTextView.setOnClickListener(view -> {
-            Intent intent = new Intent(this, ViewMessageActivity.class);
-            startActivity(intent);
-            drawer.closeDrawers();
-        });
-
-        upvotedTextView.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_UPVOTED);
-            startActivity(intent);
-            drawer.closeDrawers();
-        });
-
-        downvotedTextView.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_DOWNVOTED);
-            startActivity(intent);
-            drawer.closeDrawers();
-        });
-
-        hiddenTextView.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_HIDDEN);
-            startActivity(intent);
-            drawer.closeDrawers();
-        });
-
-        savedTextView.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, AccountSavedThingActivity.class);
-            startActivity(intent);
-            drawer.closeDrawers();
-        });
-
-        gildedTextView.setOnClickListener(view -> {
-            Intent intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_GILDED);
-            startActivity(intent);
-            drawer.closeDrawers();
-        });
-
-        if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
-            nightModeToggleTextView.setText(R.string.dark_theme);
-            nightModeToggleTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_dark_theme_24dp, 0, 0, 0);
-        } else {
-            nightModeToggleTextView.setText(R.string.light_theme);
-            nightModeToggleTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_light_theme_24dp, 0, 0, 0);
-        }
-
-        nightModeToggleTextView.setOnClickListener(view -> {
-            if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
-                mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "1").apply();
-                nightModeToggleTextView.setText(R.string.dark_theme);
-                nightModeToggleTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_dark_theme_24dp, 0, 0, 0);
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
-                    getTheme().applyStyle(R.style.Theme_Default_AmoledDark, true);
-                } else {
-                    getTheme().applyStyle(R.style.Theme_Default_NormalDark, true);
-                }
-            } else {
-                mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "0").apply();
-                nightModeToggleTextView.setText(R.string.light_theme);
-                nightModeToggleTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_light_theme_24dp, 0, 0, 0);
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                getTheme().applyStyle(R.style.Theme_Default, true);
-            }
-        });
-
-        settingsTextView.setOnClickListener(view -> {
-            drawer.closeDrawers();
-            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(intent);
-        });*/
     }
 
     private void loadSubscriptions() {
@@ -911,29 +667,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     ParseAndSaveAccountInfo.parseAndSaveAccountInfo(response, mRedditDataRoomDatabase, new ParseAndSaveAccountInfo.ParseAndSaveAccountInfoListener() {
                         @Override
                         public void onParseMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
-                            /*mAccountNameTextView.setText(name);
-                            if (profileImageUrl != null && !profileImageUrl.equals("")) {
-                                glide.load(profileImageUrl)
-                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
-                                        .error(glide.load(R.drawable.subreddit_default_icon)
-                                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0))))
-                                        .into(mProfileImageView);
-                            } else {
-                                glide.load(R.drawable.subreddit_default_icon)
-                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
-                                        .into(mProfileImageView);
-                            }
-                            if (bannerImageUrl != null && !bannerImageUrl.equals("")) {
-                                glide.load(bannerImageUrl).into(mBannerImageView);
-                            }*/
-
                             mAccountName = name;
                             mProfileImageUrl = profileImageUrl;
                             mBannerImageUrl = bannerImageUrl;
                             mKarma = karma;
-
-                            //mKarmaTextView.setText(getString(R.string.karma_info, karma));
-
                             mFetchUserInfoSuccess = true;
                         }
 

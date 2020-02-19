@@ -359,6 +359,14 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         }
     }
 
+    @Override
+    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+        super.onViewRecycled(holder);
+        if (holder instanceof SubscribedThingViewHolder) {
+            glide.clear(((SubscribedThingViewHolder) holder).iconGifImageView);
+        }
+    }
+
     public void setSubscribedSubreddits(List<SubscribedSubredditData> subscribedSubreddits) {
         this.subscribedSubreddits = (ArrayList<SubscribedSubredditData>) subscribedSubreddits;
         notifyDataSetChanged();
