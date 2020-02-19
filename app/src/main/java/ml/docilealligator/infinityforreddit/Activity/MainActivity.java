@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
@@ -92,6 +93,9 @@ import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.Subscrib
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
+
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public class MainActivity extends BaseActivity implements SortTypeSelectionCallback,
         PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {
@@ -497,7 +501,75 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             fab.setVisibility(View.VISIBLE);
         }
 
-        adapter = new NavigationDrawerRecyclerViewAdapter(this, mAccountName, mProfileImageUrl, mBannerImageUrl, mKarma);
+        adapter = new NavigationDrawerRecyclerViewAdapter(this, mAccountName, mProfileImageUrl,
+                mBannerImageUrl, mKarma, new NavigationDrawerRecyclerViewAdapter.ItemClickListener() {
+            @Override
+            public void onMenuClick(int stringId) {
+                Intent intent = null;
+                switch (stringId) {
+                    case R.string.profile:
+                        intent = new Intent(MainActivity.this, ViewUserDetailActivity.class);
+                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mAccountName);
+                        break;
+                    case R.string.subscriptions:
+                        intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
+                        break;
+                    case R.string.multi_reddit:
+                        intent = new Intent(MainActivity.this, MultiRedditListingActivity.class);
+                        break;
+                    case R.string.inbox:
+                        intent = new Intent(MainActivity.this, ViewMessageActivity.class);
+                        break;
+                    case R.string.upvoted:
+                        intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+                        intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_UPVOTED);
+                        break;
+                    case R.string.downvoted:
+                        intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+                        intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_DOWNVOTED);
+                        break;
+                    case R.string.hidden:
+                        intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+                        intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_HIDDEN);
+                        break;
+                    case R.string.saved:
+                        intent = new Intent(MainActivity.this, AccountSavedThingActivity.class);
+                        break;
+                    case R.string.gilded:
+                        intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+                        intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_GILDED);
+                        break;
+                    case R.string.light_theme:
+                        mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "1").apply();
+                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                        if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
+                            getTheme().applyStyle(R.style.Theme_Default_AmoledDark, true);
+                        } else {
+                            getTheme().applyStyle(R.style.Theme_Default_NormalDark, true);
+                        }
+                        break;
+                    case R.string.dark_theme:
+                        mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "0").apply();
+                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                        getTheme().applyStyle(R.style.Theme_Default, true);
+                        break;
+                    case R.string.settings:
+                        intent = new Intent(MainActivity.this, SettingsActivity.class);
+
+                }
+                if (intent != null) {
+                    startActivity(intent);
+                }
+                drawer.closeDrawers();
+            }
+
+            @Override
+            public void onSubscribedSubredditClick(String subredditName) {
+                Intent intent = new Intent(MainActivity.this, ViewSubredditDetailActivity.class);
+                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditName);
+                startActivity(intent);
+            }
+        });
         navDrawerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         navDrawerRecyclerView.setAdapter(adapter);
 

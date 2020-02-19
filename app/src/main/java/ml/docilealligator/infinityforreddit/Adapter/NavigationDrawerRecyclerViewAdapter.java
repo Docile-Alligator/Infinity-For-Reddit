@@ -28,6 +28,11 @@ import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.Subscrib
 import pl.droidsonroids.gif.GifImageView;
 
 public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public interface ItemClickListener {
+        void onMenuClick(int stringId);
+        void onSubscribedSubredditClick(String subredditName);
+    }
+
     private static final int VIEW_TYPE_NAV_HEADER = 0;
     private static final int VIEW_TYPE_MENU_GROUP_TITLE = 1;
     private static final int VIEW_TYPE_MENU_ITEM = 2;
@@ -42,12 +47,14 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private String userIconUrl;
     private String userBannerUrl;
     private int karma;
+    private ItemClickListener itemClickListener;
     private boolean isLoggedIn;
     private boolean isInMainPage = true;
     private ArrayList<SubscribedSubredditData> subscribedSubreddits;
+    private ArrayList<Account> accounts;
 
     public NavigationDrawerRecyclerViewAdapter(Context context, String accountName, String userIconUrl,
-                                               String userBannerUrl, int karma) {
+                                               String userBannerUrl, int karma, ItemClickListener itemClickListener) {
         this.context = context;
         resources = context.getResources();
         glide = Glide.with(context);
@@ -56,6 +63,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         this.userBannerUrl = userBannerUrl;
         this.karma = karma;
         isLoggedIn = accountName != null;
+        this.itemClickListener = itemClickListener;
     }
 
     @Override
@@ -209,10 +217,13 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
             ((MenuItemViewHolder) holder).menuTextView.setText(stringId);
             ((MenuItemViewHolder) holder).menuTextView.setCompoundDrawablesWithIntrinsicBounds(
                     drawableId, 0, 0, 0);
+            int finalStringId = stringId;
+            ((MenuItemViewHolder) holder).itemView.setOnClickListener(view -> itemClickListener.onMenuClick(finalStringId));
         } else if (holder instanceof SubscribedThingViewHolder) {
             SubscribedSubredditData subreddit = subscribedSubreddits.get(position - CURRENT_MENU_ITEMS);
-            ((SubscribedThingViewHolder) holder).subredditNameTextView.setText(subreddit.getName());
+            String subredditName = subreddit.getName();
             String iconUrl = subreddit.getIconUrl();
+            ((SubscribedThingViewHolder) holder).subredditNameTextView.setText(subredditName);
             if (iconUrl != null && !iconUrl.equals("")) {
                 glide.load(iconUrl)
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -224,6 +235,10 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                         .into(((SubscribedThingViewHolder) holder).iconGifImageView);
             }
+
+            ((SubscribedThingViewHolder) holder).itemView.setOnClickListener(view -> {
+                itemClickListener.onSubscribedSubredditClick(subredditName);
+            });
         }
     }
 
@@ -242,7 +257,8 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     }
 
     public void changeAccountsDataset(List<Account> accounts) {
-
+        this.accounts = (ArrayList<Account>) accounts;
+        notifyDataSetChanged();
     }
 
     class NavHeaderViewHolder extends RecyclerView.ViewHolder {
@@ -257,7 +273,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         @BindView(R.id.account_switcher_image_view_nav_header_main)
         ImageView dropIconImageView;
 
-        public NavHeaderViewHolder(@NonNull View itemView) {
+        NavHeaderViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
