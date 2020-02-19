@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.Fragment;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
@@ -78,8 +79,6 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
 
         ButterKnife.bind(this, rootView);
 
-        mActivity = getActivity();
-
         ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
@@ -151,6 +150,12 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mActivity = (Activity) context;
     }
 
     @Override

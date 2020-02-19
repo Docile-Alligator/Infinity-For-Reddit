@@ -39,7 +39,7 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
     @NonNull
     @Override
     public AccountViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new AccountViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_account, parent, false));
+        return new AccountViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_nav_drawer_account, parent, false));
     }
 
     @Override
@@ -63,21 +63,21 @@ public class AccountRecyclerViewAdapter extends RecyclerView.Adapter<AccountRecy
                 });
             } else if (position == mAccounts.size()) {
                 holder.profileImageGifImageView.setColorFilter(ContextCompat.getColor(mContext, R.color.primaryTextColor), android.graphics.PorterDuff.Mode.SRC_IN);
-                mGlide.load(R.drawable.ic_outline_add_circle_outline_24px)
+                mGlide.load(R.drawable.ic_outline_add_circle_outline_24dp)
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
                         .into(holder.profileImageGifImageView);
                 holder.usernameTextView.setText(R.string.add_account);
                 holder.itemView.setOnClickListener(view -> mItemSelectedListener.addAccountSelected());
             } else if (position == mAccounts.size() + 1) {
                 holder.profileImageGifImageView.setColorFilter(ContextCompat.getColor(mContext, R.color.primaryTextColor), android.graphics.PorterDuff.Mode.SRC_IN);
-                mGlide.load(R.drawable.ic_outline_public_24px)
+                mGlide.load(R.drawable.ic_anonymous_24dp)
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
                         .into(holder.profileImageGifImageView);
                 holder.usernameTextView.setText(R.string.anonymous_account);
                 holder.itemView.setOnClickListener(view -> mItemSelectedListener.anonymousSelected());
             } else {
                 holder.profileImageGifImageView.setColorFilter(ContextCompat.getColor(mContext, R.color.primaryTextColor), android.graphics.PorterDuff.Mode.SRC_IN);
-                mGlide.load(R.drawable.ic_outline_block_24px)
+                mGlide.load(R.drawable.ic_log_out_24dp)
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
                         .into(holder.profileImageGifImageView);
                 holder.usernameTextView.setText(R.string.log_out);

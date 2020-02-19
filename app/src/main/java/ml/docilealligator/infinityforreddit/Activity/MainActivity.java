@@ -66,6 +66,7 @@ import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubscribedThingsAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.AsyncTask.SwitchToAnonymousAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.Event.ChangeConfirmToExitEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeLockBottomAppBarEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
@@ -540,6 +541,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_GILDED);
                         break;
                     case R.string.light_theme:
+                        mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "0").apply();
+                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                        getTheme().applyStyle(R.style.Theme_Default, true);
+                        break;
+                    case R.string.dark_theme:
                         mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "1").apply();
                         AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                         if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
@@ -548,13 +554,28 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                             getTheme().applyStyle(R.style.Theme_Default_NormalDark, true);
                         }
                         break;
-                    case R.string.dark_theme:
-                        mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "0").apply();
-                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                        getTheme().applyStyle(R.style.Theme_Default, true);
-                        break;
                     case R.string.settings:
                         intent = new Intent(MainActivity.this, SettingsActivity.class);
+                        break;
+                    case R.string.add_account:
+                        Intent addAccountIntent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivityForResult(addAccountIntent, LOGIN_ACTIVITY_REQUEST_CODE);
+                        break;
+                    case R.string.anonymous_account:
+                        new SwitchToAnonymousAccountAsyncTask(mRedditDataRoomDatabase, false,
+                                () -> {
+                                    Intent anonymousIntent = new Intent(MainActivity.this, MainActivity.class);
+                                    startActivity(anonymousIntent);
+                                    finish();
+                                }).execute();
+                        break;
+                    case R.string.log_out:
+                        new SwitchToAnonymousAccountAsyncTask(mRedditDataRoomDatabase, true,
+                                () -> {
+                                    Intent logOutIntent = new Intent(MainActivity.this, MainActivity.class);
+                                    startActivity(logOutIntent);
+                                    finish();
+                                }).execute();
 
                 }
                 if (intent != null) {
@@ -568,6 +589,15 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 Intent intent = new Intent(MainActivity.this, ViewSubredditDetailActivity.class);
                 intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditName);
                 startActivity(intent);
+            }
+
+            @Override
+            public void onAccountClick(String accountName) {
+                new SwitchAccountAsyncTask(mRedditDataRoomDatabase, accountName, newAccount -> {
+                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                }).execute();
             }
         });
         navDrawerRecyclerView.setLayoutManager(new LinearLayoutManager(this));

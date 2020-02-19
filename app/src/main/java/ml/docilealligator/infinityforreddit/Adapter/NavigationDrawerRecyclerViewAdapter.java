@@ -28,9 +28,11 @@ import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.Subscrib
 import pl.droidsonroids.gif.GifImageView;
 
 public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
     public interface ItemClickListener {
         void onMenuClick(int stringId);
         void onSubscribedSubredditClick(String subredditName);
+        void onAccountClick(String accountName);
     }
 
     private static final int VIEW_TYPE_NAV_HEADER = 0;
@@ -38,6 +40,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private static final int VIEW_TYPE_MENU_ITEM = 2;
     private static final int VIEW_TYPE_DIVIDER = 3;
     private static final int VIEW_TYPE_SUBSCRIBED_SUBREDDIT = 4;
+    private static final int VIEW_TYPE_ACCOUNT = 5;
     private static final int CURRENT_MENU_ITEMS = 15;
 
     private Context context;
@@ -68,21 +71,36 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
     @Override
     public int getItemViewType(int position) {
-        if (isLoggedIn) {
-            if (position >= 15) {
-                return VIEW_TYPE_SUBSCRIBED_SUBREDDIT;
-            } else if (position == 0) {
-                return VIEW_TYPE_NAV_HEADER;
-            } else if (position == 1 || position == 6) {
-                return VIEW_TYPE_MENU_GROUP_TITLE;
-            } else if (position == 12) {
-                return VIEW_TYPE_DIVIDER;
+        if (isInMainPage) {
+            if (isLoggedIn) {
+                if (position >= 15) {
+                    return VIEW_TYPE_SUBSCRIBED_SUBREDDIT;
+                } else if (position == 0) {
+                    return VIEW_TYPE_NAV_HEADER;
+                } else if (position == 1 || position == 6) {
+                    return VIEW_TYPE_MENU_GROUP_TITLE;
+                } else if (position == 12) {
+                    return VIEW_TYPE_DIVIDER;
+                } else {
+                    return VIEW_TYPE_MENU_ITEM;
+                }
             } else {
-                return VIEW_TYPE_MENU_ITEM;
+                if (position == 0) {
+                    return VIEW_TYPE_NAV_HEADER;
+                } else {
+                    return VIEW_TYPE_MENU_ITEM;
+                }
             }
         } else {
             if (position == 0) {
                 return VIEW_TYPE_NAV_HEADER;
+            }
+            if (accounts != null) {
+                if (position > accounts.size()) {
+                    return VIEW_TYPE_MENU_ITEM;
+                } else {
+                    return VIEW_TYPE_ACCOUNT;
+                }
             } else {
                 return VIEW_TYPE_MENU_ITEM;
             }
@@ -105,6 +123,9 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
             case VIEW_TYPE_DIVIDER:
                 return new DividerViewHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_nav_drawer_divider, parent, false));
+            case VIEW_TYPE_ACCOUNT:
+                return new AccountViewHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_nav_drawer_account, parent, false));
             default:
                 return new SubscribedThingViewHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_nav_drawer_subscribed_thing, parent, false));
@@ -135,6 +156,9 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
             } else {
                 ((NavHeaderViewHolder) holder).karmaTextView.setText(R.string.press_here_to_login);
                 ((NavHeaderViewHolder) holder).accountNameTextView.setText(R.string.anonymous_account);
+                glide.load(R.drawable.subreddit_default_icon)
+                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0)))
+                        .into(((NavHeaderViewHolder) holder).profileImageView);
             }
 
             if (isInMainPage) {
@@ -145,11 +169,31 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
             ((NavHeaderViewHolder) holder).itemView.setOnClickListener(view -> {
                 if (isInMainPage) {
-                    isInMainPage = false;
                     ((NavHeaderViewHolder) holder).dropIconImageView.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_arrow_drop_up_24px));
+                    notifyItemRangeRemoved(1, getItemCount() - 1);
+                    if (accounts != null) {
+                        notifyItemRangeInserted(1, accounts.size() + 3);
+                    } else {
+                        if (isLoggedIn) {
+                            notifyItemRangeInserted(1, 3);
+                        } else {
+                            notifyItemInserted(1);
+                        }
+                    }
+                    isInMainPage = false;
                 } else {
-                    isInMainPage = true;
                     ((NavHeaderViewHolder) holder).dropIconImageView.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_arrow_drop_down_24px));
+                    notifyItemRangeRemoved(1, getItemCount() - 1);
+                    if (isLoggedIn) {
+                        if (subscribedSubreddits != null) {
+                            notifyItemRangeInserted(1, subscribedSubreddits.size() + CURRENT_MENU_ITEMS - 1);
+                        } else {
+                            notifyItemRangeInserted(1, CURRENT_MENU_ITEMS - 1);
+                        }
+                    } else {
+                        notifyItemRangeInserted(1, 2);
+                    }
+                    isInMainPage = true;
                 }
             });
         } else if (holder instanceof MenuGroupTitleViewHolder) {
@@ -162,63 +206,100 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
             int stringId = 0;
             int drawableId = 0;
 
-            switch (position) {
-                case 2:
-                    stringId = R.string.profile;
-                    drawableId = R.drawable.ic_account_circle_24dp;
-                    break;
-                case 3:
-                    stringId = R.string.subscriptions;
-                    drawableId = R.drawable.ic_subscritptions_bottom_app_bar_24dp;
-                    break;
-                case 4:
-                    stringId = R.string.multi_reddit;
-                    drawableId = R.drawable.ic_multi_reddit_24dp;
-                    break;
-                case 5:
-                    stringId = R.string.inbox;
-                    drawableId = R.drawable.ic_inbox_24dp;
-                    break;
-                case 7:
-                    stringId = R.string.upvoted;
-                    drawableId = R.drawable.ic_arrow_upward_black_24dp;
-                    break;
-                case 8:
-                    stringId = R.string.downvoted;
-                    drawableId = R.drawable.ic_arrow_downward_black_24dp;
-                    break;
-                case 9:
-                    stringId = R.string.hidden;
-                    drawableId = R.drawable.ic_outline_lock_24dp;
-                    break;
-                case 10:
-                    stringId = R.string.saved;
-                    drawableId = R.drawable.ic_outline_bookmarks_24dp;
-                    break;
-                case 11:
-                    stringId = R.string.gilded;
-                    drawableId = R.drawable.ic_star_border_24dp;
-                    break;
-                case 13:
-                    if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
-                        stringId = R.string.dark_theme;
-                        drawableId = R.drawable.ic_dark_theme_24dp;
-                    } else {
-                        stringId = R.string.light_theme;
-                        drawableId = R.drawable.ic_light_theme_24dp;
+            if (isInMainPage) {
+                if (isLoggedIn) {
+                    switch (position) {
+                        case 2:
+                            stringId = R.string.profile;
+                            drawableId = R.drawable.ic_account_circle_24dp;
+                            break;
+                        case 3:
+                            stringId = R.string.subscriptions;
+                            drawableId = R.drawable.ic_subscritptions_bottom_app_bar_24dp;
+                            break;
+                        case 4:
+                            stringId = R.string.multi_reddit;
+                            drawableId = R.drawable.ic_multi_reddit_24dp;
+                            break;
+                        case 5:
+                            stringId = R.string.inbox;
+                            drawableId = R.drawable.ic_inbox_24dp;
+                            break;
+                        case 7:
+                            stringId = R.string.upvoted;
+                            drawableId = R.drawable.ic_arrow_upward_black_24dp;
+                            break;
+                        case 8:
+                            stringId = R.string.downvoted;
+                            drawableId = R.drawable.ic_arrow_downward_black_24dp;
+                            break;
+                        case 9:
+                            stringId = R.string.hidden;
+                            drawableId = R.drawable.ic_outline_lock_24dp;
+                            break;
+                        case 10:
+                            stringId = R.string.saved;
+                            drawableId = R.drawable.ic_outline_bookmarks_24dp;
+                            break;
+                        case 11:
+                            stringId = R.string.gilded;
+                            drawableId = R.drawable.ic_star_border_24dp;
+                            break;
+                        case 13:
+                            if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+                                stringId = R.string.dark_theme;
+                                drawableId = R.drawable.ic_dark_theme_24dp;
+                            } else {
+                                stringId = R.string.light_theme;
+                                drawableId = R.drawable.ic_light_theme_24dp;
+                            }
+                            break;
+                        case 14:
+                            stringId = R.string.settings;
+                            drawableId = R.drawable.ic_settings_24dp;
                     }
-                    break;
-                case 14:
-                    stringId = R.string.settings;
-                    drawableId = R.drawable.ic_settings_24dp;
-                    break;
+                } else {
+                    switch (position) {
+                        case 1:
+                            if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+                                stringId = R.string.dark_theme;
+                                drawableId = R.drawable.ic_dark_theme_24dp;
+                            } else {
+                                stringId = R.string.light_theme;
+                                drawableId = R.drawable.ic_light_theme_24dp;
+                            }
+                            break;
+                        case 2:
+                            stringId = R.string.settings;
+                            drawableId = R.drawable.ic_settings_24dp;
+                    }
+                }
+            } else {
+                if (isLoggedIn) {
+                    int offset = accounts == null ? 0 : accounts.size();
+                    if (position == offset + 1) {
+                        stringId = R.string.add_account;
+                        drawableId = R.drawable.ic_outline_add_circle_outline_24dp;
+                    } else if (position == offset + 2) {
+                        stringId = R.string.anonymous_account;
+                        drawableId = R.drawable.ic_anonymous_24dp;
+                    } else if (position == offset + 3) {
+                        stringId = R.string.log_out;
+                        drawableId = R.drawable.ic_log_out_24dp;
+                    }
+                } else {
+                    stringId = R.string.add_account;
+                    drawableId = R.drawable.ic_outline_add_circle_outline_24dp;
+                }
             }
 
-            ((MenuItemViewHolder) holder).menuTextView.setText(stringId);
-            ((MenuItemViewHolder) holder).menuTextView.setCompoundDrawablesWithIntrinsicBounds(
-                    drawableId, 0, 0, 0);
-            int finalStringId = stringId;
-            ((MenuItemViewHolder) holder).itemView.setOnClickListener(view -> itemClickListener.onMenuClick(finalStringId));
+            if (stringId != 0) {
+                ((MenuItemViewHolder) holder).menuTextView.setText(stringId);
+                ((MenuItemViewHolder) holder).menuTextView.setCompoundDrawablesWithIntrinsicBounds(
+                        drawableId, 0, 0, 0);
+                int finalStringId = stringId;
+                ((MenuItemViewHolder) holder).itemView.setOnClickListener(view -> itemClickListener.onMenuClick(finalStringId));
+            }
         } else if (holder instanceof SubscribedThingViewHolder) {
             SubscribedSubredditData subreddit = subscribedSubreddits.get(position - CURRENT_MENU_ITEMS);
             String subredditName = subreddit.getName();
@@ -239,16 +320,43 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
             ((SubscribedThingViewHolder) holder).itemView.setOnClickListener(view -> {
                 itemClickListener.onSubscribedSubredditClick(subredditName);
             });
+        } else if (holder instanceof AccountViewHolder) {
+            glide.load(accounts.get(position - 1).getProfileImageUrl())
+                    .error(glide.load(R.drawable.subreddit_default_icon))
+                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
+                    .into(((AccountViewHolder) holder).profileImageGifImageView);
+            ((AccountViewHolder) holder).usernameTextView.setText(accounts.get(position - 1).getUsername());
+            ((AccountViewHolder) holder).itemView.setOnClickListener(view ->
+                    itemClickListener.onAccountClick(accounts.get(position - 1).getUsername()));
         }
     }
 
     @Override
     public int getItemCount() {
-        if (subscribedSubreddits != null) {
-            return CURRENT_MENU_ITEMS + subscribedSubreddits.size();
+        if (isInMainPage) {
+            if (isLoggedIn) {
+                if (subscribedSubreddits != null) {
+                    return CURRENT_MENU_ITEMS + subscribedSubreddits.size();
+                }
+                return CURRENT_MENU_ITEMS;
+            } else {
+                return 3;
+            }
+        } else {
+            if (isLoggedIn) {
+                if (accounts != null && !accounts.isEmpty()) {
+                    return 4 + accounts.size();
+                } else {
+                    return 4;
+                }
+            } else {
+                if (accounts != null && !accounts.isEmpty()) {
+                    return 2 + accounts.size();
+                } else {
+                    return 2;
+                }
+            }
         }
-
-        return CURRENT_MENU_ITEMS;
     }
 
     public void setSubscribedSubreddits(List<SubscribedSubredditData> subscribedSubreddits) {
@@ -311,6 +419,18 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         TextView subredditNameTextView;
 
         SubscribedThingViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
+
+    class AccountViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.profile_image_item_account)
+        GifImageView profileImageGifImageView;
+        @BindView(R.id.username_text_view_item_account)
+        TextView usernameTextView;
+
+        AccountViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
