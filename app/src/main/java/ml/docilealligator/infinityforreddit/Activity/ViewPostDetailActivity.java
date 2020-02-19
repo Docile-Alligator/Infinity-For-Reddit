@@ -243,7 +243,11 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
             int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
             if (navBarResourceId > 0) {
-                mRecyclerView.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
+                int navBarHeight = resources.getDimensionPixelSize(navBarResourceId);
+                CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+                params.bottomMargin = navBarHeight;
+                fab.setLayoutParams(params);
+                mRecyclerView.setPadding(0, 0, 0, navBarHeight);
                 showToast = true;
             }
         }
@@ -272,17 +276,21 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
                     if (!mIsSmoothScrolling && !mLockFab) {
-                        if (dy > 0) {
-                            if (mSwipeUpToHideFab) {
-                                fab.show();
-                            } else {
-                                fab.hide();
-                            }
+                        if (!recyclerView.canScrollVertically(1)) {
+                            fab.hide();
                         } else {
-                            if (mSwipeUpToHideFab) {
-                                fab.hide();
+                            if (dy > 0) {
+                                if (mSwipeUpToHideFab) {
+                                    fab.show();
+                                } else {
+                                    fab.hide();
+                                }
                             } else {
-                                fab.show();
+                                if (mSwipeUpToHideFab) {
+                                    fab.hide();
+                                } else {
+                                    fab.show();
+                                }
                             }
                         }
                     }
@@ -311,17 +319,21 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
                     if (!mIsSmoothScrolling && !mLockFab) {
-                        if (dy > 0) {
-                            if (mSwipeUpToHideFab) {
-                                fab.show();
-                            } else {
-                                fab.hide();
-                            }
+                        if (!recyclerView.canScrollVertically(1)) {
+                            fab.hide();
                         } else {
-                            if (mSwipeUpToHideFab) {
-                                fab.hide();
+                            if (dy > 0) {
+                                if (mSwipeUpToHideFab) {
+                                    fab.show();
+                                } else {
+                                    fab.hide();
+                                }
                             } else {
-                                fab.show();
+                                if (mSwipeUpToHideFab) {
+                                    fab.hide();
+                                } else {
+                                    fab.show();
+                                }
                             }
                         }
                     }
@@ -657,17 +669,21 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                                     public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                                                         super.onScrolled(recyclerView, dx, dy);
                                                         if (!mIsSmoothScrolling && !mLockFab) {
-                                                            if (dy > 0) {
-                                                                if (mSwipeUpToHideFab) {
-                                                                    fab.show();
-                                                                } else {
-                                                                    fab.hide();
-                                                                }
+                                                            if (!recyclerView.canScrollVertically(1)) {
+                                                                fab.hide();
                                                             } else {
-                                                                if (mSwipeUpToHideFab) {
-                                                                    fab.hide();
+                                                                if (dy > 0) {
+                                                                    if (mSwipeUpToHideFab) {
+                                                                        fab.show();
+                                                                    } else {
+                                                                        fab.hide();
+                                                                    }
                                                                 } else {
-                                                                    fab.show();
+                                                                    if (mSwipeUpToHideFab) {
+                                                                        fab.hide();
+                                                                    } else {
+                                                                        fab.show();
+                                                                    }
                                                                 }
                                                             }
                                                         }
@@ -753,17 +769,21 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                                     super.onScrolled(recyclerView, dx, dy);
                                     if (!mIsSmoothScrolling && !mLockFab) {
-                                        if (dy > 0) {
-                                            if (mSwipeUpToHideFab) {
-                                                fab.show();
-                                            } else {
-                                                fab.hide();
-                                            }
+                                        if (!recyclerView.canScrollVertically(1)) {
+                                            fab.hide();
                                         } else {
-                                            if (mSwipeUpToHideFab) {
-                                                fab.hide();
+                                            if (dy > 0) {
+                                                if (mSwipeUpToHideFab) {
+                                                    fab.show();
+                                                } else {
+                                                    fab.hide();
+                                                }
                                             } else {
-                                                fab.show();
+                                                if (mSwipeUpToHideFab) {
+                                                    fab.hide();
+                                                } else {
+                                                    fab.show();
+                                                }
                                             }
                                         }
                                     }
