@@ -13,7 +13,7 @@
         app:entries="@array/settings_notification_interval"
         app:entryValues="@array/settings_notification_interval_values"
         app:key="notificaiton_interval"
-        app:icon="@drawable/ic_outline_access_time_24px"
+        app:icon="@drawable/ic_outline_access_time_24dp"
         app:title="@string/settings_notification_interval_title"
         app:useSimpleSummaryProvider="true"
         app:isPreferenceVisible="false" />

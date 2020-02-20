@@ -444,4 +444,7 @@
     <string name="delete_multi_reddit_success">Delete successfully</string>
     <string name="delete_multi_reddit_failed">Delete failed</string>
     <string name="delete_multi_reddit_dialog_message">Are you sure?</string>
+
+    <string name="enable_nsfw">Enable NSFW</string>
+    <string name="disable_nsfw">Disable NSFW</string>
 </resources>

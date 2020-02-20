@@ -459,8 +459,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             fab.setVisibility(View.VISIBLE);
         }
 
+        boolean nsfwEnabled = mSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_KEY, false);
         adapter = new NavigationDrawerRecyclerViewAdapter(this, mAccountName, mProfileImageUrl,
-                mBannerImageUrl, mKarma, new NavigationDrawerRecyclerViewAdapter.ItemClickListener() {
+                mBannerImageUrl, mKarma, nsfwEnabled, new NavigationDrawerRecyclerViewAdapter.ItemClickListener() {
             @Override
             public void onMenuClick(int stringId) {
                 Intent intent = null;
@@ -509,6 +510,18 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                             getTheme().applyStyle(R.style.Theme_Default_AmoledDark, true);
                         } else {
                             getTheme().applyStyle(R.style.Theme_Default_NormalDark, true);
+                        }
+                        break;
+                    case R.string.enable_nsfw:
+                        if (sectionsPagerAdapter != null) {
+                            mSharedPreferences.edit().putBoolean(SharedPreferencesUtils.NSFW_KEY, true).apply();
+                            sectionsPagerAdapter.changeNSFW(true);
+                        }
+                        break;
+                    case R.string.disable_nsfw:
+                        if (sectionsPagerAdapter != null) {
+                            mSharedPreferences.edit().putBoolean(SharedPreferencesUtils.NSFW_KEY, false).apply();
+                            sectionsPagerAdapter.changeNSFW(false);
                         }
                         break;
                     case R.string.settings:
@@ -888,6 +901,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Subscribe
     public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
         sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
+        if (adapter != null) {
+            adapter.setNSFWEnabled(changeNSFWEvent.nsfw);
+        }
     }
 
     @Subscribe

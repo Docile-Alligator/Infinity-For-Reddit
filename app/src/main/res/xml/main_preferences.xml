@@ -53,13 +53,14 @@
         android:entries="@array/settings_lazy_mode_interval"
         app:entryValues="@array/settings_lazy_mode_interval_values"
         app:key="lazy_mode_interval"
-        app:icon="@drawable/ic_outline_access_time_24px"
+        app:icon="@drawable/ic_outline_access_time_24dp"
         app:title="@string/settings_lazy_mode_interval_title"
         app:useSimpleSummaryProvider="true" />
 
     <SwitchPreference
         app:defaultValue="false"
         app:key="nsfw"
+        app:icon="@drawable/ic_nsfw_on_24dp"
         app:title="@string/settings_enable_nsfw_title" />
 
     <SwitchPreference

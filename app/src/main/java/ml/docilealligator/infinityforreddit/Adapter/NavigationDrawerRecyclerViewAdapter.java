@@ -41,7 +41,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private static final int VIEW_TYPE_DIVIDER = 3;
     private static final int VIEW_TYPE_SUBSCRIBED_SUBREDDIT = 4;
     private static final int VIEW_TYPE_ACCOUNT = 5;
-    private static final int CURRENT_MENU_ITEMS = 15;
+    private static final int CURRENT_MENU_ITEMS = 16;
 
     private Context context;
     private Resources resources;
@@ -50,6 +50,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private String userIconUrl;
     private String userBannerUrl;
     private int karma;
+    private boolean isNSFWEnabled;
     private ItemClickListener itemClickListener;
     private boolean isLoggedIn;
     private boolean isInMainPage = true;
@@ -57,7 +58,8 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private ArrayList<Account> accounts;
 
     public NavigationDrawerRecyclerViewAdapter(Context context, String accountName, String userIconUrl,
-                                               String userBannerUrl, int karma, ItemClickListener itemClickListener) {
+                                               String userBannerUrl, int karma, boolean isNSFWEnabled,
+                                               ItemClickListener itemClickListener) {
         this.context = context;
         resources = context.getResources();
         glide = Glide.with(context);
@@ -65,6 +67,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         this.userIconUrl = userIconUrl;
         this.userBannerUrl = userBannerUrl;
         this.karma = karma;
+        this.isNSFWEnabled = isNSFWEnabled;
         isLoggedIn = accountName != null;
         this.itemClickListener = itemClickListener;
     }
@@ -73,7 +76,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     public int getItemViewType(int position) {
         if (isInMainPage) {
             if (isLoggedIn) {
-                if (position >= 15) {
+                if (position >= CURRENT_MENU_ITEMS) {
                     return VIEW_TYPE_SUBSCRIBED_SUBREDDIT;
                 } else if (position == 0) {
                     return VIEW_TYPE_NAV_HEADER;
@@ -205,6 +208,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         } else if (holder instanceof MenuItemViewHolder) {
             int stringId = 0;
             int drawableId = 0;
+            boolean setOnClickListener = true;
 
             if (isInMainPage) {
                 if (isLoggedIn) {
@@ -255,6 +259,32 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                             }
                             break;
                         case 14:
+                            setOnClickListener = false;
+                            if (isNSFWEnabled) {
+                                stringId = R.string.disable_nsfw;
+                                drawableId = R.drawable.ic_nsfw_off_24dp;
+                            } else {
+                                stringId = R.string.enable_nsfw;
+                                drawableId = R.drawable.ic_nsfw_on_24dp;
+                            }
+
+                            ((MenuItemViewHolder) holder).itemView.setOnClickListener(view -> {
+                                if (isNSFWEnabled) {
+                                    isNSFWEnabled = false;
+                                    ((MenuItemViewHolder) holder).menuTextView.setText(R.string.enable_nsfw);
+                                    ((MenuItemViewHolder) holder).menuTextView.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_nsfw_on_24dp, 0, 0, 0);
+                                    itemClickListener.onMenuClick(R.string.disable_nsfw);
+                                } else {
+                                    isNSFWEnabled = true;
+                                    ((MenuItemViewHolder) holder).menuTextView.setText(R.string.disable_nsfw);
+                                    ((MenuItemViewHolder) holder).menuTextView.setCompoundDrawablesWithIntrinsicBounds(
+                                            R.drawable.ic_nsfw_off_24dp, 0, 0, 0);
+                                    itemClickListener.onMenuClick(R.string.enable_nsfw);
+                                }
+                            });
+                            break;
+                        case 15:
                             stringId = R.string.settings;
                             drawableId = R.drawable.ic_settings_24dp;
                     }
@@ -297,8 +327,10 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                 ((MenuItemViewHolder) holder).menuTextView.setText(stringId);
                 ((MenuItemViewHolder) holder).menuTextView.setCompoundDrawablesWithIntrinsicBounds(
                         drawableId, 0, 0, 0);
-                int finalStringId = stringId;
-                ((MenuItemViewHolder) holder).itemView.setOnClickListener(view -> itemClickListener.onMenuClick(finalStringId));
+                if (setOnClickListener) {
+                    int finalStringId = stringId;
+                    ((MenuItemViewHolder) holder).itemView.setOnClickListener(view -> itemClickListener.onMenuClick(finalStringId));
+                }
             }
         } else if (holder instanceof SubscribedThingViewHolder) {
             SubscribedSubredditData subreddit = subscribedSubreddits.get(position - CURRENT_MENU_ITEMS);
@@ -369,12 +401,27 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
     public void setSubscribedSubreddits(List<SubscribedSubredditData> subscribedSubreddits) {
         this.subscribedSubreddits = (ArrayList<SubscribedSubredditData>) subscribedSubreddits;
-        notifyDataSetChanged();
+        if (isInMainPage) {
+            notifyDataSetChanged();
+        }
     }
 
     public void changeAccountsDataset(List<Account> accounts) {
         this.accounts = (ArrayList<Account>) accounts;
-        notifyDataSetChanged();
+        if (!isInMainPage) {
+            notifyDataSetChanged();
+        }
+    }
+
+    public void setNSFWEnabled(boolean isNSFWEnabled) {
+        this.isNSFWEnabled = isNSFWEnabled;
+        if (isInMainPage) {
+            if (isLoggedIn) {
+                notifyItemChanged(CURRENT_MENU_ITEMS - 2);
+            } else {
+                notifyItemChanged(2);
+            }
+        }
     }
 
     class NavHeaderViewHolder extends RecyclerView.ViewHolder {
