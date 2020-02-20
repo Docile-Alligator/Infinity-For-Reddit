@@ -21,6 +21,7 @@ public class SharedPreferencesUtils {
     public static final String MATERIAL_ICONS_KEY = "material_icons";
     public static final String OPEN_SOURCE_KEY = "open_source";
     public static final String RATE_KEY = "rate";
+    public static final String F_DROID_KEY = "f-droid";
     public static final String EMAIL_KEY = "email";
     public static final String REDDIT_ACCOUNT_KEY = "reddit_account";
     public static final String SUBREDDIT_KEY = "subreddit";

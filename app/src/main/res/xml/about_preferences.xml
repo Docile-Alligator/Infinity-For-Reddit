@@ -21,6 +21,11 @@
         app:summary="@string/settings_rate_summary" />
 
     <Preference
+        android:key="f-droid"
+        app:title="@string/settings_f_droid_title"
+        app:summary="@string/settings_f_droid_summary" />
+
+    <Preference
         android:key="email"
         app:title="@string/settings_email_title"
         app:summary="@string/settings_email_summary" />
