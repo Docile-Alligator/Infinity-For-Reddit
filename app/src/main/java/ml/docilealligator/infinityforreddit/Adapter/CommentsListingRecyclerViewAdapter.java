@@ -70,13 +70,15 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     private int mColorAccent;
     private boolean mVoteButtonsOnTheRight;
     private boolean mShowElapsedTime;
+    private boolean mShowCommentDivider;
     private NetworkState networkState;
     private RetryLoadingMoreCallback mRetryLoadingMoreCallback;
 
     public CommentsListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
                                               String accessToken, String accountName,
-                                              boolean voteButtonsOnTheRight,
-                                              boolean showElapsedTime, RetryLoadingMoreCallback retryLoadingMoreCallback) {
+                                              boolean voteButtonsOnTheRight, boolean showElapsedTime,
+                                              boolean showCommentDivider,
+                                              RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         mContext = context;
         mOauthRetrofit = oauthRetrofit;
@@ -109,6 +111,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         mAccountName = accountName;
         mVoteButtonsOnTheRight = voteButtonsOnTheRight;
         mShowElapsedTime = showElapsedTime;
+        mShowCommentDivider = showCommentDivider;
         mRetryLoadingMoreCallback = retryLoadingMoreCallback;
         mTextColorPrimaryDark = mContext.getResources().getColor(R.color.colorPrimaryDarkDayNightTheme);
         mColorAccent = mContext.getResources().getColor(R.color.colorAccent);
@@ -429,6 +432,8 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         ImageView expandButton;
         @BindView(R.id.reply_button_item_post_comment)
         ImageView replyButton;
+        @BindView(R.id.divider_item_comment)
+        View commentDivider;
 
         DataViewHolder(View itemView) {
             super(itemView);
@@ -451,6 +456,10 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 constraintSet.connect(replyButton.getId(), ConstraintSet.START, replyButton.getId(), ConstraintSet.END);
                 constraintSet.setHorizontalBias(moreButton.getId(), 0);
                 constraintSet.applyTo(bottomConstraintLayout);
+            }
+
+            if (mShowCommentDivider) {
+                commentDivider.setVisibility(View.VISIBLE);
             }
         }
     }

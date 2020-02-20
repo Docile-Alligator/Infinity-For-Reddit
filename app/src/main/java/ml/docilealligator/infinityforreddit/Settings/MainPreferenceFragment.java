@@ -4,13 +4,9 @@ package ml.docilealligator.infinityforreddit.Settings;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
@@ -27,11 +23,6 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
-
 /**
  * A simple {@link PreferenceFragmentCompat} subclass.
  */
@@ -46,22 +37,10 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.main_preferences, rootKey);
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
-        SwitchPreference amoledDarkSwitch = findPreference(SharedPreferencesUtils.AMOLED_DARK_KEY);
         SwitchPreference confirmToExitSwitch = findPreference(SharedPreferencesUtils.CONFIRM_TO_EXIT);
         SwitchPreference nsfwSwitch = findPreference(SharedPreferencesUtils.NSFW_KEY);
         SwitchPreference blurNSFWSwitch = findPreference(SharedPreferencesUtils.BLUR_NSFW_KEY);
         SwitchPreference blurSpoilerSwitch = findPreference(SharedPreferencesUtils.BLUR_SPOILER_KEY);
-        ListPreference themePreference = findPreference(SharedPreferencesUtils.THEME_KEY);
-
-        if (amoledDarkSwitch != null) {
-            amoledDarkSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
-                if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_NO) {
-                    EventBus.getDefault().post(new RecreateActivityEvent());
-                    activity.recreate();
-                }
-                return true;
-            });
-        }
 
         if (confirmToExitSwitch != null) {
             confirmToExitSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -101,35 +80,6 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
         if (blurSpoilerSwitch != null) {
             blurSpoilerSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new ChangeSpoilerBlurEvent((Boolean) newValue));
-                return true;
-            });
-        }
-
-        boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
-
-        if (themePreference != null) {
-            if (systemDefault) {
-                themePreference.setEntries(R.array.settings_theme_q);
-            } else {
-                themePreference.setEntries(R.array.settings_theme);
-            }
-
-            themePreference.setOnPreferenceChangeListener((preference, newValue) -> {
-                int option = Integer.parseInt((String) newValue);
-                switch (option) {
-                    case 0:
-                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                        break;
-                    case 1:
-                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                        break;
-                    case 2:
-                        if (systemDefault) {
-                            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
-                        } else {
-                            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
-                        }
-                }
                 return true;
             });
         }

@@ -123,6 +123,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private boolean mVoteButtonsOnTheRight;
     private boolean mShowElapsedTime;
     private boolean mExpandChildren;
+    private boolean mShowCommentDivider;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
     private boolean isInitiallyLoadingFailed;
@@ -138,7 +139,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                              String accessToken, String accountName, Post post, Locale locale,
                                              String singleCommentId, boolean isSingleCommentThreadMode,
                                              boolean needBlurNSFW, boolean needBlurSpoiler, boolean voteButtonsOnTheRight,
-                                             boolean showElapsedTime, boolean expandChildren,
+                                             boolean showElapsedTime, boolean expandChildren, boolean showCommentDivider,
                                              CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
         mActivity = activity;
         mRetrofit = retrofit;
@@ -229,6 +230,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mVoteButtonsOnTheRight = voteButtonsOnTheRight;
         mShowElapsedTime = showElapsedTime;
         mExpandChildren = expandChildren;
+        mShowCommentDivider = showCommentDivider;
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
         isInitiallyLoadingFailed = false;
@@ -1940,6 +1942,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         ImageView replyButton;
         @BindView(R.id.vertical_block_item_post_comment)
         View verticalBlock;
+        @BindView(R.id.divider_item_comment)
+        View commentDivider;
 
         CommentViewHolder(View itemView) {
             super(itemView);
@@ -1964,6 +1968,10 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 constraintSet.setHorizontalBias(moreButton.getId(), 0);
                 constraintSet.applyTo(bottomConstraintLayout);
             }
+
+            if (mShowCommentDivider) {
+                commentDivider.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -1972,10 +1980,16 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         View verticalBlock;
         @BindView(R.id.placeholder_text_view_item_load_more_comments)
         TextView placeholderTextView;
+        @BindView(R.id.divider_item_load_more_comments_placeholder)
+        View commentDivider;
 
         LoadMoreChildCommentsViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            if (mShowCommentDivider) {
+                commentDivider.setVisibility(View.VISIBLE);
+            }
         }
     }
 
