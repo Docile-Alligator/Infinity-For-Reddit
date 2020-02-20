@@ -2,6 +2,8 @@ package ml.docilealligator.infinityforreddit.Utils;
 
 import android.content.Context;
 
+import java.util.Locale;
+
 import ml.docilealligator.infinityforreddit.R;
 
 public class Utils {
@@ -58,6 +60,17 @@ public class Utils {
             return context.getString(R.string.elapsed_time_a_year_ago);
         } else {
             return context.getString(R.string.elapsed_time_years_ago, diff / YEAR_MILLIS);
+        }
+    }
+
+    public static String getNVotes(boolean showAbsoluteNumberOfVotes, int votes) {
+        if (showAbsoluteNumberOfVotes) {
+            return Integer.toString(votes);
+        } else {
+            if (Math.abs(votes) < 1000) {
+                return Integer.toString(votes);
+            }
+            return String.format(Locale.US, "%.1f", (float) votes / 1000) + "K";
         }
     }
 }

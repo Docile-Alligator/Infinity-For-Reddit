@@ -177,6 +177,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     private boolean mSwipeUpToHideFab;
     private boolean mExpandChildren;
     private boolean mShowCommentDivider;
+    private boolean mShowAbsoluteNumberOfVotes;
     private LinearLayoutManager mLinearLayoutManager;
     private CommentAndPostRecyclerViewAdapter mAdapter;
     private RecyclerView.SmoothScroller mSmoothScroller;
@@ -265,6 +266,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         mSwipeUpToHideFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
         mExpandChildren = !mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_TOP_LEVEL_COMMENTS_FIRST, false);
         mShowCommentDivider = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER, false);
+        mShowAbsoluteNumberOfVotes = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
 
         mGlide = Glide.with(this);
         mLocale = getResources().getConfiguration().locale;
@@ -511,6 +513,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                     mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mAccountName, mPost,
                     mLocale, mSingleCommentId, isSingleCommentThreadMode, mNeedBlurNsfw, mNeedBlurSpoiler,
                     mVoteButtonsOnTheRight, mShowElapsedTime, mExpandChildren, mShowCommentDivider,
+                    mShowAbsoluteNumberOfVotes,
                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                         @Override
                         public void updatePost(Post post) {
@@ -634,6 +637,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                     mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId,
                                     isSingleCommentThreadMode, mNeedBlurNsfw, mNeedBlurSpoiler,
                                     mVoteButtonsOnTheRight, mShowElapsedTime, mExpandChildren, mShowCommentDivider,
+                                    mShowAbsoluteNumberOfVotes,
                                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                                         @Override
                                         public void updatePost(Post post) {

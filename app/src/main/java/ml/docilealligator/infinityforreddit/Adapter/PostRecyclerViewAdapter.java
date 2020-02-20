@@ -105,6 +105,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean mNeedBlurSpoiler;
     private boolean mShowElapsedTime;
     private boolean mShowDividerInCompactLayout;
+    private boolean mShowAbsoluteNumberOfVotes;
     private NetworkState networkState;
     private Callback mCallback;
     private ShareLinkBottomSheetFragment mShareLinkBottomSheetFragment;
@@ -113,7 +114,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                    RedditDataRoomDatabase redditDataRoomDatabase, String accessToken,
                                    int postType, int postLayout, boolean displaySubredditName,
                                    boolean needBlurNSFW, boolean needBlurSpoiler, boolean voteButtonsOnTheRight,
-                                   boolean showElapsedTime, boolean showDividerInCompactLayout, Callback callback) {
+                                   boolean showElapsedTime, boolean showDividerInCompactLayout,
+                                   boolean showAbsoluteNumberOfVotes, Callback callback) {
         super(DIFF_CALLBACK);
         if (activity != null) {
             mActivity = activity;
@@ -127,6 +129,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mVoteButtonsOnTheRight = voteButtonsOnTheRight;
             mShowElapsedTime = showElapsedTime;
             mShowDividerInCompactLayout = showDividerInCompactLayout;
+            mShowAbsoluteNumberOfVotes = showAbsoluteNumberOfVotes;
             mPostLayout = postLayout;
             mScale = activity.getResources().getDisplayMetrics().density;
             mGlide = Glide.with(mActivity.getApplicationContext());
@@ -351,7 +354,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
 
                 ((PostViewHolder) holder).titleTextView.setText(title);
-                ((PostViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
+                ((PostViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
 
                 if (gilded > 0) {
                     ((PostViewHolder) holder).gildedNumberTextView.setVisibility(View.VISIBLE);
@@ -558,7 +561,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         ((PostViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
                     }
 
-                    ((PostViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
+                    ((PostViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
 
                     VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
@@ -575,7 +578,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             }
 
                             ((PostViewHolder) holder).downvoteButton.clearColorFilter();
-                            ((PostViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
+                            ((PostViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
@@ -584,7 +587,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         public void onVoteThingFail(int position1) {
                             Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                             post.setVoteType(previousVoteType);
-                            ((PostViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + previousVoteType));
+                            ((PostViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
                             ((PostViewHolder) holder).upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                             ((PostViewHolder) holder).downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
                             ((PostViewHolder) holder).scoreTextView.setTextColor(previousScoreTextViewColor);
@@ -629,7 +632,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         ((PostViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
                     }
 
-                    ((PostViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
+                    ((PostViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
 
                     VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
@@ -646,7 +649,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             }
 
                             ((PostViewHolder) holder).upvoteButton.clearColorFilter();
-                            ((PostViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
+                            ((PostViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
@@ -655,7 +658,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         public void onVoteThingFail(int position1) {
                             Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                             post.setVoteType(previousVoteType);
-                            ((PostViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + previousVoteType));
+                            ((PostViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
                             ((PostViewHolder) holder).upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                             ((PostViewHolder) holder).downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
                             ((PostViewHolder) holder).scoreTextView.setTextColor(previousScoreTextViewColor);
@@ -906,7 +909,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
 
                 ((PostCompactViewHolder) holder).titleTextView.setText(title);
-                ((PostCompactViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
+                ((PostCompactViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
 
                 if (gilded > 0) {
                     ((PostCompactViewHolder) holder).gildedNumberTextView.setVisibility(View.VISIBLE);
@@ -1104,7 +1107,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         ((PostCompactViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
                     }
 
-                    ((PostCompactViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
+                    ((PostCompactViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
 
                     VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
@@ -1121,7 +1124,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             }
 
                             ((PostCompactViewHolder) holder).downvoteButton.clearColorFilter();
-                            ((PostCompactViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
+                            ((PostCompactViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
@@ -1130,7 +1133,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         public void onVoteThingFail(int position1) {
                             Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                             post.setVoteType(previousVoteType);
-                            ((PostCompactViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + previousVoteType));
+                            ((PostCompactViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
                             ((PostCompactViewHolder) holder).upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                             ((PostCompactViewHolder) holder).downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
                             ((PostCompactViewHolder) holder).scoreTextView.setTextColor(previousScoreTextViewColor);
@@ -1175,7 +1178,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         ((PostCompactViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
                     }
 
-                    ((PostCompactViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
+                    ((PostCompactViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
 
                     VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
@@ -1192,7 +1195,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             }
 
                             ((PostCompactViewHolder) holder).upvoteButton.clearColorFilter();
-                            ((PostCompactViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + post.getVoteType()));
+                            ((PostCompactViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
@@ -1201,7 +1204,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         public void onVoteThingFail(int position1) {
                             Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                             post.setVoteType(previousVoteType);
-                            ((PostCompactViewHolder) holder).scoreTextView.setText(Integer.toString(post.getScore() + previousVoteType));
+                            ((PostCompactViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
                             ((PostCompactViewHolder) holder).upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                             ((PostCompactViewHolder) holder).downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
                             ((PostCompactViewHolder) holder).scoreTextView.setTextColor(previousScoreTextViewColor);
@@ -1393,6 +1396,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
     public void setShowDividerInCompactLayout(boolean showDividerInCompactLayout) {
         mShowDividerInCompactLayout = showDividerInCompactLayout;
+    }
+
+    public void setShowAbsoluteNumberOfVotes(boolean showAbsoluteNumberOfVotes) {
+        mShowAbsoluteNumberOfVotes = showAbsoluteNumberOfVotes;
     }
 
     private boolean hasExtraRow() {

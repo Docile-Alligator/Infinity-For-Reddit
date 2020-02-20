@@ -64,4 +64,9 @@
         app:key="show_comment_divider"
         app:title="@string/settings_show_comment_divider_title" />
 
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="show_absolute_number_of_votes"
+        app:title="@string/settings_show_absolute_number_of_votes_title" />
+
 </PreferenceScreen>

@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.Fragment;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -55,6 +54,7 @@ import ml.docilealligator.infinityforreddit.Adapter.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.Event.ChangeDefaultPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangePostLayoutEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeShowAbsoluteNumberOfVotesEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeShowElapsedTimeEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVoteButtonsPositionEvent;
@@ -323,6 +323,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         boolean voteButtonsOnTheRight = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
         boolean showElapsedTime = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
         boolean showDividerInCompactLayout = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_DIVIDER_IN_COMPACT_LAYOUT, true);
+        boolean showAbsoluteNumberOfVotes = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
         int defaultPostLayout = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY, "0"));
 
         if (postType == PostDataSource.TYPE_SEARCH) {
@@ -336,7 +337,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, postLayout, true, needBlurNsfw, needBlurSpoiler,
-                    voteButtonsOnTheRight, showElapsedTime, showDividerInCompactLayout, new PostRecyclerViewAdapter.Callback() {
+                    voteButtonsOnTheRight, showElapsedTime, showDividerInCompactLayout, showAbsoluteNumberOfVotes,
+                    new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -399,7 +401,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, postLayout, displaySubredditName, needBlurNsfw, needBlurSpoiler,
-                    voteButtonsOnTheRight, showElapsedTime, showDividerInCompactLayout, new PostRecyclerViewAdapter.Callback() {
+                    voteButtonsOnTheRight, showElapsedTime, showDividerInCompactLayout, showAbsoluteNumberOfVotes,
+                    new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -447,7 +450,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, postLayout, true, needBlurNsfw, needBlurSpoiler,
-                    voteButtonsOnTheRight, showElapsedTime, showDividerInCompactLayout, new PostRecyclerViewAdapter.Callback() {
+                    voteButtonsOnTheRight, showElapsedTime, showDividerInCompactLayout, showAbsoluteNumberOfVotes,
+                    new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -493,7 +497,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, postLayout, true, needBlurNsfw, needBlurSpoiler,
-                    voteButtonsOnTheRight, showElapsedTime, showDividerInCompactLayout, new PostRecyclerViewAdapter.Callback() {
+                    voteButtonsOnTheRight, showElapsedTime, showDividerInCompactLayout, showAbsoluteNumberOfVotes,
+                    new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -532,7 +537,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     accessToken, postType, postLayout, true, needBlurNsfw, needBlurSpoiler,
-                    voteButtonsOnTheRight, showElapsedTime, showDividerInCompactLayout, new PostRecyclerViewAdapter.Callback() {
+                    voteButtonsOnTheRight, showElapsedTime, showDividerInCompactLayout, showAbsoluteNumberOfVotes,
+                    new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -738,26 +744,34 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Subscribe
     public void onChangeShowElapsedTime(ChangeShowElapsedTimeEvent event) {
-        mAdapter.setShowElapsedTime(event.showElapsedTime);
-        refreshAdapter();
+        if (mAdapter != null) {
+            mAdapter.setShowElapsedTime(event.showElapsedTime);
+            refreshAdapter();
+        }
     }
 
     @Subscribe
     public void onChangeVoteButtonsPositionEvent(ChangeVoteButtonsPositionEvent event) {
-        mAdapter.setVoteButtonsPosition(event.voteButtonsOnTheRight);
-        refreshAdapter();
+        if (mAdapter != null) {
+            mAdapter.setVoteButtonsPosition(event.voteButtonsOnTheRight);
+            refreshAdapter();
+        }
     }
 
     @Subscribe
     public void onChangeNSFWBlurEvent(ChangeNSFWBlurEvent event) {
-        mAdapter.setBlurNSFW(event.needBlurNSFW);
-        refreshAdapter();
+        if (mAdapter != null) {
+            mAdapter.setBlurNSFW(event.needBlurNSFW);
+            refreshAdapter();
+        }
     }
 
     @Subscribe
     public void onChangeSpoilerBlurEvent(ChangeSpoilerBlurEvent event) {
-        mAdapter.setBlurSpoiler(event.needBlurSpoiler);
-        refreshAdapter();
+        if (mAdapter != null) {
+            mAdapter.setBlurSpoiler(event.needBlurSpoiler);
+            refreshAdapter();
+        }
     }
 
     @Subscribe
@@ -767,8 +781,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Subscribe
     public void onShowDividerInCompactLayoutPreferenceEvent(ShowDividerInCompactLayoutPreferenceEvent event) {
-        mAdapter.setShowDividerInCompactLayout(event.showDividerInCompactLayout);
-        refreshAdapter();
+        if (mAdapter != null) {
+            mAdapter.setShowDividerInCompactLayout(event.showDividerInCompactLayout);
+            refreshAdapter();
+        }
     }
 
     @Subscribe
@@ -802,6 +818,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     }
                     break;
             }
+        }
+    }
+
+    @Subscribe
+    public void onChangeShowAbsoluteNumberOfVotesEvent(ChangeShowAbsoluteNumberOfVotesEvent changeShowAbsoluteNumberOfVotesEvent) {
+        if (mAdapter != null) {
+            mAdapter.setShowAbsoluteNumberOfVotes(changeShowAbsoluteNumberOfVotesEvent.showAbsoluteNumberOfVotes);
+            refreshAdapter();
         }
     }
 

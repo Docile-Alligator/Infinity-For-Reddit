@@ -71,13 +71,14 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     private boolean mVoteButtonsOnTheRight;
     private boolean mShowElapsedTime;
     private boolean mShowCommentDivider;
+    private boolean mShowAbsoluteNumberOfVotes;
     private NetworkState networkState;
     private RetryLoadingMoreCallback mRetryLoadingMoreCallback;
 
     public CommentsListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
                                               String accessToken, String accountName,
                                               boolean voteButtonsOnTheRight, boolean showElapsedTime,
-                                              boolean showCommentDivider,
+                                              boolean showCommentDivider, boolean showAbsoluteNumberOfVotes,
                                               RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         mContext = context;
@@ -112,6 +113,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         mVoteButtonsOnTheRight = voteButtonsOnTheRight;
         mShowElapsedTime = showElapsedTime;
         mShowCommentDivider = showCommentDivider;
+        mShowAbsoluteNumberOfVotes = showAbsoluteNumberOfVotes;
         mRetryLoadingMoreCallback = retryLoadingMoreCallback;
         mTextColorPrimaryDark = mContext.getResources().getColor(R.color.colorPrimaryDarkDayNightTheme);
         mColorAccent = mContext.getResources().getColor(R.color.colorAccent);
@@ -161,7 +163,8 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
                 mMarkwon.setMarkdown(((DataViewHolder) holder).commentMarkdownView, comment.getCommentMarkdown());
 
-                ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
+                ((DataViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                        comment.getScore() + comment.getVoteType()));
 
                 switch (comment.getVoteType()) {
                     case CommentData.VOTE_TYPE_UPVOTE:
@@ -228,7 +231,8 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.defaultTextColor));
                     }
 
-                    ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
+                    ((DataViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                            comment.getScore() + comment.getVoteType()));
 
                     VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
@@ -244,7 +248,8 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                             }
 
                             ((DataViewHolder) holder).downvoteButton.clearColorFilter();
-                            ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
+                            ((DataViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                    comment.getScore() + comment.getVoteType()));
                         }
 
                         @Override
@@ -278,7 +283,8 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.defaultTextColor));
                     }
 
-                    ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
+                    ((DataViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                            comment.getScore() + comment.getVoteType()));
 
                     VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
@@ -294,7 +300,8 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                             }
 
                             ((DataViewHolder) holder).upvoteButton.clearColorFilter();
-                            ((DataViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
+                            ((DataViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                    comment.getScore() + comment.getVoteType()));
                         }
 
                         @Override

@@ -31,6 +31,7 @@
         android:id="@+id/divider_item_load_more_comments_placeholder"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/dividerColor" />
+        android:background="@color/dividerColor"
+        android:visibility="gone" />
 
 </LinearLayout>

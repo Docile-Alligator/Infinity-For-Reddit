@@ -88,6 +88,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     private CommentsListingRecyclerViewAdapter mAdapter;
     private boolean mShowElapsedTime;
     private boolean mShowCommentDivider;
+    private boolean mShowAbsoluteNumberOfVotes;
 
     public CommentsListingFragment() {
         // Required empty public constructor
@@ -118,6 +119,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
         mShowElapsedTime = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
         mShowCommentDivider = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER, false);
+        mShowAbsoluteNumberOfVotes = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
 
         if (savedInstanceState == null) {
             getCurrentAccountAndBindView(resources);
@@ -152,7 +154,8 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         boolean voteButtonsOnTheRight = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
         mAdapter = new CommentsListingRecyclerViewAdapter(mActivity, mOauthRetrofit,
                 getArguments().getString(EXTRA_ACCESS_TOKEN), getArguments().getString(EXTRA_ACCOUNT_NAME),
-                voteButtonsOnTheRight, mShowElapsedTime, mShowCommentDivider, () -> mCommentViewModel.retryLoadingMore());
+                voteButtonsOnTheRight, mShowElapsedTime, mShowCommentDivider, mShowAbsoluteNumberOfVotes,
+                () -> mCommentViewModel.retryLoadingMore());
 
         String username = getArguments().getString(EXTRA_USERNAME);
         String sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_USER_COMMENT, SortType.Type.NEW.value);

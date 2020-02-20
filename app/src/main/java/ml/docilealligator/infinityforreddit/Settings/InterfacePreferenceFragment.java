@@ -17,6 +17,7 @@ import androidx.preference.SwitchPreference;
 import org.greenrobot.eventbus.EventBus;
 
 import ml.docilealligator.infinityforreddit.Event.ChangeDefaultPostLayoutEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeShowAbsoluteNumberOfVotesEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeShowElapsedTimeEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVoteButtonsPositionEvent;
 import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
@@ -48,6 +49,7 @@ public class InterfacePreferenceFragment extends PreferenceFragmentCompat {
         SwitchPreference showElapsedTimeSwitch = findPreference(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY);
         ListPreference defaultPostLayoutSwitch = findPreference(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY);
         SwitchPreference showDividerInCompactLayout = findPreference(SharedPreferencesUtils.SHOW_DIVIDER_IN_COMPACT_LAYOUT);
+        SwitchPreference showAbsoluteNumberOfVotes = findPreference(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES);
 
         boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
 
@@ -131,6 +133,13 @@ public class InterfacePreferenceFragment extends PreferenceFragmentCompat {
         if (showDividerInCompactLayout != null) {
             showDividerInCompactLayout.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new ShowDividerInCompactLayoutPreferenceEvent((Boolean) newValue));
+                return true;
+            });
+        }
+
+        if (showAbsoluteNumberOfVotes != null) {
+            showAbsoluteNumberOfVotes.setOnPreferenceChangeListener((preference, newValue) -> {
+                EventBus.getDefault().post(new ChangeShowAbsoluteNumberOfVotesEvent((Boolean) newValue));
                 return true;
             });
         }

@@ -309,6 +309,7 @@
     <string name="settings_confirm_to_exit">Confirm to Exit</string>
     <string name="settings_show_top_level_comments_first_title">Show Top-level Comments First</string>
     <string name="settings_show_comment_divider_title">Show comment divider</string>
+    <string name="settings_show_absolute_number_of_votes_title">Show Absolute Number of Votes</string>
     <string name="settings_show_elapsed_time">Show Elapsed Time in Posts and Comments</string>
     <string name="settings_default_post_layout">Default Post Layout</string>
     <string name="settings_show_divider_in_compact_layout">Show Divider in Compact Layout</string>

@@ -124,6 +124,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private boolean mShowElapsedTime;
     private boolean mExpandChildren;
     private boolean mShowCommentDivider;
+    private boolean mShowAbsoluteNumberOfVotes;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
     private boolean isInitiallyLoadingFailed;
@@ -140,6 +141,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                              String singleCommentId, boolean isSingleCommentThreadMode,
                                              boolean needBlurNSFW, boolean needBlurSpoiler, boolean voteButtonsOnTheRight,
                                              boolean showElapsedTime, boolean expandChildren, boolean showCommentDivider,
+                                             boolean showAbsoluteNumberOfVotes,
                                              CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
         mActivity = activity;
         mRetrofit = retrofit;
@@ -231,6 +233,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mShowElapsedTime = showElapsedTime;
         mExpandChildren = expandChildren;
         mShowCommentDivider = showCommentDivider;
+        mShowAbsoluteNumberOfVotes = showAbsoluteNumberOfVotes;
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
         isInitiallyLoadingFailed = false;
@@ -484,8 +487,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 ((PostDetailViewHolder) holder).mNSFWTextView.setVisibility(View.GONE);
             }
 
-            String scoreWithVote = Integer.toString(mPost.getScore() + mPost.getVoteType());
-            ((PostDetailViewHolder) holder).mScoreTextView.setText(scoreWithVote);
+            ((PostDetailViewHolder) holder).mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, mPost.getScore() + mPost.getVoteType()));
 
             ((PostDetailViewHolder) holder).mTypeTextView.setOnClickListener(view -> {
                 Intent intent = new Intent(mActivity, FilteredThingActivity.class);
@@ -742,7 +744,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             }
 
             mCommentMarkwon.setMarkdown(((CommentViewHolder) holder).commentMarkdownView, comment.getCommentMarkdown());
-            ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
+            ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                    comment.getScore() + comment.getVoteType()));
 
             ((CommentViewHolder) holder).itemView.setPadding(comment.getDepth() * 8, 0, 0, 0);
             if (comment.getDepth() > 0) {
@@ -894,7 +897,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     ((CommentViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
                 }
 
-                ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
+                ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                        comment.getScore() + comment.getVoteType()));
 
                 VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                     @Override
@@ -910,7 +914,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         }
 
                         ((CommentViewHolder) holder).downVoteButton.clearColorFilter();
-                        ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
+                        ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                comment.getScore() + comment.getVoteType()));
                     }
 
                     @Override
@@ -949,7 +954,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     ((CommentViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
                 }
 
-                ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
+                ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                        comment.getScore() + comment.getVoteType()));
 
                 VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                     @Override
@@ -965,7 +971,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         }
 
                         ((CommentViewHolder) holder).upVoteButton.clearColorFilter();
-                        ((CommentViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore() + comment.getVoteType()));
+                        ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                comment.getScore() + comment.getVoteType()));
                     }
 
                     @Override
@@ -1784,7 +1791,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     mScoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
                 }
 
-                mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
+                mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                        mPost.getScore() + mPost.getVoteType()));
 
                 mCommentRecyclerViewAdapterCallback.updatePost(mPost);
 
@@ -1802,7 +1810,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         }
 
                         mDownvoteButton.clearColorFilter();
-                        mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
+                        mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                mPost.getScore() + mPost.getVoteType()));
 
                         mCommentRecyclerViewAdapterCallback.updatePost(mPost);
                     }
@@ -1811,7 +1820,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     public void onVoteThingFail() {
                         Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                         mPost.setVoteType(previousVoteType);
-                        mScoreTextView.setText(Integer.toString(mPost.getScore() + previousVoteType));
+                        mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                mPost.getScore() + previousVoteType));
                         mUpvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                         mDownvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
                         mScoreTextView.setTextColor(previousScoreTextViewColor);
@@ -1855,7 +1865,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     mScoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
                 }
 
-                mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
+                mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                        mPost.getScore() + mPost.getVoteType()));
 
                 mCommentRecyclerViewAdapterCallback.updatePost(mPost);
 
@@ -1873,7 +1884,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         }
 
                         mUpvoteButton.clearColorFilter();
-                        mScoreTextView.setText(Integer.toString(mPost.getScore() + mPost.getVoteType()));
+                        mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                mPost.getScore() + mPost.getVoteType()));
 
                         mCommentRecyclerViewAdapterCallback.updatePost(mPost);
                     }
@@ -1882,7 +1894,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     public void onVoteThingFail() {
                         Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                         mPost.setVoteType(previousVoteType);
-                        mScoreTextView.setText(Integer.toString(mPost.getScore() + previousVoteType));
+                        mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                mPost.getScore() + previousVoteType));
                         mUpvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                         mDownvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
                         mScoreTextView.setTextColor(previousScoreTextViewColor);

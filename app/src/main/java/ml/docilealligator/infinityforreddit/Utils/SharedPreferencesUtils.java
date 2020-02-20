@@ -76,4 +76,5 @@ public class SharedPreferencesUtils {
     public static final String CONFIRM_TO_EXIT = "confirm_to_exit";
     public static final String LOCK_BOTTOM_APP_BAR = "lock_bottom_app_bar";
     public static final String SHOW_COMMENT_DIVIDER = "show_comment_divider";
+    public static final String SHOW_ABSOLUTE_NUMBER_OF_VOTES = "show_absolute_number_of_votes";
 }
