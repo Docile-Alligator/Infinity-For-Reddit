@@ -79,6 +79,7 @@ class AppModule {
     OkHttpClient provideOkHttpClient(@Named("no_oauth") Retrofit retrofit, RedditDataRoomDatabase accountRoomDatabase) {
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
         okHttpClientBuilder.authenticator(new AccessTokenAuthenticator(retrofit, accountRoomDatabase));
+                //.addInterceptor(new Okhttp3DebugInterceptor(mApplication));
         return okHttpClientBuilder.build();
     }
 
