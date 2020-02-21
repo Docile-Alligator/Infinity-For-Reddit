@@ -8,6 +8,7 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,6 +41,7 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String USER_PATTERN_1 = "/user/\\w+/{0,1}";
     private static final String USER_PATTERN_2 = "/[uU]/\\w+/{0,1}";
     private static final String SIDEBAR_PATTERN = "/[rR]/\\w+/about/sidebar";
+    private static final String MULTIREDDIT_PATTERN = "/user/\\w+/m/\\w+/{0,1}";
 
     @Inject
     SharedPreferences mSharedPreferences;
@@ -130,6 +132,8 @@ public class LinkResolverActivity extends AppCompatActivity {
                     }
                 } else if (path.matches(USER_PATTERN_1)) {
                     Intent intent = new Intent(this, ViewUserDetailActivity.class);
+                    Log.i("afasfasfsda", "s " + path);
+                    Log.i("afasfasfsda", "s " + path.substring(6));
                     intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, path.substring(6));
                     intent.putExtra(ViewUserDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
                     intent.putExtra(ViewUserDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
@@ -143,6 +147,10 @@ public class LinkResolverActivity extends AppCompatActivity {
                 } else if (path.matches(SIDEBAR_PATTERN)) {
                     Intent intent = new Intent(this, ViewSidebarActivity.class);
                     intent.putExtra(ViewSidebarActivity.EXTRA_SUBREDDIT_NAME, path.substring(3, path.length() - 14));
+                    startActivity(intent);
+                } else if (path.matches(MULTIREDDIT_PATTERN)) {
+                    Intent intent = new Intent(this, ViewMultiRedditDetailActivity.class);
+                    intent.putExtra(ViewMultiRedditDetailActivity.EXTRA_MULTIREDDIT_PATH, path);
                     startActivity(intent);
                 } else {
                     deepLinkError(uri);

@@ -49,6 +49,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {
 
     public static final String EXTRA_MULTIREDDIT_DATA = "EMD";
+    public static final String EXTRA_MULTIREDDIT_PATH = "EMP";
 
     private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
@@ -136,13 +137,19 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
 
         MultiReddit multiReddit = getIntent().getParcelableExtra(EXTRA_MULTIREDDIT_DATA);
         if (multiReddit == null) {
-            Toast.makeText(this, R.string.multi_reddit_listing_activity_label, Toast.LENGTH_SHORT).show();
-            finish();
-            return;
+            multiPath = getIntent().getStringExtra(EXTRA_MULTIREDDIT_PATH);
+            if (multiPath != null) {
+                toolbar.setTitle(multiPath.substring(multiPath.lastIndexOf("/", multiPath.length() - 2) + 1));
+            } else {
+                Toast.makeText(this, R.string.error_getting_multi_reddit_data, Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
+        } else {
+            multiPath = multiReddit.getPath();
+            toolbar.setTitle(multiReddit.getDisplayName());
         }
-        multiPath = multiReddit.getPath();
 
-        toolbar.setTitle(multiReddit.getDisplayName());
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
