@@ -1323,7 +1323,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
             if ((post.isNSFW() && mNeedBlurNSFW) || post.isSpoiler() && mNeedBlurSpoiler) {
                 imageRequestBuilder
-                        .transform(new BlurTransformation(50, 10))
+                        .transform(new BlurTransformation(50, 2))
                         .into(((PostCompactViewHolder) holder).imageView);
             } else {
                 imageRequestBuilder.into(((PostCompactViewHolder) holder).imageView);

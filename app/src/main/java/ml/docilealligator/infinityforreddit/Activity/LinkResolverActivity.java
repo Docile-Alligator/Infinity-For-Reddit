@@ -8,7 +8,6 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -132,8 +131,6 @@ public class LinkResolverActivity extends AppCompatActivity {
                     }
                 } else if (path.matches(USER_PATTERN_1)) {
                     Intent intent = new Intent(this, ViewUserDetailActivity.class);
-                    Log.i("afasfasfsda", "s " + path);
-                    Log.i("afasfasfsda", "s " + path.substring(6));
                     intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, path.substring(6));
                     intent.putExtra(ViewUserDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
                     intent.putExtra(ViewUserDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
