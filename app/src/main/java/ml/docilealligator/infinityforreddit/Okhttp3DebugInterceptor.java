@@ -1,6 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.app.Application;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -12,9 +12,9 @@ import okhttp3.Interceptor;
 import okhttp3.Response;
 
 public class Okhttp3DebugInterceptor implements Interceptor {
-    private Application context;
+    private Context context;
 
-    public Okhttp3DebugInterceptor(Application context) {
+    public Okhttp3DebugInterceptor(Context context) {
         this.context = context;
     }
 
@@ -24,7 +24,9 @@ public class Okhttp3DebugInterceptor implements Interceptor {
         Response response = chain.proceed(chain.request());
         if (!response.isSuccessful()) {
             String message = "No body";
-            if (response.body() != null) {
+            if (response.code() == 401) {
+                message = "Not authorized";
+            } else if (response.body() != null) {
                 message = response.body().string();
             }
             NotificationManagerCompat notificationManager = NotificationUtils.getNotificationManager(context);

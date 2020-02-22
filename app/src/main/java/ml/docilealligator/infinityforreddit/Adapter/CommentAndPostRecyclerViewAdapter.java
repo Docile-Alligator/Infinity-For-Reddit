@@ -900,7 +900,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                         comment.getScore() + comment.getVoteType()));
 
-                VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
+                VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                     @Override
                     public void onVoteThingSuccess(int position) {
                         if (newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
@@ -957,7 +957,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                         comment.getScore() + comment.getVoteType()));
 
-                VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
+                VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                     @Override
                     public void onVoteThingSuccess(int position1) {
                         if (newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {
@@ -1796,7 +1796,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
                 mCommentRecyclerViewAdapterCallback.updatePost(mPost);
 
-                VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingWithoutPositionListener() {
+                VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingWithoutPositionListener() {
                     @Override
                     public void onVoteThingSuccess() {
                         if (newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
@@ -1870,7 +1870,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
                 mCommentRecyclerViewAdapterCallback.updatePost(mPost);
 
-                VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingWithoutPositionListener() {
+                VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingWithoutPositionListener() {
                     @Override
                     public void onVoteThingSuccess() {
                         if (newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {

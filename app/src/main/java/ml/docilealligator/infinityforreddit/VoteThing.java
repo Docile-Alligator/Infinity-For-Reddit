@@ -1,5 +1,8 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 
 import java.util.HashMap;
@@ -16,7 +19,7 @@ import retrofit2.Retrofit;
 
 public class VoteThing {
 
-    public static void voteThing(final Retrofit retrofit, String accessToken,
+    public static void voteThing(Context context, final Retrofit retrofit, String accessToken,
                                  final VoteThingListener voteThingListener, final String fullName,
                                  final String point, final int position) {
         RedditAPI api = retrofit.create(RedditAPI.class);
@@ -34,17 +37,19 @@ public class VoteThing {
                     voteThingListener.onVoteThingSuccess(position);
                 } else {
                     voteThingListener.onVoteThingFail(position);
+                    Toast.makeText(context, "Code " + response.code() + " Body: " + response.body(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 voteThingListener.onVoteThingFail(position);
+                Toast.makeText(context, "Network error " + "Body: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    public static void voteThing(final Retrofit retrofit, String accessToken,
+    public static void voteThing(Context context, final Retrofit retrofit, String accessToken,
                                  final VoteThingWithoutPositionListener voteThingWithoutPositionListener,
                                  final String fullName, final String point) {
         RedditAPI api = retrofit.create(RedditAPI.class);
@@ -62,12 +67,14 @@ public class VoteThing {
                     voteThingWithoutPositionListener.onVoteThingSuccess();
                 } else {
                     voteThingWithoutPositionListener.onVoteThingFail();
+                    Toast.makeText(context, "Code " + response.code() + " Body: " + response.body(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 voteThingWithoutPositionListener.onVoteThingFail();
+                Toast.makeText(context, "Network error " + "Body: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }

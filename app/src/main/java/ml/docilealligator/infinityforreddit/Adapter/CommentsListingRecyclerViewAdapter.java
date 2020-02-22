@@ -234,7 +234,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     ((DataViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                             comment.getScore() + comment.getVoteType()));
 
-                    VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mContext, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
                             if (newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
@@ -286,7 +286,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     ((DataViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                             comment.getScore() + comment.getVoteType()));
 
-                    VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mContext, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
                             if (newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {

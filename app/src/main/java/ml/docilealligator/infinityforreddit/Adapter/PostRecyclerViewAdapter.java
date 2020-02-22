@@ -563,7 +563,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                     ((PostViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
 
-                    VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
                             if (newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
@@ -634,7 +634,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                     ((PostViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
 
-                    VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
                             if (newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {
@@ -1109,7 +1109,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                     ((PostCompactViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
 
-                    VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
                             if (newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
@@ -1180,7 +1180,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                     ((PostCompactViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
 
-                    VoteThing.voteThing(mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
                             if (newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {
