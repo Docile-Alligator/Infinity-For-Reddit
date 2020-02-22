@@ -87,7 +87,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-import static ml.docilealligator.infinityforreddit.Activity.CommentActivity.EXTRA_COMMENT_DATA_KEY;
+import static ml.docilealligator.infinityforreddit.Activity.CommentActivity.RETURN_EXTRA_COMMENT_DATA_KEY;
 import static ml.docilealligator.infinityforreddit.Activity.CommentActivity.WRITE_COMMENT_REQUEST_CODE;
 
 public class ViewPostDetailActivity extends BaseActivity implements FlairBottomSheetFragment.FlairSelectionCallback,
@@ -1317,6 +1317,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
                     Intent intent = new Intent(this, CommentActivity.class);
                     intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, mPost.getTitle());
+                    intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_KEY, mPost.getSelfText());
                     intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, mPost.getFullName());
                     intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, 0);
                     intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, false);
@@ -1485,8 +1486,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == WRITE_COMMENT_REQUEST_CODE) {
             if (data != null && resultCode == RESULT_OK) {
-                if (data.hasExtra(EXTRA_COMMENT_DATA_KEY)) {
-                    CommentData comment = data.getParcelableExtra(EXTRA_COMMENT_DATA_KEY);
+                if (data.hasExtra(RETURN_EXTRA_COMMENT_DATA_KEY)) {
+                    CommentData comment = data.getParcelableExtra(RETURN_EXTRA_COMMENT_DATA_KEY);
                     if (comment != null && comment.getDepth() == 0) {
                         mAdapter.addComment(comment);
                     } else {

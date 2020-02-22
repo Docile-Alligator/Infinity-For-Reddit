@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Spanned;
 import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,10 +20,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.commonmark.ext.gfm.tables.TableBlock;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -33,8 +39,13 @@ import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
+import io.noties.markwon.recycler.MarkwonAdapter;
+import io.noties.markwon.recycler.table.TableEntry;
+import io.noties.markwon.recycler.table.TableEntryPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
+import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CommentData;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
@@ -47,11 +58,12 @@ import retrofit2.Retrofit;
 public class CommentActivity extends BaseActivity {
 
     public static final String EXTRA_COMMENT_PARENT_TEXT_KEY = "ECPTK";
+    public static final String EXTRA_COMMENT_PARENT_BODY_KEY = "ECPBK";
     public static final String EXTRA_PARENT_FULLNAME_KEY = "EPFK";
-    public static final String EXTRA_COMMENT_DATA_KEY = "ECDK";
     public static final String EXTRA_PARENT_DEPTH_KEY = "EPDK";
     public static final String EXTRA_PARENT_POSITION_KEY = "EPPK";
     public static final String EXTRA_IS_REPLYING_KEY = "EIRK";
+    public static final String RETURN_EXTRA_COMMENT_DATA_KEY = "RECDK";
     public static final int WRITE_COMMENT_REQUEST_CODE = 1;
 
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
@@ -63,6 +75,8 @@ public class CommentActivity extends BaseActivity {
     Toolbar toolbar;
     @BindView(R.id.comment_parent_markwon_view_comment_activity)
     TextView commentParentMarkwonView;
+    @BindView(R.id.content_markdown_view_comment_activity)
+    RecyclerView contentMarkdownRecyclerView;
     @BindView(R.id.comment_edit_text_comment_activity)
     EditText commentEditText;
     @Inject
@@ -128,6 +142,52 @@ public class CommentActivity extends BaseActivity {
                 )
                 .build();
         markwon.setMarkdown(commentParentMarkwonView, intent.getStringExtra(EXTRA_COMMENT_PARENT_TEXT_KEY));
+        String parentBody = intent.getStringExtra(EXTRA_COMMENT_PARENT_BODY_KEY);
+        if (parentBody != null && !parentBody.equals("")) {
+            contentMarkdownRecyclerView.setVisibility(View.VISIBLE);
+            contentMarkdownRecyclerView.setNestedScrollingEnabled(false);
+            int markdownColor = ContextCompat.getColor(this, R.color.defaultTextColor);
+            Markwon postBodyMarkwon = Markwon.builder(this)
+                    .usePlugin(new AbstractMarkwonPlugin() {
+                        @Override
+                        public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
+                            textView.setTextColor(markdownColor);
+                        }
+
+                        @Override
+                        public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                            builder.linkResolver((view, link) -> {
+                                Intent intent = new Intent(CommentActivity.this, LinkResolverActivity.class);
+                                Uri uri = Uri.parse(link);
+                                if (uri.getScheme() == null && uri.getHost() == null) {
+                                    intent.setData(LinkResolverActivity.getRedditUriByPath(link));
+                                } else {
+                                    intent.setData(uri);
+                                }
+                                startActivity(intent);
+                            }).urlProcessor(new UrlProcessorRelativeToAbsolute("https://www.reddit.com"));
+                        }
+                    })
+                    .usePlugin(StrikethroughPlugin.create())
+                    .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                    .usePlugin(SimpleExtPlugin.create(plugin ->
+                                    plugin.addExtension(1, '^', (configuration, props) -> {
+                                        return new SuperscriptSpan();
+                                    })
+                            )
+                    )
+                    .usePlugin(TableEntryPlugin.create(this))
+                    .build();
+            MarkwonAdapter markwonAdapter = MarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
+                    .include(TableBlock.class, TableEntry.create(builder -> builder
+                            .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
+                            .textLayoutIsRoot(R.layout.view_table_entry_cell)))
+                    .build();
+            contentMarkdownRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            contentMarkdownRecyclerView.setAdapter(markwonAdapter);
+            markwonAdapter.setMarkdown(postBodyMarkwon, parentBody);
+            markwonAdapter.notifyDataSetChanged();
+        }
         parentFullname = intent.getStringExtra(EXTRA_PARENT_FULLNAME_KEY);
         parentDepth = intent.getExtras().getInt(EXTRA_PARENT_DEPTH_KEY);
         parentPosition = intent.getExtras().getInt(EXTRA_PARENT_POSITION_KEY);
@@ -205,7 +265,7 @@ public class CommentActivity extends BaseActivity {
                                     item.getIcon().setAlpha(255);
                                     Toast.makeText(CommentActivity.this, R.string.send_comment_success, Toast.LENGTH_SHORT).show();
                                     Intent returnIntent = new Intent();
-                                    returnIntent.putExtra(EXTRA_COMMENT_DATA_KEY, commentData);
+                                    returnIntent.putExtra(RETURN_EXTRA_COMMENT_DATA_KEY, commentData);
                                     returnIntent.putExtra(EXTRA_PARENT_FULLNAME_KEY, parentFullname);
                                     if (isReplying) {
                                         returnIntent.putExtra(EXTRA_PARENT_POSITION_KEY, parentPosition);

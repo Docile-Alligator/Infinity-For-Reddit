@@ -31,21 +31,39 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/comment_parent_markwon_view_comment_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="?attr/title_font_16" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/content_markdown_view_comment_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:textSize="?attr/content_font_16" />
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:visibility="gone" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/dividerColor" />
 
             <EditText
                 android:id="@+id/comment_edit_text_comment_activity"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="top"
+                android:paddingBottom="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:hint="@string/write_comment_hint"
                 android:inputType="textCapSentences|textMultiLine"
                 android:textSize="?attr/content_font_18"

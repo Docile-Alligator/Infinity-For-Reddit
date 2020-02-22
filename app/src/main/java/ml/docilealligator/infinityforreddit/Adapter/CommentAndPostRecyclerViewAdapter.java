@@ -218,7 +218,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
                         .textLayoutIsRoot(R.layout.view_table_entry_cell)))
                 .build();
-        mMarkwonAdapter.setMarkdown(mPostDetailMarkwon, "");
         mAccessToken = accessToken;
         mAccountName = accountName;
         mPost = post;
@@ -624,6 +623,16 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             }
 
             ((PostDetailViewHolder) holder).commentsCountTextView.setOnClickListener(view -> {
+                if (mPost.isArchived()) {
+                    Toast.makeText(mActivity, R.string.archived_post_reply_unavailable, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (mPost.isLocked()) {
+                    Toast.makeText(mActivity, R.string.locked_post_comment_unavailable, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (mAccessToken == null) {
                     Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                     return;
@@ -632,6 +641,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 Intent intent = new Intent(mActivity, CommentActivity.class);
                 intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, mPost.getFullName());
                 intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, mPost.getTitle());
+                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_KEY, mPost.getSelfText());
                 intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, false);
                 intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, 0);
                 mActivity.startActivityForResult(intent, WRITE_COMMENT_REQUEST_CODE);

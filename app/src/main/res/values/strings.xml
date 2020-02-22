@@ -124,7 +124,7 @@
     <string name="lazy_mode_start">Lazy Mode starts in %1$.1fs</string>
     <string name="lazy_mode_stop">Lazy Mode stopped</string>
 
-    <string name="write_comment_hint">Your interesting thought here</string>
+    <string name="write_comment_hint">Your interesting thoughts here</string>
     <string name="comment_content_required">Where is your interesting thought?</string>
     <string name="sending_comment">Sending</string>
     <string name="send_comment_success">Comment sent</string>
