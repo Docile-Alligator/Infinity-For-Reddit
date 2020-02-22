@@ -2,16 +2,10 @@ package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -20,12 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.widget.NestedScrollView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.libRG.CustomTextView;
@@ -39,7 +31,6 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.LoadSubredditIconAsyncTask;
 import ml.docilealligator.infinityforreddit.Event.SubmitTextOrLinkPostEvent;
@@ -51,7 +42,6 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Service.SubmitPostService;
 import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
-import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
@@ -76,12 +66,8 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
 
     @BindView(R.id.coordinator_layout_post_link_activity)
     CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_post_link_activity)
-    AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_post_link_activity)
     Toolbar toolbar;
-    @BindView(R.id.nested_scroll_view_post_link_activity)
-    NestedScrollView nestedScrollView;
     @BindView(R.id.subreddit_icon_gif_image_view_post_link_activity)
     GifImageView iconGifImageView;
     @BindView(R.id.subreddit_name_text_view_post_link_activity)
@@ -135,54 +121,6 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            Resources resources = getResources();
-
-            if ((resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
-                    || resources.getBoolean(R.bool.isTablet))
-                    && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {
-                Window window = getWindow();
-                window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-
-                boolean lightNavBar = false;
-                if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
-                    lightNavBar = true;
-                }
-                boolean finalLightNavBar = lightNavBar;
-
-                View decorView = window.getDecorView();
-                if (finalLightNavBar) {
-                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-                }
-                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
-                    @Override
-                    public void onStateChanged(AppBarLayout appBarLayout, AppBarStateChangeListener.State state) {
-                        if (state == State.COLLAPSED) {
-                            if (finalLightNavBar) {
-                                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-                            }
-                        } else if (state == State.EXPANDED) {
-                            if (finalLightNavBar) {
-                                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-                            }
-                        }
-                    }
-                });
-
-                int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-                if (statusBarResourceId > 0) {
-                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
-                    params.topMargin = getResources().getDimensionPixelSize(statusBarResourceId);
-                    toolbar.setLayoutParams(params);
-                }
-
-                int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-                if (navBarResourceId > 0) {
-                    nestedScrollView.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
-                }
-            }
-        }
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
