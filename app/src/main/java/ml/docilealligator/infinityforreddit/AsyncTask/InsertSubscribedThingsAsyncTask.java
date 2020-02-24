@@ -84,7 +84,7 @@ public class InsertSubscribedThingsAsyncTask extends AsyncTask<Void, Void, Void>
                 Collections.sort(subscribedSubredditDataList, (subscribedSubredditData, t1) -> subscribedSubredditData.getName().compareToIgnoreCase(t1.getName()));
                 List<String> unsubscribedSubreddits = new ArrayList<>();
                 compareTwoSubscribedSubredditList(subscribedSubredditDataList, existingSubscribedSubredditDataList,
-                        unsubscribedSubreddits, 0, 0);
+                        unsubscribedSubreddits);
 
                 for (String unsubscribed : unsubscribedSubreddits) {
                     mSubscribedSubredditDao.deleteSubscribedSubreddit(unsubscribed, mAccountName);
@@ -101,7 +101,7 @@ public class InsertSubscribedThingsAsyncTask extends AsyncTask<Void, Void, Void>
                 Collections.sort(subscribedUserDataList, (subscribedUserData, t1) -> subscribedUserData.getName().compareToIgnoreCase(t1.getName()));
                 List<String> unsubscribedUsers = new ArrayList<>();
                 compareTwoSubscribedUserList(subscribedUserDataList, existingSubscribedUserDataList,
-                        unsubscribedUsers, 0, 0);
+                        unsubscribedUsers);
 
                 for (String unsubscribed : unsubscribedUsers) {
                     mSubscribedUserDao.deleteSubscribedUser(unsubscribed, mAccountName);
@@ -128,52 +128,52 @@ public class InsertSubscribedThingsAsyncTask extends AsyncTask<Void, Void, Void>
 
     private void compareTwoSubscribedSubredditList(List<SubscribedSubredditData> newSubscribedSubreddits,
                                                    List<SubscribedSubredditData> oldSubscribedSubreddits,
-                                                   List<String> unsubscribedSubredditNames, int i1, int i2) {
-        if (newSubscribedSubreddits.size() <= i1 && oldSubscribedSubreddits.size() <= i2) {
-            return;
-        }
-
-        if (newSubscribedSubreddits.size() <= i1) {
-            for (int i = 0; i < oldSubscribedSubreddits.size(); i++) {
-                unsubscribedSubredditNames.add(oldSubscribedSubreddits.get(i).getName());
+                                                   List<String> unsubscribedSubredditNames) {
+        int newIndex = 0;
+        for (int oldIndex = 0; oldIndex < oldSubscribedSubreddits.size(); oldIndex++) {
+            if (newIndex >= newSubscribedSubreddits.size()) {
+                for (; oldIndex < oldSubscribedSubreddits.size(); oldIndex++) {
+                    unsubscribedSubredditNames.add(oldSubscribedSubreddits.get(oldIndex).getName());
+                }
+                return;
             }
-            return;
-        }
 
-        if (oldSubscribedSubreddits.size() > i2) {
-            if (newSubscribedSubreddits.get(i1).getName().compareToIgnoreCase(oldSubscribedSubreddits.get(i2).getName()) == 0) {
-                compareTwoSubscribedSubredditList(newSubscribedSubreddits, oldSubscribedSubreddits, unsubscribedSubredditNames, i1 + 1, i2 + 1);
-            } else if (newSubscribedSubreddits.get(i1).getName().compareToIgnoreCase(oldSubscribedSubreddits.get(i2).getName()) < 0) {
-                compareTwoSubscribedSubredditList(newSubscribedSubreddits, oldSubscribedSubreddits, unsubscribedSubredditNames, i1 + 1, i2);
-            } else {
-                unsubscribedSubredditNames.add(oldSubscribedSubreddits.get(i2).getName());
-                compareTwoSubscribedSubredditList(newSubscribedSubreddits, oldSubscribedSubreddits, unsubscribedSubredditNames, i1, i2 + 1);
+            SubscribedSubredditData old = oldSubscribedSubreddits.get(oldIndex);
+            for (; newIndex < newSubscribedSubreddits.size(); newIndex++) {
+                if (newSubscribedSubreddits.get(newIndex).getName().compareToIgnoreCase(old.getName()) == 0) {
+                    newIndex++;
+                    break;
+                }
+                if (newSubscribedSubreddits.get(newIndex).getName().compareToIgnoreCase(old.getName()) > 0) {
+                    unsubscribedSubredditNames.add(old.getName());
+                    break;
+                }
             }
         }
     }
 
     private void compareTwoSubscribedUserList(List<SubscribedUserData> newSubscribedUsers,
-                                                   List<SubscribedUserData> oldSubscribedUsers,
-                                                   List<String> unsubscribedUserNames, int i1, int i2) {
-        if (newSubscribedUsers.size() <= i1 && oldSubscribedUsers.size() <= i2) {
-            return;
-        }
-
-        if (newSubscribedUsers.size() <= i1) {
-            for (int i = 0; i < oldSubscribedUsers.size(); i++) {
-                unsubscribedUserNames.add(oldSubscribedUsers.get(i).getName());
+                                              List<SubscribedUserData> oldSubscribedUsers,
+                                              List<String> unsubscribedUserNames) {
+        int newIndex = 0;
+        for (int oldIndex = 0; oldIndex < oldSubscribedUsers.size(); oldIndex++) {
+            if (newIndex >= newSubscribedUsers.size()) {
+                for (; oldIndex < oldSubscribedUsers.size(); oldIndex++) {
+                    unsubscribedUserNames.add(oldSubscribedUsers.get(oldIndex).getName());
+                }
+                return;
             }
-            return;
-        }
 
-        if (oldSubscribedUsers.size() > i2) {
-            if (newSubscribedUsers.get(i1).getName().compareToIgnoreCase(oldSubscribedUsers.get(i2).getName()) == 0) {
-                compareTwoSubscribedUserList(newSubscribedUsers, oldSubscribedUsers, unsubscribedUserNames, i1 + 1, i2 + 1);
-            } else if (newSubscribedUsers.get(i1).getName().compareToIgnoreCase(oldSubscribedUsers.get(i2).getName()) < 0) {
-                compareTwoSubscribedUserList(newSubscribedUsers, oldSubscribedUsers, unsubscribedUserNames, i1 + 1, i2);
-            } else {
-                unsubscribedUserNames.add(oldSubscribedUsers.get(i2).getName());
-                compareTwoSubscribedUserList(newSubscribedUsers, oldSubscribedUsers, unsubscribedUserNames, i1, i2 + 1);
+            SubscribedUserData old = oldSubscribedUsers.get(oldIndex);
+            for (; newIndex < newSubscribedUsers.size(); newIndex++) {
+                if (newSubscribedUsers.get(newIndex).getName().compareToIgnoreCase(old.getName()) == 0) {
+                    newIndex++;
+                    break;
+                }
+                if (newSubscribedUsers.get(newIndex).getName().compareToIgnoreCase(old.getName()) > 0) {
+                    unsubscribedUserNames.add(old.getName());
+                    break;
+                }
             }
         }
     }

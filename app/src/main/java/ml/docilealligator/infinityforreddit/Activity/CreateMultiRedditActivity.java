@@ -93,6 +93,8 @@ public class CreateMultiRedditActivity extends BaseActivity {
                 bindView();
             }
         } else {
+            mSelectedSubscribedSubreddits = new ArrayList<>();
+            mSelectedOtherSubreddits = new ArrayList<>();
             getCurrentAccountAndBindView();
         }
     }

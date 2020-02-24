@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.AsyncTask;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,9 +31,10 @@ public class InsertMultiRedditAsyncTask extends AsyncTask<Void, Void, Void> {
         List<MultiReddit> existingMultiReddits = multiRedditDao.getAllMultiRedditsList(accountName);
         Collections.sort(multiReddits, (multiReddit, t1) -> multiReddit.getName().compareToIgnoreCase(t1.getName()));
         List<String> deletedMultiredditNames = new ArrayList<>();
-        compareTwoMultiRedditList(multiReddits, existingMultiReddits, deletedMultiredditNames, 0, 0);
+        compareTwoMultiRedditList(multiReddits, existingMultiReddits, deletedMultiredditNames);
 
         for (String deleted : deletedMultiredditNames) {
+            Log.i("asdfasdfs", "s " + deleted + accountName);
             multiRedditDao.deleteMultiReddit(deleted, accountName);
         }
 
@@ -49,27 +51,27 @@ public class InsertMultiRedditAsyncTask extends AsyncTask<Void, Void, Void> {
     }
 
     private void compareTwoMultiRedditList(List<MultiReddit> newMultiReddits,
-                                           List<MultiReddit> oldMultiReddits,
-                                           List<String> deletedMultiReddits, int i1, int i2) {
-        if (newMultiReddits.size() <= i1 && oldMultiReddits.size() <= i2) {
-            return;
-        }
-
-        if (newMultiReddits.size() <= i1) {
-            for (int i = 0; i < oldMultiReddits.size(); i++) {
-                deletedMultiReddits.add(oldMultiReddits.get(i).getName());
+                                              List<MultiReddit> oldMultiReddits,
+                                              List<String> deletedMultiReddits) {
+        int newIndex = 0;
+        for (int oldIndex = 0; oldIndex < oldMultiReddits.size(); oldIndex++) {
+            if (newIndex >= newMultiReddits.size()) {
+                for (; oldIndex < oldMultiReddits.size(); oldIndex++) {
+                    deletedMultiReddits.add(oldMultiReddits.get(oldIndex).getName());
+                }
+                return;
             }
-            return;
-        }
 
-        if (oldMultiReddits.size() > i2) {
-            if (newMultiReddits.get(i1).getName().compareToIgnoreCase(oldMultiReddits.get(i2).getName()) == 0) {
-                compareTwoMultiRedditList(newMultiReddits, oldMultiReddits, deletedMultiReddits, i1 + 1, i2 + 1);
-            } else if (newMultiReddits.get(i1).getName().compareToIgnoreCase(oldMultiReddits.get(i2).getName()) < 0) {
-                compareTwoMultiRedditList(newMultiReddits, oldMultiReddits, deletedMultiReddits, i1 + 1, i2);
-            } else {
-                deletedMultiReddits.add(oldMultiReddits.get(i2).getName());
-                compareTwoMultiRedditList(newMultiReddits, oldMultiReddits, deletedMultiReddits, i1, i2 + 1);
+            MultiReddit old = oldMultiReddits.get(oldIndex);
+            for (; newIndex < newMultiReddits.size(); newIndex++) {
+                if (newMultiReddits.get(newIndex).getName().compareToIgnoreCase(old.getName()) == 0) {
+                    newIndex++;
+                    break;
+                }
+                if (newMultiReddits.get(newIndex).getName().compareToIgnoreCase(old.getName()) > 0) {
+                    deletedMultiReddits.add(old.getName());
+                    break;
+                }
             }
         }
     }
