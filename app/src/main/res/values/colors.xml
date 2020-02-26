@@ -10,7 +10,7 @@
 
     <color name="primaryTextColor">#000000</color>
 
-    <color name="colorPrimaryDarkDayNightTheme">@color/colorPrimaryDark</color>
+    <!--<color name="colorPrimaryDarkDayNightTheme">@color/colorPrimaryDark</color>-->
 
     <color name="dividerColor">#E0E0E0</color>
 
@@ -18,9 +18,9 @@
 
     <color name="backgroundColor">#FFFFFF</color>
 
-    <color name="backgroundColorPrimary">@color/colorPrimary</color>
+    <!--<color name="backgroundColorPrimary">@color/colorPrimary</color>
 
-    <color name="backgroundColorPrimaryDark">@color/colorPrimaryDark</color>
+    <color name="backgroundColorPrimaryDark">@color/colorPrimaryDark</color>-->
 
     <color name="backgroundColorInverse">#000000</color>
 
@@ -28,13 +28,13 @@
 
     <color name="roundedBottomSheetPrimaryNavigationBarColor">@android:color/black</color>
 
-    <color name="upvoted">#E91E63</color>
+    <!--<color name="upvoted">#E91E63</color>
 
-    <color name="downvoted">#007DDE</color>
+    <color name="downvoted">#007DDE</color>-->
 
     <color name="voteAndReplyUnavailableVoteButtonColor">#F0F0F0</color>
 
-    <color name="tabLayoutWithExpandedCollapsingToolbarTextColor">@color/colorPrimary</color>
+    <!--<color name="tabLayoutWithExpandedCollapsingToolbarTextColor">@color/colorPrimary</color>
 
     <color name="tabLayoutWithExpandedCollapsingToolbarTabBackground">#FFFFFF</color>
 
@@ -44,7 +44,7 @@
 
     <color name="tabLayoutWithCollapsedCollapsingToolbarTabBackground">@color/colorPrimary</color>
 
-    <color name="tabLayoutWithCollapsedCollapsingToolbarTabIndicator">@color/tabLayoutWithCollapsedCollapsingToolbarTextColor</color>
+    <color name="tabLayoutWithCollapsedCollapsingToolbarTabIndicator">@color/tabLayoutWithCollapsedCollapsingToolbarTextColor</color>-->
 
     <color name="navBarColor">#FFFFFF</color>
 
@@ -54,9 +54,9 @@
 
     <color name="unreadMessageBackgroundColor">#B3E5F9</color>
 
-    <color name="archivedTint">#B4009F</color>
+    <!--<color name="archivedTint">#B4009F</color>
 
-    <color name="lockedIconTint">#EE7302</color>
+    <color name="lockedIconTint">#EE7302</color>-->
 
     <color name="notificationIconColor">@color/colorPrimary</color>
 
@@ -70,7 +70,7 @@
     <color name="commentVerticalBar6">#02EE6E</color>
     <color name="commentVerticalBar7">#EE4602</color>
 
-    <color name="toolbarAndTabBackgroundColor">@color/colorPrimary</color>
+    <!--<color name="toolbarAndTabBackgroundColor">@color/colorPrimary</color>
 
     <color name="submitter">#EE8A02</color>
 
@@ -84,5 +84,5 @@
 
     <color name="usernameColor">#0D47A1</color>
 
-    <color name="subredditNameColor">#FF4081</color>
+    <color name="subredditNameColor">#FF4081</color>-->
 </resources>

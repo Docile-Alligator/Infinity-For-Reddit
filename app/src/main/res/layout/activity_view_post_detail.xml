@@ -76,7 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="@color/backgroundColorPrimary"
+        app:backgroundTint="?attr/colorPrimaryLightTheme"
         app:tint="@android:color/white"
         app:srcCompat="@drawable/ic_keyboard_arrow_down_24dp" />
 

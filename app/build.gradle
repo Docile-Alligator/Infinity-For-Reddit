@@ -72,7 +72,7 @@ dependencies {
     implementation "io.noties.markwon:simple-ext:4.2.0"
     implementation "io.noties.markwon:recycler-table:4.2.0"
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
-    implementation 'com.github.Ferfalk:SimpleSearchView:0.1.3'
+    implementation 'com.github.Ferfalk:SimpleSearchView:0.1.4'
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.libRG:customtextview:2.2'
     implementation 'com.github.Deishelon:RoundedBottomSheet:1.0.1'

@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:backgroundTint="@color/backgroundColorPrimary"
+        android:backgroundTint="?attr/colorPrimaryLightTheme"
         android:textColor="@android:color/white"
         android:text="@string/retry"
         android:textSize="?attr/font_default" />

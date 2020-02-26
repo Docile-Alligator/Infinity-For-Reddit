@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,6 +43,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Service.SubmitPostService;
 import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
@@ -102,9 +104,13 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
     private boolean subredditIsUser;
     private boolean loadSubredditIconSuccessful = true;
     private boolean isPosting;
+    private int flairColor;
+    private int spoilerColor;
+    private int nsfwColor;
     private Flair flair;
     private boolean isSpoiler = false;
     private boolean isNSFW = false;
+    private Resources resources;
     private Menu mMemu;
     private RequestManager mGlide;
     private FlairBottomSheetFragment flairSelectionBottomSheetFragment;
@@ -129,6 +135,12 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
 
         mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
 
+        flairColor = Utils.getAttributeColor(this, R.attr.flairColor);
+        spoilerColor = Utils.getAttributeColor(this, R.attr.spoilerColor);
+        nsfwColor = Utils.getAttributeColor(this, R.attr.nsfwColor);
+
+        resources = getResources();
+
         if (savedInstanceState != null) {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
@@ -148,7 +160,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
             isNSFW = savedInstanceState.getBoolean(IS_NSFW_STATE);
 
             if (subredditName != null) {
-                subredditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
+                subredditNameTextView.setTextColor(resources.getColor(R.color.primaryTextColor));
                 subredditNameTextView.setText(subredditName);
                 flairTextView.setVisibility(View.VISIBLE);
                 if (!loadSubredditIconSuccessful) {
@@ -163,13 +175,13 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
 
             if (flair != null) {
                 flairTextView.setText(flair.getText());
-                flairTextView.setBackgroundColor(getResources().getColor(R.color.backgroundColorPrimaryDark));
+                flairTextView.setBackgroundColor(flairColor);
             }
             if (isSpoiler) {
-                spoilerTextView.setBackgroundColor(getResources().getColor(R.color.backgroundColorPrimaryDark));
+                spoilerTextView.setBackgroundColor(spoilerColor);
             }
             if (isNSFW) {
-                nsfwTextView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                nsfwTextView.setBackgroundColor(nsfwColor);
             }
         } else {
             getCurrentAccount();
@@ -180,7 +192,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
                 loadSubredditIconSuccessful = false;
                 subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME);
                 subredditSelected = true;
-                subredditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
+                subredditNameTextView.setTextColor(resources.getColor(R.color.primaryTextColor));
                 subredditNameTextView.setText(subredditName);
                 flairTextView.setVisibility(View.VISIBLE);
                 loadSubredditIcon();
@@ -233,7 +245,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
                 flairSelectionBottomSheetFragment.setArguments(bundle);
                 flairSelectionBottomSheetFragment.show(getSupportFragmentManager(), flairSelectionBottomSheetFragment.getTag());
             } else {
-                flairTextView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                flairTextView.setBackgroundColor(resources.getColor(android.R.color.transparent));
                 flairTextView.setText(getString(R.string.flair));
                 flair = null;
             }
@@ -241,20 +253,20 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
 
         spoilerTextView.setOnClickListener(view -> {
             if (!isSpoiler) {
-                spoilerTextView.setBackgroundColor(getResources().getColor(R.color.backgroundColorPrimaryDark));
+                spoilerTextView.setBackgroundColor(spoilerColor);
                 isSpoiler = true;
             } else {
-                spoilerTextView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                spoilerTextView.setBackgroundColor(resources.getColor(android.R.color.transparent));
                 isSpoiler = false;
             }
         });
 
         nsfwTextView.setOnClickListener(view -> {
             if (!isNSFW) {
-                nsfwTextView.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                nsfwTextView.setBackgroundColor(nsfwColor);
                 isNSFW = true;
             } else {
-                nsfwTextView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                nsfwTextView.setBackgroundColor(resources.getColor(android.R.color.transparent));
                 isNSFW = false;
             }
         });
@@ -415,12 +427,12 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
                 subredditSelected = true;
                 subredditIsUser = data.getExtras().getBoolean(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_IS_USER);
 
-                subredditNameTextView.setTextColor(getResources().getColor(R.color.primaryTextColor));
+                subredditNameTextView.setTextColor(resources.getColor(R.color.primaryTextColor));
                 subredditNameTextView.setText(subredditName);
                 displaySubredditIcon();
 
                 flairTextView.setVisibility(View.VISIBLE);
-                flairTextView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                flairTextView.setBackgroundColor(resources.getColor(android.R.color.transparent));
                 flairTextView.setText(getString(R.string.flair));
                 flair = null;
             }
@@ -437,7 +449,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
     public void flairSelected(Flair flair) {
         this.flair = flair;
         flairTextView.setText(flair.getText());
-        flairTextView.setBackgroundColor(getResources().getColor(R.color.backgroundColorPrimaryDark));
+        flairTextView.setBackgroundColor(flairColor);
     }
 
     @Subscribe

@@ -10,7 +10,7 @@
 
     <color name="primaryTextColor">#FFFFFF</color>
 
-    <color name="colorPrimaryDarkDayNightTheme">#1E88E5</color>
+    <!--<color name="colorPrimaryDarkDayNightTheme">#1E88E5</color>-->
 
     <color name="dividerColor">#69666C</color>
 
@@ -18,9 +18,9 @@
 
     <color name="backgroundColor">#121212</color>
 
-    <color name="backgroundColorPrimary">#1565C0</color>
+    <!--<color name="backgroundColorPrimary">#1565C0</color>
 
-    <color name="backgroundColorPrimaryDark">#1565C0</color>
+    <color name="backgroundColorPrimaryDark">#1565C0</color>-->
 
     <color name="backgroundColorInverse">#FFFFFF</color>
 
@@ -28,7 +28,7 @@
 
     <color name="voteAndReplyUnavailableVoteButtonColor">#3C3C3C</color>
 
-    <color name="tabLayoutWithExpandedCollapsingToolbarTextColor">#FFFFFF</color>
+    <!--<color name="tabLayoutWithExpandedCollapsingToolbarTextColor">#FFFFFF</color>
 
     <color name="tabLayoutWithExpandedCollapsingToolbarTabBackground">@color/backgroundColor</color>
 
@@ -38,7 +38,7 @@
 
     <color name="tabLayoutWithCollapsedCollapsingToolbarTabBackground">@color/colorPrimary</color>
 
-    <color name="tabLayoutWithCollapsedCollapsingToolbarTabIndicator">@color/tabLayoutWithCollapsedCollapsingToolbarTextColor</color>
+    <color name="tabLayoutWithCollapsedCollapsingToolbarTabIndicator">@color/tabLayoutWithCollapsedCollapsingToolbarTextColor</color>-->
 
     <color name="navBarColor">@color/backgroundColor</color>
 
@@ -60,5 +60,5 @@
     <color name="commentVerticalBar6">#00B925</color>
     <color name="commentVerticalBar7">#EE4602</color>
 
-    <color name="toolbarAndTabBackgroundColor">#282828</color>
+    <!--<color name="toolbarAndTabBackgroundColor">#282828</color>-->
 </resources>

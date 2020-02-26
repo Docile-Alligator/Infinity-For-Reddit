@@ -218,7 +218,7 @@
 
     <style name="Theme" />
 
-    <style name="Theme.Default">
+    <!--<style name="Theme.Default">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="backgroundColor">@color/backgroundColor</item>
@@ -255,6 +255,114 @@
         <item name="tabLayoutWithExpandedCollapsingToolbarTabBackground">#000000</item>
         <item name="tabLayoutWithCollapsedCollapsingToolbarTabBackground">#000000</item>
         <item name="navBarColor">#000000</item>
+    </style>-->
+
+    <style name="Theme.Default">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryLightTheme">@color/colorPrimary</item>
+        <item name="backgroundColor">@color/backgroundColor</item>
+        <item name="roundedBottomSheetPrimaryBackground">@color/roundedBottomSheetPrimaryBackground</item>
+        <item name="cardViewBackgroundColor">@color/cardViewBackgroundColor</item>
+        <item name="toolbarAndTabBackgroundColor">@color/colorPrimary</item>
+        <item name="circularProgressBarBackground">#FFFFFF</item>
+        <item name="tabLayoutWithExpandedCollapsingToolbarTabBackground">#FFFFFF</item>
+        <item name="tabLayoutWithExpandedCollapsingToolbarTextColor">@color/colorPrimary</item>
+        <item name="tabLayoutWithExpandedCollapsingToolbarTabIndicator">@color/colorPrimary</item>
+        <item name="tabLayoutWithCollapsedCollapsingToolbarTabBackground">@color/colorPrimary</item>
+        <item name="tabLayoutWithCollapsedCollapsingToolbarTextColor">#FFFFFF</item>
+        <item name="tabLayoutWithCollapsedCollapsingToolbarTabIndicator">#FFFFFF</item>
+        <item name="navBarColor">@color/backgroundColor</item>
+        <item name="upvoted">#E91E63</item>
+        <item name="downvoted">#007DDE</item>
+        <item name="post_type">@color/colorPrimaryDark</item>
+        <item name="spoilerColor">#EE02EB</item>
+        <item name="nsfwColor">@color/colorAccent</item>
+        <item name="flairColor">#00AA8C</item>
+        <item name="archivedTint">#B4009F</item>
+        <item name="lockedIconTint">#EE7302</item>
+        <item name="crosspost">@color/colorAccent</item>
+        <item name="stickiedPost">@color/colorPrimaryDark</item>
+        <item name="subscribed">@color/colorAccent</item>
+        <item name="unsubscribed">@color/colorPrimaryDark</item>
+        <item name="username">@color/colorPrimaryDark</item>
+        <item name="subreddit">@color/colorAccent</item>
+        <item name="authorFlairTextColor">#EE02C4</item>
+        <item name="submitter">#EE8A02</item>
+        <item name="moderator">#00BA81</item>
+    </style>
+
+    <style name="Theme.Default.NormalDark">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryLightTheme">#1565C0</item>
+        <item name="backgroundColor">@color/backgroundColor</item>
+        <item name="roundedBottomSheetPrimaryBackground">@color/roundedBottomSheetPrimaryBackground</item>
+        <item name="cardViewBackgroundColor">@color/cardViewBackgroundColor</item>
+        <item name="toolbarAndTabBackgroundColor">#282828</item>
+        <item name="circularProgressBarBackground">@color/colorPrimary</item>
+        <item name="tabLayoutWithExpandedCollapsingToolbarTabBackground">@color/backgroundColor</item>
+        <item name="tabLayoutWithExpandedCollapsingToolbarTextColor">#FFFFFF</item>
+        <item name="tabLayoutWithExpandedCollapsingToolbarTabIndicator">#FFFFFF</item>
+        <item name="tabLayoutWithCollapsedCollapsingToolbarTabBackground">@color/colorPrimary</item>
+        <item name="tabLayoutWithCollapsedCollapsingToolbarTextColor">#FFFFFF</item>
+        <item name="tabLayoutWithCollapsedCollapsingToolbarTabIndicator">#FFFFFF</item>
+        <item name="navBarColor">@color/backgroundColor</item>
+        <item name="upvoted">#E91E63</item>
+        <item name="downvoted">#007DDE</item>
+        <item name="post_type">#0D47A1</item>
+        <item name="spoilerColor">#EE02EB</item>
+        <item name="nsfwColor">@color/colorAccent</item>
+        <item name="flairColor">#00AA8C</item>
+        <item name="archivedTint">#B4009F</item>
+        <item name="lockedIconTint">#EE7302</item>
+        <item name="crosspost">@color/colorAccent</item>
+        <item name="stickiedPost">#1565C0</item>
+        <item name="subscribed">@color/colorAccent</item>
+        <item name="unsubscribed">#1565C0</item>
+        <item name="username">#0D47A1</item>
+        <item name="subreddit">@color/colorAccent</item>
+        <item name="authorFlairTextColor">#EE02C4</item>
+        <item name="submitter">#EE8A02</item>
+        <item name="moderator">#00BA81</item>
+    </style>
+
+    <style name="Theme.Default.AmoledDark">
+        <item name="colorPrimary">#000000</item>
+        <item name="colorPrimaryDark">#000000</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimaryLightTheme">#1565C0</item>
+        <item name="backgroundColor">#000000</item>
+        <item name="roundedBottomSheetPrimaryBackground">#000000</item>
+        <item name="cardViewBackgroundColor">#000000</item>
+        <item name="toolbarAndTabBackgroundColor">#000000</item>
+        <item name="circularProgressBarBackground">#000000</item>
+        <item name="tabLayoutWithExpandedCollapsingToolbarTabBackground">@color/backgroundColor</item>
+        <item name="tabLayoutWithExpandedCollapsingToolbarTextColor">#FFFFFF</item>
+        <item name="tabLayoutWithExpandedCollapsingToolbarTabIndicator">#FFFFFF</item>
+        <item name="tabLayoutWithCollapsedCollapsingToolbarTabBackground">@color/colorPrimary</item>
+        <item name="tabLayoutWithCollapsedCollapsingToolbarTextColor">#FFFFFF</item>
+        <item name="tabLayoutWithCollapsedCollapsingToolbarTabIndicator">#FFFFFF</item>
+        <item name="navBarColor">#000000</item>
+        <item name="upvoted">#E91E63</item>
+        <item name="downvoted">#007DDE</item>
+        <item name="post_type">#0D47A1</item>
+        <item name="spoilerColor">#EE02EB</item>
+        <item name="nsfwColor">@color/colorAccent</item>
+        <item name="flairColor">#00AA8C</item>
+        <item name="archivedTint">#B4009F</item>
+        <item name="lockedIconTint">#EE7302</item>
+        <item name="crosspost">@color/colorAccent</item>
+        <item name="stickiedPost">#1565C0</item>
+        <item name="subscribed">@color/colorAccent</item>
+        <item name="unsubscribed">#1565C0</item>
+        <item name="username">#0D47A1</item>
+        <item name="subreddit">@color/colorAccent</item>
+        <item name="authorFlairTextColor">#EE02C4</item>
+        <item name="submitter">#EE8A02</item>
+        <item name="moderator">#00BA81</item>
     </style>
 
 </resources>

@@ -76,7 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:layout_gravity="bottom|end"
-        app:backgroundTint="@color/backgroundColorPrimary"
+        app:backgroundTint="?attr/colorPrimaryLightTheme"
         app:srcCompat="@drawable/ic_add_bottom_app_bar_24dp"
         app:tint="@android:color/white" />
 

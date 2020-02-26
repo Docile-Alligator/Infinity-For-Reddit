@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +31,7 @@ import ml.docilealligator.infinityforreddit.Message;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.ReadMessage;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
 
 public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, RecyclerView.ViewHolder> {
@@ -57,6 +57,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
     private NetworkState networkState;
     private RetryLoadingMoreCallback mRetryLoadingMoreCallback;
     private int mMessageBackgroundColor;
+    private int usernameColor;
 
     public MessageRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, String accessToken,
                                       RetryLoadingMoreCallback retryLoadingMoreCallback) {
@@ -92,9 +93,8 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
         mAccessToken = accessToken;
         mResources = context.getResources();
 
-        TypedValue typedValue = new TypedValue();
-        mContext.getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
-        mMessageBackgroundColor = typedValue.data;
+        mMessageBackgroundColor = Utils.getAttributeColor(context, R.attr.cardViewBackgroundColor);
+        usernameColor = Utils.getAttributeColor(context, R.attr.username);
     }
 
     @NonNull
@@ -120,7 +120,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 }
 
                 if (message.wasComment()) {
-                    ((DataViewHolder) holder).authorTextView.setTextColor(mResources.getColor(R.color.colorPrimaryDarkDayNightTheme));
+                    ((DataViewHolder) holder).authorTextView.setTextColor(usernameColor);
                     ((DataViewHolder) holder).titleTextView.setText(message.getTitle());
                 } else {
                     ((DataViewHolder) holder).titleTextView.setVisibility(View.GONE);

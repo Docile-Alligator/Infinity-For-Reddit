@@ -19,13 +19,17 @@ import okhttp3.Response;
 import okhttp3.Route;
 import retrofit2.Call;
 import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 class AccessTokenAuthenticator implements Authenticator {
     private Retrofit mRetrofit;
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
 
-    AccessTokenAuthenticator(Retrofit retrofit, RedditDataRoomDatabase accountRoomDatabase) {
-        mRetrofit = retrofit;
+    AccessTokenAuthenticator(RedditDataRoomDatabase accountRoomDatabase) {
+        mRetrofit = new Retrofit.Builder()
+                .baseUrl(RedditUtils.API_BASE_URI)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
         mRedditDataRoomDatabase = accountRoomDatabase;
     }
 

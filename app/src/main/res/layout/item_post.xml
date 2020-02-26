@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="8dp"
-                android:textColor="@color/colorPrimaryDarkDayNightTheme"
+                android:textColor="?attr/username"
                 android:textSize="?attr/font_default"
                 android:maxLines="2"
                 android:ellipsize="end"
@@ -64,7 +64,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginEnd="8dp"
-                android:tint="@color/backgroundColorPrimaryDark"
+                android:tint="?attr/stickiedPost"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/name_text_view_item_post"
@@ -127,8 +127,8 @@
                 android:padding="4dp"
                 android:textSize="?attr/font_12"
                 android:textColor="@android:color/white"
-                app:lib_setRoundedBGColor="@color/backgroundColorPrimaryDark"
-                app:lib_setRoundedBorderColor="@color/backgroundColorPrimaryDark"
+                app:lib_setRoundedBGColor="?attr/post_type"
+                app:lib_setRoundedBorderColor="?attr/post_type"
                 app:lib_setRadius="3dp"
                 app:lib_setRoundedView="true"
                 app:lib_setShape="rectangle" />
@@ -144,8 +144,8 @@
                 android:padding="4dp"
                 android:visibility="gone"
                 app:lib_setRadius="3dp"
-                app:lib_setRoundedBGColor="@color/spoilerBackgroundColor"
-                app:lib_setRoundedBorderColor="@color/spoilerBackgroundColor"
+                app:lib_setRoundedBGColor="?attr/spoilerColor"
+                app:lib_setRoundedBorderColor="?attr/spoilerColor"
                 app:lib_setRoundedView="true"
                 app:lib_setShape="rectangle" />
 
@@ -174,8 +174,8 @@
                 android:padding="4dp"
                 android:visibility="gone"
                 app:lib_setRadius="3dp"
-                app:lib_setRoundedBGColor="@color/flairBackgroundColor"
-                app:lib_setRoundedBorderColor="@color/flairBackgroundColor"
+                app:lib_setRoundedBGColor="?attr/flairColor"
+                app:lib_setRoundedBorderColor="?attr/flairColor"
                 app:lib_setRoundedView="true"
                 app:lib_setShape="rectangle" />
 
@@ -194,7 +194,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_archive_outline"
-                android:tint="@color/archivedTint"
+                android:tint="?attr/archivedTint"
                 android:visibility="gone" />
 
             <ImageView
@@ -202,7 +202,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_outline_lock_24dp"
-                android:tint="@color/lockedIconTint"
+                android:tint="?attr/lockedIconTint"
                 android:visibility="gone" />
 
             <ImageView
@@ -210,7 +210,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/crosspost"
-                android:tint="@color/colorAccent"
+                android:tint="?attr/crosspost"
                 android:visibility="gone" />
 
         </com.nex3z.flowlayout.FlowLayout>

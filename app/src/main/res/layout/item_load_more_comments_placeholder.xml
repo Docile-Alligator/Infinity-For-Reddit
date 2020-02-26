@@ -12,8 +12,7 @@
         <View
             android:id="@+id/vertical_block_item_load_more_comments"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@color/colorPrimaryDarkDayNightTheme" />
+            android:layout_height="match_parent" />
 
         <TextView
             android:id="@+id/placeholder_text_view_item_load_more_comments"

@@ -2,12 +2,12 @@ package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -65,7 +65,6 @@ import ml.docilealligator.infinityforreddit.Post.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.ReadMessage;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserDao;
@@ -73,6 +72,8 @@ import ml.docilealligator.infinityforreddit.User.UserDao;
 import ml.docilealligator.infinityforreddit.User.UserData;
 import ml.docilealligator.infinityforreddit.User.UserViewModel;
 import ml.docilealligator.infinityforreddit.UserFollowing;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
@@ -205,19 +206,12 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
         setSupportActionBar(toolbar);
 
-        expandedTabTextColor = resources.getColor(R.color.tabLayoutWithExpandedCollapsingToolbarTextColor);
-        expandedTabIndicatorColor = resources.getColor(R.color.tabLayoutWithExpandedCollapsingToolbarTabIndicator);
-
-        TypedValue expandedTabBackgroundColorTypedValue = new TypedValue();
-        getTheme().resolveAttribute(R.attr.tabLayoutWithExpandedCollapsingToolbarTabBackground, expandedTabBackgroundColorTypedValue, true);
-        expandedTabBackgroundColor = expandedTabBackgroundColorTypedValue.data;
-
-        collapsedTabTextColor = resources.getColor(R.color.tabLayoutWithCollapsedCollapsingToolbarTextColor);
-        collapsedTabIndicatorColor = resources.getColor(R.color.tabLayoutWithCollapsedCollapsingToolbarTabIndicator);
-
-        TypedValue collapsedTabBackgroundColorTypedValue = new TypedValue();
-        getTheme().resolveAttribute(R.attr.tabLayoutWithCollapsedCollapsingToolbarTabBackground, collapsedTabBackgroundColorTypedValue, true);
-        collapsedTabBackgroundColor = collapsedTabBackgroundColorTypedValue.data;
+        expandedTabTextColor = Utils.getAttributeColor(this, R.attr.tabLayoutWithExpandedCollapsingToolbarTextColor);
+        expandedTabIndicatorColor = Utils.getAttributeColor(this, R.attr.tabLayoutWithExpandedCollapsingToolbarTabIndicator);
+        expandedTabBackgroundColor = Utils.getAttributeColor(this, R.attr.tabLayoutWithExpandedCollapsingToolbarTabBackground);
+        collapsedTabTextColor = Utils.getAttributeColor(this, R.attr.tabLayoutWithCollapsedCollapsingToolbarTextColor);
+        collapsedTabIndicatorColor = Utils.getAttributeColor(this, R.attr.tabLayoutWithCollapsedCollapsingToolbarTabIndicator);
+        collapsedTabBackgroundColor = Utils.getAttributeColor(this, R.attr.tabLayoutWithCollapsedCollapsingToolbarTabBackground);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1
                 && (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
@@ -315,6 +309,9 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                     });
                 }
 
+                int unsubscribedColor = Utils.getAttributeColor(this, R.attr.unsubscribed);
+                int subscribedColor = Utils.getAttributeColor(this, R.attr.subscribed);
+
                 if (userData.isCanBeFollowed()) {
                     subscribeUserChip.setVisibility(View.VISIBLE);
                     subscribeUserChip.setOnClickListener(view -> {
@@ -331,7 +328,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                                             @Override
                                             public void onUserFollowingSuccess() {
                                                 subscribeUserChip.setText(R.string.unfollow);
-                                                subscribeUserChip.setChipBackgroundColor(resources.getColorStateList(R.color.colorAccent));
+                                                subscribeUserChip.setChipBackgroundColor(ColorStateList.valueOf(subscribedColor));
                                                 showMessage(R.string.followed, false);
                                                 subscriptionReady = true;
                                             }
@@ -348,7 +345,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                                             @Override
                                             public void onUserFollowingSuccess() {
                                                 subscribeUserChip.setText(R.string.follow);
-                                                subscribeUserChip.setChipBackgroundColor(resources.getColorStateList(R.color.backgroundColorPrimaryDark));
+                                                subscribeUserChip.setChipBackgroundColor(ColorStateList.valueOf(unsubscribedColor));
                                                 showMessage(R.string.unfollowed, false);
                                                 subscriptionReady = true;
                                             }
@@ -367,14 +364,14 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                         @Override
                         public void isSubscribed() {
                             subscribeUserChip.setText(R.string.unfollow);
-                            subscribeUserChip.setChipBackgroundColor(resources.getColorStateList(R.color.colorAccent));
+                            subscribeUserChip.setChipBackgroundColor(ColorStateList.valueOf(subscribedColor));
                             subscriptionReady = true;
                         }
 
                         @Override
                         public void isNotSubscribed() {
                             subscribeUserChip.setText(R.string.follow);
-                            subscribeUserChip.setChipBackgroundColor(resources.getColorStateList(R.color.backgroundColorPrimaryDark));
+                            subscribeUserChip.setChipBackgroundColor(ColorStateList.valueOf(unsubscribedColor));
                             subscriptionReady = true;
                         }
                     }).execute();

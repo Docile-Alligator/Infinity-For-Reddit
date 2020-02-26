@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
@@ -69,6 +70,7 @@ import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditViewModel;
 import ml.docilealligator.infinityforreddit.SubredditSubscription;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
@@ -458,6 +460,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             fab.setVisibility(View.GONE);
         }
 
+        int unsubscribedColor = Utils.getAttributeColor(this, R.attr.unsubscribed);
+        int subscribedColor = Utils.getAttributeColor(this, R.attr.subscribed);
+
         subscribeSubredditChip.setOnClickListener(view -> {
             if (mAccessToken == null) {
                 Toast.makeText(ViewSubredditDetailActivity.this, R.string.login_first, Toast.LENGTH_SHORT).show();
@@ -473,7 +478,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                                 @Override
                                 public void onSubredditSubscriptionSuccess() {
                                     subscribeSubredditChip.setText(R.string.unsubscribe);
-                                    subscribeSubredditChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+                                    subscribeSubredditChip.setChipBackgroundColor(ColorStateList.valueOf(subscribedColor));
                                     makeSnackbar(R.string.subscribed, false);
                                     subscriptionReady = true;
                                 }
@@ -491,7 +496,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                                 @Override
                                 public void onSubredditSubscriptionSuccess() {
                                     subscribeSubredditChip.setText(R.string.subscribe);
-                                    subscribeSubredditChip.setChipBackgroundColor(getResources().getColorStateList(R.color.backgroundColorPrimaryDark));
+                                    subscribeSubredditChip.setChipBackgroundColor(ColorStateList.valueOf(unsubscribedColor));
                                     makeSnackbar(R.string.unsubscribed, false);
                                     subscriptionReady = true;
                                 }
@@ -511,14 +516,14 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     @Override
                     public void isSubscribed() {
                         subscribeSubredditChip.setText(R.string.unsubscribe);
-                        subscribeSubredditChip.setChipBackgroundColor(getResources().getColorStateList(R.color.colorAccent));
+                        subscribeSubredditChip.setChipBackgroundColor(ColorStateList.valueOf(subscribedColor));
                         subscriptionReady = true;
                     }
 
                     @Override
                     public void isNotSubscribed() {
                         subscribeSubredditChip.setText(R.string.subscribe);
-                        subscribeSubredditChip.setChipBackgroundColor(getResources().getColorStateList(R.color.backgroundColorPrimaryDark));
+                        subscribeSubredditChip.setChipBackgroundColor(ColorStateList.valueOf(unsubscribedColor));
                         subscriptionReady = true;
                     }
                 }).execute();
