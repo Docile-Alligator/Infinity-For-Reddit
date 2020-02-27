@@ -24,7 +24,7 @@
             android:paddingEnd="32dp"
             android:paddingBottom="16dp"
             android:text="@string/post_layout_card"
-            android:textColor="@color/primaryTextColor"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default" />
 
         <TextView
@@ -39,7 +39,7 @@
             android:paddingEnd="32dp"
             android:paddingBottom="16dp"
             android:text="@string/post_layout_compact"
-            android:textColor="@color/primaryTextColor"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default" />
 
     </LinearLayout>

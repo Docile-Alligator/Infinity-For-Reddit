@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,6 +49,7 @@ import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
 
 public class ViewMessageActivity extends BaseActivity {
@@ -255,11 +255,8 @@ public class ViewMessageActivity extends BaseActivity {
         });
 
         mSwipeRefreshLayout.setOnRefreshListener(this::onRefresh);
-
-        TypedValue typedValue = new TypedValue();
-        getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(typedValue.data);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(Utils.getAttributeColor(this, R.attr.cardViewBackgroundColor));
+        mSwipeRefreshLayout.setColorSchemeColors(Utils.getAttributeColor(this, R.attr.colorAccent));
     }
 
     private void showErrorView(int stringResId) {

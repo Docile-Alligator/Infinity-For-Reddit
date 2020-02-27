@@ -96,7 +96,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
-                android:textColor="@color/primaryTextColor"
+                android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/content_font_default" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -215,7 +215,7 @@
         android:id="@+id/divider_item_comment"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/dividerColor"
+        android:background="?attr/dividerColor"
         android:visibility="gone" />
 
 </LinearLayout>

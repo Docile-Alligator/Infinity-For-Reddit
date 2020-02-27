@@ -2,7 +2,7 @@
 
     <style name="AppTheme.Launcher" parent="@style/AppTheme.NoActionBarWithTransparentStatusBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
-        <item name="android:navigationBarColor">@color/navBarColor</item>
+        <item name="android:navigationBarColor">#FFFFFF</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar">true</item>
     </style>

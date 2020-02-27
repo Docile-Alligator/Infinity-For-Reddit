@@ -20,7 +20,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_gravity="center_vertical"
-        android:textColor="@color/primaryTextColor"
+        android:textColor="?attr/primaryTextColor"
         android:textSize="?attr/font_default" />
 
 </LinearLayout>

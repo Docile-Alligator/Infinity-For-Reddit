@@ -8,5 +8,5 @@
     android:focusable="true"
     android:gravity="center_vertical"
     android:padding="16dp"
-    android:textColor="@color/primaryTextColor"
+    android:textColor="?attr/primaryTextColor"
     android:textSize="?attr/font_default" />

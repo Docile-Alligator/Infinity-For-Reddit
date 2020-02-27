@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:textColor="@color/primaryTextColor"
+                android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/title_font_16" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -54,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginBottom="16dp"
-                android:background="@color/dividerColor" />
+                android:background="?attr/dividerColor" />
 
             <EditText
                 android:id="@+id/comment_edit_text_comment_activity"
@@ -68,7 +68,7 @@
                 android:inputType="textCapSentences|textMultiLine"
                 android:textSize="?attr/content_font_18"
                 android:background="#00000000"
-                android:textColor="@color/primaryTextColor" />
+                android:textColor="?attr/primaryTextColor" />
 
         </LinearLayout>
 

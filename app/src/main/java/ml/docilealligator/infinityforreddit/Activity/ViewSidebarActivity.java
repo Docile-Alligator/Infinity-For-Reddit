@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,6 +55,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditViewModel;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
 
 public class ViewSidebarActivity extends BaseActivity {
@@ -66,7 +66,7 @@ public class ViewSidebarActivity extends BaseActivity {
     @BindView(R.id.toolbar_view_sidebar_activity)
     Toolbar toolbar;
     @BindView(R.id.swipe_refresh_layout_view_sidebar_activity)
-    SwipeRefreshLayout swipeRefreshLayout;
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.markdown_recycler_view_view_sidebar_activity)
     RecyclerView markdownRecyclerView;
     @Inject
@@ -151,7 +151,7 @@ public class ViewSidebarActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        int markdownColor = ContextCompat.getColor(this, R.color.defaultTextColor);
+        int markdownColor = Utils.getAttributeColor(this, R.attr.secondaryTextColor);
         Markwon markwon = Markwon.builder(this)
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
@@ -204,25 +204,23 @@ public class ViewSidebarActivity extends BaseActivity {
             }
         });
 
-        TypedValue typedValue = new TypedValue();
-        getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
-        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(typedValue.data);
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
-        swipeRefreshLayout.setOnRefreshListener(this::fetchSubredditData);
+        mSwipeRefreshLayout.setOnRefreshListener(this::fetchSubredditData);
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(Utils.getAttributeColor(this, R.attr.cardViewBackgroundColor));
+        mSwipeRefreshLayout.setColorSchemeColors(Utils.getAttributeColor(this, R.attr.colorAccent));
     }
 
     private void fetchSubredditData() {
-        swipeRefreshLayout.setRefreshing(true);
+        mSwipeRefreshLayout.setRefreshing(true);
         FetchSubredditData.fetchSubredditData(mRetrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
             @Override
             public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
-                swipeRefreshLayout.setRefreshing(false);
-                new InsertSubredditDataAsyncTask(mRedditDataRoomDatabase, subredditData, () -> swipeRefreshLayout.setRefreshing(false)).execute();
+                mSwipeRefreshLayout.setRefreshing(false);
+                new InsertSubredditDataAsyncTask(mRedditDataRoomDatabase, subredditData, () -> mSwipeRefreshLayout.setRefreshing(false)).execute();
             }
 
             @Override
             public void onFetchSubredditDataFail() {
-                swipeRefreshLayout.setRefreshing(false);
+                mSwipeRefreshLayout.setRefreshing(false);
                 Toast.makeText(ViewSidebarActivity.this, R.string.cannot_fetch_sidebar, Toast.LENGTH_SHORT).show();
             }
         });
@@ -240,7 +238,7 @@ public class ViewSidebarActivity extends BaseActivity {
             finish();
             return true;
         } else if (item.getItemId() == R.id.action_refresh_view_sidebar_activity) {
-            if (!swipeRefreshLayout.isRefreshing()) {
+            if (!mSwipeRefreshLayout.isRefreshing()) {
                 fetchSubredditData();
             }
             return true;

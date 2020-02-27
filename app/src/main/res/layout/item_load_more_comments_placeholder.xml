@@ -21,7 +21,7 @@
             android:gravity="center"
             android:padding="8dp"
             android:text="@string/comment_load_more_comments"
-            android:textColor="@color/primaryTextColor"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default" />
 
     </LinearLayout>
@@ -30,7 +30,7 @@
         android:id="@+id/divider_item_load_more_comments_placeholder"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/dividerColor"
+        android:background="?attr/dividerColor"
         android:visibility="gone" />
 
 </LinearLayout>

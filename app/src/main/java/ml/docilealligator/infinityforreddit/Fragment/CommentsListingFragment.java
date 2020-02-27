@@ -8,7 +8,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +41,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
 
 
@@ -211,11 +211,8 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         mCommentViewModel.getPaginationNetworkState().observe(this, networkState -> mAdapter.setNetworkState(networkState));
 
         mSwipeRefreshLayout.setOnRefreshListener(() -> mCommentViewModel.refresh());
-
-        TypedValue typedValue = new TypedValue();
-        mActivity.getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(typedValue.data);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(Utils.getAttributeColor(mActivity, R.attr.cardViewBackgroundColor));
+        mSwipeRefreshLayout.setColorSchemeColors(Utils.getAttributeColor(mActivity, R.attr.colorAccent));
     }
 
     public void changeSortType(SortType sortType) {

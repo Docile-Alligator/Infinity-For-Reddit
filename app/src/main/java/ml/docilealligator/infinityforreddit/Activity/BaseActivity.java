@@ -34,7 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         switch (themeType) {
             case 0:
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                getTheme().applyStyle(R.style.Theme_Default, true);
+                getTheme().applyStyle(R.style.Theme_Purple, true);
                 break;
             case 1:
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
@@ -51,7 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
                 }
                 if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO) {
-                    getTheme().applyStyle(R.style.Theme_Default, true);
+                    getTheme().applyStyle(R.style.Theme_Purple, true);
                 } else {
                     if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
                         getTheme().applyStyle(R.style.Theme_Default_AmoledDark, true);

@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:textColor="@color/primaryTextColor"
+                android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/title_font_18"
                 app:layout_constraintBottom_toTopOf="@id/flow_layout_item_post_compact"
                 app:layout_constraintStart_toStartOf="parent"
@@ -146,8 +146,8 @@
                     android:textSize="?attr/font_10"
                     android:visibility="gone"
                     app:lib_setRadius="3dp"
-                    app:lib_setRoundedBGColor="@color/colorAccent"
-                    app:lib_setRoundedBorderColor="@color/colorAccent"
+                    app:lib_setRoundedBGColor="?attr/nsfwColor"
+                    app:lib_setRoundedBorderColor="?attr/nsfwColor"
                     app:lib_setRoundedView="true"
                     app:lib_setShape="rectangle" />
 
@@ -265,7 +265,7 @@
                 android:scaleType="center"
                 android:src="@drawable/ic_link"
                 android:tint="@android:color/tab_indicator_text"
-                android:background="@color/grey"
+                android:background="?attr/noPreviewLinkBackgroundColor"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/barrier2"
@@ -385,7 +385,7 @@
             android:id="@+id/divider_item_post_compact"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/dividerColor" />
+            android:background="?attr/dividerColor" />
 
     </LinearLayout>
 

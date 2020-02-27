@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,6 +69,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
 
 
@@ -262,11 +262,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         };
 
         mSwipeRefreshLayout.setOnRefreshListener(this::refresh);
-
-        TypedValue typedValue = new TypedValue();
-        activity.getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(typedValue.data);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(Utils.getAttributeColor(activity, R.attr.cardViewBackgroundColor));
+        mSwipeRefreshLayout.setColorSchemeColors(Utils.getAttributeColor(activity, R.attr.colorAccent));
 
         if (savedInstanceState != null) {
             int recyclerViewPosition = savedInstanceState.getInt(RECYCLER_VIEW_POSITION_STATE);

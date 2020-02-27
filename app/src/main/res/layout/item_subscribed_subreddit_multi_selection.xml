@@ -25,7 +25,7 @@
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="32dp"
-        android:textColor="@color/primaryTextColor"
+        android:textColor="?attr/primaryTextColor"
         android:textSize="?attr/font_default" />
 
     <CheckBox

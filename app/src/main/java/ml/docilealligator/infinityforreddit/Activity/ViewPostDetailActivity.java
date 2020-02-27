@@ -6,7 +6,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -82,6 +81,7 @@ import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -353,11 +353,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         }
 
         mSwipeRefreshLayout.setOnRefreshListener(() -> refresh(true, true));
-
-        TypedValue typedValue = new TypedValue();
-        getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(typedValue.data);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(Utils.getAttributeColor(this, R.attr.cardViewBackgroundColor));
+        mSwipeRefreshLayout.setColorSchemeColors(Utils.getAttributeColor(this, R.attr.colorAccent));
 
         mSmoothScroller = new LinearSmoothScroller(this) {
             @Override

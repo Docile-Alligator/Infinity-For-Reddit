@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
@@ -234,7 +235,7 @@ public class LinkResolverActivity extends AppCompatActivity {
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
             // add share action to menu list
             builder.addDefaultShareMenuItem();
-            builder.setToolbarColor(getResources().getColor(R.color.colorPrimary));
+            builder.setToolbarColor(Utils.getAttributeColor(this, R.attr.colorPrimary));
             CustomTabsIntent customTabsIntent = builder.build();
             customTabsIntent.intent.setPackage(resolveInfos.get(0).activityInfo.packageName);
             if (uri.getScheme() == null) {

@@ -75,7 +75,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/dividerColor" />
+                android:background="?attr/dividerColor" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -88,7 +88,7 @@
                     android:layout_margin="16dp"
                     android:padding="4dp"
                     android:text="@string/flair"
-                    android:textColor="@color/primaryTextColor"
+                    android:textColor="?attr/primaryTextColor"
                     android:textSize="?attr/font_default"
                     android:visibility="gone"
                     app:lib_setRadius="3dp"
@@ -103,7 +103,7 @@
                     android:layout_margin="16dp"
                     android:padding="4dp"
                     android:text="@string/spoiler"
-                    android:textColor="@color/primaryTextColor"
+                    android:textColor="?attr/primaryTextColor"
                     android:textSize="?attr/font_default"
                     app:lib_setRadius="3dp"
                     app:lib_setRoundedBorderColor="?attr/spoilerColor"
@@ -117,10 +117,10 @@
                     android:layout_margin="16dp"
                     android:padding="4dp"
                     android:text="@string/nsfw"
-                    android:textColor="@color/primaryTextColor"
+                    android:textColor="?attr/primaryTextColor"
                     android:textSize="?attr/font_default"
                     app:lib_setRadius="3dp"
-                    app:lib_setRoundedBorderColor="@color/colorAccent"
+                    app:lib_setRoundedBorderColor="?attr/nsfwColor"
                     app:lib_setRoundedView="true"
                     app:lib_setShape="rectangle" />
 
@@ -129,7 +129,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/dividerColor" />
+                android:background="?attr/dividerColor" />
 
             <EditText
                 android:id="@+id/post_title_edit_text_post_image_activity"
@@ -141,12 +141,12 @@
                 android:inputType="textCapSentences|textMultiLine"
                 android:textSize="?attr/title_font_18"
                 android:background="#00000000"
-                android:textColor="@color/primaryTextColor" />
+                android:textColor="?attr/primaryTextColor" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/dividerColor" />
+                android:background="?attr/dividerColor" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/select_image_constraint_layout_post_image_activity"
@@ -188,7 +188,7 @@
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:text="@string/select_again"
-                android:textColor="@color/colorAccent"
+                android:textColor="?attr/colorAccent"
                 android:textSize="?attr/font_default"
                 android:visibility="gone" />
 

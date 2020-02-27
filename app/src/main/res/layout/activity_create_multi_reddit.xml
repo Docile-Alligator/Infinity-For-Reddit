@@ -41,13 +41,13 @@
                 android:inputType="textMultiLine"
                 android:textSize="?attr/font_default"
                 android:background="#00000000"
-                android:textColor="@color/primaryTextColor"
+                android:textColor="?attr/primaryTextColor"
                 android:maxLength="50" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/dividerColor" />
+                android:background="?attr/dividerColor" />
 
             <EditText
                 android:id="@+id/description_edit_text_create_multi_reddit_activity"
@@ -58,12 +58,12 @@
                 android:inputType="textMultiLine"
                 android:textSize="?attr/font_default"
                 android:background="#00000000"
-                android:textColor="@color/primaryTextColor" />
+                android:textColor="?attr/primaryTextColor" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/dividerColor" />
+                android:background="?attr/dividerColor" />
 
             <LinearLayout
                 android:id="@+id/visibility_wrapper_linear_layout_create_multi_reddit_activity"
@@ -80,7 +80,7 @@
                     android:layout_weight="1"
                     android:text="@string/private_multi_reddit"
                     android:textSize="?attr/font_default"
-                    android:textColor="@color/primaryTextColor" />
+                    android:textColor="?attr/primaryTextColor" />
 
                 <Switch
                     android:id="@+id/visibility_switch_create_multi_reddit_activity"
@@ -97,7 +97,7 @@
                 android:padding="16dp"
                 android:text="@string/select_subreddit"
                 android:textSize="?attr/font_default"
-                android:textColor="@color/primaryTextColor"
+                android:textColor="?attr/primaryTextColor"
                 android:clickable="true"
                 android:focusable="true"
                 android:background="?attr/selectableItemBackground" />

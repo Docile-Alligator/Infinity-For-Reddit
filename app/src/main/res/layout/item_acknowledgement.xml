@@ -14,7 +14,7 @@
         android:id="@+id/name_text_view_item_acknowledgement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/primaryTextColor"
+        android:textColor="?attr/primaryTextColor"
         android:textSize="?attr/font_16" />
 
     <TextView

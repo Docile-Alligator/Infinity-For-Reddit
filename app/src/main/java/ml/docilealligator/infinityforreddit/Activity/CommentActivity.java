@@ -20,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -53,6 +52,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SendComment;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
 
 public class CommentActivity extends BaseActivity {
@@ -146,7 +146,7 @@ public class CommentActivity extends BaseActivity {
         if (parentBody != null && !parentBody.equals("")) {
             contentMarkdownRecyclerView.setVisibility(View.VISIBLE);
             contentMarkdownRecyclerView.setNestedScrollingEnabled(false);
-            int markdownColor = ContextCompat.getColor(this, R.color.defaultTextColor);
+            int markdownColor = Utils.getAttributeColor(this, R.attr.secondaryTextColor);
             Markwon postBodyMarkwon = Markwon.builder(this)
                     .usePlugin(new AbstractMarkwonPlugin() {
                         @Override

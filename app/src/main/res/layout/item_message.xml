@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:textColor="@color/primaryTextColor"
+        android:textColor="?attr/primaryTextColor"
         android:textSize="?attr/font_default" />
 
     <TextView
@@ -19,14 +19,14 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:textSize="?attr/font_16"
-        android:textColor="@color/primaryTextColor" />
+        android:textColor="?attr/primaryTextColor" />
 
     <TextView
         android:id="@+id/title_text_view_item_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:textColor="@color/primaryTextColor"
+        android:textColor="?attr/primaryTextColor"
         android:textSize="?attr/font_default" />
 
     <TextView

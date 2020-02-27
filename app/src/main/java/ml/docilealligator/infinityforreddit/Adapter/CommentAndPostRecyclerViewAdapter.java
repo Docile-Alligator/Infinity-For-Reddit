@@ -26,7 +26,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -129,12 +128,22 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private boolean isInitiallyLoadingFailed;
     private boolean mHasMoreComments;
     private boolean loadMoreCommentsFailed;
+    private int mSecondaryTextColor;
     private int mCommentBackgroundColor;
     private int mUsernameColor;
     private int mSubmitterColor;
     private int mModeratorColor;
     private int mUpvotedColor;
     private int mDownvotedColor;
+    private int mCommentVerticalBarColor1;
+    private int mCommentVerticalBarColor2;
+    private int mCommentVerticalBarColor3;
+    private int mCommentVerticalBarColor4;
+    private int mCommentVerticalBarColor5;
+    private int mCommentVerticalBarColor6;
+    private int mCommentVerticalBarColor7;
+    private int mSingleCommentThreadBackgroundColor;
+    private int mVoteAndReplyUnavailableVoteButtonColor;
 
     private float mScale;
     private ShareLinkBottomSheetFragment mShareLinkBottomSheetFragment;
@@ -153,7 +162,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mOauthRetrofit = oauthRetrofit;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mGlide = glide;
-        int markdownColor = ContextCompat.getColor(activity, R.color.defaultTextColor);
+        mSecondaryTextColor = Utils.getAttributeColor(activity, R.attr.secondaryTextColor);
+        int markdownColor = mSecondaryTextColor;
         mPostDetailMarkwon = Markwon.builder(mActivity)
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
@@ -250,6 +260,15 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mUsernameColor = Utils.getAttributeColor(activity, R.attr.username);
         mUpvotedColor = Utils.getAttributeColor(activity, R.attr.upvoted);
         mDownvotedColor = Utils.getAttributeColor(activity, R.attr.downvoted);
+        mCommentVerticalBarColor1 = Utils.getAttributeColor(activity, R.attr.commentVerticalBarColor1);
+        mCommentVerticalBarColor2 = Utils.getAttributeColor(activity, R.attr.commentVerticalBarColor2);
+        mCommentVerticalBarColor3 = Utils.getAttributeColor(activity, R.attr.commentVerticalBarColor3);
+        mCommentVerticalBarColor4 = Utils.getAttributeColor(activity, R.attr.commentVerticalBarColor4);
+        mCommentVerticalBarColor5 = Utils.getAttributeColor(activity, R.attr.commentVerticalBarColor5);
+        mCommentVerticalBarColor6 = Utils.getAttributeColor(activity, R.attr.commentVerticalBarColor6);
+        mCommentVerticalBarColor7 = Utils.getAttributeColor(activity, R.attr.commentVerticalBarColor7);
+        mSingleCommentThreadBackgroundColor = Utils.getAttributeColor(activity, R.attr.singleCommentThreadBackgroundColor);
+        mVoteAndReplyUnavailableVoteButtonColor = Utils.getAttributeColor(activity, R.attr.voteAndReplyUnavailableVoteButtonColor);
 
         mShareLinkBottomSheetFragment = new ShareLinkBottomSheetFragment();
         mCopyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
@@ -418,7 +437,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 case 0:
                     ((PostDetailViewHolder) holder).mUpvoteButton.clearColorFilter();
                     ((PostDetailViewHolder) holder).mDownvoteButton.clearColorFilter();
-                    ((PostDetailViewHolder) holder).mScoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
+                    ((PostDetailViewHolder) holder).mScoreTextView.setTextColor(mSecondaryTextColor);
             }
 
             if (mPost.getPostType() != Post.TEXT_TYPE && mPost.getPostType() != Post.NO_PREVIEW_LINK_TYPE) {
@@ -433,9 +452,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if (mPost.isArchived()) {
                 ((PostDetailViewHolder) holder).mUpvoteButton
-                        .setColorFilter(ContextCompat.getColor(mActivity, R.color.voteAndReplyUnavailableVoteButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                        .setColorFilter(mVoteAndReplyUnavailableVoteButtonColor, android.graphics.PorterDuff.Mode.SRC_IN);
                 ((PostDetailViewHolder) holder).mDownvoteButton
-                        .setColorFilter(ContextCompat.getColor(mActivity, R.color.voteAndReplyUnavailableVoteButtonColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                        .setColorFilter(mVoteAndReplyUnavailableVoteButtonColor, android.graphics.PorterDuff.Mode.SRC_IN);
             }
 
             if (mPost.isCrosspost()) {
@@ -719,8 +738,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             }
 
             if (mIsSingleCommentThreadMode && comment.getId().equals(mSingleCommentId)) {
-                ((CommentViewHolder) holder).itemView.setBackgroundColor(
-                        mActivity.getResources().getColor(R.color.singleCommentThreadBackgroundColor));
+                ((CommentViewHolder) holder).itemView.setBackgroundColor(mSingleCommentThreadBackgroundColor);
             }
 
             String authorPrefixed = "u/" + comment.getAuthor();
@@ -769,31 +787,31 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 switch (comment.getDepth() % 7) {
                     case 0:
                         ((CommentViewHolder) holder).verticalBlock
-                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar7));
+                                .setBackgroundColor(mCommentVerticalBarColor7);
                         break;
                     case 1:
                         ((CommentViewHolder) holder).verticalBlock
-                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar1));
+                                .setBackgroundColor(mCommentVerticalBarColor1);
                         break;
                     case 2:
                         ((CommentViewHolder) holder).verticalBlock
-                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar2));
+                                .setBackgroundColor(mCommentVerticalBarColor2);
                         break;
                     case 3:
                         ((CommentViewHolder) holder).verticalBlock
-                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar3));
+                                .setBackgroundColor(mCommentVerticalBarColor3);
                         break;
                     case 4:
                         ((CommentViewHolder) holder).verticalBlock
-                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar4));
+                                .setBackgroundColor(mCommentVerticalBarColor4);
                         break;
                     case 5:
                         ((CommentViewHolder) holder).verticalBlock
-                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar5));
+                                .setBackgroundColor(mCommentVerticalBarColor5);
                         break;
                     case 6:
                         ((CommentViewHolder) holder).verticalBlock
-                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar6));
+                                .setBackgroundColor(mCommentVerticalBarColor6);
                         break;
                 }
                 ViewGroup.LayoutParams params = ((CommentViewHolder) holder).verticalBlock.getLayoutParams();
@@ -841,19 +859,19 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if (mPost.isArchived()) {
                 ((CommentViewHolder) holder).replyButton
-                        .setColorFilter(ContextCompat.getColor(mActivity, R.color.voteAndReplyUnavailableVoteButtonColor),
+                        .setColorFilter(mVoteAndReplyUnavailableVoteButtonColor,
                                 android.graphics.PorterDuff.Mode.SRC_IN);
                 ((CommentViewHolder) holder).upVoteButton
-                        .setColorFilter(ContextCompat.getColor(mActivity, R.color.voteAndReplyUnavailableVoteButtonColor),
+                        .setColorFilter(mVoteAndReplyUnavailableVoteButtonColor,
                                 android.graphics.PorterDuff.Mode.SRC_IN);
                 ((CommentViewHolder) holder).downVoteButton
-                        .setColorFilter(ContextCompat.getColor(mActivity, R.color.voteAndReplyUnavailableVoteButtonColor),
+                        .setColorFilter(mVoteAndReplyUnavailableVoteButtonColor,
                                 android.graphics.PorterDuff.Mode.SRC_IN);
             }
 
             if (mPost.isLocked()) {
                 ((CommentViewHolder) holder).replyButton
-                        .setColorFilter(ContextCompat.getColor(mActivity, R.color.voteAndReplyUnavailableVoteButtonColor),
+                        .setColorFilter(mVoteAndReplyUnavailableVoteButtonColor,
                                 android.graphics.PorterDuff.Mode.SRC_IN);
             }
 
@@ -911,7 +929,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
                     newVoteType = RedditUtils.DIR_UNVOTE;
                     ((CommentViewHolder) holder).upVoteButton.clearColorFilter();
-                    ((CommentViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
+                    ((CommentViewHolder) holder).scoreTextView.setTextColor(mSecondaryTextColor);
                 }
 
                 ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
@@ -927,7 +945,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         } else {
                             comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
                             ((CommentViewHolder) holder).upVoteButton.clearColorFilter();
-                            ((CommentViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
+                            ((CommentViewHolder) holder).scoreTextView.setTextColor(mSecondaryTextColor);
                         }
 
                         ((CommentViewHolder) holder).downVoteButton.clearColorFilter();
@@ -968,7 +986,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
                     newVoteType = RedditUtils.DIR_UNVOTE;
                     ((CommentViewHolder) holder).downVoteButton.clearColorFilter();
-                    ((CommentViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
+                    ((CommentViewHolder) holder).scoreTextView.setTextColor(mSecondaryTextColor);
                 }
 
                 ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
@@ -984,7 +1002,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         } else {
                             comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
                             ((CommentViewHolder) holder).downVoteButton.clearColorFilter();
-                            ((CommentViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
+                            ((CommentViewHolder) holder).scoreTextView.setTextColor(mSecondaryTextColor);
                         }
 
                         ((CommentViewHolder) holder).upVoteButton.clearColorFilter();
@@ -1092,31 +1110,31 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 switch (placeholder.getDepth() % 7) {
                     case 0:
                         ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
-                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar7));
+                                .setBackgroundColor(mCommentVerticalBarColor7);
                         break;
                     case 1:
                         ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
-                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar1));
+                                .setBackgroundColor(mCommentVerticalBarColor1);
                         break;
                     case 2:
                         ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
-                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar2));
+                                .setBackgroundColor(mCommentVerticalBarColor2);
                         break;
                     case 3:
                         ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
-                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar3));
+                                .setBackgroundColor(mCommentVerticalBarColor3);
                         break;
                     case 4:
                         ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
-                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar4));
+                                .setBackgroundColor(mCommentVerticalBarColor4);
                         break;
                     case 5:
                         ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
-                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar5));
+                                .setBackgroundColor(mCommentVerticalBarColor5);
                         break;
                     case 6:
                         ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
-                                .setBackgroundColor(ContextCompat.getColor(mActivity, R.color.commentVerticalBar6));
+                                .setBackgroundColor(mCommentVerticalBarColor6);
                         break;
                 }
 
@@ -1615,7 +1633,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ((CommentViewHolder) holder).authorTypeImageView.setVisibility(View.GONE);
             ((CommentViewHolder) holder).expandButton.setVisibility(View.GONE);
             ((CommentViewHolder) holder).upVoteButton.clearColorFilter();
-            ((CommentViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
+            ((CommentViewHolder) holder).scoreTextView.setTextColor(mSecondaryTextColor);
             ((CommentViewHolder) holder).downVoteButton.clearColorFilter();
             ((CommentViewHolder) holder).replyButton.clearColorFilter();
             ViewGroup.LayoutParams params = ((CommentViewHolder) holder).verticalBlock.getLayoutParams();
@@ -1625,7 +1643,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ((CommentViewHolder) holder).itemView.setBackgroundColor(mCommentBackgroundColor);
         } else if (holder instanceof PostDetailViewHolder) {
             ((PostDetailViewHolder) holder).mUpvoteButton.clearColorFilter();
-            ((PostDetailViewHolder) holder).mScoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
+            ((PostDetailViewHolder) holder).mScoreTextView.setTextColor(mSecondaryTextColor);
             ((PostDetailViewHolder) holder).mDownvoteButton.clearColorFilter();
             ((PostDetailViewHolder) holder).flairTextView.setVisibility(View.GONE);
             ((PostDetailViewHolder) holder).spoilerTextView.setVisibility(View.GONE);
@@ -1804,7 +1822,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     mPost.setVoteType(0);
                     newVoteType = RedditUtils.DIR_UNVOTE;
                     mUpvoteButton.clearColorFilter();
-                    mScoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
+                    mScoreTextView.setTextColor(mSecondaryTextColor);
                 }
 
                 mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
@@ -1822,7 +1840,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         } else {
                             mPost.setVoteType(0);
                             mUpvoteButton.clearColorFilter();
-                            mScoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
+                            mScoreTextView.setTextColor(mSecondaryTextColor);
                         }
 
                         mDownvoteButton.clearColorFilter();
@@ -1878,7 +1896,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     mPost.setVoteType(0);
                     newVoteType = RedditUtils.DIR_UNVOTE;
                     mDownvoteButton.clearColorFilter();
-                    mScoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
+                    mScoreTextView.setTextColor(mSecondaryTextColor);
                 }
 
                 mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
@@ -1896,7 +1914,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         } else {
                             mPost.setVoteType(0);
                             mDownvoteButton.clearColorFilter();
-                            mScoreTextView.setTextColor(ContextCompat.getColor(mActivity, R.color.defaultTextColor));
+                            mScoreTextView.setTextColor(mSecondaryTextColor);
                         }
 
                         mUpvoteButton.clearColorFilter();

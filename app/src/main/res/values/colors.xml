@@ -8,13 +8,13 @@
     
     <color name="gold">#FFC107</color>
 
-    <color name="primaryTextColor">#000000</color>
+    <!--<color name="primaryTextColor">#000000</color>-->
 
     <!--<color name="colorPrimaryDarkDayNightTheme">@color/colorPrimaryDark</color>-->
 
-    <color name="dividerColor">#E0E0E0</color>
+    <!--<color name="dividerColor">#E0E0E0</color>-->
 
-    <color name="grey">#E0E0E0</color>
+    <!--<color name="grey">#E0E0E0</color>-->
 
     <color name="backgroundColor">#FFFFFF</color>
 
@@ -22,17 +22,17 @@
 
     <color name="backgroundColorPrimaryDark">@color/colorPrimaryDark</color>-->
 
-    <color name="backgroundColorInverse">#000000</color>
+    <color name="playButtonBackgroundColor">#000000</color>
 
     <color name="roundedBottomSheetPrimaryBackground">#FFFFFF</color>
 
-    <color name="roundedBottomSheetPrimaryNavigationBarColor">@android:color/black</color>
+    <color name="roundedBottomSheetPrimaryNavigationBarColor">#000000</color>
 
     <!--<color name="upvoted">#E91E63</color>
 
     <color name="downvoted">#007DDE</color>-->
 
-    <color name="voteAndReplyUnavailableVoteButtonColor">#F0F0F0</color>
+    <!--<color name="voteAndReplyUnavailableVoteButtonColor">#F0F0F0</color>-->
 
     <!--<color name="tabLayoutWithExpandedCollapsingToolbarTextColor">@color/colorPrimary</color>
 
@@ -46,29 +46,29 @@
 
     <color name="tabLayoutWithCollapsedCollapsingToolbarTabIndicator">@color/tabLayoutWithCollapsedCollapsingToolbarTextColor</color>-->
 
-    <color name="navBarColor">#FFFFFF</color>
+    <!--<color name="navBarColor">#FFFFFF</color>-->
 
-    <color name="cardViewBackgroundColor">#FFFFFF</color>
+    <!--<color name="cardViewBackgroundColor">#FFFFFF</color>-->
 
-    <color name="singleCommentThreadBackgroundColor">#B3E5F9</color>
+    <!--<color name="singleCommentThreadBackgroundColor">#B3E5F9</color>-->
 
-    <color name="unreadMessageBackgroundColor">#B3E5F9</color>
+    <!--<color name="unreadMessageBackgroundColor">#B3E5F9</color>-->
 
     <!--<color name="archivedTint">#B4009F</color>
 
     <color name="lockedIconTint">#EE7302</color>-->
 
-    <color name="notificationIconColor">@color/colorPrimary</color>
+    <!--<color name="notificationIconColor">@color/colorPrimary</color>-->
 
-    <color name="defaultTextColor">#8A000000</color>
+    <!--<color name="defaultTextColor">#8A000000</color>-->
 
-    <color name="commentVerticalBar1">#1565C0</color>
+    <!--<color name="commentVerticalBar1">#1565C0</color>
     <color name="commentVerticalBar2">#EE02BE</color>
     <color name="commentVerticalBar3">#02DFEE</color>
     <color name="commentVerticalBar4">#EED502</color>
     <color name="commentVerticalBar5">#EE0220</color>
     <color name="commentVerticalBar6">#02EE6E</color>
-    <color name="commentVerticalBar7">#EE4602</color>
+    <color name="commentVerticalBar7">#EE4602</color>-->
 
     <!--<color name="toolbarAndTabBackgroundColor">@color/colorPrimary</color>
 

@@ -40,12 +40,12 @@
                 android:gravity="top"
                 android:padding="16dp"
                 android:textSize="?attr/title_font_18"
-                android:textColor="@color/primaryTextColor" />
+                android:textColor="?attr/primaryTextColor" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/dividerColor" />
+                android:background="?attr/dividerColor" />
 
             <EditText
                 android:id="@+id/post_text_content_edit_text_edit_post_activity"
@@ -57,7 +57,7 @@
                 android:inputType="textCapSentences|textMultiLine"
                 android:textSize="?attr/content_font_18"
                 android:background="#00000000"
-                android:textColor="@color/primaryTextColor" />
+                android:textColor="?attr/primaryTextColor" />
 
         </LinearLayout>
 

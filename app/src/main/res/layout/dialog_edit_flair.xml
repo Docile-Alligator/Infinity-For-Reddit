@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
         android:background="#00000000"
-        android:textColor="@color/primaryTextColor"
+        android:textColor="?attr/primaryTextColor"
         android:textSize="?attr/font_default"
         android:hint="@string/flair"
         android:maxLength="64" />
@@ -20,7 +20,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:text="@string/only_allow_64_chars"
-        android:textColor="@color/colorAccent"
+        android:textColor="?attr/colorAccent"
         android:textSize="?attr/font_default" />
 
 </LinearLayout>

@@ -6,7 +6,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +46,7 @@ import ml.docilealligator.infinityforreddit.MultiReddit.MultiRedditViewModel;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
 
 public class MultiRedditListingActivity extends BaseActivity {
@@ -147,11 +147,8 @@ public class MultiRedditListingActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mSwipeRefreshLayout.setOnRefreshListener(this::loadMultiReddits);
-
-        TypedValue typedValue = new TypedValue();
-        getTheme().resolveAttribute(R.attr.cardViewBackgroundColor, typedValue, true);
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(typedValue.data);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(Utils.getAttributeColor(this, R.attr.cardViewBackgroundColor));
+        mSwipeRefreshLayout.setColorSchemeColors(Utils.getAttributeColor(this, R.attr.colorAccent));
 
         if (savedInstanceState != null) {
             mInsertSuccess = savedInstanceState.getBoolean(INSERT_MULTI_REDDIT_STATE);

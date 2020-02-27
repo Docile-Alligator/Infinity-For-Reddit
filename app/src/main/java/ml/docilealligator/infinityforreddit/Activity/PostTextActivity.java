@@ -104,6 +104,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
     private boolean subredditIsUser;
     private boolean loadSubredditIconSuccessful = true;
     private boolean isPosting;
+    private int primaryTextColor;
     private int flairColor;
     private int spoilerColor;
     private int nsfwColor;
@@ -135,6 +136,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
 
         mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
 
+        primaryTextColor = Utils.getAttributeColor(this, R.attr.primaryTextColor);
         flairColor = Utils.getAttributeColor(this, R.attr.flairColor);
         spoilerColor = Utils.getAttributeColor(this, R.attr.spoilerColor);
         nsfwColor = Utils.getAttributeColor(this, R.attr.nsfwColor);
@@ -160,7 +162,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
             isNSFW = savedInstanceState.getBoolean(IS_NSFW_STATE);
 
             if (subredditName != null) {
-                subredditNameTextView.setTextColor(resources.getColor(R.color.primaryTextColor));
+                subredditNameTextView.setTextColor(primaryTextColor);
                 subredditNameTextView.setText(subredditName);
                 flairTextView.setVisibility(View.VISIBLE);
                 if (!loadSubredditIconSuccessful) {
@@ -192,7 +194,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
                 loadSubredditIconSuccessful = false;
                 subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME);
                 subredditSelected = true;
-                subredditNameTextView.setTextColor(resources.getColor(R.color.primaryTextColor));
+                subredditNameTextView.setTextColor(primaryTextColor);
                 subredditNameTextView.setText(subredditName);
                 flairTextView.setVisibility(View.VISIBLE);
                 loadSubredditIcon();
@@ -427,7 +429,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
                 subredditSelected = true;
                 subredditIsUser = data.getExtras().getBoolean(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_IS_USER);
 
-                subredditNameTextView.setTextColor(resources.getColor(R.color.primaryTextColor));
+                subredditNameTextView.setTextColor(primaryTextColor);
                 subredditNameTextView.setText(subredditName);
                 displaySubredditIcon();
 

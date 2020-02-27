@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:textColor="@color/primaryTextColor"
+        android:textColor="?attr/primaryTextColor"
         android:textSize="?attr/font_default" />
 
     <ImageView
@@ -22,7 +22,7 @@
         android:layout_marginStart="32dp"
         android:src="@drawable/ic_outline_edit_24px"
         android:visibility="gone"
-        android:tint="@color/primaryTextColor"
+        android:tint="?attr/primaryTextColor"
         android:background="?actionBarItemBackground"
         android:clickable="true"
         android:focusable="true" />

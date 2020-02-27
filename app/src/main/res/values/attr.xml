@@ -4,7 +4,7 @@
 
     <declare-styleable name="FontStyle">
         <attr name="font_default" format="dimension"/>
-        <attr name="font_10" format="dimension" />
+        <attr name="font_10" format="dimension"/>
         <attr name="font_12" format="dimension"/>
         <attr name="font_16" format="dimension"/>
         <attr name="font_18" format="dimension"/>
@@ -30,36 +30,51 @@
     <declare-styleable name="Theme">
         <attr name="colorPrimary" format="color"/>
         <attr name="colorPrimaryDark" format="color"/>
-        <attr name="colorAccent" format="color" />
-        <attr name="colorPrimaryLightTheme" format="color" />
+        <attr name="colorAccent" format="color"/>
+        <attr name="colorPrimaryLightTheme" format="color"/>
+        <attr name="primaryTextColor" format="color"/>
+        <attr name="secondaryTextColor" format="color"/>
         <attr name="backgroundColor" format="color"/>
         <attr name="roundedBottomSheetPrimaryBackground" format="color"/>
         <attr name="cardViewBackgroundColor" format="color"/>
         <attr name="toolbarAndTabBackgroundColor" format="color"/>
         <attr name="circularProgressBarBackground" format="color"/>
         <attr name="tabLayoutWithExpandedCollapsingToolbarTabBackground" format="color"/>
-        <attr name="tabLayoutWithExpandedCollapsingToolbarTextColor" format="color" />
-        <attr name="tabLayoutWithExpandedCollapsingToolbarTabIndicator" format="color" />
+        <attr name="tabLayoutWithExpandedCollapsingToolbarTextColor" format="color"/>
+        <attr name="tabLayoutWithExpandedCollapsingToolbarTabIndicator" format="color"/>
         <attr name="tabLayoutWithCollapsedCollapsingToolbarTabBackground" format="color"/>
-        <attr name="tabLayoutWithCollapsedCollapsingToolbarTextColor" format="color" />
-        <attr name="tabLayoutWithCollapsedCollapsingToolbarTabIndicator" format="color" />
-        <attr name="navBarColor" format="color" />
-        <attr name="upvoted" format="color" />
-        <attr name="downvoted" format="color" />
-        <attr name="post_type" format="color" />
-        <attr name="spoilerColor" format="color" />
-        <attr name="nsfwColor" format="color" />
-        <attr name="flairColor" format="color" />
-        <attr name="archivedTint" format="color" />
-        <attr name="lockedIconTint" format="color" />
-        <attr name="crosspost" format="color" />
-        <attr name="stickiedPost" format="color" />
-        <attr name="subscribed" format="color" />
-        <attr name="unsubscribed" format="color" />
-        <attr name="username" format="color" />
-        <attr name="subreddit" format="color" />
-        <attr name="authorFlairTextColor" format="color" />
-        <attr name="submitter" format="color" />
-        <attr name="moderator" format="color" />
+        <attr name="tabLayoutWithCollapsedCollapsingToolbarTextColor" format="color"/>
+        <attr name="tabLayoutWithCollapsedCollapsingToolbarTabIndicator" format="color"/>
+        <attr name="navBarColor" format="color"/>
+        <attr name="upvoted" format="color"/>
+        <attr name="downvoted" format="color"/>
+        <attr name="post_type" format="color"/>
+        <attr name="spoilerColor" format="color"/>
+        <attr name="nsfwColor" format="color"/>
+        <attr name="flairColor" format="color"/>
+        <attr name="archivedTint" format="color"/>
+        <attr name="lockedIconTint" format="color"/>
+        <attr name="crosspost" format="color"/>
+        <attr name="stickiedPost" format="color"/>
+        <attr name="subscribed" format="color"/>
+        <attr name="unsubscribed" format="color"/>
+        <attr name="username" format="color"/>
+        <attr name="subreddit" format="color"/>
+        <attr name="authorFlairTextColor" format="color"/>
+        <attr name="submitter" format="color"/>
+        <attr name="moderator" format="color"/>
+        <attr name="notificationIconColor" format="color"/>
+        <attr name="singleCommentThreadBackgroundColor" format="color"/>
+        <attr name="unreadMessageBackgroundColor" format="color"/>
+        <attr name="dividerColor" format="color"/>
+        <attr name="noPreviewLinkBackgroundColor" format="color"/>
+        <attr name="voteAndReplyUnavailableVoteButtonColor" format="color"/>
+        <attr name="commentVerticalBarColor1" format="color"/>
+        <attr name="commentVerticalBarColor2" format="color"/>
+        <attr name="commentVerticalBarColor3" format="color"/>
+        <attr name="commentVerticalBarColor4" format="color"/>
+        <attr name="commentVerticalBarColor5" format="color"/>
+        <attr name="commentVerticalBarColor6" format="color"/>
+        <attr name="commentVerticalBarColor7" format="color"/>
     </declare-styleable>
 </resources>

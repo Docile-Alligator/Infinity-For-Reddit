@@ -7,6 +7,8 @@ import android.content.Context;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import ml.docilealligator.infinityforreddit.Utils.Utils;
+
 public class NotificationUtils {
     public static final String CHANNEL_SUBMIT_POST = "Submit Post";
     static final String CHANNEL_ID_NEW_MESSAGES = "new_messages";
@@ -31,7 +33,7 @@ public class NotificationUtils {
                 .setContentTitle(title)
                 .setContentText(content)
                 .setSmallIcon(R.drawable.ic_notification)
-                .setColor(context.getResources().getColor(R.color.notificationIconColor))
+                .setColor(context.getResources().getColor(Utils.getAttributeColor(context, R.attr.notificationIconColor)))
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .setSummaryText(summary)
                         .bigText(content))
@@ -52,7 +54,7 @@ public class NotificationUtils {
                 //set content text to support devices running API level < 24
                 .setContentText(content)
                 .setSmallIcon(R.drawable.ic_notification)
-                .setColor(context.getResources().getColor(R.color.notificationIconColor))
+                .setColor(Utils.getAttributeColor(context, R.attr.notificationIconColor))
                 .setGroup(group)
                 .setGroupSummary(true)
                 .setAutoCancel(true);

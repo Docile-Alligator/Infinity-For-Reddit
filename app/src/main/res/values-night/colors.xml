@@ -8,13 +8,13 @@
 
     <color name="gold">#FFC107</color>
 
-    <color name="primaryTextColor">#FFFFFF</color>
+    <!--<color name="primaryTextColor">#FFFFFF</color>-->
 
     <!--<color name="colorPrimaryDarkDayNightTheme">#1E88E5</color>-->
 
-    <color name="dividerColor">#69666C</color>
+    <!--<color name="dividerColor">#69666C</color>-->
 
-    <color name="grey">#424242</color>
+    <!--<color name="grey">#424242</color>-->
 
     <color name="backgroundColor">#121212</color>
 
@@ -22,11 +22,11 @@
 
     <color name="backgroundColorPrimaryDark">#1565C0</color>-->
 
-    <color name="backgroundColorInverse">#FFFFFF</color>
+    <color name="playButtonBackgroundColor">#FFFFFF</color>
 
     <color name="roundedBottomSheetPrimaryBackground">#242424</color>
 
-    <color name="voteAndReplyUnavailableVoteButtonColor">#3C3C3C</color>
+    <!--<color name="voteAndReplyUnavailableVoteButtonColor">#3C3C3C</color>-->
 
     <!--<color name="tabLayoutWithExpandedCollapsingToolbarTextColor">#FFFFFF</color>
 
@@ -40,25 +40,25 @@
 
     <color name="tabLayoutWithCollapsedCollapsingToolbarTabIndicator">@color/tabLayoutWithCollapsedCollapsingToolbarTextColor</color>-->
 
-    <color name="navBarColor">@color/backgroundColor</color>
+    <!--<color name="navBarColor">@color/backgroundColor</color>-->
 
-    <color name="cardViewBackgroundColor">#242424</color>
+    <!--<color name="cardViewBackgroundColor">#242424</color>-->
 
-    <color name="singleCommentThreadBackgroundColor">#123E77</color>
+    <!--<color name="singleCommentThreadBackgroundColor">#123E77</color>-->
 
-    <color name="unreadMessageBackgroundColor">#123E77</color>
+    <!--<color name="unreadMessageBackgroundColor">#123E77</color>-->
 
-    <color name="notificationIconColor">#1565C0</color>
+    <!--<color name="notificationIconColor">#1565C0</color>-->
 
-    <color name="defaultTextColor">#B3FFFFFF</color>
+    <!--<color name="defaultTextColor">#B3FFFFFF</color>-->
 
-    <color name="commentVerticalBar1">#1565C0</color>
+    <!--<color name="commentVerticalBar1">#1565C0</color>
     <color name="commentVerticalBar2">#C300B3</color>
     <color name="commentVerticalBar3">#00B8DA</color>
     <color name="commentVerticalBar4">#EDCA00</color>
     <color name="commentVerticalBar5">#EE0219</color>
     <color name="commentVerticalBar6">#00B925</color>
-    <color name="commentVerticalBar7">#EE4602</color>
+    <color name="commentVerticalBar7">#EE4602</color>-->
 
     <!--<color name="toolbarAndTabBackgroundColor">#282828</color>-->
 </resources>

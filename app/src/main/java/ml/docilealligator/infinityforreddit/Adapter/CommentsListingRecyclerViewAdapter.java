@@ -19,7 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.content.ContextCompat;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -66,6 +65,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     private Markwon mMarkwon;
     private String mAccessToken;
     private String mAccountName;
+    private int mSecondaryTextColor;
     private int mUsernameColor;
     private int mSubredditColor;
     private int mUpvotedColor;
@@ -117,6 +117,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         mShowCommentDivider = showCommentDivider;
         mShowAbsoluteNumberOfVotes = showAbsoluteNumberOfVotes;
         mRetryLoadingMoreCallback = retryLoadingMoreCallback;
+        mSecondaryTextColor = Utils.getAttributeColor(context, R.attr.secondaryTextColor);
         mSubredditColor = Utils.getAttributeColor(context, R.attr.subreddit);
         mUsernameColor = Utils.getAttributeColor(context, R.attr.username);
         mUpvotedColor = Utils.getAttributeColor(context, R.attr.upvoted);
@@ -232,7 +233,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
                         newVoteType = RedditUtils.DIR_UNVOTE;
                         ((DataViewHolder) holder).upvoteButton.clearColorFilter();
-                        ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.defaultTextColor));
+                        ((DataViewHolder) holder).scoreTextView.setTextColor(mSecondaryTextColor);
                     }
 
                     ((DataViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
@@ -248,7 +249,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                             } else {
                                 comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
                                 ((DataViewHolder) holder).upvoteButton.clearColorFilter();
-                                ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.defaultTextColor));
+                                ((DataViewHolder) holder).scoreTextView.setTextColor(mSecondaryTextColor);
                             }
 
                             ((DataViewHolder) holder).downvoteButton.clearColorFilter();
@@ -284,7 +285,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
                         newVoteType = RedditUtils.DIR_UNVOTE;
                         ((DataViewHolder) holder).downvoteButton.clearColorFilter();
-                        ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.defaultTextColor));
+                        ((DataViewHolder) holder).scoreTextView.setTextColor(mSecondaryTextColor);
                     }
 
                     ((DataViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
@@ -300,7 +301,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                             } else {
                                 comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
                                 ((DataViewHolder) holder).downvoteButton.clearColorFilter();
-                                ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.defaultTextColor));
+                                ((DataViewHolder) holder).scoreTextView.setTextColor(mSecondaryTextColor);
                             }
 
                             ((DataViewHolder) holder).upvoteButton.clearColorFilter();
@@ -380,7 +381,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         if (holder instanceof DataViewHolder) {
             ((DataViewHolder) holder).upvoteButton.clearColorFilter();
             ((DataViewHolder) holder).downvoteButton.clearColorFilter();
-            ((DataViewHolder) holder).scoreTextView.setTextColor(ContextCompat.getColor(mContext, R.color.defaultTextColor));
+            ((DataViewHolder) holder).scoreTextView.setTextColor(mSecondaryTextColor);
         }
     }
 

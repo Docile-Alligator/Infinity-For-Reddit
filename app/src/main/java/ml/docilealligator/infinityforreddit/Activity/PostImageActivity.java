@@ -130,6 +130,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
     private boolean loadSubredditIconSuccessful = true;
     private boolean isPosting;
     private Uri imageUri;
+    private int primaryTextColor;
     private int flairColor;
     private int spoilerColor;
     private int nsfwColor;
@@ -161,6 +162,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
 
         mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
 
+        primaryTextColor = Utils.getAttributeColor(this, R.attr.primaryTextColor);
         flairColor = Utils.getAttributeColor(this, R.attr.flairColor);
         spoilerColor = Utils.getAttributeColor(this, R.attr.spoilerColor);
         nsfwColor = Utils.getAttributeColor(this, R.attr.nsfwColor);
@@ -192,7 +194,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
             }
 
             if (subredditName != null) {
-                subredditNameTextView.setTextColor(resources.getColor(R.color.primaryTextColor));
+                subredditNameTextView.setTextColor(primaryTextColor);
                 subredditNameTextView.setText(subredditName);
                 flairTextView.setVisibility(View.VISIBLE);
                 if (!loadSubredditIconSuccessful) {
@@ -224,7 +226,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
                 loadSubredditIconSuccessful = false;
                 subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME);
                 subredditSelected = true;
-                subredditNameTextView.setTextColor(resources.getColor(R.color.primaryTextColor));
+                subredditNameTextView.setTextColor(primaryTextColor);
                 subredditNameTextView.setText(subredditName);
                 loadSubredditIcon();
             } else {
@@ -507,7 +509,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
                 subredditSelected = true;
                 subredditIsUser = data.getExtras().getBoolean(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_IS_USER);
 
-                subredditNameTextView.setTextColor(resources.getColor(R.color.primaryTextColor));
+                subredditNameTextView.setTextColor(primaryTextColor);
                 subredditNameTextView.setText(subredditName);
                 displaySubredditIcon();
 

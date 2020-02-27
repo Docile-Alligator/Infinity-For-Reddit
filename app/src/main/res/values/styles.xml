@@ -69,7 +69,7 @@
     </style>
 
     <style name="MaterialAlertDialogNegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
-        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColor">?attr/primaryTextColor</item>
     </style>
 
     <style name="MaterialAlertDialogTitleTextStyle" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
@@ -83,7 +83,7 @@
     <style name="PreferenceActivityTheme" parent="AppTheme.NoActionBar">
         <item name="android:textAppearanceListItem">@style/PreferenceTitleTextStyle</item>
         <item name="android:textAppearanceListItemSecondary">@style/PreferenceSubtitleTextStyle</item>
-        <item name="android:textColorPrimary">@color/primaryTextColor</item>
+        <item name="android:textColorPrimary">?attr/primaryTextColor</item>
         <item name="buttonBarPositiveButtonStyle">@style/MaterialAlertDialogPositiveButtonStyle</item>
         <item name="buttonBarNegativeButtonStyle">@style/MaterialAlertDialogNegativeButtonStyle</item>
         <item name="alertDialogTheme">@style/ListPreferenceStyle</item>
@@ -91,7 +91,7 @@
 
     <style name="PreferenceTitleTextStyle">
         <item name="android:textSize">?attr/font_16</item>
-        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColor">?attr/primaryTextColor</item>
     </style>
 
     <style name="PreferenceSubtitleTextStyle">
@@ -262,9 +262,11 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorPrimaryLightTheme">@color/colorPrimary</item>
+        <item name="primaryTextColor">#000000</item>
+        <item name="secondaryTextColor">#8A000000</item>
         <item name="backgroundColor">@color/backgroundColor</item>
         <item name="roundedBottomSheetPrimaryBackground">@color/roundedBottomSheetPrimaryBackground</item>
-        <item name="cardViewBackgroundColor">@color/cardViewBackgroundColor</item>
+        <item name="cardViewBackgroundColor">#FFFFFF</item>
         <item name="toolbarAndTabBackgroundColor">@color/colorPrimary</item>
         <item name="circularProgressBarBackground">#FFFFFF</item>
         <item name="tabLayoutWithExpandedCollapsingToolbarTabBackground">#FFFFFF</item>
@@ -291,6 +293,19 @@
         <item name="authorFlairTextColor">#EE02C4</item>
         <item name="submitter">#EE8A02</item>
         <item name="moderator">#00BA81</item>
+        <item name="notificationIconColor">@color/colorPrimary</item>
+        <item name="singleCommentThreadBackgroundColor">#B3E5F9</item>
+        <item name="unreadMessageBackgroundColor">#B3E5F9</item>
+        <item name="dividerColor">#E0E0E0</item>
+        <item name="noPreviewLinkBackgroundColor">#E0E0E0</item>
+        <item name="voteAndReplyUnavailableVoteButtonColor">#F0F0F0</item>
+        <item name="commentVerticalBarColor1">#1565C0</item>
+        <item name="commentVerticalBarColor2">#EE02BE</item>
+        <item name="commentVerticalBarColor3">#02DFEE</item>
+        <item name="commentVerticalBarColor4">#EED502</item>
+        <item name="commentVerticalBarColor5">#EE0220</item>
+        <item name="commentVerticalBarColor6">#02EE6E</item>
+        <item name="commentVerticalBarColor7">#EE4602</item>
     </style>
 
     <style name="Theme.Default.NormalDark">
@@ -298,9 +313,11 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorPrimaryLightTheme">#1565C0</item>
+        <item name="primaryTextColor">#FFFFFF</item>
+        <item name="secondaryTextColor">#B3FFFFFF</item>
         <item name="backgroundColor">@color/backgroundColor</item>
         <item name="roundedBottomSheetPrimaryBackground">@color/roundedBottomSheetPrimaryBackground</item>
-        <item name="cardViewBackgroundColor">@color/cardViewBackgroundColor</item>
+        <item name="cardViewBackgroundColor">#242424</item>
         <item name="toolbarAndTabBackgroundColor">#282828</item>
         <item name="circularProgressBarBackground">@color/colorPrimary</item>
         <item name="tabLayoutWithExpandedCollapsingToolbarTabBackground">@color/backgroundColor</item>
@@ -327,6 +344,19 @@
         <item name="authorFlairTextColor">#EE02C4</item>
         <item name="submitter">#EE8A02</item>
         <item name="moderator">#00BA81</item>
+        <item name="notificationIconColor">#1565C0</item>
+        <item name="singleCommentThreadBackgroundColor">#123E77</item>
+        <item name="unreadMessageBackgroundColor">#123E77</item>
+        <item name="dividerColor">#69666C</item>
+        <item name="noPreviewLinkBackgroundColor">#424242</item>
+        <item name="voteAndReplyUnavailableVoteButtonColor">#3C3C3C</item>
+        <item name="commentVerticalBarColor1">#1565C0</item>
+        <item name="commentVerticalBarColor2">#C300B3</item>
+        <item name="commentVerticalBarColor3">#00B8DA</item>
+        <item name="commentVerticalBarColor4">#EDCA00</item>
+        <item name="commentVerticalBarColor5">#EE0219</item>
+        <item name="commentVerticalBarColor6">#00B925</item>
+        <item name="commentVerticalBarColor7">#EE4602</item>
     </style>
 
     <style name="Theme.Default.AmoledDark">
@@ -334,6 +364,8 @@
         <item name="colorPrimaryDark">#000000</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorPrimaryLightTheme">#1565C0</item>
+        <item name="primaryTextColor">#FFFFFF</item>
+        <item name="secondaryTextColor">#B3FFFFFF</item>
         <item name="backgroundColor">#000000</item>
         <item name="roundedBottomSheetPrimaryBackground">#000000</item>
         <item name="cardViewBackgroundColor">#000000</item>
@@ -363,6 +395,70 @@
         <item name="authorFlairTextColor">#EE02C4</item>
         <item name="submitter">#EE8A02</item>
         <item name="moderator">#00BA81</item>
+        <item name="notificationIconColor">#1565C0</item>
+        <item name="singleCommentThreadBackgroundColor">#123E77</item>
+        <item name="unreadMessageBackgroundColor">#123E77</item>
+        <item name="dividerColor">#69666C</item>
+        <item name="noPreviewLinkBackgroundColor">#424242</item>
+        <item name="voteAndReplyUnavailableVoteButtonColor">#3C3C3C</item>
+        <item name="commentVerticalBarColor1">#1565C0</item>
+        <item name="commentVerticalBarColor2">#C300B3</item>
+        <item name="commentVerticalBarColor3">#00B8DA</item>
+        <item name="commentVerticalBarColor4">#EDCA00</item>
+        <item name="commentVerticalBarColor5">#EE0219</item>
+        <item name="commentVerticalBarColor6">#00B925</item>
+        <item name="commentVerticalBarColor7">#EE4602</item>
+    </style>
+
+    <style name="Theme.Purple">
+        <item name="colorPrimary">#9C27B0</item>
+        <item name="colorPrimaryDark">#7B1FA2</item>
+        <item name="colorAccent">#03A9F4</item>
+        <item name="colorPrimaryLightTheme">#9C27B0</item>
+        <item name="primaryTextColor">#000000</item>
+        <item name="secondaryTextColor">#8A000000</item>
+        <item name="backgroundColor">@color/backgroundColor</item>
+        <item name="roundedBottomSheetPrimaryBackground">@color/roundedBottomSheetPrimaryBackground</item>
+        <item name="cardViewBackgroundColor">#FFFFFF</item>
+        <item name="toolbarAndTabBackgroundColor">#9C27B0</item>
+        <item name="circularProgressBarBackground">#FFFFFF</item>
+        <item name="tabLayoutWithExpandedCollapsingToolbarTabBackground">#FFFFFF</item>
+        <item name="tabLayoutWithExpandedCollapsingToolbarTextColor">#9C27B0</item>
+        <item name="tabLayoutWithExpandedCollapsingToolbarTabIndicator">#9C27B0</item>
+        <item name="tabLayoutWithCollapsedCollapsingToolbarTabBackground">#9C27B0</item>
+        <item name="tabLayoutWithCollapsedCollapsingToolbarTextColor">#FFFFFF</item>
+        <item name="tabLayoutWithCollapsedCollapsingToolbarTabIndicator">#FFFFFF</item>
+        <item name="navBarColor">@color/backgroundColor</item>
+        <item name="upvoted">#E91E63</item>
+        <item name="downvoted">#007DDE</item>
+        <item name="post_type">#7B1FA2</item>
+        <item name="spoilerColor">#EE02EB</item>
+        <item name="nsfwColor">#03A9F4</item>
+        <item name="flairColor">#00AA8C</item>
+        <item name="archivedTint">#B4009F</item>
+        <item name="lockedIconTint">#EE7302</item>
+        <item name="crosspost">#03A9F4</item>
+        <item name="stickiedPost">#7B1FA2</item>
+        <item name="subscribed">#03A9F4</item>
+        <item name="unsubscribed">#7B1FA2</item>
+        <item name="username">#7B1FA2</item>
+        <item name="subreddit">#03A9F4</item>
+        <item name="authorFlairTextColor">#EE02C4</item>
+        <item name="submitter">#EE8A02</item>
+        <item name="moderator">#00BA81</item>
+        <item name="notificationIconColor">#9C27B0</item>
+        <item name="singleCommentThreadBackgroundColor">#B3E5F9</item>
+        <item name="unreadMessageBackgroundColor">#B3E5F9</item>
+        <item name="dividerColor">#E0E0E0</item>
+        <item name="noPreviewLinkBackgroundColor">#E0E0E0</item>
+        <item name="voteAndReplyUnavailableVoteButtonColor">#F0F0F0</item>
+        <item name="commentVerticalBarColor1">#1565C0</item>
+        <item name="commentVerticalBarColor2">#EE02BE</item>
+        <item name="commentVerticalBarColor3">#02DFEE</item>
+        <item name="commentVerticalBarColor4">#EED502</item>
+        <item name="commentVerticalBarColor5">#EE0220</item>
+        <item name="commentVerticalBarColor6">#02EE6E</item>
+        <item name="commentVerticalBarColor7">#EE4602</item>
     </style>
 
 </resources>

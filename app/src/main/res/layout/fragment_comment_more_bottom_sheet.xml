@@ -23,7 +23,7 @@
             android:paddingEnd="32dp"
             android:paddingBottom="16dp"
             android:text="@string/edit"
-            android:textColor="@color/primaryTextColor"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
             android:visibility="gone" />
 
@@ -41,7 +41,7 @@
             android:paddingEnd="32dp"
             android:paddingBottom="16dp"
             android:text="@string/delete"
-            android:textColor="@color/primaryTextColor"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
             android:visibility="gone" />
 
@@ -60,7 +60,7 @@
             android:paddingEnd="32dp"
             android:paddingBottom="16dp"
             android:text="@string/share"
-            android:textColor="@color/primaryTextColor"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default" />
 
         <TextView
@@ -78,7 +78,7 @@
             android:paddingEnd="32dp"
             android:paddingBottom="16dp"
             android:text="@string/copy_text"
-            android:textColor="@color/primaryTextColor"
+            android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default" />
 
     </LinearLayout>

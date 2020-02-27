@@ -57,7 +57,9 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
     private NetworkState networkState;
     private RetryLoadingMoreCallback mRetryLoadingMoreCallback;
     private int mMessageBackgroundColor;
-    private int usernameColor;
+    private int mUsernameColor;
+    private int mPrimaryTextColor;
+    private int mUnreadMessageBackgroundColor;
 
     public MessageRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, String accessToken,
                                       RetryLoadingMoreCallback retryLoadingMoreCallback) {
@@ -94,7 +96,9 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
         mResources = context.getResources();
 
         mMessageBackgroundColor = Utils.getAttributeColor(context, R.attr.cardViewBackgroundColor);
-        usernameColor = Utils.getAttributeColor(context, R.attr.username);
+        mUsernameColor = Utils.getAttributeColor(context, R.attr.username);
+        mPrimaryTextColor = Utils.getAttributeColor(context, R.attr.primaryTextColor);
+        mUnreadMessageBackgroundColor = Utils.getAttributeColor(context, R.attr.unreadMessageBackgroundColor);
     }
 
     @NonNull
@@ -116,11 +120,11 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
             if (message != null) {
                 if (message.isNew()) {
                     ((DataViewHolder) holder).itemView.setBackgroundColor(
-                            mResources.getColor(R.color.unreadMessageBackgroundColor));
+                            mUnreadMessageBackgroundColor);
                 }
 
                 if (message.wasComment()) {
-                    ((DataViewHolder) holder).authorTextView.setTextColor(usernameColor);
+                    ((DataViewHolder) holder).authorTextView.setTextColor(mUsernameColor);
                     ((DataViewHolder) holder).titleTextView.setText(message.getTitle());
                 } else {
                     ((DataViewHolder) holder).titleTextView.setVisibility(View.GONE);
@@ -152,7 +156,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                                     @Override
                                     public void readFailed() {
                                         message.setNew(true);
-                                        ((DataViewHolder) holder).itemView.setBackgroundColor(mResources.getColor(R.color.unreadMessageBackgroundColor));
+                                        ((DataViewHolder) holder).itemView.setBackgroundColor(mUnreadMessageBackgroundColor);
                                     }
                                 });
                     }
@@ -199,7 +203,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
         if (holder instanceof DataViewHolder) {
             ((DataViewHolder) holder).itemView.setBackgroundColor(mMessageBackgroundColor);
             ((DataViewHolder) holder).titleTextView.setVisibility(View.VISIBLE);
-            ((DataViewHolder) holder).authorTextView.setTextColor(mResources.getColor(R.color.primaryTextColor));
+            ((DataViewHolder) holder).authorTextView.setTextColor(mPrimaryTextColor);
         }
     }
 

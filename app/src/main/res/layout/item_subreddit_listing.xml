@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="32dp"
-        android:textColor="@color/primaryTextColor"
+        android:textColor="?attr/primaryTextColor"
         android:textSize="?attr/font_default"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/subreddit_icon_gif_image_view_item_subreddit_listing"
