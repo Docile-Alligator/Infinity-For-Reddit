@@ -318,17 +318,17 @@ public class ViewVideoActivity extends AppCompatActivity {
             isMute = savedInstanceState.getBoolean(IS_MUTE_STATE);
             if (isMute) {
                 player.setVolume(0f);
-                muteButton.setImageResource(R.drawable.ic_unmute_24dp);
+                muteButton.setImageResource(R.drawable.ic_mute_24dp);
             } else {
                 player.setVolume(1f);
-                muteButton.setImageResource(R.drawable.ic_mute_24dp);
+                muteButton.setImageResource(R.drawable.ic_unmute_24dp);
             }
         } else if (muteVideo) {
             isMute = true;
             player.setVolume(0f);
-            muteButton.setImageResource(R.drawable.ic_unmute_24dp);
-        } else {
             muteButton.setImageResource(R.drawable.ic_mute_24dp);
+        } else {
+            muteButton.setImageResource(R.drawable.ic_unmute_24dp);
         }
 
         player.addListener(new Player.EventListener() {
@@ -343,11 +343,11 @@ public class ViewVideoActivity extends AppCompatActivity {
                                 if (isMute) {
                                     isMute = false;
                                     player.setVolume(1f);
-                                    muteButton.setImageResource(R.drawable.ic_mute_24dp);
+                                    muteButton.setImageResource(R.drawable.ic_unmute_24dp);
                                 } else {
                                     isMute = true;
                                     player.setVolume(0f);
-                                    muteButton.setImageResource(R.drawable.ic_unmute_24dp);
+                                    muteButton.setImageResource(R.drawable.ic_mute_24dp);
                                 }
                             });
                             break;
