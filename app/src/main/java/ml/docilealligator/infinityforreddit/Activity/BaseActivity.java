@@ -121,9 +121,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public abstract SharedPreferences getSharedPreferences();
 
-    protected boolean isLightStatusbar() {
-        return lightStatusbar;
-    }
     protected boolean isChangeStatusBarIconColor() {
         return changeStatusBarIconColor;
     }
@@ -136,7 +133,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return systemVisibilityToolbarCollapsed;
     }
 
-    protected boolean isImmersiveInterface() {
+    public boolean isImmersiveInterface() {
         return immersiveInterface;
     }
 
@@ -163,7 +160,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         });
     }
 
-    protected int getNavBarHeight() {
+    public int getNavBarHeight() {
         Resources resources = getResources();
         int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
         if (navBarResourceId > 0) {
