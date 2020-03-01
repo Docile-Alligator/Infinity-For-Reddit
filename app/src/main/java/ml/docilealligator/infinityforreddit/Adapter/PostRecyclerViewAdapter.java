@@ -1502,7 +1502,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         MaterialCardView cardView;
         @BindView(R.id.icon_gif_image_view_item_post)
         AspectRatioGifImageView iconGifImageView;
-        @BindView(R.id.name_text_view_item_post)
+        @BindView(R.id.subreddit_name_text_view_item_post)
         TextView subredditTextView;
         @BindView(R.id.user_text_view_item_post)
         TextView userTextView;

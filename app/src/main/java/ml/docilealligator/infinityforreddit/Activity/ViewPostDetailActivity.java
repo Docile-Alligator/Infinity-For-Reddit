@@ -460,10 +460,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 if (mAccessToken != null) {
                     if (mPost.isSaved()) {
                         saveItem.setVisible(true);
-                        saveItem.setIcon(R.drawable.ic_bookmark_black_24dp);
+                        saveItem.setIcon(R.drawable.ic_bookmark_toolbar_24dp);
                     } else {
                         saveItem.setVisible(true);
-                        saveItem.setIcon(R.drawable.ic_bookmark_border_black_24dp);
+                        saveItem.setIcon(R.drawable.ic_bookmark_border_toolbar_24dp);
                     }
 
                     if (mPost.isHidden()) {
@@ -601,10 +601,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                 if (mAccessToken != null) {
                                     if (post.isSaved()) {
                                         saveItem.setVisible(true);
-                                        saveItem.setIcon(R.drawable.ic_bookmark_black_24dp);
+                                        saveItem.setIcon(R.drawable.ic_bookmark_toolbar_24dp);
                                     } else {
                                         saveItem.setVisible(true);
-                                        saveItem.setIcon(R.drawable.ic_bookmark_border_black_24dp);
+                                        saveItem.setIcon(R.drawable.ic_bookmark_border_toolbar_24dp);
                                     }
 
                                     if (post.isHidden()) {
@@ -911,10 +911,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                     if (mAccessToken != null) {
                                         if (post.isSaved()) {
                                             saveItem.setVisible(true);
-                                            saveItem.setIcon(R.drawable.ic_bookmark_black_24dp);
+                                            saveItem.setIcon(R.drawable.ic_bookmark_toolbar_24dp);
                                         } else {
                                             saveItem.setVisible(true);
-                                            saveItem.setIcon(R.drawable.ic_bookmark_border_black_24dp);
+                                            saveItem.setIcon(R.drawable.ic_bookmark_border_toolbar_24dp);
                                         }
 
                                         if (post.isHidden()) {
@@ -1181,10 +1181,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             if (mMenu != null) {
                 if (event.post.isSaved()) {
                     mMenu.findItem(R.id.action_save_view_post_detail_activity).setIcon(getResources()
-                            .getDrawable(R.drawable.ic_bookmark_black_24dp));
+                            .getDrawable(R.drawable.ic_bookmark_toolbar_24dp));
                 } else {
                     mMenu.findItem(R.id.action_save_view_post_detail_activity).setIcon(getResources()
-                            .getDrawable(R.drawable.ic_bookmark_border_black_24dp));
+                            .getDrawable(R.drawable.ic_bookmark_border_toolbar_24dp));
                 }
             }
             mAdapter.updatePost(mPost);
@@ -1241,10 +1241,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             if (mAccessToken != null) {
                 if (mPost.isSaved()) {
                     saveItem.setVisible(true);
-                    saveItem.setIcon(R.drawable.ic_bookmark_black_24dp);
+                    saveItem.setIcon(R.drawable.ic_bookmark_toolbar_24dp);
                 } else {
                     saveItem.setVisible(true);
-                    saveItem.setIcon(R.drawable.ic_bookmark_border_black_24dp);
+                    saveItem.setIcon(R.drawable.ic_bookmark_border_toolbar_24dp);
                 }
 
                 if (mPost.isHidden()) {
@@ -1324,13 +1324,13 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             case R.id.action_save_view_post_detail_activity:
                 if (mPost != null && mAccessToken != null) {
                     if (mPost.isSaved()) {
-                        item.setIcon(R.drawable.ic_bookmark_border_black_24dp);
+                        item.setIcon(R.drawable.ic_bookmark_border_toolbar_24dp);
                         SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
                                 new SaveThing.SaveThingListener() {
                                     @Override
                                     public void success() {
                                         mPost.setSaved(false);
-                                        item.setIcon(R.drawable.ic_bookmark_border_black_24dp);
+                                        item.setIcon(R.drawable.ic_bookmark_border_toolbar_24dp);
                                         showMessage(R.string.post_unsaved_success);
                                         EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                     }
@@ -1338,19 +1338,19 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                     @Override
                                     public void failed() {
                                         mPost.setSaved(true);
-                                        item.setIcon(R.drawable.ic_bookmark_black_24dp);
+                                        item.setIcon(R.drawable.ic_bookmark_toolbar_24dp);
                                         showMessage(R.string.post_unsaved_failed);
                                         EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                     }
                                 });
                     } else {
-                        item.setIcon(R.drawable.ic_bookmark_black_24dp);
+                        item.setIcon(R.drawable.ic_bookmark_toolbar_24dp);
                         SaveThing.saveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
                                 new SaveThing.SaveThingListener() {
                                     @Override
                                     public void success() {
                                         mPost.setSaved(true);
-                                        item.setIcon(R.drawable.ic_bookmark_black_24dp);
+                                        item.setIcon(R.drawable.ic_bookmark_toolbar_24dp);
                                         showMessage(R.string.post_saved_success);
                                         EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                     }
@@ -1358,7 +1358,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                     @Override
                                     public void failed() {
                                         mPost.setSaved(false);
-                                        item.setIcon(R.drawable.ic_bookmark_border_black_24dp);
+                                        item.setIcon(R.drawable.ic_bookmark_border_toolbar_24dp);
                                         showMessage(R.string.post_saved_failed);
                                         EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                     }

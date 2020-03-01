@@ -37,6 +37,7 @@
         <attr name="backgroundColor" format="color"/>
         <attr name="roundedBottomSheetPrimaryBackground" format="color"/>
         <attr name="cardViewBackgroundColor" format="color"/>
+        <attr name="toolbarPrimaryTextAndIconColor" format="color" />
         <attr name="toolbarAndTabBackgroundColor" format="color"/>
         <attr name="circularProgressBarBackground" format="color"/>
         <attr name="tabLayoutWithExpandedCollapsingToolbarTabBackground" format="color"/>

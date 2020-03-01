@@ -124,12 +124,19 @@ public class AccountSavedThingActivity extends BaseActivity {
                 }
             });
 
-            int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+            /*int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
             if (statusBarResourceId > 0) {
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
                 params.topMargin = getResources().getDimensionPixelSize(statusBarResourceId);
                 toolbar.setLayoutParams(params);
-            }
+            }*/
+        }
+
+        int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (statusBarResourceId > 0) {
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
+            params.topMargin = getResources().getDimensionPixelSize(statusBarResourceId);
+            toolbar.setLayoutParams(params);
         }
 
         setSupportActionBar(toolbar);

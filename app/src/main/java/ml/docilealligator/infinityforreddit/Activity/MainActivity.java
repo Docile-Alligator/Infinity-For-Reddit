@@ -3,11 +3,9 @@ package ml.docilealligator.infinityforreddit.Activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -196,61 +194,34 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
         EventBus.getDefault().register(this);
 
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
-            if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
-                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-            }
-            TypedValue typedValue = new TypedValue();
-            getTheme().resolveAttribute(R.attr.navBarColor, typedValue, true);
-            int navBarColor = typedValue.data;
-            window.setNavigationBarColor(navBarColor);
+            Resources resources = getResources();
+            View decorView = window.getDecorView();
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-                Resources resources = getResources();
-
-                if ((resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet))
-                        && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {
-                    window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-
-                    boolean lightNavBar = false;
-                    if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
-                        lightNavBar = true;
-                    }
-                    boolean finalLightNavBar = lightNavBar;
-
-                    View decorView = window.getDecorView();
-                    appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
-                        @Override
-                        public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                            if (state == State.COLLAPSED) {
-                                if (finalLightNavBar) {
-                                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-                                }
-                            } else if (state == State.EXPANDED) {
-                                if (finalLightNavBar) {
-                                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-                                }
-                            }
+            if (isChangeStatusBarIconColor()) {
+                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                    @Override
+                    public void onStateChanged(AppBarLayout appBarLayout, AppBarStateChangeListener.State state) {
+                        if (state == State.COLLAPSED) {
+                            decorView.setSystemUiVisibility(getSystemVisibilityToolbarCollapsed());
+                        } else if (state == State.EXPANDED) {
+                            decorView.setSystemUiVisibility(getSystemVisibilityToolbarExpanded());
                         }
-                    });
-
-                    int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-                    if (statusBarResourceId > 0) {
-                        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
-                        params.topMargin = resources.getDimensionPixelSize(statusBarResourceId);
-                        toolbar.setLayoutParams(params);
                     }
+                });
+            }
 
-                    int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-                    if (navBarResourceId > 0) {
-                        int navBarHeight = resources.getDimensionPixelSize(navBarResourceId);
-                        linearLayoutBottomAppBar.setPadding(0,
-                                (int) (6 * resources.getDisplayMetrics().density), 0, navBarHeight);
-                        navDrawerRecyclerView.setPadding(0, 0, 0, navBarHeight);
-                    }
+            if (isImmersiveInterface()) {
+                window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
+                adjustToolbar(toolbar);
+
+                int navBarHeight = getNavBarHeight();
+                if (navBarHeight > 0) {
+                    linearLayoutBottomAppBar.setPadding(0,
+                            (int) (6 * resources.getDisplayMetrics().density), 0, navBarHeight);
+                    navDrawerRecyclerView.setPadding(0, 0, 0, navBarHeight);
                 }
             }
         }
@@ -506,7 +477,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     case R.string.dark_theme:
                         mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "1").apply();
                         AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                        if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
+                        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
                             getTheme().applyStyle(R.style.Theme_Default_AmoledDark, true);
                         } else {
                             getTheme().applyStyle(R.style.Theme_Default_NormalDark, true);
@@ -1194,7 +1165,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 switch (viewPager.getCurrentItem()) {
                     case 0:
                         mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_BEST_POST, sortType.getType().name()).apply();
-                        if(sortType.getTime() != null) {
+                        if (sortType.getTime() != null) {
                             mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_BEST_POST, sortType.getTime().name()).apply();
                         }
 
@@ -1202,7 +1173,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         break;
                     case 1:
                         mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POPULAR_POST, sortType.getType().name()).apply();
-                        if(sortType.getTime() != null) {
+                        if (sortType.getTime() != null) {
                             mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_POPULAR_POST, sortType.getTime().name()).apply();
                         }
 
@@ -1210,7 +1181,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         break;
                     case 2:
                         mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_ALL_POST, sortType.getType().name()).apply();
-                        if(sortType.getTime() != null) {
+                        if (sortType.getTime() != null) {
                             mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_ALL_POST, sortType.getTime().name()).apply();
                         }
 

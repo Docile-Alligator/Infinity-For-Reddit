@@ -5,6 +5,6 @@
         android:id="@+id/action_download_view_video"
         android:orderInCategory="1"
         android:title="@string/action_download"
-        android:icon="@drawable/ic_file_download_white_24dp"
+        android:icon="@drawable/ic_file_download_toolbar_white_24dp"
         app:showAsAction="always" />
 </menu>

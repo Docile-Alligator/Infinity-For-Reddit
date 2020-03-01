@@ -5,7 +5,7 @@
         android:id="@+id/action_comment_view_post_detail_activity"
         android:orderInCategory="1"
         android:title="@string/action_add_comment"
-        android:icon="@drawable/ic_comment_white_24dp"
+        android:icon="@drawable/ic_comment_toolbar_24dp"
         app:showAsAction="ifRoom"
         android:visible="false" />
 

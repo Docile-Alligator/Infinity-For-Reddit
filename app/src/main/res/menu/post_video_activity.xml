@@ -5,6 +5,6 @@
         android:id="@+id/action_send_post_video_activity"
         android:orderInCategory="1"
         android:title="@string/action_send"
-        android:icon="@drawable/ic_send_white_24dp"
+        android:icon="@drawable/ic_send_toolbar_24dp"
         app:showAsAction="ifRoom" />
 </menu>

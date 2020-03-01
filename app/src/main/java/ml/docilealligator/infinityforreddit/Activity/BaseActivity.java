@@ -2,21 +2,24 @@ package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 
 import ml.docilealligator.infinityforreddit.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.FontStyle;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.TitleFontStyle;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
@@ -24,6 +27,12 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public abstract class BaseActivity extends AppCompatActivity {
+    private boolean immersiveInterface;
+    private boolean lightStatusbar;
+    private boolean changeStatusBarIconColor = true;
+    private int systemVisibilityToolbarExpanded;
+    private int systemVisibilityToolbarCollapsed;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,10 +40,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         SharedPreferences mSharedPreferences = getSharedPreferences();
         boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
         int themeType = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
+        immersiveInterface = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
+                mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true);
         switch (themeType) {
             case 0:
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
                 getTheme().applyStyle(R.style.Theme_Purple, true);
+                lightStatusbar = true;
+                changeStatusBarIconColor = false;
                 break;
             case 1:
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
@@ -43,6 +56,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 } else {
                     getTheme().applyStyle(R.style.Theme_Default_NormalDark, true);
                 }
+                changeStatusBarIconColor = false;
                 break;
             case 2:
                 if (systemDefault) {
@@ -52,12 +66,15 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }
                 if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO) {
                     getTheme().applyStyle(R.style.Theme_Purple, true);
+                    lightStatusbar = true;
+                    changeStatusBarIconColor = false;
                 } else {
                     if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
                         getTheme().applyStyle(R.style.Theme_Default_AmoledDark, true);
                     } else {
                         getTheme().applyStyle(R.style.Theme_Default_NormalDark, true);
                     }
+                    changeStatusBarIconColor = false;
                 }
         }
 
@@ -70,17 +87,69 @@ public abstract class BaseActivity extends AppCompatActivity {
         getTheme().applyStyle(ContentFontStyle.valueOf(mSharedPreferences
                 .getString(SharedPreferencesUtils.CONTENT_FONT_SIZE_KEY, ContentFontStyle.Normal.name())).getResId(), true);
 
+        Window window = getWindow();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Window window = getWindow();
-            if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
+            if (lightStatusbar) {
+                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                systemVisibilityToolbarExpanded = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                if (changeStatusBarIconColor) {
+                    systemVisibilityToolbarCollapsed = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                }
+            } else {
                 window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                systemVisibilityToolbarExpanded = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                if (changeStatusBarIconColor) {
+                    systemVisibilityToolbarCollapsed = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                }
             }
-            TypedValue typedValue = new TypedValue();
-            getTheme().resolveAttribute(R.attr.navBarColor, typedValue, true);
-            int navBarColor = typedValue.data;
-            window.setNavigationBarColor(navBarColor);
+            window.setNavigationBarColor(Utils.getAttributeColor(this, R.attr.navBarColor));
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (lightStatusbar) {
+                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                systemVisibilityToolbarExpanded = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            }
+            if (changeStatusBarIconColor) {
+                systemVisibilityToolbarCollapsed = 0;
+            }
         }
     }
 
     public abstract SharedPreferences getSharedPreferences();
+
+    protected boolean isLightStatusbar() {
+        return lightStatusbar;
+    }
+    protected boolean isChangeStatusBarIconColor() {
+        return changeStatusBarIconColor;
+    }
+
+    protected int getSystemVisibilityToolbarExpanded() {
+        return systemVisibilityToolbarExpanded;
+    }
+
+    protected int getSystemVisibilityToolbarCollapsed() {
+        return systemVisibilityToolbarCollapsed;
+    }
+
+    protected boolean isImmersiveInterface() {
+        return immersiveInterface;
+    }
+
+    protected void adjustToolbar(Toolbar toolbar) {
+        int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (statusBarResourceId > 0) {
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
+            params.topMargin = getResources().getDimensionPixelSize(statusBarResourceId);
+            toolbar.setLayoutParams(params);
+        }
+    }
+
+    protected int getNavBarHeight() {
+        Resources resources = getResources();
+        int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+        if (navBarResourceId > 0) {
+            return resources.getDimensionPixelSize(navBarResourceId);
+        }
+        return 0;
+    }
 }

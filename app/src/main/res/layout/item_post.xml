@@ -30,13 +30,13 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
-                android:id="@+id/name_text_view_item_post"
+                android:id="@+id/subreddit_name_text_view_item_post"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="8dp"
-                android:textColor="#E91E63"
+                android:textColor="?attr/subreddit"
                 android:textSize="?attr/font_default"
                 app:layout_constraintBottom_toTopOf="@id/user_text_view_item_post"
                 app:layout_constraintStart_toEndOf="@id/icon_gif_image_view_item_post"
@@ -56,7 +56,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/icon_gif_image_view_item_post"
                 app:layout_constraintEnd_toStartOf="@id/stickied_post_image_view_item_post"
-                app:layout_constraintTop_toBottomOf="@+id/name_text_view_item_post"
+                app:layout_constraintTop_toBottomOf="@+id/subreddit_name_text_view_item_post"
                 app:layout_constraintHorizontal_bias="0" />
 
             <ImageView
@@ -67,7 +67,7 @@
                 android:tint="?attr/stickiedPost"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/name_text_view_item_post"
+                app:layout_constraintStart_toEndOf="@id/subreddit_name_text_view_item_post"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toTopOf="parent"/>
 
