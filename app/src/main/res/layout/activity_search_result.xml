@@ -36,10 +36,10 @@
             app:layout_scrollFlags="scroll|enterAlways"
             app:tabGravity="fill"
             app:tabMode="fixed"
-            app:tabIndicatorColor="@android:color/white"
+            app:tabIndicatorColor="?attr/tabLayoutWithCollapsedCollapsingToolbarTabIndicator"
             app:tabIndicatorHeight="3dp"
-            app:tabSelectedTextColor="@android:color/white"
-            app:tabTextColor="@android:color/white"
+            app:tabSelectedTextColor="?attr/tabLayoutWithCollapsedCollapsingToolbarTextColor"
+            app:tabTextColor="?attr/tabLayoutWithCollapsedCollapsingToolbarTextColor"
             app:tabRippleColor="?attr/colorControlHighlight"
             app:tabUnboundedRipple="false"/>
 

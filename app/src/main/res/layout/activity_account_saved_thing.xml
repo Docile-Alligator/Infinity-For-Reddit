@@ -40,12 +40,12 @@
             android:background="?attr/toolbarAndTabBackgroundColor"
             app:layout_scrollFlags="scroll|enterAlways"
             app:tabGravity="fill"
-            app:tabIndicatorColor="@android:color/white"
+            app:tabIndicatorColor="?attr/tabLayoutWithCollapsedCollapsingToolbarTabIndicator"
             app:tabIndicatorHeight="3dp"
             app:tabMode="fixed"
             app:tabRippleColor="?attr/colorControlHighlight"
-            app:tabSelectedTextColor="@android:color/white"
-            app:tabTextColor="@android:color/white"
+            app:tabSelectedTextColor="?attr/tabLayoutWithCollapsedCollapsingToolbarTextColor"
+            app:tabTextColor="?attr/tabLayoutWithCollapsedCollapsingToolbarTextColor"
             app:tabUnboundedRipple="false" />
 
     </com.google.android.material.appbar.AppBarLayout>

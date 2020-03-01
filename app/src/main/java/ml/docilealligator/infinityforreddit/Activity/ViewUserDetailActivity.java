@@ -190,13 +190,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
         Resources resources = getResources();
 
-        //Get status bar height
-        int statusBarHeight = 0;
-        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            statusBarHeight = resources.getDimensionPixelSize(resourceId);
-        }
-
         adjustToolbar(toolbar);
 
         String title = "u/" + username;
