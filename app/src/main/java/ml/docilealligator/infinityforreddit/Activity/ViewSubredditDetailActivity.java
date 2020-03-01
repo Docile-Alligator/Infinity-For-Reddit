@@ -3,8 +3,6 @@ package ml.docilealligator.infinityforreddit.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -12,7 +10,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -45,7 +42,6 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.AsyncTask.CheckIsSubscribedToSubredditAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubredditDataAsyncTask;
@@ -163,6 +159,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
+        setTransparentStatusBarAfterToolbarCollapsed(true);
 
         super.onCreate(savedInstanceState);
 
@@ -172,44 +169,24 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
         EventBus.getDefault().register(this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            Resources resources = getResources();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Window window = getWindow();
 
-            if ((resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet))
-                    && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {
-                Window window = getWindow();
+            if (isChangeStatusBarIconColor()) {
+                addOnOffsetChangedListener(appBarLayout);
+            }
+
+            if (isImmersiveInterface()) {
                 window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+                adjustToolbar(toolbar);
 
-                boolean lightNavBar = false;
-                if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
-                    lightNavBar = true;
-                }
-                boolean finalLightNavBar = lightNavBar;
-
-                View decorView = window.getDecorView();
-                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
-                    @Override
-                    public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                        if (state == State.COLLAPSED) {
-                            if (finalLightNavBar) {
-                                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-                            }
-                        } else if (state == State.EXPANDED) {
-                            if (finalLightNavBar) {
-                                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-                            }
-                        }
-                    }
-                });
-
-                int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-                if (navBarResourceId > 0) {
-                    int navBarHeight = resources.getDimensionPixelSize(navBarResourceId);
+                int navBarHeight = getNavBarHeight();
+                if (navBarHeight > 0) {
                     CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
                     params.bottomMargin = navBarHeight;
                     fab.setLayoutParams(params);
                     linearLayoutBottomAppBar.setPadding(0,
-                            (int) (6 * resources.getDisplayMetrics().density), 0, navBarHeight);
+                            (int) (6 * getResources().getDisplayMetrics().density), 0, navBarHeight);
 
                     showToast = true;
                 }
@@ -275,9 +252,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         subredditNameTextView.setText(title);
 
         toolbar.setTitle(title);
-        ViewGroup.MarginLayoutParams toolbarParams = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
-        toolbarParams.topMargin = statusBarHeight;
-        toolbar.setLayoutParams(toolbarParams);
+        adjustToolbar(toolbar);
         setSupportActionBar(toolbar);
 
         glide = Glide.with(this);

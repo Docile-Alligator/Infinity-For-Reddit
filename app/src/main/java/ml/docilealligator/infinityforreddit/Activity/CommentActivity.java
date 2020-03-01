@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Spanned;
 import android.text.style.SuperscriptSpan;
@@ -23,6 +24,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -71,6 +73,8 @@ public class CommentActivity extends BaseActivity {
 
     @BindView(R.id.coordinator_layout_comment_activity)
     CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.appbar_layout_comment_activity)
+    AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_comment_activity)
     Toolbar toolbar;
     @BindView(R.id.comment_parent_markwon_view_comment_activity)
@@ -105,6 +109,10 @@ public class CommentActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
+            addOnOffsetChangedListener(appBarLayout);
+        }
 
         if (savedInstanceState == null) {
             getCurrentAccount();

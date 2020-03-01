@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -98,6 +97,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     ViewPager viewPager;
     @BindView(R.id.appbar_layout_view_user_detail)
     AppBarLayout appBarLayout;
+    @BindView(R.id.toolbar_view_user_detail_activity)
+    Toolbar toolbar;
     @BindView(R.id.tab_layout_view_user_detail_activity)
     TabLayout tabLayout;
     @BindView(R.id.collapsing_toolbar_layout_view_user_detail_activity)
@@ -151,6 +152,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
+        setTransparentStatusBarAfterToolbarCollapsed(true);
 
         super.onCreate(savedInstanceState);
 
@@ -195,10 +197,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             statusBarHeight = resources.getDimensionPixelSize(resourceId);
         }
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        ViewGroup.MarginLayoutParams toolbarLayoutParams = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
-        toolbarLayoutParams.topMargin = statusBarHeight;
-        toolbar.setLayoutParams(toolbarLayoutParams);
+        adjustToolbar(toolbar);
 
         String title = "u/" + username;
         userNameTextView.setText(title);
@@ -213,42 +212,47 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         collapsedTabIndicatorColor = Utils.getAttributeColor(this, R.attr.tabLayoutWithCollapsedCollapsingToolbarTabIndicator);
         collapsedTabBackgroundColor = Utils.getAttributeColor(this, R.attr.tabLayoutWithCollapsedCollapsingToolbarTabBackground);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1
-                && (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
-                || resources.getBoolean(R.bool.isTablet))
-                && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
-            window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-
-            boolean lightNavBar = false;
-            if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
-                lightNavBar = true;
+            if (isImmersiveInterface()) {
+                window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+                showToast = true;
             }
-            boolean finalLightNavBar = lightNavBar;
 
             View decorView = window.getDecorView();
-            appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
-                @Override
-                public void onStateChanged(AppBarLayout appBarLayout, State state) {
-                    if (state == State.COLLAPSED) {
-                        if (finalLightNavBar) {
-                            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+            if (isChangeStatusBarIconColor()) {
+                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                    @Override
+                    public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                        if (state == State.COLLAPSED) {
+                            decorView.setSystemUiVisibility(getSystemVisibilityToolbarCollapsed());
+                            tabLayout.setTabTextColors(collapsedTabTextColor, collapsedTabTextColor);
+                            tabLayout.setSelectedTabIndicatorColor(collapsedTabIndicatorColor);
+                            tabLayout.setBackgroundColor(collapsedTabBackgroundColor);
+                        } else if (state == State.EXPANDED) {
+                            decorView.setSystemUiVisibility(getSystemVisibilityToolbarExpanded());
+                            tabLayout.setTabTextColors(expandedTabTextColor, expandedTabTextColor);
+                            tabLayout.setSelectedTabIndicatorColor(expandedTabIndicatorColor);
+                            tabLayout.setBackgroundColor(expandedTabBackgroundColor);
                         }
-                        tabLayout.setTabTextColors(collapsedTabTextColor, collapsedTabTextColor);
-                        tabLayout.setSelectedTabIndicatorColor(collapsedTabIndicatorColor);
-                        tabLayout.setBackgroundColor(collapsedTabBackgroundColor);
-                    } else if (state == State.EXPANDED) {
-                        if (finalLightNavBar) {
-                            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-                        }
-                        tabLayout.setTabTextColors(expandedTabTextColor, expandedTabTextColor);
-                        tabLayout.setSelectedTabIndicatorColor(expandedTabIndicatorColor);
-                        tabLayout.setBackgroundColor(expandedTabBackgroundColor);
                     }
-                }
-            });
-
-            showToast = true;
+                });
+            } else {
+                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                    @Override
+                    public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                        if (state == State.COLLAPSED) {
+                            tabLayout.setTabTextColors(collapsedTabTextColor, collapsedTabTextColor);
+                            tabLayout.setSelectedTabIndicatorColor(collapsedTabIndicatorColor);
+                            tabLayout.setBackgroundColor(collapsedTabBackgroundColor);
+                        } else if (state == State.EXPANDED) {
+                            tabLayout.setTabTextColors(expandedTabTextColor, expandedTabTextColor);
+                            tabLayout.setSelectedTabIndicatorColor(expandedTabIndicatorColor);
+                            tabLayout.setBackgroundColor(expandedTabBackgroundColor);
+                        }
+                    }
+                });
+            }
         } else {
             appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
                 @Override

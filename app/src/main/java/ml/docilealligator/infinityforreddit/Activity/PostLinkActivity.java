@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +20,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.libRG.CustomTextView;
@@ -68,6 +70,8 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
 
     @BindView(R.id.coordinator_layout_post_link_activity)
     CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.appbar_layout_post_link_activity)
+    AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_post_link_activity)
     Toolbar toolbar;
     @BindView(R.id.subreddit_icon_gif_image_view_post_link_activity)
@@ -128,6 +132,10 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
+            addOnOffsetChangedListener(appBarLayout);
+        }
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

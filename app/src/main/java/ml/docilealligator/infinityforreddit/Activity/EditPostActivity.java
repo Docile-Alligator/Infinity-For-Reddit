@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -48,6 +50,8 @@ public class EditPostActivity extends BaseActivity {
 
     @BindView(R.id.coordinator_layout_edit_post_activity)
     CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.appbar_layout_edit_post_activity)
+    AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_edit_post_activity)
     Toolbar toolbar;
     @BindView(R.id.post_title_text_view_edit_post_activity)
@@ -75,6 +79,10 @@ public class EditPostActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
+            addOnOffsetChangedListener(appBarLayout);
+        }
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

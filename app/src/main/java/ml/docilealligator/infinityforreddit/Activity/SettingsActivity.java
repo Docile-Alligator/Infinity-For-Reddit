@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -9,6 +10,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+
+import com.google.android.material.appbar.AppBarLayout;
 
 import javax.inject.Inject;
 
@@ -25,6 +28,8 @@ public class SettingsActivity extends BaseActivity implements
 
     private static final String TITLE_STATE = "TS";
 
+    @BindView(R.id.appbar_layout_settings_activity)
+    AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_settings_activity)
     Toolbar toolbar;
 
@@ -40,6 +45,10 @@ public class SettingsActivity extends BaseActivity implements
         setContentView(R.layout.activity_settings);
 
         ButterKnife.bind(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
+            addOnOffsetChangedListener(appBarLayout);
+        }
 
         setSupportActionBar(toolbar);
 

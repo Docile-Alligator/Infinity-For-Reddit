@@ -14,6 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.appbar.AppBarLayout;
+
+import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.FontStyle;
 import ml.docilealligator.infinityforreddit.R;
@@ -30,6 +33,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private boolean immersiveInterface;
     private boolean lightStatusbar;
     private boolean changeStatusBarIconColor = true;
+    private boolean transparentStatusBarAfterToolbarCollapsed;
     private int systemVisibilityToolbarExpanded;
     private int systemVisibilityToolbarCollapsed;
 
@@ -46,7 +50,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             case 0:
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
                 getTheme().applyStyle(R.style.Theme_Purple, true);
-                lightStatusbar = true;
+                lightStatusbar = !transparentStatusBarAfterToolbarCollapsed;
                 changeStatusBarIconColor = false;
                 break;
             case 1:
@@ -66,7 +70,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }
                 if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO) {
                     getTheme().applyStyle(R.style.Theme_Purple, true);
-                    lightStatusbar = true;
+                    lightStatusbar = !transparentStatusBarAfterToolbarCollapsed;
                     changeStatusBarIconColor = false;
                 } else {
                     if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
@@ -88,15 +92,16 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .getString(SharedPreferencesUtils.CONTENT_FONT_SIZE_KEY, ContentFontStyle.Normal.name())).getResId(), true);
 
         Window window = getWindow();
+        View decorView = window.getDecorView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (lightStatusbar) {
-                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                 systemVisibilityToolbarExpanded = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                 if (changeStatusBarIconColor) {
                     systemVisibilityToolbarCollapsed = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                 }
             } else {
-                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
                 systemVisibilityToolbarExpanded = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
                 if (changeStatusBarIconColor) {
                     systemVisibilityToolbarCollapsed = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
@@ -105,7 +110,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             window.setNavigationBarColor(Utils.getAttributeColor(this, R.attr.navBarColor));
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (lightStatusbar) {
-                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
                 systemVisibilityToolbarExpanded = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             }
             if (changeStatusBarIconColor) {
@@ -144,6 +149,20 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    protected void addOnOffsetChangedListener(AppBarLayout appBarLayout) {
+        View decorView = getWindow().getDecorView();
+        appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+            @Override
+            public void onStateChanged(AppBarLayout appBarLayout, AppBarStateChangeListener.State state) {
+                if (state == State.COLLAPSED) {
+                    decorView.setSystemUiVisibility(getSystemVisibilityToolbarCollapsed());
+                } else if (state == State.EXPANDED) {
+                    decorView.setSystemUiVisibility(getSystemVisibilityToolbarExpanded());
+                }
+            }
+        });
+    }
+
     protected int getNavBarHeight() {
         Resources resources = getResources();
         int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
@@ -151,5 +170,9 @@ public abstract class BaseActivity extends AppCompatActivity {
             return resources.getDimensionPixelSize(navBarResourceId);
         }
         return 0;
+    }
+
+    public void setTransparentStatusBarAfterToolbarCollapsed(boolean transparentStatusBarAfterToolbarCollapsed) {
+        this.transparentStatusBarAfterToolbarCollapsed = transparentStatusBarAfterToolbarCollapsed;
     }
 }

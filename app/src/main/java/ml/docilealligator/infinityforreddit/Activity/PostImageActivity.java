@@ -26,6 +26,7 @@ import androidx.core.content.FileProvider;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -81,6 +82,8 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
 
     @BindView(R.id.coordinator_layout_post_image_activity)
     CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.appbar_layout_post_image_activity)
+    AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_post_image_activity)
     Toolbar toolbar;
     @BindView(R.id.subreddit_icon_gif_image_view_post_image_activity)
@@ -154,6 +157,10 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
+            addOnOffsetChangedListener(appBarLayout);
+        }
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

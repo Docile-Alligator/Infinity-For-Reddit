@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
@@ -13,8 +12,6 @@ import android.text.util.Linkify;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -46,7 +43,6 @@ import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
-import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubredditDataAsyncTask;
 import ml.docilealligator.infinityforreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -54,7 +50,6 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditViewModel;
-import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
 
@@ -89,54 +84,26 @@ public class ViewSidebarActivity extends BaseActivity {
 
         Resources resources = getResources();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1
-                && (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
-                || resources.getBoolean(R.bool.isTablet))
-                && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
-            window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
-            boolean lightNavBar = false;
-            if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
-                lightNavBar = true;
+            if (isChangeStatusBarIconColor()) {
+                addOnOffsetChangedListener(appBarLayout);
             }
-            boolean finalLightNavBar = lightNavBar;
 
-            View decorView = window.getDecorView();
-            if (finalLightNavBar) {
-                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-            }
-            appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
-                @Override
-                public void onStateChanged(AppBarLayout appBarLayout, AppBarStateChangeListener.State state) {
-                    if (state == State.COLLAPSED) {
-                        if (finalLightNavBar) {
-                            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-                        }
-                    } else if (state == State.EXPANDED) {
-                        if (finalLightNavBar) {
-                            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-                        }
-                    }
+            if (isImmersiveInterface()) {
+                window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+                adjustToolbar(toolbar);
+
+                int navBarHeight = getNavBarHeight();
+                if (navBarHeight > 0) {
+                    int px = (int) TypedValue.applyDimension(
+                            TypedValue.COMPLEX_UNIT_DIP,
+                            16,
+                            resources.getDisplayMetrics()
+                    );
+                    markdownRecyclerView.setPadding(px, px, px, navBarHeight);
                 }
-            });
-
-            int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-            if (statusBarResourceId > 0) {
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
-                params.topMargin = getResources().getDimensionPixelSize(statusBarResourceId);
-                toolbar.setLayoutParams(params);
-            }
-
-            int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-            if (navBarResourceId > 0) {
-                int dp = 16;
-                int px = (int) TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP,
-                        dp,
-                        resources.getDisplayMetrics()
-                );
-                markdownRecyclerView.setPadding(px, px, px, resources.getDimensionPixelSize(navBarResourceId));
             }
         }
 

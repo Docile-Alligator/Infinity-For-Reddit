@@ -31,6 +31,7 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -83,6 +84,8 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
 
     @BindView(R.id.coordinator_layout_post_video_activity)
     CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.appbar_layout_post_video_activity)
+    AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_post_video_activity)
     Toolbar toolbar;
     @BindView(R.id.subreddit_icon_gif_image_view_post_video_activity)
@@ -162,6 +165,10 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
+            addOnOffsetChangedListener(appBarLayout);
+        }
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

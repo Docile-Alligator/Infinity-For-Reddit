@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit.Activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -58,7 +57,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Account.AccountViewModel;
 import ml.docilealligator.infinityforreddit.Adapter.NavigationDrawerRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubscribedThingsAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
@@ -196,31 +194,19 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
-            Resources resources = getResources();
-            View decorView = window.getDecorView();
 
             if (isChangeStatusBarIconColor()) {
-                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
-                    @Override
-                    public void onStateChanged(AppBarLayout appBarLayout, AppBarStateChangeListener.State state) {
-                        if (state == State.COLLAPSED) {
-                            decorView.setSystemUiVisibility(getSystemVisibilityToolbarCollapsed());
-                        } else if (state == State.EXPANDED) {
-                            decorView.setSystemUiVisibility(getSystemVisibilityToolbarExpanded());
-                        }
-                    }
-                });
+                addOnOffsetChangedListener(appBarLayout);
             }
 
             if (isImmersiveInterface()) {
                 window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-
                 adjustToolbar(toolbar);
 
                 int navBarHeight = getNavBarHeight();
                 if (navBarHeight > 0) {
                     linearLayoutBottomAppBar.setPadding(0,
-                            (int) (6 * resources.getDisplayMetrics().density), 0, navBarHeight);
+                            (int) (6 * getResources().getDisplayMetrics().density), 0, navBarHeight);
                     navDrawerRecyclerView.setPadding(0, 0, 0, navBarHeight);
                 }
             }

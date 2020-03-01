@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -44,6 +46,8 @@ public class CreateMultiRedditActivity extends BaseActivity {
     private static final String SELECTED_OTHER_SUBREDDITS_STATE = "SOSS";
     @BindView(R.id.coordinator_layout_create_multi_reddit_activity)
     CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.appbar_layout_create_multi_reddit_activity)
+    AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_create_multi_reddit_activity)
     Toolbar toolbar;
     @BindView(R.id.multi_reddit_name_edit_text_create_multi_reddit_activity)
@@ -76,6 +80,10 @@ public class CreateMultiRedditActivity extends BaseActivity {
         setContentView(R.layout.activity_create_multi_reddit);
 
         ButterKnife.bind(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
+            addOnOffsetChangedListener(appBarLayout);
+        }
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
