@@ -385,7 +385,7 @@ public class ViewVideoActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.action_download_view_video:
+            case R.id.action_download_view_video_activity:
                 isDownloading = true;
                 if (Build.VERSION.SDK_INT >= 23) {
                     if (ContextCompat.checkSelfPermission(this,

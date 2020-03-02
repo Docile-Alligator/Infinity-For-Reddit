@@ -48,6 +48,7 @@
     <string name="action_view_side_bar">View Sidebar</string>
     <string name="action_save">Save</string>
     <string name="action_delete_multi_reddit">Delete Multireddit</string>
+    <string name="action_share">Share</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -451,4 +452,8 @@
 
     <string name="enable_nsfw">Enable NSFW</string>
     <string name="disable_nsfw">Disable NSFW</string>
+
+    <string name="cannot_save_image">Cannot save the image</string>
+    <string name="cannot_save_gif">Cannot save the gif</string>
+    <string name="cannot_get_storage">Cannot access the app storage</string>
 </resources>

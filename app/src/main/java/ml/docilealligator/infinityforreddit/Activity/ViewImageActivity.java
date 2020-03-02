@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -31,16 +32,20 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.alexvasilkov.gestures.GestureController;
 import com.alexvasilkov.gestures.State;
 import com.alexvasilkov.gestures.views.GestureImageView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.github.pwittchen.swipe.library.rx2.SimpleSwipeListener;
 import com.github.pwittchen.swipe.library.rx2.Swipe;
 
@@ -50,6 +55,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.AsyncTask.SaveImageToFileAsyncTask;
+import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.FontStyle;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -82,6 +89,7 @@ public class ViewImageActivity extends AppCompatActivity {
     private float touchY = -1.0f;
     private float zoom = 1.0f;
     private boolean isSwiping = false;
+    private RequestManager glide;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +117,8 @@ public class ViewImageActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(upArrow);
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
         setTitle("");
+
+        glide = Glide.with(this);
 
         Intent intent = getIntent();
         mImageUrl = intent.getStringExtra(IMAGE_URL_KEY);
@@ -333,7 +343,7 @@ public class ViewImageActivity extends AppCompatActivity {
     }
 
     private void loadImage() {
-        Glide.with(this).load(mImageUrl).listener(new RequestListener<Drawable>() {
+        glide.load(mImageUrl).listener(new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 mProgressBar.setVisibility(View.GONE);
@@ -352,7 +362,7 @@ public class ViewImageActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         mMenu = menu;
-        getMenuInflater().inflate(R.menu.view_image, menu);
+        getMenuInflater().inflate(R.menu.view_image_activity, menu);
         return true;
     }
 
@@ -362,7 +372,7 @@ public class ViewImageActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.action_download_view_image:
+            case R.id.action_download_view_image_activity:
                 if (isDownloading) {
                     return false;
                 }
@@ -387,6 +397,44 @@ public class ViewImageActivity extends AppCompatActivity {
                     download();
                 }
 
+                return true;
+            case R.id.action_share_view_image_activity:
+                glide.asBitmap().load(mImageUrl).into(new CustomTarget<Bitmap>() {
+
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        if (getExternalCacheDir() != null) {
+                            new SaveImageToFileAsyncTask(resource, getExternalCacheDir().getPath(),
+                                    new SaveImageToFileAsyncTask.SaveImageToFileAsyncTaskListener() {
+                                        @Override
+                                        public void saveSuccess(File imageFile) {
+                                            Uri uri = FileProvider.getUriForFile(ViewImageActivity.this,
+                                                    BuildConfig.APPLICATION_ID + ".provider",imageFile);
+                                            Intent shareIntent = new Intent();
+                                            shareIntent.setAction(Intent.ACTION_SEND);
+                                            shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                                            shareIntent.setType("image/*");
+                                            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                            startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
+                                        }
+
+                                        @Override
+                                        public void saveFailed() {
+                                            Toast.makeText(ViewImageActivity.this,
+                                                    R.string.cannot_save_image, Toast.LENGTH_SHORT).show();
+                                        }
+                                    }).execute();
+                        } else {
+                            Toast.makeText(ViewImageActivity.this,
+                                    R.string.cannot_get_storage, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+                });
                 return true;
         }
 

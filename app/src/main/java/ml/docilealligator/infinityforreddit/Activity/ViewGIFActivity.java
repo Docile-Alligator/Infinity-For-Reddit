@@ -345,7 +345,7 @@ public class ViewGIFActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.action_download_view_gif:
+            case R.id.action_download_view_gif_activity:
                 if (isDownloading) {
                     return false;
                 }
