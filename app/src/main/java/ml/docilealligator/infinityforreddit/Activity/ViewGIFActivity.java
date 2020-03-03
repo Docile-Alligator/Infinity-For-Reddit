@@ -31,10 +31,13 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
@@ -47,12 +50,14 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.AsyncTask.SaveGIFToFileAsyncTask;
+import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.FontStyle;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.TitleFontStyle;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import pl.droidsonroids.gif.GifImageView;
 
 public class ViewGIFActivity extends AppCompatActivity {
@@ -74,6 +79,7 @@ public class ViewGIFActivity extends AppCompatActivity {
     private boolean isDownloading = false;
     private Menu mMenu;
     private Swipe swipe;
+    private RequestManager glide;
     private String mImageUrl;
     private String mImageFileName;
     private float totalLengthY = 0.0f;
@@ -106,6 +112,8 @@ public class ViewGIFActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(upArrow);
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
         setTitle("");
+
+        glide = Glide.with(this);
 
         Intent intent = getIntent();
         mImageUrl = intent.getStringExtra(IMAGE_URL_KEY);
@@ -316,7 +324,7 @@ public class ViewGIFActivity extends AppCompatActivity {
     }
 
     private void loadImage() {
-        Glide.with(this).load(mImageUrl).listener(new RequestListener<Drawable>() {
+        glide.load(mImageUrl).listener(new RequestListener<Drawable>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 mProgressBar.setVisibility(View.GONE);
@@ -370,6 +378,44 @@ public class ViewGIFActivity extends AppCompatActivity {
                     download();
                 }
 
+                return true;
+            case R.id.action_share_view_gif_activity:
+                Toast.makeText(ViewGIFActivity.this, R.string.save_gif_before_sharing, Toast.LENGTH_SHORT).show();
+                glide.asGif().load(mImageUrl).listener(new RequestListener<GifDrawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
+                        if (getExternalCacheDir() != null) {
+                            new SaveGIFToFileAsyncTask(resource, getExternalCacheDir().getPath(),
+                                    new SaveGIFToFileAsyncTask.SaveGIFToFileAsyncTaskListener() {
+                                        @Override
+                                        public void saveSuccess(File imageFile) {
+                                            Uri uri = FileProvider.getUriForFile(ViewGIFActivity.this,
+                                                    BuildConfig.APPLICATION_ID + ".provider", imageFile);
+                                            Intent shareIntent = new Intent();
+                                            shareIntent.setAction(Intent.ACTION_SEND);
+                                            shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                                            shareIntent.setType("image/*");
+                                            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                            startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
+                                        }
+
+                                        @Override
+                                        public void saveFailed() {
+
+                                        }
+                                    }).execute();
+                        } else {
+                            Toast.makeText(ViewGIFActivity.this,
+                                    R.string.cannot_get_storage, Toast.LENGTH_SHORT).show();
+                        }
+                        return false;
+                    }
+                }).submit();
                 return true;
         }
 

@@ -404,6 +404,7 @@ public class ViewImageActivity extends AppCompatActivity {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         if (getExternalCacheDir() != null) {
+                            Toast.makeText(ViewImageActivity.this, R.string.save_image_before_sharing, Toast.LENGTH_SHORT).show();
                             new SaveImageToFileAsyncTask(resource, getExternalCacheDir().getPath(),
                                     new SaveImageToFileAsyncTask.SaveImageToFileAsyncTaskListener() {
                                         @Override

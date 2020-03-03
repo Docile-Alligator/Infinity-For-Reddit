@@ -456,4 +456,6 @@
     <string name="cannot_save_image">Cannot save the image</string>
     <string name="cannot_save_gif">Cannot save the gif</string>
     <string name="cannot_get_storage">Cannot access the app storage</string>
+    <string name="save_image_before_sharing">Saving the image. Please wait.</string>
+    <string name="save_gif_before_sharing">Saving the gif. Please wait.</string>
 </resources>
