@@ -14,6 +14,7 @@ import androidx.preference.SwitchPreference;
 import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
@@ -29,6 +30,7 @@ import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 public class MainPreferenceFragment extends PreferenceFragmentCompat {
 
     @Inject
+    @Named("default")
     SharedPreferences sharedPreferences;
     private Activity activity;
 

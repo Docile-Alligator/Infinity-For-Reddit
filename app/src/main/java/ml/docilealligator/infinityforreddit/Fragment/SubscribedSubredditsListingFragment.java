@@ -4,7 +4,6 @@ package ml.docilealligator.infinityforreddit.Fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -66,6 +65,7 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;

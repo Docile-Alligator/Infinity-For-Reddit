@@ -70,6 +70,7 @@ public class MultiRedditListingActivity extends BaseActivity {
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
     @Named("oauth")

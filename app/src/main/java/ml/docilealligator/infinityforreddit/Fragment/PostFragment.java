@@ -112,6 +112,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
     private RequestManager mGlide;
     private AppCompatActivity activity;

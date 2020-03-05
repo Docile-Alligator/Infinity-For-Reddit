@@ -154,6 +154,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
     private RequestManager mGlide;
     private Locale mLocale;

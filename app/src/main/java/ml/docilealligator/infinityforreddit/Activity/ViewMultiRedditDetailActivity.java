@@ -68,6 +68,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
     private boolean mNullAccessToken = false;
     private String mAccessToken;

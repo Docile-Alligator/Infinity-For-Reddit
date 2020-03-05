@@ -11,6 +11,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import ml.docilealligator.infinityforreddit.Account.Account;
 import ml.docilealligator.infinityforreddit.Account.AccountDao;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomTheme;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeDao;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiRedditDao;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditDao;
@@ -23,7 +25,7 @@ import ml.docilealligator.infinityforreddit.User.UserDao;
 import ml.docilealligator.infinityforreddit.User.UserData;
 
 @Database(entities = {Account.class, SubredditData.class, SubscribedSubredditData.class, UserData.class,
-        SubscribedUserData.class, MultiReddit.class}, version = 5)
+        SubscribedUserData.class, MultiReddit.class, CustomTheme.class}, version = 6)
 public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static RedditDataRoomDatabase INSTANCE;
 
@@ -33,7 +35,8 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             RedditDataRoomDatabase.class, "reddit_data")
-                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
+                                    MIGRATION_5_6)
                             .build();
                 }
             }
@@ -52,6 +55,8 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
     public abstract SubscribedUserDao subscribedUserDao();
 
     public abstract MultiRedditDao multiRedditDao();
+
+    public abstract CustomThemeDao customThemeDao();
 
     private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
@@ -104,6 +109,41 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE subreddits"
                     + " ADD COLUMN sidebar_description TEXT");
+        }
+    };
+
+    private static final Migration MIGRATION_5_6 = new Migration(5, 6) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE custom_themes" +
+                    "(name TEXT NOT NULL PRIMARY KEY, color_primary INTEGER NOT NULL," +
+                    "color_primary_dark INTEGER NOT NULL, color_accent INTEGER NOT NULL," +
+                    "color_primary_light_theme INTEGER NOT NULL, primary_text_color INTEGER NOT NULL," +
+                    "secondary_text_color INTEGER NOT NULL, background_color INTEGER NOT NULL," +
+                    "rounded_bottom_sheet_primary_background INTEGER NOT NULL," +
+                    "card_view_background_color INTEGER NOT NULL, toolbar_primary_text_and_icon_color INTEGER NOT NULL," +
+                    "toolbar_and_tab_background_color INTEGER NOT NULL, circular_progress_bar_background INTEGER NOT NULL," +
+                    "tab_layout_with_expanded_collapsing_toolbar_tab_background INTEGER NOT NULL," +
+                    "tab_layout_with_expanded_collapsing_toolbar_text_color INTEGER NOT NULL," +
+                    "tab_layout_with_expanded_collapsing_toolbar_tab_indicator INTEGER NOT NULL," +
+                    "tab_layout_with_collapsed_collapsing_toolbar_tab_background INTEGER NOT NULL," +
+                    "tab_layout_with_collapsed_collapsing_toolbar_text_color INTEGER NOT NULL," +
+                    "tab_layout_with_collapsed_collapsing_toolbar_tab_indicator INTEGER NOT NULL," +
+                    "nav_bar_color INTEGER NOT NULL, upvoted INTEGER NOT NULL, downvoted INTEGER NOT NULL," +
+                    "post_type INTEGER NOT NULL, spoiler_color INTEGER NOT NULL, nsfw_color INTEGER NOT NULL," +
+                    "flair_color INTEGER NOT NULL, archived_tint INTEGER NOT NULL, locked_icon_tint INTEGER NOT NULL," +
+                    "crosspost INTEGER NOT NULL, stickied_post INTEGER NOT NULL, subscribed INTEGER NOT NULL," +
+                    "unsubscribed INTEGER NOT NULL, username INTEGER NOT NULL, subreddit INTEGER NOT NULL," +
+                    "author_flair_text_color INTEGER NOT NULL, submitter INTEGER NOT NULL," +
+                    "moderator INTEGER NOT NULL, notification_icon_color INTEGER NOT NULL," +
+                    "single_comment_thread_background_color INTEGER NOT NULL," +
+                    "unread_message_background_color INTEGER NOT NULL, divider_color INTEGER NOT NULL," +
+                    "no_preview_link_background_color INTEGER NOT NULL," +
+                    "vote_and_reply_unavailable_vote_button_color INTEGER NOT NULL," +
+                    "comment_vertical_bar_color_1 INTEGER NOT NULL, comment_vertical_bar_color_2 INTEGER NOT NULL," +
+                    "comment_vertical_bar_color_3 INTEGER NOT NULL, comment_vertical_bar_color_4 INTEGER NOT NULL," +
+                    "comment_vertical_bar_color_5 INTEGER NOT NULL, comment_vertical_bar_color_6 INTEGER NOT NULL," +
+                    "comment_vertical_bar_color_7 INTEGER NOT NULL)");
         }
     };
 }

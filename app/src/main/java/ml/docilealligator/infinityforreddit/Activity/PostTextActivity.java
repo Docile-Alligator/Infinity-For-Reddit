@@ -99,6 +99,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
     private boolean mNullAccessToken = false;
     private String mAccessToken;

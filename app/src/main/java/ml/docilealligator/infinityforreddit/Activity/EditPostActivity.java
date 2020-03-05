@@ -62,6 +62,7 @@ public class EditPostActivity extends BaseActivity {
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
     private String mFullName;
     private String mAccessToken;

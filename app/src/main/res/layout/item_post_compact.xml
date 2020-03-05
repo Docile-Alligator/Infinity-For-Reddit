@@ -115,8 +115,8 @@
                     android:textColor="@android:color/white"
                     android:textSize="?attr/font_10"
                     app:lib_setRadius="3dp"
-                    app:lib_setRoundedBGColor="?attr/post_type"
-                    app:lib_setRoundedBorderColor="?attr/post_type"
+                    app:lib_setRoundedBGColor="?attr/postType"
+                    app:lib_setRoundedBorderColor="?attr/postType"
                     app:lib_setRoundedView="true"
                     app:lib_setShape="rectangle" />
 

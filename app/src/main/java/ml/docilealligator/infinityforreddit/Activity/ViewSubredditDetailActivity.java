@@ -132,6 +132,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
     private boolean mNullAccessToken = false;
     private String mAccessToken;

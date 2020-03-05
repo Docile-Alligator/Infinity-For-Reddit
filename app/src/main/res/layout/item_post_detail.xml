@@ -109,8 +109,8 @@
             android:padding="4dp"
             android:textSize="?attr/font_12"
             android:textColor="@android:color/white"
-            app:lib_setRoundedBGColor="?attr/post_type"
-            app:lib_setRoundedBorderColor="?attr/post_type"
+            app:lib_setRoundedBGColor="?attr/postType"
+            app:lib_setRoundedBorderColor="?attr/postType"
             app:lib_setRadius="3dp"
             app:lib_setRoundedView="true"
             app:lib_setShape="rectangle" />
@@ -255,7 +255,7 @@
                 android:drawableTop="@drawable/ic_error_outline_black_24dp"
                 android:layout_centerInParent="true"
                 android:gravity="center"
-                android:text="@string/tap_to_retry"
+                android:text="@string/error_loading_image_tap_to_retry"
                 android:textSize="?attr/font_default"
                 android:visibility="gone" />
 

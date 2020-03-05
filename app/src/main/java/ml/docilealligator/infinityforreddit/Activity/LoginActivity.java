@@ -59,6 +59,7 @@ public class LoginActivity extends BaseActivity {
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
     private String authCode;
 

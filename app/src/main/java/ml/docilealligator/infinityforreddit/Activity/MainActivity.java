@@ -152,6 +152,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private AppBarLayout.LayoutParams params;

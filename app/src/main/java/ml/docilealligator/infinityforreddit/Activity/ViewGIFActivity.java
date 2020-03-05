@@ -47,6 +47,7 @@ import com.github.pwittchen.swipe.library.rx2.Swipe;
 import java.io.File;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,6 +75,7 @@ public class ViewGIFActivity extends AppCompatActivity {
     @BindView(R.id.load_image_error_linear_layout_view_gif_activity)
     LinearLayout mLoadErrorLinearLayout;
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
     private boolean isActionBarHidden = false;
     private boolean isDownloading = false;
@@ -406,7 +408,8 @@ public class ViewGIFActivity extends AppCompatActivity {
 
                                         @Override
                                         public void saveFailed() {
-
+                                            Toast.makeText(ViewGIFActivity.this,
+                                                    R.string.cannot_save_gif, Toast.LENGTH_SHORT).show();
                                         }
                                     }).execute();
                         } else {

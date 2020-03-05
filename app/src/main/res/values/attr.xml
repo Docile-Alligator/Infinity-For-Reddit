@@ -37,7 +37,7 @@
         <attr name="backgroundColor" format="color"/>
         <attr name="roundedBottomSheetPrimaryBackground" format="color"/>
         <attr name="cardViewBackgroundColor" format="color"/>
-        <attr name="toolbarPrimaryTextAndIconColor" format="color" />
+        <attr name="toolbarPrimaryTextAndIconColor" format="color"/>
         <attr name="toolbarAndTabBackgroundColor" format="color"/>
         <attr name="circularProgressBarBackground" format="color"/>
         <attr name="tabLayoutWithExpandedCollapsingToolbarTabBackground" format="color"/>
@@ -49,7 +49,7 @@
         <attr name="navBarColor" format="color"/>
         <attr name="upvoted" format="color"/>
         <attr name="downvoted" format="color"/>
-        <attr name="post_type" format="color"/>
+        <attr name="postType" format="color"/>
         <attr name="spoilerColor" format="color"/>
         <attr name="nsfwColor" format="color"/>
         <attr name="flairColor" format="color"/>

@@ -70,6 +70,7 @@ public class ViewSidebarActivity extends BaseActivity {
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
     private String subredditName;
     private SubredditViewModel mSubredditViewModel;

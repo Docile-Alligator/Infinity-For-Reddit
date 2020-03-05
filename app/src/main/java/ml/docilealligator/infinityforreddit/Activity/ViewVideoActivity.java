@@ -54,6 +54,7 @@ import com.google.android.exoplayer2.util.Util;
 import java.io.File;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -91,6 +92,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     private float touchY = -1.0f;
 
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
 
     @Override

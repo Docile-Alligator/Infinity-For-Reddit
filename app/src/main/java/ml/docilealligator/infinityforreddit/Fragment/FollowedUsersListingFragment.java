@@ -60,6 +60,7 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;

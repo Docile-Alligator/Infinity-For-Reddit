@@ -4,7 +4,6 @@ package ml.docilealligator.infinityforreddit.Fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -81,6 +80,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
     private boolean mNullAccessToken = false;
     private String mAccessToken;

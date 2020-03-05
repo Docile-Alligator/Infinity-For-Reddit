@@ -20,6 +20,7 @@ import androidx.work.WorkManager;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.PullNotificationWorker;
@@ -32,6 +33,7 @@ import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 public class NotificationPreferenceFragment extends PreferenceFragmentCompat {
 
     @Inject
+    @Named("default")
     SharedPreferences sharedPreferences;
     private boolean enableNotification;
     private long notificationInterval;

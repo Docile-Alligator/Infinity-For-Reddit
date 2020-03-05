@@ -14,6 +14,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import com.google.android.material.appbar.AppBarLayout;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,6 +35,7 @@ public class SettingsActivity extends BaseActivity implements
     Toolbar toolbar;
 
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
 
     @Override

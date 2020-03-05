@@ -50,8 +50,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             case 0:
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
                 getTheme().applyStyle(R.style.Theme_Purple, true);
-                lightStatusbar = !transparentStatusBarAfterToolbarCollapsed;
-                changeStatusBarIconColor = false;
+                changeStatusBarIconColor = immersiveInterface;
                 break;
             case 1:
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
@@ -70,8 +69,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }
                 if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO) {
                     getTheme().applyStyle(R.style.Theme_Purple, true);
-                    lightStatusbar = !transparentStatusBarAfterToolbarCollapsed;
-                    changeStatusBarIconColor = false;
+                    changeStatusBarIconColor = immersiveInterface;
                 } else {
                     if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
                         getTheme().applyStyle(R.style.Theme_Default_AmoledDark, true);
@@ -171,5 +169,15 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void setTransparentStatusBarAfterToolbarCollapsed(boolean transparentStatusBarAfterToolbarCollapsed) {
         this.transparentStatusBarAfterToolbarCollapsed = transparentStatusBarAfterToolbarCollapsed;
+    }
+
+    @Override
+    protected void onApplyThemeResource(Resources.Theme theme, int resid, boolean first) {
+        super.onApplyThemeResource(theme, resid, first);
+    }
+
+    @Override
+    public Resources.Theme getTheme() {
+        return super.getTheme();
     }
 }

@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
@@ -13,6 +14,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -97,8 +99,16 @@ class AppModule {
     }
 
     @Provides
+    @Named("default")
     @Singleton
     SharedPreferences provideSharedPreferences() {
         return PreferenceManager.getDefaultSharedPreferences(mApplication);
+    }
+
+    @Provides
+    @Named("theme")
+    @Singleton
+    SharedPreferences provideThemeSharedPreferences() {
+        return mApplication.getSharedPreferences(SharedPreferencesUtils.THEME_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
     }
 }

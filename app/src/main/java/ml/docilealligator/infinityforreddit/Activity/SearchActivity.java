@@ -22,6 +22,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,6 +54,7 @@ public class SearchActivity extends BaseActivity {
     @BindView(R.id.subreddit_name_text_view_search_activity)
     TextView subredditNameTextView;
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
     private String query;
     private String subredditName;

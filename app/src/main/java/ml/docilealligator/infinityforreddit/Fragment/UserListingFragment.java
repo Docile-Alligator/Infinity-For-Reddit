@@ -4,7 +4,6 @@ package ml.docilealligator.infinityforreddit.Fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -75,6 +74,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
     private LinearLayoutManager mLinearLayoutManager;
     private String mQuery;

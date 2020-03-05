@@ -45,6 +45,7 @@ public class PullNotificationWorker extends Worker {
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
     private Context context;
 

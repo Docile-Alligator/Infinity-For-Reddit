@@ -32,10 +32,6 @@ public class MultiRedditViewModel extends AndroidViewModel {
         return mAllFavoriteMultiReddits;
     }
 
-    public void insert(MultiReddit MultiReddit) {
-        mMultiRedditRepository.insert(MultiReddit);
-    }
-
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
         private Application mApplication;
         private RedditDataRoomDatabase mRedditDataRoomDatabase;

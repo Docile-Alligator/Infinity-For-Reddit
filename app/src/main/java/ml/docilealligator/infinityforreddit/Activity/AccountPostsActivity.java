@@ -20,6 +20,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,6 +57,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
     private boolean isInLazyMode = false;
     private boolean mNullAccessToken = false;

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
@@ -44,6 +45,7 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String MULTIREDDIT_PATTERN = "/user/\\w+/m/\\w+/{0,1}";
 
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
 
     public static Uri getRedditUriByPath(String path) {

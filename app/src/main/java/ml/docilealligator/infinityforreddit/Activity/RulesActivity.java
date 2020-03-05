@@ -62,6 +62,7 @@ public class RulesActivity extends BaseActivity {
     @Named("no_oauth")
     Retrofit mRetrofit;
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
     private String mSubredditName;
     private RulesRecyclerViewAdapter mAdapter;

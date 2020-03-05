@@ -122,6 +122,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
+    @Named("default")
     SharedPreferences mSharedPreferences;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private SubscribedUserDao subscribedUserDao;
