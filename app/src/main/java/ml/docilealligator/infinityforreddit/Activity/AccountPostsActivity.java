@@ -25,6 +25,7 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
@@ -59,6 +60,8 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private boolean isInLazyMode = false;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
@@ -139,6 +142,11 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+
     }
 
     private void getCurrentAccountAndInitializeFragment() {

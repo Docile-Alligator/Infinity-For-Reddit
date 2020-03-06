@@ -171,13 +171,5 @@ public abstract class BaseActivity extends AppCompatActivity {
         this.transparentStatusBarAfterToolbarCollapsed = transparentStatusBarAfterToolbarCollapsed;
     }
 
-    @Override
-    protected void onApplyThemeResource(Resources.Theme theme, int resid, boolean first) {
-        super.onApplyThemeResource(theme, resid, first);
-    }
-
-    @Override
-    public Resources.Theme getTheme() {
-        return super.getTheme();
-    }
+    protected abstract void applyCustomTheme();
 }
