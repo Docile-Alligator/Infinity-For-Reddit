@@ -52,6 +52,7 @@ import ml.docilealligator.infinityforreddit.Adapter.CommentAndPostRecyclerViewAd
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CommentData;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.DeleteThing;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
@@ -77,7 +78,6 @@ import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -130,7 +130,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     @BindView(R.id.coordinator_layout_view_post_detail)
     CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.appbar_layout_view_post_detail_activity)
-    AppBarLayout appBarLayout;
+    AppBarLayout mAppBarLayout;
     @BindView(R.id.toolbar_view_post_detail_activity)
     Toolbar toolbar;
     @BindView(R.id.swipe_refresh_layout_view_post_detail_activity)
@@ -156,6 +156,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private RequestManager mGlide;
     private Locale mLocale;
     private Menu mMenu;
@@ -195,6 +197,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
         EventBus.getDefault().register(this);
 
+        applyCustomTheme();
+
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL, true)) {
             mSlidrInterface = Slidr.attach(this);
         }
@@ -203,7 +207,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             Window window = getWindow();
 
             if (isChangeStatusBarIconColor()) {
-                addOnOffsetChangedListener(appBarLayout);
+                addOnOffsetChangedListener(mAppBarLayout);
             }
 
             if (isImmersiveInterface()) {
@@ -320,8 +324,6 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         }
 
         mSwipeRefreshLayout.setOnRefreshListener(() -> refresh(true, true));
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(Utils.getAttributeColor(this, R.attr.cardViewBackgroundColor));
-        mSwipeRefreshLayout.setColorSchemeColors(Utils.getAttributeColor(this, R.attr.colorAccent));
 
         mSmoothScroller = new LinearSmoothScroller(this) {
             @Override
@@ -357,6 +359,22 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
+        mAppBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCardViewBackgroundColor(themeType));
+        mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent(themeType));
+        mFetchPostInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor(themeType));
+        applyFABTheme(fab, mCustomThemeWrapper, themeType);
     }
 
     private void getCurrentAccountAndBindView() {
@@ -473,11 +491,11 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 mMenu.findItem(R.id.action_view_crosspost_parent_view_post_detail_activity).setVisible(mPost.getCrosspostParentId() != null);
             }
 
-            mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this, mRetrofit,
-                    mOauthRetrofit, mRedditDataRoomDatabase, mGlide, mAccessToken, mAccountName, mPost,
-                    mLocale, mSingleCommentId, isSingleCommentThreadMode, mNeedBlurNsfw, mNeedBlurSpoiler,
-                    mVoteButtonsOnTheRight, mShowElapsedTime, mExpandChildren, mShowCommentDivider,
-                    mShowAbsoluteNumberOfVotes,
+            mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this,
+                    mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mGlide,
+                    mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId, isSingleCommentThreadMode,
+                    mNeedBlurNsfw, mNeedBlurSpoiler, mVoteButtonsOnTheRight, mShowElapsedTime,
+                    mExpandChildren, mShowCommentDivider, mShowAbsoluteNumberOfVotes,
                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                         @Override
                         public void updatePost(Post post) {
@@ -597,7 +615,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                             }
 
                             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this,
-                                    mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mGlide,
+                                    mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mGlide,
                                     mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId,
                                     isSingleCommentThreadMode, mNeedBlurNsfw, mNeedBlurSpoiler,
                                     mVoteButtonsOnTheRight, mShowElapsedTime, mExpandChildren, mShowCommentDivider,

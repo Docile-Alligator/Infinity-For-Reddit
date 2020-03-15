@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,6 +33,7 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Adapter.RulesRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
@@ -48,6 +50,8 @@ public class RulesActivity extends BaseActivity {
 
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
 
+    @BindView(R.id.coordinator_layout_rules_activity)
+    CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_rules_activity)
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_rules_activity)
@@ -64,6 +68,8 @@ public class RulesActivity extends BaseActivity {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private String mSubredditName;
     private RulesRecyclerViewAdapter mAdapter;
 
@@ -78,6 +84,8 @@ public class RulesActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
+
+        applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -103,7 +111,7 @@ public class RulesActivity extends BaseActivity {
         mSubredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new RulesRecyclerViewAdapter(this);
+        mAdapter = new RulesRecyclerViewAdapter(this, mCustomThemeWrapper);
         recyclerView.setAdapter(mAdapter);
 
         fetchRules();
@@ -112,6 +120,19 @@ public class RulesActivity extends BaseActivity {
     @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
+        errorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor(themeType));
     }
 
     private void fetchRules() {

@@ -42,6 +42,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -61,6 +62,7 @@ import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubscribedThingsAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchToAnonymousAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.ChangeConfirmToExitEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeLockBottomAppBarEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
@@ -116,6 +118,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
+    @BindView(R.id.navigation_view_main_activity)
+    NavigationView navigationView;
     @BindView(R.id.coordinator_layout_main_activity)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_main_activity)
@@ -154,6 +158,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private AppBarLayout.LayoutParams params;
     private PostTypeBottomSheetFragment postTypeBottomSheetFragment;
@@ -192,6 +198,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
+
+        applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -271,6 +279,23 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        int backgroundColor = mCustomThemeWrapper.getBackgroundColor(themeType);
+        drawer.setBackgroundColor(backgroundColor);
+        navigationView.setBackgroundColor(backgroundColor);
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
+        applyTabLayoutTheme(tabLayout, mCustomThemeWrapper, themeType);
+        bottomNavigationView.setBackgroundColor(backgroundColor);
+        applyFABTheme(fab, mCustomThemeWrapper, themeType);
     }
 
     private void getCurrentAccountAndBindView() {
@@ -418,8 +443,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         }
 
         boolean nsfwEnabled = mSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_KEY, false);
-        adapter = new NavigationDrawerRecyclerViewAdapter(this, mAccountName, mProfileImageUrl,
-                mBannerImageUrl, mKarma, nsfwEnabled, new NavigationDrawerRecyclerViewAdapter.ItemClickListener() {
+        adapter = new NavigationDrawerRecyclerViewAdapter(this, mCustomThemeWrapper, mAccountName,
+                mProfileImageUrl, mBannerImageUrl, mKarma, nsfwEnabled,
+                new NavigationDrawerRecyclerViewAdapter.ItemClickListener() {
             @Override
             public void onMenuClick(int stringId) {
                 Intent intent = null;

@@ -7,8 +7,6 @@ import android.content.Context;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import ml.docilealligator.infinityforreddit.Utils.Utils;
-
 public class NotificationUtils {
     public static final String CHANNEL_SUBMIT_POST = "Submit Post";
     static final String CHANNEL_ID_NEW_MESSAGES = "new_messages";
@@ -23,7 +21,7 @@ public class NotificationUtils {
     static NotificationCompat.Builder buildNotification(NotificationManagerCompat notificationManager,
                                                         Context context, String title, String content,
                                                         String summary, String channelId, String channelName,
-                                                        String group) {
+                                                        String group, int color) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
@@ -33,7 +31,7 @@ public class NotificationUtils {
                 .setContentTitle(title)
                 .setContentText(content)
                 .setSmallIcon(R.drawable.ic_notification)
-                .setColor(context.getResources().getColor(Utils.getAttributeColor(context, R.attr.notificationIconColor)))
+                .setColor(color)
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .setSummaryText(summary)
                         .bigText(content))
@@ -43,7 +41,7 @@ public class NotificationUtils {
 
     static NotificationCompat.Builder buildSummaryNotification(Context context, NotificationManagerCompat notificationManager,
                                                                String title, String content, String channelId,
-                                                               String channelName, String group) {
+                                                               String channelName, String group, int color) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
@@ -54,7 +52,7 @@ public class NotificationUtils {
                 //set content text to support devices running API level < 24
                 .setContentText(content)
                 .setSmallIcon(R.drawable.ic_notification)
-                .setColor(Utils.getAttributeColor(context, R.attr.notificationIconColor))
+                .setColor(color)
                 .setGroup(group)
                 .setGroupSummary(true)
                 .setAutoCancel(true);

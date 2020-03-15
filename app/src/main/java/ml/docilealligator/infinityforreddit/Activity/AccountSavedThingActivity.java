@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -13,6 +12,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -31,6 +31,7 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Fragment.CommentsListingFragment;
@@ -49,6 +50,8 @@ public class AccountSavedThingActivity extends BaseActivity {
     private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
+    @BindView(R.id.coordinator_layout_account_saved_thing_activity)
+    CoordinatorLayout coordinatorLayout;
     @BindView(R.id.collapsing_toolbar_layout_account_saved_thing_activity)
     CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.appbar_layout_account_saved_thing_activity)
@@ -67,6 +70,8 @@ public class AccountSavedThingActivity extends BaseActivity {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
@@ -87,7 +92,7 @@ public class AccountSavedThingActivity extends BaseActivity {
 
         EventBus.getDefault().register(this);
 
-        Resources resources = getResources();
+        applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -141,6 +146,19 @@ public class AccountSavedThingActivity extends BaseActivity {
     @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
+        applyTabLayoutTheme(tabLayout, mCustomThemeWrapper, themeType);
     }
 
     private void getCurrentAccountAndInitializeViewPager() {

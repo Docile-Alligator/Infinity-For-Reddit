@@ -34,6 +34,7 @@ import ml.docilealligator.infinityforreddit.Activity.BaseActivity;
 import ml.docilealligator.infinityforreddit.Activity.SearchSubredditsResultActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.Adapter.SubredditListingRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
@@ -80,6 +81,8 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper customThemeWrapper;
     private LinearLayoutManager mLinearLayoutManager;
     private SubredditListingRecyclerViewAdapter mAdapter;
     private Activity mActivity;
@@ -98,6 +101,8 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
+
+        applyTheme();
 
         Resources resources = getResources();
 
@@ -123,7 +128,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         SortType sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
 
         mAdapter = new SubredditListingRecyclerViewAdapter(mActivity, mOauthRetrofit, mRetrofit,
-                accessToken, accountName, mRedditDataRoomDatabase,
+                customThemeWrapper, accessToken, accountName, mRedditDataRoomDatabase,
                 new SubredditListingRecyclerViewAdapter.Callback() {
                     @Override
                     public void retryLoadingMore() {
@@ -177,8 +182,6 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         });
 
         mSwipeRefreshLayout.setOnRefreshListener(() -> mSubredditListingViewModel.refresh());
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(Utils.getAttributeColor(mActivity, R.attr.cardViewBackgroundColor));
-        mSwipeRefreshLayout.setColorSchemeColors(Utils.getAttributeColor(mActivity, R.attr.colorAccent));
 
         return rootView;
     }
@@ -207,5 +210,13 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         mFetchSubredditListingInfoLinearLayout.setVisibility(View.GONE);
         mSubredditListingViewModel.refresh();
         mAdapter.setNetworkState(null);
+    }
+
+    @Override
+    public void applyTheme() {
+        int themeType = customThemeWrapper.getThemeType();
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCardViewBackgroundColor(themeType));
+        mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent(themeType));
+        mFetchSubredditListingInfoTextView.setTextColor(customThemeWrapper.getSecondaryTextColor(themeType));
     }
 }

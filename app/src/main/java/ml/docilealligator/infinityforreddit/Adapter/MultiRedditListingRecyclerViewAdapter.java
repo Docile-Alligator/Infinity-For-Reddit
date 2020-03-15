@@ -22,6 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Activity.ViewMultiRedditDetailActivity;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.MultiReddit.FavoriteMultiReddit;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.R;
@@ -45,9 +46,12 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
     private String mAccountName;
     private List<MultiReddit> mMultiReddits;
     private List<MultiReddit> mFavoriteMultiReddits;
+    private int mPrimaryTextColor;
+    private int mSecondaryTextColor;
 
     public MultiRedditListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
                                                  RedditDataRoomDatabase redditDataRoomDatabase,
+                                                 CustomThemeWrapper customThemeWrapper,
                                                  String accessToken, String accountName) {
         mContext = context;
         mGlide = Glide.with(context.getApplicationContext());
@@ -55,6 +59,9 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mAccessToken = accessToken;
         mAccountName = accountName;
+        int themeType = customThemeWrapper.getThemeType();
+        mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor(themeType);
+        mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor(themeType);
     }
 
     @Override
@@ -313,6 +320,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
         MultiRedditViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            multiRedditNameTextView.setTextColor(mPrimaryTextColor);
         }
     }
 
@@ -327,6 +335,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
         FavoriteMultiRedditViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            multiRedditNameTextView.setTextColor(mPrimaryTextColor);
         }
     }
 
@@ -337,6 +346,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
             super(itemView);
             ButterKnife.bind(this, itemView);
             dividerTextView.setText(R.string.favorites);
+            dividerTextView.setTextColor(mSecondaryTextColor);
         }
     }
 
@@ -347,6 +357,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
             super(itemView);
             ButterKnife.bind(this, itemView);
             dividerTextView.setText(R.string.all);
+            dividerTextView.setTextColor(mSecondaryTextColor);
         }
     }
 }

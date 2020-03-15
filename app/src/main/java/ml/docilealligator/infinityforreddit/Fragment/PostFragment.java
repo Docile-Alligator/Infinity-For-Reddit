@@ -52,6 +52,7 @@ import ml.docilealligator.infinityforreddit.Activity.FilteredThingActivity;
 import ml.docilealligator.infinityforreddit.Activity.MainActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.Adapter.PostRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.ChangeDefaultPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangePostLayoutEvent;
@@ -114,6 +115,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper customThemeWrapper;
     private RequestManager mGlide;
     private AppCompatActivity activity;
     private LinearLayoutManager mLinearLayoutManager;
@@ -182,6 +185,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         ButterKnife.bind(this, rootView);
 
         EventBus.getDefault().register(this);
+
+        applyTheme();
 
         lazyModeHandler = new Handler();
 
@@ -263,8 +268,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         };
 
         mSwipeRefreshLayout.setOnRefreshListener(this::refresh);
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(Utils.getAttributeColor(activity, R.attr.cardViewBackgroundColor));
-        mSwipeRefreshLayout.setColorSchemeColors(Utils.getAttributeColor(activity, R.attr.colorAccent));
 
         if (savedInstanceState != null) {
             int recyclerViewPosition = savedInstanceState.getInt(RECYCLER_VIEW_POSITION_STATE);
@@ -334,8 +337,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    accessToken, postType, postLayout, true, needBlurNsfw, needBlurSpoiler,
-                    voteButtonsOnTheRight, showElapsedTime, showDividerInCompactLayout, showAbsoluteNumberOfVotes,
+                    customThemeWrapper, accessToken, postType, postLayout, true,
+                    needBlurNsfw, needBlurSpoiler, voteButtonsOnTheRight, showElapsedTime,
+                    showDividerInCompactLayout, showAbsoluteNumberOfVotes,
                     new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
@@ -398,8 +402,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    accessToken, postType, postLayout, displaySubredditName, needBlurNsfw, needBlurSpoiler,
-                    voteButtonsOnTheRight, showElapsedTime, showDividerInCompactLayout, showAbsoluteNumberOfVotes,
+                    customThemeWrapper, accessToken, postType, postLayout, displaySubredditName,
+                    needBlurNsfw, needBlurSpoiler, voteButtonsOnTheRight, showElapsedTime,
+                    showDividerInCompactLayout, showAbsoluteNumberOfVotes,
                     new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
@@ -447,8 +452,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    accessToken, postType, postLayout, true, needBlurNsfw, needBlurSpoiler,
-                    voteButtonsOnTheRight, showElapsedTime, showDividerInCompactLayout, showAbsoluteNumberOfVotes,
+                    customThemeWrapper, accessToken, postType, postLayout, true,
+                    needBlurNsfw, needBlurSpoiler, voteButtonsOnTheRight, showElapsedTime,
+                    showDividerInCompactLayout, showAbsoluteNumberOfVotes,
                     new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
@@ -494,8 +500,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    accessToken, postType, postLayout, true, needBlurNsfw, needBlurSpoiler,
-                    voteButtonsOnTheRight, showElapsedTime, showDividerInCompactLayout, showAbsoluteNumberOfVotes,
+                    customThemeWrapper, accessToken, postType, postLayout, true,
+                    needBlurNsfw, needBlurSpoiler, voteButtonsOnTheRight, showElapsedTime,
+                    showDividerInCompactLayout, showAbsoluteNumberOfVotes,
                     new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
@@ -534,8 +541,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    accessToken, postType, postLayout, true, needBlurNsfw, needBlurSpoiler,
-                    voteButtonsOnTheRight, showElapsedTime, showDividerInCompactLayout, showAbsoluteNumberOfVotes,
+                    customThemeWrapper, accessToken, postType, postLayout, true,
+                    needBlurNsfw, needBlurSpoiler, voteButtonsOnTheRight, showElapsedTime,
+                    showDividerInCompactLayout, showAbsoluteNumberOfVotes,
                     new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
@@ -719,6 +727,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter.setPostLayout(postLayout);
             refreshAdapter();
         }
+    }
+
+    @Override
+    public void applyTheme() {
+        int themeType = customThemeWrapper.getThemeType();
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCardViewBackgroundColor(themeType));
+        mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent(themeType));
+        mFetchPostInfoTextView.setTextColor(customThemeWrapper.getSecondaryTextColor(themeType));
     }
 
     @Subscribe

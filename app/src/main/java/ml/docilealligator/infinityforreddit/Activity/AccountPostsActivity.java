@@ -11,6 +11,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -49,6 +50,8 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String FRAGMENT_OUT_STATE = "FOS";
 
+    @BindView(R.id.coordinator_layout_account_posts_activity)
+    CoordinatorLayout coordinatorLayout;
     @BindView(R.id.collapsing_toolbar_layout_account_posts_activity)
     CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.appbar_layout_account_posts_activity)
@@ -83,6 +86,8 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
+
+        applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -145,8 +150,15 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     }
 
     @Override
-    protected void applyCustomTheme() {
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
 
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
     }
 
     private void getCurrentAccountAndInitializeFragment() {

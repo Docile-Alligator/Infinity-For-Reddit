@@ -23,6 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Account.Account;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
 import pl.droidsonroids.gif.GifImageView;
@@ -56,8 +57,12 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private boolean isInMainPage = true;
     private ArrayList<SubscribedSubredditData> subscribedSubreddits;
     private ArrayList<Account> accounts;
+    private int primaryTextColor;
+    private int secondaryTextColor;
+    private int dividerColor;
 
-    public NavigationDrawerRecyclerViewAdapter(Context context, String accountName, String userIconUrl,
+    public NavigationDrawerRecyclerViewAdapter(Context context, CustomThemeWrapper customThemeWrapper,
+                                               String accountName, String userIconUrl,
                                                String userBannerUrl, int karma, boolean isNSFWEnabled,
                                                ItemClickListener itemClickListener) {
         this.context = context;
@@ -70,6 +75,10 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         this.isNSFWEnabled = isNSFWEnabled;
         isLoggedIn = accountName != null;
         this.itemClickListener = itemClickListener;
+        int themeType = customThemeWrapper.getThemeType();
+        primaryTextColor = customThemeWrapper.getPrimaryTextColor(themeType);
+        secondaryTextColor = customThemeWrapper.getSecondaryTextColor(themeType);
+        dividerColor = customThemeWrapper.getDividerColor(themeType);
     }
 
     @Override
@@ -439,6 +448,8 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         NavHeaderViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            accountNameTextView.setTextColor(secondaryTextColor);
+            karmaTextView.setTextColor(secondaryTextColor);
         }
     }
 
@@ -448,6 +459,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         MenuGroupTitleViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTextView = (TextView) itemView;
+            titleTextView.setTextColor(primaryTextColor);
         }
     }
 
@@ -457,6 +469,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         MenuItemViewHolder(@NonNull View itemView) {
             super(itemView);
             menuTextView = (TextView) itemView;
+            menuTextView.setTextColor(primaryTextColor);
         }
     }
 
@@ -464,6 +477,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
         DividerViewHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.setBackgroundColor(dividerColor);
         }
     }
 
@@ -476,6 +490,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         SubscribedThingViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            subredditNameTextView.setTextColor(primaryTextColor);
         }
     }
 
@@ -488,6 +503,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         AccountViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            usernameTextView.setTextColor(primaryTextColor);
         }
     }
 }

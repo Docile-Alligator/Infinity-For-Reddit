@@ -11,6 +11,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -24,6 +25,7 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Fragment.SubredditListingFragment;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -41,6 +43,8 @@ public class SearchSubredditsResultActivity extends BaseActivity {
     private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String FRAGMENT_OUT_STATE = "FOS";
 
+    @BindView(R.id.coordinator_layout_search_subreddits_result_activity)
+    CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_search_subreddits_result_activity)
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_search_subreddits_result_activity)
@@ -51,6 +55,8 @@ public class SearchSubredditsResultActivity extends BaseActivity {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
@@ -66,6 +72,8 @@ public class SearchSubredditsResultActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
+
+        applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -103,6 +111,18 @@ public class SearchSubredditsResultActivity extends BaseActivity {
     @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
     }
 
     private void getCurrentAccountAndInitializeFragment(String query) {

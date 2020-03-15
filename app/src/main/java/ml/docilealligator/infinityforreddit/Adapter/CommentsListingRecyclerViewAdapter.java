@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.style.SuperscriptSpan;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +38,7 @@ import ml.docilealligator.infinityforreddit.Activity.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.CommentData;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Fragment.CommentMoreBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
@@ -65,11 +68,17 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     private Markwon mMarkwon;
     private String mAccessToken;
     private String mAccountName;
+    private int mColorPrimaryLightTheme;
     private int mSecondaryTextColor;
+    private int mCommentBackgroundColor;
+    private int mCommentColor;
+    private int mDividerColor;
     private int mUsernameColor;
     private int mSubredditColor;
     private int mUpvotedColor;
     private int mDownvotedColor;
+    private int mButtonTextColor;
+    private int mColorAccent;
     private boolean mVoteButtonsOnTheRight;
     private boolean mShowElapsedTime;
     private boolean mShowCommentDivider;
@@ -78,9 +87,10 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     private RetryLoadingMoreCallback mRetryLoadingMoreCallback;
 
     public CommentsListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
-                                              String accessToken, String accountName,
-                                              boolean voteButtonsOnTheRight, boolean showElapsedTime,
-                                              boolean showCommentDivider, boolean showAbsoluteNumberOfVotes,
+                                              CustomThemeWrapper customThemeWrapper, String accessToken,
+                                              String accountName, boolean voteButtonsOnTheRight,
+                                              boolean showElapsedTime, boolean showCommentDivider,
+                                              boolean showAbsoluteNumberOfVotes,
                                               RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         mContext = context;
@@ -117,11 +127,18 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         mShowCommentDivider = showCommentDivider;
         mShowAbsoluteNumberOfVotes = showAbsoluteNumberOfVotes;
         mRetryLoadingMoreCallback = retryLoadingMoreCallback;
-        mSecondaryTextColor = Utils.getAttributeColor(context, R.attr.secondaryTextColor);
-        mSubredditColor = Utils.getAttributeColor(context, R.attr.subreddit);
-        mUsernameColor = Utils.getAttributeColor(context, R.attr.username);
-        mUpvotedColor = Utils.getAttributeColor(context, R.attr.upvoted);
-        mDownvotedColor = Utils.getAttributeColor(context, R.attr.downvoted);
+        int themeType = customThemeWrapper.getThemeType();
+        mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme(themeType);
+        mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor(themeType);
+        mCommentBackgroundColor = customThemeWrapper.getCommentBackgroundColor(themeType);
+        mCommentColor = customThemeWrapper.getCommentColor(themeType);
+        mDividerColor = customThemeWrapper.getDividerColor(themeType);
+        mSubredditColor = customThemeWrapper.getSubreddit(themeType);
+        mUsernameColor = customThemeWrapper.getUsername(themeType);
+        mUpvotedColor = customThemeWrapper.getUpvoted(themeType);
+        mDownvotedColor = customThemeWrapper.getDownvoted(themeType);
+        mButtonTextColor = customThemeWrapper.getButtonTextColor(themeType);
+        mColorAccent = customThemeWrapper.getColorAccent(themeType);
     }
 
     @NonNull
@@ -473,6 +490,12 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             if (mShowCommentDivider) {
                 commentDivider.setVisibility(View.VISIBLE);
             }
+
+            itemView.setBackgroundColor(mCommentBackgroundColor);
+            authorTextView.setTextColor(mUsernameColor);
+            commentTimeTextView.setTextColor(mSecondaryTextColor);
+            commentMarkdownView.setTextColor(mCommentColor);
+            commentDivider.setBackgroundColor(mDividerColor);
         }
     }
 
@@ -487,13 +510,20 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             ButterKnife.bind(this, itemView);
             errorTextView.setText(R.string.load_comments_failed);
             retryButton.setOnClickListener(view -> mRetryLoadingMoreCallback.retryLoadingMore());
+            errorTextView.setTextColor(mSecondaryTextColor);
+            retryButton.setBackgroundTintList(ColorStateList.valueOf(mColorPrimaryLightTheme));
+            retryButton.setTextColor(mButtonTextColor);
         }
     }
 
     class LoadingViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.progress_bar_item_footer_loading)
+        ProgressBar progressBar;
+
         LoadingViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
         }
     }
 }

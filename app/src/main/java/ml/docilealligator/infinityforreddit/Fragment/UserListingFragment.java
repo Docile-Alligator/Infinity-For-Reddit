@@ -31,6 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Activity.BaseActivity;
 import ml.docilealligator.infinityforreddit.Adapter.UserListingRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
@@ -76,6 +77,8 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper customThemeWrapper;
     private LinearLayoutManager mLinearLayoutManager;
     private String mQuery;
     private UserListingRecyclerViewAdapter mAdapter;
@@ -95,6 +98,8 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
+
+        applyTheme();
 
         Resources resources = getResources();
 
@@ -118,7 +123,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         SortType sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
 
         mAdapter = new UserListingRecyclerViewAdapter(getActivity(), mOauthRetrofit, mRetrofit,
-                accessToken, accountName, mRedditDataRoomDatabase.subscribedUserDao(),
+                customThemeWrapper, accessToken, accountName, mRedditDataRoomDatabase.subscribedUserDao(),
                 () -> mUserListingViewModel.retryLoadingMore());
 
         mUserListingRecyclerView.setAdapter(mAdapter);
@@ -157,8 +162,6 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         });
 
         mSwipeRefreshLayout.setOnRefreshListener(() -> mUserListingViewModel.refresh());
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(Utils.getAttributeColor(mActivity, R.attr.cardViewBackgroundColor));
-        mSwipeRefreshLayout.setColorSchemeColors(Utils.getAttributeColor(mActivity, R.attr.colorAccent));
 
         return rootView;
     }
@@ -187,5 +190,13 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         mFetchUserListingInfoLinearLayout.setVisibility(View.GONE);
         mUserListingViewModel.refresh();
         mAdapter.setNetworkState(null);
+    }
+
+    @Override
+    public void applyTheme() {
+        int themeType = customThemeWrapper.getThemeType();
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCardViewBackgroundColor(themeType));
+        mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent(themeType));
+        mFetchUserListingInfoTextView.setTextColor(customThemeWrapper.getSecondaryTextColor(themeType));
     }
 }

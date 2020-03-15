@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,8 +16,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.ferfalk.simplesearchview.SimpleSearchView;
+import com.google.android.material.appbar.AppBarLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -26,6 +29,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
@@ -45,17 +49,25 @@ public class SearchActivity extends BaseActivity {
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
     private static final int SUBREDDIT_SEARCH_REQUEST_CODE = 1;
 
+    @BindView(R.id.coordinator_layout_search_activity)
+    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.appbar_layout_search_activity)
+    AppBarLayout appBarLayout;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.search_view_search_activity)
     SimpleSearchView simpleSearchView;
     @BindView(R.id.subreddit_name_relative_layout_search_activity)
     RelativeLayout subredditNameRelativeLayout;
+    @BindView(R.id.search_in_text_view_search_activity)
+    TextView searchInTextView;
     @BindView(R.id.subreddit_name_text_view_search_activity)
     TextView subredditNameTextView;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private String query;
     private String subredditName;
     private boolean subredditIsUser;
@@ -71,6 +83,8 @@ public class SearchActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
+
+        applyCustomTheme();
 
         setSupportActionBar(toolbar);
 
@@ -166,6 +180,21 @@ public class SearchActivity extends BaseActivity {
     @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
+        simpleSearchView.setSearchBackground(new ColorDrawable(mCustomThemeWrapper.getColorPrimary(themeType)));
+        searchInTextView.setTextColor(mCustomThemeWrapper.getColorAccent(themeType));
+        subredditNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor(themeType));
     }
 
     @Override

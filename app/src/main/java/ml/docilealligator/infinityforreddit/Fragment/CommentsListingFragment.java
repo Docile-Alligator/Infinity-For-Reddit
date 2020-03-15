@@ -34,6 +34,7 @@ import ml.docilealligator.infinityforreddit.Activity.BaseActivity;
 import ml.docilealligator.infinityforreddit.Adapter.CommentsListingRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CommentViewModel;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
@@ -82,6 +83,8 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper customThemeWrapper;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private RequestManager mGlide;
@@ -104,6 +107,8 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
+
+        applyTheme();
 
         mGlide = Glide.with(mActivity);
 
@@ -154,7 +159,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
 
         boolean voteButtonsOnTheRight = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
-        mAdapter = new CommentsListingRecyclerViewAdapter(mActivity, mOauthRetrofit,
+        mAdapter = new CommentsListingRecyclerViewAdapter(mActivity, mOauthRetrofit, customThemeWrapper,
                 getArguments().getString(EXTRA_ACCESS_TOKEN), getArguments().getString(EXTRA_ACCOUNT_NAME),
                 voteButtonsOnTheRight, mShowElapsedTime, mShowCommentDivider, mShowAbsoluteNumberOfVotes,
                 () -> mCommentViewModel.retryLoadingMore());
@@ -213,8 +218,6 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         mCommentViewModel.getPaginationNetworkState().observe(this, networkState -> mAdapter.setNetworkState(networkState));
 
         mSwipeRefreshLayout.setOnRefreshListener(() -> mCommentViewModel.refresh());
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(Utils.getAttributeColor(mActivity, R.attr.cardViewBackgroundColor));
-        mSwipeRefreshLayout.setColorSchemeColors(Utils.getAttributeColor(mActivity, R.attr.colorAccent));
     }
 
     public void changeSortType(SortType sortType) {
@@ -239,6 +242,14 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         mFetchCommentInfoLinearLayout.setVisibility(View.GONE);
         mCommentViewModel.refresh();
         mAdapter.setNetworkState(null);
+    }
+
+    @Override
+    public void applyTheme() {
+        int themeType = customThemeWrapper.getThemeType();
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCardViewBackgroundColor(themeType));
+        mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent(themeType));
+        mFetchCommentInfoTextView.setTextColor(customThemeWrapper.getSecondaryTextColor(themeType));
     }
 
     private void showErrorView(int stringResId) {

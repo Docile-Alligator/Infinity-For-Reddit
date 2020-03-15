@@ -22,6 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FavoriteThing;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
@@ -42,15 +43,21 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private String mAccessToken;
     private RequestManager glide;
+    private int mUsernameColor;
+    private int mSecondaryTextColor;
 
     public FollowedUsersRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
                                             RedditDataRoomDatabase redditDataRoomDatabase,
+                                            CustomThemeWrapper customThemeWrapper,
                                             String accessToken) {
         mContext = context;
         mOauthRetrofit = oauthRetrofit;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mAccessToken = accessToken;
         glide = Glide.with(context.getApplicationContext());
+        int themeType = customThemeWrapper.getThemeType();
+        mUsernameColor = customThemeWrapper.getUsername(themeType);
+        mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor(themeType);
     }
 
     @Override
@@ -294,6 +301,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         FavoriteUserViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            userNameTextView.setTextColor(mUsernameColor);
         }
     }
 
@@ -308,6 +316,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         UserViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            userNameTextView.setTextColor(mUsernameColor);
         }
     }
 
@@ -318,6 +327,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             super(itemView);
             ButterKnife.bind(this, itemView);
             dividerTextView.setText(R.string.favorites);
+            dividerTextView.setTextColor(mSecondaryTextColor);
         }
     }
 
@@ -328,6 +338,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             super(itemView);
             ButterKnife.bind(this, itemView);
             dividerTextView.setText(R.string.all);
+            dividerTextView.setTextColor(mSecondaryTextColor);
         }
     }
 }

@@ -49,6 +49,7 @@ import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.AsyncTask.CheckIsFollowingUserAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.DeleteThing;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
@@ -72,7 +73,6 @@ import ml.docilealligator.infinityforreddit.User.UserData;
 import ml.docilealligator.infinityforreddit.User.UserViewModel;
 import ml.docilealligator.infinityforreddit.UserFollowing;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.Utils.Utils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
@@ -124,6 +124,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private SubscribedUserDao subscribedUserDao;
     private RequestManager glide;
@@ -146,6 +148,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     private int collapsedTabTextColor;
     private int collapsedTabBackgroundColor;
     private int collapsedTabIndicatorColor;
+    private int unsubscribedColor;
+    private int subscribedColor;
     private boolean showToast = false;
     private String mMessageFullname;
     private String mNewAccountName;
@@ -153,7 +157,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
-        setTransparentStatusBarAfterToolbarCollapsed(true);
+        setTransparentStatusBarAfterToolbarCollapsed();
 
         super.onCreate(savedInstanceState);
 
@@ -162,6 +166,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
+
+        applyCustomTheme();
 
         username = getIntent().getStringExtra(EXTRA_USER_NAME_KEY);
 
@@ -198,13 +204,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         toolbar.setTitle(title);
 
         setSupportActionBar(toolbar);
-
-        expandedTabTextColor = Utils.getAttributeColor(this, R.attr.tabLayoutWithExpandedCollapsingToolbarTextColor);
-        expandedTabIndicatorColor = Utils.getAttributeColor(this, R.attr.tabLayoutWithExpandedCollapsingToolbarTabIndicator);
-        expandedTabBackgroundColor = Utils.getAttributeColor(this, R.attr.tabLayoutWithExpandedCollapsingToolbarTabBackground);
-        collapsedTabTextColor = Utils.getAttributeColor(this, R.attr.tabLayoutWithCollapsedCollapsingToolbarTextColor);
-        collapsedTabIndicatorColor = Utils.getAttributeColor(this, R.attr.tabLayoutWithCollapsedCollapsingToolbarTabIndicator);
-        collapsedTabBackgroundColor = Utils.getAttributeColor(this, R.attr.tabLayoutWithCollapsedCollapsingToolbarTabBackground);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -307,9 +306,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                     });
                 }
 
-                int unsubscribedColor = Utils.getAttributeColor(this, R.attr.unsubscribed);
-                int subscribedColor = Utils.getAttributeColor(this, R.attr.subscribed);
-
                 if (userData.isCanBeFollowed()) {
                     subscribeUserChip.setVisibility(View.VISIBLE);
                     subscribeUserChip.setOnClickListener(view -> {
@@ -404,6 +400,30 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
+        expandedTabTextColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTextColor(themeType);
+        expandedTabIndicatorColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTabIndicator(themeType);
+        expandedTabBackgroundColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTabBackground(themeType);
+        collapsedTabTextColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTextColor(themeType);
+        collapsedTabIndicatorColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabIndicator(themeType);
+        collapsedTabBackgroundColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabBackground(themeType);
+        unsubscribedColor = mCustomThemeWrapper.getUnsubscribed(themeType);
+        subscribedColor = mCustomThemeWrapper.getSubscribed(themeType);
+        userNameTextView.setTextColor(mCustomThemeWrapper.getUsername(themeType));
+        karmaTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor(themeType));
+        subscribeUserChip.setTextColor(mCustomThemeWrapper.getChipTextColor(themeType));
+        applyTabLayoutTheme(tabLayout, mCustomThemeWrapper, themeType);
     }
 
     private void getCurrentAccountAndInitializeViewPager() {

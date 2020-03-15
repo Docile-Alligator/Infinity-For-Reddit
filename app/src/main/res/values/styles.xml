@@ -227,6 +227,9 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorPrimaryLightTheme">@color/colorPrimary</item>
+        <item name="postTitleColor">#000000</item>
+        <item name="postContentColor">#8A000000</item>
+        <item name="commentColor">#000000</item>
         <item name="primaryTextColor">#000000</item>
         <item name="secondaryTextColor">#8A000000</item>
         <item name="backgroundColor">@color/backgroundColor</item>
@@ -279,6 +282,9 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorPrimaryLightTheme">#1565C0</item>
+        <item name="postTitleColor">#FFFFFF</item>
+        <item name="postContentColor">#B3FFFFFF</item>
+        <item name="commentColor">#FFFFFF</item>
         <item name="primaryTextColor">#FFFFFF</item>
         <item name="secondaryTextColor">#B3FFFFFF</item>
         <item name="backgroundColor">@color/backgroundColor</item>
@@ -331,6 +337,9 @@
         <item name="colorPrimaryDark">#000000</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorPrimaryLightTheme">#1565C0</item>
+        <item name="postTitleColor">#FFFFFF</item>
+        <item name="postContentColor">#B3FFFFFF</item>
+        <item name="commentColor">#FFFFFF</item>
         <item name="primaryTextColor">#FFFFFF</item>
         <item name="secondaryTextColor">#B3FFFFFF</item>
         <item name="backgroundColor">#000000</item>
@@ -383,6 +392,9 @@
         <item name="colorPrimaryDark">#3D00E0</item>
         <item name="colorAccent">#0098DD</item>
         <item name="colorPrimaryLightTheme">?attr/colorPrimary</item>
+        <item name="postTitleColor">#000000</item>
+        <item name="postContentColor">#8A000000</item>
+        <item name="commentColor">#000000</item>
         <item name="primaryTextColor">#000000</item>
         <item name="secondaryTextColor">#8A000000</item>
         <item name="backgroundColor">@color/backgroundColor</item>

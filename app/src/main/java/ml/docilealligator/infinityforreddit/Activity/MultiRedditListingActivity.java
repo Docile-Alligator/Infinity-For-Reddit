@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,13 +36,13 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Adapter.MultiRedditListingRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertMultiRedditAsyncTask;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MultiReddit.FetchMultiReddit;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiRedditViewModel;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
 
 public class MultiRedditListingActivity extends BaseActivity {
@@ -51,6 +52,8 @@ public class MultiRedditListingActivity extends BaseActivity {
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
 
+    @BindView(R.id.coordinator_layout_multi_reddit_listing_activity)
+    CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.appbar_layout_multi_reddit_listing_activity)
     AppBarLayout mAppBarLayout;
     @BindView(R.id.toolbar_multi_reddit_listing_activity)
@@ -75,6 +78,8 @@ public class MultiRedditListingActivity extends BaseActivity {
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
 
     MultiRedditViewModel mMultiRedditViewModel;
     private RequestManager mGlide;
@@ -91,6 +96,8 @@ public class MultiRedditListingActivity extends BaseActivity {
         setContentView(R.layout.activity_multi_reddit_listing);
 
         ButterKnife.bind(this);
+
+        applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -114,8 +121,6 @@ public class MultiRedditListingActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mSwipeRefreshLayout.setOnRefreshListener(this::loadMultiReddits);
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(Utils.getAttributeColor(this, R.attr.cardViewBackgroundColor));
-        mSwipeRefreshLayout.setColorSchemeColors(Utils.getAttributeColor(this, R.attr.colorAccent));
 
         if (savedInstanceState != null) {
             mInsertSuccess = savedInstanceState.getBoolean(INSERT_MULTI_REDDIT_STATE);
@@ -156,7 +161,7 @@ public class MultiRedditListingActivity extends BaseActivity {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         MultiRedditListingRecyclerViewAdapter adapter = new MultiRedditListingRecyclerViewAdapter(this,
-                mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken, mAccountName);
+                mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, mAccessToken, mAccountName);
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -239,5 +244,21 @@ public class MultiRedditListingActivity extends BaseActivity {
     @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
+        mAppBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCardViewBackgroundColor(themeType));
+        mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent(themeType));
+        mErrorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor(themeType));
+        applyFABTheme(fab, mCustomThemeWrapper, themeType);
     }
 }

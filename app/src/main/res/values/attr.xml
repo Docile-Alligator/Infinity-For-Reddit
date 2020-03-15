@@ -32,6 +32,9 @@
         <attr name="colorPrimaryDark" format="color"/>
         <attr name="colorAccent" format="color"/>
         <attr name="colorPrimaryLightTheme" format="color"/>
+        <attr name="postTitleColor" format="color" />
+        <attr name="postContentColor" format="color" />
+        <attr name="commentColor" format="color" />
         <attr name="primaryTextColor" format="color"/>
         <attr name="secondaryTextColor" format="color"/>
         <attr name="backgroundColor" format="color"/>

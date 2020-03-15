@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -18,6 +19,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Settings.AboutPreferenceFragment;
@@ -29,6 +31,8 @@ public class SettingsActivity extends BaseActivity implements
 
     private static final String TITLE_STATE = "TS";
 
+    @BindView(R.id.coordinator_layout_settings_activity)
+    CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_settings_activity)
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_settings_activity)
@@ -37,6 +41,8 @@ public class SettingsActivity extends BaseActivity implements
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +53,8 @@ public class SettingsActivity extends BaseActivity implements
         setContentView(R.layout.activity_settings);
 
         ButterKnife.bind(this);
+
+        applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
             addOnOffsetChangedListener(appBarLayout);
@@ -77,6 +85,18 @@ public class SettingsActivity extends BaseActivity implements
     @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
     }
 
     @Override

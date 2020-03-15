@@ -13,6 +13,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -30,6 +31,7 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
@@ -56,6 +58,8 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
+    @BindView(R.id.coordinator_layout_search_result_activity)
+    CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_search_result_activity)
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_search_result_activity)
@@ -69,6 +73,8 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
@@ -91,6 +97,8 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
+
+        applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -154,6 +162,19 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
+        applyTabLayoutTheme(tabLayout, mCustomThemeWrapper, themeType);
     }
 
     private void getCurrentAccountAndInitializeViewPager() {

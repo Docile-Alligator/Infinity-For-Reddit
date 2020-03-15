@@ -14,8 +14,8 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.Utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
-import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -110,7 +110,7 @@ class AppModule {
     @Named("theme")
     @Singleton
     SharedPreferences provideThemeSharedPreferences() {
-        return mApplication.getSharedPreferences(SharedPreferencesUtils.THEME_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+        return mApplication.getSharedPreferences(CustomThemeSharedPreferencesUtils.THEME_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
     }
 
     @Provides

@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.LoadSubredditIconAsyncTask;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SubmitTextOrLinkPostEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Flair;
@@ -45,7 +47,6 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Service.SubmitPostService;
 import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
-import ml.docilealligator.infinityforreddit.Utils.Utils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
@@ -80,6 +81,12 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
     TextView subredditNameTextView;
     @BindView(R.id.rules_button_post_link_activity)
     Button rulesButton;
+    @BindView(R.id.divider_1_post_link_activity)
+    View divider1;
+    @BindView(R.id.divider_2_post_link_activity)
+    View divider2;
+    @BindView(R.id.divider_3_post_link_activity)
+    View divider3;
     @BindView(R.id.flair_custom_text_view_post_link_activity)
     CustomTextView flairTextView;
     @BindView(R.id.spoiler_custom_text_view_post_link_activity)
@@ -89,7 +96,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
     @BindView(R.id.post_title_edit_text_post_link_activity)
     EditText titleEditText;
     @BindView(R.id.post_link_edit_text_post_link_activity)
-    EditText contentEditText;
+    EditText linkEditText;
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
@@ -101,6 +108,8 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String iconUrl;
@@ -134,6 +143,8 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
 
         EventBus.getDefault().register(this);
 
+        applyCustomTheme();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
             addOnOffsetChangedListener(appBarLayout);
         }
@@ -144,11 +155,6 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
         mGlide = Glide.with(this);
 
         mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
-
-        primaryTextColor = Utils.getAttributeColor(this, R.attr.primaryTextColor);
-        flairColor = Utils.getAttributeColor(this, R.attr.flairColor);
-        spoilerColor = Utils.getAttributeColor(this, R.attr.spoilerColor);
-        nsfwColor = Utils.getAttributeColor(this, R.attr.nsfwColor);
 
         resources = getResources();
 
@@ -187,12 +193,15 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
             if (flair != null) {
                 flairTextView.setText(flair.getText());
                 flairTextView.setBackgroundColor(flairColor);
+                flairTextView.setBorderColor(flairColor);
             }
             if (isSpoiler) {
                 spoilerTextView.setBackgroundColor(spoilerColor);
+                spoilerTextView.setBorderColor(spoilerColor);
             }
             if (isNSFW) {
                 nsfwTextView.setBackgroundColor(nsfwColor);
+                nsfwTextView.setBorderColor(nsfwColor);
             }
         } else {
             getCurrentAccount();
@@ -215,7 +224,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
 
             String link = getIntent().getStringExtra(EXTRA_LINK);
             if (link != null) {
-                contentEditText.setText(link);
+                linkEditText.setText(link);
             }
         }
 
@@ -261,6 +270,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
         spoilerTextView.setOnClickListener(view -> {
             if (!isSpoiler) {
                 spoilerTextView.setBackgroundColor(spoilerColor);
+                spoilerTextView.setBorderColor(spoilerColor);
                 isSpoiler = true;
             } else {
                 spoilerTextView.setBackgroundColor(resources.getColor(android.R.color.transparent));
@@ -271,6 +281,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
         nsfwTextView.setOnClickListener(view -> {
             if (!isNSFW) {
                 nsfwTextView.setBackgroundColor(nsfwColor);
+                nsfwTextView.setBorderColor(nsfwColor);
                 isNSFW = true;
             } else {
                 nsfwTextView.setBackgroundColor(resources.getColor(android.R.color.transparent));
@@ -282,6 +293,42 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
     @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
+        rulesButton.setTextColor(mCustomThemeWrapper.getButtonTextColor(themeType));
+        rulesButton.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimaryLightTheme(themeType)));
+        int dividerColor = mCustomThemeWrapper.getDividerColor(themeType);
+        divider1.setBackgroundColor(dividerColor);
+        divider2.setBackgroundColor(dividerColor);
+        divider3.setBackgroundColor(dividerColor);
+        /*int flairColor = mCustomThemeWrapper.getFlairColor(themeType);
+        flairTextView.setBackgroundColor(flairColor);
+        flairTextView.setBorderColor(flairColor);
+        flairTextView.setTextColor(primaryTextColor);
+        int spoilerColor = mCustomThemeWrapper.getSpoilerColor(themeType);
+        spoilerTextView.setBackgroundColor(spoilerColor);
+        spoilerTextView.setBorderColor(spoilerColor);
+        spoilerTextView.setTextColor(primaryTextColor);
+        int nsfwColor = mCustomThemeWrapper.getNsfwColor(themeType);
+        nsfwTextView.setBackgroundColor(nsfwColor);
+        nsfwTextView.setBorderColor(nsfwColor);
+        nsfwTextView.setTextColor(primaryTextColor);*/
+        primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor(themeType);
+        flairColor = mCustomThemeWrapper.getFlairColor(themeType);
+        spoilerColor = mCustomThemeWrapper.getSpoilerColor(themeType);
+        nsfwColor = mCustomThemeWrapper.getNsfwColor(themeType);
+        titleEditText.setTextColor(primaryTextColor);
+        linkEditText.setTextColor(primaryTextColor);
     }
 
     private void getCurrentAccount() {
@@ -344,7 +391,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
                     promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
                     return true;
                 } else {
-                    if (!titleEditText.getText().toString().equals("") || !contentEditText.getText().toString().equals("")) {
+                    if (!titleEditText.getText().toString().equals("") || !linkEditText.getText().toString().equals("")) {
                         promptAlertDialog(R.string.discard, R.string.discard_detail);
                         return true;
                     }
@@ -362,7 +409,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
                     return true;
                 }
 
-                if (contentEditText.getText() == null || contentEditText.getText().toString().equals("")) {
+                if (linkEditText.getText() == null || linkEditText.getText().toString().equals("")) {
                     Snackbar.make(coordinatorLayout, R.string.link_required, Snackbar.LENGTH_SHORT).show();
                     return true;
                 }
@@ -385,7 +432,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
                 intent.putExtra(SubmitPostService.EXTRA_ACCESS_TOKEN, mAccessToken);
                 intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
                 intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
-                intent.putExtra(SubmitPostService.EXTRA_CONTENT, contentEditText.getText().toString());
+                intent.putExtra(SubmitPostService.EXTRA_CONTENT, linkEditText.getText().toString());
                 intent.putExtra(SubmitPostService.EXTRA_KIND, RedditUtils.KIND_LINK);
                 intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
                 intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
@@ -404,7 +451,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
         if (isPosting) {
             promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
         } else {
-            if (!titleEditText.getText().toString().equals("") || !contentEditText.getText().toString().equals("")) {
+            if (!titleEditText.getText().toString().equals("") || !linkEditText.getText().toString().equals("")) {
                 promptAlertDialog(R.string.discard, R.string.discard_detail);
             } else {
                 finish();
@@ -461,6 +508,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
         this.flair = flair;
         flairTextView.setText(flair.getText());
         flairTextView.setBackgroundColor(flairColor);
+        flairTextView.setBorderColor(flairColor);
     }
 
     @Subscribe

@@ -30,6 +30,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
@@ -57,7 +58,7 @@ public class EditCommentActivity extends BaseActivity {
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_edit_comment_activity)
     Toolbar toolbar;
-    @BindView(R.id.post_text_content_edit_text_edit_comment_activity)
+    @BindView(R.id.comment_edit_text_edit_comment_activity)
     EditText contentEditText;
     @Inject
     @Named("oauth")
@@ -65,6 +66,8 @@ public class EditCommentActivity extends BaseActivity {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private String mFullName;
     private String mAccessToken;
     private String mCommentContent;
@@ -81,6 +84,8 @@ public class EditCommentActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
+
+        applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
             addOnOffsetChangedListener(appBarLayout);
@@ -104,6 +109,19 @@ public class EditCommentActivity extends BaseActivity {
     @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
+        contentEditText.setTextColor(mCustomThemeWrapper.getCommentColor(themeType));
     }
 
     @Override

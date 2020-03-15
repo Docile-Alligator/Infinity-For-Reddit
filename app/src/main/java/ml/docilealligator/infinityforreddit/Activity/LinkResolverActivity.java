@@ -20,10 +20,10 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.Utils.Utils;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
@@ -47,6 +47,8 @@ public class LinkResolverActivity extends AppCompatActivity {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
 
     public static Uri getRedditUriByPath(String path) {
         return Uri.parse("https://www.reddit.com" + path);
@@ -237,7 +239,7 @@ public class LinkResolverActivity extends AppCompatActivity {
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
             // add share action to menu list
             builder.addDefaultShareMenuItem();
-            builder.setToolbarColor(Utils.getAttributeColor(this, R.attr.colorPrimary));
+            builder.setToolbarColor(mCustomThemeWrapper.getColorPrimary(mCustomThemeWrapper.getThemeType()));
             CustomTabsIntent customTabsIntent = builder.build();
             customTabsIntent.intent.setPackage(resolveInfos.get(0).activityInfo.packageName);
             if (uri.getScheme() == null) {

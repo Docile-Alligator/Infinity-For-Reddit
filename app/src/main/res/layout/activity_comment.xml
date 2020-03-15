@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:textColor="?attr/primaryTextColor"
+                android:textColor="?attr/commentColor"
                 android:textSize="?attr/title_font_16" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -61,6 +61,7 @@
                 android:visibility="gone" />
 
             <View
+                android:id="@+id/divider_comment_activity"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginBottom="16dp"

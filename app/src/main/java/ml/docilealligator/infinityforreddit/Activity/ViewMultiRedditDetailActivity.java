@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -25,6 +25,7 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SortTimeBottomSheetFragment;
@@ -53,6 +54,8 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
 
+    @BindView(R.id.coordinator_layout_view_multi_reddit_detail_activity)
+    CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_view_multi_reddit_detail_activity)
     AppBarLayout appBarLayout;
     @BindView(R.id.collapsing_toolbar_layout_view_multi_reddit_detail_activity)
@@ -70,6 +73,8 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
@@ -90,7 +95,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
 
         ButterKnife.bind(this);
 
-        Resources resources = getResources();
+        applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -309,5 +314,17 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
     }
 }

@@ -55,6 +55,7 @@
                 android:maxLength="50" />
 
             <View
+                android:id="@+id/divider_1_create_multi_reddit_activity"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="?attr/dividerColor" />
@@ -71,6 +72,7 @@
                 android:textColor="?attr/primaryTextColor" />
 
             <View
+                android:id="@+id/divider_2_create_multi_reddit_activity"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="?attr/dividerColor" />
@@ -85,6 +87,7 @@
                 android:background="?attr/selectableItemBackground">
 
                 <TextView
+                    android:id="@+id/visibility_text_view_create_multi_reddit_activity"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

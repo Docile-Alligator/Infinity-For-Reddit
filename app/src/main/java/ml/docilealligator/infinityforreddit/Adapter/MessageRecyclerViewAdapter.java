@@ -2,7 +2,7 @@ package ml.docilealligator.infinityforreddit.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,11 +28,11 @@ import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Message;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.ReadMessage;
-import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
 
 public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, RecyclerView.ViewHolder> {
@@ -53,16 +54,20 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
     private Retrofit mOauthRetrofit;
     private Markwon mMarkwon;
     private String mAccessToken;
-    private Resources mResources;
     private NetworkState networkState;
     private RetryLoadingMoreCallback mRetryLoadingMoreCallback;
+    private int mColorAccent;
     private int mMessageBackgroundColor;
     private int mUsernameColor;
     private int mPrimaryTextColor;
+    private int mSecondaryTextColor;
     private int mUnreadMessageBackgroundColor;
+    private int mColorPrimaryLightTheme;
+    private int mButtonTextColor;
 
-    public MessageRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, String accessToken,
-                                      RetryLoadingMoreCallback retryLoadingMoreCallback) {
+    public MessageRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
+                                      CustomThemeWrapper customThemeWrapper,
+                                      String accessToken, RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         mContext = context;
         mOauthRetrofit = oauthRetrofit;
@@ -93,12 +98,16 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 )
                 .build();
         mAccessToken = accessToken;
-        mResources = context.getResources();
 
-        mMessageBackgroundColor = Utils.getAttributeColor(context, R.attr.cardViewBackgroundColor);
-        mUsernameColor = Utils.getAttributeColor(context, R.attr.username);
-        mPrimaryTextColor = Utils.getAttributeColor(context, R.attr.primaryTextColor);
-        mUnreadMessageBackgroundColor = Utils.getAttributeColor(context, R.attr.unreadMessageBackgroundColor);
+        int themeType = customThemeWrapper.getThemeType();
+        mColorAccent = customThemeWrapper.getColorAccent(themeType);
+        mMessageBackgroundColor = customThemeWrapper.getCardViewBackgroundColor(themeType);
+        mUsernameColor = customThemeWrapper.getUsername(themeType);
+        mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor(themeType);
+        mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor(themeType);
+        mUnreadMessageBackgroundColor = customThemeWrapper.getUnreadMessageBackgroundColor(themeType);
+        mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme(themeType);
+        mButtonTextColor = customThemeWrapper.getButtonTextColor(themeType);
     }
 
     @NonNull
@@ -232,7 +241,6 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
     }
 
     class DataViewHolder extends RecyclerView.ViewHolder {
-        View itemView;
         @BindView(R.id.author_text_view_item_message)
         TextView authorTextView;
         @BindView(R.id.subject_text_view_item_message)
@@ -245,7 +253,10 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
         DataViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            this.itemView = itemView;
+            authorTextView.setTextColor(mUsernameColor);
+            subjectTextView.setTextColor(mPrimaryTextColor);
+            titleTextView.setTextColor(mPrimaryTextColor);
+            contentCustomMarkwonView.setTextColor(mSecondaryTextColor);
         }
     }
 
@@ -259,14 +270,21 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
             super(itemView);
             ButterKnife.bind(this, itemView);
             errorTextView.setText(R.string.load_comments_failed);
+            errorTextView.setTextColor(mSecondaryTextColor);
             retryButton.setOnClickListener(view -> mRetryLoadingMoreCallback.retryLoadingMore());
+            retryButton.setBackgroundTintList(ColorStateList.valueOf(mColorPrimaryLightTheme));
+            retryButton.setTextColor(mButtonTextColor);
         }
     }
 
     class LoadingViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.progress_bar_item_footer_loading)
+        ProgressBar progressBar;
+
         LoadingViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
         }
     }
 }

@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.Adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import ml.docilealligator.infinityforreddit.SubredditWithSelection;
@@ -38,8 +40,10 @@ public class SubredditMultiselectionRecyclerViewAdapter extends RecyclerView.Ada
     private ArrayList<SubredditWithSelection> selectedOtherSubreddits;
     private Context context;
     private RequestManager glide;
+    private int primaryTextColor;
+    private int colorAccent;
 
-    public SubredditMultiselectionRecyclerViewAdapter(Context context,
+    public SubredditMultiselectionRecyclerViewAdapter(Context context, CustomThemeWrapper customThemeWrapper,
                                                       ArrayList<SubredditWithSelection> selectedSubscribedSubreddits,
                                                       ArrayList<SubredditWithSelection> otherSubreddits) {
         this.context = context;
@@ -57,6 +61,10 @@ public class SubredditMultiselectionRecyclerViewAdapter extends RecyclerView.Ada
             this.selectedOtherSubreddits.addAll(otherSubreddits);
             this.otherSubreddits.addAll(otherSubreddits);
         }
+
+        int themeType = customThemeWrapper.getThemeType();
+        primaryTextColor = customThemeWrapper.getPrimaryTextColor(themeType);
+        colorAccent = customThemeWrapper.getColorAccent(themeType);
     }
 
     @Override
@@ -256,6 +264,8 @@ public class SubredditMultiselectionRecyclerViewAdapter extends RecyclerView.Ada
             super(itemView);
             this.itemView = itemView;
             ButterKnife.bind(this, itemView);
+            nameTextView.setTextColor(primaryTextColor);
+            checkBox.setButtonTintList(ColorStateList.valueOf(colorAccent));
         }
     }
 
@@ -272,6 +282,8 @@ public class SubredditMultiselectionRecyclerViewAdapter extends RecyclerView.Ada
             super(itemView);
             this.itemView = itemView;
             ButterKnife.bind(this, itemView);
+            nameTextView.setTextColor(primaryTextColor);
+            checkBox.setButtonTintList(ColorStateList.valueOf(colorAccent));
         }
     }
 }

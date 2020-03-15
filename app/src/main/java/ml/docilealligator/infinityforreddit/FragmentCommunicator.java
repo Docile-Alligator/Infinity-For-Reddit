@@ -33,4 +33,6 @@ public interface FragmentCommunicator {
 
     default void stopRefreshProgressbar() {
     }
+
+    void applyTheme();
 }

@@ -19,15 +19,20 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.R;
 
 public class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<FlairBottomSheetRecyclerViewAdapter.FlairViewHolder> {
     private Context context;
     private ArrayList<Flair> flairs;
+    private int flairColor;
     private ItemClickListener itemClickListener;
-    public FlairBottomSheetRecyclerViewAdapter(Context context, ItemClickListener itemClickListener) {
+
+    public FlairBottomSheetRecyclerViewAdapter(Context context, CustomThemeWrapper customThemeWrapper,
+                                               ItemClickListener itemClickListener) {
         this.context = context;
+        flairColor = customThemeWrapper.getFlairColor(customThemeWrapper.getThemeType());
         this.itemClickListener = itemClickListener;
     }
 
@@ -103,6 +108,7 @@ public class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<Fl
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.itemView = itemView;
+            flairTextView.setTextColor(flairColor);
         }
     }
 }

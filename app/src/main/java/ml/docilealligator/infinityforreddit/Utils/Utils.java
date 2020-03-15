@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.Utils;
 
 import android.content.Context;
-import android.util.TypedValue;
 
 import java.util.Locale;
 
@@ -75,9 +74,9 @@ public class Utils {
         }
     }
 
-    public static int getAttributeColor(Context context, int attrId) {
+    /*public static int getAttributeColor(Context context, int attrId) {
         TypedValue typedValue = new TypedValue();
         context.getTheme().resolveAttribute(attrId, typedValue, true);
         return typedValue.data;
-    }
+    }*/
 }

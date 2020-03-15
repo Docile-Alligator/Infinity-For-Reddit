@@ -49,12 +49,12 @@ import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CommentData;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SendComment;
-import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
 
 public class CommentActivity extends BaseActivity {
@@ -79,6 +79,8 @@ public class CommentActivity extends BaseActivity {
     Toolbar toolbar;
     @BindView(R.id.comment_parent_markwon_view_comment_activity)
     TextView commentParentMarkwonView;
+    @BindView(R.id.divider_comment_activity)
+    View divider;
     @BindView(R.id.content_markdown_view_comment_activity)
     RecyclerView contentMarkdownRecyclerView;
     @BindView(R.id.comment_edit_text_comment_activity)
@@ -91,6 +93,8 @@ public class CommentActivity extends BaseActivity {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String parentFullname;
@@ -98,6 +102,7 @@ public class CommentActivity extends BaseActivity {
     private int parentPosition;
     private boolean isSubmitting = false;
     private boolean isReplying;
+    private int markdownColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +115,8 @@ public class CommentActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
+
+        applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
             addOnOffsetChangedListener(appBarLayout);
@@ -155,7 +162,6 @@ public class CommentActivity extends BaseActivity {
         if (parentBody != null && !parentBody.equals("")) {
             contentMarkdownRecyclerView.setVisibility(View.VISIBLE);
             contentMarkdownRecyclerView.setNestedScrollingEnabled(false);
-            int markdownColor = Utils.getAttributeColor(this, R.attr.secondaryTextColor);
             Markwon postBodyMarkwon = Markwon.builder(this)
                     .usePlugin(new AbstractMarkwonPlugin() {
                         @Override
@@ -217,6 +223,22 @@ public class CommentActivity extends BaseActivity {
     @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
+        commentParentMarkwonView.setTextColor(mCustomThemeWrapper.getCommentColor(themeType));
+        divider.setBackgroundColor(mCustomThemeWrapper.getDividerColor(themeType));
+        commentEditText.setTextColor(mCustomThemeWrapper.getCommentColor(themeType));
+        markdownColor = mCustomThemeWrapper.getSecondaryTextColor(themeType);
     }
 
     private void getCurrentAccount() {

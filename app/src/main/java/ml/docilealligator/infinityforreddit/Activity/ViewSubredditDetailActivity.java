@@ -46,6 +46,7 @@ import ml.docilealligator.infinityforreddit.AsyncTask.CheckIsSubscribedToSubredd
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubredditDataAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchSubredditData;
@@ -66,7 +67,6 @@ import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditViewModel;
 import ml.docilealligator.infinityforreddit.SubredditSubscription;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.Utils.Utils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
@@ -93,6 +93,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     AppBarLayout appBarLayout;
     @BindView(R.id.collapsing_toolbar_layout_view_subreddit_detail_activity)
     CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.toolbar_linear_layout_view_subreddit_detail_activity)
+    LinearLayout linearLayout;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.banner_image_view_view_subreddit_detail_activity)
@@ -134,6 +136,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
@@ -156,11 +160,13 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
     private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
     private SubredditViewModel mSubredditViewModel;
+    private int unsubscribedColor;
+    private int subscribedColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
-        setTransparentStatusBarAfterToolbarCollapsed(true);
+        setTransparentStatusBarAfterToolbarCollapsed();
 
         super.onCreate(savedInstanceState);
 
@@ -169,6 +175,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
+
+        applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -329,6 +337,30 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         return mSharedPreferences;
     }
 
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        int backgroundColor = mCustomThemeWrapper.getBackgroundColor(themeType);
+        coordinatorLayout.setBackgroundColor(backgroundColor);
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
+        linearLayout.setBackgroundColor(backgroundColor);
+        subredditNameTextView.setTextColor(mCustomThemeWrapper.getSubreddit(themeType));
+        subscribeSubredditChip.setTextColor(mCustomThemeWrapper.getChipTextColor(themeType));
+        int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor(themeType);
+        nSubscribersTextView.setTextColor(primaryTextColor);
+        nOnlineSubscribersTextView.setTextColor(primaryTextColor);
+        descriptionTextView.setTextColor(primaryTextColor);
+        bottomNavigationView.setBackgroundColor(backgroundColor);
+        applyFABTheme(fab, mCustomThemeWrapper, themeType);
+        unsubscribedColor = mCustomThemeWrapper.getUnsubscribed(themeType);
+        subscribedColor = mCustomThemeWrapper.getSubscribed(themeType);
+    }
+
     private void getCurrentAccountAndBindView() {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
             if (mNewAccountName != null) {
@@ -435,9 +467,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             bottomNavigationView.setVisibility(View.GONE);
             fab.setVisibility(View.GONE);
         }
-
-        int unsubscribedColor = Utils.getAttributeColor(this, R.attr.unsubscribed);
-        int subscribedColor = Utils.getAttributeColor(this, R.attr.subscribed);
 
         subscribeSubredditChip.setOnClickListener(view -> {
             if (mAccessToken == null) {

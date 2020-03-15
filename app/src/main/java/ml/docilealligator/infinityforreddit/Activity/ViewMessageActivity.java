@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,6 +38,7 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Adapter.MessageRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchMessages;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -45,7 +46,6 @@ import ml.docilealligator.infinityforreddit.MessageViewModel;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
 
 public class ViewMessageActivity extends BaseActivity {
@@ -56,10 +56,12 @@ public class ViewMessageActivity extends BaseActivity {
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
 
+    @BindView(R.id.coordinator_layout_view_message_activity)
+    CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.collapsing_toolbar_layout_view_message_activity)
     CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.appbar_layout_view_message_activity)
-    AppBarLayout appBarLayout;
+    AppBarLayout mAppBarLayout;
     @BindView(R.id.toolbar_view_message_activity)
     Toolbar toolbar;
     @BindView(R.id.swipe_refresh_layout_view_message_activity)
@@ -81,6 +83,8 @@ public class ViewMessageActivity extends BaseActivity {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mNewAccountName;
@@ -99,15 +103,15 @@ public class ViewMessageActivity extends BaseActivity {
 
         EventBus.getDefault().register(this);
 
-        mGlide = Glide.with(this);
+        applyCustomTheme();
 
-        Resources resources = getResources();
+        mGlide = Glide.with(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
 
             if (isChangeStatusBarIconColor()) {
-                addOnOffsetChangedListener(appBarLayout);
+                addOnOffsetChangedListener(mAppBarLayout);
             }
 
             if (isImmersiveInterface()) {
@@ -145,6 +149,21 @@ public class ViewMessageActivity extends BaseActivity {
         return mSharedPreferences;
     }
 
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
+        mAppBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCardViewBackgroundColor(themeType));
+        mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent(themeType));
+        mFetchMessageInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor(themeType));
+    }
+
     private void getCurrentAccountAndFetchMessage() {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
             if (mNewAccountName != null) {
@@ -179,8 +198,8 @@ public class ViewMessageActivity extends BaseActivity {
     }
 
     private void bindView() {
-        mAdapter = new MessageRecyclerViewAdapter(this, mOauthRetrofit, mAccessToken,
-                () -> mMessageViewModel.retryLoadingMore());
+        mAdapter = new MessageRecyclerViewAdapter(this, mOauthRetrofit, mCustomThemeWrapper,
+                mAccessToken, () -> mMessageViewModel.retryLoadingMore());
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -225,8 +244,6 @@ public class ViewMessageActivity extends BaseActivity {
         });
 
         mSwipeRefreshLayout.setOnRefreshListener(this::onRefresh);
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(Utils.getAttributeColor(this, R.attr.cardViewBackgroundColor));
-        mSwipeRefreshLayout.setColorSchemeColors(Utils.getAttributeColor(this, R.attr.colorAccent));
     }
 
     private void showErrorView(int stringResId) {

@@ -24,14 +24,17 @@ import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Rule;
 
 public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecyclerViewAdapter.RuleViewHolder> {
     private Markwon markwon;
     private ArrayList<Rule> rules;
+    private int mPrimaryTextColor;
+    private int mSecondaryTextColor;
 
-    public RulesRecyclerViewAdapter(Context context) {
+    public RulesRecyclerViewAdapter(Context context, CustomThemeWrapper customThemeWrapper) {
         markwon = Markwon.builder(context)
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
@@ -57,6 +60,9 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
                         )
                 )
                 .build();
+        int themeType = customThemeWrapper.getThemeType();
+        mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor(themeType);
+        mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor(themeType);
     }
 
     @NonNull
@@ -100,6 +106,8 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
         RuleViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            shortNameTextView.setTextColor(mPrimaryTextColor);
+            descriptionMarkwonView.setTextColor(mSecondaryTextColor);
         }
     }
 }

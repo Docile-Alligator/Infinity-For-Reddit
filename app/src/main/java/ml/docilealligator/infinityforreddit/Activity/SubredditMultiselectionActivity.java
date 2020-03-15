@@ -11,11 +11,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +36,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Adapter.SubredditMultiselectionRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
@@ -56,6 +59,8 @@ public class SubredditMultiselectionActivity extends BaseActivity {
     private static final String SELECTED_SUBSCRIBED_SUBREDDITS_STATE = "SSSS";
     private static final String SELECTED_OTHER_SUBREDDITS_STATE = "SOSS";
 
+    @BindView(R.id.coordinator_layout_subreddits_multiselection_activity)
+    CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.appbar_layout_subreddits_multiselection_activity)
     AppBarLayout mAppBarLayout;
     @BindView(R.id.toolbar_subscribed_subreddits_multiselection_activity)
@@ -68,6 +73,8 @@ public class SubredditMultiselectionActivity extends BaseActivity {
     LinearLayout mLinearLayout;
     @BindView(R.id.no_subscriptions_image_view_subscribed_subreddits_multiselection_activity)
     ImageView mImageView;
+    @BindView(R.id.error_text_view_subscribed_subreddits_multiselection_activity)
+    TextView mErrorTextView;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -76,6 +83,8 @@ public class SubredditMultiselectionActivity extends BaseActivity {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
@@ -89,6 +98,8 @@ public class SubredditMultiselectionActivity extends BaseActivity {
         setContentView(R.layout.activity_subscribed_subreddits_multiselection);
 
         ButterKnife.bind(this);
+
+        applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -151,8 +162,8 @@ public class SubredditMultiselectionActivity extends BaseActivity {
     private void bindView(ArrayList<SubredditWithSelection> selectedSubscribedSubreddits,
                           ArrayList<SubredditWithSelection> otherSubreddits) {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new SubredditMultiselectionRecyclerViewAdapter(this, selectedSubscribedSubreddits,
-                otherSubreddits);
+        mAdapter = new SubredditMultiselectionRecyclerViewAdapter(this, mCustomThemeWrapper,
+                selectedSubscribedSubreddits, otherSubreddits);
         mRecyclerView.setAdapter(mAdapter);
 
         mSubscribedSubredditViewModel = new ViewModelProvider(this,
@@ -231,5 +242,18 @@ public class SubredditMultiselectionActivity extends BaseActivity {
     @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
+        mAppBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
+        mErrorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor(themeType));
     }
 }

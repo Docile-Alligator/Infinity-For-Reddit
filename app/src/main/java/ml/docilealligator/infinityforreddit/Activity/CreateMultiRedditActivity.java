@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -28,6 +29,7 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MultiReddit.CreateMultiReddit;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiRedditJSONModel;
@@ -52,10 +54,16 @@ public class CreateMultiRedditActivity extends BaseActivity {
     Toolbar toolbar;
     @BindView(R.id.multi_reddit_name_edit_text_create_multi_reddit_activity)
     EditText nameEditText;
+    @BindView(R.id.divider_1_create_multi_reddit_activity)
+    View divider1;
     @BindView(R.id.description_edit_text_create_multi_reddit_activity)
     EditText descriptionEditText;
+    @BindView(R.id.divider_2_create_multi_reddit_activity)
+    View divider2;
     @BindView(R.id.visibility_wrapper_linear_layout_create_multi_reddit_activity)
     LinearLayout visibilityLinearLayout;
+    @BindView(R.id.visibility_text_view_create_multi_reddit_activity)
+    TextView visibilityTextView;
     @BindView(R.id.visibility_switch_create_multi_reddit_activity)
     Switch visibilitySwitch;
     @BindView(R.id.select_subreddit_text_view_create_multi_reddit_activity)
@@ -68,6 +76,8 @@ public class CreateMultiRedditActivity extends BaseActivity {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
@@ -81,6 +91,8 @@ public class CreateMultiRedditActivity extends BaseActivity {
         setContentView(R.layout.activity_create_multi_reddit);
 
         ButterKnife.bind(this);
+
+        applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
             addOnOffsetChangedListener(appBarLayout);
@@ -223,5 +235,24 @@ public class CreateMultiRedditActivity extends BaseActivity {
     @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
+        int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor(themeType);
+        nameEditText.setTextColor(primaryTextColor);
+        int dividerColor = mCustomThemeWrapper.getDividerColor(themeType);
+        divider1.setBackgroundColor(dividerColor);
+        divider2.setBackgroundColor(dividerColor);
+        descriptionEditText.setTextColor(primaryTextColor);
+        visibilityTextView.setTextColor(primaryTextColor);
+        selectSubredditTextView.setTextColor(primaryTextColor);
     }
 }

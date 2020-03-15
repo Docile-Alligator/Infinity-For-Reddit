@@ -11,6 +11,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -25,6 +26,7 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostLayoutBottomSheetFragment;
@@ -56,6 +58,8 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String FRAGMENT_OUT_STATE = "FOS";
 
+    @BindView(R.id.coordinator_layout_filtered_thing_activity)
+    CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_filtered_posts_activity)
     AppBarLayout appBarLayout;
     @BindView(R.id.collapsing_toolbar_layout_filtered_posts_activity)
@@ -67,6 +71,8 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private boolean isInLazyMode = false;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
@@ -96,6 +102,8 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
+
+        applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -158,6 +166,18 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
     @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
     }
 
     private void getCurrentAccountAndBindView(int filter) {

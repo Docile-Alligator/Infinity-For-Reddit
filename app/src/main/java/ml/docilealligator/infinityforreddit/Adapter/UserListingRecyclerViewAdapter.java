@@ -2,11 +2,13 @@ package ml.docilealligator.infinityforreddit.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +28,7 @@ import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.AsyncTask.CheckIsFollowingUserAsyncTask;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserDao;
@@ -57,11 +60,18 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
     private String accountName;
     private SubscribedUserDao subscribedUserDao;
 
+    private int primaryTextColor;
+    private int buttonTextColor;
+    private int colorPrimaryLightTheme;
+    private int colorAccent;
+    private int unsubscribedColor;
+
     private NetworkState networkState;
     private UserListingRecyclerViewAdapter.RetryLoadingMoreCallback retryLoadingMoreCallback;
 
     public UserListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, Retrofit retrofit,
-                                          String accessToken, String accountName, SubscribedUserDao subscribedUserDao,
+                                          CustomThemeWrapper customThemeWrapper, String accessToken,
+                                          String accountName, SubscribedUserDao subscribedUserDao,
                                           UserListingRecyclerViewAdapter.RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         this.context = context;
@@ -72,6 +82,12 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
         this.subscribedUserDao = subscribedUserDao;
         this.retryLoadingMoreCallback = retryLoadingMoreCallback;
         glide = Glide.with(context.getApplicationContext());
+        int themeType = customThemeWrapper.getThemeType();
+        primaryTextColor = customThemeWrapper.getPrimaryTextColor(themeType);
+        buttonTextColor = customThemeWrapper.getButtonTextColor(themeType);
+        colorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme(themeType);
+        colorAccent = customThemeWrapper.getColorAccent(themeType);
+        unsubscribedColor = customThemeWrapper.getUnsubscribed(themeType);
     }
 
     @NonNull
@@ -93,54 +109,56 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof UserListingRecyclerViewAdapter.DataViewHolder) {
             UserData userData = getItem(position);
-            ((UserListingRecyclerViewAdapter.DataViewHolder) holder).constraintLayout.setOnClickListener(view -> {
-                Intent intent = new Intent(context, ViewUserDetailActivity.class);
-                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, userData.getName());
-                context.startActivity(intent);
-            });
+            if (userData != null) {
+                ((UserListingRecyclerViewAdapter.DataViewHolder) holder).constraintLayout.setOnClickListener(view -> {
+                    Intent intent = new Intent(context, ViewUserDetailActivity.class);
+                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, userData.getName());
+                    context.startActivity(intent);
+                });
 
-            if (!userData.getIconUrl().equals("")) {
-                glide.load(userData.getIconUrl())
-                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                        .error(glide.load(R.drawable.subreddit_default_icon)
-                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                        .into(((UserListingRecyclerViewAdapter.DataViewHolder) holder).iconGifImageView);
-            } else {
-                glide.load(R.drawable.subreddit_default_icon)
-                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                        .into(((UserListingRecyclerViewAdapter.DataViewHolder) holder).iconGifImageView);
+                if (!userData.getIconUrl().equals("")) {
+                    glide.load(userData.getIconUrl())
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                            .error(glide.load(R.drawable.subreddit_default_icon)
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                            .into(((UserListingRecyclerViewAdapter.DataViewHolder) holder).iconGifImageView);
+                } else {
+                    glide.load(R.drawable.subreddit_default_icon)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                            .into(((UserListingRecyclerViewAdapter.DataViewHolder) holder).iconGifImageView);
+                }
+
+                ((UserListingRecyclerViewAdapter.DataViewHolder) holder).userNameTextView.setText(userData.getName());
+
+                new CheckIsFollowingUserAsyncTask(subscribedUserDao, userData.getName(), accountName,
+                        new CheckIsFollowingUserAsyncTask.CheckIsFollowingUserListener() {
+                            @Override
+                            public void isSubscribed() {
+                                ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void isNotSubscribed() {
+                                ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setVisibility(View.VISIBLE);
+                                ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setOnClickListener(view -> {
+                                    UserFollowing.followUser(oauthRetrofit, retrofit,
+                                            accessToken, userData.getName(), accountName, subscribedUserDao,
+                                            new UserFollowing.UserFollowingListener() {
+                                                @Override
+                                                public void onUserFollowingSuccess() {
+                                                    ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
+                                                    Toast.makeText(context, R.string.followed, Toast.LENGTH_SHORT).show();
+                                                }
+
+                                                @Override
+                                                public void onUserFollowingFail() {
+                                                    Toast.makeText(context, R.string.follow_failed, Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                });
+                            }
+                        }).execute();
             }
-
-            ((UserListingRecyclerViewAdapter.DataViewHolder) holder).UserNameTextView.setText(userData.getName());
-
-            new CheckIsFollowingUserAsyncTask(subscribedUserDao, userData.getName(), accountName,
-                    new CheckIsFollowingUserAsyncTask.CheckIsFollowingUserListener() {
-                        @Override
-                        public void isSubscribed() {
-                            ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
-                        }
-
-                        @Override
-                        public void isNotSubscribed() {
-                            ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setVisibility(View.VISIBLE);
-                            ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setOnClickListener(view -> {
-                                UserFollowing.followUser(oauthRetrofit, retrofit,
-                                        accessToken, userData.getName(), accountName, subscribedUserDao,
-                                        new UserFollowing.UserFollowingListener() {
-                                            @Override
-                                            public void onUserFollowingSuccess() {
-                                                ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
-                                                Toast.makeText(context, R.string.followed, Toast.LENGTH_SHORT).show();
-                                            }
-
-                                            @Override
-                                            public void onUserFollowingFail() {
-                                                Toast.makeText(context, R.string.follow_failed, Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                            });
-                        }
-                    }).execute();
         }
     }
 
@@ -204,13 +222,15 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
         @BindView(R.id.user_icon_gif_image_view_item_user_listing)
         GifImageView iconGifImageView;
         @BindView(R.id.user_name_text_view_item_user_listing)
-        TextView UserNameTextView;
+        TextView userNameTextView;
         @BindView(R.id.subscribe_image_view_item_user_listing)
         ImageView subscribeButton;
 
         DataViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            userNameTextView.setTextColor(primaryTextColor);
+            subscribeButton.setColorFilter(unsubscribedColor, android.graphics.PorterDuff.Mode.SRC_IN);
         }
     }
 
@@ -225,13 +245,20 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
             ButterKnife.bind(this, itemView);
             retryButton.setOnClickListener(view -> retryLoadingMoreCallback.retryLoadingMore());
             errorTextView.setText(R.string.load_comments_failed);
+            errorTextView.setTextColor(primaryTextColor);
+            retryButton.setTextColor(buttonTextColor);
+            retryButton.setBackgroundTintList(ColorStateList.valueOf(colorPrimaryLightTheme));
         }
     }
 
     class LoadingViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.progress_bar_item_footer_loading)
+        ProgressBar progressBar;
+
         LoadingViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            progressBar.setIndeterminateTintList(ColorStateList.valueOf(colorAccent));
         }
     }
 }

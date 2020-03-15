@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
@@ -56,6 +58,8 @@ public class EditPostActivity extends BaseActivity {
     Toolbar toolbar;
     @BindView(R.id.post_title_text_view_edit_post_activity)
     TextView titleTextView;
+    @BindView(R.id.divider_edit_post_activity)
+    View divider;
     @BindView(R.id.post_text_content_edit_text_edit_post_activity)
     EditText contentEditText;
     @Inject
@@ -64,6 +68,8 @@ public class EditPostActivity extends BaseActivity {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private String mFullName;
     private String mAccessToken;
     private String mPostContent;
@@ -80,6 +86,8 @@ public class EditPostActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
+
+        applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
             addOnOffsetChangedListener(appBarLayout);
@@ -104,6 +112,21 @@ public class EditPostActivity extends BaseActivity {
     @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
+        titleTextView.setTextColor(mCustomThemeWrapper.getPostTitleColor(themeType));
+        divider.setBackgroundColor(mCustomThemeWrapper.getPostTitleColor(themeType));
+        contentEditText.setTextColor(mCustomThemeWrapper.getPostContentColor(themeType));
     }
 
     @Override

@@ -22,6 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FavoriteThing;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
@@ -48,21 +49,29 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
     private String userIconUrl;
     private boolean hasClearSelectionRow;
 
+    private int primaryTextColor;
+    private int secondaryTextColor;
+
     public SubscribedSubredditsRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
                                                    RedditDataRoomDatabase redditDataRoomDatabase,
+                                                   CustomThemeWrapper customThemeWrapper,
                                                    String accessToken) {
         mContext = context;
         glide = Glide.with(context.getApplicationContext());
         mOauthRetrofit = oauthRetrofit;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         this.accessToken = accessToken;
+        int themeType = customThemeWrapper.getThemeType();
+        primaryTextColor = customThemeWrapper.getPrimaryTextColor(themeType);
+        secondaryTextColor = customThemeWrapper.getSecondaryTextColor(themeType);
     }
 
     public SubscribedSubredditsRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
                                                    RedditDataRoomDatabase redditDataRoomDatabase,
+                                                   CustomThemeWrapper customThemeWrapper,
                                                    String accessToken, boolean hasClearSelectionRow,
                                                    ItemClickListener itemClickListener) {
-        this(context, oauthRetrofit, redditDataRoomDatabase, accessToken);
+        this(context, oauthRetrofit, redditDataRoomDatabase, customThemeWrapper, accessToken);
         this.hasClearSelectionRow = hasClearSelectionRow;
         this.itemClickListener = itemClickListener;
     }
@@ -410,6 +419,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
         SubredditViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            subredditNameTextView.setTextColor(primaryTextColor);
         }
     }
 
@@ -424,6 +434,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
         FavoriteSubredditViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            subredditNameTextView.setTextColor(primaryTextColor);
         }
     }
 
@@ -434,6 +445,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
             super(itemView);
             ButterKnife.bind(this, itemView);
             dividerTextView.setText(R.string.favorites);
+            dividerTextView.setTextColor(secondaryTextColor);
         }
     }
 
@@ -444,6 +456,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
             super(itemView);
             ButterKnife.bind(this, itemView);
             dividerTextView.setText(R.string.all);
+            dividerTextView.setTextColor(secondaryTextColor);
         }
     }
 }

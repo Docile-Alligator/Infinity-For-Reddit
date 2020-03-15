@@ -2,8 +2,8 @@ package ml.docilealligator.infinityforreddit.Fragment;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,7 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,13 +32,13 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Activity.BaseActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubscribedThingListingActivity;
 import ml.docilealligator.infinityforreddit.Adapter.FollowedUsersRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserViewModel;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
 
 
@@ -56,6 +58,8 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
     LinearLayout mLinearLayout;
     @BindView(R.id.no_subscriptions_image_view_followed_users_listing_fragment)
     ImageView mImageView;
+    @BindView(R.id.error_text_view_followed_users_listing_fragment)
+    TextView mErrorTextView;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -64,6 +68,8 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
     SharedPreferences mSharedPreferences;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
+    @Inject
+    CustomThemeWrapper customThemeWrapper;
     SubscribedUserViewModel mSubscribedUserViewModel;
     private Activity mActivity;
     private RequestManager mGlide;
@@ -79,9 +85,9 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
 
         ButterKnife.bind(this, rootView);
 
-        mActivity = getActivity();
-
         ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
+
+        applyTheme();
 
         Resources resources = getResources();
 
@@ -97,17 +103,10 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
 
         mGlide = Glide.with(this);
 
-        if (mActivity instanceof SubscribedThingListingActivity) {
-            mSwipeRefreshLayout.setOnRefreshListener(() -> ((SubscribedThingListingActivity) mActivity).loadSubscriptions(true));
-            mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(Utils.getAttributeColor(mActivity, R.attr.cardViewBackgroundColor));
-            mSwipeRefreshLayout.setColorSchemeColors(Utils.getAttributeColor(mActivity, R.attr.colorAccent));
-        } else {
-            mSwipeRefreshLayout.setEnabled(false);
-        }
-
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
         FollowedUsersRecyclerViewAdapter adapter = new FollowedUsersRecyclerViewAdapter(mActivity,
-                mOauthRetrofit, mRedditDataRoomDatabase, getArguments().getString(EXTRA_ACCESS_TOKEN));
+                mOauthRetrofit, mRedditDataRoomDatabase, customThemeWrapper,
+                getArguments().getString(EXTRA_ACCESS_TOKEN));
         mRecyclerView.setAdapter(adapter);
 
         mSubscribedUserViewModel = new ViewModelProvider(this,
@@ -142,7 +141,26 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mActivity = (Activity) context;
+    }
+
+    @Override
     public void stopRefreshProgressbar() {
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void applyTheme() {
+        int themeType = customThemeWrapper.getThemeType();
+        if (mActivity instanceof SubscribedThingListingActivity) {
+            mSwipeRefreshLayout.setOnRefreshListener(() -> ((SubscribedThingListingActivity) mActivity).loadSubscriptions(true));
+            mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCardViewBackgroundColor(themeType));
+            mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent(themeType));
+        } else {
+            mSwipeRefreshLayout.setEnabled(false);
+        }
+        mErrorTextView.setTextColor(customThemeWrapper.getSecondaryTextColor(themeType));
     }
 }

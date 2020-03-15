@@ -31,6 +31,7 @@ import java.io.IOException;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SubmitImagePostEvent;
 import ml.docilealligator.infinityforreddit.Event.SubmitTextOrLinkPostEvent;
 import ml.docilealligator.infinityforreddit.Event.SubmitVideoPostEvent;
@@ -39,7 +40,6 @@ import ml.docilealligator.infinityforreddit.NotificationUtils;
 import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SubmitPost;
-import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
 
 public class SubmitPostService extends Service {
@@ -64,6 +64,8 @@ public class SubmitPostService extends Service {
     @Inject
     @Named("upload_video")
     Retrofit mUploadVideoRetrofit;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private String mAccessToken;
     private String subredditName;
     private String title;
@@ -128,7 +130,7 @@ public class SubmitPostService extends Service {
                 .setContentTitle(getString(stringResId))
                 .setContentText(getString(R.string.please_wait))
                 .setSmallIcon(R.drawable.ic_notification)
-                .setColor(Utils.getAttributeColor(context, R.attr.notificationIconColor))
+                .setColor(mCustomThemeWrapper.getNotificationIconColor(mCustomThemeWrapper.getThemeType()))
                 .build();
     }
 

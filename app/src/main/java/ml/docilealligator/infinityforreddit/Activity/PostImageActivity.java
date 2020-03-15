@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
@@ -46,6 +47,7 @@ import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.LoadSubredditIconAsyncTask;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SubmitImagePostEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Flair;
@@ -54,7 +56,6 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Service.SubmitPostService;
-import ml.docilealligator.infinityforreddit.Utils.Utils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
@@ -92,14 +93,20 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
     TextView subredditNameTextView;
     @BindView(R.id.rules_button_post_image_activity)
     Button rulesButton;
+    @BindView(R.id.divider_1_post_image_activity)
+    View divider1;
     @BindView(R.id.flair_custom_text_view_post_image_activity)
     CustomTextView flairTextView;
     @BindView(R.id.spoiler_custom_text_view_post_image_activity)
     CustomTextView spoilerTextView;
     @BindView(R.id.nsfw_custom_text_view_post_image_activity)
     CustomTextView nsfwTextView;
+    @BindView(R.id.divider_2_post_image_activity)
+    View divider2;
     @BindView(R.id.post_title_edit_text_post_image_activity)
     EditText titleEditText;
+    @BindView(R.id.divider_3_post_image_activity)
+    View divider3;
     @BindView(R.id.select_image_constraint_layout_post_image_activity)
     ConstraintLayout constraintLayout;
     @BindView(R.id.capture_fab_post_image_activity)
@@ -124,6 +131,8 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
@@ -159,6 +168,8 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
 
         EventBus.getDefault().register(this);
 
+        applyCustomTheme();
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
             addOnOffsetChangedListener(appBarLayout);
         }
@@ -169,11 +180,6 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
         mGlide = Glide.with(this);
 
         mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
-
-        primaryTextColor = Utils.getAttributeColor(this, R.attr.primaryTextColor);
-        flairColor = Utils.getAttributeColor(this, R.attr.flairColor);
-        spoilerColor = Utils.getAttributeColor(this, R.attr.spoilerColor);
-        nsfwColor = Utils.getAttributeColor(this, R.attr.nsfwColor);
 
         resources = getResources();
 
@@ -218,12 +224,15 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
             if (flair != null) {
                 flairTextView.setText(flair.getText());
                 flairTextView.setBackgroundColor(flairColor);
+                flairTextView.setBorderColor(flairColor);
             }
             if (isSpoiler) {
                 spoilerTextView.setBackgroundColor(spoilerColor);
+                spoilerTextView.setBorderColor(spoilerColor);
             }
             if (isNSFW) {
                 nsfwTextView.setBackgroundColor(nsfwColor);
+                nsfwTextView.setBorderColor(nsfwColor);
             }
         } else {
             getCurrentAccount();
@@ -291,6 +300,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
         spoilerTextView.setOnClickListener(view -> {
             if (!isSpoiler) {
                 spoilerTextView.setBackgroundColor(spoilerColor);
+                spoilerTextView.setBorderColor(spoilerColor);
                 isSpoiler = true;
             } else {
                 spoilerTextView.setBackgroundColor(resources.getColor(android.R.color.transparent));
@@ -301,6 +311,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
         nsfwTextView.setOnClickListener(view -> {
             if (!isNSFW) {
                 nsfwTextView.setBackgroundColor(nsfwColor);
+                nsfwTextView.setBorderColor(nsfwColor);
                 isNSFW = true;
             } else {
                 nsfwTextView.setBackgroundColor(resources.getColor(android.R.color.transparent));
@@ -343,6 +354,44 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
     @Override
     public SharedPreferences getSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        int themeType = mCustomThemeWrapper.getThemeType();
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
+        rulesButton.setTextColor(mCustomThemeWrapper.getButtonTextColor(themeType));
+        rulesButton.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimaryLightTheme(themeType)));
+        int dividerColor = mCustomThemeWrapper.getDividerColor(themeType);
+        divider1.setBackgroundColor(dividerColor);
+        divider2.setBackgroundColor(dividerColor);
+        divider3.setBackgroundColor(dividerColor);
+        /*int flairColor = mCustomThemeWrapper.getFlairColor(themeType);
+        flairTextView.setBackgroundColor(flairColor);
+        flairTextView.setBorderColor(flairColor);
+        flairTextView.setTextColor(primaryTextColor);
+        int spoilerColor = mCustomThemeWrapper.getSpoilerColor(themeType);
+        spoilerTextView.setBackgroundColor(spoilerColor);
+        spoilerTextView.setBorderColor(spoilerColor);
+        spoilerTextView.setTextColor(primaryTextColor);
+        int nsfwColor = mCustomThemeWrapper.getNsfwColor(themeType);
+        nsfwTextView.setBackgroundColor(nsfwColor);
+        nsfwTextView.setBorderColor(nsfwColor);
+        nsfwTextView.setTextColor(primaryTextColor);*/
+        primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor(themeType);
+        flairColor = mCustomThemeWrapper.getFlairColor(themeType);
+        spoilerColor = mCustomThemeWrapper.getSpoilerColor(themeType);
+        nsfwColor = mCustomThemeWrapper.getNsfwColor(themeType);
+        titleEditText.setTextColor(primaryTextColor);
+        applyFABTheme(captureFab, mCustomThemeWrapper, themeType);
+        applyFABTheme(selectFromLibraryFab, mCustomThemeWrapper, themeType);
+        selectAgainTextView.setTextColor(mCustomThemeWrapper.getColorAccent(themeType));
     }
 
     private void getCurrentAccount() {
@@ -554,6 +603,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
         this.flair = flair;
         flairTextView.setText(flair.getText());
         flairTextView.setBackgroundColor(flairColor);
+        flairTextView.setBorderColor(flairColor);
     }
 
     @Subscribe

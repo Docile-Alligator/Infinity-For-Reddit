@@ -1,11 +1,13 @@
 package ml.docilealligator.infinityforreddit.Adapter;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.AsyncTask.CheckIsSubscribedToSubredditAsyncTask;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
@@ -54,11 +57,18 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
     private String accessToken;
     private String accountName;
     private RedditDataRoomDatabase redditDataRoomDatabase;
+    private int colorPrimaryLightTheme;
+    private int primaryTextColor;
+    private int secondaryTextColor;
+    private int colorAccent;
+    private int buttonTextColor;
+    private int unsubscribed;
 
     private NetworkState networkState;
     private Callback callback;
 
     public SubredditListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, Retrofit retrofit,
+                                               CustomThemeWrapper customThemeWrapper,
                                                String accessToken, String accountName,
                                                RedditDataRoomDatabase redditDataRoomDatabase,
                                                Callback callback) {
@@ -71,6 +81,13 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
         this.redditDataRoomDatabase = redditDataRoomDatabase;
         this.callback = callback;
         glide = Glide.with(context.getApplicationContext());
+        int themeType = customThemeWrapper.getThemeType();
+        colorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme(themeType);
+        primaryTextColor = customThemeWrapper.getPrimaryTextColor(themeType);
+        secondaryTextColor = customThemeWrapper.getSecondaryTextColor(themeType);
+        colorAccent = customThemeWrapper.getColorAccent(themeType);
+        buttonTextColor = customThemeWrapper.getButtonTextColor(themeType);
+        unsubscribed = customThemeWrapper.getUnsubscribed(themeType);
     }
 
     @NonNull
@@ -209,6 +226,8 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
         DataViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            subredditNameTextView.setTextColor(primaryTextColor);
+            subscribeButton.setColorFilter(unsubscribed, android.graphics.PorterDuff.Mode.SRC_IN);
         }
     }
 
@@ -223,13 +242,20 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
             ButterKnife.bind(this, itemView);
             retryButton.setOnClickListener(view -> callback.retryLoadingMore());
             errorTextView.setText(R.string.load_comments_failed);
+            errorTextView.setTextColor(secondaryTextColor);
+            retryButton.setBackgroundTintList(ColorStateList.valueOf(colorPrimaryLightTheme));
+            retryButton.setTextColor(buttonTextColor);
         }
     }
 
     class LoadingViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.progress_bar_item_footer_loading)
+        ProgressBar progressBar;
+
         LoadingViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            progressBar.setIndeterminateTintList(ColorStateList.valueOf(colorAccent));
         }
     }
 }

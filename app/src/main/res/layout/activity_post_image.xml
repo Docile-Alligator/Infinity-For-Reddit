@@ -83,6 +83,7 @@
             </RelativeLayout>
 
             <View
+                android:id="@+id/divider_1_post_image_activity"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="?attr/dividerColor" />
@@ -137,6 +138,7 @@
             </LinearLayout>
 
             <View
+                android:id="@+id/divider_2_post_image_activity"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="?attr/dividerColor" />
@@ -154,6 +156,7 @@
                 android:textColor="?attr/primaryTextColor" />
 
             <View
+                android:id="@+id/divider_3_post_image_activity"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="?attr/dividerColor" />

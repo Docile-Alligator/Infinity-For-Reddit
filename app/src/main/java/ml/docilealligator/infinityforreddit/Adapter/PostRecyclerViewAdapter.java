@@ -1,7 +1,9 @@
 package ml.docilealligator.infinityforreddit.Adapter;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -52,6 +54,7 @@ import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewVideoActivity;
 import ml.docilealligator.infinityforreddit.AsyncTask.LoadSubredditIconAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.LoadUserDataAsyncTask;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToDetailActivity;
 import ml.docilealligator.infinityforreddit.Fragment.ShareLinkBottomSheetFragment;
@@ -97,12 +100,40 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean canStartActivity = true;
     private int mPostType;
     private int mPostLayout;
+    private int mColorPrimaryLightTheme;
+    private int mColorAccent;
+    private int mCardViewColor;
     private int mSecondaryTextColor;
+    private int mPostTitleColor;
+    private int mPrimaryTextColor;
+    private int mCommentTextColor;
+    private int mCommentBackgroundColor;
+    private int mPostTypeColor;
+    private int mDividerColor;
     private int mSubredditColor;
     private int mUsernameColor;
+    private int mSubmitterColor;
+    private int mModeratorColor;
+    private int mSpoilerColor;
+    private int mFlairColor;
+    private int mNSFWColor;
+    private int mArchivedTintColor;
+    private int mLockedTintColor;
+    private int mCrosspostTintColor;
+    private int mNoPreviewLinkBackgroundColor;
     private int mUpvotedColor;
     private int mDownvotedColor;
+    private int mCommentVerticalBarColor1;
+    private int mCommentVerticalBarColor2;
+    private int mCommentVerticalBarColor3;
+    private int mCommentVerticalBarColor4;
+    private int mCommentVerticalBarColor5;
+    private int mCommentVerticalBarColor6;
+    private int mCommentVerticalBarColor7;
+    private int mSingleCommentThreadBackgroundColor;
     private int mVoteAndReplyUnavailableVoteButtonColor;
+    private int mButtonBackgroundTint;
+    private int mButtonTextColor;
     private float mScale;
     private boolean mDisplaySubredditName;
     private boolean mVoteButtonsOnTheRight;
@@ -116,7 +147,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private ShareLinkBottomSheetFragment mShareLinkBottomSheetFragment;
 
     public PostRecyclerViewAdapter(AppCompatActivity activity, Retrofit oauthRetrofit, Retrofit retrofit,
-                                   RedditDataRoomDatabase redditDataRoomDatabase, String accessToken,
+                                   RedditDataRoomDatabase redditDataRoomDatabase,
+                                   CustomThemeWrapper customThemeWrapper, String accessToken,
                                    int postType, int postLayout, boolean displaySubredditName,
                                    boolean needBlurNSFW, boolean needBlurSpoiler, boolean voteButtonsOnTheRight,
                                    boolean showElapsedTime, boolean showDividerInCompactLayout,
@@ -136,12 +168,16 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mShowDividerInCompactLayout = showDividerInCompactLayout;
             mShowAbsoluteNumberOfVotes = showAbsoluteNumberOfVotes;
             mPostLayout = postLayout;
-            mSecondaryTextColor = Utils.getAttributeColor(activity, R.attr.secondaryTextColor);
-            mSubredditColor = Utils.getAttributeColor(activity, R.attr.subreddit);
-            mUsernameColor = Utils.getAttributeColor(activity, R.attr.username);
-            mUpvotedColor = Utils.getAttributeColor(activity, R.attr.upvoted);
-            mDownvotedColor = Utils.getAttributeColor(activity, R.attr.downvoted);
-            mVoteAndReplyUnavailableVoteButtonColor = Utils.getAttributeColor(activity, R.attr.voteAndReplyUnavailableVoteButtonColor);
+            int themeType = customThemeWrapper.getThemeType();
+            mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme(themeType);
+            mColorAccent = customThemeWrapper.getColorAccent(themeType);
+            mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor(themeType);
+            mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor(themeType);
+            mSubredditColor = customThemeWrapper.getSubreddit(themeType);
+            mUsernameColor = customThemeWrapper.getUsername(themeType);
+            mUpvotedColor = customThemeWrapper.getUpvoted(themeType);
+            mDownvotedColor = customThemeWrapper.getDownvoted(themeType);
+            mVoteAndReplyUnavailableVoteButtonColor = customThemeWrapper.getVoteAndReplyUnavailableVoteButtonColor(themeType);
             mScale = activity.getResources().getDisplayMetrics().density;
             mGlide = Glide.with(mActivity.getApplicationContext());
             mRedditDataRoomDatabase = redditDataRoomDatabase;
@@ -1584,6 +1620,24 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 constraintSet.setHorizontalBias(commentsCountTextView.getId(), 0);
                 constraintSet.applyTo(bottomConstraintLayout);
             }
+
+            subredditTextView.setTextColor(mSubredditColor);
+            userTextView.setTextColor(mUsernameColor);
+            postTimeTextView.setTextColor(mSecondaryTextColor);
+            titleTextView.setTextColor(mPrimaryTextColor);
+            typeTextView.setBackgroundColor(mPostTypeColor);
+            typeTextView.setBorderColor(mPostTypeColor);
+            spoilerTextView.setBackgroundColor(mSpoilerColor);
+            spoilerTextView.setBorderColor(mSpoilerColor);
+            nsfwTextView.setBackgroundColor(mNSFWColor);
+            nsfwTextView.setBorderColor(mNSFWColor);
+            flairTextView.setBackgroundColor(mFlairColor);
+            flairTextView.setBorderColor(mFlairColor);
+            archivedImageView.setColorFilter(mArchivedTintColor, PorterDuff.Mode.SRC_IN);
+            lockedImageView.setColorFilter(mLockedTintColor, PorterDuff.Mode.SRC_IN);
+            crosspostImageView.setColorFilter(mCrosspostTintColor, PorterDuff.Mode.SRC_IN);
+            linkTextView.setTextColor(mSecondaryTextColor);
+            noPreviewLinkImageView.setBackgroundColor(mNoPreviewLinkBackgroundColor);
         }
     }
 
@@ -1668,6 +1722,22 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 constraintSet.setHorizontalBias(commentsCountTextView.getId(), 0);
                 constraintSet.applyTo(bottomConstraintLayout);
             }
+
+            postTimeTextView.setTextColor(mSecondaryTextColor);
+            titleTextView.setTextColor(mPrimaryTextColor);
+            typeTextView.setBackgroundColor(mPostTypeColor);
+            typeTextView.setBorderColor(mPostTypeColor);
+            spoilerTextView.setBackgroundColor(mSpoilerColor);
+            spoilerTextView.setBorderColor(mSpoilerColor);
+            nsfwTextView.setBackgroundColor(mNSFWColor);
+            nsfwTextView.setBorderColor(mNSFWColor);
+            flairTextView.setBackgroundColor(mFlairColor);
+            flairTextView.setBorderColor(mFlairColor);
+            archivedImageView.setColorFilter(mArchivedTintColor, PorterDuff.Mode.SRC_IN);
+            lockedImageView.setColorFilter(mLockedTintColor, PorterDuff.Mode.SRC_IN);
+            crosspostImageView.setColorFilter(mCrosspostTintColor, PorterDuff.Mode.SRC_IN);
+            linkTextView.setTextColor(mSecondaryTextColor);
+            noPreviewLinkImageView.setBackgroundColor(mNoPreviewLinkBackgroundColor);
         }
     }
 
@@ -1681,14 +1751,22 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             super(itemView);
             ButterKnife.bind(this, itemView);
             errorTextView.setText(R.string.load_more_posts_error);
+            errorTextView.setTextColor(mSecondaryTextColor);
             retryButton.setOnClickListener(view -> mCallback.retryLoadingMore());
+            retryButton.setBackgroundTintList(ColorStateList.valueOf(mColorPrimaryLightTheme));
+            retryButton.setTextColor(mButtonTextColor);
+            itemView.setOnClickListener(view -> retryButton.performClick());
         }
     }
 
     class LoadingViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.progress_bar_item_footer_loading)
+        ProgressBar progressBar;
+
         LoadingViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
         }
     }
 }

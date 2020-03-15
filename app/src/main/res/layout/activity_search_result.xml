@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/coordinator_layout_search_result_activity"
     android:background="?attr/backgroundColor">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -44,14 +45,6 @@
             app:tabUnboundedRipple="false"/>
 
     </com.google.android.material.appbar.AppBarLayout>
-
-    <View
-        android:id="@+id/transparent_overlay_search_result_activity"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#40000000"
-        android:elevation="1dp"
-        android:visibility="gone"/>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager_search_result_activity"

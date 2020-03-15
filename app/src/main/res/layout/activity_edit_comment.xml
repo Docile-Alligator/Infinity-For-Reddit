@@ -34,7 +34,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <EditText
-        android:id="@+id/post_text_content_edit_text_edit_comment_activity"
+        android:id="@+id/comment_edit_text_edit_comment_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="top"

@@ -28,6 +28,7 @@ import javax.inject.Named;
 import ml.docilealligator.infinityforreddit.Account.Account;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewMessageActivity;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Call;
@@ -47,6 +48,8 @@ public class PullNotificationWorker extends Worker {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
     private Context context;
 
     public PullNotificationWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
@@ -60,6 +63,7 @@ public class PullNotificationWorker extends Worker {
     public Result doWork() {
         try {
             List<Account> accounts = mRedditDataRoomDatabase.accountDao().getAllAccounts();
+            int color = mCustomThemeWrapper.getNotificationIconColor(mCustomThemeWrapper.getThemeType());
             for (int accountIndex = 0; accountIndex < accounts.size(); accountIndex++) {
                 Account account = accounts.get(accountIndex);
 
@@ -78,11 +82,11 @@ public class PullNotificationWorker extends Worker {
                                 notificationManager, accountName,
                                 context.getString(R.string.notification_new_messages, messages.size()),
                                 NotificationUtils.CHANNEL_ID_NEW_MESSAGES, NotificationUtils.CHANNEL_NEW_MESSAGES,
-                                NotificationUtils.getAccountGroupName(accountName));
+                                NotificationUtils.getAccountGroupName(accountName), color);
 
                         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
-                        int messageSize = messages.size() >= 5 ? 5 : messages.size();
+                        int messageSize = Math.min(messages.size(), 5);
                         long lastNotificationTime = mSharedPreferences.getLong(SharedPreferencesUtils.PULL_NOTIFICATION_TIME, -1L);
                         boolean hasValidMessage = false;
 
@@ -122,7 +126,7 @@ public class PullNotificationWorker extends Worker {
                                     context, title, message.getBody(), summary,
                                     NotificationUtils.CHANNEL_ID_NEW_MESSAGES,
                                     NotificationUtils.CHANNEL_NEW_MESSAGES,
-                                    NotificationUtils.getAccountGroupName(accountName));
+                                    NotificationUtils.getAccountGroupName(accountName), color);
 
                             if (kind.equals(Message.TYPE_COMMENT)) {
                                 Intent intent = new Intent(context, LinkResolverActivity.class);
