@@ -228,11 +228,10 @@ public class ViewSidebarActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
-        int themeType = mCustomThemeWrapper.getThemeType();
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
-        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCardViewBackgroundColor(themeType));
-        swipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent(themeType));
-        markdownColor = mCustomThemeWrapper.getSecondaryTextColor(themeType);
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
+        swipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
+        markdownColor = mCustomThemeWrapper.getSecondaryTextColor();
     }
 }

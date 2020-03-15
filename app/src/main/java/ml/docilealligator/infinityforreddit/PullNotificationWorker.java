@@ -63,7 +63,7 @@ public class PullNotificationWorker extends Worker {
     public Result doWork() {
         try {
             List<Account> accounts = mRedditDataRoomDatabase.accountDao().getAllAccounts();
-            int color = mCustomThemeWrapper.getNotificationIconColor(mCustomThemeWrapper.getThemeType());
+            int color = mCustomThemeWrapper.getNotificationIconColor();
             for (int accountIndex = 0; accountIndex < accounts.size(); accountIndex++) {
                 Account account = accounts.get(accountIndex);
 

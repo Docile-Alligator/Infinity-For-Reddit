@@ -108,7 +108,7 @@
 
     <style name="FontStyle" />
 
-    <style name="FontStyle.Small">
+    <style name="FontStyle.Small" parent="TextAppearance.AppCompat.Body1">
         <item name="font_default">12sp</item>
         <item name="font_10">10sp</item>
         <item name="font_12">12sp</item>

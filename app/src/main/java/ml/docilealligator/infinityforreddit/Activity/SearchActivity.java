@@ -189,12 +189,11 @@ public class SearchActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
-        int themeType = mCustomThemeWrapper.getThemeType();
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
-        simpleSearchView.setSearchBackground(new ColorDrawable(mCustomThemeWrapper.getColorPrimary(themeType)));
-        searchInTextView.setTextColor(mCustomThemeWrapper.getColorAccent(themeType));
-        subredditNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor(themeType));
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        simpleSearchView.setSearchBackground(new ColorDrawable(mCustomThemeWrapper.getColorPrimary()));
+        searchInTextView.setTextColor(mCustomThemeWrapper.getColorAccent());
+        subredditNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
     }
 
     @Override

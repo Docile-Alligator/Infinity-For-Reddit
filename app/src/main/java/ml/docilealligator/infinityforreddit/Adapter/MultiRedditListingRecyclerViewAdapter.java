@@ -59,9 +59,8 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mAccessToken = accessToken;
         mAccountName = accountName;
-        int themeType = customThemeWrapper.getThemeType();
-        mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor(themeType);
-        mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor(themeType);
+        mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
+        mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
     }
 
     @Override

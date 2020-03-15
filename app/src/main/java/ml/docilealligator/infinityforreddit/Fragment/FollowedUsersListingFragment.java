@@ -153,14 +153,13 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
 
     @Override
     public void applyTheme() {
-        int themeType = customThemeWrapper.getThemeType();
         if (mActivity instanceof SubscribedThingListingActivity) {
             mSwipeRefreshLayout.setOnRefreshListener(() -> ((SubscribedThingListingActivity) mActivity).loadSubscriptions(true));
-            mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCardViewBackgroundColor(themeType));
-            mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent(themeType));
+            mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCircularProgressBarBackground());
+            mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent());
         } else {
             mSwipeRefreshLayout.setEnabled(false);
         }
-        mErrorTextView.setTextColor(customThemeWrapper.getSecondaryTextColor(themeType));
+        mErrorTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
     }
 }

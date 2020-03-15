@@ -44,6 +44,7 @@ import ml.docilealligator.infinityforreddit.Fragment.SubscribedSubredditsListing
 import ml.docilealligator.infinityforreddit.Fragment.UserListingFragment;
 import ml.docilealligator.infinityforreddit.Service.SubmitPostService;
 import ml.docilealligator.infinityforreddit.Settings.GesturesAndButtonsPreferenceFragment;
+import ml.docilealligator.infinityforreddit.Settings.InterfacePreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.MainPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.NotificationPreferenceFragment;
 
@@ -137,4 +138,6 @@ public interface AppComponent {
     void inject(CreateMultiRedditActivity createMultiRedditActivity);
 
     void inject(SubredditMultiselectionActivity subredditMultiselectionActivity);
+
+    void inject(InterfacePreferenceFragment interfacePreferenceFragment);
 }

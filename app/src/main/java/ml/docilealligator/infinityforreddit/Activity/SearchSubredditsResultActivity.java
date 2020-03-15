@@ -120,9 +120,8 @@ public class SearchSubredditsResultActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
-        int themeType = mCustomThemeWrapper.getThemeType();
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
     }
 
     private void getCurrentAccountAndInitializeFragment(String query) {

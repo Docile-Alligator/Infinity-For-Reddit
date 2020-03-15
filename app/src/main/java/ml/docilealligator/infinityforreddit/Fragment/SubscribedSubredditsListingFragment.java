@@ -171,10 +171,9 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
     public void applyTheme() {
         if (mActivity instanceof SubscribedThingListingActivity) {
             mSwipeRefreshLayout.setOnRefreshListener(() -> ((SubscribedThingListingActivity) mActivity).loadSubscriptions(true));
-            int themeType = customThemeWrapper.getThemeType();
-            mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCardViewBackgroundColor(themeType));
-            mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent(themeType));
-            mErrorTextView.setTextColor(customThemeWrapper.getSecondaryTextColor(themeType));
+            mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCircularProgressBarBackground());
+            mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent());
+            mErrorTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
         } else {
             mSwipeRefreshLayout.setEnabled(false);
         }

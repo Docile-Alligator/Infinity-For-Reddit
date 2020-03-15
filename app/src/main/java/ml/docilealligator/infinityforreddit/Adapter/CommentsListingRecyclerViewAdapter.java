@@ -127,18 +127,17 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         mShowCommentDivider = showCommentDivider;
         mShowAbsoluteNumberOfVotes = showAbsoluteNumberOfVotes;
         mRetryLoadingMoreCallback = retryLoadingMoreCallback;
-        int themeType = customThemeWrapper.getThemeType();
-        mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme(themeType);
-        mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor(themeType);
-        mCommentBackgroundColor = customThemeWrapper.getCommentBackgroundColor(themeType);
-        mCommentColor = customThemeWrapper.getCommentColor(themeType);
-        mDividerColor = customThemeWrapper.getDividerColor(themeType);
-        mSubredditColor = customThemeWrapper.getSubreddit(themeType);
-        mUsernameColor = customThemeWrapper.getUsername(themeType);
-        mUpvotedColor = customThemeWrapper.getUpvoted(themeType);
-        mDownvotedColor = customThemeWrapper.getDownvoted(themeType);
-        mButtonTextColor = customThemeWrapper.getButtonTextColor(themeType);
-        mColorAccent = customThemeWrapper.getColorAccent(themeType);
+        mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
+        mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
+        mCommentBackgroundColor = customThemeWrapper.getCommentBackgroundColor();
+        mCommentColor = customThemeWrapper.getCommentColor();
+        mDividerColor = customThemeWrapper.getDividerColor();
+        mSubredditColor = customThemeWrapper.getSubreddit();
+        mUsernameColor = customThemeWrapper.getUsername();
+        mUpvotedColor = customThemeWrapper.getUpvoted();
+        mDownvotedColor = customThemeWrapper.getDownvoted();
+        mButtonTextColor = customThemeWrapper.getButtonTextColor();
+        mColorAccent = customThemeWrapper.getColorAccent();
     }
 
     @NonNull

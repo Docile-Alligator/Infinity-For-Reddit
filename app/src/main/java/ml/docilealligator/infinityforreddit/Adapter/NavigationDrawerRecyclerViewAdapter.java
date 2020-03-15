@@ -75,10 +75,9 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         this.isNSFWEnabled = isNSFWEnabled;
         isLoggedIn = accountName != null;
         this.itemClickListener = itemClickListener;
-        int themeType = customThemeWrapper.getThemeType();
-        primaryTextColor = customThemeWrapper.getPrimaryTextColor(themeType);
-        secondaryTextColor = customThemeWrapper.getSecondaryTextColor(themeType);
-        dividerColor = customThemeWrapper.getDividerColor(themeType);
+        primaryTextColor = customThemeWrapper.getPrimaryTextColor();
+        secondaryTextColor = customThemeWrapper.getSecondaryTextColor();
+        dividerColor = customThemeWrapper.getDividerColor();
     }
 
     @Override
@@ -448,8 +447,6 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         NavHeaderViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            accountNameTextView.setTextColor(secondaryTextColor);
-            karmaTextView.setTextColor(secondaryTextColor);
         }
     }
 
@@ -459,7 +456,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         MenuGroupTitleViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTextView = (TextView) itemView;
-            titleTextView.setTextColor(primaryTextColor);
+            titleTextView.setTextColor(secondaryTextColor);
         }
     }
 

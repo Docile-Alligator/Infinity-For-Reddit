@@ -156,12 +156,11 @@ public class ViewMessageActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
-        int themeType = mCustomThemeWrapper.getThemeType();
-        mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
-        mAppBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCardViewBackgroundColor(themeType));
-        mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent(themeType));
-        mFetchMessageInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor(themeType));
+        mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        mAppBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
+        mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
+        mFetchMessageInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
     }
 
     private void getCurrentAccountAndFetchMessage() {

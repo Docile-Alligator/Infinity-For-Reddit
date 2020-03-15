@@ -60,9 +60,8 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
                         )
                 )
                 .build();
-        int themeType = customThemeWrapper.getThemeType();
-        mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor(themeType);
-        mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor(themeType);
+        mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
+        mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
     }
 
     @NonNull

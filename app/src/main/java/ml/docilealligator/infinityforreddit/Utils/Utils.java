@@ -73,10 +73,4 @@ public class Utils {
             return String.format(Locale.US, "%.1f", (float) votes / 1000) + "K";
         }
     }
-
-    /*public static int getAttributeColor(Context context, int attrId) {
-        TypedValue typedValue = new TypedValue();
-        context.getTheme().resolveAttribute(attrId, typedValue, true);
-        return typedValue.data;
-    }*/
 }

@@ -32,7 +32,7 @@ public class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<Fl
     public FlairBottomSheetRecyclerViewAdapter(Context context, CustomThemeWrapper customThemeWrapper,
                                                ItemClickListener itemClickListener) {
         this.context = context;
-        flairColor = customThemeWrapper.getFlairColor(customThemeWrapper.getThemeType());
+        flairColor = customThemeWrapper.getFlairBackgroundColor();
         this.itemClickListener = itemClickListener;
     }
 

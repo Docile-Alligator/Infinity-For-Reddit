@@ -129,10 +129,9 @@ public class RulesActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
-        int themeType = mCustomThemeWrapper.getThemeType();
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
-        errorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor(themeType));
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        errorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
     }
 
     private void fetchRules() {

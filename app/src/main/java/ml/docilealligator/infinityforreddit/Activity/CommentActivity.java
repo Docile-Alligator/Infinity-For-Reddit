@@ -232,13 +232,12 @@ public class CommentActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
-        int themeType = mCustomThemeWrapper.getThemeType();
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
-        commentParentMarkwonView.setTextColor(mCustomThemeWrapper.getCommentColor(themeType));
-        divider.setBackgroundColor(mCustomThemeWrapper.getDividerColor(themeType));
-        commentEditText.setTextColor(mCustomThemeWrapper.getCommentColor(themeType));
-        markdownColor = mCustomThemeWrapper.getSecondaryTextColor(themeType);
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        commentParentMarkwonView.setTextColor(mCustomThemeWrapper.getCommentColor());
+        divider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
+        commentEditText.setTextColor(mCustomThemeWrapper.getCommentColor());
+        markdownColor = mCustomThemeWrapper.getSecondaryTextColor();
     }
 
     private void getCurrentAccount() {

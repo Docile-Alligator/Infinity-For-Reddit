@@ -214,9 +214,8 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
     @Override
     public void applyTheme() {
-        int themeType = customThemeWrapper.getThemeType();
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCardViewBackgroundColor(themeType));
-        mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent(themeType));
-        mFetchSubredditListingInfoTextView.setTextColor(customThemeWrapper.getSecondaryTextColor(themeType));
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCircularProgressBarBackground());
+        mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent());
+        mFetchSubredditListingInfoTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
     }
 }

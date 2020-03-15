@@ -62,9 +62,8 @@ public class SubredditMultiselectionRecyclerViewAdapter extends RecyclerView.Ada
             this.otherSubreddits.addAll(otherSubreddits);
         }
 
-        int themeType = customThemeWrapper.getThemeType();
-        primaryTextColor = customThemeWrapper.getPrimaryTextColor(themeType);
-        colorAccent = customThemeWrapper.getColorAccent(themeType);
+        primaryTextColor = customThemeWrapper.getPrimaryTextColor();
+        colorAccent = customThemeWrapper.getColorAccent();
     }
 
     @Override

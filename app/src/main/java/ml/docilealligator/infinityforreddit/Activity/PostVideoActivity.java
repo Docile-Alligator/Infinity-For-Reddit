@@ -150,9 +150,12 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     private boolean isPosting;
     private boolean wasPlaying;
     private int primaryTextColor;
-    private int flairColor;
-    private int spoilerColor;
-    private int nsfwColor;
+    private int flairBackgroundColor;
+    private int flairTextColor;
+    private int spoilerBackgroundColor;
+    private int spoilerTextColor;
+    private int nsfwBackgroundColor;
+    private int nsfwTextColor;
     private Flair flair;
     private boolean isSpoiler = false;
     private boolean isNSFW = false;
@@ -236,16 +239,19 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
 
             if (flair != null) {
                 flairTextView.setText(flair.getText());
-                flairTextView.setBackgroundColor(flairColor);
-                flairTextView.setBorderColor(flairColor);
+                flairTextView.setBackgroundColor(flairBackgroundColor);
+                flairTextView.setBorderColor(flairBackgroundColor);
+                flairTextView.setTextColor(flairTextColor);
             }
             if (isSpoiler) {
-                spoilerTextView.setBackgroundColor(spoilerColor);
-                spoilerTextView.setBorderColor(spoilerColor);
+                spoilerTextView.setBackgroundColor(spoilerBackgroundColor);
+                spoilerTextView.setBorderColor(spoilerBackgroundColor);
+                spoilerTextView.setTextColor(spoilerTextColor);
             }
             if (isNSFW) {
-                nsfwTextView.setBackgroundColor(nsfwColor);
-                nsfwTextView.setBorderColor(nsfwColor);
+                nsfwTextView.setBackgroundColor(nsfwBackgroundColor);
+                nsfwTextView.setBorderColor(nsfwBackgroundColor);
+                nsfwTextView.setTextColor(nsfwTextColor);
             }
         } else {
             getCurrentAccount();
@@ -305,6 +311,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
                 mFlairSelectionBottomSheetFragment.show(getSupportFragmentManager(), mFlairSelectionBottomSheetFragment.getTag());
             } else {
                 flairTextView.setBackgroundColor(resources.getColor(android.R.color.transparent));
+                flairTextView.setTextColor(primaryTextColor);
                 flairTextView.setText(getString(R.string.flair));
                 flair = null;
             }
@@ -312,22 +319,26 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
 
         spoilerTextView.setOnClickListener(view -> {
             if (!isSpoiler) {
-                spoilerTextView.setBackgroundColor(spoilerColor);
-                spoilerTextView.setBorderColor(spoilerColor);
+                spoilerTextView.setBackgroundColor(spoilerBackgroundColor);
+                spoilerTextView.setBorderColor(spoilerBackgroundColor);
+                spoilerTextView.setTextColor(spoilerTextColor);
                 isSpoiler = true;
             } else {
                 spoilerTextView.setBackgroundColor(resources.getColor(android.R.color.transparent));
+                spoilerTextView.setTextColor(primaryTextColor);
                 isSpoiler = false;
             }
         });
 
         nsfwTextView.setOnClickListener(view -> {
             if (!isNSFW) {
-                nsfwTextView.setBackgroundColor(nsfwColor);
-                nsfwTextView.setBorderColor(nsfwColor);
+                nsfwTextView.setBackgroundColor(nsfwBackgroundColor);
+                nsfwTextView.setBorderColor(nsfwBackgroundColor);
+                nsfwTextView.setTextColor(nsfwTextColor);
                 isNSFW = true;
             } else {
                 nsfwTextView.setBackgroundColor(resources.getColor(android.R.color.transparent));
+                nsfwTextView.setTextColor(primaryTextColor);
                 isNSFW = false;
             }
         });
@@ -368,35 +379,25 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
 
     @Override
     protected void applyCustomTheme() {
-        int themeType = mCustomThemeWrapper.getThemeType();
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
-        rulesButton.setTextColor(mCustomThemeWrapper.getButtonTextColor(themeType));
-        rulesButton.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimaryLightTheme(themeType)));
-        int dividerColor = mCustomThemeWrapper.getDividerColor(themeType);
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        rulesButton.setTextColor(mCustomThemeWrapper.getButtonTextColor());
+        rulesButton.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimaryLightTheme()));
+        int dividerColor = mCustomThemeWrapper.getDividerColor();
         divider1.setBackgroundColor(dividerColor);
         divider2.setBackgroundColor(dividerColor);
         divider3.setBackgroundColor(dividerColor);
-        /*int flairColor = mCustomThemeWrapper.getFlairColor(themeType);
-        flairTextView.setBackgroundColor(flairColor);
-        flairTextView.setBorderColor(flairColor);
-        flairTextView.setTextColor(primaryTextColor);
-        int spoilerColor = mCustomThemeWrapper.getSpoilerColor(themeType);
-        spoilerTextView.setBackgroundColor(spoilerColor);
-        spoilerTextView.setBorderColor(spoilerColor);
-        spoilerTextView.setTextColor(primaryTextColor);
-        int nsfwColor = mCustomThemeWrapper.getNsfwColor(themeType);
-        nsfwTextView.setBackgroundColor(nsfwColor);
-        nsfwTextView.setBorderColor(nsfwColor);
-        nsfwTextView.setTextColor(primaryTextColor);*/
-        primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor(themeType);
-        flairColor = mCustomThemeWrapper.getFlairColor(themeType);
-        spoilerColor = mCustomThemeWrapper.getSpoilerColor(themeType);
-        nsfwColor = mCustomThemeWrapper.getNsfwColor(themeType);
+        primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
+        flairBackgroundColor = mCustomThemeWrapper.getFlairBackgroundColor();
+        flairTextColor = mCustomThemeWrapper.getFlairTextColor();
+        spoilerBackgroundColor = mCustomThemeWrapper.getSpoilerBackgroundColor();
+        spoilerTextColor = mCustomThemeWrapper.getSpoilerTextColor();
+        nsfwBackgroundColor = mCustomThemeWrapper.getNsfwBackgroundColor();
+        nsfwTextColor = mCustomThemeWrapper.getNsfwTextColor();
         titleEditText.setTextColor(primaryTextColor);
-        applyFABTheme(captureFab, mCustomThemeWrapper, themeType);
-        applyFABTheme(selectFromLibraryFab, mCustomThemeWrapper, themeType);
-        selectAgainTextView.setTextColor(mCustomThemeWrapper.getColorAccent(themeType));
+        applyFABTheme(captureFab, R.drawable.ic_outline_add_a_photo_24dp);
+        applyFABTheme(selectFromLibraryFab, R.drawable.ic_outline_select_photo_24dp);
+        selectAgainTextView.setTextColor(mCustomThemeWrapper.getColorAccent());
     }
 
     private void getCurrentAccount() {
@@ -593,6 +594,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
 
                     flairTextView.setVisibility(View.VISIBLE);
                     flairTextView.setBackgroundColor(resources.getColor(android.R.color.transparent));
+                    flairTextView.setTextColor(primaryTextColor);
                     flairTextView.setText(getString(R.string.flair));
                     flair = null;
                 }
@@ -630,8 +632,9 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     public void flairSelected(Flair flair) {
         this.flair = flair;
         flairTextView.setText(flair.getText());
-        flairTextView.setBackgroundColor(flairColor);
-        flairTextView.setBorderColor(flairColor);
+        flairTextView.setBackgroundColor(flairBackgroundColor);
+        flairTextView.setBorderColor(flairBackgroundColor);
+        flairTextView.setTextColor(flairTextColor);
     }
 
     @Subscribe

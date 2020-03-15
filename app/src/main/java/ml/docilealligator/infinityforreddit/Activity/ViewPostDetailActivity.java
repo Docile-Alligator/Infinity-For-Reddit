@@ -368,13 +368,12 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
     @Override
     protected void applyCustomTheme() {
-        int themeType = mCustomThemeWrapper.getThemeType();
-        mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
-        mAppBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCardViewBackgroundColor(themeType));
-        mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent(themeType));
-        mFetchPostInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor(themeType));
-        applyFABTheme(fab, mCustomThemeWrapper, themeType);
+        mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        mAppBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
+        mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
+        mFetchPostInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+        applyFABTheme(fab, R.drawable.ic_keyboard_arrow_down_24dp);
     }
 
     private void getCurrentAccountAndBindView() {

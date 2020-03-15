@@ -194,9 +194,8 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
 
     @Override
     public void applyTheme() {
-        int themeType = customThemeWrapper.getThemeType();
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCardViewBackgroundColor(themeType));
-        mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent(themeType));
-        mFetchUserListingInfoTextView.setTextColor(customThemeWrapper.getSecondaryTextColor(themeType));
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCircularProgressBarBackground());
+        mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent());
+        mFetchUserListingInfoTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
     }
 }

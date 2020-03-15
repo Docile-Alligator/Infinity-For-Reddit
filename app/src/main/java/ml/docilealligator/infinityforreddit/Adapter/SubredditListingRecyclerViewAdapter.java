@@ -81,13 +81,12 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
         this.redditDataRoomDatabase = redditDataRoomDatabase;
         this.callback = callback;
         glide = Glide.with(context.getApplicationContext());
-        int themeType = customThemeWrapper.getThemeType();
-        colorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme(themeType);
-        primaryTextColor = customThemeWrapper.getPrimaryTextColor(themeType);
-        secondaryTextColor = customThemeWrapper.getSecondaryTextColor(themeType);
-        colorAccent = customThemeWrapper.getColorAccent(themeType);
-        buttonTextColor = customThemeWrapper.getButtonTextColor(themeType);
-        unsubscribed = customThemeWrapper.getUnsubscribed(themeType);
+        colorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
+        primaryTextColor = customThemeWrapper.getPrimaryTextColor();
+        secondaryTextColor = customThemeWrapper.getSecondaryTextColor();
+        colorAccent = customThemeWrapper.getColorAccent();
+        buttonTextColor = customThemeWrapper.getButtonTextColor();
+        unsubscribed = customThemeWrapper.getUnsubscribed();
     }
 
     @NonNull

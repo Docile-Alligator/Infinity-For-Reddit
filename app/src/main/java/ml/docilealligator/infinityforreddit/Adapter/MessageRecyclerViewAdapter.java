@@ -99,15 +99,14 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 .build();
         mAccessToken = accessToken;
 
-        int themeType = customThemeWrapper.getThemeType();
-        mColorAccent = customThemeWrapper.getColorAccent(themeType);
-        mMessageBackgroundColor = customThemeWrapper.getCardViewBackgroundColor(themeType);
-        mUsernameColor = customThemeWrapper.getUsername(themeType);
-        mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor(themeType);
-        mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor(themeType);
-        mUnreadMessageBackgroundColor = customThemeWrapper.getUnreadMessageBackgroundColor(themeType);
-        mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme(themeType);
-        mButtonTextColor = customThemeWrapper.getButtonTextColor(themeType);
+        mColorAccent = customThemeWrapper.getColorAccent();
+        mMessageBackgroundColor = customThemeWrapper.getCardViewBackgroundColor();
+        mUsernameColor = customThemeWrapper.getUsername();
+        mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
+        mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
+        mUnreadMessageBackgroundColor = customThemeWrapper.getUnreadMessageBackgroundColor();
+        mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
+        mButtonTextColor = customThemeWrapper.getButtonTextColor();
     }
 
     @NonNull

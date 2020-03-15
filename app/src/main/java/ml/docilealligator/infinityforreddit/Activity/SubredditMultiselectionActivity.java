@@ -251,9 +251,8 @@ public class SubredditMultiselectionActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
-        int themeType = mCustomThemeWrapper.getThemeType();
-        mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
-        mAppBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
-        mErrorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor(themeType));
+        mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        mAppBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        mErrorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
     }
 }

@@ -82,12 +82,11 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
         this.subscribedUserDao = subscribedUserDao;
         this.retryLoadingMoreCallback = retryLoadingMoreCallback;
         glide = Glide.with(context.getApplicationContext());
-        int themeType = customThemeWrapper.getThemeType();
-        primaryTextColor = customThemeWrapper.getPrimaryTextColor(themeType);
-        buttonTextColor = customThemeWrapper.getButtonTextColor(themeType);
-        colorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme(themeType);
-        colorAccent = customThemeWrapper.getColorAccent(themeType);
-        unsubscribedColor = customThemeWrapper.getUnsubscribed(themeType);
+        primaryTextColor = customThemeWrapper.getPrimaryTextColor();
+        buttonTextColor = customThemeWrapper.getButtonTextColor();
+        colorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
+        colorAccent = customThemeWrapper.getColorAccent();
+        unsubscribedColor = customThemeWrapper.getUnsubscribed();
     }
 
     @NonNull

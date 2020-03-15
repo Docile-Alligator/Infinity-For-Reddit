@@ -344,21 +344,20 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     @Override
     protected void applyCustomTheme() {
-        int themeType = mCustomThemeWrapper.getThemeType();
-        int backgroundColor = mCustomThemeWrapper.getBackgroundColor(themeType);
+        int backgroundColor = mCustomThemeWrapper.getBackgroundColor();
         coordinatorLayout.setBackgroundColor(backgroundColor);
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
         linearLayout.setBackgroundColor(backgroundColor);
-        subredditNameTextView.setTextColor(mCustomThemeWrapper.getSubreddit(themeType));
-        subscribeSubredditChip.setTextColor(mCustomThemeWrapper.getChipTextColor(themeType));
-        int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor(themeType);
+        subredditNameTextView.setTextColor(mCustomThemeWrapper.getSubreddit());
+        subscribeSubredditChip.setTextColor(mCustomThemeWrapper.getChipTextColor());
+        int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         nSubscribersTextView.setTextColor(primaryTextColor);
         nOnlineSubscribersTextView.setTextColor(primaryTextColor);
         descriptionTextView.setTextColor(primaryTextColor);
         bottomNavigationView.setBackgroundColor(backgroundColor);
-        applyFABTheme(fab, mCustomThemeWrapper, themeType);
-        unsubscribedColor = mCustomThemeWrapper.getUnsubscribed(themeType);
-        subscribedColor = mCustomThemeWrapper.getSubscribed(themeType);
+        applyFABTheme(fab, R.drawable.ic_add_bottom_app_bar_24dp);
+        unsubscribedColor = mCustomThemeWrapper.getUnsubscribed();
+        subscribedColor = mCustomThemeWrapper.getSubscribed();
     }
 
     private void getCurrentAccountAndBindView() {

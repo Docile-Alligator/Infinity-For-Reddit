@@ -121,12 +121,11 @@ public class EditPostActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
-        int themeType = mCustomThemeWrapper.getThemeType();
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
-        titleTextView.setTextColor(mCustomThemeWrapper.getPostTitleColor(themeType));
-        divider.setBackgroundColor(mCustomThemeWrapper.getPostTitleColor(themeType));
-        contentEditText.setTextColor(mCustomThemeWrapper.getPostContentColor(themeType));
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        titleTextView.setTextColor(mCustomThemeWrapper.getPostTitleColor());
+        divider.setBackgroundColor(mCustomThemeWrapper.getPostTitleColor());
+        contentEditText.setTextColor(mCustomThemeWrapper.getPostContentColor());
     }
 
     @Override

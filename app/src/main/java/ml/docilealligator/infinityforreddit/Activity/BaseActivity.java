@@ -4,6 +4,9 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +28,7 @@ import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FontStyle;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.TitleFontStyle;
+import ml.docilealligator.infinityforreddit.Utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
@@ -34,11 +38,11 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public abstract class BaseActivity extends AppCompatActivity {
     private boolean immersiveInterface;
-    private boolean lightStatusbar;
     private boolean changeStatusBarIconColor = true;
     private boolean transparentStatusBarAfterToolbarCollapsed;
-    private int systemVisibilityToolbarExpanded;
-    private int systemVisibilityToolbarCollapsed;
+    private int systemVisibilityToolbarExpanded = 0;
+    private int systemVisibilityToolbarCollapsed = 0;
+    private CustomThemeWrapper customThemeWrapper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,18 +53,22 @@ public abstract class BaseActivity extends AppCompatActivity {
         int systemThemeType = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
         immersiveInterface = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
                 mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true);
+        customThemeWrapper = getCustomThemeWrapper();
         switch (systemThemeType) {
             case 0:
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
                 getTheme().applyStyle(R.style.Theme_Purple, true);
                 changeStatusBarIconColor = immersiveInterface;
+                customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.NORMAL);
                 break;
             case 1:
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
                     getTheme().applyStyle(R.style.Theme_Default_AmoledDark, true);
+                    customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.AMOLED_DARK);
                 } else {
                     getTheme().applyStyle(R.style.Theme_Default_NormalDark, true);
+                    customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.DARK);
                 }
                 changeStatusBarIconColor = false;
                 break;
@@ -73,11 +81,14 @@ public abstract class BaseActivity extends AppCompatActivity {
                 if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO) {
                     getTheme().applyStyle(R.style.Theme_Purple, true);
                     changeStatusBarIconColor = immersiveInterface;
+                    customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.NORMAL);
                 } else {
                     if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
                         getTheme().applyStyle(R.style.Theme_Default_AmoledDark, true);
+                        customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.AMOLED_DARK);
                     } else {
                         getTheme().applyStyle(R.style.Theme_Default_NormalDark, true);
+                        customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.DARK);
                     }
                     changeStatusBarIconColor = false;
                 }
@@ -92,33 +103,49 @@ public abstract class BaseActivity extends AppCompatActivity {
         getTheme().applyStyle(ContentFontStyle.valueOf(mSharedPreferences
                 .getString(SharedPreferencesUtils.CONTENT_FONT_SIZE_KEY, ContentFontStyle.Normal.name())).getResId(), true);
 
-        CustomThemeWrapper customThemeWrapper = getCustomThemeWrapper();
-        int themeType = customThemeWrapper.getThemeType();
         Window window = getWindow();
         View decorView = window.getDecorView();
-        window.setStatusBarColor(customThemeWrapper.getColorPrimaryDark(themeType));
+        window.setStatusBarColor(customThemeWrapper.getColorPrimaryDark());
+        boolean isLightStatusbar = customThemeWrapper.isLightStatusBar();
+        boolean isLightNavBar = customThemeWrapper.isLightNavBar();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (lightStatusbar) {
-                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-                systemVisibilityToolbarExpanded = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
-                if (changeStatusBarIconColor) {
-                    systemVisibilityToolbarCollapsed = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            if (isLightStatusbar) {
+                if (isLightNavBar) {
+                    systemVisibilityToolbarExpanded = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                    if (changeStatusBarIconColor) {
+                        systemVisibilityToolbarCollapsed = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                    } else {
+                        systemVisibilityToolbarCollapsed = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                    }
+                } else {
+                    systemVisibilityToolbarExpanded = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+                    if (!changeStatusBarIconColor) {
+                        systemVisibilityToolbarCollapsed = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+                    }
                 }
             } else {
-                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-                systemVisibilityToolbarExpanded = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
-                if (changeStatusBarIconColor) {
-                    systemVisibilityToolbarCollapsed = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                if (isLightNavBar) {
+                    systemVisibilityToolbarExpanded = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                    if (changeStatusBarIconColor) {
+                        systemVisibilityToolbarCollapsed = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+                    }
+                } else {
+                    if (changeStatusBarIconColor) {
+                        systemVisibilityToolbarCollapsed = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+                    }
                 }
             }
-            window.setNavigationBarColor(customThemeWrapper.getNavBarColor(themeType));
+            decorView.setSystemUiVisibility(systemVisibilityToolbarExpanded);
+            window.setNavigationBarColor(customThemeWrapper.getNavBarColor());
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (lightStatusbar) {
+            if (isLightStatusbar) {
                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
                 systemVisibilityToolbarExpanded = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-            }
-            if (changeStatusBarIconColor) {
-                systemVisibilityToolbarCollapsed = 0;
+                if (!changeStatusBarIconColor) {
+                    systemVisibilityToolbarCollapsed = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+                }
+            } else if (changeStatusBarIconColor) {
+                systemVisibilityToolbarCollapsed = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             }
         }
     }
@@ -181,20 +208,26 @@ public abstract class BaseActivity extends AppCompatActivity {
         this.transparentStatusBarAfterToolbarCollapsed = true;
     }
 
-    protected void applyTabLayoutTheme(TabLayout tabLayout, CustomThemeWrapper customThemeWrapper, int themeType) {
-        int toolbarAndTabBackgroundColor = customThemeWrapper.getToolbarAndTabBackgroundColor(themeType);
-        tabLayout.setBackgroundColor(toolbarAndTabBackgroundColor);
-        tabLayout.setSelectedTabIndicatorColor(customThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabIndicator(themeType));
-        tabLayout.setTabTextColors(customThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTextColor(themeType),
-                customThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTextColor(themeType));
+    protected void applyToolbarTheme(Toolbar toolbar) {
+        toolbar.setTitleTextColor(customThemeWrapper.getToolbarPrimaryTextAndIconColor());
     }
 
-    protected void applyFABTheme(FloatingActionButton fab, CustomThemeWrapper customThemeWrapper, int themeType) {
-        fab.setBackgroundTintList(ColorStateList.valueOf(customThemeWrapper.getColorPrimaryLightTheme(themeType)));
-        fab.setImageTintList(ColorStateList.valueOf(customThemeWrapper.getFABIconColor(themeType)));
-        /*Drawable myFabSrc = getResources().getDrawable(R.drawable.ic_add_bottom_app_bar_24dp);
-        Drawable willBeWhite = myFabSrc.getConstantState().newDrawable();
-        willBeWhite.mutate().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
-        fab.setImageDrawable(willBeWhite);*/
+    protected void applyTabLayoutTheme(TabLayout tabLayout) {
+        int toolbarAndTabBackgroundColor = customThemeWrapper.getToolbarAndTabBackgroundColor();
+        tabLayout.setBackgroundColor(toolbarAndTabBackgroundColor);
+        tabLayout.setSelectedTabIndicatorColor(customThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabIndicator());
+        tabLayout.setTabTextColors(customThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTextColor(),
+                customThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTextColor());
+    }
+
+    protected void applyFABTheme(FloatingActionButton fab, int drawableId) {
+        fab.setBackgroundTintList(ColorStateList.valueOf(customThemeWrapper.getColorPrimaryLightTheme()));
+        fab.setImageTintList(ColorStateList.valueOf(customThemeWrapper.getFABIconColor()));
+        Drawable myFabSrc = getResources().getDrawable(drawableId);
+        if (myFabSrc.getConstantState() != null) {
+            Drawable willBeWhite = myFabSrc.getConstantState().newDrawable();
+            willBeWhite.mutate().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+            fab.setImageDrawable(willBeWhite);
+        }
     }
 }

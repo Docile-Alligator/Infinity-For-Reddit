@@ -409,21 +409,20 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
     @Override
     protected void applyCustomTheme() {
-        int themeType = mCustomThemeWrapper.getThemeType();
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor(themeType));
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
-        expandedTabTextColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTextColor(themeType);
-        expandedTabIndicatorColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTabIndicator(themeType);
-        expandedTabBackgroundColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTabBackground(themeType);
-        collapsedTabTextColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTextColor(themeType);
-        collapsedTabIndicatorColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabIndicator(themeType);
-        collapsedTabBackgroundColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabBackground(themeType);
-        unsubscribedColor = mCustomThemeWrapper.getUnsubscribed(themeType);
-        subscribedColor = mCustomThemeWrapper.getSubscribed(themeType);
-        userNameTextView.setTextColor(mCustomThemeWrapper.getUsername(themeType));
-        karmaTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor(themeType));
-        subscribeUserChip.setTextColor(mCustomThemeWrapper.getChipTextColor(themeType));
-        applyTabLayoutTheme(tabLayout, mCustomThemeWrapper, themeType);
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        expandedTabTextColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTextColor();
+        expandedTabIndicatorColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTabIndicator();
+        expandedTabBackgroundColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTabBackground();
+        collapsedTabTextColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTextColor();
+        collapsedTabIndicatorColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabIndicator();
+        collapsedTabBackgroundColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabBackground();
+        unsubscribedColor = mCustomThemeWrapper.getUnsubscribed();
+        subscribedColor = mCustomThemeWrapper.getSubscribed();
+        userNameTextView.setTextColor(mCustomThemeWrapper.getUsername());
+        karmaTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+        subscribeUserChip.setTextColor(mCustomThemeWrapper.getChipTextColor());
+        applyTabLayoutTheme(tabLayout);
     }
 
     private void getCurrentAccountAndInitializeViewPager() {

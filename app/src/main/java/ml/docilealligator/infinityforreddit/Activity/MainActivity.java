@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.Activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -88,6 +89,7 @@ import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditViewModel;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
+import ml.docilealligator.infinityforreddit.Utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
@@ -288,14 +290,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     @Override
     protected void applyCustomTheme() {
-        int themeType = mCustomThemeWrapper.getThemeType();
-        int backgroundColor = mCustomThemeWrapper.getBackgroundColor(themeType);
+        int backgroundColor = mCustomThemeWrapper.getBackgroundColor();
         drawer.setBackgroundColor(backgroundColor);
         navigationView.setBackgroundColor(backgroundColor);
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor(themeType));
-        applyTabLayoutTheme(tabLayout, mCustomThemeWrapper, themeType);
-        bottomNavigationView.setBackgroundColor(backgroundColor);
-        applyFABTheme(fab, mCustomThemeWrapper, themeType);
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyTabLayoutTheme(tabLayout);
+        bottomNavigationView.setBackgroundTint(ColorStateList.valueOf(backgroundColor));
+        applyFABTheme(fab, R.drawable.ic_add_bottom_app_bar_24dp);
     }
 
     private void getCurrentAccountAndBindView() {
@@ -486,14 +487,17 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "0").apply();
                         AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
                         getTheme().applyStyle(R.style.Theme_Default, true);
+                        mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.NORMAL);
                         break;
                     case R.string.dark_theme:
                         mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "1").apply();
                         AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
                             getTheme().applyStyle(R.style.Theme_Default_AmoledDark, true);
+                            mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.AMOLED_DARK);
                         } else {
                             getTheme().applyStyle(R.style.Theme_Default_NormalDark, true);
+                            mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.DARK);
                         }
                         break;
                     case R.string.enable_nsfw:

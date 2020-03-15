@@ -130,7 +130,7 @@ public class SubmitPostService extends Service {
                 .setContentTitle(getString(stringResId))
                 .setContentText(getString(R.string.please_wait))
                 .setSmallIcon(R.drawable.ic_notification)
-                .setColor(mCustomThemeWrapper.getNotificationIconColor(mCustomThemeWrapper.getThemeType()))
+                .setColor(mCustomThemeWrapper.getNotificationIconColor())
                 .build();
     }
 

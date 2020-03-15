@@ -55,9 +55,8 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mAccessToken = accessToken;
         glide = Glide.with(context.getApplicationContext());
-        int themeType = customThemeWrapper.getThemeType();
-        mUsernameColor = customThemeWrapper.getUsername(themeType);
-        mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor(themeType);
+        mUsernameColor = customThemeWrapper.getUsername();
+        mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
     }
 
     @Override

@@ -16,13 +16,18 @@ import androidx.preference.SwitchPreference;
 
 import org.greenrobot.eventbus.EventBus;
 
+import javax.inject.Inject;
+
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.ChangeDefaultPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeShowAbsoluteNumberOfVotesEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeShowElapsedTimeEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVoteButtonsPositionEvent;
 import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.Event.ShowDividerInCompactLayoutPreferenceEvent;
+import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.Utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
@@ -36,10 +41,14 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 public class InterfacePreferenceFragment extends PreferenceFragmentCompat {
 
     private Activity activity;
+    @Inject
+    CustomThemeWrapper customThemeWrapper;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.interface_preference, rootKey);
+
+        ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
         ListPreference themePreference = findPreference(SharedPreferencesUtils.THEME_KEY);
         SwitchPreference amoledDarkSwitch = findPreference(SharedPreferencesUtils.AMOLED_DARK_KEY);
@@ -53,7 +62,7 @@ public class InterfacePreferenceFragment extends PreferenceFragmentCompat {
 
         boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
 
-        if (themePreference != null) {
+        if (themePreference != null && amoledDarkSwitch != null) {
             if (systemDefault) {
                 themePreference.setEntries(R.array.settings_theme_q);
             } else {
@@ -65,15 +74,31 @@ public class InterfacePreferenceFragment extends PreferenceFragmentCompat {
                 switch (option) {
                     case 0:
                         AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                        customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.NORMAL);
                         break;
                     case 1:
                         AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                        if (amoledDarkSwitch.isChecked()) {
+                            customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.AMOLED_DARK);
+                        } else {
+                            customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.DARK);
+                        }
                         break;
                     case 2:
                         if (systemDefault) {
                             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
                         } else {
                             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
+                        }
+
+                        if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO) {
+                            customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.NORMAL);
+                        } else {
+                            if (amoledDarkSwitch.isChecked()) {
+                                customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.AMOLED_DARK);
+                            } else {
+                                customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.DARK);
+                            }
                         }
                 }
                 return true;

@@ -246,10 +246,9 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
     @Override
     public void applyTheme() {
-        int themeType = customThemeWrapper.getThemeType();
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCardViewBackgroundColor(themeType));
-        mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent(themeType));
-        mFetchCommentInfoTextView.setTextColor(customThemeWrapper.getSecondaryTextColor(themeType));
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCircularProgressBarBackground());
+        mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent());
+        mFetchCommentInfoTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
     }
 
     private void showErrorView(int stringResId) {

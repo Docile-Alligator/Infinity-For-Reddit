@@ -61,9 +61,8 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
         mOauthRetrofit = oauthRetrofit;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         this.accessToken = accessToken;
-        int themeType = customThemeWrapper.getThemeType();
-        primaryTextColor = customThemeWrapper.getPrimaryTextColor(themeType);
-        secondaryTextColor = customThemeWrapper.getSecondaryTextColor(themeType);
+        primaryTextColor = customThemeWrapper.getPrimaryTextColor();
+        secondaryTextColor = customThemeWrapper.getSecondaryTextColor();
     }
 
     public SubscribedSubredditsRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
