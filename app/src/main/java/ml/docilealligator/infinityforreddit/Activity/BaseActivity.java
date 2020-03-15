@@ -40,6 +40,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private boolean immersiveInterface;
     private boolean changeStatusBarIconColor = true;
     private boolean transparentStatusBarAfterToolbarCollapsed;
+    private boolean hasDrawerLayout = false;
     private int systemVisibilityToolbarExpanded = 0;
     private int systemVisibilityToolbarCollapsed = 0;
     private CustomThemeWrapper customThemeWrapper;
@@ -105,7 +106,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         Window window = getWindow();
         View decorView = window.getDecorView();
-        window.setStatusBarColor(customThemeWrapper.getColorPrimaryDark());
+        if (!hasDrawerLayout) {
+            window.setStatusBarColor(customThemeWrapper.getColorPrimaryDark());
+        }
         boolean isLightStatusbar = customThemeWrapper.isLightStatusBar();
         boolean isLightNavBar = customThemeWrapper.isLightNavBar();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -206,6 +209,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void setTransparentStatusBarAfterToolbarCollapsed() {
         this.transparentStatusBarAfterToolbarCollapsed = true;
+    }
+
+    protected void setHasDrawerLayout() {
+        hasDrawerLayout = true;
     }
 
     protected void applyToolbarTheme(Toolbar toolbar) {

@@ -193,6 +193,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
         setTheme(R.style.AppTheme_NoActionBarWithTransparentStatusBar);
 
+        setHasDrawerLayout();
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
@@ -292,6 +294,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     protected void applyCustomTheme() {
         int backgroundColor = mCustomThemeWrapper.getBackgroundColor();
         drawer.setBackgroundColor(backgroundColor);
+        drawer.setStatusBarBackgroundColor(mCustomThemeWrapper.getColorPrimaryDark());
         navigationView.setBackgroundColor(backgroundColor);
         appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
         applyTabLayoutTheme(tabLayout);
