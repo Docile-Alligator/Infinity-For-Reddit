@@ -233,7 +233,7 @@ public class CommentActivity extends BaseActivity {
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         commentParentMarkwonView.setTextColor(mCustomThemeWrapper.getCommentColor());
         divider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
         commentEditText.setTextColor(mCustomThemeWrapper.getCommentColor());
@@ -262,6 +262,7 @@ public class CommentActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.comment_activity, menu);
+        applyMenuItemTheme(menu);
         return true;
     }
 

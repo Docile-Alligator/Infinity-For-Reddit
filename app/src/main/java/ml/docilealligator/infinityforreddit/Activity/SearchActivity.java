@@ -190,7 +190,7 @@ public class SearchActivity extends BaseActivity {
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         simpleSearchView.setSearchBackground(new ColorDrawable(mCustomThemeWrapper.getColorPrimary()));
         searchInTextView.setTextColor(mCustomThemeWrapper.getColorAccent());
         subredditNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());

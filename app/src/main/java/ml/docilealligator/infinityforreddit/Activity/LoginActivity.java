@@ -223,7 +223,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
     }
 
     @Override

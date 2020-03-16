@@ -148,6 +148,7 @@ public class CreateMultiRedditActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.create_multi_reddit_activity, menu);
+        applyMenuItemTheme(menu);
         return true;
     }
 
@@ -244,7 +245,7 @@ public class CreateMultiRedditActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         nameEditText.setTextColor(primaryTextColor);
         int dividerColor = mCustomThemeWrapper.getDividerColor();

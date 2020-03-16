@@ -346,7 +346,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     protected void applyCustomTheme() {
         int backgroundColor = mCustomThemeWrapper.getBackgroundColor();
         coordinatorLayout.setBackgroundColor(backgroundColor);
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         linearLayout.setBackgroundColor(backgroundColor);
         subredditNameTextView.setTextColor(mCustomThemeWrapper.getSubreddit());
         subscribeSubredditChip.setTextColor(mCustomThemeWrapper.getChipTextColor());
@@ -547,6 +547,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_subreddit_detail_activity, menu);
+        applyMenuItemTheme(menu);
         mMenu = menu;
         MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity);
         if (isInLazyMode) {

@@ -122,7 +122,7 @@ public class EditPostActivity extends BaseActivity {
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         titleTextView.setTextColor(mCustomThemeWrapper.getPostTitleColor());
         divider.setBackgroundColor(mCustomThemeWrapper.getPostTitleColor());
         contentEditText.setTextColor(mCustomThemeWrapper.getPostContentColor());
@@ -140,6 +140,7 @@ public class EditPostActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.edit_post_activity, menu);
+        applyMenuItemTheme(menu);
         return true;
     }
 

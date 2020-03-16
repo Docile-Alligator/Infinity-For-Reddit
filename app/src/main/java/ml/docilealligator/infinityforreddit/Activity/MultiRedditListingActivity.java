@@ -254,7 +254,7 @@ public class MultiRedditListingActivity extends BaseActivity {
     @Override
     protected void applyCustomTheme() {
         mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        mAppBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(mAppBarLayout, mToolbar);
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         mErrorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());

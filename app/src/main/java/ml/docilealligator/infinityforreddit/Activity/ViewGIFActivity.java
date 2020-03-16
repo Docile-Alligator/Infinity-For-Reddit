@@ -94,7 +94,7 @@ public class ViewGIFActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
-        getTheme().applyStyle(R.style.Theme_Default, true);
+        getTheme().applyStyle(R.style.Theme_Normal, true);
 
         getTheme().applyStyle(FontStyle.valueOf(mSharedPreferences
                 .getString(SharedPreferencesUtils.FONT_SIZE_KEY, FontStyle.Normal.name())).getResId(), true);

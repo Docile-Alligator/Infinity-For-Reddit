@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -19,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
@@ -132,7 +134,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     @BindView(R.id.appbar_layout_view_post_detail_activity)
     AppBarLayout mAppBarLayout;
     @BindView(R.id.toolbar_view_post_detail_activity)
-    Toolbar toolbar;
+    Toolbar mToolbar;
     @BindView(R.id.swipe_refresh_layout_view_post_detail_activity)
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view_view_post_detail)
@@ -182,6 +184,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     private RecyclerView.SmoothScroller mSmoothScroller;
     private PostCommentSortTypeBottomSheetFragment mPostCommentSortTypeBottomSheetFragment;
     private SlidrInterface mSlidrInterface;
+    private Drawable mSavedIcon;
+    private Drawable mUnsavedIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,6 +203,9 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
         applyCustomTheme();
 
+        mSavedIcon = getMenuItemIcon(R.drawable.ic_bookmark_toolbar_24dp);
+        mUnsavedIcon = getMenuItemIcon(R.drawable.ic_bookmark_border_toolbar_24dp);
+
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL, true)) {
             mSlidrInterface = Slidr.attach(this);
         }
@@ -212,7 +219,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
             if (isImmersiveInterface()) {
                 window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-                adjustToolbar(toolbar);
+                adjustToolbar(mToolbar);
 
                 int navBarHeight = getNavBarHeight();
                 if (navBarHeight > 0) {
@@ -225,8 +232,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             }
         }
 
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
+        mToolbar.setTitle("");
+        setSupportActionBar(mToolbar);
 
         mNeedBlurNsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_NSFW_KEY, true);
         mNeedBlurSpoiler = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_SPOILER_KEY, false);
@@ -369,7 +376,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     @Override
     protected void applyCustomTheme() {
         mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        mAppBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(mAppBarLayout, mToolbar);
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         mFetchPostInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
@@ -444,10 +451,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 if (mAccessToken != null) {
                     if (mPost.isSaved()) {
                         saveItem.setVisible(true);
-                        saveItem.setIcon(R.drawable.ic_bookmark_toolbar_24dp);
+                        saveItem.setIcon(mSavedIcon);
                     } else {
                         saveItem.setVisible(true);
-                        saveItem.setIcon(R.drawable.ic_bookmark_border_toolbar_24dp);
+                        saveItem.setIcon(mUnsavedIcon);
                     }
 
                     if (mPost.isHidden()) {
@@ -537,6 +544,14 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         fab.setOnClickListener(view -> scrollToNextParentComment());
     }
 
+    private Drawable getMenuItemIcon(int drawableId) {
+        Drawable icon = getDrawable(drawableId);
+        if (icon != null) {
+            DrawableCompat.setTint(icon, mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
+        }
+
+        return icon;
+    }
 
     private void fetchPostAndCommentsById(String subredditId) {
         mFetchPostInfoLinearLayout.setVisibility(View.GONE);
@@ -585,10 +600,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                 if (mAccessToken != null) {
                                     if (post.isSaved()) {
                                         saveItem.setVisible(true);
-                                        saveItem.setIcon(R.drawable.ic_bookmark_toolbar_24dp);
+                                        saveItem.setIcon(mSavedIcon);
                                     } else {
                                         saveItem.setVisible(true);
-                                        saveItem.setIcon(R.drawable.ic_bookmark_border_toolbar_24dp);
+                                        saveItem.setIcon(mUnsavedIcon);
                                     }
 
                                     if (post.isHidden()) {
@@ -895,10 +910,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                     if (mAccessToken != null) {
                                         if (post.isSaved()) {
                                             saveItem.setVisible(true);
-                                            saveItem.setIcon(R.drawable.ic_bookmark_toolbar_24dp);
+                                            saveItem.setIcon(mSavedIcon);
                                         } else {
                                             saveItem.setVisible(true);
-                                            saveItem.setIcon(R.drawable.ic_bookmark_border_toolbar_24dp);
+                                            saveItem.setIcon(mUnsavedIcon);
                                         }
 
                                         if (post.isHidden()) {
@@ -1164,11 +1179,9 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             mPost.setSaved(event.post.isSaved());
             if (mMenu != null) {
                 if (event.post.isSaved()) {
-                    mMenu.findItem(R.id.action_save_view_post_detail_activity).setIcon(getResources()
-                            .getDrawable(R.drawable.ic_bookmark_toolbar_24dp));
+                    mMenu.findItem(R.id.action_save_view_post_detail_activity).setIcon(mSavedIcon);
                 } else {
-                    mMenu.findItem(R.id.action_save_view_post_detail_activity).setIcon(getResources()
-                            .getDrawable(R.drawable.ic_bookmark_border_toolbar_24dp));
+                    mMenu.findItem(R.id.action_save_view_post_detail_activity).setIcon(mUnsavedIcon);
                 }
             }
             mAdapter.updatePost(mPost);
@@ -1214,6 +1227,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_post_detail_activity, menu);
+        applyMenuItemTheme(menu);
         mMenu = menu;
         if (mPost != null) {
             MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
@@ -1225,10 +1239,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             if (mAccessToken != null) {
                 if (mPost.isSaved()) {
                     saveItem.setVisible(true);
-                    saveItem.setIcon(R.drawable.ic_bookmark_toolbar_24dp);
+                    saveItem.setIcon(mSavedIcon);
                 } else {
                     saveItem.setVisible(true);
-                    saveItem.setIcon(R.drawable.ic_bookmark_border_toolbar_24dp);
+                    saveItem.setIcon(mUnsavedIcon);
                 }
 
                 if (mPost.isHidden()) {
@@ -1308,13 +1322,13 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             case R.id.action_save_view_post_detail_activity:
                 if (mPost != null && mAccessToken != null) {
                     if (mPost.isSaved()) {
-                        item.setIcon(R.drawable.ic_bookmark_border_toolbar_24dp);
+                        item.setIcon(mUnsavedIcon);
                         SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
                                 new SaveThing.SaveThingListener() {
                                     @Override
                                     public void success() {
                                         mPost.setSaved(false);
-                                        item.setIcon(R.drawable.ic_bookmark_border_toolbar_24dp);
+                                        item.setIcon(mUnsavedIcon);
                                         showMessage(R.string.post_unsaved_success);
                                         EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                     }
@@ -1322,19 +1336,19 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                     @Override
                                     public void failed() {
                                         mPost.setSaved(true);
-                                        item.setIcon(R.drawable.ic_bookmark_toolbar_24dp);
+                                        item.setIcon(mSavedIcon);
                                         showMessage(R.string.post_unsaved_failed);
                                         EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                     }
                                 });
                     } else {
-                        item.setIcon(R.drawable.ic_bookmark_toolbar_24dp);
+                        item.setIcon(mSavedIcon);
                         SaveThing.saveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
                                 new SaveThing.SaveThingListener() {
                                     @Override
                                     public void success() {
                                         mPost.setSaved(true);
-                                        item.setIcon(R.drawable.ic_bookmark_toolbar_24dp);
+                                        item.setIcon(mSavedIcon);
                                         showMessage(R.string.post_saved_success);
                                         EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                     }
@@ -1342,7 +1356,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                     @Override
                                     public void failed() {
                                         mPost.setSaved(false);
-                                        item.setIcon(R.drawable.ic_bookmark_border_toolbar_24dp);
+                                        item.setIcon(mUnsavedIcon);
                                         showMessage(R.string.post_saved_failed);
                                         EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                     }

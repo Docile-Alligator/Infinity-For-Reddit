@@ -48,6 +48,8 @@ public class SettingsActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
+        setImmersiveModeNotApplicable();
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_settings);
@@ -95,7 +97,7 @@ public class SettingsActivity extends BaseActivity implements
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
     }
 
     @Override

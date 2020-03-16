@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.Activity;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
@@ -9,6 +10,8 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -16,7 +19,9 @@ import android.view.Window;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.view.menu.MenuItemImpl;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -38,9 +43,10 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public abstract class BaseActivity extends AppCompatActivity {
     private boolean immersiveInterface;
-    private boolean changeStatusBarIconColor = true;
+    private boolean changeStatusBarIconColor;
     private boolean transparentStatusBarAfterToolbarCollapsed;
     private boolean hasDrawerLayout = false;
+    private boolean isImmersiveInterfaceApplicable = true;
     private int systemVisibilityToolbarExpanded = 0;
     private int systemVisibilityToolbarCollapsed = 0;
     private CustomThemeWrapper customThemeWrapper;
@@ -48,30 +54,28 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        customThemeWrapper = getCustomThemeWrapper();
 
         SharedPreferences mSharedPreferences = getSharedPreferences();
         boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
         int systemThemeType = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
         immersiveInterface = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
                 mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true);
-        customThemeWrapper = getCustomThemeWrapper();
         switch (systemThemeType) {
             case 0:
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                getTheme().applyStyle(R.style.Theme_Purple, true);
-                changeStatusBarIconColor = immersiveInterface;
+                getTheme().applyStyle(R.style.Theme_Normal, true);
                 customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.NORMAL);
                 break;
             case 1:
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
-                    getTheme().applyStyle(R.style.Theme_Default_AmoledDark, true);
+                    getTheme().applyStyle(R.style.Theme_Normal_AmoledDark, true);
                     customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.AMOLED_DARK);
                 } else {
-                    getTheme().applyStyle(R.style.Theme_Default_NormalDark, true);
+                    getTheme().applyStyle(R.style.Theme_Normal_NormalDark, true);
                     customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.DARK);
                 }
-                changeStatusBarIconColor = false;
                 break;
             case 2:
                 if (systemDefault) {
@@ -80,19 +84,25 @@ public abstract class BaseActivity extends AppCompatActivity {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
                 }
                 if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO) {
-                    getTheme().applyStyle(R.style.Theme_Purple, true);
-                    changeStatusBarIconColor = immersiveInterface;
+                    getTheme().applyStyle(R.style.Theme_Normal, true);
                     customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.NORMAL);
                 } else {
                     if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
-                        getTheme().applyStyle(R.style.Theme_Default_AmoledDark, true);
+                        getTheme().applyStyle(R.style.Theme_Normal_AmoledDark, true);
                         customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.AMOLED_DARK);
                     } else {
-                        getTheme().applyStyle(R.style.Theme_Default_NormalDark, true);
+                        getTheme().applyStyle(R.style.Theme_Normal_NormalDark, true);
                         customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.DARK);
                     }
-                    changeStatusBarIconColor = false;
                 }
+        }
+
+        boolean userDefinedChangeSatusBarIconColorInImmersiveInterface =
+                customThemeWrapper.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface();
+        if (immersiveInterface && isImmersiveInterfaceApplicable) {
+            changeStatusBarIconColor = userDefinedChangeSatusBarIconColorInImmersiveInterface;
+        } else {
+            changeStatusBarIconColor = false;
         }
 
         getTheme().applyStyle(FontStyle.valueOf(mSharedPreferences
@@ -215,8 +225,37 @@ public abstract class BaseActivity extends AppCompatActivity {
         hasDrawerLayout = true;
     }
 
-    protected void applyToolbarTheme(Toolbar toolbar) {
+    public void setImmersiveModeNotApplicable() {
+        isImmersiveInterfaceApplicable = false;
+    }
+
+    protected void applyAppBarLayoutAndToolbarTheme(AppBarLayout appBarLayout, Toolbar toolbar) {
+        appBarLayout.setBackgroundColor(customThemeWrapper.getToolbarAndTabBackgroundColor());
         toolbar.setTitleTextColor(customThemeWrapper.getToolbarPrimaryTextAndIconColor());
+        if (toolbar.getNavigationIcon() != null) {
+            toolbar.getNavigationIcon().setColorFilter(customThemeWrapper.getToolbarPrimaryTextAndIconColor(), android.graphics.PorterDuff.Mode.SRC_IN);
+        }
+        if (toolbar.getOverflowIcon() != null) {
+            toolbar.getOverflowIcon().setColorFilter(customThemeWrapper.getToolbarPrimaryTextAndIconColor(), android.graphics.PorterDuff.Mode.SRC_IN);
+        }
+    }
+
+    @SuppressLint("RestrictedApi")
+    protected boolean applyMenuItemTheme(Menu menu) {
+        if (customThemeWrapper != null) {
+            int size = Math.min(menu.size(), 2);
+            for (int i = 0; i < size; i++) {
+                MenuItem item = menu.getItem(i);
+                if (((MenuItemImpl) item).requestsActionButton()) {
+                    Drawable drawable = item.getIcon();
+                    if (drawable != null) {
+                        DrawableCompat.setTint(drawable, customThemeWrapper.getToolbarPrimaryTextAndIconColor());
+                        item.setIcon(drawable);
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     protected void applyTabLayoutTheme(TabLayout tabLayout) {

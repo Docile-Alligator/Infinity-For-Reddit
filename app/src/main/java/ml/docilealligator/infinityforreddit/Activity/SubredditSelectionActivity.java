@@ -143,7 +143,7 @@ public class SubredditSelectionActivity extends BaseActivity {
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
     }
 
     private void getCurrentAccountAndBindView() {
@@ -207,6 +207,7 @@ public class SubredditSelectionActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.subreddit_selection_activity, menu);
+        applyMenuItemTheme(menu);
         return true;
     }
 

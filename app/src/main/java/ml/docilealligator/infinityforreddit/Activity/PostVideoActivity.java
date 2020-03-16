@@ -171,6 +171,8 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
+        setImmersiveModeNotApplicable();
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_post_video);
@@ -380,7 +382,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         rulesButton.setTextColor(mCustomThemeWrapper.getButtonTextColor());
         rulesButton.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimaryLightTheme()));
         int dividerColor = mCustomThemeWrapper.getDividerColor();
@@ -454,6 +456,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.post_video_activity, menu);
+        applyMenuItemTheme(menu);
         mMemu = menu;
         if (isPosting) {
             mMemu.findItem(R.id.action_send_post_video_activity).setEnabled(false);

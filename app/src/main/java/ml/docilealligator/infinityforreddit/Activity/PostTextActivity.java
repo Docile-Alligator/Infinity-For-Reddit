@@ -138,6 +138,8 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
+        setImmersiveModeNotApplicable();
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_post_text);
@@ -318,7 +320,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         rulesButton.setTextColor(mCustomThemeWrapper.getButtonTextColor());
         rulesButton.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimaryLightTheme()));
         int dividerColor = mCustomThemeWrapper.getDividerColor();
@@ -381,6 +383,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.post_text_activity, menu);
+        applyMenuItemTheme(menu);
         mMemu = menu;
         if (isPosting) {
             mMemu.findItem(R.id.action_send_post_text_activity).setEnabled(false);

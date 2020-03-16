@@ -156,7 +156,7 @@ public class AccountSavedThingActivity extends BaseActivity {
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         applyTabLayoutTheme(tabLayout);
     }
 
@@ -205,6 +205,7 @@ public class AccountSavedThingActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.account_saved_thing_activity, menu);
+        applyMenuItemTheme(menu);
         mMenu = menu;
         MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_account_saved_thing_activity);
         if (isInLazyMode) {

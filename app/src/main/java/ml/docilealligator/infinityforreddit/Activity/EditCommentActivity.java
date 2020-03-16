@@ -119,7 +119,7 @@ public class EditCommentActivity extends BaseActivity {
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         contentEditText.setTextColor(mCustomThemeWrapper.getCommentColor());
     }
 
@@ -135,6 +135,7 @@ public class EditCommentActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.edit_comment_activity, menu);
+        applyMenuItemTheme(menu);
         return true;
     }
 

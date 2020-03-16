@@ -7,6 +7,7 @@ public class CustomThemeSharedPreferencesUtils {
     public static final String THEME_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.theme";
     public static final String LIGHT_STATUS_BAR = "lightStatusBar";
     public static final String LIGHT_NAV_BAR = "lightNavBar";
+    public static final String CHANGE_STATUS_BAR_ICON_COLOR_AFTER_TOOLBAR_COLLAPSED_IN_IMMERSIVE_INTERFACE = "changeStatusBarIconColorImmersive";
     public static final String COLOR_PRIMARY = "colorPrimary";
     public static final String COLOR_PRIMARY_DARK = "colorPrimaryDark";
     public static final String COLOR_ACCENT = "colorAccent";

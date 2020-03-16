@@ -98,7 +98,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getTheme().applyStyle(R.style.Theme_Default, true);
+        getTheme().applyStyle(R.style.Theme_Normal, true);
 
         setContentView(R.layout.activity_view_video);
 

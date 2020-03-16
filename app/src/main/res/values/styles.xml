@@ -222,7 +222,7 @@
 
     <style name="Theme" />
 
-    <style name="Theme.Default">
+    <style name="Theme.Normal">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -235,7 +235,7 @@
         <item name="backgroundColor">@color/backgroundColor</item>
         <item name="roundedBottomSheetPrimaryBackground">@color/roundedBottomSheetPrimaryBackground</item>
         <item name="cardViewBackgroundColor">#FFFFFF</item>
-        <item name="toolbarPrimaryTextAndIconColor">#3C4043</item>
+        <item name="toolbarPrimaryTextAndIconColor">#FFFFFF</item>
         <item name="toolbarAndTabBackgroundColor">@color/colorPrimary</item>
         <item name="circularProgressBarBackground">#FFFFFF</item>
         <item name="tabLayoutWithExpandedCollapsingToolbarTabBackground">#FFFFFF</item>
@@ -277,7 +277,7 @@
         <item name="commentVerticalBarColor7">#EE4602</item>
     </style>
 
-    <style name="Theme.Default.NormalDark">
+    <style name="Theme.Normal.NormalDark">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -332,7 +332,7 @@
         <item name="commentVerticalBarColor7">#EE4602</item>
     </style>
 
-    <style name="Theme.Default.AmoledDark">
+    <style name="Theme.Normal.AmoledDark">
         <item name="colorPrimary">#000000</item>
         <item name="colorPrimaryDark">#000000</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -384,62 +384,6 @@
         <item name="commentVerticalBarColor4">#EDCA00</item>
         <item name="commentVerticalBarColor5">#EE0219</item>
         <item name="commentVerticalBarColor6">#00B925</item>
-        <item name="commentVerticalBarColor7">#EE4602</item>
-    </style>
-
-    <style name="Theme.Purple">
-        <item name="colorPrimary">#6002EE</item>
-        <item name="colorPrimaryDark">#3D00E0</item>
-        <item name="colorAccent">#0098DD</item>
-        <item name="colorPrimaryLightTheme">?attr/colorPrimary</item>
-        <item name="postTitleColor">#000000</item>
-        <item name="postContentColor">#8A000000</item>
-        <item name="commentColor">#000000</item>
-        <item name="primaryTextColor">#000000</item>
-        <item name="secondaryTextColor">#8A000000</item>
-        <item name="backgroundColor">@color/backgroundColor</item>
-        <item name="roundedBottomSheetPrimaryBackground">@color/roundedBottomSheetPrimaryBackground</item>
-        <item name="cardViewBackgroundColor">#FFFFFF</item>
-        <!--<item name="toolbarPrimaryTextAndIconColor">#FF3C4043</item>-->
-        <item name="toolbarPrimaryTextAndIconColor">#FFFFFF</item>
-        <item name="toolbarAndTabBackgroundColor">?attr/colorPrimary</item>
-        <item name="circularProgressBarBackground">#FFFFFF</item>
-        <item name="tabLayoutWithExpandedCollapsingToolbarTabBackground">#FFFFFF</item>
-        <item name="tabLayoutWithExpandedCollapsingToolbarTextColor">?attr/colorPrimary</item>
-        <item name="tabLayoutWithExpandedCollapsingToolbarTabIndicator">?attr/colorPrimary</item>
-        <item name="tabLayoutWithCollapsedCollapsingToolbarTabBackground">?attr/colorPrimary</item>
-        <item name="tabLayoutWithCollapsedCollapsingToolbarTextColor">?attr/toolbarPrimaryTextAndIconColor</item>
-        <item name="tabLayoutWithCollapsedCollapsingToolbarTabIndicator">?attr/toolbarPrimaryTextAndIconColor</item>
-        <item name="navBarColor">@color/backgroundColor</item>
-        <item name="upvoted">#FC2727</item>
-        <item name="downvoted">#276BFC</item>
-        <item name="postType">#6002EE</item>
-        <item name="spoilerColor">#EE02EB</item>
-        <item name="nsfwColor">#FC27A1</item>
-        <item name="flairColor">#00D039</item>
-        <item name="archivedTint">#B4009F</item>
-        <item name="lockedIconTint">#EE7302</item>
-        <item name="crosspost">#03A9F4</item>
-        <item name="stickiedPost">#7B1FA2</item>
-        <item name="subscribed">#03A9F4</item>
-        <item name="unsubscribed">#7B1FA2</item>
-        <item name="username">#FB9E25</item>
-        <item name="subreddit">#4D27FC</item>
-        <item name="authorFlairTextColor">#EE02C4</item>
-        <item name="submitter">#EE8002</item>
-        <item name="moderator">#02EEDD</item>
-        <item name="notificationIconColor">?attr/colorPrimary</item>
-        <item name="singleCommentThreadBackgroundColor">#B3E5F9</item>
-        <item name="unreadMessageBackgroundColor">#B3E5F9</item>
-        <item name="dividerColor">#E0E0E0</item>
-        <item name="noPreviewLinkBackgroundColor">#E0E0E0</item>
-        <item name="voteAndReplyUnavailableVoteButtonColor">#F0F0F0</item>
-        <item name="commentVerticalBarColor1">#1565C0</item>
-        <item name="commentVerticalBarColor2">#EE02BE</item>
-        <item name="commentVerticalBarColor3">#02DFEE</item>
-        <item name="commentVerticalBarColor4">#EED502</item>
-        <item name="commentVerticalBarColor5">#EE0220</item>
-        <item name="commentVerticalBarColor6">#02EE6E</item>
         <item name="commentVerticalBarColor7">#EE4602</item>
     </style>
 

@@ -172,7 +172,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         applyTabLayoutTheme(tabLayout);
     }
 
@@ -198,6 +198,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search_result_activity, menu);
+        applyMenuItemTheme(menu);
         return true;
     }
 

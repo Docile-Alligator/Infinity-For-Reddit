@@ -188,6 +188,7 @@ public class SubredditMultiselectionActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.subreddit_multiselection_activity, menu);
+        applyMenuItemTheme(menu);
         return true;
     }
 
@@ -252,7 +253,7 @@ public class SubredditMultiselectionActivity extends BaseActivity {
     @Override
     protected void applyCustomTheme() {
         mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        mAppBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(mAppBarLayout, mToolbar);
         mErrorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
     }
 }

@@ -176,7 +176,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
     }
 
     private void getCurrentAccountAndBindView(int filter) {
@@ -295,6 +295,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.filtered_posts_activity, menu);
+        applyMenuItemTheme(menu);
         mMenu = menu;
         MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_filtered_thing_activity);
         if (isInLazyMode) {

@@ -39,6 +39,12 @@ public class CustomThemeWrapper {
         return themeSharedPreferences.getBoolean(CustomThemeSharedPreferencesUtils.LIGHT_NAV_BAR, false);
     }
 
+    public boolean isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface() {
+        return themeSharedPreferences.getBoolean(
+                CustomThemeSharedPreferencesUtils.CHANGE_STATUS_BAR_ICON_COLOR_AFTER_TOOLBAR_COLLAPSED_IN_IMMERSIVE_INTERFACE,
+                true);
+    }
+
     public int getColorPrimary() {
         return themeSharedPreferences.getInt(CustomThemeSharedPreferencesUtils.COLOR_PRIMARY,
                 getDefaultColor("#1565C0", "#242424", "#000000"));
@@ -106,7 +112,7 @@ public class CustomThemeWrapper {
 
     public int getToolbarPrimaryTextAndIconColor() {
         return themeSharedPreferences.getInt(CustomThemeSharedPreferencesUtils.TOOLBAR_PRIMARY_TEXT_AND_ICON_COLOR,
-                getDefaultColor("#FFFFFF", "#FFFFFF", "#FFFFFF"));
+                getDefaultColor("#000000", "#FFFFFF", "#FFFFFF"));
     }
 
     public int getToolbarAndTabBackgroundColor() {

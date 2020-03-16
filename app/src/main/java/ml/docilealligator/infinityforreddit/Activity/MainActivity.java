@@ -245,6 +245,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle.getDrawerArrowDrawable().setColor(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -296,7 +297,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         drawer.setBackgroundColor(backgroundColor);
         drawer.setStatusBarBackgroundColor(mCustomThemeWrapper.getColorPrimaryDark());
         navigationView.setBackgroundColor(backgroundColor);
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         applyTabLayoutTheme(tabLayout);
         bottomNavigationView.setBackgroundTint(ColorStateList.valueOf(backgroundColor));
         applyFABTheme(fab, R.drawable.ic_add_bottom_app_bar_24dp);
@@ -489,17 +490,14 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     case R.string.light_theme:
                         mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "0").apply();
                         AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                        getTheme().applyStyle(R.style.Theme_Default, true);
                         mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.NORMAL);
                         break;
                     case R.string.dark_theme:
                         mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "1").apply();
                         AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
-                            getTheme().applyStyle(R.style.Theme_Default_AmoledDark, true);
                             mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.AMOLED_DARK);
                         } else {
-                            getTheme().applyStyle(R.style.Theme_Default_NormalDark, true);
                             mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.DARK);
                         }
                         break;
@@ -707,6 +705,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_activity, menu);
+        applyMenuItemTheme(menu);
         mMenu = menu;
         MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);
 

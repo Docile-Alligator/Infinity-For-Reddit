@@ -63,7 +63,7 @@ public class ViewMessageActivity extends BaseActivity {
     @BindView(R.id.appbar_layout_view_message_activity)
     AppBarLayout mAppBarLayout;
     @BindView(R.id.toolbar_view_message_activity)
-    Toolbar toolbar;
+    Toolbar mToolbar;
     @BindView(R.id.swipe_refresh_layout_view_message_activity)
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view_view_message_activity)
@@ -116,7 +116,7 @@ public class ViewMessageActivity extends BaseActivity {
 
             if (isImmersiveInterface()) {
                 window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-                adjustToolbar(toolbar);
+                adjustToolbar(mToolbar);
 
                 int navBarHeight = getNavBarHeight();
                 if (navBarHeight > 0) {
@@ -125,8 +125,8 @@ public class ViewMessageActivity extends BaseActivity {
             }
         }
 
-        toolbar.setTitle(R.string.inbox);
-        setSupportActionBar(toolbar);
+        mToolbar.setTitle(R.string.inbox);
+        setSupportActionBar(mToolbar);
 
         if (savedInstanceState != null) {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
@@ -157,7 +157,7 @@ public class ViewMessageActivity extends BaseActivity {
     @Override
     protected void applyCustomTheme() {
         mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        mAppBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(mAppBarLayout, mToolbar);
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         mFetchMessageInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
@@ -255,6 +255,7 @@ public class ViewMessageActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_message_activity, menu);
+        applyMenuItemTheme(menu);
         return true;
     }
 

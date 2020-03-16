@@ -157,7 +157,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
     }
 
     private void getCurrentAccountAndInitializeFragment() {
@@ -187,6 +187,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.account_posts_activity, menu);
+        applyMenuItemTheme(menu);
         mMenu = menu;
         MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_account_posts_activity);
         if (isInLazyMode) {

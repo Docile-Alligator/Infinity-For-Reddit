@@ -199,6 +199,7 @@ public class ViewSidebarActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_sidebar_activity, menu);
+        applyMenuItemTheme(menu);
         return true;
     }
 
@@ -229,7 +230,7 @@ public class ViewSidebarActivity extends BaseActivity {
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getToolbarAndTabBackgroundColor());
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         swipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         markdownColor = mCustomThemeWrapper.getSecondaryTextColor();
