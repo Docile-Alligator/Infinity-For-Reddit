@@ -79,6 +79,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     private int mDownvotedColor;
     private int mButtonTextColor;
     private int mColorAccent;
+    private int mCommentIconAndInfoColor;
     private boolean mVoteButtonsOnTheRight;
     private boolean mShowElapsedTime;
     private boolean mShowCommentDivider;
@@ -138,6 +139,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         mDownvotedColor = customThemeWrapper.getDownvoted();
         mButtonTextColor = customThemeWrapper.getButtonTextColor();
         mColorAccent = customThemeWrapper.getColorAccent();
+        mCommentIconAndInfoColor = customThemeWrapper.getCommentIconAndInfoColor();
     }
 
     @NonNull
@@ -235,7 +237,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     int previousVoteType = comment.getVoteType();
                     String newVoteType;
 
-                    ((DataViewHolder) holder).downvoteButton.clearColorFilter();
+                    ((DataViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
                     if (previousVoteType != CommentData.VOTE_TYPE_UPVOTE) {
                         //Not upvoted before
@@ -248,8 +250,8 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         //Upvoted before
                         comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
                         newVoteType = RedditUtils.DIR_UNVOTE;
-                        ((DataViewHolder) holder).upvoteButton.clearColorFilter();
-                        ((DataViewHolder) holder).scoreTextView.setTextColor(mSecondaryTextColor);
+                        ((DataViewHolder) holder).upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                        ((DataViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
                     }
 
                     ((DataViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
@@ -264,11 +266,11 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                                 ((DataViewHolder) holder).scoreTextView.setTextColor(mUpvotedColor);
                             } else {
                                 comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
-                                ((DataViewHolder) holder).upvoteButton.clearColorFilter();
-                                ((DataViewHolder) holder).scoreTextView.setTextColor(mSecondaryTextColor);
+                                ((DataViewHolder) holder).upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                ((DataViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
                             }
 
-                            ((DataViewHolder) holder).downvoteButton.clearColorFilter();
+                            ((DataViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                             ((DataViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                     comment.getScore() + comment.getVoteType()));
                         }
@@ -288,7 +290,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     int previousVoteType = comment.getVoteType();
                     String newVoteType;
 
-                    ((DataViewHolder) holder).upvoteButton.clearColorFilter();
+                    ((DataViewHolder) holder).upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
                     if (previousVoteType != CommentData.VOTE_TYPE_DOWNVOTE) {
                         //Not downvoted before
@@ -300,8 +302,8 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         //Downvoted before
                         comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
                         newVoteType = RedditUtils.DIR_UNVOTE;
-                        ((DataViewHolder) holder).downvoteButton.clearColorFilter();
-                        ((DataViewHolder) holder).scoreTextView.setTextColor(mSecondaryTextColor);
+                        ((DataViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                        ((DataViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
                     }
 
                     ((DataViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
@@ -316,11 +318,11 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                                 ((DataViewHolder) holder).scoreTextView.setTextColor(mDownvotedColor);
                             } else {
                                 comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
-                                ((DataViewHolder) holder).downvoteButton.clearColorFilter();
-                                ((DataViewHolder) holder).scoreTextView.setTextColor(mSecondaryTextColor);
+                                ((DataViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                ((DataViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
                             }
 
-                            ((DataViewHolder) holder).upvoteButton.clearColorFilter();
+                            ((DataViewHolder) holder).upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                             ((DataViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                     comment.getScore() + comment.getVoteType()));
                         }
@@ -395,9 +397,9 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof DataViewHolder) {
-            ((DataViewHolder) holder).upvoteButton.clearColorFilter();
-            ((DataViewHolder) holder).downvoteButton.clearColorFilter();
-            ((DataViewHolder) holder).scoreTextView.setTextColor(mSecondaryTextColor);
+            ((DataViewHolder) holder).upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            ((DataViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            ((DataViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
         }
     }
 
@@ -494,6 +496,13 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             authorTextView.setTextColor(mUsernameColor);
             commentTimeTextView.setTextColor(mSecondaryTextColor);
             commentMarkdownView.setTextColor(mCommentColor);
+            upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            scoreTextView.setTextColor(mCommentIconAndInfoColor);
+            downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            moreButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            expandButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            saveButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            replyButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             commentDivider.setBackgroundColor(mDividerColor);
         }
     }

@@ -110,9 +110,29 @@ public class CustomThemeWrapper {
                 getDefaultColor("#FFFFFF", "#242424", "#000000"));
     }
 
+    public int getBottomAppBarBackgroundColor() {
+        return themeSharedPreferences.getInt(CustomThemeSharedPreferencesUtils.BOTTOM_APP_BAR_BACKGROUND_COLOR,
+                getDefaultColor("#FFFFFF", "#121212", "#000000"));
+    }
+
+    public int getPrimaryIconColor() {
+        return themeSharedPreferences.getInt(CustomThemeSharedPreferencesUtils.PRIMARY_ICON_COLOR,
+                getDefaultColor("#000000", "#FFFFFF", "#FFFFFF"));
+    }
+
+    public int getPostIconAndInfoColor() {
+        return themeSharedPreferences.getInt(CustomThemeSharedPreferencesUtils.POST_ICON_AND_INFO_COLOR,
+                getDefaultColor("#808080", "#808080", "#808080"));
+    }
+
+    public int getCommentIconAndInfoColor() {
+        return themeSharedPreferences.getInt(CustomThemeSharedPreferencesUtils.COMMENT_ICON_AND_INFO_COLOR,
+                getDefaultColor("#808080", "#808080", "#808080"));
+    }
+
     public int getToolbarPrimaryTextAndIconColor() {
         return themeSharedPreferences.getInt(CustomThemeSharedPreferencesUtils.TOOLBAR_PRIMARY_TEXT_AND_ICON_COLOR,
-                getDefaultColor("#000000", "#FFFFFF", "#FFFFFF"));
+                getDefaultColor("#FFFFFF", "#FFFFFF", "#FFFFFF"));
     }
 
     public int getToolbarAndTabBackgroundColor() {
@@ -263,11 +283,6 @@ public class CustomThemeWrapper {
     public int getModerator() {
         return themeSharedPreferences.getInt(CustomThemeSharedPreferencesUtils.MODERATOR,
                 getDefaultColor("#00BA81", "#00BA81", "#00BA81"));
-    }
-
-    public int getNotificationIconColor() {
-        return themeSharedPreferences.getInt(CustomThemeSharedPreferencesUtils.NOTIFICATION_ICON_COLOR,
-                getDefaultColor("#1565C0", "#1565C0", "#1565C0"));
     }
 
     public int getSingleCommentThreadBackgroundColor() {

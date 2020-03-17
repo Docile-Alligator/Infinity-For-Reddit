@@ -21,6 +21,10 @@ public class CustomThemeSharedPreferencesUtils {
     public static final String BACKGROUND_COLOR = "backgroundColor";
     public static final String CARD_VIEW_BACKGROUND_COLOR = "cardViewBackgroundColor";
     public static final String COMMENT_BACKGROUND_COLOR = "commentBackgroundColor";
+    public static final String BOTTOM_APP_BAR_BACKGROUND_COLOR = "bottomAppBarBackgroundColor";
+    public static final String PRIMARY_ICON_COLOR = "primaryIconColor";
+    public static final String POST_ICON_AND_INFO_COLOR = "postIconAndInfoColor";
+    public static final String COMMENT_ICON_AND_INFO_COLOR = "commentIconAndInfoColor";
     public static final String TOOLBAR_PRIMARY_TEXT_AND_ICON_COLOR = "toolbarPrimaryTextAndIconColor";
     public static final String TOOLBAR_AND_TAB_BACKGROUND_COLOR = "toolbarAndTabBackgroundColor";
     public static final String CIRCULAR_PROGRESS_BAR_BACKGROUND = "circularProgressBarBackground";
@@ -52,7 +56,6 @@ public class CustomThemeSharedPreferencesUtils {
     public static final String AUTHOR_FLAIR_TEXT_COLOR = "authorFlairTextColor";
     public static final String SUBMITTER = "submitter";
     public static final String MODERATOR = "moderator";
-    public static final String NOTIFICATION_ICON_COLOR = "notificationIconColor";
     public static final String SINGLE_COMMENT_THREAD_BACKGROUND = "singleCommentThreadBackgroundColor";
     public static final String UNREAD_MESSAGE_BACKGROUND_COLOR = "unreadMessageBackgroundColor";
     public static final String DIVIDER_COLOR = "dividerColor";

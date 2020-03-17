@@ -27,6 +27,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -170,7 +171,10 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private int mSingleCommentThreadBackgroundColor;
     private int mVoteAndReplyUnavailableVoteButtonColor;
     private int mButtonTextColor;
+    private int mPostIconAndInfoColor;
+    private int mCommentIconAndInfoColor;
 
+    private Drawable mCommentIcon;
     private float mScale;
     private ShareLinkBottomSheetFragment mShareLinkBottomSheetFragment;
     private CopyTextBottomSheetFragment mCopyTextBottomSheetFragment;
@@ -319,6 +323,13 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mSingleCommentThreadBackgroundColor = customThemeWrapper.getSingleCommentThreadBackgroundColor();
         mVoteAndReplyUnavailableVoteButtonColor = customThemeWrapper.getVoteAndReplyUnavailableVoteButtonColor();
         mButtonTextColor = customThemeWrapper.getButtonTextColor();
+        mPostIconAndInfoColor = customThemeWrapper.getPostIconAndInfoColor();
+        mCommentIconAndInfoColor = customThemeWrapper.getCommentIconAndInfoColor();
+
+        mCommentIcon = activity.getDrawable(R.drawable.ic_comment_grey_24dp);
+        if (mCommentIcon != null) {
+            DrawableCompat.setTint(mCommentIcon, mPostIconAndInfoColor);
+        }
 
         mShareLinkBottomSheetFragment = new ShareLinkBottomSheetFragment();
         mCopyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
@@ -485,9 +496,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     ((PostDetailViewHolder) holder).mScoreTextView.setTextColor(mDownvotedColor);
                     break;
                 case 0:
-                    ((PostDetailViewHolder) holder).mUpvoteButton.clearColorFilter();
-                    ((PostDetailViewHolder) holder).mDownvoteButton.clearColorFilter();
-                    ((PostDetailViewHolder) holder).mScoreTextView.setTextColor(mSecondaryTextColor);
+                    ((PostDetailViewHolder) holder).mUpvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                    ((PostDetailViewHolder) holder).mDownvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                    ((PostDetailViewHolder) holder).mScoreTextView.setTextColor(mPostIconAndInfoColor);
             }
 
             if (mPost.getPostType() != Post.TEXT_TYPE && mPost.getPostType() != Post.NO_PREVIEW_LINK_TYPE) {
@@ -726,25 +737,25 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ((PostDetailViewHolder) holder).commentsCountTextView.setText(Integer.toString(mPost.getNComments()));
 
             if (mPost.isSaved()) {
-                ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                ((PostDetailViewHolder) holder).mSaveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
             } else {
-                ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                ((PostDetailViewHolder) holder).mSaveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
             }
 
-            ((PostDetailViewHolder) holder).saveButton.setOnClickListener(view -> {
+            ((PostDetailViewHolder) holder).mSaveButton.setOnClickListener(view -> {
                 if (mAccessToken == null) {
                     Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (mPost.isSaved()) {
-                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                    ((PostDetailViewHolder) holder).mSaveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                     SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
                             new SaveThing.SaveThingListener() {
                                 @Override
                                 public void success() {
                                     mPost.setSaved(false);
-                                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                    ((PostDetailViewHolder) holder).mSaveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                     Toast.makeText(mActivity, R.string.post_unsaved_success, Toast.LENGTH_SHORT).show();
                                     mCommentRecyclerViewAdapterCallback.updatePost(mPost);
                                 }
@@ -752,19 +763,19 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                 @Override
                                 public void failed() {
                                     mPost.setSaved(true);
-                                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                    ((PostDetailViewHolder) holder).mSaveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                     Toast.makeText(mActivity, R.string.post_unsaved_failed, Toast.LENGTH_SHORT).show();
                                     mCommentRecyclerViewAdapterCallback.updatePost(mPost);
                                 }
                             });
                 } else {
-                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                    ((PostDetailViewHolder) holder).mSaveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                     SaveThing.saveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
                             new SaveThing.SaveThingListener() {
                                 @Override
                                 public void success() {
                                     mPost.setSaved(true);
-                                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                    ((PostDetailViewHolder) holder).mSaveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                     Toast.makeText(mActivity, R.string.post_saved_success, Toast.LENGTH_SHORT).show();
                                     mCommentRecyclerViewAdapterCallback.updatePost(mPost);
                                 }
@@ -772,7 +783,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                 @Override
                                 public void failed() {
                                     mPost.setSaved(false);
-                                    ((PostDetailViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                    ((PostDetailViewHolder) holder).mSaveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                     Toast.makeText(mActivity, R.string.post_saved_failed, Toast.LENGTH_SHORT).show();
                                     mCommentRecyclerViewAdapterCallback.updatePost(mPost);
                                 }
@@ -896,12 +907,12 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             switch (comment.getVoteType()) {
                 case CommentData.VOTE_TYPE_UPVOTE:
-                    ((CommentViewHolder) holder).upVoteButton
+                    ((CommentViewHolder) holder).upvoteButton
                             .setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                     ((CommentViewHolder) holder).scoreTextView.setTextColor(mUpvotedColor);
                     break;
                 case CommentData.VOTE_TYPE_DOWNVOTE:
-                    ((CommentViewHolder) holder).downVoteButton
+                    ((CommentViewHolder) holder).downvoteButton
                             .setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                     ((CommentViewHolder) holder).scoreTextView.setTextColor(mDownvotedColor);
                     break;
@@ -911,10 +922,10 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 ((CommentViewHolder) holder).replyButton
                         .setColorFilter(mVoteAndReplyUnavailableVoteButtonColor,
                                 android.graphics.PorterDuff.Mode.SRC_IN);
-                ((CommentViewHolder) holder).upVoteButton
+                ((CommentViewHolder) holder).upvoteButton
                         .setColorFilter(mVoteAndReplyUnavailableVoteButtonColor,
                                 android.graphics.PorterDuff.Mode.SRC_IN);
-                ((CommentViewHolder) holder).downVoteButton
+                ((CommentViewHolder) holder).downvoteButton
                         .setColorFilter(mVoteAndReplyUnavailableVoteButtonColor,
                                 android.graphics.PorterDuff.Mode.SRC_IN);
             }
@@ -952,7 +963,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 mActivity.startActivityForResult(intent, CommentActivity.WRITE_COMMENT_REQUEST_CODE);
             });
 
-            ((CommentViewHolder) holder).upVoteButton.setOnClickListener(view -> {
+            ((CommentViewHolder) holder).upvoteButton.setOnClickListener(view -> {
                 if (mPost.isArchived()) {
                     Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
                     return;
@@ -966,20 +977,20 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 int previousVoteType = comment.getVoteType();
                 String newVoteType;
 
-                ((CommentViewHolder) holder).downVoteButton.clearColorFilter();
+                ((CommentViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
                 if (previousVoteType != CommentData.VOTE_TYPE_UPVOTE) {
                     //Not upvoted before
                     comment.setVoteType(CommentData.VOTE_TYPE_UPVOTE);
                     newVoteType = RedditUtils.DIR_UPVOTE;
-                    ((CommentViewHolder) holder).upVoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                    ((CommentViewHolder) holder).upvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                     ((CommentViewHolder) holder).scoreTextView.setTextColor(mUpvotedColor);
                 } else {
                     //Upvoted before
                     comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
                     newVoteType = RedditUtils.DIR_UNVOTE;
-                    ((CommentViewHolder) holder).upVoteButton.clearColorFilter();
-                    ((CommentViewHolder) holder).scoreTextView.setTextColor(mSecondaryTextColor);
+                    ((CommentViewHolder) holder).upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                    ((CommentViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
                 }
 
                 ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
@@ -990,15 +1001,15 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     public void onVoteThingSuccess(int position) {
                         if (newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
                             comment.setVoteType(CommentData.VOTE_TYPE_UPVOTE);
-                            ((CommentViewHolder) holder).upVoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                            ((CommentViewHolder) holder).upvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                             ((CommentViewHolder) holder).scoreTextView.setTextColor(mUpvotedColor);
                         } else {
                             comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
-                            ((CommentViewHolder) holder).upVoteButton.clearColorFilter();
-                            ((CommentViewHolder) holder).scoreTextView.setTextColor(mSecondaryTextColor);
+                            ((CommentViewHolder) holder).upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                            ((CommentViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
                         }
 
-                        ((CommentViewHolder) holder).downVoteButton.clearColorFilter();
+                        ((CommentViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                 comment.getScore() + comment.getVoteType()));
                     }
@@ -1009,7 +1020,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 }, comment.getFullName(), newVoteType, holder.getAdapterPosition());
             });
 
-            ((CommentViewHolder) holder).downVoteButton.setOnClickListener(view -> {
+            ((CommentViewHolder) holder).downvoteButton.setOnClickListener(view -> {
                 if (mPost.isArchived()) {
                     Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
                     return;
@@ -1023,20 +1034,20 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 int previousVoteType = comment.getVoteType();
                 String newVoteType;
 
-                ((CommentViewHolder) holder).upVoteButton.clearColorFilter();
+                ((CommentViewHolder) holder).upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
                 if (previousVoteType != CommentData.VOTE_TYPE_DOWNVOTE) {
                     //Not downvoted before
                     comment.setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
                     newVoteType = RedditUtils.DIR_DOWNVOTE;
-                    ((CommentViewHolder) holder).downVoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                    ((CommentViewHolder) holder).downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                     ((CommentViewHolder) holder).scoreTextView.setTextColor(mDownvotedColor);
                 } else {
                     //Downvoted before
                     comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
                     newVoteType = RedditUtils.DIR_UNVOTE;
-                    ((CommentViewHolder) holder).downVoteButton.clearColorFilter();
-                    ((CommentViewHolder) holder).scoreTextView.setTextColor(mSecondaryTextColor);
+                    ((CommentViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                    ((CommentViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
                 }
 
                 ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
@@ -1047,15 +1058,15 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     public void onVoteThingSuccess(int position1) {
                         if (newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {
                             comment.setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
-                            ((CommentViewHolder) holder).downVoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                            ((CommentViewHolder) holder).downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                             ((CommentViewHolder) holder).scoreTextView.setTextColor(mDownvotedColor);
                         } else {
                             comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
-                            ((CommentViewHolder) holder).downVoteButton.clearColorFilter();
-                            ((CommentViewHolder) holder).scoreTextView.setTextColor(mSecondaryTextColor);
+                            ((CommentViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                            ((CommentViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
                         }
 
-                        ((CommentViewHolder) holder).upVoteButton.clearColorFilter();
+                        ((CommentViewHolder) holder).upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                 comment.getScore() + comment.getVoteType()));
                     }
@@ -1682,19 +1693,19 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.GONE);
             ((CommentViewHolder) holder).authorTypeImageView.setVisibility(View.GONE);
             ((CommentViewHolder) holder).expandButton.setVisibility(View.GONE);
-            ((CommentViewHolder) holder).upVoteButton.clearColorFilter();
-            ((CommentViewHolder) holder).scoreTextView.setTextColor(mSecondaryTextColor);
-            ((CommentViewHolder) holder).downVoteButton.clearColorFilter();
-            ((CommentViewHolder) holder).replyButton.clearColorFilter();
+            ((CommentViewHolder) holder).upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            ((CommentViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
+            ((CommentViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            ((CommentViewHolder) holder).replyButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             ViewGroup.LayoutParams params = ((CommentViewHolder) holder).verticalBlock.getLayoutParams();
             params.width = 0;
             ((CommentViewHolder) holder).verticalBlock.setLayoutParams(params);
             ((CommentViewHolder) holder).itemView.setPadding(0, 0, 0, 0);
             ((CommentViewHolder) holder).itemView.setBackgroundColor(mCommentBackgroundColor);
         } else if (holder instanceof PostDetailViewHolder) {
-            ((PostDetailViewHolder) holder).mUpvoteButton.clearColorFilter();
-            ((PostDetailViewHolder) holder).mScoreTextView.setTextColor(mSecondaryTextColor);
-            ((PostDetailViewHolder) holder).mDownvoteButton.clearColorFilter();
+            ((PostDetailViewHolder) holder).mUpvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            ((PostDetailViewHolder) holder).mScoreTextView.setTextColor(mPostIconAndInfoColor);
+            ((PostDetailViewHolder) holder).mDownvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             ((PostDetailViewHolder) holder).mFlairTextView.setVisibility(View.GONE);
             ((PostDetailViewHolder) holder).mSpoilerTextView.setVisibility(View.GONE);
             ((PostDetailViewHolder) holder).mNSFWTextView.setVisibility(View.GONE);
@@ -1791,7 +1802,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         @BindView(R.id.comments_count_item_post_detail)
         TextView commentsCountTextView;
         @BindView(R.id.save_button_item_post_detail)
-        ImageView saveButton;
+        ImageView mSaveButton;
         @BindView(R.id.share_button_item_post_detail)
         ImageView mShareButton;
 
@@ -1859,7 +1870,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 int previousVoteType = mPost.getVoteType();
                 String newVoteType;
 
-                mDownvoteButton.clearColorFilter();
+                mDownvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
                 if (previousUpvoteButtonColorFilter == null) {
                     //Not upvoted before
@@ -1871,8 +1882,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     //Upvoted before
                     mPost.setVoteType(0);
                     newVoteType = RedditUtils.DIR_UNVOTE;
-                    mUpvoteButton.clearColorFilter();
-                    mScoreTextView.setTextColor(mSecondaryTextColor);
+                    mUpvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                    mScoreTextView.setTextColor(mPostIconAndInfoColor);
                 }
 
                 mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
@@ -1889,11 +1900,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             mScoreTextView.setTextColor(mUpvotedColor);
                         } else {
                             mPost.setVoteType(0);
-                            mUpvoteButton.clearColorFilter();
-                            mScoreTextView.setTextColor(mSecondaryTextColor);
+                            mUpvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                            mScoreTextView.setTextColor(mPostIconAndInfoColor);
                         }
 
-                        mDownvoteButton.clearColorFilter();
+                        mDownvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                 mPost.getScore() + mPost.getVoteType()));
 
@@ -1933,7 +1944,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 int previousVoteType = mPost.getVoteType();
                 String newVoteType;
 
-                mUpvoteButton.clearColorFilter();
+                mUpvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
                 if (previousDownvoteButtonColorFilter == null) {
                     //Not upvoted before
@@ -1945,8 +1956,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     //Upvoted before
                     mPost.setVoteType(0);
                     newVoteType = RedditUtils.DIR_UNVOTE;
-                    mDownvoteButton.clearColorFilter();
-                    mScoreTextView.setTextColor(mSecondaryTextColor);
+                    mDownvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                    mScoreTextView.setTextColor(mPostIconAndInfoColor);
                 }
 
                 mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
@@ -1963,11 +1974,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             mScoreTextView.setTextColor(mDownvotedColor);
                         } else {
                             mPost.setVoteType(0);
-                            mDownvoteButton.clearColorFilter();
-                            mScoreTextView.setTextColor(mSecondaryTextColor);
+                            mDownvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                            mScoreTextView.setTextColor(mPostIconAndInfoColor);
                         }
 
-                        mUpvoteButton.clearColorFilter();
+                        mUpvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                 mPost.getScore() + mPost.getVoteType()));
 
@@ -1995,14 +2006,14 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 constraintSet.clear(mUpvoteButton.getId(), ConstraintSet.START);
                 constraintSet.clear(mScoreTextView.getId(), ConstraintSet.START);
                 constraintSet.clear(mDownvoteButton.getId(), ConstraintSet.START);
-                constraintSet.clear(saveButton.getId(), ConstraintSet.END);
+                constraintSet.clear(mSaveButton.getId(), ConstraintSet.END);
                 constraintSet.clear(mShareButton.getId(), ConstraintSet.END);
                 constraintSet.connect(mUpvoteButton.getId(), ConstraintSet.END, mScoreTextView.getId(), ConstraintSet.START);
                 constraintSet.connect(mScoreTextView.getId(), ConstraintSet.END, mDownvoteButton.getId(), ConstraintSet.START);
                 constraintSet.connect(mDownvoteButton.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
-                constraintSet.connect(commentsCountTextView.getId(), ConstraintSet.START, saveButton.getId(), ConstraintSet.END);
+                constraintSet.connect(commentsCountTextView.getId(), ConstraintSet.START, mSaveButton.getId(), ConstraintSet.END);
                 constraintSet.connect(commentsCountTextView.getId(), ConstraintSet.END, mUpvoteButton.getId(), ConstraintSet.START);
-                constraintSet.connect(saveButton.getId(), ConstraintSet.START, mShareButton.getId(), ConstraintSet.END);
+                constraintSet.connect(mSaveButton.getId(), ConstraintSet.START, mShareButton.getId(), ConstraintSet.END);
                 constraintSet.connect(mShareButton.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
                 constraintSet.setHorizontalBias(commentsCountTextView.getId(), 0);
                 constraintSet.applyTo(mBottomConstraintLayout);
@@ -2032,6 +2043,13 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             mLoadImageProgressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
             mNoPreviewLinkImageView.setBackgroundColor(mNoPreviewLinkBackgroundColor);
             mLoadImageErrorTextView.setTextColor(mPrimaryTextColor);
+            mUpvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            mScoreTextView.setTextColor(mPostIconAndInfoColor);
+            mDownvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            commentsCountTextView.setTextColor(mPostIconAndInfoColor);
+            commentsCountTextView.setCompoundDrawablesWithIntrinsicBounds(mCommentIcon, null, null, null);
+            mSaveButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            mShareButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
         }
     }
 
@@ -2049,11 +2067,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         @BindView(R.id.bottom_constraint_layout_item_post_comment)
         ConstraintLayout bottomConstraintLayout;
         @BindView(R.id.up_vote_button_item_post_comment)
-        ImageView upVoteButton;
+        ImageView upvoteButton;
         @BindView(R.id.score_text_view_item_post_comment)
         TextView scoreTextView;
         @BindView(R.id.down_vote_button_item_post_comment)
-        ImageView downVoteButton;
+        ImageView downvoteButton;
         @BindView(R.id.more_button_item_post_comment)
         ImageView moreButton;
         @BindView(R.id.save_button_item_post_comment)
@@ -2074,15 +2092,15 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             if (mVoteButtonsOnTheRight) {
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone(bottomConstraintLayout);
-                constraintSet.clear(upVoteButton.getId(), ConstraintSet.START);
+                constraintSet.clear(upvoteButton.getId(), ConstraintSet.START);
                 constraintSet.clear(scoreTextView.getId(), ConstraintSet.START);
-                constraintSet.clear(downVoteButton.getId(), ConstraintSet.START);
+                constraintSet.clear(downvoteButton.getId(), ConstraintSet.START);
                 constraintSet.clear(expandButton.getId(), ConstraintSet.END);
                 constraintSet.clear(saveButton.getId(), ConstraintSet.END);
                 constraintSet.clear(replyButton.getId(), ConstraintSet.END);
-                constraintSet.connect(upVoteButton.getId(), ConstraintSet.END, scoreTextView.getId(), ConstraintSet.START);
-                constraintSet.connect(scoreTextView.getId(), ConstraintSet.END, downVoteButton.getId(), ConstraintSet.START);
-                constraintSet.connect(downVoteButton.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+                constraintSet.connect(upvoteButton.getId(), ConstraintSet.END, scoreTextView.getId(), ConstraintSet.START);
+                constraintSet.connect(scoreTextView.getId(), ConstraintSet.END, downvoteButton.getId(), ConstraintSet.START);
+                constraintSet.connect(downvoteButton.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
                 constraintSet.connect(moreButton.getId(), ConstraintSet.START, expandButton.getId(), ConstraintSet.END);
                 constraintSet.connect(expandButton.getId(), ConstraintSet.START, saveButton.getId(), ConstraintSet.END);
                 constraintSet.connect(saveButton.getId(), ConstraintSet.START, replyButton.getId(), ConstraintSet.END);
@@ -2102,6 +2120,13 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             commentMarkdownView.setTextColor(mCommentTextColor);
             authorFlairTextView.setTextColor(mAuthorFlairTextColor);
             commentDivider.setBackgroundColor(mDividerColor);
+            upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            scoreTextView.setTextColor(mCommentIconAndInfoColor);
+            downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            moreButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            expandButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            saveButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            replyButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
         }
     }
 

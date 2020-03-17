@@ -354,7 +354,12 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         nSubscribersTextView.setTextColor(primaryTextColor);
         nOnlineSubscribersTextView.setTextColor(primaryTextColor);
         descriptionTextView.setTextColor(primaryTextColor);
-        bottomNavigationView.setBackgroundColor(backgroundColor);
+        bottomNavigationView.setBackgroundTint(ColorStateList.valueOf(backgroundColor));
+        int primaryIconColor = mCustomThemeWrapper.getPrimaryIconColor();
+        subscriptionsBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        multiRedditBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        messageBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        profileBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         applyFABTheme(fab, R.drawable.ic_add_bottom_app_bar_24dp);
         unsubscribedColor = mCustomThemeWrapper.getUnsubscribed();
         subscribedColor = mCustomThemeWrapper.getSubscribed();

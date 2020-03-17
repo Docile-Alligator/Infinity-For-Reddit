@@ -60,6 +60,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private int primaryTextColor;
     private int secondaryTextColor;
     private int dividerColor;
+    private int primaryIconColor;
 
     public NavigationDrawerRecyclerViewAdapter(Context context, CustomThemeWrapper customThemeWrapper,
                                                String accountName, String userIconUrl,
@@ -78,6 +79,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         primaryTextColor = customThemeWrapper.getPrimaryTextColor();
         secondaryTextColor = customThemeWrapper.getSecondaryTextColor();
         dividerColor = customThemeWrapper.getDividerColor();
+        primaryIconColor = customThemeWrapper.getPrimaryIconColor();
     }
 
     @Override
@@ -280,14 +282,12 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                                 if (isNSFWEnabled) {
                                     isNSFWEnabled = false;
                                     ((MenuItemViewHolder) holder).menuTextView.setText(R.string.enable_nsfw);
-                                    ((MenuItemViewHolder) holder).menuTextView.setCompoundDrawablesWithIntrinsicBounds(
-                                            R.drawable.ic_nsfw_on_24dp, 0, 0, 0);
+                                    ((MenuItemViewHolder) holder).imageView.setImageDrawable(context.getDrawable(R.drawable.ic_nsfw_on_24dp));
                                     itemClickListener.onMenuClick(R.string.disable_nsfw);
                                 } else {
                                     isNSFWEnabled = true;
                                     ((MenuItemViewHolder) holder).menuTextView.setText(R.string.disable_nsfw);
-                                    ((MenuItemViewHolder) holder).menuTextView.setCompoundDrawablesWithIntrinsicBounds(
-                                            R.drawable.ic_nsfw_off_24dp, 0, 0, 0);
+                                    ((MenuItemViewHolder) holder).imageView.setImageDrawable(context.getDrawable(R.drawable.ic_nsfw_off_24dp));
                                     itemClickListener.onMenuClick(R.string.enable_nsfw);
                                 }
                             });
@@ -333,8 +333,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
             if (stringId != 0) {
                 ((MenuItemViewHolder) holder).menuTextView.setText(stringId);
-                ((MenuItemViewHolder) holder).menuTextView.setCompoundDrawablesWithIntrinsicBounds(
-                        drawableId, 0, 0, 0);
+                ((MenuItemViewHolder) holder).imageView.setImageDrawable(context.getDrawable(drawableId));
                 if (setOnClickListener) {
                     int finalStringId = stringId;
                     ((MenuItemViewHolder) holder).itemView.setOnClickListener(view -> itemClickListener.onMenuClick(finalStringId));
@@ -461,12 +460,16 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     }
 
     class MenuItemViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.image_view_item_nav_drawer_menu_item)
+        ImageView imageView;
+        @BindView(R.id.text_view_item_nav_drawer_menu_item)
         TextView menuTextView;
 
         MenuItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            menuTextView = (TextView) itemView;
+            ButterKnife.bind(this, itemView);
             menuTextView.setTextColor(primaryTextColor);
+            imageView.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         }
     }
 
