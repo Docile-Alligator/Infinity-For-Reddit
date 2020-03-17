@@ -609,7 +609,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                     ((PostViewHolder) holder).downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
-                    if (previousUpvoteButtonColorFilter == null) {
+                    if (previousVoteType != 1) {
                         //Not upvoted before
                         post.setVoteType(1);
                         newVoteType = RedditUtils.DIR_UPVOTE;
@@ -680,7 +680,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                     ((PostViewHolder) holder).upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
-                    if (previousDownvoteButtonColorFilter == null) {
+                    if (previousVoteType != -1) {
                         //Not downvoted before
                         post.setVoteType(-1);
                         newVoteType = RedditUtils.DIR_DOWNVOTE;
@@ -1155,7 +1155,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                     ((PostCompactViewHolder) holder).downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
-                    if (previousUpvoteButtonColorFilter == null) {
+                    if (previousVoteType != 1) {
                         //Not upvoted before
                         post.setVoteType(1);
                         newVoteType = RedditUtils.DIR_UPVOTE;
@@ -1226,7 +1226,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                     ((PostCompactViewHolder) holder).upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
-                    if (previousDownvoteButtonColorFilter == null) {
+                    if (previousVoteType != -1) {
                         //Not downvoted before
                         post.setVoteType(-1);
                         newVoteType = RedditUtils.DIR_DOWNVOTE;

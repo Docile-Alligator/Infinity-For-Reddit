@@ -1392,8 +1392,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             });
                 }
             });
-        } else if (holder instanceof LoadMoreCommentsFailedViewHolder) {
-            ((LoadMoreCommentsFailedViewHolder) holder).errorTextView.setText(R.string.load_comments_failed);
         }
     }
 
@@ -1872,7 +1870,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
                 mDownvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
-                if (previousUpvoteButtonColorFilter == null) {
+                if (previousVoteType != 1) {
                     //Not upvoted before
                     mPost.setVoteType(1);
                     newVoteType = RedditUtils.DIR_UPVOTE;
@@ -1946,7 +1944,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
                 mUpvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
-                if (previousDownvoteButtonColorFilter == null) {
+                if (previousVoteType != -1) {
                     //Not upvoted before
                     mPost.setVoteType(-1);
                     newVoteType = RedditUtils.DIR_DOWNVOTE;
@@ -2209,6 +2207,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         LoadMoreCommentsFailedViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            errorTextView.setText(R.string.load_comments_failed);
             retryButton.setOnClickListener(view -> mCommentRecyclerViewAdapterCallback.retryFetchingMoreComments());
             itemView.setBackgroundColor(mCommentBackgroundColor);
             errorTextView.setTextColor(mSecondaryTextColor);
