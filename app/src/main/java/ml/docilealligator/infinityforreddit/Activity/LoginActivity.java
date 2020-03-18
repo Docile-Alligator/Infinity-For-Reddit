@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.webkit.CookieManager;
@@ -15,7 +14,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.google.android.material.appbar.AppBarLayout;
 
@@ -46,8 +44,6 @@ import retrofit2.Retrofit;
 
 public class LoginActivity extends BaseActivity {
 
-    @BindView(R.id.coordinator_layout_login_activity)
-    CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_login_activity)
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_login_activity)
@@ -79,10 +75,6 @@ public class LoginActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         applyCustomTheme();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
-            addOnOffsetChangedListener(appBarLayout);
-        }
 
         setSupportActionBar(toolbar);
 
@@ -222,7 +214,6 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
     }
 

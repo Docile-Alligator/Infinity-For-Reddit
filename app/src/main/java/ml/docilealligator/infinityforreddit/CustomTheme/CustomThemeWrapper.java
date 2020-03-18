@@ -122,12 +122,12 @@ public class CustomThemeWrapper {
 
     public int getPostIconAndInfoColor() {
         return themeSharedPreferences.getInt(CustomThemeSharedPreferencesUtils.POST_ICON_AND_INFO_COLOR,
-                getDefaultColor("#808080", "#808080", "#808080"));
+                getDefaultColor("#8A000000", "#B3FFFFFF", "#B3FFFFFF"));
     }
 
     public int getCommentIconAndInfoColor() {
         return themeSharedPreferences.getInt(CustomThemeSharedPreferencesUtils.COMMENT_ICON_AND_INFO_COLOR,
-                getDefaultColor("#808080", "#808080", "#808080"));
+                getDefaultColor("#8A000000", "#B3FFFFFF", "#B3FFFFFF"));
     }
 
     public int getToolbarPrimaryTextAndIconColor() {

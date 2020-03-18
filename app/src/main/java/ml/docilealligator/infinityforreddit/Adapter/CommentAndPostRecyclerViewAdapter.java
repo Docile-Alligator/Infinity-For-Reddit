@@ -2169,7 +2169,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(view -> mCommentRecyclerViewAdapterCallback.retryFetchingComments());
-            itemView.setBackgroundColor(mCommentBackgroundColor);
             errorTextView.setTextColor(mSecondaryTextColor);
         }
     }
@@ -2181,7 +2180,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         NoCommentViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setBackgroundColor(mCommentBackgroundColor);
             errorTextView.setTextColor(mSecondaryTextColor);
         }
     }
@@ -2193,7 +2191,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         IsLoadingMoreCommentsViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setBackgroundColor(mCommentBackgroundColor);
             progressbar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
         }
     }
@@ -2209,7 +2206,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ButterKnife.bind(this, itemView);
             errorTextView.setText(R.string.load_comments_failed);
             retryButton.setOnClickListener(view -> mCommentRecyclerViewAdapterCallback.retryFetchingMoreComments());
-            itemView.setBackgroundColor(mCommentBackgroundColor);
             errorTextView.setTextColor(mSecondaryTextColor);
             retryButton.setBackgroundTintList(ColorStateList.valueOf(mColorPrimaryLightTheme));
             retryButton.setTextColor(mButtonTextColor);

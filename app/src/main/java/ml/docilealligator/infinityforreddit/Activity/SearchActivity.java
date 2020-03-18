@@ -192,6 +192,11 @@ public class SearchActivity extends BaseActivity {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         simpleSearchView.setSearchBackground(new ColorDrawable(mCustomThemeWrapper.getColorPrimary()));
+        int toolbarPrimaryTextAndIconColorColor = mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor();
+        simpleSearchView.setIconsColor(toolbarPrimaryTextAndIconColorColor);
+        simpleSearchView.setTextColor(toolbarPrimaryTextAndIconColorColor);
+        simpleSearchView.setBackIconColor(toolbarPrimaryTextAndIconColorColor);
+        simpleSearchView.setHintTextColor(mCustomThemeWrapper.getSecondaryTextColor());
         searchInTextView.setTextColor(mCustomThemeWrapper.getColorAccent());
         subredditNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
     }
