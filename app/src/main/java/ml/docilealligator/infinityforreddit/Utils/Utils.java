@@ -44,7 +44,7 @@ public class Utils {
             return context.getString(R.string.elapsed_time_a_minute_ago);
         } else if (diff < 50 * MINUTE_MILLIS) {
             return context.getString(R.string.elapsed_time_minutes_ago, diff / MINUTE_MILLIS);
-        } else if (diff < 90 * MINUTE_MILLIS) {
+        } else if (diff < 120 * MINUTE_MILLIS) {
             return context.getString(R.string.elapsed_time_an_hour_ago);
         } else if (diff < 24 * HOUR_MILLIS) {
             return context.getString(R.string.elapsed_time_hours_ago, diff / HOUR_MILLIS);

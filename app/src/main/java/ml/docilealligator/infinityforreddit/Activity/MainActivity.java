@@ -495,13 +495,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     case R.string.light_theme:
                         mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "0").apply();
                         AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                        mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.NORMAL);
+                        mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.LIGHT);
                         break;
                     case R.string.dark_theme:
                         mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "1").apply();
                         AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
-                            mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.AMOLED_DARK);
+                            mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.AMOLED);
                         } else {
                             mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.DARK);
                         }

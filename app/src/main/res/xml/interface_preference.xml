@@ -2,19 +2,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ListPreference
-        app:defaultValue="2"
-        app:entryValues="@array/settings_theme_values"
-        app:key="theme"
-        app:icon="@drawable/ic_outline_color_lens_24px"
-        app:title="@string/settings_theme_title"
-        app:useSimpleSummaryProvider="true" />
-
-    <SwitchPreference
-        app:defaultValue="false"
-        app:key="amoled_dark"
-        app:title="@string/settings_amoled_dark_title" />
-
     <Preference
         app:title="@string/settings_font_size_title"
         app:icon="@drawable/ic_font_size_24dp"

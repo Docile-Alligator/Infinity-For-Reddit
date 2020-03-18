@@ -459,4 +459,7 @@
     <string name="cannot_get_storage">Cannot access the app storage</string>
     <string name="save_image_before_sharing">Saving the image. Please wait.</string>
     <string name="save_gif_before_sharing">Saving the gif. Please wait.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

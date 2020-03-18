@@ -116,12 +116,16 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE custom_themes" +
-                    "(name TEXT NOT NULL PRIMARY KEY, color_primary INTEGER NOT NULL," +
+                    "(name TEXT NOT NULL PRIMARY KEY, is_light_theme INTEGER NOT NULL," +
+                    "is_dark_theme INTEGER NOT NULL, is_amoled_theme INTEGER NOT NULL, color_primary INTEGER NOT NULL," +
                     "color_primary_dark INTEGER NOT NULL, color_accent INTEGER NOT NULL," +
                     "color_primary_light_theme INTEGER NOT NULL, primary_text_color INTEGER NOT NULL," +
-                    "secondary_text_color INTEGER NOT NULL, background_color INTEGER NOT NULL," +
-                    "rounded_bottom_sheet_primary_background INTEGER NOT NULL," +
-                    "card_view_background_color INTEGER NOT NULL, toolbar_primary_text_and_icon_color INTEGER NOT NULL," +
+                    "secondary_text_color INTEGER NOT NULL, post_title_color INTEGER NOT NULL," +
+                    "post_content_color INTEGER NOT NULL, comment_color INTEGER NOT NULL," +
+                    "button_text_color INTEGER NOT NULL, background_color INTEGER NOT NULL," +
+                    "card_view_background_color INTEGER NOT NULL, comment_background_color INTEGER NOT NULL," +
+                    "bottom_app_bar_background_color INTEGER NOT NULL, primary_icon_color INTEGER NOT NULL," +
+                    "comment_icon_and_info_color INTEGER NOT NULL, toolbar_primary_text_and_icon_color INTEGER NOT NULL," +
                     "toolbar_and_tab_background_color INTEGER NOT NULL, circular_progress_bar_background INTEGER NOT NULL," +
                     "tab_layout_with_expanded_collapsing_toolbar_tab_background INTEGER NOT NULL," +
                     "tab_layout_with_expanded_collapsing_toolbar_text_color INTEGER NOT NULL," +
@@ -130,9 +134,12 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                     "tab_layout_with_collapsed_collapsing_toolbar_text_color INTEGER NOT NULL," +
                     "tab_layout_with_collapsed_collapsing_toolbar_tab_indicator INTEGER NOT NULL," +
                     "nav_bar_color INTEGER NOT NULL, upvoted INTEGER NOT NULL, downvoted INTEGER NOT NULL," +
-                    "post_type INTEGER NOT NULL, spoiler_color INTEGER NOT NULL, nsfw_color INTEGER NOT NULL," +
-                    "flair_color INTEGER NOT NULL, archived_tint INTEGER NOT NULL, locked_icon_tint INTEGER NOT NULL," +
-                    "crosspost INTEGER NOT NULL, stickied_post INTEGER NOT NULL, subscribed INTEGER NOT NULL," +
+                    "post_type_background_color INTEGER NOT NULL, post_type_text_color INTEGER NOT NULL," +
+                    "spoiler_background_color INTEGER NOT NULL, spoiler_text_color INTEGER NOT NULL," +
+                    "nsfw_background_color INTEGER NOT NULL, nsfw_text_color INTEGER NOT NULL," +
+                    "flair_background_color INTEGER NOT NULL, flair_text_color INTEGER NOT NULL," +
+                    "archived_tint INTEGER NOT NULL, locked_icon_tint INTEGER NOT NULL," +
+                    "crosspost_icon_tint INTEGER NOT NULL, stickied_post_icon_tint INTEGER NOT NULL, subscribed INTEGER NOT NULL," +
                     "unsubscribed INTEGER NOT NULL, username INTEGER NOT NULL, subreddit INTEGER NOT NULL," +
                     "author_flair_text_color INTEGER NOT NULL, submitter INTEGER NOT NULL," +
                     "moderator INTEGER NOT NULL, notification_icon_color INTEGER NOT NULL," +
@@ -143,7 +150,10 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                     "comment_vertical_bar_color_1 INTEGER NOT NULL, comment_vertical_bar_color_2 INTEGER NOT NULL," +
                     "comment_vertical_bar_color_3 INTEGER NOT NULL, comment_vertical_bar_color_4 INTEGER NOT NULL," +
                     "comment_vertical_bar_color_5 INTEGER NOT NULL, comment_vertical_bar_color_6 INTEGER NOT NULL," +
-                    "comment_vertical_bar_color_7 INTEGER NOT NULL)");
+                    "comment_vertical_bar_color_7 INTEGER NOT NULL, fab_icon_color INTEGER NOT NULL," +
+                    "chip_text_color INTEGER NOT NULL, is_light_status_bar INTEGER NOT NULL," +
+                    "is_light_nav_bar INTEGER NOT NULL," +
+                    "is_change_status_bar_icon_color_after_toolbar_collapsed_in_immersive_interface INTEGER NOT NULL)");
         }
     };
 }

@@ -11,6 +11,12 @@ public class CustomTheme {
     @NonNull
     @ColumnInfo(name = "name")
     public String name;
+    @ColumnInfo(name = "is_light_theme")
+    public boolean isLightTheme;
+    @ColumnInfo(name = "is_dark_theme")
+    public boolean isDarkTheme;
+    @ColumnInfo(name = "is_amoled_theme")
+    public boolean isAmoledTheme;
     @ColumnInfo(name = "color_primary")
     public int colorPrimary;
     @ColumnInfo(name = "color_primary_dark")
@@ -23,12 +29,26 @@ public class CustomTheme {
     public int primaryTextColor;
     @ColumnInfo(name = "secondary_text_color")
     public int secondaryTextColor;
+    @ColumnInfo(name = "post_title_color")
+    public int postTitleColor;
+    @ColumnInfo(name = "post_content_color")
+    public int postContentColor;
+    @ColumnInfo(name = "comment_color")
+    public int commentColor;
+    @ColumnInfo(name = "button_text_color")
+    public int buttonTextColor;
     @ColumnInfo(name = "background_color")
     public int backgroundColor;
-    @ColumnInfo(name = "rounded_bottom_sheet_primary_background")
-    public int roundedBottomSheetPrimaryBackground;
     @ColumnInfo(name = "card_view_background_color")
     public int cardViewBackgroundColor;
+    @ColumnInfo(name = "comment_background_color")
+    public int commentBackgroundColor;
+    @ColumnInfo(name = "bottom_app_bar_background_color")
+    public int bottomAppBarBackgroundColor;
+    @ColumnInfo(name = "primary_icon_color")
+    public int primaryIconColor;
+    @ColumnInfo(name = "comment_icon_and_info_color")
+    public int commentIconAndInfoColor;
     @ColumnInfo(name = "toolbar_primary_text_and_icon_color")
     public int toolbarPrimaryTextAndIconColor;
     @ColumnInfo(name = "toolbar_and_tab_background_color")
@@ -53,22 +73,30 @@ public class CustomTheme {
     public int upvoted;
     @ColumnInfo(name = "downvoted")
     public int downvoted;
-    @ColumnInfo(name = "post_type")
-    public int postType;
-    @ColumnInfo(name = "spoiler_color")
-    public int spoilerColor;
-    @ColumnInfo(name = "nsfw_color")
-    public int nsfwColor;
-    @ColumnInfo(name = "flair_color")
-    public int flairColor;
+    @ColumnInfo(name = "post_type_background_color")
+    public int postTypeBackgroundColor;
+    @ColumnInfo(name = "post_type_text_color")
+    public int postTypeTextColor;
+    @ColumnInfo(name = "spoiler_background_color")
+    public int spoilerBackgroundColor;
+    @ColumnInfo(name = "spoiler_text_color")
+    public int spoilerTextColor;
+    @ColumnInfo(name = "nsfw_background_color")
+    public int nsfwBackgroundColor;
+    @ColumnInfo(name = "nsfw_text_color")
+    public int nsfwTextColor;
+    @ColumnInfo(name = "flair_background_color")
+    public int flairBackgroundColor;
+    @ColumnInfo(name = "flair_text_color")
+    public int flairTextColor;
     @ColumnInfo(name = "archived_tint")
     public int archivedTint;
     @ColumnInfo(name = "locked_icon_tint")
     public int lockedIconTint;
-    @ColumnInfo(name = "crosspost")
-    public int crosspost;
-    @ColumnInfo(name = "stickied_post")
-    public int stickiedPost;
+    @ColumnInfo(name = "crosspost_icon_tint")
+    public int crosspostIconTint;
+    @ColumnInfo(name = "stickied_post_icon_tint")
+    public int stickiedPostIconTint;
     @ColumnInfo(name = "subscribed")
     public int subscribed;
     @ColumnInfo(name = "unsubscribed")
@@ -83,8 +111,6 @@ public class CustomTheme {
     public int submitter;
     @ColumnInfo(name = "moderator")
     public int moderator;
-    @ColumnInfo(name = "notification_icon_color")
-    public int notificationIconColor;
     @ColumnInfo(name = "single_comment_thread_background_color")
     public int singleCommentThreadBackgroundColor;
     @ColumnInfo(name = "unread_message_background_color")
@@ -109,6 +135,16 @@ public class CustomTheme {
     public int commentVerticalBarColor6;
     @ColumnInfo(name = "comment_vertical_bar_color_7")
     public int commentVerticalBarColor7;
+    @ColumnInfo(name = "fab_icon_color")
+    public int fabIconColor;
+    @ColumnInfo(name = "chip_text_color")
+    public int chipTextColor;
+    @ColumnInfo(name = "is_light_status_bar")
+    public int isLightStatusBar;
+    @ColumnInfo(name = "is_light_nav_bar")
+    public int isLightNavBar;
+    @ColumnInfo(name = "is_change_status_bar_icon_color_after_toolbar_collapsed_in_immersive_interface")
+    public int isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface;
 
     public CustomTheme(@NonNull String name) {
         this.name = name;

@@ -13,6 +13,11 @@
         app:fragment="ml.docilealligator.infinityforreddit.Settings.InterfacePreferenceFragment" />
 
     <Preference
+        app:title="@string/settings_theme_title"
+        app:icon="@drawable/ic_outline_color_lens_24dp"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.ThemePreferenceFragment" />
+
+    <Preference
         app:icon="@drawable/ic_gesture_24dp"
         app:title="@string/settings_gestures_and_buttons_title"
         app:fragment="ml.docilealligator.infinityforreddit.Settings.GesturesAndButtonsPreferenceFragment" />

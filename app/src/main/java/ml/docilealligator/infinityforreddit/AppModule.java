@@ -107,15 +107,31 @@ class AppModule {
     }
 
     @Provides
-    @Named("theme")
+    @Named("light_theme")
     @Singleton
-    SharedPreferences provideThemeSharedPreferences() {
-        return mApplication.getSharedPreferences(CustomThemeSharedPreferencesUtils.THEME_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+    SharedPreferences provideLightThemeSharedPreferences() {
+        return mApplication.getSharedPreferences(CustomThemeSharedPreferencesUtils.LIGHT_THEME_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+    }
+
+    @Provides
+    @Named("dark_theme")
+    @Singleton
+    SharedPreferences provideDarkThemeSharedPreferences() {
+        return mApplication.getSharedPreferences(CustomThemeSharedPreferencesUtils.DARK_THEME_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+    }
+
+    @Provides
+    @Named("amoled_theme")
+    @Singleton
+    SharedPreferences provideAmoledThemeSharedPreferences() {
+        return mApplication.getSharedPreferences(CustomThemeSharedPreferencesUtils.AMOLED_THEME_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
     }
 
     @Provides
     @Singleton
-    CustomThemeWrapper provideCustomThemeWrapper(@Named("theme") SharedPreferences themeSharedPreferences) {
-        return new CustomThemeWrapper(themeSharedPreferences);
+    CustomThemeWrapper provideCustomThemeWrapper(@Named("light_theme") SharedPreferences lightThemeSharedPreferences,
+                                                 @Named("dark_theme") SharedPreferences darkThemeSharedPreferences,
+                                                 @Named("amoled_theme") SharedPreferences amoledThemeSharedPreferences) {
+        return new CustomThemeWrapper(lightThemeSharedPreferences, darkThemeSharedPreferences, amoledThemeSharedPreferences);
     }
 }

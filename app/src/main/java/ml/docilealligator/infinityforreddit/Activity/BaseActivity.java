@@ -65,13 +65,13 @@ public abstract class BaseActivity extends AppCompatActivity {
             case 0:
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
                 getTheme().applyStyle(R.style.Theme_Normal, true);
-                customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.NORMAL);
+                customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.LIGHT);
                 break;
             case 1:
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
                     getTheme().applyStyle(R.style.Theme_Normal_AmoledDark, true);
-                    customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.AMOLED_DARK);
+                    customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.AMOLED);
                 } else {
                     getTheme().applyStyle(R.style.Theme_Normal_NormalDark, true);
                     customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.DARK);
@@ -85,11 +85,11 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }
                 if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO) {
                     getTheme().applyStyle(R.style.Theme_Normal, true);
-                    customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.NORMAL);
+                    customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.LIGHT);
                 } else {
                     if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
                         getTheme().applyStyle(R.style.Theme_Normal_AmoledDark, true);
-                        customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.AMOLED_DARK);
+                        customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.AMOLED);
                     } else {
                         getTheme().applyStyle(R.style.Theme_Normal_NormalDark, true);
                         customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.DARK);
@@ -120,8 +120,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             window.setStatusBarColor(customThemeWrapper.getColorPrimaryDark());
         }
         boolean isLightStatusbar = customThemeWrapper.isLightStatusBar();
-        boolean isLightNavBar = customThemeWrapper.isLightNavBar();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            boolean isLightNavBar = customThemeWrapper.isLightNavBar();
             if (isLightStatusbar) {
                 if (isLightNavBar) {
                     systemVisibilityToolbarExpanded = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;

@@ -23,8 +23,8 @@ import ml.docilealligator.infinityforreddit.Activity.SearchActivity;
 import ml.docilealligator.infinityforreddit.Activity.SearchResultActivity;
 import ml.docilealligator.infinityforreddit.Activity.SearchSubredditsResultActivity;
 import ml.docilealligator.infinityforreddit.Activity.SettingsActivity;
-import ml.docilealligator.infinityforreddit.Activity.SubredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubredditMultiselectionActivity;
+import ml.docilealligator.infinityforreddit.Activity.SubredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubscribedThingListingActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewGIFActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewImageActivity;
@@ -44,9 +44,9 @@ import ml.docilealligator.infinityforreddit.Fragment.SubscribedSubredditsListing
 import ml.docilealligator.infinityforreddit.Fragment.UserListingFragment;
 import ml.docilealligator.infinityforreddit.Service.SubmitPostService;
 import ml.docilealligator.infinityforreddit.Settings.GesturesAndButtonsPreferenceFragment;
-import ml.docilealligator.infinityforreddit.Settings.InterfacePreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.MainPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.NotificationPreferenceFragment;
+import ml.docilealligator.infinityforreddit.Settings.ThemePreferenceFragment;
 
 @Singleton
 @Component(modules = AppModule.class)
@@ -139,5 +139,5 @@ public interface AppComponent {
 
     void inject(SubredditMultiselectionActivity subredditMultiselectionActivity);
 
-    void inject(InterfacePreferenceFragment interfacePreferenceFragment);
+    void inject(ThemePreferenceFragment themePreferenceFragment);
 }
