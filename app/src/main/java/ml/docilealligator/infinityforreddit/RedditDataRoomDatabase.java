@@ -125,8 +125,9 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                     "button_text_color INTEGER NOT NULL, background_color INTEGER NOT NULL," +
                     "card_view_background_color INTEGER NOT NULL, comment_background_color INTEGER NOT NULL," +
                     "bottom_app_bar_background_color INTEGER NOT NULL, primary_icon_color INTEGER NOT NULL," +
+                    "post_icon_and_info_color INTEGER NOT NULL," +
                     "comment_icon_and_info_color INTEGER NOT NULL, toolbar_primary_text_and_icon_color INTEGER NOT NULL," +
-                    "toolbar_and_tab_background_color INTEGER NOT NULL, circular_progress_bar_background INTEGER NOT NULL," +
+                    "toolbar_secondary_text_color INTEGER NOT NULL, circular_progress_bar_background INTEGER NOT NULL," +
                     "tab_layout_with_expanded_collapsing_toolbar_tab_background INTEGER NOT NULL," +
                     "tab_layout_with_expanded_collapsing_toolbar_text_color INTEGER NOT NULL," +
                     "tab_layout_with_expanded_collapsing_toolbar_tab_indicator INTEGER NOT NULL," +
@@ -146,7 +147,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                     "single_comment_thread_background_color INTEGER NOT NULL," +
                     "unread_message_background_color INTEGER NOT NULL, divider_color INTEGER NOT NULL," +
                     "no_preview_link_background_color INTEGER NOT NULL," +
-                    "vote_and_reply_unavailable_vote_button_color INTEGER NOT NULL," +
+                    "vote_and_reply_unavailable_button_color INTEGER NOT NULL," +
                     "comment_vertical_bar_color_1 INTEGER NOT NULL, comment_vertical_bar_color_2 INTEGER NOT NULL," +
                     "comment_vertical_bar_color_3 INTEGER NOT NULL, comment_vertical_bar_color_4 INTEGER NOT NULL," +
                     "comment_vertical_bar_color_5 INTEGER NOT NULL, comment_vertical_bar_color_6 INTEGER NOT NULL," +

@@ -28,7 +28,7 @@ public class CustomThemeSharedPreferencesUtils {
     public static final String POST_ICON_AND_INFO_COLOR = "postIconAndInfoColor";
     public static final String COMMENT_ICON_AND_INFO_COLOR = "commentIconAndInfoColor";
     public static final String TOOLBAR_PRIMARY_TEXT_AND_ICON_COLOR = "toolbarPrimaryTextAndIconColor";
-    public static final String TOOLBAR_AND_TAB_BACKGROUND_COLOR = "toolbarAndTabBackgroundColor";
+    public static final String TOOLBAR_SECONDARY_TEXT_COLOR = "toolbarSecondaryTextColor";
     public static final String CIRCULAR_PROGRESS_BAR_BACKGROUND = "circularProgressBarBackground";
     public static final String TAB_LAYOUT_WITH_EXPANDED_COLLAPSING_TOOLBAR_TAB_BACKGROUND = "tabLayoutWithExpandedCollapsingToolbarTabBackground";
     public static final String TAB_LAYOUT_WITH_EXPANDED_COLLAPSING_TOOLBAR_TEXT_COLOR = "tabLayoutWithExpandedCollapsingToolbarTextColor";
@@ -47,7 +47,7 @@ public class CustomThemeSharedPreferencesUtils {
     public static final String NSFW_TEXT_COLOR = "nsfwTextColor";
     public static final String FLAIR_BACKGROUND_COLOR = "flairBackgroundColor";
     public static final String FLAIR_TEXT_COLOR = "flairTextColor";
-    public static final String ARCHIVED_TINT = "archivedTint";
+    public static final String ARCHIVED_ICON_TINT = "archivedIconTint";
     public static final String LOCKED_ICON_TINT = "lockedIconTint";
     public static final String CROSSPOST_ICON_TINT = "crosspostIconTint";
     public static final String STICKIED_POST_ICON_TINT = "stickiedPost";
@@ -62,7 +62,7 @@ public class CustomThemeSharedPreferencesUtils {
     public static final String UNREAD_MESSAGE_BACKGROUND_COLOR = "unreadMessageBackgroundColor";
     public static final String DIVIDER_COLOR = "dividerColor";
     public static final String NO_PREVIEW_LINK_BACKGROUND_COLOR = "noPreviewLinkBackgroundColor";
-    public static final String VOTE_AND_REPLY_UNAVAILABLE_VOTE_BUTTON_COLOR = "voteAndReplyUnavailableVoteButtonColor";
+    public static final String VOTE_AND_REPLY_UNAVAILABLE_BUTTON_COLOR = "voteAndReplyUnavailableButtonColor";
     public static final String COMMENT_VERTICAL_BAR_COLOR_1 = "commentVerticalBarColor1";
     public static final String COMMENT_VERTICAL_BAR_COLOR_2 = "commentVerticalBarColor2";
     public static final String COMMENT_VERTICAL_BAR_COLOR_3 = "commentVerticalBarColor3";

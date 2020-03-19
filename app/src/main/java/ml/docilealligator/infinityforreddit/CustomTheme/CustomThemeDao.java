@@ -16,6 +16,15 @@ public interface CustomThemeDao {
     @Query("SELECT * FROM custom_themes")
     LiveData<List<CustomTheme>> getAllCustomThemes();
 
+    @Query("SELECT * FROM custom_themes WHERE is_light_theme = 1 LIMIT 1")
+    LiveData<CustomTheme> getLightCustomTheme();
+
+    @Query("SELECT * FROM custom_themes WHERE is_dark_theme = 1 LIMIT 1")
+    LiveData<CustomTheme> getDarkCustomTheme();
+
+    @Query("SELECT * FROM custom_themes WHERE is_amoled_theme = 1 LIMIT 1")
+    LiveData<CustomTheme> getAmoledCustomTheme();
+
     @Query("SELECT * FROM custom_themes WHERE name = :name AND username = :username COLLATE NOCASE LIMIT 1")
     CustomTheme getCustomTheme(String name, String username);
 

@@ -1,15 +1,17 @@
 package ml.docilealligator.infinityforreddit.Settings;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
@@ -17,6 +19,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
 
+import ml.docilealligator.infinityforreddit.Activity.CustomizeThemeActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -34,7 +37,7 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
  */
 public class ThemePreferenceFragment extends PreferenceFragmentCompat {
 
-    private Activity activity;
+    private AppCompatActivity activity;
     @Inject
     CustomThemeWrapper customThemeWrapper;
 
@@ -46,6 +49,9 @@ public class ThemePreferenceFragment extends PreferenceFragmentCompat {
 
         ListPreference themePreference = findPreference(SharedPreferencesUtils.THEME_KEY);
         SwitchPreference amoledDarkSwitch = findPreference(SharedPreferencesUtils.AMOLED_DARK_KEY);
+        Preference customizeLightThemePreference = findPreference(SharedPreferencesUtils.CUSTOMIZE_LIGHT_THEME);
+        Preference customizeDarkThemePreference = findPreference(SharedPreferencesUtils.CUSTOMIZE_DARK_THEME);
+        Preference customizeAmoledThemePreference = findPreference(SharedPreferencesUtils.CUSTOMIZE_AMOLED_THEME);
 
         boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
         if (themePreference != null && amoledDarkSwitch != null) {
@@ -100,11 +106,38 @@ public class ThemePreferenceFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
+
+        if (customizeLightThemePreference != null) {
+            customizeLightThemePreference.setOnPreferenceClickListener(preference -> {
+                Intent intent = new Intent(activity, CustomizeThemeActivity.class);
+                intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_TYPE, CustomizeThemeActivity.EXTRA_LIGHT_THEME);
+                startActivity(intent);
+                return false;
+            });
+        }
+
+        if (customizeDarkThemePreference != null) {
+            customizeDarkThemePreference.setOnPreferenceClickListener(preference -> {
+                Intent intent = new Intent(activity, CustomizeThemeActivity.class);
+                intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_TYPE, CustomizeThemeActivity.EXTRA_DARK_THEME);
+                startActivity(intent);
+                return false;
+            });
+        }
+
+        if (customizeAmoledThemePreference != null) {
+            customizeAmoledThemePreference.setOnPreferenceClickListener(preference -> {
+                Intent intent = new Intent(activity, CustomizeThemeActivity.class);
+                intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_TYPE, CustomizeThemeActivity.EXTRA_AMOLED_THEME);
+                startActivity(intent);
+                return false;
+            });
+        }
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (Activity) context;
+        activity = (AppCompatActivity) context;
     }
 }

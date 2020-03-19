@@ -230,7 +230,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void applyAppBarLayoutAndToolbarTheme(AppBarLayout appBarLayout, Toolbar toolbar) {
-        appBarLayout.setBackgroundColor(customThemeWrapper.getToolbarAndTabBackgroundColor());
+        appBarLayout.setBackgroundColor(customThemeWrapper.getColorPrimary());
         toolbar.setTitleTextColor(customThemeWrapper.getToolbarPrimaryTextAndIconColor());
         if (toolbar.getNavigationIcon() != null) {
             toolbar.getNavigationIcon().setColorFilter(customThemeWrapper.getToolbarPrimaryTextAndIconColor(), android.graphics.PorterDuff.Mode.SRC_IN);
@@ -259,7 +259,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void applyTabLayoutTheme(TabLayout tabLayout) {
-        int toolbarAndTabBackgroundColor = customThemeWrapper.getToolbarAndTabBackgroundColor();
+        int toolbarAndTabBackgroundColor = customThemeWrapper.getColorPrimary();
         tabLayout.setBackgroundColor(toolbarAndTabBackgroundColor);
         tabLayout.setSelectedTabIndicatorColor(customThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabIndicator());
         tabLayout.setTabTextColors(customThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTextColor(),

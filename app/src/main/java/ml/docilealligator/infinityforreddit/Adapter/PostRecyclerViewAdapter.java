@@ -180,13 +180,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mFlairTextColor = customThemeWrapper.getFlairTextColor();
             mNSFWBackgroundColor = customThemeWrapper.getNsfwBackgroundColor();
             mNSFWTextColor = customThemeWrapper.getNsfwTextColor();
-            mArchivedIconTint = customThemeWrapper.getArchivedTint();
+            mArchivedIconTint = customThemeWrapper.getArchivedIconTint();
             mLockedIconTint = customThemeWrapper.getLockedIconTint();
             mCrosspostIconTint = customThemeWrapper.getCrosspostIconTint();
             mNoPreviewLinkBackgroundColor = customThemeWrapper.getNoPreviewLinkBackgroundColor();
             mUpvotedColor = customThemeWrapper.getUpvoted();
             mDownvotedColor = customThemeWrapper.getDownvoted();
-            mVoteAndReplyUnavailableVoteButtonColor = customThemeWrapper.getVoteAndReplyUnavailableVoteButtonColor();
+            mVoteAndReplyUnavailableVoteButtonColor = customThemeWrapper.getVoteAndReplyUnavailableButtonColor();
             mButtonTextColor = customThemeWrapper.getButtonTextColor();
             mPostIconAndInfoColor = customThemeWrapper.getPostIconAndInfoColor();
 

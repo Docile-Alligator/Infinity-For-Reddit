@@ -138,9 +138,9 @@ public class CustomThemeWrapper {
                 getDefaultColor("#FFFFFF", "#FFFFFF", "#FFFFFF"));
     }
 
-    public int getToolbarAndTabBackgroundColor() {
-        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.TOOLBAR_AND_TAB_BACKGROUND_COLOR,
-                getDefaultColor("#1565C0", "#282828", "#000000"));
+    public int getToolbarSecondaryTextColor() {
+        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.TOOLBAR_SECONDARY_TEXT_COLOR,
+                getDefaultColor("#FFFFFF", "#FFFFFF", "#FFFFFF"));
     }
 
     public int getCircularProgressBarBackground() {
@@ -176,11 +176,6 @@ public class CustomThemeWrapper {
     public int getTabLayoutWithCollapsedCollapsingToolbarTabIndicator() {
         return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.TAB_LAYOUT_WITH_COLLAPSED_COLLAPSING_TOOLBAR_TAB_INDICATOR,
                 getDefaultColor("#FFFFFF", "#FFFFFF", "#FFFFFF"));
-    }
-
-    public int getNavBarColor() {
-        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.NAV_BAR_COLOR,
-                getDefaultColor("#FFFFFF", "#121212", "#000000"));
     }
 
     public int getUpvoted() {
@@ -233,8 +228,8 @@ public class CustomThemeWrapper {
                 getDefaultColor("#FFFFFF", "#FFFFFF", "#FFFFFF"));
     }
 
-    public int getArchivedTint() {
-        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.ARCHIVED_TINT,
+    public int getArchivedIconTint() {
+        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.ARCHIVED_ICON_TINT,
                 getDefaultColor("#B4009F", "#B4009F", "#B4009F"));
     }
 
@@ -308,8 +303,8 @@ public class CustomThemeWrapper {
                 getDefaultColor("#E0E0E0", "#424242", "#424242"));
     }
 
-    public int getVoteAndReplyUnavailableVoteButtonColor() {
-        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.VOTE_AND_REPLY_UNAVAILABLE_VOTE_BUTTON_COLOR,
+    public int getVoteAndReplyUnavailableButtonColor() {
+        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.VOTE_AND_REPLY_UNAVAILABLE_BUTTON_COLOR,
                 getDefaultColor("#F0F0F0", "#3C3C3C", "#3C3C3C"));
     }
 
@@ -356,6 +351,11 @@ public class CustomThemeWrapper {
     public int getChipTextColor() {
         return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.CHIP_TEXT_COLOR,
                 getDefaultColor("#FFFFFF", "#FFFFFF", "#FFFFFF"));
+    }
+
+    public int getNavBarColor() {
+        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.NAV_BAR_COLOR,
+                getDefaultColor("#FFFFFF", "#121212", "#000000"));
     }
 
     public boolean isLightStatusBar() {

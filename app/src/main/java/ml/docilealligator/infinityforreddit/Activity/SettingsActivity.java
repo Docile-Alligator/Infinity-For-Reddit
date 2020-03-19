@@ -7,7 +7,6 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -31,8 +30,6 @@ public class SettingsActivity extends BaseActivity implements
 
     private static final String TITLE_STATE = "TS";
 
-    @BindView(R.id.coordinator_layout_settings_activity)
-    CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_settings_activity)
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_settings_activity)
@@ -96,7 +93,6 @@ public class SettingsActivity extends BaseActivity implements
 
     @Override
     protected void applyCustomTheme() {
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
     }
 

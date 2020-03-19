@@ -77,4 +77,7 @@ public class SharedPreferencesUtils {
     public static final String LOCK_BOTTOM_APP_BAR = "lock_bottom_app_bar";
     public static final String SHOW_COMMENT_DIVIDER = "show_comment_divider";
     public static final String SHOW_ABSOLUTE_NUMBER_OF_VOTES = "show_absolute_number_of_votes";
+    public static final String CUSTOMIZE_LIGHT_THEME = "customize_light_theme";
+    public static final String CUSTOMIZE_DARK_THEME = "customize_dark_theme";
+    public static final String CUSTOMIZE_AMOLED_THEME = "customize_amoled_theme";
 }

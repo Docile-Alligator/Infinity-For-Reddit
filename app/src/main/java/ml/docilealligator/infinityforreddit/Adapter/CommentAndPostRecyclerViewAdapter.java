@@ -303,7 +303,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mSpoilerTextColor = customThemeWrapper.getSpoilerTextColor();
         mNSFWBackgroundColor = customThemeWrapper.getNsfwBackgroundColor();
         mNSFWTextColor = customThemeWrapper.getNsfwTextColor();
-        mArchivedTintColor = customThemeWrapper.getArchivedTint();
+        mArchivedTintColor = customThemeWrapper.getArchivedIconTint();
         mLockedTintColor = customThemeWrapper.getLockedIconTint();
         mCrosspostTintColor = customThemeWrapper.getCrosspostIconTint();
         mNoPreviewLinkBackgroundColor = customThemeWrapper.getNoPreviewLinkBackgroundColor();
@@ -321,7 +321,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mCommentVerticalBarColor6 = customThemeWrapper.getCommentVerticalBarColor6();
         mCommentVerticalBarColor7 = customThemeWrapper.getCommentVerticalBarColor7();
         mSingleCommentThreadBackgroundColor = customThemeWrapper.getSingleCommentThreadBackgroundColor();
-        mVoteAndReplyUnavailableVoteButtonColor = customThemeWrapper.getVoteAndReplyUnavailableVoteButtonColor();
+        mVoteAndReplyUnavailableVoteButtonColor = customThemeWrapper.getVoteAndReplyUnavailableButtonColor();
         mButtonTextColor = customThemeWrapper.getButtonTextColor();
         mPostIconAndInfoColor = customThemeWrapper.getPostIconAndInfoColor();
         mCommentIconAndInfoColor = customThemeWrapper.getCommentIconAndInfoColor();

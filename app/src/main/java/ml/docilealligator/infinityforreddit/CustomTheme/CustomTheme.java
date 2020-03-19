@@ -47,12 +47,14 @@ public class CustomTheme {
     public int bottomAppBarBackgroundColor;
     @ColumnInfo(name = "primary_icon_color")
     public int primaryIconColor;
+    @ColumnInfo(name = "post_icon_and_info_color")
+    public int postIconAndInfoColor;
     @ColumnInfo(name = "comment_icon_and_info_color")
     public int commentIconAndInfoColor;
     @ColumnInfo(name = "toolbar_primary_text_and_icon_color")
     public int toolbarPrimaryTextAndIconColor;
-    @ColumnInfo(name = "toolbar_and_tab_background_color")
-    public int toolbarAndTabBackgroundColor;
+    @ColumnInfo(name = "toolbar_secondary_text_color")
+    public int toolbarSecondaryTextColor;
     @ColumnInfo(name = "circular_progress_bar_background")
     public int circularProgressBarBackground;
     @ColumnInfo(name = "tab_layout_with_expanded_collapsing_toolbar_tab_background")
@@ -119,8 +121,8 @@ public class CustomTheme {
     public int dividerColor;
     @ColumnInfo(name = "no_preview_link_background_color")
     public int noPreviewLinkBackgroundColor;
-    @ColumnInfo(name = "vote_and_reply_unavailable_vote_button_color")
-    public int voteAndReplyUnavailableVoteButtonColor;
+    @ColumnInfo(name = "vote_and_reply_unavailable_button_color")
+    public int voteAndReplyUnavailableButtonColor;
     @ColumnInfo(name = "comment_vertical_bar_color_1")
     public int commentVerticalBarColor1;
     @ColumnInfo(name = "comment_vertical_bar_color_2")
@@ -140,11 +142,11 @@ public class CustomTheme {
     @ColumnInfo(name = "chip_text_color")
     public int chipTextColor;
     @ColumnInfo(name = "is_light_status_bar")
-    public int isLightStatusBar;
+    public boolean isLightStatusBar;
     @ColumnInfo(name = "is_light_nav_bar")
-    public int isLightNavBar;
+    public boolean isLightNavBar;
     @ColumnInfo(name = "is_change_status_bar_icon_color_after_toolbar_collapsed_in_immersive_interface")
-    public int isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface;
+    public boolean isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface;
 
     public CustomTheme(@NonNull String name) {
         this.name = name;
