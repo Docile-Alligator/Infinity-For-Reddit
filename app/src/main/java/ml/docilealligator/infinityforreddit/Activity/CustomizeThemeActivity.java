@@ -6,8 +6,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -20,6 +20,7 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Adapter.CustomizeThemeRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.AsyncTask.GetCustomThemeAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeSettingsItem;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeViewModel;
@@ -34,6 +35,7 @@ public class CustomizeThemeActivity extends BaseActivity {
     public static final int EXTRA_LIGHT_THEME = 0;
     public static final int EXTRA_DARK_THEME = 1;
     public static final int EXTRA_AMOLED_THEME = 2;
+    public static final String EXTRA_THEME_NAME = "ETN";
 
     @BindView(R.id.appbar_layout_customize_theme_activity)
     AppBarLayout appBarLayout;
@@ -51,7 +53,6 @@ public class CustomizeThemeActivity extends BaseActivity {
 
     public CustomThemeViewModel customThemeViewModel;
     private CustomizeThemeRecyclerViewAdapter adapter;
-    private int themeType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,38 +65,59 @@ public class CustomizeThemeActivity extends BaseActivity {
 
         applyCustomTheme();
 
-        themeType = getIntent().getIntExtra(EXTRA_THEME_TYPE, EXTRA_LIGHT_THEME);
-
+        setTitle(getIntent().getStringExtra(EXTRA_THEME_NAME));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         adapter = new CustomizeThemeRecyclerViewAdapter();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
 
         customThemeViewModel = new ViewModelProvider(this, new CustomThemeViewModel.Factory(redditDataRoomDatabase))
                 .get(CustomThemeViewModel.class);
 
-        LiveData<CustomTheme> customThemeLiveData;
-        switch (themeType) {
-            case EXTRA_DARK_THEME:
-                toolbar.setTitle(getString(R.string.customize_dark_theme_fragment_title));
-                customThemeLiveData = customThemeViewModel.getDarkCustomTheme();
-                break;
-            case EXTRA_AMOLED_THEME:
-                toolbar.setTitle(getString(R.string.customize_amoled_theme_fragment_title));
-                customThemeLiveData = customThemeViewModel.getAmoledCustomTheme();
-                break;
-            default:
-                toolbar.setTitle(getString(R.string.customize_light_theme_fragment_title));
-                customThemeLiveData = customThemeViewModel.getLightCustomTheme();
-                break;
-        }
-
         int androidVersion = Build.VERSION.SDK_INT;
-        customThemeLiveData.observe(this, new Observer<CustomTheme>() {
-            @Override
-            public void onChanged(CustomTheme customTheme) {
-                ArrayList<CustomThemeSettingsItem> customThemeSettingsItems =
-                        CustomThemeSettingsItem.convertCustomTheme(CustomizeThemeActivity.this, customTheme);
+        if (getIntent().hasExtra(EXTRA_THEME_TYPE)) {
+            LiveData<CustomTheme> customThemeLiveData;
+            int themeType = getIntent().getIntExtra(EXTRA_THEME_TYPE, EXTRA_LIGHT_THEME);
+            switch (themeType) {
+                case EXTRA_DARK_THEME:
+                    setTitle(getString(R.string.customize_dark_theme_fragment_title));
+                    customThemeLiveData = customThemeViewModel.getDarkCustomTheme();
+                    break;
+                case EXTRA_AMOLED_THEME:
+                    setTitle(getString(R.string.customize_amoled_theme_fragment_title));
+                    customThemeLiveData = customThemeViewModel.getAmoledCustomTheme();
+                    break;
+                default:
+                    setTitle(getString(R.string.customize_light_theme_fragment_title));
+                    customThemeLiveData = customThemeViewModel.getLightCustomTheme();
+                    break;
+            }
+
+            customThemeLiveData.observe(this, customTheme -> {
+                ArrayList<CustomThemeSettingsItem> customThemeSettingsItems;
+                if (customTheme == null) {
+                    switch (themeType) {
+                        case EXTRA_DARK_THEME:
+                            customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(
+                                    CustomizeThemeActivity.this,
+                                    CustomThemeWrapper.getIndigoDark(CustomizeThemeActivity.this));
+                            break;
+                        case EXTRA_AMOLED_THEME:
+                            customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(
+                                    CustomizeThemeActivity.this,
+                                    CustomThemeWrapper.getIndigoAmoled(CustomizeThemeActivity.this));
+                            break;
+                        default:
+                            customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(
+                                    CustomizeThemeActivity.this,
+                                    CustomThemeWrapper.getIndigo(CustomizeThemeActivity.this));
+                    }
+                } else {
+                    customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(CustomizeThemeActivity.this, customTheme);
+                }
+
                 if (androidVersion < Build.VERSION_CODES.O) {
                     customThemeSettingsItems.get(customThemeSettingsItems.size() - 2).itemDetails = getString(R.string.theme_item_available_on_android_8);
                 }
@@ -104,8 +126,12 @@ public class CustomizeThemeActivity extends BaseActivity {
                 }
 
                 adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
-            }
-        });
+            });
+        } else {
+            new GetCustomThemeAsyncTask(redditDataRoomDatabase, getIntent().getStringExtra(EXTRA_THEME_NAME),
+                    customTheme -> adapter.setCustomThemeSettingsItem(
+                            CustomThemeSettingsItem.convertCustomThemeToSettingsItem(CustomizeThemeActivity.this, customTheme))).execute();
+        }
     }
 
     @Override

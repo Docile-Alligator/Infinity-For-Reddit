@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?attr/selectableItemBackground">
+
+    <View
+        android:id="@+id/color_image_view_item_custom_theme_color_item"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/circular_background"
+        android:layout_gravity="center_vertical" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="32dp">
+
+        <TextView
+            android:id="@+id/theme_item_name_text_view_item_custom_theme_color_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_16" />
+
+        <TextView
+            android:id="@+id/theme_item_info_text_view_item_custom_theme_color_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="?attr/secondaryTextColor"
+            android:textSize="?attr/font_default" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,8 +1,12 @@
 package ml.docilealligator.infinityforreddit.CustomTheme;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 
+import java.util.ArrayList;
+
+import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Utils.CustomThemeSharedPreferencesUtils;
 
 import static ml.docilealligator.infinityforreddit.Utils.CustomThemeSharedPreferencesUtils.AMOLED;
@@ -345,7 +349,7 @@ public class CustomThemeWrapper {
 
     public int getFABIconColor() {
         return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.FAB_ICON_COLOR,
-                getDefaultColor("#1565C0", "#1565C0", "#1565C0"));
+                getDefaultColor("#FFFFFF", "#FFFFFF", "#FFFFFF"));
     }
 
     public int getChipTextColor() {
@@ -363,11 +367,243 @@ public class CustomThemeWrapper {
     }
 
     public boolean isLightNavBar() {
-        return getThemeSharedPreferences().getBoolean(CustomThemeSharedPreferencesUtils.LIGHT_NAV_BAR, true);
+        return getThemeSharedPreferences().getBoolean(CustomThemeSharedPreferencesUtils.LIGHT_NAV_BAR,
+                themeType == CustomThemeSharedPreferencesUtils.LIGHT);
     }
 
     public boolean isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface() {
         return getThemeSharedPreferences().getBoolean(
-                CustomThemeSharedPreferencesUtils.CHANGE_STATUS_BAR_ICON_COLOR_AFTER_TOOLBAR_COLLAPSED_IN_IMMERSIVE_INTERFACE, true);
+                CustomThemeSharedPreferencesUtils.CHANGE_STATUS_BAR_ICON_COLOR_AFTER_TOOLBAR_COLLAPSED_IN_IMMERSIVE_INTERFACE,
+                themeType == CustomThemeSharedPreferencesUtils.LIGHT);
+    }
+
+    public static ArrayList<CustomTheme> getPredifinedThemes(Context context) {
+        ArrayList<CustomTheme> customThemes = new ArrayList<>();
+        customThemes.add(getIndigo(context));
+        customThemes.add(getIndigoDark(context));
+        customThemes.add(getIndigoAmoled(context));
+        return customThemes;
+    }
+
+    public static CustomTheme getIndigo(Context context) {
+        CustomTheme customTheme = new CustomTheme(context.getString(R.string.theme_name_indigo));
+        customTheme.isLightTheme = true;
+        customTheme.isDarkTheme = false;
+        customTheme.isAmoledTheme = false;
+        customTheme.colorPrimary = Color.parseColor("#1565C0");
+        customTheme.colorPrimaryDark = Color.parseColor("#0D47A1");
+        customTheme.colorAccent = Color.parseColor("#FF4081");
+        customTheme.colorPrimaryLightTheme = Color.parseColor("#1565C0");
+        customTheme.primaryTextColor = Color.parseColor("#000000");
+        customTheme.secondaryTextColor = Color.parseColor("#8A000000");
+        customTheme.postTitleColor = Color.parseColor("#000000");
+        customTheme.postContentColor = Color.parseColor("#8A000000");
+        customTheme.commentColor = Color.parseColor("#000000");
+        customTheme.buttonTextColor = Color.parseColor("#FFFFFF");
+        customTheme.backgroundColor = Color.parseColor("#FFFFFF");
+        customTheme.cardViewBackgroundColor = Color.parseColor("#FFFFFF");
+        customTheme.commentBackgroundColor = Color.parseColor("#FFFFFF");
+        customTheme.bottomAppBarBackgroundColor = Color.parseColor("#FFFFFF");
+        customTheme.primaryIconColor = Color.parseColor("#000000");
+        customTheme.postIconAndInfoColor = Color.parseColor("#8A000000");
+        customTheme.commentIconAndInfoColor = Color.parseColor("#8A000000");
+        customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
+        customTheme.toolbarSecondaryTextColor = Color.parseColor("#FFFFFF");
+        customTheme.circularProgressBarBackground = Color.parseColor("#FFFFFF");
+        customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground = Color.parseColor("#FFFFFF");
+        customTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = Color.parseColor("#1565C0");
+        customTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = Color.parseColor("#1565C0");
+        customTheme.tabLayoutWithCollapsedCollapsingToolbarTabBackground = Color.parseColor("#1565C0");
+        customTheme.tabLayoutWithCollapsedCollapsingToolbarTextColor = Color.parseColor("#FFFFFF");
+        customTheme.tabLayoutWithCollapsedCollapsingToolbarTabIndicator = Color.parseColor("#FFFFFF");
+        customTheme.upvoted = Color.parseColor("#E91E63");
+        customTheme.downvoted = Color.parseColor("#007DDE");
+        customTheme.postTypeBackgroundColor = Color.parseColor("#0D47A1");
+        customTheme.postTypeTextColor = Color.parseColor("#FFFFFF");
+        customTheme.spoilerBackgroundColor = Color.parseColor("#EE02EB");
+        customTheme.spoilerTextColor = Color.parseColor("#FFFFFF");
+        customTheme.nsfwBackgroundColor = Color.parseColor("#FF4081");
+        customTheme.nsfwTextColor = Color.parseColor("#FFFFFF");
+        customTheme.flairBackgroundColor = Color.parseColor("#00AA8C");
+        customTheme.flairTextColor = Color.parseColor("#FFFFFF");
+        customTheme.archivedTint = Color.parseColor("#B4009F");
+        customTheme.lockedIconTint = Color.parseColor("#EE7302");
+        customTheme.crosspostIconTint = Color.parseColor("#FF4081");
+        customTheme.stickiedPostIconTint = Color.parseColor("#0D47A1");
+        customTheme.subscribed = Color.parseColor("#FF4081");
+        customTheme.unsubscribed = Color.parseColor("#0D47A1");
+        customTheme.username = Color.parseColor("#0D47A1");
+        customTheme.subreddit = Color.parseColor("#E91E63");
+        customTheme.authorFlairTextColor = Color.parseColor("#EE02C4");
+        customTheme.submitter = Color.parseColor("#EE8A02");
+        customTheme.moderator = Color.parseColor("#00BA81");
+        customTheme.singleCommentThreadBackgroundColor = Color.parseColor("#B3E5F9");
+        customTheme.unreadMessageBackgroundColor = Color.parseColor("#B3E5F9");
+        customTheme.dividerColor = Color.parseColor("#E0E0E0");
+        customTheme.noPreviewLinkBackgroundColor = Color.parseColor("#E0E0E0");
+        customTheme.voteAndReplyUnavailableButtonColor = Color.parseColor("#F0F0F0");
+        customTheme.commentVerticalBarColor1 = Color.parseColor("#1565C0");
+        customTheme.commentVerticalBarColor2 = Color.parseColor("#EE02BE");
+        customTheme.commentVerticalBarColor3 = Color.parseColor("#02DFEE");
+        customTheme.commentVerticalBarColor4 = Color.parseColor("#EED502");
+        customTheme.commentVerticalBarColor5 = Color.parseColor("#EE0220");
+        customTheme.commentVerticalBarColor6 = Color.parseColor("#02EE6E");
+        customTheme.commentVerticalBarColor7 = Color.parseColor("#EE4602");
+        customTheme.fabIconColor = Color.parseColor("#FFFFFF");
+        customTheme.chipTextColor = Color.parseColor("#FFFFFF");
+        customTheme.navBarColor = Color.parseColor("#FFFFFF");
+        customTheme.isLightStatusBar = false;
+        customTheme.isLightNavBar = true;
+        customTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface = true;
+
+        return customTheme;
+    }
+
+    public static CustomTheme getIndigoDark(Context context) {
+        CustomTheme customTheme = new CustomTheme(context.getString(R.string.theme_name_indigo_dark));
+        customTheme.isLightTheme = false;
+        customTheme.isDarkTheme = true;
+        customTheme.isAmoledTheme = false;
+        customTheme.colorPrimary = Color.parseColor("#242424");
+        customTheme.colorPrimaryDark = Color.parseColor("#121212");
+        customTheme.colorAccent = Color.parseColor("#FF4081");
+        customTheme.colorPrimaryLightTheme = Color.parseColor("#1565C0");
+        customTheme.primaryTextColor = Color.parseColor("#FFFFFF");
+        customTheme.secondaryTextColor = Color.parseColor("#B3FFFFFF");
+        customTheme.postTitleColor = Color.parseColor("#FFFFFF");
+        customTheme.postContentColor = Color.parseColor("#B3FFFFFF");
+        customTheme.commentColor = Color.parseColor("#FFFFFF");
+        customTheme.buttonTextColor = Color.parseColor("#FFFFFF");
+        customTheme.backgroundColor = Color.parseColor("#121212");
+        customTheme.cardViewBackgroundColor = Color.parseColor("#242424");
+        customTheme.commentBackgroundColor = Color.parseColor("#242424");
+        customTheme.bottomAppBarBackgroundColor = Color.parseColor("#121212");
+        customTheme.primaryIconColor = Color.parseColor("#FFFFFF");
+        customTheme.postIconAndInfoColor = Color.parseColor("#B3FFFFFF");
+        customTheme.commentIconAndInfoColor = Color.parseColor("#B3FFFFFF");
+        customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
+        customTheme.toolbarSecondaryTextColor = Color.parseColor("#FFFFFF");
+        customTheme.circularProgressBarBackground = Color.parseColor("#242424");
+        customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground = Color.parseColor("#242424");
+        customTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = Color.parseColor("#FFFFFF");
+        customTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = Color.parseColor("#FFFFFF");
+        customTheme.tabLayoutWithCollapsedCollapsingToolbarTabBackground = Color.parseColor("#242424");
+        customTheme.tabLayoutWithCollapsedCollapsingToolbarTextColor = Color.parseColor("#FFFFFF");
+        customTheme.tabLayoutWithCollapsedCollapsingToolbarTabIndicator = Color.parseColor("#FFFFFF");
+        customTheme.upvoted = Color.parseColor("#E91E63");
+        customTheme.downvoted = Color.parseColor("#007DDE");
+        customTheme.postTypeBackgroundColor = Color.parseColor("#1565C0");
+        customTheme.postTypeTextColor = Color.parseColor("#FFFFFF");
+        customTheme.spoilerBackgroundColor = Color.parseColor("#EE02EB");
+        customTheme.spoilerTextColor = Color.parseColor("#FFFFFF");
+        customTheme.nsfwBackgroundColor = Color.parseColor("#FF4081");
+        customTheme.nsfwTextColor = Color.parseColor("#FFFFFF");
+        customTheme.flairBackgroundColor = Color.parseColor("#00AA8C");
+        customTheme.flairTextColor = Color.parseColor("#FFFFFF");
+        customTheme.archivedTint = Color.parseColor("#B4009F");
+        customTheme.lockedIconTint = Color.parseColor("#EE7302");
+        customTheme.crosspostIconTint = Color.parseColor("#FF4081");
+        customTheme.stickiedPostIconTint = Color.parseColor("#1565C0");
+        customTheme.subscribed = Color.parseColor("#FF4081");
+        customTheme.unsubscribed = Color.parseColor("#1565C0");
+        customTheme.username = Color.parseColor("#1E88E5");
+        customTheme.subreddit = Color.parseColor("#E91E63");
+        customTheme.authorFlairTextColor = Color.parseColor("#EE02C4");
+        customTheme.submitter = Color.parseColor("#EE8A02");
+        customTheme.moderator = Color.parseColor("#00BA81");
+        customTheme.singleCommentThreadBackgroundColor = Color.parseColor("#123E77");
+        customTheme.unreadMessageBackgroundColor = Color.parseColor("#123E77");
+        customTheme.dividerColor = Color.parseColor("#69666C");
+        customTheme.noPreviewLinkBackgroundColor = Color.parseColor("#424242");
+        customTheme.voteAndReplyUnavailableButtonColor = Color.parseColor("#3C3C3C");
+        customTheme.commentVerticalBarColor1 = Color.parseColor("#1565C0");
+        customTheme.commentVerticalBarColor2 = Color.parseColor("#C300B3");
+        customTheme.commentVerticalBarColor3 = Color.parseColor("#00B8DA");
+        customTheme.commentVerticalBarColor4 = Color.parseColor("#EDCA00");
+        customTheme.commentVerticalBarColor5 = Color.parseColor("#EE0219");
+        customTheme.commentVerticalBarColor6 = Color.parseColor("#00B925");
+        customTheme.commentVerticalBarColor7 = Color.parseColor("#EE4602");
+        customTheme.fabIconColor = Color.parseColor("#FFFFFF");
+        customTheme.chipTextColor = Color.parseColor("#FFFFFF");
+        customTheme.navBarColor = Color.parseColor("#121212");
+        customTheme.isLightStatusBar = false;
+        customTheme.isLightNavBar = false;
+        customTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface = false;
+
+        return customTheme;
+    }
+
+    public static CustomTheme getIndigoAmoled(Context context) {
+        CustomTheme customTheme = new CustomTheme(context.getString(R.string.theme_name_indigo_dark));
+        customTheme.isLightTheme = false;
+        customTheme.isDarkTheme = true;
+        customTheme.isAmoledTheme = false;
+        customTheme.colorPrimary = Color.parseColor("#000000");
+        customTheme.colorPrimaryDark = Color.parseColor("#000000");
+        customTheme.colorAccent = Color.parseColor("#FF4081");
+        customTheme.colorPrimaryLightTheme = Color.parseColor("#1565C0");
+        customTheme.primaryTextColor = Color.parseColor("#FFFFFF");
+        customTheme.secondaryTextColor = Color.parseColor("#B3FFFFFF");
+        customTheme.postTitleColor = Color.parseColor("#FFFFFF");
+        customTheme.postContentColor = Color.parseColor("#B3FFFFFF");
+        customTheme.commentColor = Color.parseColor("#FFFFFF");
+        customTheme.buttonTextColor = Color.parseColor("#FFFFFF");
+        customTheme.backgroundColor = Color.parseColor("#000000");
+        customTheme.cardViewBackgroundColor = Color.parseColor("#000000");
+        customTheme.commentBackgroundColor = Color.parseColor("#000000");
+        customTheme.bottomAppBarBackgroundColor = Color.parseColor("#000000");
+        customTheme.primaryIconColor = Color.parseColor("#FFFFFF");
+        customTheme.postIconAndInfoColor = Color.parseColor("#B3FFFFFF");
+        customTheme.commentIconAndInfoColor = Color.parseColor("#B3FFFFFF");
+        customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
+        customTheme.toolbarSecondaryTextColor = Color.parseColor("#FFFFFF");
+        customTheme.circularProgressBarBackground = Color.parseColor("#000000");
+        customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground = Color.parseColor("#000000");
+        customTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = Color.parseColor("#FFFFFF");
+        customTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = Color.parseColor("#FFFFFF");
+        customTheme.tabLayoutWithCollapsedCollapsingToolbarTabBackground = Color.parseColor("#000000");
+        customTheme.tabLayoutWithCollapsedCollapsingToolbarTextColor = Color.parseColor("#FFFFFF");
+        customTheme.tabLayoutWithCollapsedCollapsingToolbarTabIndicator = Color.parseColor("#FFFFFF");
+        customTheme.upvoted = Color.parseColor("#E91E63");
+        customTheme.downvoted = Color.parseColor("#007DDE");
+        customTheme.postTypeBackgroundColor = Color.parseColor("#1565C0");
+        customTheme.postTypeTextColor = Color.parseColor("#FFFFFF");
+        customTheme.spoilerBackgroundColor = Color.parseColor("#EE02EB");
+        customTheme.spoilerTextColor = Color.parseColor("#FFFFFF");
+        customTheme.nsfwBackgroundColor = Color.parseColor("#FF4081");
+        customTheme.nsfwTextColor = Color.parseColor("#FFFFFF");
+        customTheme.flairBackgroundColor = Color.parseColor("#00AA8C");
+        customTheme.flairTextColor = Color.parseColor("#FFFFFF");
+        customTheme.archivedTint = Color.parseColor("#B4009F");
+        customTheme.lockedIconTint = Color.parseColor("#EE7302");
+        customTheme.crosspostIconTint = Color.parseColor("#FF4081");
+        customTheme.stickiedPostIconTint = Color.parseColor("#1565C0");
+        customTheme.subscribed = Color.parseColor("#FF4081");
+        customTheme.unsubscribed = Color.parseColor("#1565C0");
+        customTheme.username = Color.parseColor("#1E88E5");
+        customTheme.subreddit = Color.parseColor("#E91E63");
+        customTheme.authorFlairTextColor = Color.parseColor("#EE02C4");
+        customTheme.submitter = Color.parseColor("#EE8A02");
+        customTheme.moderator = Color.parseColor("#00BA81");
+        customTheme.singleCommentThreadBackgroundColor = Color.parseColor("#123E77");
+        customTheme.unreadMessageBackgroundColor = Color.parseColor("#123E77");
+        customTheme.dividerColor = Color.parseColor("#69666C");
+        customTheme.noPreviewLinkBackgroundColor = Color.parseColor("#424242");
+        customTheme.voteAndReplyUnavailableButtonColor = Color.parseColor("#3C3C3C");
+        customTheme.commentVerticalBarColor1 = Color.parseColor("#1565C0");
+        customTheme.commentVerticalBarColor2 = Color.parseColor("#C300B3");
+        customTheme.commentVerticalBarColor3 = Color.parseColor("#00B8DA");
+        customTheme.commentVerticalBarColor4 = Color.parseColor("#EDCA00");
+        customTheme.commentVerticalBarColor5 = Color.parseColor("#EE0219");
+        customTheme.commentVerticalBarColor6 = Color.parseColor("#00B925");
+        customTheme.commentVerticalBarColor7 = Color.parseColor("#EE4602");
+        customTheme.fabIconColor = Color.parseColor("#FFFFFF");
+        customTheme.chipTextColor = Color.parseColor("#FFFFFF");
+        customTheme.navBarColor = Color.parseColor("#000000");
+        customTheme.isLightStatusBar = false;
+        customTheme.isLightNavBar = false;
+        customTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface = false;
+
+        return customTheme;
     }
 }

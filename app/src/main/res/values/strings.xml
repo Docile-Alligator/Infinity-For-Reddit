@@ -598,4 +598,8 @@
     <string name="theme_item_available_on_android_8">Only available for Android 8.0 or above.</string>
     <string name="theme_item_available_on_android_6">Only available for Android 6.0 or above.</string>
 
+    <string name="theme_name_indigo">Indigo</string>
+    <string name="theme_name_indigo_dark">Indigo Dark</string>
+    <string name="theme_name_indigo_amoled">Indigo Amoled</string>
+
 </resources>

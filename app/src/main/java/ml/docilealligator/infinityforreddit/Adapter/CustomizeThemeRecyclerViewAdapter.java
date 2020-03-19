@@ -39,10 +39,10 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_SWITCH) {
-            return new ThemeSwitchItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_theme_color_item, parent, false));
+            return new ThemeSwitchItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_custom_theme_switch_item, parent, false));
         }
 
-        return new ThemeColorItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_theme_color_item, parent, false));
+        return new ThemeColorItemViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_custom_theme_color_item, parent, false));
     }
 
     @Override
@@ -78,11 +78,11 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     }
 
     class ThemeColorItemViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.color_image_view_item_theme_color_item)
+        @BindView(R.id.color_image_view_item_custom_theme_color_item)
         View colorImageView;
-        @BindView(R.id.theme_item_name_text_view_item_theme_color_item)
+        @BindView(R.id.theme_item_name_text_view_item_custom_theme_color_item)
         TextView themeItemNameTextView;
-        @BindView(R.id.theme_item_info_text_view_item_theme_color_item)
+        @BindView(R.id.theme_item_info_text_view_item_custom_theme_color_item)
         TextView themeItemInfoTextView;
 
         ThemeColorItemViewHolder(@NonNull View itemView) {
@@ -92,11 +92,11 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     }
 
     class ThemeSwitchItemViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.theme_item_name_text_view_item_theme_switch_item)
+        @BindView(R.id.theme_item_name_text_view_item_custom_theme_switch_item)
         TextView themeItemNameTextView;
-        @BindView(R.id.theme_item_info_text_view_item_theme_switch_item)
+        @BindView(R.id.theme_item_info_text_view_item_custom_theme_switch_item)
         TextView themeItemInfoTextView;
-        @BindView(R.id.theme_item_switch_item_theme_switch_item)
+        @BindView(R.id.theme_item_switch_item_custom_theme_switch_item)
         Switch themeItemSwitch;
 
         ThemeSwitchItemViewHolder(@NonNull View itemView) {

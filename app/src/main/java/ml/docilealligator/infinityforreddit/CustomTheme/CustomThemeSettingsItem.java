@@ -23,7 +23,7 @@ public class CustomThemeSettingsItem {
         this.isEnabled = isEnabled;
     }
 
-    public static ArrayList<CustomThemeSettingsItem> convertCustomTheme(Context context, CustomTheme customTheme) {
+    public static ArrayList<CustomThemeSettingsItem> convertCustomThemeToSettingsItem(Context context, CustomTheme customTheme) {
         ArrayList<CustomThemeSettingsItem> customThemeSettingsItems = new ArrayList<>();
 
         if (customTheme == null) {

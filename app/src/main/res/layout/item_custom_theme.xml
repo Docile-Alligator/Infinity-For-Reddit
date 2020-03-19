@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?attr/selectableItemBackground">
+
+    <View
+        android:id="@+id/color_primary_item_custom_theme"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/circular_background" />
+
+    <TextView
+        android:id="@+id/name_text_view_item_custom_theme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp" />
+
+</LinearLayout>
