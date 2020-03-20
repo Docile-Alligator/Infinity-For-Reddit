@@ -5,6 +5,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.ArrayList;
+
 @Entity(tableName = "custom_themes")
 public class CustomTheme {
     @PrimaryKey
@@ -150,5 +152,81 @@ public class CustomTheme {
 
     public CustomTheme(@NonNull String name) {
         this.name = name;
+    }
+
+    public static CustomTheme convertSettingsItemsToCustomTheme(ArrayList<CustomThemeSettingsItem> customThemeSettingsItems, String themeName) {
+        CustomTheme customTheme = new CustomTheme(themeName);
+
+        if (customThemeSettingsItems.isEmpty()) {
+            return customTheme;
+        }
+
+        customTheme.colorPrimary = customThemeSettingsItems.get(0).colorValue;
+        customTheme.colorPrimaryDark = customThemeSettingsItems.get(1).colorValue;
+        customTheme.colorAccent = customThemeSettingsItems.get(2).colorValue;
+        customTheme.colorPrimaryLightTheme = customThemeSettingsItems.get(3).colorValue;
+        customTheme.primaryTextColor = customThemeSettingsItems.get(4).colorValue;
+        customTheme.secondaryTextColor = customThemeSettingsItems.get(5).colorValue;
+        customTheme.postTitleColor = customThemeSettingsItems.get(6).colorValue;
+        customTheme.postContentColor = customThemeSettingsItems.get(7).colorValue;
+        customTheme.commentColor = customThemeSettingsItems.get(8).colorValue;
+        customTheme.buttonTextColor = customThemeSettingsItems.get(9).colorValue;
+        customTheme.chipTextColor = customThemeSettingsItems.get(10).colorValue;
+        customTheme.backgroundColor = customThemeSettingsItems.get(11).colorValue;
+        customTheme.cardViewBackgroundColor = customThemeSettingsItems.get(12).colorValue;
+        customTheme.commentBackgroundColor = customThemeSettingsItems.get(13).colorValue;
+        customTheme.bottomAppBarBackgroundColor = customThemeSettingsItems.get(14).colorValue;
+        customTheme.primaryIconColor = customThemeSettingsItems.get(15).colorValue;
+        customTheme.postIconAndInfoColor = customThemeSettingsItems.get(16).colorValue;
+        customTheme.commentIconAndInfoColor = customThemeSettingsItems.get(17).colorValue;
+        customTheme.fabIconColor = customThemeSettingsItems.get(18).colorValue;
+        customTheme.toolbarPrimaryTextAndIconColor = customThemeSettingsItems.get(19).colorValue;
+        customTheme.toolbarSecondaryTextColor = customThemeSettingsItems.get(20).colorValue;
+        customTheme.circularProgressBarBackground = customThemeSettingsItems.get(21).colorValue;
+        customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground = customThemeSettingsItems.get(22).colorValue;
+        customTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = customThemeSettingsItems.get(23).colorValue;
+        customTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = customThemeSettingsItems.get(24).colorValue;
+        customTheme.tabLayoutWithCollapsedCollapsingToolbarTabBackground = customThemeSettingsItems.get(25).colorValue;
+        customTheme.tabLayoutWithCollapsedCollapsingToolbarTextColor = customThemeSettingsItems.get(26).colorValue;
+        customTheme.tabLayoutWithCollapsedCollapsingToolbarTabIndicator = customThemeSettingsItems.get(27).colorValue;
+        customTheme.upvoted = customThemeSettingsItems.get(28).colorValue;
+        customTheme.downvoted = customThemeSettingsItems.get(29).colorValue;
+        customTheme.postTypeBackgroundColor = customThemeSettingsItems.get(30).colorValue;
+        customTheme.postTypeTextColor = customThemeSettingsItems.get(31).colorValue;
+        customTheme.spoilerBackgroundColor = customThemeSettingsItems.get(32).colorValue;
+        customTheme.spoilerTextColor = customThemeSettingsItems.get(33).colorValue;
+        customTheme.nsfwBackgroundColor = customThemeSettingsItems.get(34).colorValue;
+        customTheme.nsfwTextColor = customThemeSettingsItems.get(35).colorValue;
+        customTheme.flairBackgroundColor = customThemeSettingsItems.get(36).colorValue;
+        customTheme.flairTextColor = customThemeSettingsItems.get(37).colorValue;
+        customTheme.archivedTint = customThemeSettingsItems.get(38).colorValue;
+        customTheme.lockedIconTint = customThemeSettingsItems.get(39).colorValue;
+        customTheme.crosspostIconTint = customThemeSettingsItems.get(40).colorValue;
+        customTheme.stickiedPostIconTint = customThemeSettingsItems.get(41).colorValue;
+        customTheme.subscribed = customThemeSettingsItems.get(42).colorValue;
+        customTheme.unsubscribed = customThemeSettingsItems.get(43).colorValue;
+        customTheme.username = customThemeSettingsItems.get(44).colorValue;
+        customTheme.subreddit = customThemeSettingsItems.get(45).colorValue;
+        customTheme.authorFlairTextColor = customThemeSettingsItems.get(46).colorValue;
+        customTheme.submitter = customThemeSettingsItems.get(47).colorValue;
+        customTheme.moderator = customThemeSettingsItems.get(48).colorValue;
+        customTheme.singleCommentThreadBackgroundColor = customThemeSettingsItems.get(49).colorValue;
+        customTheme.unreadMessageBackgroundColor = customThemeSettingsItems.get(50).colorValue;
+        customTheme.dividerColor = customThemeSettingsItems.get(51).colorValue;
+        customTheme.noPreviewLinkBackgroundColor = customThemeSettingsItems.get(52).colorValue;
+        customTheme.voteAndReplyUnavailableButtonColor = customThemeSettingsItems.get(53).colorValue;
+        customTheme.commentVerticalBarColor1 = customThemeSettingsItems.get(54).colorValue;
+        customTheme.commentVerticalBarColor2 = customThemeSettingsItems.get(55).colorValue;
+        customTheme.commentVerticalBarColor3 = customThemeSettingsItems.get(56).colorValue;
+        customTheme.commentVerticalBarColor4 = customThemeSettingsItems.get(57).colorValue;
+        customTheme.commentVerticalBarColor5 = customThemeSettingsItems.get(58).colorValue;
+        customTheme.commentVerticalBarColor6 = customThemeSettingsItems.get(59).colorValue;
+        customTheme.commentVerticalBarColor7 = customThemeSettingsItems.get(60).colorValue;
+        customTheme.navBarColor = customThemeSettingsItems.get(61).colorValue;
+        customTheme.isLightStatusBar = customThemeSettingsItems.get(62).isEnabled;
+        customTheme.isLightNavBar = customThemeSettingsItems.get(63).isEnabled;
+        customTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface = customThemeSettingsItems.get(64).isEnabled;
+
+        return customTheme;
     }
 }

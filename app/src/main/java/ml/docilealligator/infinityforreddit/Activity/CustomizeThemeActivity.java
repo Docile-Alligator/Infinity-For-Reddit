@@ -3,7 +3,9 @@ package ml.docilealligator.infinityforreddit.Activity;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -23,6 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Adapter.CustomizeThemeRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCustomThemeAsyncTask;
+import ml.docilealligator.infinityforreddit.AsyncTask.InsertCustomThemeAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeSettingsItem;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeViewModel;
@@ -30,6 +33,7 @@ import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.Utils.CustomThemeSharedPreferencesUtils;
 
 public class CustomizeThemeActivity extends BaseActivity {
 
@@ -54,6 +58,10 @@ public class CustomizeThemeActivity extends BaseActivity {
     CustomThemeWrapper customThemeWrapper;
 
     public CustomThemeViewModel customThemeViewModel;
+
+    private int themeType;
+    private String themeName;
+    private ArrayList<CustomThemeSettingsItem> customThemeSettingsItems;
     private CustomizeThemeRecyclerViewAdapter adapter;
 
     @Override
@@ -67,7 +75,6 @@ public class CustomizeThemeActivity extends BaseActivity {
 
         applyCustomTheme();
 
-        setTitle(getIntent().getStringExtra(EXTRA_THEME_NAME));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -75,13 +82,14 @@ public class CustomizeThemeActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-        customThemeViewModel = new ViewModelProvider(this, new CustomThemeViewModel.Factory(redditDataRoomDatabase))
-                .get(CustomThemeViewModel.class);
+        customThemeSettingsItems = new ArrayList<>();
 
         int androidVersion = Build.VERSION.SDK_INT;
         if (getIntent().hasExtra(EXTRA_THEME_TYPE)) {
+            customThemeViewModel = new ViewModelProvider(this, new CustomThemeViewModel.Factory(redditDataRoomDatabase))
+                    .get(CustomThemeViewModel.class);
             LiveData<CustomTheme> customThemeLiveData;
-            int themeType = getIntent().getIntExtra(EXTRA_THEME_TYPE, EXTRA_LIGHT_THEME);
+            themeType = getIntent().getIntExtra(EXTRA_THEME_TYPE, EXTRA_LIGHT_THEME);
             switch (themeType) {
                 case EXTRA_DARK_THEME:
                     setTitle(getString(R.string.customize_dark_theme_fragment_title));
@@ -98,7 +106,6 @@ public class CustomizeThemeActivity extends BaseActivity {
             }
 
             customThemeLiveData.observe(this, customTheme -> {
-                ArrayList<CustomThemeSettingsItem> customThemeSettingsItems;
                 if (customTheme == null) {
                     switch (themeType) {
                         case EXTRA_DARK_THEME:
@@ -130,10 +137,21 @@ public class CustomizeThemeActivity extends BaseActivity {
                 adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
             });
         } else {
-            new GetCustomThemeAsyncTask(redditDataRoomDatabase, getIntent().getStringExtra(EXTRA_THEME_NAME),
-                    customTheme -> adapter.setCustomThemeSettingsItem(
-                            CustomThemeSettingsItem.convertCustomThemeToSettingsItem(CustomizeThemeActivity.this, customTheme))).execute();
+            themeName = getIntent().getStringExtra(EXTRA_THEME_NAME);
+            setTitle(themeName);
+            new GetCustomThemeAsyncTask(redditDataRoomDatabase, themeName,
+                    customTheme -> {
+                customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(CustomizeThemeActivity.this, customTheme);
+                adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
+                    }).execute();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.customize_theme_activity, menu);
+        applyMenuItemTheme(menu);
+        return true;
     }
 
     @Override
@@ -141,6 +159,45 @@ public class CustomizeThemeActivity extends BaseActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                return true;
+            case R.id.action_save_customize_theme_activity:
+                if (themeName == null) {
+                    switch (themeType) {
+                        case CustomThemeSharedPreferencesUtils.DARK:
+                            themeName = "Indigo Dark";
+                            break;
+                        case CustomThemeSharedPreferencesUtils.AMOLED:
+                            themeName = "Indigo Amoled";
+                            break;
+                        default:
+                            themeName = "Indigo";
+                    }
+                }
+
+                CustomTheme customTheme = CustomTheme.convertSettingsItemsToCustomTheme(customThemeSettingsItems, themeName);
+
+                switch (themeType) {
+                    case CustomThemeSharedPreferencesUtils.DARK:
+                        customTheme.isLightTheme = false;
+                        customTheme.isDarkTheme = true;
+                        customTheme.isAmoledTheme = false;
+                        break;
+                    case CustomThemeSharedPreferencesUtils.AMOLED:
+                        customTheme.isLightTheme = false;
+                        customTheme.isDarkTheme = false;
+                        customTheme.isAmoledTheme = true;
+                        break;
+                    default:
+                        customTheme.isLightTheme = true;
+                        customTheme.isDarkTheme = false;
+                        customTheme.isAmoledTheme = false;
+                }
+
+                new InsertCustomThemeAsyncTask(redditDataRoomDatabase, customTheme, () -> {
+                    Toast.makeText(CustomizeThemeActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
+                    finish();
+                }).execute();
+
                 return true;
         }
 
