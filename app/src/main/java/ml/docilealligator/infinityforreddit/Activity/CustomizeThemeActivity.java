@@ -3,7 +3,9 @@ package ml.docilealligator.infinityforreddit.Activity;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -69,7 +71,7 @@ public class CustomizeThemeActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        adapter = new CustomizeThemeRecyclerViewAdapter();
+        adapter = new CustomizeThemeRecyclerViewAdapter(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
@@ -132,6 +134,17 @@ public class CustomizeThemeActivity extends BaseActivity {
                     customTheme -> adapter.setCustomThemeSettingsItem(
                             CustomThemeSettingsItem.convertCustomThemeToSettingsItem(CustomizeThemeActivity.this, customTheme))).execute();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return false;
     }
 
     @Override

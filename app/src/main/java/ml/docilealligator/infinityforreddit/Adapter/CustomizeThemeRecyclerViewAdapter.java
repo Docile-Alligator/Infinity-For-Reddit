@@ -8,6 +8,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -15,14 +16,17 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeSettingsItem;
+import ml.docilealligator.infinityforreddit.CustomView.ColorPickerDialog;
 import ml.docilealligator.infinityforreddit.R;
 
 public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_COLOR = 1;
     private static final int VIEW_TYPE_SWITCH = 2;
+    private AppCompatActivity activity;
     private ArrayList<CustomThemeSettingsItem> customThemeSettingsItems;
 
-    public CustomizeThemeRecyclerViewAdapter() {
+    public CustomizeThemeRecyclerViewAdapter(AppCompatActivity activity) {
+        this.activity = activity;
         customThemeSettingsItems = new ArrayList<>();
     }
 
@@ -53,7 +57,10 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ((ThemeColorItemViewHolder) holder).themeItemInfoTextView.setText(customThemeSettingsItem.itemDetails);
             ((ThemeColorItemViewHolder) holder).colorImageView.setBackgroundTintList(ColorStateList.valueOf(customThemeSettingsItem.colorValue));
             holder.itemView.setOnClickListener(view -> {
-
+                new ColorPickerDialog(activity, customThemeSettingsItem.colorValue, color -> {
+                    customThemeSettingsItem.colorValue = color;
+                    ((ThemeColorItemViewHolder) holder).colorImageView.setBackgroundTintList(ColorStateList.valueOf(color));
+                }).show();
             });
         } else if (holder instanceof ThemeSwitchItemViewHolder) {
             CustomThemeSettingsItem customThemeSettingsItem = customThemeSettingsItems.get(position);

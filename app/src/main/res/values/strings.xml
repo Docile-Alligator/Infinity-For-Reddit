@@ -602,4 +602,7 @@
     <string name="theme_name_indigo_dark">Indigo Dark</string>
     <string name="theme_name_indigo_amoled">Indigo Amoled</string>
 
+    <string name="color_picker">Color Picker</string>
+    <string name="invalid_color">Invalid Color</string>
+
 </resources>
