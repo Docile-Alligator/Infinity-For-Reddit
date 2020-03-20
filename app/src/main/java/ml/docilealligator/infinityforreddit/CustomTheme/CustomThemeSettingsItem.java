@@ -1,12 +1,14 @@
 package ml.docilealligator.infinityforreddit.CustomTheme;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.util.ArrayList;
 
 import ml.docilealligator.infinityforreddit.R;
 
-public class CustomThemeSettingsItem {
+public class CustomThemeSettingsItem implements Parcelable {
     public String itemName;
     public String itemDetails;
     public int colorValue;
@@ -22,6 +24,25 @@ public class CustomThemeSettingsItem {
         this.itemName = itemName;
         this.isEnabled = isEnabled;
     }
+
+    protected CustomThemeSettingsItem(Parcel in) {
+        itemName = in.readString();
+        itemDetails = in.readString();
+        colorValue = in.readInt();
+        isEnabled = in.readByte() != 0;
+    }
+
+    public static final Creator<CustomThemeSettingsItem> CREATOR = new Creator<CustomThemeSettingsItem>() {
+        @Override
+        public CustomThemeSettingsItem createFromParcel(Parcel in) {
+            return new CustomThemeSettingsItem(in);
+        }
+
+        @Override
+        public CustomThemeSettingsItem[] newArray(int size) {
+            return new CustomThemeSettingsItem[size];
+        }
+    };
 
     public static ArrayList<CustomThemeSettingsItem> convertCustomThemeToSettingsItem(Context context, CustomTheme customTheme) {
         ArrayList<CustomThemeSettingsItem> customThemeSettingsItems = new ArrayList<>();
@@ -288,5 +309,18 @@ public class CustomThemeSettingsItem {
                 context.getString(R.string.theme_item_change_status_bar_icon_color_after_toolbar_collapsed_in_immersive_interface),
                 customTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface));
         return customThemeSettingsItems;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(itemName);
+        parcel.writeString(itemDetails);
+        parcel.writeInt(colorValue);
+        parcel.writeByte((byte) (isEnabled ? 1 : 0));
     }
 }

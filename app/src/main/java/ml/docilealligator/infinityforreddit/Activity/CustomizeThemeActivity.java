@@ -9,12 +9,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -30,6 +30,7 @@ import ml.docilealligator.infinityforreddit.CustomTheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeSettingsItem;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeViewModel;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
@@ -38,10 +39,11 @@ import ml.docilealligator.infinityforreddit.Utils.CustomThemeSharedPreferencesUt
 public class CustomizeThemeActivity extends BaseActivity {
 
     public static final String EXTRA_THEME_TYPE = "ETT";
-    public static final int EXTRA_LIGHT_THEME = 0;
-    public static final int EXTRA_DARK_THEME = 1;
-    public static final int EXTRA_AMOLED_THEME = 2;
+    public static final int EXTRA_LIGHT_THEME = CustomThemeSharedPreferencesUtils.LIGHT;
+    public static final int EXTRA_DARK_THEME = CustomThemeSharedPreferencesUtils.DARK;
+    public static final int EXTRA_AMOLED_THEME = CustomThemeSharedPreferencesUtils.AMOLED;
     public static final String EXTRA_THEME_NAME = "ETN";
+    private static final String CUSTOM_THEME_SETTINGS_ITEMS_STATE = "CTSIS";
 
     @BindView(R.id.appbar_layout_customize_theme_activity)
     AppBarLayout appBarLayout;
@@ -52,6 +54,15 @@ public class CustomizeThemeActivity extends BaseActivity {
     @Inject
     @Named("default")
     SharedPreferences sharedPreferences;
+    @Inject
+    @Named("light_theme")
+    SharedPreferences lightThemeSharedPreferences;
+    @Inject
+    @Named("dark_theme")
+    SharedPreferences darkThemeSharedPreferences;
+    @Inject
+    @Named("amoled_theme")
+    SharedPreferences amoledThemeSharedPreferences;
     @Inject
     RedditDataRoomDatabase redditDataRoomDatabase;
     @Inject
@@ -82,68 +93,78 @@ public class CustomizeThemeActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-        customThemeSettingsItems = new ArrayList<>();
+        if (savedInstanceState != null) {
+            customThemeSettingsItems = savedInstanceState.getParcelableArrayList(CUSTOM_THEME_SETTINGS_ITEMS_STATE);
+        }
 
         int androidVersion = Build.VERSION.SDK_INT;
-        if (getIntent().hasExtra(EXTRA_THEME_TYPE)) {
-            customThemeViewModel = new ViewModelProvider(this, new CustomThemeViewModel.Factory(redditDataRoomDatabase))
-                    .get(CustomThemeViewModel.class);
-            LiveData<CustomTheme> customThemeLiveData;
-            themeType = getIntent().getIntExtra(EXTRA_THEME_TYPE, EXTRA_LIGHT_THEME);
-            switch (themeType) {
-                case EXTRA_DARK_THEME:
-                    setTitle(getString(R.string.customize_dark_theme_fragment_title));
-                    customThemeLiveData = customThemeViewModel.getDarkCustomTheme();
-                    break;
-                case EXTRA_AMOLED_THEME:
-                    setTitle(getString(R.string.customize_amoled_theme_fragment_title));
-                    customThemeLiveData = customThemeViewModel.getAmoledCustomTheme();
-                    break;
-                default:
-                    setTitle(getString(R.string.customize_light_theme_fragment_title));
-                    customThemeLiveData = customThemeViewModel.getLightCustomTheme();
-                    break;
-            }
 
-            customThemeLiveData.observe(this, customTheme -> {
-                if (customTheme == null) {
-                    switch (themeType) {
-                        case EXTRA_DARK_THEME:
-                            customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(
-                                    CustomizeThemeActivity.this,
-                                    CustomThemeWrapper.getIndigoDark(CustomizeThemeActivity.this));
-                            break;
-                        case EXTRA_AMOLED_THEME:
-                            customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(
-                                    CustomizeThemeActivity.this,
-                                    CustomThemeWrapper.getIndigoAmoled(CustomizeThemeActivity.this));
-                            break;
-                        default:
-                            customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(
-                                    CustomizeThemeActivity.this,
-                                    CustomThemeWrapper.getIndigo(CustomizeThemeActivity.this));
+        if (customThemeSettingsItems == null) {
+            if (getIntent().hasExtra(EXTRA_THEME_TYPE)) {
+                themeType = getIntent().getIntExtra(EXTRA_THEME_TYPE, EXTRA_LIGHT_THEME);
+
+                new GetCustomThemeAsyncTask(redditDataRoomDatabase, themeType, customTheme -> {
+                    if (customTheme == null) {
+                        switch (themeType) {
+                            case EXTRA_DARK_THEME:
+                                customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(
+                                        CustomizeThemeActivity.this,
+                                        CustomThemeWrapper.getIndigoDark(CustomizeThemeActivity.this));
+                                break;
+                            case EXTRA_AMOLED_THEME:
+                                customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(
+                                        CustomizeThemeActivity.this,
+                                        CustomThemeWrapper.getIndigoAmoled(CustomizeThemeActivity.this));
+                                break;
+                            default:
+                                customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(
+                                        CustomizeThemeActivity.this,
+                                        CustomThemeWrapper.getIndigo(CustomizeThemeActivity.this));
+                        }
+                    } else {
+                        customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(CustomizeThemeActivity.this, customTheme);
                     }
-                } else {
-                    customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(CustomizeThemeActivity.this, customTheme);
-                }
 
-                if (androidVersion < Build.VERSION_CODES.O) {
-                    customThemeSettingsItems.get(customThemeSettingsItems.size() - 2).itemDetails = getString(R.string.theme_item_available_on_android_8);
-                }
-                if (androidVersion < Build.VERSION_CODES.M) {
-                    customThemeSettingsItems.get(customThemeSettingsItems.size() - 3).itemDetails = getString(R.string.theme_item_available_on_android_6);
-                }
+                    if (androidVersion < Build.VERSION_CODES.O) {
+                        customThemeSettingsItems.get(customThemeSettingsItems.size() - 2).itemDetails = getString(R.string.theme_item_available_on_android_8);
+                    }
+                    if (androidVersion < Build.VERSION_CODES.M) {
+                        customThemeSettingsItems.get(customThemeSettingsItems.size() - 3).itemDetails = getString(R.string.theme_item_available_on_android_6);
+                    }
 
-                adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
-            });
+                    adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
+                }).execute();
+
+                switch (themeType) {
+                    case EXTRA_DARK_THEME:
+                        setTitle(getString(R.string.customize_dark_theme_fragment_title));
+                        break;
+                    case EXTRA_AMOLED_THEME:
+                        setTitle(getString(R.string.customize_amoled_theme_fragment_title));
+                        break;
+                    default:
+                        setTitle(getString(R.string.customize_light_theme_fragment_title));
+                        break;
+                }
+            } else {
+                themeName = getIntent().getStringExtra(EXTRA_THEME_NAME);
+                setTitle(themeName);
+                new GetCustomThemeAsyncTask(redditDataRoomDatabase, themeName,
+                        customTheme -> {
+                            customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(CustomizeThemeActivity.this, customTheme);
+
+                            if (androidVersion < Build.VERSION_CODES.O) {
+                                customThemeSettingsItems.get(customThemeSettingsItems.size() - 2).itemDetails = getString(R.string.theme_item_available_on_android_8);
+                            }
+                            if (androidVersion < Build.VERSION_CODES.M) {
+                                customThemeSettingsItems.get(customThemeSettingsItems.size() - 3).itemDetails = getString(R.string.theme_item_available_on_android_6);
+                            }
+
+                            adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
+                        }).execute();
+            }
         } else {
-            themeName = getIntent().getStringExtra(EXTRA_THEME_NAME);
-            setTitle(themeName);
-            new GetCustomThemeAsyncTask(redditDataRoomDatabase, themeName,
-                    customTheme -> {
-                customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(CustomizeThemeActivity.this, customTheme);
-                adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
-                    }).execute();
+            adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
         }
     }
 
@@ -181,27 +202,43 @@ public class CustomizeThemeActivity extends BaseActivity {
                         customTheme.isLightTheme = false;
                         customTheme.isDarkTheme = true;
                         customTheme.isAmoledTheme = false;
+                        new InsertCustomThemeAsyncTask(redditDataRoomDatabase, darkThemeSharedPreferences, customTheme, () -> {
+                            Toast.makeText(CustomizeThemeActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
+                            EventBus.getDefault().post(new RecreateActivityEvent());
+                            finish();
+                        }).execute();
                         break;
                     case CustomThemeSharedPreferencesUtils.AMOLED:
                         customTheme.isLightTheme = false;
                         customTheme.isDarkTheme = false;
                         customTheme.isAmoledTheme = true;
+                        new InsertCustomThemeAsyncTask(redditDataRoomDatabase, amoledThemeSharedPreferences, customTheme, () -> {
+                            Toast.makeText(CustomizeThemeActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
+                            EventBus.getDefault().post(new RecreateActivityEvent());
+                            finish();
+                        }).execute();
                         break;
                     default:
                         customTheme.isLightTheme = true;
                         customTheme.isDarkTheme = false;
                         customTheme.isAmoledTheme = false;
+                        new InsertCustomThemeAsyncTask(redditDataRoomDatabase, lightThemeSharedPreferences, customTheme, () -> {
+                            Toast.makeText(CustomizeThemeActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
+                            EventBus.getDefault().post(new RecreateActivityEvent());
+                            finish();
+                        }).execute();
                 }
-
-                new InsertCustomThemeAsyncTask(redditDataRoomDatabase, customTheme, () -> {
-                    Toast.makeText(CustomizeThemeActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
-                    finish();
-                }).execute();
 
                 return true;
         }
 
         return false;
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(CUSTOM_THEME_SETTINGS_ITEMS_STATE, customThemeSettingsItems);
     }
 
     @Override

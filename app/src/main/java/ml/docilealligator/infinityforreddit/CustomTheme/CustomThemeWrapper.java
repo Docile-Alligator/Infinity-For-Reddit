@@ -288,7 +288,7 @@ public class CustomThemeWrapper {
     }
 
     public int getSingleCommentThreadBackgroundColor() {
-        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.SINGLE_COMMENT_THREAD_BACKGROUND,
+        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.SINGLE_COMMENT_THREAD_BACKGROUND_COLOR,
                 getDefaultColor("#B3E5F9", "#123E77", "#123E77"));
     }
 

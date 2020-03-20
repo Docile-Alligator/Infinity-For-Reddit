@@ -13,12 +13,16 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.google.android.material.appbar.AppBarLayout;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Settings.AboutPreferenceFragment;
@@ -52,6 +56,8 @@ public class SettingsActivity extends BaseActivity implements
         setContentView(R.layout.activity_settings);
 
         ButterKnife.bind(this);
+
+        EventBus.getDefault().register(this);
 
         applyCustomTheme();
 
@@ -135,5 +141,16 @@ public class SettingsActivity extends BaseActivity implements
                 .commit();
         setTitle(pref.getTitle());
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onRecreateActivityEvent(RecreateActivityEvent recreateActivityEvent) {
+        recreate();
     }
 }
