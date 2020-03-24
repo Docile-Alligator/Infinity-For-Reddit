@@ -7,6 +7,7 @@ import ml.docilealligator.infinityforreddit.Activity.AccountPostsActivity;
 import ml.docilealligator.infinityforreddit.Activity.AccountSavedThingActivity;
 import ml.docilealligator.infinityforreddit.Activity.CommentActivity;
 import ml.docilealligator.infinityforreddit.Activity.CreateMultiRedditActivity;
+import ml.docilealligator.infinityforreddit.Activity.CustomThemeListingActivity;
 import ml.docilealligator.infinityforreddit.Activity.CustomizeThemeActivity;
 import ml.docilealligator.infinityforreddit.Activity.EditCommentActivity;
 import ml.docilealligator.infinityforreddit.Activity.EditPostActivity;
@@ -143,4 +144,6 @@ public interface AppComponent {
     void inject(ThemePreferenceFragment themePreferenceFragment);
 
     void inject(CustomizeThemeActivity customizeThemeActivity);
+
+    void inject(CustomThemeListingActivity customThemeListingActivity);
 }

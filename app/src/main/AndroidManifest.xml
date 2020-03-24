@@ -21,7 +21,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
-        <activity android:name=".Activity.CustomThemeListingActivity"></activity>
+        <activity android:name=".Activity.CustomThemeListingActivity"
+            android:label="@string/custom_theme_listing_activity_label"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.CustomizeThemeActivity"
             android:parentActivityName=".Activity.MainActivity"

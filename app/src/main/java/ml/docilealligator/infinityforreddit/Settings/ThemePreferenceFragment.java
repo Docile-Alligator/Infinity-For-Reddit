@@ -19,6 +19,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
 
+import ml.docilealligator.infinityforreddit.Activity.CustomThemeListingActivity;
 import ml.docilealligator.infinityforreddit.Activity.CustomizeThemeActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
@@ -52,6 +53,7 @@ public class ThemePreferenceFragment extends PreferenceFragmentCompat {
         Preference customizeLightThemePreference = findPreference(SharedPreferencesUtils.CUSTOMIZE_LIGHT_THEME);
         Preference customizeDarkThemePreference = findPreference(SharedPreferencesUtils.CUSTOMIZE_DARK_THEME);
         Preference customizeAmoledThemePreference = findPreference(SharedPreferencesUtils.CUSTOMIZE_AMOLED_THEME);
+        Preference selectAndCustomizeThemePreference = findPreference(SharedPreferencesUtils.SELECT_AND_CUSTOMIZE_THEME);
 
         boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
         if (themePreference != null && amoledDarkSwitch != null) {
@@ -112,7 +114,7 @@ public class ThemePreferenceFragment extends PreferenceFragmentCompat {
                 Intent intent = new Intent(activity, CustomizeThemeActivity.class);
                 intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_TYPE, CustomizeThemeActivity.EXTRA_LIGHT_THEME);
                 startActivity(intent);
-                return false;
+                return true;
             });
         }
 
@@ -121,7 +123,7 @@ public class ThemePreferenceFragment extends PreferenceFragmentCompat {
                 Intent intent = new Intent(activity, CustomizeThemeActivity.class);
                 intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_TYPE, CustomizeThemeActivity.EXTRA_DARK_THEME);
                 startActivity(intent);
-                return false;
+                return true;
             });
         }
 
@@ -130,7 +132,15 @@ public class ThemePreferenceFragment extends PreferenceFragmentCompat {
                 Intent intent = new Intent(activity, CustomizeThemeActivity.class);
                 intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_TYPE, CustomizeThemeActivity.EXTRA_AMOLED_THEME);
                 startActivity(intent);
-                return false;
+                return true;
+            });
+        }
+
+        if (selectAndCustomizeThemePreference != null) {
+            selectAndCustomizeThemePreference.setOnPreferenceClickListener(preference -> {
+                Intent intent = new Intent(activity, CustomThemeListingActivity.class);
+                startActivity(intent);
+                return true;
             });
         }
     }

@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,49 +21,123 @@ import ml.docilealligator.infinityforreddit.CustomTheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.R;
 
 public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Context context;
-    private ArrayList<CustomTheme> customThemes;
+    private static final int VIEW_TYPE_PREDEFINED_THEME = 0;
+    private static final int VIEW_TYPE_USER_THME = 1;
+    private static final int VIEW_TYPE_PREDEFINED_THEME_DIVIDER = 2;
+    private static final int VIEW_TYPE_USER_THEME_DIVIDER = 3;
 
-    public CustomThemeListingRecyclerViewAdapter(Context context) {
+    private Context context;
+    private ArrayList<CustomTheme> predefinedCustomThemes;
+    private ArrayList<CustomTheme> userCustomThemes;
+
+    public CustomThemeListingRecyclerViewAdapter(Context context, ArrayList<CustomTheme> predefinedCustomThemes) {
         this.context = context;
-        customThemes = new ArrayList<>();
+        this.predefinedCustomThemes = predefinedCustomThemes;
+        userCustomThemes = new ArrayList<>();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return VIEW_TYPE_PREDEFINED_THEME_DIVIDER;
+        } else if (position < 1 + predefinedCustomThemes.size()) {
+            return VIEW_TYPE_PREDEFINED_THEME;
+        } else if (position == 1 + predefinedCustomThemes.size()) {
+            return VIEW_TYPE_USER_THEME_DIVIDER;
+        } else {
+            return VIEW_TYPE_USER_THME;
+        }
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new CustomThemeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_custom_theme, parent, false));
+        switch (viewType) {
+            case VIEW_TYPE_PREDEFINED_THEME_DIVIDER:
+                return new PreDefinedThemeDividerViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_theme_type_divider, parent, false));
+            case VIEW_TYPE_PREDEFINED_THEME:
+                return new PredefinedCustomThemeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_custom_theme, parent, false));
+            case VIEW_TYPE_USER_THEME_DIVIDER:
+                return new UserThemeDividerViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_theme_type_divider, parent, false));
+            default:
+                return new UserCustomThemeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_custom_theme, parent, false));
+        }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof CustomThemeViewHolder) {
-            CustomTheme customTheme = customThemes.get(position);
-            ((CustomThemeViewHolder) holder).colorPrimaryView.setBackgroundTintList(ColorStateList.valueOf(customTheme.colorPrimary));
-            ((CustomThemeViewHolder) holder).nameTextView.setText(customTheme.name);
-            ((CustomThemeViewHolder) holder).itemView.setOnClickListener(view -> {
+        if (holder instanceof PredefinedCustomThemeViewHolder) {
+            CustomTheme customTheme = predefinedCustomThemes.get(position - 1);
+            ((PredefinedCustomThemeViewHolder) holder).colorPrimaryView.setBackgroundTintList(ColorStateList.valueOf(customTheme.colorPrimary));
+            ((PredefinedCustomThemeViewHolder) holder).nameTextView.setText(customTheme.name);
+            ((PredefinedCustomThemeViewHolder) holder).itemView.setOnClickListener(view -> {
                 Intent intent = new Intent(context, CustomizeThemeActivity.class);
                 intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_NAME, customTheme.name);
                 context.startActivity(intent);
             });
+        } else if (holder instanceof UserCustomThemeViewHolder) {
+            CustomTheme customTheme = userCustomThemes.get(position - predefinedCustomThemes.size() - 2);
+            ((UserCustomThemeViewHolder) holder).colorPrimaryView.setBackgroundTintList(ColorStateList.valueOf(customTheme.colorPrimary));
+            ((UserCustomThemeViewHolder) holder).nameTextView.setText(customTheme.name);
+            ((UserCustomThemeViewHolder) holder).itemView.setOnClickListener(view -> {
+                Intent intent = new Intent(context, CustomizeThemeActivity.class);
+                intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_NAME, customTheme.name);
+                context.startActivity(intent);
+            });
+        } else if (holder instanceof PreDefinedThemeDividerViewHolder) {
+            ((TextView) ((PreDefinedThemeDividerViewHolder) holder).itemView).setText(R.string.predefined_themes);
+        } else if (holder instanceof UserThemeDividerViewHolder) {
+            ((TextView) ((UserThemeDividerViewHolder) holder).itemView).setText(R.string.user_themes);
         }
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return predefinedCustomThemes.size() + userCustomThemes.size() + 2;
     }
 
-    class CustomThemeViewHolder extends RecyclerView.ViewHolder {
+    public void setUserThemes(List<CustomTheme> userThemes) {
+        userCustomThemes = (ArrayList<CustomTheme>) userThemes;
+        notifyDataSetChanged();
+    }
+
+    class PredefinedCustomThemeViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.color_primary_item_custom_theme)
         View colorPrimaryView;
         @BindView(R.id.name_text_view_item_custom_theme)
         TextView nameTextView;
 
-        public CustomThemeViewHolder(@NonNull View itemView) {
+        public PredefinedCustomThemeViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+    }
+
+    class UserCustomThemeViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.color_primary_item_custom_theme)
+        View colorPrimaryView;
+        @BindView(R.id.name_text_view_item_custom_theme)
+        TextView nameTextView;
+
+        public UserCustomThemeViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
+
+    class PreDefinedThemeDividerViewHolder extends RecyclerView.ViewHolder {
+
+        public PreDefinedThemeDividerViewHolder(@NonNull View itemView) {
+            super(itemView);
+        }
+    }
+
+    class UserThemeDividerViewHolder extends RecyclerView.ViewHolder {
+
+        public UserThemeDividerViewHolder(@NonNull View itemView) {
+            super(itemView);
         }
     }
 }

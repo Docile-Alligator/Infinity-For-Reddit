@@ -33,4 +33,13 @@
         app:icon="@drawable/ic_dark_theme_preference_24dp"
         app:title="@string/settings_customize_amoled_theme_title" />
 
+    <Preference
+        app:key="select_and_customize_theme"
+        app:icon="@drawable/ic_edit_24dp"
+        app:title="@string/settings_select_and_customize_theme_title" />
+
+    <Preference
+        app:summary="@string/settings_custom_theme_cannot_apply_to_settings_page_title"
+        app:enabled="false" />
+
 </PreferenceScreen>

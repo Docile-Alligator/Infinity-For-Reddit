@@ -19,6 +19,7 @@
     <string name="multi_reddit_listing_activity_label">Multireddit</string>
     <string name="create_multi_reddit_activity_label">Create Multireddit</string>
     <string name="subreddit_multiselection_activity_label">Select Subreddits</string>
+    <string name="custom_theme_listing_activity_label">Custom Themes</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -361,6 +362,8 @@
     <string name="settings_customize_light_theme_title">Light Theme</string>
     <string name="settings_customize_dark_theme_title">Dark Theme</string>
     <string name="settings_customize_amoled_theme_title">Amoled Theme</string>
+    <string name="settings_select_and_customize_theme_title">Select and Customize Themes</string>
+    <string name="settings_custom_theme_cannot_apply_to_settings_page_title">Custom themes cannot be applied to settings page.</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -598,6 +601,8 @@
     <string name="theme_item_available_on_android_8">Only available for Android 8.0 or above.</string>
     <string name="theme_item_available_on_android_6">Only available for Android 6.0 or above.</string>
 
+    <string name="predefined_themes">Predefined Themes</string>
+    <string name="user_themes">Your Themes</string>
     <string name="theme_name_indigo">Indigo</string>
     <string name="theme_name_indigo_dark">Indigo Dark</string>
     <string name="theme_name_indigo_amoled">Indigo Amoled</string>

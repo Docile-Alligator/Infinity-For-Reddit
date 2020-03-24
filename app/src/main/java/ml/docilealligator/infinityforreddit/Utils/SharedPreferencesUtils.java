@@ -80,4 +80,5 @@ public class SharedPreferencesUtils {
     public static final String CUSTOMIZE_LIGHT_THEME = "customize_light_theme";
     public static final String CUSTOMIZE_DARK_THEME = "customize_dark_theme";
     public static final String CUSTOMIZE_AMOLED_THEME = "customize_amoled_theme";
+    public static final String SELECT_AND_CUSTOMIZE_THEME = "select_and_customize_theme";
 }
