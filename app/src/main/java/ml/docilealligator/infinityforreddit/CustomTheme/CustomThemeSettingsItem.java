@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.CustomTheme;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -44,13 +45,27 @@ public class CustomThemeSettingsItem implements Parcelable {
         }
     };
 
-    public static ArrayList<CustomThemeSettingsItem> convertCustomThemeToSettingsItem(Context context, CustomTheme customTheme) {
+    public static ArrayList<CustomThemeSettingsItem> convertCustomThemeToSettingsItem(Context context,
+                                                                                      CustomTheme customTheme,
+                                                                                      int androidVersion) {
         ArrayList<CustomThemeSettingsItem> customThemeSettingsItems = new ArrayList<>();
 
         if (customTheme == null) {
             return customThemeSettingsItems;
         }
 
+        customThemeSettingsItems.add(new CustomThemeSettingsItem(
+                context.getString(R.string.theme_item_is_light_theme),
+                customTheme.isLightTheme
+        ));
+        customThemeSettingsItems.add(new CustomThemeSettingsItem(
+                context.getString(R.string.theme_item_is_dark_theme),
+                customTheme.isDarkTheme
+        ));
+        customThemeSettingsItems.add(new CustomThemeSettingsItem(
+                context.getString(R.string.theme_item_is_amoled_theme),
+                customTheme.isAmoledTheme
+        ));
         customThemeSettingsItems.add(new CustomThemeSettingsItem(
                 context.getString(R.string.theme_item_color_primary),
                 context.getString(R.string.theme_item_color_primary_detail),
@@ -308,6 +323,12 @@ public class CustomThemeSettingsItem implements Parcelable {
         customThemeSettingsItems.add(new CustomThemeSettingsItem(
                 context.getString(R.string.theme_item_change_status_bar_icon_color_after_toolbar_collapsed_in_immersive_interface),
                 customTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface));
+        if (androidVersion < Build.VERSION_CODES.O) {
+            customThemeSettingsItems.get(customThemeSettingsItems.size() - 2).itemDetails = context.getString(R.string.theme_item_available_on_android_8);
+        }
+        if (androidVersion < Build.VERSION_CODES.M) {
+            customThemeSettingsItems.get(customThemeSettingsItems.size() - 3).itemDetails = context.getString(R.string.theme_item_available_on_android_6);
+        }
         return customThemeSettingsItems;
     }
 

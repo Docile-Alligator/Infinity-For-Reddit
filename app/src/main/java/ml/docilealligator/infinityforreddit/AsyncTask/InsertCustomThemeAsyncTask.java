@@ -9,7 +9,9 @@ import ml.docilealligator.infinityforreddit.Utils.CustomThemeSharedPreferencesUt
 
 public class InsertCustomThemeAsyncTask extends AsyncTask<Void, Void, Void> {
     private RedditDataRoomDatabase redditDataRoomDatabase;
-    private SharedPreferences themeSharedPreferences;
+    private SharedPreferences lightThemeSharedPreferences;
+    private SharedPreferences darkThemeSharedPreferences;
+    private SharedPreferences amoledThemeSharedPreferences;
     private CustomTheme customTheme;
     private InsertCustomThemeAsyncTaskListener insertCustomThemeAsyncTaskListener;
 
@@ -18,18 +20,33 @@ public class InsertCustomThemeAsyncTask extends AsyncTask<Void, Void, Void> {
     }
 
     public InsertCustomThemeAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase,
-                                      SharedPreferences themeSharedPreferences, CustomTheme customTheme,
+                                      SharedPreferences lightThemeSharedPreferences,
+                                      SharedPreferences darkThemeSharedPreferences,
+                                      SharedPreferences amoledThemeSharedPreferences, CustomTheme customTheme,
                                       InsertCustomThemeAsyncTaskListener insertCustomThemeAsyncTaskListener) {
         this.redditDataRoomDatabase = redditDataRoomDatabase;
-        this.themeSharedPreferences = themeSharedPreferences;
+        this.lightThemeSharedPreferences = lightThemeSharedPreferences;
+        this.darkThemeSharedPreferences = darkThemeSharedPreferences;
+        this.amoledThemeSharedPreferences = amoledThemeSharedPreferences;
         this.customTheme = customTheme;
         this.insertCustomThemeAsyncTaskListener = insertCustomThemeAsyncTaskListener;
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
+        if (customTheme.isLightTheme) {
+            redditDataRoomDatabase.customThemeDao().unsetLightTheme();
+            CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(customTheme, lightThemeSharedPreferences);
+        }
+        if (customTheme.isDarkTheme) {
+            redditDataRoomDatabase.customThemeDao().unsetDarkTheme();
+            CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(customTheme, darkThemeSharedPreferences);
+        }
+        if (customTheme.isAmoledTheme) {
+            redditDataRoomDatabase.customThemeDao().unsetAmoledTheme();
+            CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(customTheme, amoledThemeSharedPreferences);
+        }
         redditDataRoomDatabase.customThemeDao().insert(customTheme);
-        CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(customTheme, themeSharedPreferences);
         return null;
     }
 

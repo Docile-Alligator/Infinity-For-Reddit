@@ -377,7 +377,17 @@ public class CustomThemeWrapper {
                 themeType == CustomThemeSharedPreferencesUtils.LIGHT);
     }
 
-    public static ArrayList<CustomTheme> getPredifinedThemes(Context context) {
+    public static CustomTheme getPredefinedCustomTheme(Context context, String name) {
+        if (name.equals(context.getString(R.string.theme_name_indigo_dark))) {
+            return getIndigoDark(context);
+        } else if (name.equals(context.getString(R.string.theme_name_indigo_amoled))) {
+            return getIndigoAmoled(context);
+        } else {
+            return getIndigo(context);
+        }
+    }
+
+    public static ArrayList<CustomTheme> getPredefinedThemes(Context context) {
         ArrayList<CustomTheme> customThemes = new ArrayList<>();
         customThemes.add(getIndigo(context));
         customThemes.add(getIndigoDark(context));
@@ -534,7 +544,7 @@ public class CustomThemeWrapper {
     }
 
     public static CustomTheme getIndigoAmoled(Context context) {
-        CustomTheme customTheme = new CustomTheme(context.getString(R.string.theme_name_indigo_dark));
+        CustomTheme customTheme = new CustomTheme(context.getString(R.string.theme_name_indigo_amoled));
         customTheme.isLightTheme = false;
         customTheme.isDarkTheme = true;
         customTheme.isAmoledTheme = false;

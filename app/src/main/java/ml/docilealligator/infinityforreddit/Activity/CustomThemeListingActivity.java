@@ -56,14 +56,14 @@ public class CustomThemeListingActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         CustomThemeListingRecyclerViewAdapter adapter = new CustomThemeListingRecyclerViewAdapter(this,
-                CustomThemeWrapper.getPredifinedThemes(this));
+                CustomThemeWrapper.getPredefinedThemes(this));
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         customThemeViewModel = new ViewModelProvider(this,
                 new CustomThemeViewModel.Factory(redditDataRoomDatabase))
                 .get(CustomThemeViewModel.class);
-        customThemeViewModel.getAllCustomThemes().observe(this, customThemes -> adapter.setUserThemes(customThemes));
+        customThemeViewModel.getAllCustomThemes().observe(this, adapter::setUserThemes);
     }
 
     @Override

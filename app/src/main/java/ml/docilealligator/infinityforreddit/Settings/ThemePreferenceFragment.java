@@ -53,7 +53,7 @@ public class ThemePreferenceFragment extends PreferenceFragmentCompat {
         Preference customizeLightThemePreference = findPreference(SharedPreferencesUtils.CUSTOMIZE_LIGHT_THEME);
         Preference customizeDarkThemePreference = findPreference(SharedPreferencesUtils.CUSTOMIZE_DARK_THEME);
         Preference customizeAmoledThemePreference = findPreference(SharedPreferencesUtils.CUSTOMIZE_AMOLED_THEME);
-        Preference selectAndCustomizeThemePreference = findPreference(SharedPreferencesUtils.SELECT_AND_CUSTOMIZE_THEME);
+        Preference selectAndCustomizeThemePreference = findPreference(SharedPreferencesUtils.MANAGE_THEMES);
 
         boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
         if (themePreference != null && amoledDarkSwitch != null) {

@@ -6,6 +6,7 @@ import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -56,11 +57,11 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
             case VIEW_TYPE_PREDEFINED_THEME_DIVIDER:
                 return new PreDefinedThemeDividerViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_theme_type_divider, parent, false));
             case VIEW_TYPE_PREDEFINED_THEME:
-                return new PredefinedCustomThemeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_custom_theme, parent, false));
+                return new PredefinedCustomThemeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_predefined_custom_theme, parent, false));
             case VIEW_TYPE_USER_THEME_DIVIDER:
                 return new UserThemeDividerViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_theme_type_divider, parent, false));
             default:
-                return new UserCustomThemeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_custom_theme, parent, false));
+                return new UserCustomThemeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_user_custom_theme, parent, false));
         }
     }
 
@@ -73,12 +74,19 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
             ((PredefinedCustomThemeViewHolder) holder).itemView.setOnClickListener(view -> {
                 Intent intent = new Intent(context, CustomizeThemeActivity.class);
                 intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_NAME, customTheme.name);
+                intent.putExtra(CustomizeThemeActivity.EXTRA_IS_PREDEFIINED_THEME, true);
                 context.startActivity(intent);
             });
         } else if (holder instanceof UserCustomThemeViewHolder) {
             CustomTheme customTheme = userCustomThemes.get(position - predefinedCustomThemes.size() - 2);
             ((UserCustomThemeViewHolder) holder).colorPrimaryView.setBackgroundTintList(ColorStateList.valueOf(customTheme.colorPrimary));
             ((UserCustomThemeViewHolder) holder).nameTextView.setText(customTheme.name);
+            ((UserCustomThemeViewHolder) holder).deleteImageView.setOnClickListener(view -> {
+
+            });
+            ((UserCustomThemeViewHolder) holder).shareImageView.setOnClickListener(view -> {
+
+            });
             ((UserCustomThemeViewHolder) holder).itemView.setOnClickListener(view -> {
                 Intent intent = new Intent(context, CustomizeThemeActivity.class);
                 intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_NAME, customTheme.name);
@@ -103,9 +111,9 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
 
     class PredefinedCustomThemeViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.color_primary_item_custom_theme)
+        @BindView(R.id.color_primary_item_predefined_custom_theme)
         View colorPrimaryView;
-        @BindView(R.id.name_text_view_item_custom_theme)
+        @BindView(R.id.name_text_view_item_predefined_custom_theme)
         TextView nameTextView;
 
         public PredefinedCustomThemeViewHolder(@NonNull View itemView) {
@@ -116,10 +124,14 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
 
     class UserCustomThemeViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.color_primary_item_custom_theme)
+        @BindView(R.id.color_primary_item_user_custom_theme)
         View colorPrimaryView;
-        @BindView(R.id.name_text_view_item_custom_theme)
+        @BindView(R.id.name_text_view_item_user_custom_theme)
         TextView nameTextView;
+        @BindView(R.id.delete_image_view_item_user_custom_theme)
+        ImageView deleteImageView;
+        @BindView(R.id.share_image_view_item_user_custom_theme)
+        ImageView shareImageView;
 
         public UserCustomThemeViewHolder(@NonNull View itemView) {
             super(itemView);

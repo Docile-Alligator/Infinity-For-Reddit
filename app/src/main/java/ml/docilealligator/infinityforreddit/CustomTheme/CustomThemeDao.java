@@ -28,6 +28,15 @@ public interface CustomThemeDao {
     @Query("SELECT * FROM custom_themes WHERE name = :name COLLATE NOCASE LIMIT 1")
     CustomTheme getCustomTheme(String name);
 
+    @Query("UPDATE custom_themes SET is_light_theme = 0 WHERE is_light_theme = 1")
+    void unsetLightTheme();
+
+    @Query("UPDATE custom_themes SET is_dark_theme = 0 WHERE is_dark_theme = 1")
+    void unsetDarkTheme();
+
+    @Query("UPDATE custom_themes SET is_amoled_theme = 0 WHERE is_amoled_theme = 1")
+    void unsetAmoledTheme();
+
     @Query("DELETE FROM custom_themes WHERE name = :name")
     void deleteCustomTheme(String name);
 }

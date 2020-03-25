@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?attr/selectableItemBackground">
+
+    <View
+        android:id="@+id/color_primary_item_user_custom_theme"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/circular_background" />
+
+    <TextView
+        android:id="@+id/name_text_view_item_user_custom_theme"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="32dp"
+        android:layout_gravity="center_vertical"
+        android:textColor="?attr/primaryTextColor" />
+
+    <ImageView
+        android:id="@+id/delete_image_view_item_user_custom_theme"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="32dp"
+        android:src="@drawable/ic_delete_24dp"
+        android:background="?attr/selectableItemBackgroundBorderless" />
+
+    <ImageView
+        android:id="@+id/share_image_view_item_user_custom_theme"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/ic_share_24dp"
+        android:background="?attr/selectableItemBackgroundBorderless" />
+
+</LinearLayout>

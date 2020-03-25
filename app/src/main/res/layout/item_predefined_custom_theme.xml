@@ -8,15 +8,18 @@
     android:background="?attr/selectableItemBackground">
 
     <View
-        android:id="@+id/color_primary_item_custom_theme"
+        android:id="@+id/color_primary_item_predefined_custom_theme"
         android:layout_width="24dp"
         android:layout_height="24dp"
+        android:layout_gravity="center_vertical"
         android:background="@drawable/circular_background" />
 
     <TextView
-        android:id="@+id/name_text_view_item_custom_theme"
+        android:id="@+id/name_text_view_item_predefined_custom_theme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp" />
+        android:layout_marginStart="32dp"
+        android:layout_gravity="center_vertical"
+        android:textColor="?attr/primaryTextColor" />
 
 </LinearLayout>

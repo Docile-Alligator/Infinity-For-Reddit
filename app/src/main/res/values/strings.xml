@@ -362,7 +362,7 @@
     <string name="settings_customize_light_theme_title">Light Theme</string>
     <string name="settings_customize_dark_theme_title">Dark Theme</string>
     <string name="settings_customize_amoled_theme_title">Amoled Theme</string>
-    <string name="settings_select_and_customize_theme_title">Select and Customize Themes</string>
+    <string name="settings_manage_themes_title">Manage Themes</string>
     <string name="settings_custom_theme_cannot_apply_to_settings_page_title">Custom themes cannot be applied to settings page.</string>
 
     <string name="no_link_available">Cannot get the link</string>
@@ -467,10 +467,11 @@
     <string name="save_image_before_sharing">Saving the image. Please wait.</string>
     <string name="save_gif_before_sharing">Saving the gif. Please wait.</string>
 
-    <string name="customize_light_theme_fragment_title">Customize Light Theme</string>
-    <string name="customize_dark_theme_fragment_title">Customize Dark Theme</string>
-    <string name="customize_amoled_theme_fragment_title">Customize Amoled Theme</string>
-
+    <string name="theme_name_description">Tap to change the name of this theme.</string>
+    <string name="theme_name_forbid_change_description">You cannot change the name of this predefined theme.</string>
+    <string name="theme_item_is_light_theme">Set as Light Theme</string>
+    <string name="theme_item_is_dark_theme">Set as Dark Theme</string>
+    <string name="theme_item_is_amoled_theme">Set as Amoled Theme</string>
     <string name="theme_item_color_primary">Color Primary</string>
     <string name="theme_item_color_primary_detail">Applied to: Toolbar</string>
     <string name="theme_item_color_primary_dark">Color Primary Dark</string>
