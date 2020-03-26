@@ -1,8 +1,8 @@
 package ml.docilealligator.infinityforreddit.Adapter;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Activity.CustomizeThemeActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomTheme;
+import ml.docilealligator.infinityforreddit.Fragment.CustomThemeOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.R;
 
 public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -27,12 +29,12 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
     private static final int VIEW_TYPE_PREDEFINED_THEME_DIVIDER = 2;
     private static final int VIEW_TYPE_USER_THEME_DIVIDER = 3;
 
-    private Context context;
+    private AppCompatActivity activity;
     private ArrayList<CustomTheme> predefinedCustomThemes;
     private ArrayList<CustomTheme> userCustomThemes;
 
-    public CustomThemeListingRecyclerViewAdapter(Context context, ArrayList<CustomTheme> predefinedCustomThemes) {
-        this.context = context;
+    public CustomThemeListingRecyclerViewAdapter(AppCompatActivity activity, ArrayList<CustomTheme> predefinedCustomThemes) {
+        this.activity = activity;
         this.predefinedCustomThemes = predefinedCustomThemes;
         userCustomThemes = new ArrayList<>();
     }
@@ -72,25 +74,30 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
             ((PredefinedCustomThemeViewHolder) holder).colorPrimaryView.setBackgroundTintList(ColorStateList.valueOf(customTheme.colorPrimary));
             ((PredefinedCustomThemeViewHolder) holder).nameTextView.setText(customTheme.name);
             ((PredefinedCustomThemeViewHolder) holder).itemView.setOnClickListener(view -> {
-                Intent intent = new Intent(context, CustomizeThemeActivity.class);
+                Intent intent = new Intent(activity, CustomizeThemeActivity.class);
                 intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_NAME, customTheme.name);
                 intent.putExtra(CustomizeThemeActivity.EXTRA_IS_PREDEFIINED_THEME, true);
-                context.startActivity(intent);
+                activity.startActivity(intent);
             });
         } else if (holder instanceof UserCustomThemeViewHolder) {
             CustomTheme customTheme = userCustomThemes.get(position - predefinedCustomThemes.size() - 2);
             ((UserCustomThemeViewHolder) holder).colorPrimaryView.setBackgroundTintList(ColorStateList.valueOf(customTheme.colorPrimary));
             ((UserCustomThemeViewHolder) holder).nameTextView.setText(customTheme.name);
-            ((UserCustomThemeViewHolder) holder).deleteImageView.setOnClickListener(view -> {
-
+            ((UserCustomThemeViewHolder) holder).createThemeImageView.setOnClickListener(view -> {
+                Intent intent = new Intent(activity, CustomizeThemeActivity.class);
+                intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_NAME, customTheme.name);
+                intent.putExtra(CustomizeThemeActivity.EXTRA_CREATE_THEME, true);
+                activity.startActivity(intent);
             });
             ((UserCustomThemeViewHolder) holder).shareImageView.setOnClickListener(view -> {
 
             });
             ((UserCustomThemeViewHolder) holder).itemView.setOnClickListener(view -> {
-                Intent intent = new Intent(context, CustomizeThemeActivity.class);
-                intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_NAME, customTheme.name);
-                context.startActivity(intent);
+                CustomThemeOptionsBottomSheetFragment customThemeOptionsBottomSheetFragment = new CustomThemeOptionsBottomSheetFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(CustomThemeOptionsBottomSheetFragment.EXTRA_THEME_NAME, customTheme.name);
+                customThemeOptionsBottomSheetFragment.setArguments(bundle);
+                customThemeOptionsBottomSheetFragment.show(activity.getSupportFragmentManager(), customThemeOptionsBottomSheetFragment.getTag());
             });
         } else if (holder instanceof PreDefinedThemeDividerViewHolder) {
             ((TextView) ((PreDefinedThemeDividerViewHolder) holder).itemView).setText(R.string.predefined_themes);
@@ -115,6 +122,8 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
         View colorPrimaryView;
         @BindView(R.id.name_text_view_item_predefined_custom_theme)
         TextView nameTextView;
+        @BindView(R.id.add_image_view_item_predefined_custom_theme)
+        ImageView createThemeImageView;
 
         public PredefinedCustomThemeViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -128,8 +137,8 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
         View colorPrimaryView;
         @BindView(R.id.name_text_view_item_user_custom_theme)
         TextView nameTextView;
-        @BindView(R.id.delete_image_view_item_user_custom_theme)
-        ImageView deleteImageView;
+        @BindView(R.id.add_image_view_item_user_custom_theme)
+        ImageView createThemeImageView;
         @BindView(R.id.share_image_view_item_user_custom_theme)
         ImageView shareImageView;
 

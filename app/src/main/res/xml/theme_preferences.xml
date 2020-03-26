@@ -21,17 +21,20 @@
     <Preference
         app:key="customize_light_theme"
         app:icon="@drawable/ic_light_theme_preference_24dp"
-        app:title="@string/settings_customize_light_theme_title" />
+        app:title="@string/settings_customize_light_theme_title"
+        app:isPreferenceVisible="false" />
 
     <Preference
         app:key="customize_dark_theme"
         app:icon="@drawable/ic_dark_theme_preference_24dp"
-        app:title="@string/settings_customize_dark_theme_title" />
+        app:title="@string/settings_customize_dark_theme_title"
+        app:isPreferenceVisible="false" />
 
     <Preference
         app:key="customize_amoled_theme"
-        app:icon="@drawable/ic_dark_theme_preference_24dp"
-        app:title="@string/settings_customize_amoled_theme_title" />
+        app:icon="@drawable/ic_amoled_theme_preference_24dp"
+        app:title="@string/settings_customize_amoled_theme_title"
+        app:isPreferenceVisible="false" />
 
     <Preference
         app:key="manage_themes"

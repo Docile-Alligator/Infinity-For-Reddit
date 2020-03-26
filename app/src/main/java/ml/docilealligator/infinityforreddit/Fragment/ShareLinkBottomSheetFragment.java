@@ -137,6 +137,6 @@ public class ShareLinkBottomSheetFragment extends RoundedBottomSheetDialogFragme
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.activity = (AppCompatActivity) context;
+        activity = (AppCompatActivity) context;
     }
 }

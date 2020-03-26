@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -21,10 +22,12 @@ import javax.inject.Inject;
 
 import ml.docilealligator.infinityforreddit.Activity.CustomThemeListingActivity;
 import ml.docilealligator.infinityforreddit.Activity.CustomizeThemeActivity;
+import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeViewModel;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
@@ -40,7 +43,10 @@ public class ThemePreferenceFragment extends PreferenceFragmentCompat {
 
     private AppCompatActivity activity;
     @Inject
+    RedditDataRoomDatabase redditDataRoomDatabase;
+    @Inject
     CustomThemeWrapper customThemeWrapper;
+    public CustomThemeViewModel customThemeViewModel;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -143,6 +149,40 @@ public class ThemePreferenceFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
+
+        customThemeViewModel = new ViewModelProvider(this,
+                new CustomThemeViewModel.Factory(redditDataRoomDatabase))
+                .get(CustomThemeViewModel.class);
+        customThemeViewModel.getCurrentLightThemeLiveData().observe(this, customTheme -> {
+            if (customizeLightThemePreference != null) {
+                if (customTheme != null) {
+                    customizeLightThemePreference.setVisible(true);
+                    customizeLightThemePreference.setSummary(customTheme.name);
+                } else {
+                    customizeLightThemePreference.setVisible(false);
+                }
+            }
+        });
+        customThemeViewModel.getCurrentDarkThemeLiveData().observe(this, customTheme -> {
+            if (customizeDarkThemePreference != null) {
+                if (customTheme != null) {
+                    customizeDarkThemePreference.setVisible(true);
+                    customizeDarkThemePreference.setSummary(customTheme.name);
+                } else {
+                    customizeDarkThemePreference.setVisible(false);
+                }
+            }
+        });
+        customThemeViewModel.getCurrentAmoledThemeLiveData().observe(this, customTheme -> {
+            if (customizeAmoledThemePreference != null) {
+                if (customTheme != null) {
+                    customizeAmoledThemePreference.setVisible(true);
+                    customizeAmoledThemePreference.setSummary(customTheme.name);
+                } else {
+                    customizeAmoledThemePreference.setVisible(false);
+                }
+            }
+        });
     }
 
     @Override

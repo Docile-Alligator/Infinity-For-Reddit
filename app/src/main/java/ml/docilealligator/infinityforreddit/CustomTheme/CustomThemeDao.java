@@ -25,6 +25,15 @@ public interface CustomThemeDao {
     @Query("SELECT * FROM custom_themes WHERE is_amoled_theme = 1 LIMIT 1")
     CustomTheme getAmoledCustomTheme();
 
+    @Query("SELECT * FROM custom_themes WHERE is_light_theme = 1 LIMIT 1")
+    LiveData<CustomTheme> getLightCustomThemeLiveData();
+
+    @Query("SELECT * FROM custom_themes WHERE is_dark_theme = 1 LIMIT 1")
+    LiveData<CustomTheme> getDarkCustomThemeLiveData();
+
+    @Query("SELECT * FROM custom_themes WHERE is_amoled_theme = 1 LIMIT 1")
+    LiveData<CustomTheme> getAmoledCustomThemeLiveData();
+
     @Query("SELECT * FROM custom_themes WHERE name = :name COLLATE NOCASE LIMIT 1")
     CustomTheme getCustomTheme(String name);
 
@@ -39,4 +48,7 @@ public interface CustomThemeDao {
 
     @Query("DELETE FROM custom_themes WHERE name = :name")
     void deleteCustomTheme(String name);
+
+    @Query("UPDATE custom_themes SET name = :newName WHERE name = :oldName")
+    void updateName(String oldName, String newName);
 }

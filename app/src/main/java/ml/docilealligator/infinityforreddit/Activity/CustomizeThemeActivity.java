@@ -9,10 +9,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -43,9 +45,12 @@ public class CustomizeThemeActivity extends BaseActivity {
     public static final int EXTRA_AMOLED_THEME = CustomThemeSharedPreferencesUtils.AMOLED;
     public static final String EXTRA_THEME_NAME = "ETN";
     public static final String EXTRA_IS_PREDEFIINED_THEME = "EIPT";
+    public static final String EXTRA_CREATE_THEME = "ECT";
     private static final String CUSTOM_THEME_SETTINGS_ITEMS_STATE = "CTSIS";
     private static final String THEME_NAME_STATE = "TNS";
 
+    @BindView(R.id.coordinator_customize_theme_activity)
+    CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_customize_theme_activity)
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_customize_theme_activity)
@@ -87,6 +92,10 @@ public class CustomizeThemeActivity extends BaseActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if (getIntent().getBooleanExtra(EXTRA_CREATE_THEME, false)) {
+            setTitle(R.string.customize_theme_activity_create_theme_label);
+        }
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -132,7 +141,6 @@ public class CustomizeThemeActivity extends BaseActivity {
                         themeName = customTheme.name;
                     }
 
-                    setTitle(themeName);
                     adapter = new CustomizeThemeRecyclerViewAdapter(this, themeName, isPredefinedTheme);
                     recyclerView.setAdapter(adapter);
                     adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
@@ -142,14 +150,12 @@ public class CustomizeThemeActivity extends BaseActivity {
                 themeName = getIntent().getStringExtra(EXTRA_THEME_NAME);
                 adapter = new CustomizeThemeRecyclerViewAdapter(this, themeName, isPredefinedTheme);
                 recyclerView.setAdapter(adapter);
-                setTitle(themeName);
                 if (isPredefinedTheme) {
                     customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(
                             CustomizeThemeActivity.this,
                             CustomThemeWrapper.getPredefinedCustomTheme(this, themeName),
                             androidVersion);
 
-                    setTitle(themeName);
                     adapter = new CustomizeThemeRecyclerViewAdapter(this, themeName, isPredefinedTheme);
                     recyclerView.setAdapter(adapter);
                     adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
@@ -184,13 +190,20 @@ public class CustomizeThemeActivity extends BaseActivity {
                 finish();
                 return true;
             case R.id.action_save_customize_theme_activity:
-                CustomTheme customTheme = CustomTheme.convertSettingsItemsToCustomTheme(customThemeSettingsItems, themeName);
-                new InsertCustomThemeAsyncTask(redditDataRoomDatabase, lightThemeSharedPreferences,
-                        darkThemeSharedPreferences, amoledThemeSharedPreferences, customTheme, () -> {
-                    Toast.makeText(CustomizeThemeActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
-                    EventBus.getDefault().post(new RecreateActivityEvent());
-                    finish();
-                }).execute();
+                if (adapter != null) {
+                    themeName = adapter.getThemeName();
+                    if (themeName.equals("")) {
+                        Snackbar.make(coordinatorLayout, R.string.no_theme_name, Snackbar.LENGTH_SHORT).show();
+                        return true;
+                    }
+                    CustomTheme customTheme = CustomTheme.convertSettingsItemsToCustomTheme(customThemeSettingsItems, themeName);
+                    new InsertCustomThemeAsyncTask(redditDataRoomDatabase, lightThemeSharedPreferences,
+                            darkThemeSharedPreferences, amoledThemeSharedPreferences, customTheme, () -> {
+                        Toast.makeText(CustomizeThemeActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
+                        EventBus.getDefault().post(new RecreateActivityEvent());
+                        finish();
+                    }).execute();
+                }
 
                 return true;
         }
@@ -201,8 +214,10 @@ public class CustomizeThemeActivity extends BaseActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(CUSTOM_THEME_SETTINGS_ITEMS_STATE, customThemeSettingsItems);
-        outState.putString(THEME_NAME_STATE, themeName);
+        if (adapter != null) {
+            outState.putParcelableArrayList(CUSTOM_THEME_SETTINGS_ITEMS_STATE, customThemeSettingsItems);
+            outState.putString(THEME_NAME_STATE, adapter.getThemeName());
+        }
     }
 
     @Override

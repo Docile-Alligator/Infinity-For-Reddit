@@ -546,8 +546,8 @@ public class CustomThemeWrapper {
     public static CustomTheme getIndigoAmoled(Context context) {
         CustomTheme customTheme = new CustomTheme(context.getString(R.string.theme_name_indigo_amoled));
         customTheme.isLightTheme = false;
-        customTheme.isDarkTheme = true;
-        customTheme.isAmoledTheme = false;
+        customTheme.isDarkTheme = false;
+        customTheme.isAmoledTheme = true;
         customTheme.colorPrimary = Color.parseColor("#000000");
         customTheme.colorPrimaryDark = Color.parseColor("#000000");
         customTheme.colorAccent = Color.parseColor("#FF4081");

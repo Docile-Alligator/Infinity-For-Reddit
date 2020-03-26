@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/coordinator_customize_theme_activity"
     tools:context=".Activity.CustomizeThemeActivity">
 
     <com.google.android.material.appbar.AppBarLayout

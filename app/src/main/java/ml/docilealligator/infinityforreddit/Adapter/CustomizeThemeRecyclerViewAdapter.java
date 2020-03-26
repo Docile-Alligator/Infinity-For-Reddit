@@ -1,15 +1,20 @@
 package ml.docilealligator.infinityforreddit.Adapter;
 
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 
@@ -40,7 +45,7 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     public int getItemViewType(int position) {
         if (position == 0) {
             return VIEW_TYPE_THEME_NAME;
-        } else if (position > 3 && position < customThemeSettingsItems.size() - 3) {
+        } else if (position > 3 && position < customThemeSettingsItems.size() - 2) {
             return VIEW_TYPE_COLOR;
         }
 
@@ -82,7 +87,36 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         } else if (holder instanceof ThemeNameItemViewHolder) {
             ((ThemeNameItemViewHolder) holder).themeNameTextView.setText(themeName);
             holder.itemView.setOnClickListener(view -> {
-
+                View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_edit_theme_name, null);
+                EditText themeNameEditText = dialogView.findViewById(R.id.theme_name_edit_text_edit_theme_name_dialog);
+                themeNameEditText.setText(themeName);
+                themeNameEditText.requestFocus();
+                InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                }
+                new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+                        .setTitle(R.string.edit_theme_name)
+                        .setView(dialogView)
+                        .setPositiveButton(R.string.ok, (dialogInterface, i)
+                                -> {
+                            if (imm != null) {
+                                imm.hideSoftInputFromWindow(themeNameEditText.getWindowToken(), 0);
+                            }
+                            themeName = themeNameEditText.getText().toString();
+                            ((ThemeNameItemViewHolder) holder).themeNameTextView.setText(themeName);
+                        })
+                        .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                            if (imm != null) {
+                                imm.hideSoftInputFromWindow(themeNameEditText.getWindowToken(), 0);
+                            }
+                        })
+                        .setOnDismissListener(dialogInterface -> {
+                            if (imm != null) {
+                                imm.hideSoftInputFromWindow(themeNameEditText.getWindowToken(), 0);
+                            }
+                        })
+                        .show();
             });
         }
     }
@@ -97,6 +131,10 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         notifyDataSetChanged();
         this.customThemeSettingsItems.addAll(customThemeSettingsItems);
         notifyDataSetChanged();
+    }
+
+    public String getThemeName() {
+        return themeName;
     }
 
     class ThemeColorItemViewHolder extends RecyclerView.ViewHolder {
@@ -135,10 +173,6 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         public ThemeNameItemViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            if (isPredefinedTheme) {
-                descriptionTextView.setText(activity.getString(R.string.theme_name_forbid_change_description));
-                itemView.setOnClickListener(view ->{});
-            }
         }
     }
 }

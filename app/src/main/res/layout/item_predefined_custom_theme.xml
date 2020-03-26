@@ -16,10 +16,19 @@
 
     <TextView
         android:id="@+id/name_text_view_item_predefined_custom_theme"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:layout_marginStart="32dp"
         android:layout_gravity="center_vertical"
         android:textColor="?attr/primaryTextColor" />
+
+    <ImageView
+        android:id="@+id/add_image_view_item_predefined_custom_theme"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="32dp"
+        android:src="@drawable/ic_add_24dp" />
 
 </LinearLayout>

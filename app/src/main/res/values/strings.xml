@@ -20,6 +20,8 @@
     <string name="create_multi_reddit_activity_label">Create Multireddit</string>
     <string name="subreddit_multiselection_activity_label">Select Subreddits</string>
     <string name="custom_theme_listing_activity_label">Custom Themes</string>
+    <string name="customize_theme_activity_label">Customize Theme</string>
+    <string name="customize_theme_activity_create_theme_label">Create Theme</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -468,7 +470,6 @@
     <string name="save_gif_before_sharing">Saving the gif. Please wait.</string>
 
     <string name="theme_name_description">Tap to change the name of this theme.</string>
-    <string name="theme_name_forbid_change_description">You cannot change the name of this predefined theme.</string>
     <string name="theme_item_is_light_theme">Set as Light Theme</string>
     <string name="theme_item_is_dark_theme">Set as Dark Theme</string>
     <string name="theme_item_is_amoled_theme">Set as Amoled Theme</string>
@@ -604,9 +605,20 @@
 
     <string name="predefined_themes">Predefined Themes</string>
     <string name="user_themes">Your Themes</string>
+    <string name="no_theme_name">What is the name of this theme?</string>
+    <string name="theme_name_hint">Theme Name</string>
     <string name="theme_name_indigo">Indigo</string>
     <string name="theme_name_indigo_dark">Indigo Dark</string>
     <string name="theme_name_indigo_amoled">Indigo Amoled</string>
+    <string name="create_light_theme">Create a Light Theme\nBase on Indigo Theme</string>
+    <string name="create_dark_theme">Create a Dark Theme\nBase on Indigo Dark Theme</string>
+    <string name="create_amoled_theme">Create an Amoled Theme\nBase on Indigo Amoled Theme</string>
+    <string name="create_theme_info">If you want to create a theme based on another theme, click the \"+\" button on a theme instead.</string>
+    <string name="edit_theme_name">Edit Theme Name</string>
+    <string name="edit_theme">Edit Theme</string>
+    <string name="delete_theme">Delete Theme</string>
+    <string name="share_theme">Share Theme</string>
+    <string name="change_theme_name">Change Name</string>
 
     <string name="color_picker">Color Picker</string>
     <string name="invalid_color">Invalid Color</string>
