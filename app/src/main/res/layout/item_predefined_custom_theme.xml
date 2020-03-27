@@ -29,6 +29,6 @@
         android:layout_height="24dp"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="32dp"
-        android:src="@drawable/ic_add_24dp" />
+        android:src="@drawable/ic_add_day_night_24dp" />
 
 </LinearLayout>

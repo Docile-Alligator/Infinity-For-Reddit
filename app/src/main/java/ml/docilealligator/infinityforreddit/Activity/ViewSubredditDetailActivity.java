@@ -360,7 +360,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         multiRedditBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         messageBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         profileBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        applyFABTheme(fab, R.drawable.ic_add_bottom_app_bar_24dp);
+        applyFABTheme(fab, R.drawable.ic_add_day_night_24dp);
         unsubscribedColor = mCustomThemeWrapper.getUnsubscribed();
         subscribedColor = mCustomThemeWrapper.getSubscribed();
     }

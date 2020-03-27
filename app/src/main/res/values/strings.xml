@@ -365,7 +365,7 @@
     <string name="settings_customize_dark_theme_title">Dark Theme</string>
     <string name="settings_customize_amoled_theme_title">Amoled Theme</string>
     <string name="settings_manage_themes_title">Manage Themes</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_title">Custom themes cannot be applied to settings page.</string>
+    <string name="settings_custom_theme_cannot_apply_to_settings_page_title">Custom themes cannot be applied to settings page (except toolbar, status bar and navigation bar).</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -617,6 +617,7 @@
     <string name="edit_theme_name">Edit Theme Name</string>
     <string name="edit_theme">Edit Theme</string>
     <string name="delete_theme">Delete Theme</string>
+    <string name="delete_theme_dialog_message">Are you sure to delete %1$s?</string>
     <string name="share_theme">Share Theme</string>
     <string name="change_theme_name">Change Name</string>
 

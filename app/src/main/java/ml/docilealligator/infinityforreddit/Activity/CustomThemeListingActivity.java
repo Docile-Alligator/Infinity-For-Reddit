@@ -18,6 +18,9 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -28,11 +31,13 @@ import ml.docilealligator.infinityforreddit.AsyncTask.ChangeThemeNameAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.DeleteThemeAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeViewModel;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.Fragment.CustomThemeOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SelectBaseThemeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.Utils.CustomThemeSharedPreferencesUtils;
 
 public class CustomThemeListingActivity extends BaseActivity implements CustomThemeOptionsBottomSheetFragment.CustomThemeOptionsBottomSheetFragmentListener {
 
@@ -51,6 +56,15 @@ public class CustomThemeListingActivity extends BaseActivity implements CustomTh
     RedditDataRoomDatabase redditDataRoomDatabase;
     @Inject
     CustomThemeWrapper customThemeWrapper;
+    @Inject
+    @Named("light_theme")
+    SharedPreferences lightThemeSharedPreferences;
+    @Inject
+    @Named("dark_theme")
+    SharedPreferences darkThemeSharedPreferences;
+    @Inject
+    @Named("amoled_theme")
+    SharedPreferences amoledThemeSharedPreferences;
     public CustomThemeViewModel customThemeViewModel;
 
     @Override
@@ -61,6 +75,8 @@ public class CustomThemeListingActivity extends BaseActivity implements CustomTh
         setContentView(R.layout.activity_custom_theme_listing);
 
         ButterKnife.bind(this);
+
+        EventBus.getDefault().register(this);
 
         applyCustomTheme();
 
@@ -125,7 +141,7 @@ public class CustomThemeListingActivity extends BaseActivity implements CustomTh
                     if (imm != null) {
                         imm.hideSoftInputFromWindow(themeNameEditText.getWindowToken(), 0);
                     }
-                    new ChangeThemeNameAsyncTask(redditDataRoomDatabase, oldName, themeNameEditText.getText().toString());
+                    new ChangeThemeNameAsyncTask(redditDataRoomDatabase, oldName, themeNameEditText.getText().toString()).execute();
                 })
                 .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
                     if (imm != null) {
@@ -142,6 +158,37 @@ public class CustomThemeListingActivity extends BaseActivity implements CustomTh
 
     @Override
     public void delete(String name) {
-        new DeleteThemeAsyncTask(redditDataRoomDatabase, name).execute();
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                .setTitle(R.string.delete_theme)
+                .setMessage(getString(R.string.delete_theme_dialog_message, name))
+                .setPositiveButton(R.string.yes, (dialogInterface, i)
+                        -> new DeleteThemeAsyncTask(redditDataRoomDatabase, name, (isLightTheme, isDarkTheme, isAmoledTheme) -> {
+                            if (isLightTheme) {
+                                CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(
+                                        CustomThemeWrapper.getIndigo(CustomThemeListingActivity.this), lightThemeSharedPreferences);
+                            }
+                            if (isDarkTheme) {
+                                CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(
+                                        CustomThemeWrapper.getIndigo(CustomThemeListingActivity.this), darkThemeSharedPreferences);
+                            }
+                            if (isAmoledTheme) {
+                                CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(
+                                        CustomThemeWrapper.getIndigo(CustomThemeListingActivity.this), amoledThemeSharedPreferences);
+                            }
+                            EventBus.getDefault().post(new RecreateActivityEvent());
+                        }).execute())
+                .setNegativeButton(R.string.no, null)
+                .show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onRecreateActivityEvent(RecreateActivityEvent recreateActivityEvent) {
+        recreate();
     }
 }
