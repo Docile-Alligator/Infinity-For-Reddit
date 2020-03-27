@@ -250,13 +250,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
-        //Get status bar height
-        int statusBarHeight = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            statusBarHeight = getResources().getDimensionPixelSize(resourceId);
-        }
-
         String title = "r/" + subredditName;
         subredditNameTextView.setText(title);
 
@@ -346,6 +339,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     protected void applyCustomTheme() {
         int backgroundColor = mCustomThemeWrapper.getBackgroundColor();
         coordinatorLayout.setBackgroundColor(backgroundColor);
+        collapsingToolbarLayout.setContentScrimColor(mCustomThemeWrapper.getColorPrimary());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         linearLayout.setBackgroundColor(backgroundColor);
         subredditNameTextView.setTextColor(mCustomThemeWrapper.getSubreddit());

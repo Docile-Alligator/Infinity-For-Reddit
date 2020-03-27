@@ -169,11 +169,11 @@ public class CustomThemeListingActivity extends BaseActivity implements CustomTh
                             }
                             if (isDarkTheme) {
                                 CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(
-                                        CustomThemeWrapper.getIndigo(CustomThemeListingActivity.this), darkThemeSharedPreferences);
+                                        CustomThemeWrapper.getIndigoDark(CustomThemeListingActivity.this), darkThemeSharedPreferences);
                             }
                             if (isAmoledTheme) {
                                 CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(
-                                        CustomThemeWrapper.getIndigo(CustomThemeListingActivity.this), amoledThemeSharedPreferences);
+                                        CustomThemeWrapper.getIndigoAmoled(CustomThemeListingActivity.this), amoledThemeSharedPreferences);
                             }
                             EventBus.getDefault().post(new RecreateActivityEvent());
                         }).execute())

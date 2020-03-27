@@ -410,6 +410,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        collapsingToolbarLayout.setContentScrimColor(mCustomThemeWrapper.getColorPrimary());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         expandedTabTextColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTextColor();
         expandedTabIndicatorColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTabIndicator();
@@ -546,7 +547,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_user_detail_activity, menu);
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        applyMenuItemTheme(menu);
         mMenu = menu;
         MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity);
         if (isInLazyMode) {
