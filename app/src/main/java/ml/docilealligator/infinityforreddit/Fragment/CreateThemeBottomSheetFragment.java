@@ -22,24 +22,36 @@ import ml.docilealligator.infinityforreddit.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SelectBaseThemeBottomSheetFragment extends RoundedBottomSheetDialogFragment {
+public class CreateThemeBottomSheetFragment extends RoundedBottomSheetDialogFragment {
 
-    @BindView(R.id.light_theme_text_view_select_base_theme_bottom_sheet_fragment)
+    @BindView(R.id.import_theme_text_view_create_theme_bottom_sheet_fragment)
+    TextView importTextView;
+    @BindView(R.id.light_theme_text_view_create_theme_bottom_sheet_fragment)
     TextView lightThemeTextView;
-    @BindView(R.id.dark_theme_text_view_select_base_theme_bottom_sheet_fragment)
+    @BindView(R.id.dark_theme_text_view_create_theme_bottom_sheet_fragment)
     TextView darkThemeTextView;
-    @BindView(R.id.amoled_theme_text_view_select_base_theme_bottom_sheet_fragment)
+    @BindView(R.id.amoled_theme_text_view_create_theme_bottom_sheet_fragment)
     TextView amoledThemeTextView;
     private Activity activity;
-    public SelectBaseThemeBottomSheetFragment() {
+
+    public interface SelectBaseThemeBottomSheetFragmentListener {
+        void importTheme();
+    }
+
+    public CreateThemeBottomSheetFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_select_base_theme_bottom_sheet, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_create_theme_bottom_sheet, container, false);
         ButterKnife.bind(this, rootView);
+
+        importTextView.setOnClickListener(view -> {
+            ((SelectBaseThemeBottomSheetFragmentListener) activity).importTheme();
+            dismiss();
+        });
 
         lightThemeTextView.setOnClickListener(view -> {
             Intent intent = new Intent(activity, CustomizeThemeActivity.class);

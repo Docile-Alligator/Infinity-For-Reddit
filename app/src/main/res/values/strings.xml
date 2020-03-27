@@ -431,7 +431,7 @@
     <string name="copy_link">Copy Link</string>
 
     <string name="copy_success">Copied</string>
-    <string name="copy_failed">Cannot copy the link</string>
+    <string name="copy_link_failed">Cannot copy the link</string>
     <string name="copy_text">Copy</string>
     <string name="copy_all">Copy All</string>
     <string name="copy_markdown">Copy Markdown</string>
@@ -620,6 +620,20 @@
     <string name="delete_theme_dialog_message">Are you sure to delete %1$s?</string>
     <string name="share_theme">Share Theme</string>
     <string name="change_theme_name">Change Name</string>
+    <string name="theme_copied">Copied! Paste and share it to other people.</string>
+    <string name="copy_theme_faied">Cannot copy the theme configuration</string>
+    <string name="cannot_find_theme">Cannot find this theme</string>
+    <string name="import_theme">Import Theme</string>
+    <string name="no_data_in_clipboard">Cannot find data in clipboard</string>
+    <string name="import_theme_success">Import theme successful</string>
+    <string name="parse_theme_failed">Parse Theme Failed</string>
+    <string name="share_theme_to_subreddit_dialog_title">Share it to r/Infinity_For_Reddit?</string>
+    <string name="share_theme_to_subreddit_dialog_message">The theme configuration is copied!
+        Do you want to share it to r/Infinity so that other people can use it?</string>
+    <string name="duplicate_theme_name_dialog_title">Duplicate Theme Found</string>
+    <string name="duplicate_theme_name_dialog_message">A theme in the database is also called %1$s. Do you want to change the name of this imported theme?</string>
+    <string name="rename">Rename</string>
+    <string name="override">Override</string>
 
     <string name="color_picker">Color Picker</string>
     <string name="invalid_color">Invalid Color</string>

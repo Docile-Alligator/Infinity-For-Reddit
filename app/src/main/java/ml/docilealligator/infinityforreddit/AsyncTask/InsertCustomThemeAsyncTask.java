@@ -13,22 +13,27 @@ public class InsertCustomThemeAsyncTask extends AsyncTask<Void, Void, Void> {
     private SharedPreferences darkThemeSharedPreferences;
     private SharedPreferences amoledThemeSharedPreferences;
     private CustomTheme customTheme;
+    private boolean checkDuplicate;
     private InsertCustomThemeAsyncTaskListener insertCustomThemeAsyncTaskListener;
+    private boolean isDuplicate = false;
 
     public interface InsertCustomThemeAsyncTaskListener {
         void success();
+        default void duplicate() {}
     }
 
     public InsertCustomThemeAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase,
                                       SharedPreferences lightThemeSharedPreferences,
                                       SharedPreferences darkThemeSharedPreferences,
-                                      SharedPreferences amoledThemeSharedPreferences, CustomTheme customTheme,
+                                      SharedPreferences amoledThemeSharedPreferences,
+                                      CustomTheme customTheme, boolean checkDuplicate,
                                       InsertCustomThemeAsyncTaskListener insertCustomThemeAsyncTaskListener) {
         this.redditDataRoomDatabase = redditDataRoomDatabase;
         this.lightThemeSharedPreferences = lightThemeSharedPreferences;
         this.darkThemeSharedPreferences = darkThemeSharedPreferences;
         this.amoledThemeSharedPreferences = amoledThemeSharedPreferences;
         this.customTheme = customTheme;
+        this.checkDuplicate = checkDuplicate;
         this.insertCustomThemeAsyncTaskListener = insertCustomThemeAsyncTaskListener;
     }
 
@@ -46,6 +51,12 @@ public class InsertCustomThemeAsyncTask extends AsyncTask<Void, Void, Void> {
             redditDataRoomDatabase.customThemeDao().unsetAmoledTheme();
             CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(customTheme, amoledThemeSharedPreferences);
         }
+        if (checkDuplicate) {
+            if (redditDataRoomDatabase.customThemeDao().getCustomTheme(customTheme.name) != null) {
+                isDuplicate = true;
+                return null;
+            }
+        }
         redditDataRoomDatabase.customThemeDao().insert(customTheme);
         return null;
     }
@@ -53,6 +64,10 @@ public class InsertCustomThemeAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        insertCustomThemeAsyncTaskListener.success();
+        if (isDuplicate) {
+            insertCustomThemeAsyncTaskListener.duplicate();
+        } else {
+            insertCustomThemeAsyncTaskListener.success();
+        }
     }
 }

@@ -130,7 +130,7 @@ public class ShareLinkBottomSheetFragment extends RoundedBottomSheetDialogFragme
             clipboard.setPrimaryClip(clip);
             Toast.makeText(activity, R.string.copy_success, Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(activity, R.string.copy_failed, Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, R.string.copy_link_failed, Toast.LENGTH_SHORT).show();
         }
     }
 

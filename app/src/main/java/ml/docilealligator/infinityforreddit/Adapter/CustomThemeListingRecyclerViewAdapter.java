@@ -18,6 +18,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.Activity.CustomThemeListingActivity;
 import ml.docilealligator.infinityforreddit.Activity.CustomizeThemeActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.Fragment.CustomThemeOptionsBottomSheetFragment;
@@ -90,7 +91,7 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
                 activity.startActivity(intent);
             });
             ((UserCustomThemeViewHolder) holder).shareImageView.setOnClickListener(view -> {
-
+                ((CustomThemeListingActivity) activity).shareTheme(customTheme);
             });
             ((UserCustomThemeViewHolder) holder).itemView.setOnClickListener(view -> {
                 CustomThemeOptionsBottomSheetFragment customThemeOptionsBottomSheetFragment = new CustomThemeOptionsBottomSheetFragment();

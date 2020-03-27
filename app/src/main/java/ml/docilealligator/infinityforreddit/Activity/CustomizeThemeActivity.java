@@ -198,7 +198,8 @@ public class CustomizeThemeActivity extends BaseActivity {
                     }
                     CustomTheme customTheme = CustomTheme.convertSettingsItemsToCustomTheme(customThemeSettingsItems, themeName);
                     new InsertCustomThemeAsyncTask(redditDataRoomDatabase, lightThemeSharedPreferences,
-                            darkThemeSharedPreferences, amoledThemeSharedPreferences, customTheme, () -> {
+                            darkThemeSharedPreferences, amoledThemeSharedPreferences, customTheme,
+                            false, () -> {
                         Toast.makeText(CustomizeThemeActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
                         EventBus.getDefault().post(new RecreateActivityEvent());
                         finish();

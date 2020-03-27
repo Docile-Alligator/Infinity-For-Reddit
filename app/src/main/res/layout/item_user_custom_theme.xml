@@ -24,21 +24,21 @@
         android:textColor="?attr/primaryTextColor" />
 
     <ImageView
-        android:id="@+id/add_image_view_item_user_custom_theme"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="32dp"
-        android:src="@drawable/ic_add_day_night_24dp"
-        android:background="?attr/selectableItemBackgroundBorderless" />
-
-    <ImageView
         android:id="@+id/share_image_view_item_user_custom_theme"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="16dp"
         android:src="@drawable/ic_share_24dp"
+        android:background="?attr/selectableItemBackgroundBorderless" />
+
+    <ImageView
+        android:id="@+id/add_image_view_item_user_custom_theme"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="32dp"
+        android:src="@drawable/ic_add_day_night_24dp"
         android:background="?attr/selectableItemBackgroundBorderless" />
 
 </LinearLayout>

@@ -5,6 +5,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 
 @Entity(tableName = "custom_themes")
@@ -150,8 +152,15 @@ public class CustomTheme {
     @ColumnInfo(name = "is_change_status_bar_icon_color_after_toolbar_collapsed_in_immersive_interface")
     public boolean isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface;
 
+    public CustomTheme() {}
+
     public CustomTheme(@NonNull String name) {
         this.name = name;
+    }
+
+    public String getJSONModel() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 
     public static CustomTheme convertSettingsItemsToCustomTheme(ArrayList<CustomThemeSettingsItem> customThemeSettingsItems, String themeName) {

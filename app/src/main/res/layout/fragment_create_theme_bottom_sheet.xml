@@ -11,7 +11,25 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/light_theme_text_view_select_base_theme_bottom_sheet_fragment"
+            android:id="@+id/import_theme_text_view_create_theme_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:text="@string/import_theme"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:drawableStart="@drawable/ic_import_day_night_24dp"
+            android:drawablePadding="48dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:id="@+id/light_theme_text_view_create_theme_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -29,7 +47,7 @@
             android:background="?attr/selectableItemBackground" />
 
         <TextView
-            android:id="@+id/dark_theme_text_view_select_base_theme_bottom_sheet_fragment"
+            android:id="@+id/dark_theme_text_view_create_theme_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -47,7 +65,7 @@
             android:background="?attr/selectableItemBackground" />
 
         <TextView
-            android:id="@+id/amoled_theme_text_view_select_base_theme_bottom_sheet_fragment"
+            android:id="@+id/amoled_theme_text_view_create_theme_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"

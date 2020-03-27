@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,8 +44,9 @@ public class CustomThemeOptionsBottomSheetFragment extends RoundedBottomSheetDia
     }
 
     public interface CustomThemeOptionsBottomSheetFragmentListener {
-        void changeName(String oldName);
-        void delete(String name);
+        void changeName(String oldThemeName);
+        void shareTheme(String themeName);
+        void delete(String themeName);
     }
 
     @Override
@@ -68,6 +66,7 @@ public class CustomThemeOptionsBottomSheetFragment extends RoundedBottomSheetDia
         });
 
         shareThemeTextView.setOnClickListener(view -> {
+            ((CustomThemeOptionsBottomSheetFragmentListener) activity).shareTheme(themeName);
             dismiss();
         });
 
