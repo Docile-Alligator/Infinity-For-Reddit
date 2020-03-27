@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -105,6 +106,7 @@ public class RulesActivity extends BaseActivity {
             }
         }
 
+        appBarLayout.setBackgroundColor(mCustomThemeWrapper.getColorPrimary());
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -131,6 +133,7 @@ public class RulesActivity extends BaseActivity {
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        progressBar.setIndeterminateTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorAccent()));
         errorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
     }
 
