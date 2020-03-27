@@ -43,7 +43,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private String mAccessToken;
     private RequestManager glide;
-    private int mUsernameColor;
+    private int mPrimaryTextColor;
     private int mSecondaryTextColor;
 
     public FollowedUsersRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
@@ -55,7 +55,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mAccessToken = accessToken;
         glide = Glide.with(context.getApplicationContext());
-        mUsernameColor = customThemeWrapper.getUsername();
+        mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
     }
 
@@ -300,7 +300,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         FavoriteUserViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            userNameTextView.setTextColor(mUsernameColor);
+            userNameTextView.setTextColor(mPrimaryTextColor);
         }
     }
 
@@ -315,7 +315,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         UserViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            userNameTextView.setTextColor(mUsernameColor);
+            userNameTextView.setTextColor(mPrimaryTextColor);
         }
     }
 

@@ -41,6 +41,7 @@ import ml.docilealligator.infinityforreddit.Fragment.CommentsListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.FollowedUsersListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
+import ml.docilealligator.infinityforreddit.Fragment.SidebarFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SubredditListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SubscribedSubredditsListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.UserListingFragment;
@@ -146,4 +147,6 @@ public interface AppComponent {
     void inject(CustomizeThemeActivity customizeThemeActivity);
 
     void inject(CustomThemeListingActivity customThemeListingActivity);
+
+    void inject(SidebarFragment sidebarFragment);
 }

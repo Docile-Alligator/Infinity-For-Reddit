@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -21,7 +22,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -32,6 +36,7 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -42,6 +47,7 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.AsyncTask.CheckIsSubscribedToSubredditAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubredditDataAsyncTask;
@@ -53,6 +59,7 @@ import ml.docilealligator.infinityforreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.Fragment.SidebarFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
@@ -79,7 +86,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     private static final String FETCH_SUBREDDIT_INFO_STATE = "FSIS";
     private static final String CURRENT_ONLINE_SUBSCRIBERS_STATE = "COSS";
-    private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
@@ -89,6 +95,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     @BindView(R.id.coordinator_layout_view_subreddit_detail_activity)
     CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.view_pager_view_subreddit_detail_activity)
+    ViewPager viewPager;
     @BindView(R.id.appbar_layout_view_subreddit_detail)
     AppBarLayout appBarLayout;
     @BindView(R.id.collapsing_toolbar_layout_view_subreddit_detail_activity)
@@ -97,6 +105,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     LinearLayout linearLayout;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.tab_layout_view_subreddit_detail_activity)
+    TabLayout tabLayout;
     @BindView(R.id.banner_image_view_view_subreddit_detail_activity)
     GifImageView bannerImageView;
     @BindView(R.id.icon_gif_image_view_view_subreddit_detail_activity)
@@ -138,6 +148,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    public SubredditViewModel mSubredditViewModel;
+    private SectionsPagerAdapter sectionsPagerAdapter;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
@@ -152,14 +164,18 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private String mMessageFullname;
     private String mNewAccountName;
     private RequestManager glide;
-    private Fragment mFragment;
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
     private PostTypeBottomSheetFragment postTypeBottomSheetFragment;
     private SortTypeBottomSheetFragment sortTypeBottomSheetFragment;
     private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
     private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
-    private SubredditViewModel mSubredditViewModel;
+    private int expandedTabTextColor;
+    private int expandedTabBackgroundColor;
+    private int expandedTabIndicatorColor;
+    private int collapsedTabTextColor;
+    private int collapsedTabBackgroundColor;
+    private int collapsedTabIndicatorColor;
     private int unsubscribedColor;
     private int subscribedColor;
 
@@ -180,14 +196,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
-
-            if (isChangeStatusBarIconColor()) {
-                addOnOffsetChangedListener(appBarLayout);
-            }
-
             if (isImmersiveInterface()) {
                 window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-                adjustToolbar(toolbar);
+                showToast = true;
 
                 int navBarHeight = getNavBarHeight();
                 if (navBarHeight > 0) {
@@ -200,6 +211,56 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     showToast = true;
                 }
             }
+
+            View decorView = window.getDecorView();
+            if (isChangeStatusBarIconColor()) {
+                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                    @Override
+                    public void onStateChanged(AppBarLayout appBarLayout, AppBarStateChangeListener.State state) {
+                        if (state == State.COLLAPSED) {
+                            decorView.setSystemUiVisibility(getSystemVisibilityToolbarCollapsed());
+                            tabLayout.setTabTextColors(collapsedTabTextColor, collapsedTabTextColor);
+                            tabLayout.setSelectedTabIndicatorColor(collapsedTabIndicatorColor);
+                            tabLayout.setBackgroundColor(collapsedTabBackgroundColor);
+                        } else if (state == State.EXPANDED) {
+                            decorView.setSystemUiVisibility(getSystemVisibilityToolbarExpanded());
+                            tabLayout.setTabTextColors(expandedTabTextColor, expandedTabTextColor);
+                            tabLayout.setSelectedTabIndicatorColor(expandedTabIndicatorColor);
+                            tabLayout.setBackgroundColor(expandedTabBackgroundColor);
+                        }
+                    }
+                });
+            } else {
+                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                    @Override
+                    public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                        if (state == State.COLLAPSED) {
+                            tabLayout.setTabTextColors(collapsedTabTextColor, collapsedTabTextColor);
+                            tabLayout.setSelectedTabIndicatorColor(collapsedTabIndicatorColor);
+                            tabLayout.setBackgroundColor(collapsedTabBackgroundColor);
+                        } else if (state == State.EXPANDED) {
+                            tabLayout.setTabTextColors(expandedTabTextColor, expandedTabTextColor);
+                            tabLayout.setSelectedTabIndicatorColor(expandedTabIndicatorColor);
+                            tabLayout.setBackgroundColor(expandedTabBackgroundColor);
+                        }
+                    }
+                });
+            }
+        } else {
+            appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                @Override
+                public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                    if (state == State.EXPANDED) {
+                        tabLayout.setTabTextColors(expandedTabTextColor, expandedTabTextColor);
+                        tabLayout.setSelectedTabIndicatorColor(expandedTabIndicatorColor);
+                        tabLayout.setBackgroundColor(expandedTabBackgroundColor);
+                    } else if (state == State.COLLAPSED) {
+                        tabLayout.setTabTextColors(collapsedTabTextColor, collapsedTabTextColor);
+                        tabLayout.setSelectedTabIndicatorColor(collapsedTabIndicatorColor);
+                        tabLayout.setBackgroundColor(collapsedTabBackgroundColor);
+                    }
+                }
+            });
         }
 
         showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false);
@@ -221,13 +282,10 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             mMessageFullname = savedInstanceState.getString(MESSAGE_FULLNAME_STATE);
             mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
 
-            mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
-
             if (!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndBindView();
             } else {
-                bindView(false);
+                bindView();
             }
 
             if (mFetchSubredditInfoSuccess) {
@@ -318,8 +376,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (mFragment != null) {
-            return ((FragmentCommunicator)(mFragment)).handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
+        if (sectionsPagerAdapter != null) {
+            return sectionsPagerAdapter.handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
         }
 
         return super.onKeyDown(keyCode, event);
@@ -341,6 +399,12 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         coordinatorLayout.setBackgroundColor(backgroundColor);
         collapsingToolbarLayout.setContentScrimColor(mCustomThemeWrapper.getColorPrimary());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        expandedTabTextColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTextColor();
+        expandedTabIndicatorColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTabIndicator();
+        expandedTabBackgroundColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTabBackground();
+        collapsedTabTextColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTextColor();
+        collapsedTabIndicatorColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabIndicator();
+        collapsedTabBackgroundColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabBackground();
         linearLayout.setBackgroundColor(backgroundColor);
         subredditNameTextView.setTextColor(mCustomThemeWrapper.getSubreddit());
         subscribeSubredditChip.setTextColor(mCustomThemeWrapper.getChipTextColor());
@@ -354,6 +418,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         multiRedditBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         messageBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         profileBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        applyTabLayoutTheme(tabLayout);
         applyFABTheme(fab, R.drawable.ic_add_day_night_24dp);
         unsubscribedColor = mCustomThemeWrapper.getUnsubscribed();
         subscribedColor = mCustomThemeWrapper.getSubscribed();
@@ -375,12 +440,12 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                             mAccountName = newAccount.getUsername();
                         }
 
-                        bindView(true);
+                        bindView();
                     }).execute();
                 } else {
                     mAccessToken = account.getAccessToken();
                     mAccountName = account.getUsername();
-                    bindView(true);
+                    bindView();
                 }
             } else {
                 if (account == null) {
@@ -390,7 +455,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     mAccountName = account.getUsername();
                 }
 
-                bindView(true);
+                bindView();
             }
         }).execute();
     }
@@ -414,7 +479,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         }
     }
 
-    private void bindView(boolean initializeFragment) {
+    private void bindView() {
         if (mAccessToken != null) {
             if (mMessageFullname != null) {
                 ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
@@ -531,16 +596,33 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     }
                 }).execute();
 
-        if (initializeFragment) {
-            mFragment = new PostFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString(PostFragment.EXTRA_NAME, subredditName);
-            bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
-            bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
-            bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
-            mFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_subreddit_detail_activity, mFragment).commit();
-        }
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setOffscreenPageLimit(2);
+        tabLayout.setupWithViewPager(viewPager);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (isInLazyMode) {
+                    if (viewPager.getCurrentItem() == 0) {
+                        sectionsPagerAdapter.resumeLazyMode();
+                    } else {
+                        sectionsPagerAdapter.pauseLazyMode();
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override
@@ -582,24 +664,22 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 if (mMenu != null) {
                     mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity).setTitle(R.string.action_start_lazy_mode);
                 }
-                if (mFragment instanceof FragmentCommunicator) {
-                    ((FragmentCommunicator) mFragment).refresh();
-                    mFetchSubredditInfoSuccess = false;
-                    fetchSubredditData();
-                }
+                sectionsPagerAdapter.refresh();
+                mFetchSubredditInfoSuccess = false;
+                fetchSubredditData();
                 return true;
             case R.id.action_lazy_mode_view_subreddit_detail_activity:
                 MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity);
                 if (isInLazyMode) {
                     isInLazyMode = false;
-                    ((FragmentCommunicator) mFragment).stopLazyMode();
+                    sectionsPagerAdapter.stopLazyMode();
                     lazyModeItem.setTitle(R.string.action_start_lazy_mode);
                     params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
                             AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
                     collapsingToolbarLayout.setLayoutParams(params);
                 } else {
                     isInLazyMode = true;
-                    if (((FragmentCommunicator) mFragment).startLazyMode()) {
+                    if (sectionsPagerAdapter.startLazyMode()) {
                         lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
                         appBarLayout.setExpanded(false);
                         params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
@@ -632,7 +712,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         outState.putString(ACCOUNT_NAME_STATE, mAccountName);
         outState.putString(MESSAGE_FULLNAME_STATE, mMessageFullname);
         outState.putString(NEW_ACCOUNT_NAME_STATE, mNewAccountName);
-        getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE_KEY, mFragment);
     }
 
     @Override
@@ -660,10 +739,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         if(sortType.getTime() != null) {
             mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST, sortType.getTime().name()).apply();
         }
-
-        if (mFragment != null) {
-            ((PostFragment) mFragment).changeSortType(sortType);
-        }
+        sectionsPagerAdapter.changeSortType(sortType);
     }
 
     @Override
@@ -702,10 +778,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     @Override
     public void postLayoutSelected(int postLayout) {
-        if (mFragment != null) {
-            mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, postLayout).apply();
-            ((FragmentCommunicator) mFragment).changePostLayout(postLayout);
-        }
+        mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, postLayout).apply();
+        sectionsPagerAdapter.changePostLayout(postLayout);
     }
 
     public void postScrollUp() {
@@ -739,6 +813,131 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     @Subscribe
     public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
-        ((FragmentCommunicator) mFragment).changeNSFW(changeNSFWEvent.nsfw);
+        sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
+    }
+
+    private class SectionsPagerAdapter extends FragmentPagerAdapter {
+        private PostFragment postFragment;
+        private SidebarFragment sidebarFragment;
+
+        SectionsPagerAdapter(FragmentManager fm) {
+            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        }
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                PostFragment fragment = new PostFragment();
+                fragment = new PostFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(PostFragment.EXTRA_NAME, subredditName);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+                bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
+                bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                fragment.setArguments(bundle);
+                return fragment;
+            }
+            SidebarFragment fragment = new SidebarFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(SidebarFragment.EXTRA_SUBREDDIT_NAME, subredditName);
+            fragment.setArguments(bundle);
+            return fragment;
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "Posts";
+                case 1:
+                    return "Sidebar";
+            }
+            return null;
+        }
+
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
+            Fragment fragment = (Fragment) super.instantiateItem(container, position);
+            switch (position) {
+                case 0:
+                    postFragment = (PostFragment) fragment;
+                    break;
+                case 1:
+                    sidebarFragment = (SidebarFragment) fragment;
+            }
+            return fragment;
+        }
+
+        public boolean handleKeyDown(int keyCode) {
+            return viewPager.getCurrentItem() == 0 && postFragment.handleKeyDown(keyCode);
+        }
+
+        public void refresh() {
+            if (viewPager.getCurrentItem() == 0) {
+                if (postFragment != null) {
+                    postFragment.refresh();
+                }
+            } else {
+                if (sidebarFragment != null) {
+                    sidebarFragment.fetchSubredditData();
+                }
+            }
+        }
+
+        boolean startLazyMode() {
+            if (postFragment != null) {
+                return ((FragmentCommunicator) postFragment).startLazyMode();
+            }
+            return false;
+        }
+
+        void stopLazyMode() {
+            if (postFragment != null) {
+                ((FragmentCommunicator) postFragment).stopLazyMode();
+            }
+        }
+
+        void resumeLazyMode() {
+            if (postFragment != null) {
+                ((FragmentCommunicator) postFragment).resumeLazyMode(false);
+            }
+        }
+
+        void pauseLazyMode() {
+            if (postFragment != null) {
+                ((FragmentCommunicator) postFragment).pauseLazyMode(false);
+            }
+        }
+
+        public void changeSortType(SortType sortType) {
+            if (postFragment != null) {
+                mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_USER_POST, sortType.getType().name()).apply();
+                if(sortType.getTime() != null) {
+                    mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_USER_POST, sortType.getTime().name()).apply();
+                }
+
+                postFragment.changeSortType(sortType);
+            }
+        }
+
+        public void changeNSFW(boolean nsfw) {
+            if (postFragment != null) {
+                postFragment.changeNSFW(nsfw);
+            }
+        }
+
+        void changePostLayout(int postLayout) {
+            if (postFragment != null) {
+                mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, postLayout).apply();
+                ((FragmentCommunicator) postFragment).changePostLayout(postLayout);
+            }
+        }
     }
 }

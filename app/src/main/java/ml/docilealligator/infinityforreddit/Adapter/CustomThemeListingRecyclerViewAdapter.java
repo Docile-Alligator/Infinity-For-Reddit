@@ -78,6 +78,7 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
                 Intent intent = new Intent(activity, CustomizeThemeActivity.class);
                 intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_NAME, customTheme.name);
                 intent.putExtra(CustomizeThemeActivity.EXTRA_IS_PREDEFIINED_THEME, true);
+                intent.putExtra(CustomizeThemeActivity.EXTRA_CREATE_THEME, true);
                 activity.startActivity(intent);
             });
         } else if (holder instanceof UserCustomThemeViewHolder) {

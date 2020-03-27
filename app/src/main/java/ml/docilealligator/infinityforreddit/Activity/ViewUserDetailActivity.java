@@ -126,10 +126,10 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    public UserViewModel userViewModel;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private SubscribedUserDao subscribedUserDao;
     private RequestManager glide;
-    private UserViewModel userViewModel;
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
     private UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment;

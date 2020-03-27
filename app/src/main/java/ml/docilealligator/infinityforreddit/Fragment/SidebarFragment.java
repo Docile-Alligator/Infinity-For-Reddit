@@ -1,30 +1,25 @@
-package ml.docilealligator.infinityforreddit.Activity;
+package ml.docilealligator.infinityforreddit.Fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Spanned;
 import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
-import android.util.TypedValue;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import com.google.android.material.appbar.AppBarLayout;
 
 import org.commonmark.ext.gfm.tables.TableBlock;
 
@@ -43,6 +38,7 @@ import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
+import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubredditDataAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FetchSubredditData;
@@ -53,78 +49,53 @@ import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditViewModel;
 import retrofit2.Retrofit;
 
-public class ViewSidebarActivity extends BaseActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class SidebarFragment extends Fragment {
 
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
-    @BindView(R.id.coordinator_layout_view_sidebar_activity)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_view_sidebar_activity)
-    AppBarLayout appBarLayout;
-    @BindView(R.id.toolbar_view_sidebar_activity)
-    Toolbar toolbar;
-    @BindView(R.id.swipe_refresh_layout_view_sidebar_activity)
+    @BindView(R.id.swipe_refresh_layout_sidebar_fragment)
     SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.markdown_recycler_view_view_sidebar_activity)
-    RecyclerView markdownRecyclerView;
+    @BindView(R.id.markdown_recycler_view_sidebar_fragment)
+    RecyclerView recyclerView;
+    private Activity activity;
+    private String subredditName;
+    public SubredditViewModel mSubredditViewModel;
+    private int markdownColor;
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
-    @Named("default")
-    SharedPreferences mSharedPreferences;
-    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
-    public SubredditViewModel mSubredditViewModel;
-    private String subredditName;
-    private int markdownColor;
+
+    public SidebarFragment() {
+        // Required empty public constructor
+    }
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        ((Infinity) getApplication()).getAppComponent().inject(this);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_sidebar);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_sidebar, container, false);
 
-        ButterKnife.bind(this);
+        ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
-        applyCustomTheme();
+        ButterKnife.bind(this, rootView);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Window window = getWindow();
-
-            if (isChangeStatusBarIconColor()) {
-                addOnOffsetChangedListener(appBarLayout);
-            }
-
-            if (isImmersiveInterface()) {
-                window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-                adjustToolbar(toolbar);
-
-                int navBarHeight = getNavBarHeight();
-                if (navBarHeight > 0) {
-                    int px = (int) TypedValue.applyDimension(
-                            TypedValue.COMPLEX_UNIT_DIP,
-                            16,
-                            getResources().getDisplayMetrics()
-                    );
-                    markdownRecyclerView.setPadding(px, px, px, navBarHeight);
-                }
-            }
-        }
-
-        subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME);
+        subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
         if (subredditName == null) {
-            Toast.makeText(this, R.string.error_getting_subreddit_name, Toast.LENGTH_SHORT).show();
-            finish();
-            return;
+            Toast.makeText(activity, R.string.error_getting_subreddit_name, Toast.LENGTH_SHORT).show();
+            return rootView;
         }
 
-        toolbar.setTitle("r/" + subredditName);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
+        swipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
+        markdownColor = mCustomThemeWrapper.getSecondaryTextColor();
 
-        Markwon markwon = Markwon.builder(this)
+        Markwon markwon = Markwon.builder(activity)
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
                     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
@@ -134,14 +105,14 @@ public class ViewSidebarActivity extends BaseActivity {
                     @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                         builder.linkResolver((view, link) -> {
-                            Intent intent = new Intent(ViewSidebarActivity.this, LinkResolverActivity.class);
+                            Intent intent = new Intent(activity, LinkResolverActivity.class);
                             Uri uri = Uri.parse(link);
                             if (uri.getScheme() == null && uri.getHost() == null) {
                                 intent.setData(LinkResolverActivity.getRedditUriByPath(link));
                             } else {
                                 intent.setData(uri);
                             }
-                            ViewSidebarActivity.this.startActivity(intent);
+                            startActivity(intent);
                         }).urlProcessor(new UrlProcessorRelativeToAbsolute("https://www.reddit.com"));
                     }
                 })
@@ -153,7 +124,7 @@ public class ViewSidebarActivity extends BaseActivity {
                                 })
                         )
                 )
-                .usePlugin(TableEntryPlugin.create(this))
+                .usePlugin(TableEntryPlugin.create(activity))
                 .build();
         MarkwonAdapter markwonAdapter = MarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
                 .include(TableBlock.class, TableEntry.create(builder -> builder
@@ -161,11 +132,11 @@ public class ViewSidebarActivity extends BaseActivity {
                         .textLayoutIsRoot(R.layout.view_table_entry_cell)))
                 .build();
 
-        markdownRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        markdownRecyclerView.setAdapter(markwonAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        recyclerView.setAdapter(markwonAdapter);
 
         mSubredditViewModel = new ViewModelProvider(this,
-                new SubredditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, subredditName))
+                new SubredditViewModel.Factory(activity.getApplication(), mRedditDataRoomDatabase, subredditName))
                 .get(SubredditViewModel.class);
         mSubredditViewModel.getSubredditLiveData().observe(this, subredditData -> {
             if (subredditData != null) {
@@ -177,9 +148,17 @@ public class ViewSidebarActivity extends BaseActivity {
         });
 
         swipeRefreshLayout.setOnRefreshListener(this::fetchSubredditData);
+
+        return rootView;
     }
 
-    private void fetchSubredditData() {
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        activity = (Activity) context;
+    }
+
+    public void fetchSubredditData() {
         swipeRefreshLayout.setRefreshing(true);
         FetchSubredditData.fetchSubredditData(mRetrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
             @Override
@@ -191,48 +170,8 @@ public class ViewSidebarActivity extends BaseActivity {
             @Override
             public void onFetchSubredditDataFail() {
                 swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(ViewSidebarActivity.this, R.string.cannot_fetch_sidebar, Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, R.string.cannot_fetch_sidebar, Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.view_sidebar_activity, menu);
-        applyMenuItemTheme(menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        } else if (item.getItemId() == R.id.action_refresh_view_sidebar_activity) {
-            if (!swipeRefreshLayout.isRefreshing()) {
-                fetchSubredditData();
-            }
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public SharedPreferences getSharedPreferences() {
-        return mSharedPreferences;
-    }
-
-    @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
-        return mCustomThemeWrapper;
-    }
-
-    @Override
-    protected void applyCustomTheme() {
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
-        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
-        swipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
-        markdownColor = mCustomThemeWrapper.getSecondaryTextColor();
     }
 }

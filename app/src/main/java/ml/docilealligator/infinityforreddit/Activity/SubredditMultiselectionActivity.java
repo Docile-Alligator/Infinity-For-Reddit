@@ -85,12 +85,12 @@ public class SubredditMultiselectionActivity extends BaseActivity {
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    public SubscribedSubredditViewModel mSubscribedSubredditViewModel;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
     private SubredditMultiselectionRecyclerViewAdapter mAdapter;
     private RequestManager mGlide;
-    private SubscribedSubredditViewModel mSubscribedSubredditViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);

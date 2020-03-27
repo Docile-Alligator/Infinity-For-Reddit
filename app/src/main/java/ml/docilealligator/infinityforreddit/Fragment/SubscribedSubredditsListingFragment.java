@@ -74,9 +74,9 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
     CustomThemeWrapper customThemeWrapper;
+    public SubscribedSubredditViewModel mSubscribedSubredditViewModel;
     private Activity mActivity;
     private RequestManager mGlide;
-    private SubscribedSubredditViewModel mSubscribedSubredditViewModel;
 
     public SubscribedSubredditsListingFragment() {
         // Required empty public constructor

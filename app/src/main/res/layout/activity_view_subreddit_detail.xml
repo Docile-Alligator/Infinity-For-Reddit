@@ -8,6 +8,12 @@
     android:background="?attr/backgroundColor"
     tools:application=".Activity.ViewSubredditDetailActivity">
 
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_pager_view_subreddit_detail_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_view_subreddit_detail"
         android:layout_width="match_parent"
@@ -121,9 +127,22 @@
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout_view_subreddit_detail_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="?attr/toolbarAndTabBackgroundColor"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            app:tabIndicatorHeight="3dp"
+            app:tabRippleColor="?attr/colorControlHighlight"
+            app:tabUnboundedRipple="false" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_view_subreddit_detail" />
+    <!--<include layout="@layout/content_view_subreddit_detail" />-->
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottom_navigation_view_subreddit_detail_activity"
