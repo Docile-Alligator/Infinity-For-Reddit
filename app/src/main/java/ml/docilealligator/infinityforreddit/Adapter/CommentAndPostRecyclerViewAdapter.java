@@ -555,9 +555,16 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 ((PostDetailViewHolder) holder).mSpoilerTextView.setVisibility(View.VISIBLE);
             }
 
-            if (mPost.getFlair() != null) {
+            if (mPost.getFlair() != null && !mPost.getFlair().equals("")) {
                 ((PostDetailViewHolder) holder).mFlairTextView.setVisibility(View.VISIBLE);
-                ((PostDetailViewHolder) holder).mFlairTextView.setText(mPost.getFlair());
+                Spannable flairHTML;
+                GlideImageGetter glideImageGetter = new GlideImageGetter(((PostDetailViewHolder) holder).mFlairTextView);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    flairHTML = (Spannable) Html.fromHtml(mPost.getFlair(), Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
+                } else {
+                    flairHTML = (Spannable) Html.fromHtml(mPost.getFlair(), glideImageGetter, null);
+                }
+                ((PostDetailViewHolder) holder).mFlairTextView.setText(flairHTML);
             }
 
             if (mPost.isNSFW()) {

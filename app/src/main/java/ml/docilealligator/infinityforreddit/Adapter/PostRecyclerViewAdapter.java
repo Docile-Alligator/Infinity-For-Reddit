@@ -7,6 +7,8 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spannable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +68,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.User.UserDao;
+import ml.docilealligator.infinityforreddit.Utils.GlideImageGetter;
 import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
@@ -446,9 +449,16 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     ((PostViewHolder) holder).spoilerTextView.setVisibility(View.VISIBLE);
                 }
 
-                if (flair != null) {
+                if (flair != null && !flair.equals("")) {
                     ((PostViewHolder) holder).flairTextView.setVisibility(View.VISIBLE);
-                    ((PostViewHolder) holder).flairTextView.setText(flair);
+                    Spannable flairHTML;
+                    GlideImageGetter glideImageGetter = new GlideImageGetter(((PostViewHolder) holder).flairTextView);
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                        flairHTML = (Spannable) Html.fromHtml(flair, Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
+                    } else {
+                        flairHTML = (Spannable) Html.fromHtml(flair, glideImageGetter, null);
+                    }
+                    ((PostViewHolder) holder).flairTextView.setText(flairHTML);
                 }
 
                 switch (voteType) {
@@ -1001,9 +1011,16 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     ((PostCompactViewHolder) holder).spoilerTextView.setVisibility(View.VISIBLE);
                 }
 
-                if (flair != null) {
+                if (flair != null && !flair.equals("")) {
                     ((PostCompactViewHolder) holder).flairTextView.setVisibility(View.VISIBLE);
-                    ((PostCompactViewHolder) holder).flairTextView.setText(flair);
+                    Spannable flairHTML;
+                    GlideImageGetter glideImageGetter = new GlideImageGetter(((PostCompactViewHolder) holder).flairTextView);
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                        flairHTML = (Spannable) Html.fromHtml(flair, Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
+                    } else {
+                        flairHTML = (Spannable) Html.fromHtml(flair, glideImageGetter, null);
+                    }
+                    ((PostCompactViewHolder) holder).flairTextView.setText(flairHTML);
                 }
 
                 switch (voteType) {

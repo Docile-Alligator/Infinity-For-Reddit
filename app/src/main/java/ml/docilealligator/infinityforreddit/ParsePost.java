@@ -50,10 +50,20 @@ public class ParsePost {
         boolean archived = data.getBoolean(JSONUtils.ARCHIVED_KEY);
         boolean locked = data.getBoolean(JSONUtils.LOCKEC_KEY);
         boolean saved = data.getBoolean(JSONUtils.SAVED_KEY);
-        String flair = null;
-        if (!data.isNull(JSONUtils.LINK_FLAIR_TEXT_KEY)) {
-            flair = data.getString(JSONUtils.LINK_FLAIR_TEXT_KEY);
+        StringBuilder postFlairHTMLBuilder = new StringBuilder();
+        if (data.has(JSONUtils.LINK_FLAIR_RICHTEXT_KEY)) {
+            JSONArray flairArray = data.getJSONArray(JSONUtils.LINK_FLAIR_RICHTEXT_KEY);
+            for (int i = 0; i < flairArray.length(); i++) {
+                JSONObject flairObject = flairArray.getJSONObject(i);
+                String e = flairObject.getString(JSONUtils.E_KEY);
+                if (e.equals("text")) {
+                    postFlairHTMLBuilder.append(flairObject.getString(JSONUtils.T_KEY));
+                } else if (e.equals("emoji")) {
+                    postFlairHTMLBuilder.append("<img src=\"").append(flairObject.getString(JSONUtils.U_KEY)).append("\">");
+                }
+            }
         }
+        String flair = postFlairHTMLBuilder.toString();
 
         if (data.isNull(JSONUtils.LIKES_KEY)) {
             voteType = 0;
