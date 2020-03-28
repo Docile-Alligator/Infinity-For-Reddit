@@ -308,6 +308,30 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                             }
                             break;
                         case 2:
+                            setOnClickListener = false;
+                            if (isNSFWEnabled) {
+                                stringId = R.string.disable_nsfw;
+                                drawableId = R.drawable.ic_nsfw_off_24dp;
+                            } else {
+                                stringId = R.string.enable_nsfw;
+                                drawableId = R.drawable.ic_nsfw_on_24dp;
+                            }
+
+                            ((MenuItemViewHolder) holder).itemView.setOnClickListener(view -> {
+                                if (isNSFWEnabled) {
+                                    isNSFWEnabled = false;
+                                    ((MenuItemViewHolder) holder).menuTextView.setText(R.string.enable_nsfw);
+                                    ((MenuItemViewHolder) holder).imageView.setImageDrawable(context.getDrawable(R.drawable.ic_nsfw_on_24dp));
+                                    itemClickListener.onMenuClick(R.string.disable_nsfw);
+                                } else {
+                                    isNSFWEnabled = true;
+                                    ((MenuItemViewHolder) holder).menuTextView.setText(R.string.disable_nsfw);
+                                    ((MenuItemViewHolder) holder).imageView.setImageDrawable(context.getDrawable(R.drawable.ic_nsfw_off_24dp));
+                                    itemClickListener.onMenuClick(R.string.enable_nsfw);
+                                }
+                            });
+                            break;
+                        case 3:
                             stringId = R.string.settings;
                             drawableId = R.drawable.ic_settings_24dp;
                     }
@@ -379,7 +403,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                 }
                 return CURRENT_MENU_ITEMS;
             } else {
-                return 3;
+                return 4;
             }
         } else {
             if (isLoggedIn) {

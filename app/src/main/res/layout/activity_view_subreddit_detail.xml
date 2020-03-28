@@ -142,8 +142,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!--<include layout="@layout/content_view_subreddit_detail" />-->
-
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottom_navigation_view_subreddit_detail_activity"
         android:layout_width="match_parent"
