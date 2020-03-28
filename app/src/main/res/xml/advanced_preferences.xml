@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        app:key="delete_all_subreddits_data_in_database"
+        app:title="@string/settings_delete_all_subreddits_data_in_database_title" />
+
+    <Preference
+        app:key="delete_all_users_data_in_database"
+        app:title="@string/settings_delete_all_users_data_in_database_title" />
+
+    <Preference
+        app:key="delete_all_sort_type_data_in_database"
+        app:title="@string/settings_delete_all_sort_type_data_in_database_title" />
+
+    <Preference
+        app:key="delete_all_post_layout_data_in_database"
+        app:title="@string/settings_delete_all_post_layout_data_in_database_title" />
+
+</PreferenceScreen>

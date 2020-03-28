@@ -67,6 +67,10 @@
         app:title="@string/settings_blur_spoiler_title" />
 
     <Preference
+        app:title="@string/settings_advanced_master_title"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.AdvancedPreferenceFragment" />
+
+    <Preference
         app:title="@string/settings_about_master_title"
         app:fragment="ml.docilealligator.infinityforreddit.Settings.AboutPreferenceFragment" />
 

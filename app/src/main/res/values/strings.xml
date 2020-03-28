@@ -366,6 +366,11 @@
     <string name="settings_customize_amoled_theme_title">Amoled Theme</string>
     <string name="settings_manage_themes_title">Manage Themes</string>
     <string name="settings_custom_theme_cannot_apply_to_settings_page_title">Custom themes cannot be applied to settings page (except toolbar, status bar and navigation bar).</string>
+    <string name="settings_advanced_master_title">Advanced</string>
+    <string name="settings_delete_all_subreddits_data_in_database_title">Delete All Subreddits in Database</string>
+    <string name="settings_delete_all_users_data_in_database_title">Delete All Users in Database</string>
+    <string name="settings_delete_all_sort_type_data_in_database_title">Delete All Sort Type in Database</string>
+    <string name="settings_delete_all_post_layout_data_in_database_title">Delete All Post Layout Data in Database</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -637,5 +642,8 @@
 
     <string name="color_picker">Color Picker</string>
     <string name="invalid_color">Invalid Color</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

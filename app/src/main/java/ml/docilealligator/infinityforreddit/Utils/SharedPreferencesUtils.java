@@ -81,4 +81,8 @@ public class SharedPreferencesUtils {
     public static final String CUSTOMIZE_DARK_THEME = "customize_dark_theme";
     public static final String CUSTOMIZE_AMOLED_THEME = "customize_amoled_theme";
     public static final String MANAGE_THEMES = "manage_themes";
+    public static final String DELETE_ALL_SUBREDDITS_DATA_IN_DATABASE= "delete_all_subreddits_data_in_database";
+    public static final String DELETE_ALL_USERS_DATA_IN_DATABASE= "delete_all_users_data_in_database";
+    public static final String DELETE_ALL_SORT_TYPE_DATA_IN_DATABASE= "delete_all_sort_type_data_in_database";
+    public static final String DELETE_ALL_POST_LAYOUT_DATA_IN_DATABASE= "delete_all_post_layout_data_in_database";
 }
