@@ -39,23 +39,30 @@ public class InsertCustomThemeAsyncTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
-        if (customTheme.isLightTheme) {
-            redditDataRoomDatabase.customThemeDao().unsetLightTheme();
-            CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(customTheme, lightThemeSharedPreferences);
-        }
-        if (customTheme.isDarkTheme) {
-            redditDataRoomDatabase.customThemeDao().unsetDarkTheme();
-            CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(customTheme, darkThemeSharedPreferences);
-        }
-        if (customTheme.isAmoledTheme) {
-            redditDataRoomDatabase.customThemeDao().unsetAmoledTheme();
-            CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(customTheme, amoledThemeSharedPreferences);
-        }
         if (checkDuplicate) {
             if (redditDataRoomDatabase.customThemeDao().getCustomTheme(customTheme.name) != null) {
                 isDuplicate = true;
                 return null;
             }
+        }
+        CustomTheme previousTheme = redditDataRoomDatabase.customThemeDao().getCustomTheme(customTheme.name);
+        if (customTheme.isLightTheme) {
+            redditDataRoomDatabase.customThemeDao().unsetLightTheme();
+            CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(customTheme, lightThemeSharedPreferences);
+        } else if (previousTheme.isLightTheme) {
+            lightThemeSharedPreferences.edit().clear().apply();
+        }
+        if (customTheme.isDarkTheme) {
+            redditDataRoomDatabase.customThemeDao().unsetDarkTheme();
+            CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(customTheme, darkThemeSharedPreferences);
+        } else if (previousTheme.isDarkTheme) {
+            darkThemeSharedPreferences.edit().clear().apply();
+        }
+        if (customTheme.isAmoledTheme) {
+            redditDataRoomDatabase.customThemeDao().unsetAmoledTheme();
+            CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(customTheme, amoledThemeSharedPreferences);
+        } else if (previousTheme.isAmoledTheme) {
+            amoledThemeSharedPreferences.edit().clear().apply();
         }
         redditDataRoomDatabase.customThemeDao().insert(customTheme);
         return null;

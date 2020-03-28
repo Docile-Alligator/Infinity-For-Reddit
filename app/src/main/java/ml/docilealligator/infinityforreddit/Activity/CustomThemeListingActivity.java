@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -268,7 +269,8 @@ public class CustomThemeListingActivity extends BaseActivity implements
                 new InsertCustomThemeAsyncTask.InsertCustomThemeAsyncTaskListener() {
                     @Override
                     public void success() {
-                        Snackbar.make(coordinatorLayout, R.string.import_theme_success, Snackbar.LENGTH_SHORT).show();
+                        Toast.makeText(CustomThemeListingActivity.this, R.string.import_theme_success, Toast.LENGTH_SHORT).show();
+                        EventBus.getDefault().post(new RecreateActivityEvent());
                     }
 
                     @Override
