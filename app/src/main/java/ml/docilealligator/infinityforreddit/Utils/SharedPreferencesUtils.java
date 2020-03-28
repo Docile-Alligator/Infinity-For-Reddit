@@ -41,12 +41,12 @@ public class SharedPreferencesUtils {
     public static final String SORT_TIME_POPULAR_POST = "sort_time_popular_post";
     public static final String SORT_TYPE_SEARCH_POST = "sort_type_search_post";
     public static final String SORT_TIME_SEARCH_POST = "sort_time_search_post";
-    public static final String SORT_TYPE_SUBREDDIT_POST = "sort_type_subreddit_post";
-    public static final String SORT_TIME_SUBREDDIT_POST = "sort_time_subreddit_post";
+    public static final String SORT_TYPE_SUBREDDIT_POST_BASE = "sort_type_subreddit_post_";
+    public static final String SORT_TIME_SUBREDDIT_POST_BASE = "sort_time_subreddit_post_";
     public static final String SORT_TYPE_MULTI_REDDIT_POST_BASE = "sort_type_multi_reddit_post_";
     public static final String SORT_TIME_MULTI_REDDIT_POST_BASE = "sort_time_multi_reddit_post_";
-    public static final String SORT_TYPE_USER_POST = "sort_type_user_post";
-    public static final String SORT_TIME_USER_POST = "sort_time_user_post";
+    public static final String SORT_TYPE_USER_POST_BASE = "sort_type_user_post_";
+    public static final String SORT_TIME_USER_POST_BASE = "sort_time_user_post_";
     public static final String SORT_TYPE_USER_COMMENT = "sort_type_user_comment";
     public static final String SORT_TIME_USER_COMMENT = "sort_time_user_comment";
     public static final String SORT_TYPE_SEARCH_SUBREDDIT = "sort_type_search_subreddit";

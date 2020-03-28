@@ -386,9 +386,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_ALL_POST, defaultPostLayout);
                 }
             } else {
-                sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST, SortType.Type.HOT.name());
+                sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST_BASE + subredditName, SortType.Type.HOT.name());
                 if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
-                    sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST, SortType.Time.ALL.name());
+                    sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST_BASE + subredditName, SortType.Time.ALL.name());
                 }
                 postLayout = mSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, defaultPostLayout);
             }
@@ -487,10 +487,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 mFetchPostInfoLinearLayout.setLayoutParams(params);
             }
 
-            String sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_USER_POST, SortType.Type.NEW.name());
+            String sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_USER_POST_BASE + username, SortType.Type.NEW.name());
             SortType sortType;
             if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
-                String sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_USER_POST, SortType.Time.ALL.name());
+                String sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_USER_POST_BASE + username, SortType.Time.ALL.name());
                 sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
             } else {
                 sortType = new SortType(SortType.Type.valueOf(sort));

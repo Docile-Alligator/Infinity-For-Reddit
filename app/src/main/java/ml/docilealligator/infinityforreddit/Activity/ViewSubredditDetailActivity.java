@@ -735,10 +735,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     @Override
     public void sortTypeSelected(SortType sortType) {
-        mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST, sortType.getType().name()).apply();
-        if(sortType.getTime() != null) {
-            mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST, sortType.getTime().name()).apply();
-        }
         sectionsPagerAdapter.changeSortType(sortType);
     }
 
@@ -918,9 +914,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
         public void changeSortType(SortType sortType) {
             if (postFragment != null) {
-                mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_USER_POST, sortType.getType().name()).apply();
+                mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST_BASE + subredditName, sortType.getType().name()).apply();
                 if(sortType.getTime() != null) {
-                    mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_USER_POST, sortType.getTime().name()).apply();
+                    mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST_BASE + subredditName, sortType.getTime().name()).apply();
                 }
 
                 postFragment.changeSortType(sortType);

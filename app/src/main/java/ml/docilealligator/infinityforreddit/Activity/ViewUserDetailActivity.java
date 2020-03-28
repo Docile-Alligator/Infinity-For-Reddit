@@ -811,9 +811,9 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         public void changeSortType(SortType sortType) {
             if (viewPager.getCurrentItem() == 0) {
                 if (postFragment != null) {
-                    mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_USER_POST, sortType.getType().name()).apply();
+                    mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_USER_POST_BASE + username, sortType.getType().name()).apply();
                     if(sortType.getTime() != null) {
-                        mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_USER_POST, sortType.getTime().name()).apply();
+                        mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_USER_POST_BASE + username, sortType.getTime().name()).apply();
                     }
 
                     postFragment.changeSortType(sortType);
