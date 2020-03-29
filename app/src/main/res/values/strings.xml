@@ -643,7 +643,7 @@
     <string name="color_picker">Color Picker</string>
     <string name="invalid_color">Invalid Color</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="delete_all_subreddits_success">Delete all subreddits successful</string>
+    <string name="delete_all_users_success">Delete all users successful</string>
 
 </resources>

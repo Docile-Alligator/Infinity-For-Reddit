@@ -267,7 +267,8 @@
         <activity
             android:name=".Activity.ViewVideoActivity"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.ActionBar.Transparent" />
+            android:theme="@style/AppTheme.ActionBar.Transparent"
+            android:configChanges="orientation|screenSize|layoutDirection" />
         <activity
             android:name=".Activity.ViewPostDetailActivity"
             android:parentActivityName=".Activity.MainActivity"
