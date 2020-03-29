@@ -21,7 +21,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:animateLayoutChanges="true">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -70,6 +71,17 @@
                     app:layout_constraintTop_toBottomOf="@id/author_text_view_item_post_comment" />
 
                 <TextView
+                    android:id="@+id/top_score_text_view_item_post_comment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="end"
+                    android:textSize="?attr/font_default"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/comment_time_text_view_item_post_comment"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
                     android:id="@+id/comment_time_text_view_item_post_comment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -84,7 +96,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:barrierDirection="start"
-                    app:constraint_referenced_ids="comment_time_text_view_item_post_comment" />
+                    app:constraint_referenced_ids="top_score_text_view_item_post_comment" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

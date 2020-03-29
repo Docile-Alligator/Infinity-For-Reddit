@@ -75,6 +75,8 @@ public class SharedPreferencesUtils {
     public static final String SHOW_TOP_LEVEL_COMMENTS_FIRST = "show_top_level_comments_first";
     public static final String CONFIRM_TO_EXIT = "confirm_to_exit";
     public static final String LOCK_BOTTOM_APP_BAR = "lock_bottom_app_bar";
+    public static final String COMMENT_TOOLBAR_HIDDEN = "comment_toolbar_hidden";
+    public static final String COMMENT_TOOLBAR_HIDE_ON_CLICK = "comment_toolbar_hide_on_click";
     public static final String SHOW_COMMENT_DIVIDER = "show_comment_divider";
     public static final String SHOW_ABSOLUTE_NUMBER_OF_VOTES = "show_absolute_number_of_votes";
     public static final String CUSTOMIZE_LIGHT_THEME = "customize_light_theme";

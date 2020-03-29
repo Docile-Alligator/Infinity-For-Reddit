@@ -177,6 +177,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     private boolean mLockFab;
     private boolean mSwipeUpToHideFab;
     private boolean mExpandChildren;
+    private boolean mCommentToolbarHidden;
+    private boolean mCommentToolbarHideOnClick;
     private boolean mShowCommentDivider;
     private boolean mShowAbsoluteNumberOfVotes;
     private LinearLayoutManager mLinearLayoutManager;
@@ -243,6 +245,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         mLockFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
         mSwipeUpToHideFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
         mExpandChildren = !mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_TOP_LEVEL_COMMENTS_FIRST, false);
+        mCommentToolbarHidden = mSharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDDEN, false);
+        mCommentToolbarHideOnClick= mSharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDE_ON_CLICK, true);
         mShowCommentDivider = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER, false);
         mShowAbsoluteNumberOfVotes = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
 
@@ -500,8 +504,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this,
                     mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mGlide,
                     mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId, isSingleCommentThreadMode,
-                    mNeedBlurNsfw, mNeedBlurSpoiler, mVoteButtonsOnTheRight, mShowElapsedTime,
-                    mExpandChildren, mShowCommentDivider, mShowAbsoluteNumberOfVotes,
+                    mNeedBlurNsfw, mNeedBlurSpoiler, mVoteButtonsOnTheRight, mShowElapsedTime, mExpandChildren,
+                    mCommentToolbarHidden, mCommentToolbarHideOnClick, mShowCommentDivider,mShowAbsoluteNumberOfVotes,
                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                         @Override
                         public void updatePost(Post post) {
@@ -630,10 +634,9 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
                             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this,
                                     mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mGlide,
-                                    mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId,
-                                    isSingleCommentThreadMode, mNeedBlurNsfw, mNeedBlurSpoiler,
-                                    mVoteButtonsOnTheRight, mShowElapsedTime, mExpandChildren, mShowCommentDivider,
-                                    mShowAbsoluteNumberOfVotes,
+                                    mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId, isSingleCommentThreadMode,
+                                    mNeedBlurNsfw, mNeedBlurSpoiler, mVoteButtonsOnTheRight, mShowElapsedTime, mExpandChildren,
+                                    mCommentToolbarHidden, mCommentToolbarHideOnClick, mShowCommentDivider, mShowAbsoluteNumberOfVotes,
                                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                                         @Override
                                         public void updatePost(Post post) {

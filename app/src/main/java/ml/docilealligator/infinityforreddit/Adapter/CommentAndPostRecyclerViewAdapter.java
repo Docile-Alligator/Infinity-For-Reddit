@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -125,6 +126,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private boolean mVoteButtonsOnTheRight;
     private boolean mShowElapsedTime;
     private boolean mExpandChildren;
+    private boolean mCommentToolbarHidden;
+    private boolean mCommentToolbarHideOnClick;
     private boolean mShowCommentDivider;
     private boolean mShowAbsoluteNumberOfVotes;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
@@ -185,7 +188,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                              String accessToken, String accountName, Post post, Locale locale,
                                              String singleCommentId, boolean isSingleCommentThreadMode,
                                              boolean needBlurNSFW, boolean needBlurSpoiler, boolean voteButtonsOnTheRight,
-                                             boolean showElapsedTime, boolean expandChildren, boolean showCommentDivider,
+                                             boolean showElapsedTime, boolean expandChildren, boolean commentToolbarHidden,
+                                             boolean commentToolbarHideOnClick, boolean showCommentDivider,
                                              boolean showAbsoluteNumberOfVotes,
                                              CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
         mActivity = activity;
@@ -277,6 +281,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mVoteButtonsOnTheRight = voteButtonsOnTheRight;
         mShowElapsedTime = showElapsedTime;
         mExpandChildren = expandChildren;
+        mCommentToolbarHidden = commentToolbarHidden;
+        mCommentToolbarHideOnClick = commentToolbarHideOnClick;
         mShowCommentDivider = showCommentDivider;
         mShowAbsoluteNumberOfVotes = showAbsoluteNumberOfVotes;
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
@@ -846,9 +852,19 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 ((CommentViewHolder) holder).commentTimeTextView.setText(comment.getCommentTime());
             }
 
+            if (mCommentToolbarHidden) {
+                ((CommentViewHolder) holder).bottomConstraintLayout.setVisibility(View.GONE);
+                ((CommentViewHolder) holder).topScoreTextView.setVisibility(View.VISIBLE);
+            } else {
+                ((CommentViewHolder) holder).bottomConstraintLayout.setVisibility(View.VISIBLE);
+                ((CommentViewHolder) holder).topScoreTextView.setVisibility(View.GONE);
+            }
+
             mCommentMarkwon.setMarkdown(((CommentViewHolder) holder).commentMarkdownView, comment.getCommentMarkdown());
             ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                     comment.getScore() + comment.getVoteType()));
+            ((CommentViewHolder) holder).topScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                    comment.getScore() + comment.getVoteType()) + " pts");
 
             ((CommentViewHolder) holder).itemView.setPadding(comment.getDepth() * 8, 0, 0, 0);
             if (comment.getDepth() > 0) {
@@ -885,6 +901,21 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 ViewGroup.LayoutParams params = ((CommentViewHolder) holder).verticalBlock.getLayoutParams();
                 params.width = 8;
                 ((CommentViewHolder) holder).verticalBlock.setLayoutParams(params);
+            }
+
+            if (mCommentToolbarHideOnClick) {
+                View.OnClickListener hideToolbarOnClickListener = view -> {
+                    if (((CommentViewHolder) holder).bottomConstraintLayout.getVisibility() == View.GONE){
+                        ((CommentViewHolder) holder).bottomConstraintLayout.setVisibility(View.VISIBLE);
+                        ((CommentViewHolder) holder).topScoreTextView.setVisibility(View.GONE);
+                    } else {
+                        ((CommentViewHolder) holder).bottomConstraintLayout.setVisibility(View.GONE);
+                        ((CommentViewHolder) holder).topScoreTextView.setVisibility(View.VISIBLE);
+                    }
+                };
+                ((CommentViewHolder) holder).linearLayout.setOnClickListener(hideToolbarOnClickListener);
+                ((CommentViewHolder) holder).commentMarkdownView.setOnClickListener(hideToolbarOnClickListener);
+                ((CommentViewHolder) holder).commentTimeTextView.setOnClickListener(hideToolbarOnClickListener);
             }
 
             ((CommentViewHolder) holder).moreButton.setOnClickListener(view -> {
@@ -1002,6 +1033,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
                 ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                         comment.getScore() + comment.getVoteType()));
+                ((CommentViewHolder) holder).topScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                        comment.getScore() + comment.getVoteType()) + " pts");
 
                 VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                     @Override
@@ -1019,6 +1052,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         ((CommentViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                 comment.getScore() + comment.getVoteType()));
+                        ((CommentViewHolder) holder).topScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                comment.getScore() + comment.getVoteType()) + " pts");
                     }
 
                     @Override
@@ -1059,6 +1094,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
                 ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                         comment.getScore() + comment.getVoteType()));
+                ((CommentViewHolder) holder).topScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                        comment.getScore() + comment.getVoteType()) + " pts");
 
                 VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                     @Override
@@ -1076,6 +1113,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         ((CommentViewHolder) holder).upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                 comment.getScore() + comment.getVoteType()));
+                        ((CommentViewHolder) holder).topScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                comment.getScore() + comment.getVoteType()) + " pts");
                     }
 
                     @Override
@@ -2059,6 +2098,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     }
 
     class CommentViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.linear_layout_item_comment)
+        LinearLayout linearLayout;
         @BindView(R.id.author_text_view_item_post_comment)
         TextView authorTextView;
         @BindView(R.id.author_flair_text_view_item_post_comment)
@@ -2067,6 +2108,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         ImageView authorTypeImageView;
         @BindView(R.id.comment_time_text_view_item_post_comment)
         TextView commentTimeTextView;
+        @BindView(R.id.top_score_text_view_item_post_comment)
+        TextView topScoreTextView;
         @BindView(R.id.comment_markdown_view_item_post_comment)
         TextView commentMarkdownView;
         @BindView(R.id.bottom_constraint_layout_item_post_comment)
