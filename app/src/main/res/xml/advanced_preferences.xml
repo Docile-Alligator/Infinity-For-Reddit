@@ -18,4 +18,17 @@
         app:key="delete_all_post_layout_data_in_database"
         app:title="@string/settings_delete_all_post_layout_data_in_database_title" />
 
+    <Preference
+        app:key="delete_all_themes_in_database"
+        app:title="@string/settings_delete_all_themes_in_database_title" />
+
+    <Preference
+        app:key="reset_all_settings"
+        app:title="@string/settings_reset_all_settings_title" />
+
+    <Preference
+        android:icon="@drawable/ic_info_preference_24dp"
+        app:summary="@string/settings_custom_theme_cannot_apply_to_settings_page_summary"
+        app:enabled="false" />
+
 </PreferenceScreen>

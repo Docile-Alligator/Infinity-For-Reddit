@@ -90,4 +90,6 @@ public class SharedPreferencesUtils {
     public static final String DELETE_ALL_USERS_DATA_IN_DATABASE= "delete_all_users_data_in_database";
     public static final String DELETE_ALL_SORT_TYPE_DATA_IN_DATABASE= "delete_all_sort_type_data_in_database";
     public static final String DELETE_ALL_POST_LAYOUT_DATA_IN_DATABASE= "delete_all_post_layout_data_in_database";
+    public static final String DELETE_ALL_THEMES_IN_DATABASE = "delete_all_themes_in_database";
+    public static final String RESET_ALL_SETTINGS = "reset_all_settings";
 }

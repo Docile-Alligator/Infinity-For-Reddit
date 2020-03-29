@@ -49,19 +49,19 @@ public class InsertCustomThemeAsyncTask extends AsyncTask<Void, Void, Void> {
         if (customTheme.isLightTheme) {
             redditDataRoomDatabase.customThemeDao().unsetLightTheme();
             CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(customTheme, lightThemeSharedPreferences);
-        } else if (previousTheme.isLightTheme) {
+        } else if (previousTheme != null && previousTheme.isLightTheme) {
             lightThemeSharedPreferences.edit().clear().apply();
         }
         if (customTheme.isDarkTheme) {
             redditDataRoomDatabase.customThemeDao().unsetDarkTheme();
             CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(customTheme, darkThemeSharedPreferences);
-        } else if (previousTheme.isDarkTheme) {
+        } else if (previousTheme != null && previousTheme.isDarkTheme) {
             darkThemeSharedPreferences.edit().clear().apply();
         }
         if (customTheme.isAmoledTheme) {
             redditDataRoomDatabase.customThemeDao().unsetAmoledTheme();
             CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(customTheme, amoledThemeSharedPreferences);
-        } else if (previousTheme.isAmoledTheme) {
+        } else if (previousTheme != null && previousTheme.isAmoledTheme) {
             amoledThemeSharedPreferences.edit().clear().apply();
         }
         redditDataRoomDatabase.customThemeDao().insert(customTheme);

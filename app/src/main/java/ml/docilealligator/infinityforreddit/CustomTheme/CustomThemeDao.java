@@ -51,4 +51,7 @@ public interface CustomThemeDao {
 
     @Query("UPDATE custom_themes SET name = :newName WHERE name = :oldName")
     void updateName(String oldName, String newName);
+
+    @Query("DELETE FROM custom_themes")
+    void deleteAllCustomThemes();
 }

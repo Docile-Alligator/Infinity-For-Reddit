@@ -42,7 +42,8 @@
         app:title="@string/settings_manage_themes_title" />
 
     <Preference
-        app:summary="@string/settings_custom_theme_cannot_apply_to_settings_page_title"
+        android:icon="@drawable/ic_info_preference_24dp"
+        app:summary="@string/settings_custom_theme_cannot_apply_to_settings_page_summary"
         app:enabled="false" />
 
 </PreferenceScreen>
