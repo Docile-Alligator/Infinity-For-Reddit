@@ -72,6 +72,9 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("post_layout")
+    SharedPreferences mPostLayoutSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private boolean isInLazyMode = false;
     private boolean mNullAccessToken = false;
@@ -399,16 +402,16 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
         if (mFragment != null) {
             switch (postType) {
                 case PostDataSource.TYPE_FRONT_PAGE:
-                    mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, postLayout).apply();
+                    mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, postLayout).apply();
                     break;
                 case PostDataSource.TYPE_SUBREDDIT:
-                    mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + name, postLayout).apply();
+                    mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + name, postLayout).apply();
                     break;
                 case PostDataSource.TYPE_USER:
-                    mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + name, postLayout).apply();
+                    mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + name, postLayout).apply();
                     break;
                 case PostDataSource.TYPE_SEARCH:
-                    mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, postLayout).apply();
+                    mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, postLayout).apply();
             }
             ((FragmentCommunicator) mFragment).changePostLayout(postLayout);
         }

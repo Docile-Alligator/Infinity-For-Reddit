@@ -74,6 +74,12 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("sort_type")
+    SharedPreferences mSortTypeSharedPreferences;
+    @Inject
+    @Named("post_layout")
+    SharedPreferences mPostLayoutSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
@@ -375,9 +381,9 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         }
 
         void changeSortType(SortType sortType) {
-            mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SEARCH_POST, sortType.getType().name()).apply();
+            mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SEARCH_POST, sortType.getType().name()).apply();
             if(sortType.getTime() != null) {
-                mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SEARCH_POST, sortType.getTime().name()).apply();
+                mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SEARCH_POST, sortType.getTime().name()).apply();
             }
 
             postFragment.changeSortType(sortType);
@@ -386,11 +392,11 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         void changeSortType(SortType sortType, int fragmentPosition) {
             switch (fragmentPosition) {
                 case 1:
-                    mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SEARCH_SUBREDDIT, sortType.getType().name()).apply();
+                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SEARCH_SUBREDDIT, sortType.getType().name()).apply();
                     subredditListingFragment.changeSortType(sortType);
                     break;
                 case 2:
-                    mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SEARCH_USER, sortType.getType().name()).apply();
+                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SEARCH_USER, sortType.getType().name()).apply();
                     userListingFragment.changeSortType(sortType);
             }
         }
@@ -417,7 +423,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
 
         void changePostLayout(int postLayout) {
             if (postFragment != null) {
-                mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, postLayout).apply();
+                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, postLayout).apply();
                 ((FragmentCommunicator) postFragment).changePostLayout(postLayout);
             }
         }

@@ -78,6 +78,9 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("sort_type")
+    SharedPreferences mSortTypeSharedPreferences;
+    @Inject
     CustomThemeWrapper customThemeWrapper;
     private LinearLayoutManager mLinearLayoutManager;
     private String mQuery;
@@ -119,7 +122,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         mQuery = getArguments().getString(EXTRA_QUERY);
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
-        String sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SEARCH_USER, SortType.Type.RELEVANCE.value);
+        String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SEARCH_USER, SortType.Type.RELEVANCE.value);
         SortType sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
 
         mAdapter = new UserListingRecyclerViewAdapter(getActivity(), mOauthRetrofit, mRetrofit,

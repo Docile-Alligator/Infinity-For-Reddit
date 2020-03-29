@@ -125,6 +125,12 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("sort_type")
+    SharedPreferences mSortTypeSharedPreferences;
+    @Inject
+    @Named("post_layout")
+    SharedPreferences mPostLayoutSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     public UserViewModel userViewModel;
     private SectionsPagerAdapter sectionsPagerAdapter;
@@ -811,18 +817,18 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         public void changeSortType(SortType sortType) {
             if (viewPager.getCurrentItem() == 0) {
                 if (postFragment != null) {
-                    mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_USER_POST_BASE + username, sortType.getType().name()).apply();
+                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_USER_POST_BASE + username, sortType.getType().name()).apply();
                     if(sortType.getTime() != null) {
-                        mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_USER_POST_BASE + username, sortType.getTime().name()).apply();
+                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_USER_POST_BASE + username, sortType.getTime().name()).apply();
                     }
 
                     postFragment.changeSortType(sortType);
                 }
             } else {
                 if (commentsListingFragment != null) {
-                    mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_USER_COMMENT, sortType.getType().name()).apply();
+                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_USER_COMMENT, sortType.getType().name()).apply();
                     if(sortType.getTime() != null) {
-                        mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_USER_COMMENT, sortType.getTime().name()).apply();
+                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_USER_COMMENT, sortType.getTime().name()).apply();
                     }
 
                     commentsListingFragment.changeSortType(sortType);
@@ -838,7 +844,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
         void changePostLayout(int postLayout) {
             if (postFragment != null) {
-                mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, postLayout).apply();
+                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, postLayout).apply();
                 ((FragmentCommunicator) postFragment).changePostLayout(postLayout);
             }
         }

@@ -161,6 +161,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("sort_type")
+    SharedPreferences mSortTypeSharedPreferences;
+    @Inject
+    @Named("post_layout")
+    SharedPreferences mPostLayoutSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private AppBarLayout.LayoutParams params;
@@ -1188,25 +1194,25 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             } else {
                 switch (viewPager.getCurrentItem()) {
                     case 0:
-                        mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_BEST_POST, sortType.getType().name()).apply();
+                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_BEST_POST, sortType.getType().name()).apply();
                         if (sortType.getTime() != null) {
-                            mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_BEST_POST, sortType.getTime().name()).apply();
+                            mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_BEST_POST, sortType.getTime().name()).apply();
                         }
 
                         frontPagePostFragment.changeSortType(sortType);
                         break;
                     case 1:
-                        mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POPULAR_POST, sortType.getType().name()).apply();
+                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POPULAR_POST, sortType.getType().name()).apply();
                         if (sortType.getTime() != null) {
-                            mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_POPULAR_POST, sortType.getTime().name()).apply();
+                            mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_POPULAR_POST, sortType.getTime().name()).apply();
                         }
 
                         popularPostFragment.changeSortType(sortType);
                         break;
                     case 2:
-                        mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_ALL_POST, sortType.getType().name()).apply();
+                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_ALL_POST, sortType.getType().name()).apply();
                         if (sortType.getTime() != null) {
-                            mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_ALL_POST, sortType.getTime().name()).apply();
+                            mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_ALL_POST, sortType.getTime().name()).apply();
                         }
 
                         allPostFragment.changeSortType(sortType);
@@ -1261,12 +1267,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (mAccessToken == null) {
                 if (viewPager.getCurrentItem() == 0) {
                     if (popularPostFragment != null) {
-                        mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_POPULAR_POST, postLayout).apply();
+                        mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_POPULAR_POST, postLayout).apply();
                         popularPostFragment.changePostLayout(postLayout);
                     }
                 } else {
                     if (allPostFragment != null) {
-                        mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_ALL_POST, postLayout).apply();
+                        mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_ALL_POST, postLayout).apply();
                         allPostFragment.changePostLayout(postLayout);
                     }
                 }
@@ -1274,19 +1280,19 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 switch (viewPager.getCurrentItem()) {
                     case 0:
                         if (frontPagePostFragment != null) {
-                            mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, postLayout).apply();
+                            mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, postLayout).apply();
                             frontPagePostFragment.changePostLayout(postLayout);
                         }
                         break;
                     case 1:
                         if (popularPostFragment != null) {
-                            mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_POPULAR_POST, postLayout).apply();
+                            mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_POPULAR_POST, postLayout).apply();
                             popularPostFragment.changePostLayout(postLayout);
                         }
                         break;
                     case 2:
                         if (allPostFragment != null) {
-                            mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_ALL_POST, postLayout).apply();
+                            mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_ALL_POST, postLayout).apply();
                             allPostFragment.changePostLayout(postLayout);
                         }
                 }

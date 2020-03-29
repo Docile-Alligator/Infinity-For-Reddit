@@ -33,6 +33,8 @@ public class SharedPreferencesUtils {
     public static final String IMMERSIVE_INTERFACE_KEY = "immersive_interface";
     public static final String BOTTOM_APP_BAR_KEY = "bottom_app_bar";
     public static final String VOTE_BUTTONS_ON_THE_RIGHT_KEY = "vote_buttons_on_the_right";
+
+    public static final String SORT_TYPE_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.sort_type";
     public static final String SORT_TYPE_BEST_POST = "sort_type_best_post";
     public static final String SORT_TIME_BEST_POST = "sort_time_best_post";
     public static final String SORT_TYPE_ALL_POST = "sort_type_all_post";
@@ -52,6 +54,8 @@ public class SharedPreferencesUtils {
     public static final String SORT_TYPE_SEARCH_SUBREDDIT = "sort_type_search_subreddit";
     public static final String SORT_TYPE_SEARCH_USER = "sort_type_search_user";
     public static final String SORT_TYPE_POST_COMMENT = "sort_type_post_comment";
+
+    public static final String POST_LAYOUT_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.post_layout";
     public static final String POST_LAYOUT_FRONT_PAGE_POST = "post_layout_best_post";
     public static final String POST_LAYOUT_POPULAR_POST = "post_layout_popular_post";
     public static final String POST_LAYOUT_ALL_POST = "post_layout_all_post";
@@ -61,6 +65,7 @@ public class SharedPreferencesUtils {
     public static final String POST_LAYOUT_SEARCH_POST = "post_layout_search_post";
     public static final int POST_LAYOUT_CARD = 0;
     public static final int POST_LAYOUT_COMPACT = 1;
+
     public static final String PULL_NOTIFICATION_TIME = "pull_notification_time";
     public static final String SHOW_ELAPSED_TIME_KEY = "show_elapsed_time";
     public static final String DEFAULT_POST_LAYOUT_KEY = "default_post_layout";

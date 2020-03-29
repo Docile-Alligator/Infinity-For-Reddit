@@ -16,6 +16,7 @@ import dagger.Provides;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -125,6 +126,18 @@ class AppModule {
     @Singleton
     SharedPreferences provideAmoledThemeSharedPreferences() {
         return mApplication.getSharedPreferences(CustomThemeSharedPreferencesUtils.AMOLED_THEME_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+    }
+
+    @Provides
+    @Named("sort_type")
+    SharedPreferences provideSortTypeSharedPreferences() {
+        return mApplication.getSharedPreferences(SharedPreferencesUtils.SORT_TYPE_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+    }
+
+    @Provides
+    @Named("post_layout")
+    SharedPreferences providePostLayoutSharedPreferences() {
+        return mApplication.getSharedPreferences(SharedPreferencesUtils.POST_LAYOUT_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
     }
 
     @Provides

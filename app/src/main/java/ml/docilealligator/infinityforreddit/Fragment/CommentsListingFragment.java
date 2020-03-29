@@ -84,6 +84,12 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("sort_type")
+    SharedPreferences mSortTypeSharedPreferences;
+    @Inject
+    @Named("post_layout")
+    SharedPreferences mPostLayoutSharedPreferences;
+    @Inject
     CustomThemeWrapper customThemeWrapper;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
@@ -165,10 +171,10 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
                 () -> mCommentViewModel.retryLoadingMore());
 
         String username = getArguments().getString(EXTRA_USERNAME);
-        String sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_USER_COMMENT, SortType.Type.NEW.value);
+        String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_USER_COMMENT, SortType.Type.NEW.value);
         SortType sortType;
         if(sort.equals(SortType.Type.CONTROVERSIAL.value) || sort.equals(SortType.Type.TOP.value)) {
-            String sortTime = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_USER_COMMENT, SortType.Time.ALL.value);
+            String sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_USER_COMMENT, SortType.Time.ALL.value);
             sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()), SortType.Time.valueOf(sortTime.toUpperCase()));
         } else {
             sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));

@@ -147,6 +147,12 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("sort_type")
+    SharedPreferences mSortTypeSharedPreferences;
+    @Inject
+    @Named("post_layout")
+    SharedPreferences mPostLayoutSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     public SubredditViewModel mSubredditViewModel;
     private SectionsPagerAdapter sectionsPagerAdapter;
@@ -774,7 +780,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     @Override
     public void postLayoutSelected(int postLayout) {
-        mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, postLayout).apply();
+        mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, postLayout).apply();
         sectionsPagerAdapter.changePostLayout(postLayout);
     }
 
@@ -914,9 +920,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
         public void changeSortType(SortType sortType) {
             if (postFragment != null) {
-                mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST_BASE + subredditName, sortType.getType().name()).apply();
+                mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST_BASE + subredditName, sortType.getType().name()).apply();
                 if(sortType.getTime() != null) {
-                    mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST_BASE + subredditName, sortType.getTime().name()).apply();
+                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST_BASE + subredditName, sortType.getTime().name()).apply();
                 }
 
                 postFragment.changeSortType(sortType);
@@ -931,7 +937,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
         void changePostLayout(int postLayout) {
             if (postFragment != null) {
-                mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, postLayout).apply();
+                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, postLayout).apply();
                 ((FragmentCommunicator) postFragment).changePostLayout(postLayout);
             }
         }

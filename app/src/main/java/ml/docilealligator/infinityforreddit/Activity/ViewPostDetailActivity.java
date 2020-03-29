@@ -159,6 +159,9 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("sort_type")
+    SharedPreferences mSortTypeSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private RequestManager mGlide;
     private Locale mLocale;
@@ -558,7 +561,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         mSwipeRefreshLayout.setRefreshing(true);
         mGlide.clear(mFetchPostInfoImageView);
 
-        String sortType = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value).toLowerCase();
+        String sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value).toLowerCase();
 
 
         Call<String> postAndComments;
@@ -836,7 +839,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     }
 
     private void fetchComments(boolean changeRefreshState) {
-        String sortType = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT,
+        String sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT,
                 SortType.Type.BEST.value).toLowerCase();
         fetchComments(changeRefreshState, true, sortType);
     }
@@ -1582,7 +1585,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             children.clear();
         }
         fetchComments(false, false, sortType.getType().value);
-        mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.getType().name()).apply();
+        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.getType().name()).apply();
     }
 
     public void lockSwipeRightToGoBack() {

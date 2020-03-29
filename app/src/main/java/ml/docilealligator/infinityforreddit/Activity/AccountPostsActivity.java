@@ -64,6 +64,9 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("post_layout")
+    SharedPreferences mPostLayoutSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private boolean isInLazyMode = false;
     private boolean mNullAccessToken = false;
@@ -281,7 +284,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     @Override
     public void postLayoutSelected(int postLayout) {
         if (mFragment != null) {
-            mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + mAccountName, postLayout).apply();
+            mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + mAccountName, postLayout).apply();
             ((FragmentCommunicator) mFragment).changePostLayout(postLayout);
         }
     }

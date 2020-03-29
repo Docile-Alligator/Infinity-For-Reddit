@@ -82,6 +82,9 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("sort_type")
+    SharedPreferences mSortTypeSharedPreferences;
+    @Inject
     CustomThemeWrapper customThemeWrapper;
     private LinearLayoutManager mLinearLayoutManager;
     private SubredditListingRecyclerViewAdapter mAdapter;
@@ -124,7 +127,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
 
-        String sort = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SEARCH_SUBREDDIT, SortType.Type.RELEVANCE.value);
+        String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SEARCH_SUBREDDIT, SortType.Type.RELEVANCE.value);
         SortType sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
 
         mAdapter = new SubredditListingRecyclerViewAdapter(mActivity, mOauthRetrofit, mRetrofit,

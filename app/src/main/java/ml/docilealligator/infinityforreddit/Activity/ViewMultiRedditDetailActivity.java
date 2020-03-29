@@ -74,6 +74,12 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("sort_type")
+    SharedPreferences mSortTypeSharedPreferences;
+    @Inject
+    @Named("post_layout")
+    SharedPreferences mPostLayoutSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
@@ -284,10 +290,10 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
 
     @Override
     public void sortTypeSelected(SortType sortType) {
-        mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiPath,
+        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiPath,
                 sortType.getType().name()).apply();
         if(sortType.getTime() != null) {
-            mSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_MULTI_REDDIT_POST_BASE+ multiPath,
+            mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_MULTI_REDDIT_POST_BASE+ multiPath,
                     sortType.getTime().name()).apply();
         }
 
@@ -305,7 +311,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     @Override
     public void postLayoutSelected(int postLayout) {
         if (mFragment != null) {
-            mSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + multiPath, postLayout).apply();
+            mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + multiPath, postLayout).apply();
             ((FragmentCommunicator) mFragment).changePostLayout(postLayout);
         }
     }
