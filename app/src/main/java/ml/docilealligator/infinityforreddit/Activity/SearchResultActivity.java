@@ -231,7 +231,9 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 return true;
             case R.id.action_search_search_result_activity:
                 Intent intent = new Intent(this, SearchActivity.class);
-                intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, false);
+                if (mSubredditName != null && !mSubredditName.equals("")) {
+                    intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, mSubredditName);
+                }
                 intent.putExtra(SearchActivity.EXTRA_QUERY, mQuery);
                 finish();
                 startActivity(intent);

@@ -28,7 +28,7 @@
 
     <Preference
         android:icon="@drawable/ic_info_preference_24dp"
-        app:summary="@string/settings_custom_theme_cannot_apply_to_settings_page_summary"
+        app:summary="@string/settings_advanced_settings_summary"
         app:enabled="false" />
 
 </PreferenceScreen>

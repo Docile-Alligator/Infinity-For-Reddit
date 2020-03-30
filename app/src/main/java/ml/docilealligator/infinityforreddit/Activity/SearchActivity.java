@@ -171,9 +171,9 @@ public class SearchActivity extends BaseActivity {
 
         Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_SUBREDDIT_NAME)) {
-            subredditName = intent.getExtras().getString(EXTRA_SUBREDDIT_NAME);
+            subredditName = intent.getStringExtra(EXTRA_SUBREDDIT_NAME);
             subredditNameTextView.setText(subredditName);
-            subredditIsUser = intent.getExtras().getBoolean(EXTRA_SUBREDDIT_IS_USER);
+            subredditIsUser = intent.getBooleanExtra(EXTRA_SUBREDDIT_IS_USER, false);
         }
     }
 
@@ -196,7 +196,7 @@ public class SearchActivity extends BaseActivity {
         simpleSearchView.setIconsColor(toolbarPrimaryTextAndIconColorColor);
         simpleSearchView.setTextColor(toolbarPrimaryTextAndIconColorColor);
         simpleSearchView.setBackIconColor(toolbarPrimaryTextAndIconColorColor);
-        simpleSearchView.setHintTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+        simpleSearchView.setHintTextColor(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
         searchInTextView.setTextColor(mCustomThemeWrapper.getColorAccent());
         subredditNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
     }

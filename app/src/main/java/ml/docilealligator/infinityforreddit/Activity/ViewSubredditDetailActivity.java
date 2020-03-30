@@ -662,8 +662,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             case R.id.action_search_view_subreddit_detail_activity:
                 Intent intent = new Intent(this, SearchActivity.class);
                 intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, subredditName);
-                intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_IS_USER, false);
-                intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, false);
                 startActivity(intent);
                 return true;
             case R.id.action_refresh_view_subreddit_detail_activity:

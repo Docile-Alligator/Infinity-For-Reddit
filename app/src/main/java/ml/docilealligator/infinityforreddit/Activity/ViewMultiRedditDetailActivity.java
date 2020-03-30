@@ -215,7 +215,6 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                 return true;
             case R.id.action_search_view_multi_reddit_detail_activity:
                 Intent intent = new Intent(this, SearchActivity.class);
-                intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, false);
                 startActivity(intent);
                 return true;
             case R.id.action_refresh_view_multi_reddit_detail_activity:

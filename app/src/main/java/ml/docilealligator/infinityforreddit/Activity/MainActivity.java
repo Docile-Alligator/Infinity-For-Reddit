@@ -745,7 +745,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 return true;
             case R.id.action_search_main_activity:
                 Intent intent = new Intent(this, SearchActivity.class);
-                intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, false);
                 startActivity(intent);
                 return true;
             case R.id.action_refresh_main_activity:
