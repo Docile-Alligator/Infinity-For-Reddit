@@ -309,9 +309,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     if (dy > 0) {
-                        ((ViewSubredditDetailActivity) activity).postScrollDown();
+                        ((ViewSubredditDetailActivity) activity).contentScrollDown();
                     } else if (dy < 0) {
-                        ((ViewSubredditDetailActivity) activity).postScrollUp();
+                        ((ViewSubredditDetailActivity) activity).contentScrollUp();
                     }
 
                 }

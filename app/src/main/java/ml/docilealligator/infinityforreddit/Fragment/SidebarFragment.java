@@ -39,6 +39,7 @@ import io.noties.markwon.recycler.table.TableEntryPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubredditDataAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FetchSubredditData;
@@ -134,6 +135,17 @@ public class SidebarFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         recyclerView.setAdapter(markwonAdapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
+                    ((ViewSubredditDetailActivity) activity).contentScrollDown();
+                } else if (dy < 0) {
+                    ((ViewSubredditDetailActivity) activity).contentScrollUp();
+                }
+
+            }
+        });
 
         mSubredditViewModel = new ViewModelProvider(this,
                 new SubredditViewModel.Factory(activity.getApplication(), mRedditDataRoomDatabase, subredditName))

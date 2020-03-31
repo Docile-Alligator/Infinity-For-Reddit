@@ -615,6 +615,12 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
             @Override
             public void onPageSelected(int position) {
+                if (mAccessToken != null) {
+                    if (showBottomAppBar) {
+                        bottomNavigationView.performShow();
+                    }
+                    fab.show();
+                }
                 if (isInLazyMode) {
                     if (viewPager.getCurrentItem() == 0) {
                         sectionsPagerAdapter.resumeLazyMode();
@@ -782,7 +788,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         sectionsPagerAdapter.changePostLayout(postLayout);
     }
 
-    public void postScrollUp() {
+    public void contentScrollUp() {
         if (mAccessToken != null) {
             if (showBottomAppBar && !lockBottomAppBar) {
                 bottomNavigationView.performShow();
@@ -793,7 +799,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         }
     }
 
-    public void postScrollDown() {
+    public void contentScrollDown() {
         if (mAccessToken != null) {
             if (!(showBottomAppBar && lockBottomAppBar)) {
                 fab.hide();
@@ -829,7 +835,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         public Fragment getItem(int position) {
             if (position == 0) {
                 PostFragment fragment = new PostFragment();
-                fragment = new PostFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(PostFragment.EXTRA_NAME, subredditName);
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);

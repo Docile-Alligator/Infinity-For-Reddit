@@ -158,6 +158,9 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                 ((SubredditViewHolder) viewHolder).favoriteImageView.setVisibility(View.GONE);
                 name = username;
                 iconUrl = userIconUrl;
+                if (itemClickListener != null) {
+                    viewHolder.itemView.setOnClickListener(view -> itemClickListener.onClick(name, iconUrl, true));
+                }
             } else {
                 int offset;
                 if (itemClickListener != null) {
@@ -234,11 +237,13 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                                 });
                     }
                 });
+
+                if (itemClickListener != null) {
+                    viewHolder.itemView.setOnClickListener(view -> itemClickListener.onClick(name, iconUrl, false));
+                }
             }
 
-            if (itemClickListener != null) {
-                viewHolder.itemView.setOnClickListener(view -> itemClickListener.onClick(name, iconUrl, true));
-            } else {
+            if (itemClickListener == null) {
                 viewHolder.itemView.setOnClickListener(view -> {
                     Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
                     intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, name);
@@ -332,7 +337,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
             });
 
             if (itemClickListener != null) {
-                viewHolder.itemView.setOnClickListener(view -> itemClickListener.onClick(name, iconUrl, true));
+                viewHolder.itemView.setOnClickListener(view -> itemClickListener.onClick(name, iconUrl, false));
             } else {
                 viewHolder.itemView.setOnClickListener(view -> {
                     Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);

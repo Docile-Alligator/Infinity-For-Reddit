@@ -1004,7 +1004,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             } else {
                 switch (position) {
                     case 0:
-                        return "Best";
+                        return "Home";
                     case 1:
                         return "Popular";
                     case 2:
