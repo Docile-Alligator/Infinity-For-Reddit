@@ -52,6 +52,16 @@
         app:title="@string/settings_show_comment_divider_title" />
 
     <SwitchPreference
+        app:defaultValue="false"
+        app:key="comment_toolbar_hidden"
+        app:title="@string/settings_comment_toolbar_hidden" />
+
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="comment_toolbar_hide_on_click"
+        app:title="@string/settings_comment_toolbar_hide_on_click" />
+
+    <SwitchPreference
         app:defaultValue="true"
         app:key="show_absolute_number_of_votes"
         app:title="@string/settings_show_absolute_number_of_votes_title" />
