@@ -143,8 +143,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                     "crosspost_icon_tint INTEGER NOT NULL, stickied_post_icon_tint INTEGER NOT NULL, subscribed INTEGER NOT NULL," +
                     "unsubscribed INTEGER NOT NULL, username INTEGER NOT NULL, subreddit INTEGER NOT NULL," +
                     "author_flair_text_color INTEGER NOT NULL, submitter INTEGER NOT NULL," +
-                    "moderator INTEGER NOT NULL, notification_icon_color INTEGER NOT NULL," +
-                    "single_comment_thread_background_color INTEGER NOT NULL," +
+                    "moderator INTEGER NOT NULL, single_comment_thread_background_color INTEGER NOT NULL," +
                     "unread_message_background_color INTEGER NOT NULL, divider_color INTEGER NOT NULL," +
                     "no_preview_link_background_color INTEGER NOT NULL," +
                     "vote_and_reply_unavailable_button_color INTEGER NOT NULL," +

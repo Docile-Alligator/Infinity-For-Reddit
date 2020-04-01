@@ -5,6 +5,6 @@
         android:id="@+id/action_create_create_multi_reddit_activity"
         android:orderInCategory="1"
         android:title="@string/action_send"
-        android:icon="@drawable/ic_add_24dp"
+        android:icon="@drawable/ic_add_day_night_24dp"
         app:showAsAction="ifRoom" />
 </menu>
