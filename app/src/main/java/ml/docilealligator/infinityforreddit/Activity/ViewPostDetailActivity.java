@@ -25,6 +25,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.transition.AutoTransition;
+import androidx.transition.TransitionManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -1176,6 +1178,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 }
             }
         }
+    }
+
+    public void delayTransition() {
+        TransitionManager.beginDelayedTransition(mRecyclerView, new AutoTransition());
     }
 
     @Subscribe

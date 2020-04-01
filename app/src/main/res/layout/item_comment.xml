@@ -20,7 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
             android:orientation="vertical"
             android:animateLayoutChanges="true">
 
@@ -115,6 +114,7 @@
                 android:id="@+id/bottom_constraint_layout_item_post_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingBottom="12dp"
                 android:paddingStart="4dp"
                 android:paddingEnd="4dp">
 

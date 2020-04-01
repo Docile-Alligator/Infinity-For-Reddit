@@ -853,10 +853,10 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             }
 
             if (mCommentToolbarHidden) {
-                ((CommentViewHolder) holder).bottomConstraintLayout.setVisibility(View.GONE);
+                ((CommentViewHolder) holder).bottomConstraintLayout.getLayoutParams().height = 0;
                 ((CommentViewHolder) holder).topScoreTextView.setVisibility(View.VISIBLE);
             } else {
-                ((CommentViewHolder) holder).bottomConstraintLayout.setVisibility(View.VISIBLE);
+                ((CommentViewHolder) holder).bottomConstraintLayout.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
                 ((CommentViewHolder) holder).topScoreTextView.setVisibility(View.GONE);
             }
 
@@ -905,11 +905,13 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if (mCommentToolbarHideOnClick) {
                 View.OnClickListener hideToolbarOnClickListener = view -> {
-                    if (((CommentViewHolder) holder).bottomConstraintLayout.getVisibility() == View.GONE){
-                        ((CommentViewHolder) holder).bottomConstraintLayout.setVisibility(View.VISIBLE);
+                    if (((CommentViewHolder) holder).bottomConstraintLayout.getLayoutParams().height == 0) {
+                        ((CommentViewHolder) holder).bottomConstraintLayout.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
                         ((CommentViewHolder) holder).topScoreTextView.setVisibility(View.GONE);
+                        ((ViewPostDetailActivity) mActivity).delayTransition();
                     } else {
-                        ((CommentViewHolder) holder).bottomConstraintLayout.setVisibility(View.GONE);
+                        ((ViewPostDetailActivity) mActivity).delayTransition();
+                        ((CommentViewHolder) holder).bottomConstraintLayout.getLayoutParams().height = 0;
                         ((CommentViewHolder) holder).topScoreTextView.setVisibility(View.VISIBLE);
                     }
                 };
