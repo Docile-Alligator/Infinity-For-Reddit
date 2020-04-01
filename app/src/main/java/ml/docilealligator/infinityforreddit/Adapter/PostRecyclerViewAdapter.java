@@ -215,18 +215,14 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_DATA) {
             if (mPostLayout == SharedPreferencesUtils.POST_LAYOUT_CARD) {
-                MaterialCardView cardView = (MaterialCardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
-                return new PostViewHolder(cardView);
+                return new PostViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false));
             } else {
-                MaterialCardView cardView = (MaterialCardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_compact, parent, false);
-                return new PostCompactViewHolder(cardView);
+                return new PostCompactViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_compact, parent, false));
             }
         } else if (viewType == VIEW_TYPE_ERROR) {
-            RelativeLayout relativeLayout = (RelativeLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_error, parent, false);
-            return new ErrorViewHolder(relativeLayout);
+            return new ErrorViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_error, parent, false));
         } else {
-            RelativeLayout relativeLayout = (RelativeLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_loading, parent, false);
-            return new LoadingViewHolder(relativeLayout);
+            return new LoadingViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_loading, parent, false));
         }
     }
 

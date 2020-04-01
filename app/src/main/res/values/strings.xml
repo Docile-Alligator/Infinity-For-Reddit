@@ -490,7 +490,7 @@
     <string name="theme_item_color_accent">Color Accent</string>
     <string name="theme_item_color_accent_detail">Applied to: Progress Bar, etc</string>
     <string name="theme_item_color_primary_light_theme">Color Primary Light Theme</string>
-    <string name="theme_item_color_primary_light_theme_detail">Has effect only when this theme is set as light theme.\nApplied to: background of Floating Action Button and Button</string>
+    <string name="theme_item_color_primary_light_theme_detail">Applied to: background of Floating Action Button and Button</string>
     <string name="theme_item_primary_text_color">Primary Text Color</string>
     <string name="theme_item_primary_text_color_detail">Applied to: Primary text</string>
     <string name="theme_item_secondary_text_color">Secondary Text Color</string>
@@ -620,6 +620,9 @@
     <string name="theme_name_indigo">Indigo</string>
     <string name="theme_name_indigo_dark">Indigo Dark</string>
     <string name="theme_name_indigo_amoled">Indigo Amoled</string>
+    <string name="theme_name_white">White</string>
+    <string name="theme_name_white_dark">White Dark</string>
+    <string name="theme_name_white_amoled">White Amoled</string>
     <string name="create_light_theme">Create a Light Theme\nBase on Indigo Theme</string>
     <string name="create_dark_theme">Create a Dark Theme\nBase on Indigo Dark Theme</string>
     <string name="create_amoled_theme">Create an Amoled Theme\nBase on Indigo Amoled Theme</string>
