@@ -4,117 +4,101 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinator_layout_view_subreddit_detail_activity"
-    android:background="?attr/backgroundColor"
-    tools:application=".Activity.ViewSubredditDetailActivity">
+    android:id="@+id/coordinator_layout_theme_preview_activity"
+    tools:context=".Activity.ThemePreviewActivity">
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager_view_subreddit_detail_activity"
+        android:id="@+id/view_pager_theme_preview_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar_layout_view_subreddit_detail_activity"
+        android:id="@+id/appbar_layout_theme_preview_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/toolbarAndTabBackgroundColor"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar_layout_view_subreddit_detail_activity"
+            android:id="@+id/collapsing_toolbar_layout_theme_preview_activity"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:titleEnabled="false"
-            app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
             app:toolbarId="@+id/toolbar">
 
-            <RelativeLayout
+            <LinearLayout
+                android:id="@+id/toolbar_linear_layout_theme_preview_activity"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <pl.droidsonroids.gif.GifImageView
-                    android:id="@+id/banner_image_view_view_subreddit_detail_activity"
-                    android:layout_width="match_parent"
-                    android:scaleType="centerCrop"
-                    android:layout_height="180dp"
-                    android:contentDescription="@string/content_description_banner_imageview" />
-
-                <pl.droidsonroids.gif.GifImageView
-                    android:id="@+id/icon_gif_image_view_view_subreddit_detail_activity"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    android:layout_marginTop="-36dp"
-                    android:layout_below="@id/banner_image_view_view_subreddit_detail_activity"
-                    android:layout_centerHorizontal="true"
-                    android:elevation="4dp" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="180dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
 
                 <LinearLayout
-                    android:id="@+id/toolbar_linear_layout_view_subreddit_detail_activity"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="36dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:layout_below="@id/banner_image_view_view_subreddit_detail_activity"
-                    android:background="?attr/backgroundColor">
+                    android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/subreddit_name_text_view_view_subreddit_detail_activity"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="16dp"
-                        android:textSize="?attr/font_18"
-                        android:textColor="?attr/subreddit"
-                        android:layout_gravity="center_horizontal"/>
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/subreddit_name_text_view_theme_preview_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:text="@string/subreddit_preview"
+                            android:textSize="?attr/font_18"/>
+
+                        <TextView
+                            android:id="@+id/user_name_text_view_theme_preview_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/username_preview"
+                            android:textSize="?attr/font_18"/>
+
+                    </LinearLayout>
 
                     <com.google.android.material.chip.Chip
-                        android:id="@+id/subscribe_subreddit_chip_view_subreddit_detail_activity"
+                        android:id="@+id/subscribe_subreddit_chip_theme_preview_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:text="@string/subscribe"
                         android:textColor="@android:color/white"
                         android:layout_gravity="center_horizontal"/>
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="16dp">
+                </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/subscriber_count_text_view_view_subreddit_detail_activity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="?attr/primaryTextColor"
-                            android:textSize="?attr/font_default"
-                            android:layout_alignParentStart="true"
-                            android:layout_toStartOf="@id/online_subscriber_count_text_view_view_subreddit_detail_activity" />
-
-                        <TextView
-                            android:id="@+id/online_subscriber_count_text_view_view_subreddit_detail_activity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:textColor="?attr/primaryTextColor"
-                            android:textSize="?attr/font_default" />
-
-                    </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp">
 
                     <TextView
-                        android:id="@+id/description_text_view_view_subreddit_detail_activity"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/primary_text_text_view_theme_preview_activity"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:textColor="?attr/primaryTextColor"
-                        android:textSize="?attr/font_default"
-                        android:visibility="gone"/>
+                        android:layout_weight="1"
+                        android:text="@string/primary_text_preview"
+                        android:textSize="?attr/font_default" />
+
+                    <TextView
+                        android:id="@+id/secondary_text_text_view_theme_preview_activity"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="end"
+                        android:text="@string/secondary_text_preview"
+                        android:textSize="?attr/font_default" />
 
                 </LinearLayout>
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -128,11 +112,10 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_layout_view_subreddit_detail_activity"
+            android:id="@+id/tab_layout_theme_preview_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="?attr/toolbarAndTabBackgroundColor"
             app:layout_scrollFlags="scroll|enterAlways"
             app:tabGravity="fill"
             app:tabMode="fixed"
@@ -143,22 +126,20 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottom_navigation_view_subreddit_detail_activity"
+        android:id="@+id/bottom_navigation_theme_preview_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:visibility="gone"
-        app:backgroundTint="?attr/backgroundColor"
         app:fabAlignmentMode="center">
 
         <LinearLayout
-            android:id="@+id/linear_layout_bottom_app_bar_view_subreddit_detail_activity"
+            android:id="@+id/linear_layout_bottom_app_bar_theme_preview_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:weightSum="5">
 
             <ImageView
-                android:id="@+id/subscriptions_bottom_app_bar_view_subreddit_detail_activity"
+                android:id="@+id/subscriptions_bottom_app_bar_theme_preview_activity"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -169,7 +150,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
             <ImageView
-                android:id="@+id/multi_reddit_bottom_app_bar_view_subreddit_detail_activity"
+                android:id="@+id/multi_reddit_bottom_app_bar_theme_preview_activity"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -186,7 +167,7 @@
                 android:background="@android:color/transparent"/>
 
             <ImageView
-                android:id="@+id/message_bottom_app_bar_view_subreddit_detail_activity"
+                android:id="@+id/message_bottom_app_bar_theme_preview_activity"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -197,7 +178,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
             <ImageView
-                android:id="@+id/profile_bottom_app_bar_view_subreddit_detail_activity"
+                android:id="@+id/profile_bottom_app_bar_theme_preview_activity"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -212,14 +193,12 @@
     </com.google.android.material.bottomappbar.BottomAppBar>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_view_subreddit_detail_activity"
+        android:id="@+id/fab_theme_preview_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        android:visibility="gone"
-        app:backgroundTint="?attr/colorPrimaryLightTheme"
         app:srcCompat="@drawable/ic_add_day_night_24dp"
         app:tint="@android:color/white"
-        app:layout_anchor="@id/bottom_navigation_view_subreddit_detail_activity" />
+        app:layout_anchor="@id/bottom_navigation_theme_preview_activity" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

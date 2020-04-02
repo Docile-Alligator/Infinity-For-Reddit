@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.Activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -188,6 +189,12 @@ public class CustomizeThemeActivity extends BaseActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                return true;
+            case R.id.action_preview_customize_theme_activity:
+                Intent intent = new Intent(this, ThemePreviewActivity.class);
+                intent.putParcelableArrayListExtra(ThemePreviewActivity.EXTRA_CUSTOM_THEME_SETTINGS_ITEMS, customThemeSettingsItems);
+                startActivity(intent);
+
                 return true;
             case R.id.action_save_customize_theme_activity:
                 if (adapter != null) {

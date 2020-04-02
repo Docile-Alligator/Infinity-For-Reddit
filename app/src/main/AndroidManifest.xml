@@ -21,7 +21,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
-        <activity android:name=".Activity.CustomThemeListingActivity"
+        <activity android:name=".Activity.ThemePreviewActivity"
+            android:label="@string/theme_preview_activity_label"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.CustomThemeListingActivity"
             android:label="@string/custom_theme_listing_activity_label"
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -266,9 +271,9 @@
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".Activity.ViewVideoActivity"
+            android:configChanges="orientation|screenSize|layoutDirection"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.ActionBar.Transparent"
-            android:configChanges="orientation|screenSize|layoutDirection" />
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".Activity.ViewPostDetailActivity"
             android:parentActivityName=".Activity.MainActivity"

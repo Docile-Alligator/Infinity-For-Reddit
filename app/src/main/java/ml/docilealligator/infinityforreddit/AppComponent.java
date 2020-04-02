@@ -28,6 +28,7 @@ import ml.docilealligator.infinityforreddit.Activity.SettingsActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubredditMultiselectionActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubscribedThingListingActivity;
+import ml.docilealligator.infinityforreddit.Activity.ThemePreviewActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewGIFActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewImageActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewMessageActivity;
@@ -152,4 +153,6 @@ public interface AppComponent {
     void inject(SidebarFragment sidebarFragment);
 
     void inject(AdvancedPreferenceFragment advancedPreferenceFragment);
+
+    void inject(ThemePreviewActivity themePreviewActivity);
 }

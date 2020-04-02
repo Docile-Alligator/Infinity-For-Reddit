@@ -97,7 +97,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.view_pager_view_subreddit_detail_activity)
     ViewPager viewPager;
-    @BindView(R.id.appbar_layout_view_subreddit_detail)
+    @BindView(R.id.appbar_layout_view_subreddit_detail_activity)
     AppBarLayout appBarLayout;
     @BindView(R.id.collapsing_toolbar_layout_view_subreddit_detail_activity)
     CollapsingToolbarLayout collapsingToolbarLayout;

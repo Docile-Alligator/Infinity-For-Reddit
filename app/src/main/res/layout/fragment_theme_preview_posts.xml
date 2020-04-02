@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_view_theme_preview_posts_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView
+                    android:id="@+id/icon_gif_image_view_theme_preview_posts_fragment"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/subreddit_name_text_view_theme_preview_posts_fragment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/subreddit_preview"
+                    android:textSize="?attr/font_default"
+                    app:layout_constraintBottom_toTopOf="@id/user_text_view_theme_preview_posts_fragment"
+                    app:layout_constraintEnd_toStartOf="@id/stickied_post_image_view_theme_preview_posts_fragment"
+                    app:layout_constraintStart_toEndOf="@id/icon_gif_image_view_theme_preview_posts_fragment"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/user_text_view_theme_preview_posts_fragment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="@string/username_preview"
+                    android:textSize="?attr/font_default"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/stickied_post_image_view_theme_preview_posts_fragment"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toEndOf="@+id/icon_gif_image_view_theme_preview_posts_fragment"
+                    app:layout_constraintTop_toBottomOf="@+id/subreddit_name_text_view_theme_preview_posts_fragment" />
+
+                <ImageView
+                    android:id="@+id/stickied_post_image_view_theme_preview_posts_fragment"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                    app:layout_constraintStart_toEndOf="@id/subreddit_name_text_view_theme_preview_posts_fragment"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/post_time_text_view_best_theme_preview_posts_fragment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:text="2 Hours"
+                    android:textSize="?attr/font_default"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline2"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.6" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/title_text_view_best_theme_preview_posts_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/post_title_preview"
+                android:textSize="?attr/title_font_18" />
+
+            <TextView
+                android:id="@+id/content_text_view_theme_preview_posts_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:maxLines="4"
+                android:text="@string/post_content_preview"
+                android:textSize="?attr/content_font_default"
+                android:ellipsize="end" />
+
+            <com.nex3z.flowlayout.FlowLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                app:flChildSpacing="16dp"
+                app:flChildSpacingForLastRow="align"
+                app:flRowSpacing="8dp">
+
+                <com.libRG.CustomTextView
+                    android:id="@+id/type_text_view_theme_preview_posts_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="@string/post_type_preview"
+                    android:textColor="@android:color/white"
+                    android:textSize="?attr/font_12"
+                    app:lib_setRadius="3dp"
+                    app:lib_setRoundedView="true"
+                    app:lib_setShape="rectangle" />
+
+                <com.libRG.CustomTextView
+                    android:id="@+id/spoiler_custom_text_view_theme_preview_posts_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="4dp"
+                    android:text="@string/spoiler"
+                    android:textColor="@android:color/white"
+                    android:textSize="?attr/font_12"
+                    app:lib_setRadius="3dp"
+                    app:lib_setRoundedView="true"
+                    app:lib_setShape="rectangle" />
+
+                <com.libRG.CustomTextView
+                    android:id="@+id/nsfw_text_view_theme_preview_posts_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="@string/nsfw"
+                    android:textColor="@android:color/white"
+                    android:textSize="?attr/font_12"
+                    app:lib_setRadius="3dp"
+                    app:lib_setRoundedView="true"
+                    app:lib_setShape="rectangle" />
+
+                <com.libRG.CustomTextView
+                    android:id="@+id/flair_custom_text_view_theme_preview_posts_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="4dp"
+                    android:text="@string/flair_preview"
+                    android:textColor="@android:color/white"
+                    android:textSize="?attr/font_12"
+                    app:lib_setRadius="3dp"
+                    app:lib_setRoundedView="true"
+                    app:lib_setShape="rectangle" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/gold"
+                    android:drawablePadding="4dp"
+                    android:text="@string/gilded_preview"
+                    android:textColor="@color/gold"
+                    android:textSize="?attr/font_default" />
+
+                <ImageView
+                    android:id="@+id/archived_image_view_theme_preview_posts_fragment"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_archive_outline" />
+
+                <ImageView
+                    android:id="@+id/locked_image_view_theme_preview_posts_fragment"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_outline_lock_24dp" />
+
+                <ImageView
+                    android:id="@+id/crosspost_image_view_theme_preview_posts_fragment"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/crosspost" />
+
+            </com.nex3z.flowlayout.FlowLayout>
+
+            <TextView
+                android:id="@+id/link_text_view_theme_preview_posts_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="abcd.efg"
+                android:textSize="?attr/font_12" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar_theme_preview_posts_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp" />
+
+            <ImageView
+                android:id="@+id/image_view_no_preview_link_theme_preview_posts_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:scaleType="center"
+                android:src="@drawable/ic_link"
+                android:tint="@android:color/tab_indicator_text"
+                android:background="?attr/noPreviewLinkBackgroundColor" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/plus_button_theme_preview_posts_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?actionBarItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_arrow_upward_grey_24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/score_text_view_theme_preview_posts_fragment"
+                    android:layout_width="64dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="1234"
+                    android:textSize="?attr/font_12"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/plus_button_theme_preview_posts_fragment"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/minus_button_theme_preview_posts_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?actionBarItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_arrow_downward_grey_24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/score_text_view_theme_preview_posts_fragment"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/comments_count_theme_preview_posts_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_comment_grey_24dp"
+                    android:drawablePadding="12dp"
+                    android:gravity="center_vertical"
+                    android:padding="12dp"
+                    android:text="567"
+                    android:textSize="?attr/font_12"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/minus_button_theme_preview_posts_fragment"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/save_button_theme_preview_posts_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?actionBarItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_bookmark_border_grey_24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/share_button_theme_preview_posts_fragment"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toEndOf="@id/comments_count_theme_preview_posts_fragment"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/share_button_theme_preview_posts_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?actionBarItemBackground"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="12dp"
+                    android:src="@drawable/ic_share_grey_24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.core.widget.NestedScrollView>
