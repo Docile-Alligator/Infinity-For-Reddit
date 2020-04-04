@@ -37,6 +37,7 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String USER_PATTERN_2 = "/[uU]/\\w+/{0,1}";
     private static final String SIDEBAR_PATTERN = "/[rR]/\\w+/about/sidebar";
     private static final String MULTIREDDIT_PATTERN = "/user/\\w+/m/\\w+/{0,1}";
+    private static final String REDD_IT_POST_PATTERN = "/\\w+/{0,1}";
 
     @Inject
     @Named("default")
@@ -130,7 +131,12 @@ public class LinkResolverActivity extends AppCompatActivity {
                     Intent intent = new Intent(this, ViewMultiRedditDetailActivity.class);
                     intent.putExtra(ViewMultiRedditDetailActivity.EXTRA_MULTIREDDIT_PATH, path);
                     startActivity(intent);
-                } else {
+                } else if (path.matches(REDD_IT_POST_PATTERN)) {
+                    Intent intent = new Intent(this, ViewPostDetailActivity.class);
+                    intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, path.substring(1));
+                    startActivity(intent);
+                }
+                else {
                     deepLinkError(uri);
                 }
             }
