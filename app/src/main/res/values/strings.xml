@@ -23,6 +23,8 @@
     <string name="customize_theme_activity_label">Customize Theme</string>
     <string name="customize_theme_activity_create_theme_label">Create Theme</string>
     <string name="theme_preview_activity_label">Theme Preview</string>
+    <string name="edit_multi_reddit_activity_label">Edit Multireddit</string>
+    <string name="selected_subeddits_activity_label">Selected Subreddits</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -51,6 +53,7 @@
     <string name="action_change_post_layout">Change Post Layout</string>
     <string name="action_view_side_bar">View Sidebar</string>
     <string name="action_save">Save</string>
+    <string name="action_edit_multi_reddit">Edit MultiReddit</string>
     <string name="action_delete_multi_reddit">Delete Multireddit</string>
     <string name="action_share">Share</string>
 
@@ -103,6 +106,7 @@
     <string name="cannot_fetch_subreddit_info">Cannot fetch subreddit info</string>
     <string name="cannot_fetch_user_info">Cannot fetch user info</string>
     <string name="cannot_fetch_sidebar">Cannot fetch sidebar</string>
+    <string name="cannot_fetch_multireddit">Cannot fetch multireddit info</string>
 
     <string name="gilded_count">x%1$d</string>
     <string name="title_activity_view_user_detail">ViewUserDetailActivity</string>
@@ -308,6 +312,7 @@
     <string name="settings_open_link_in_app_title">Open Link In App</string>
     <string name="settings_immersive_interface_title">Immersive Interface</string>
     <string name="settings_enable_bottom_app_bar_title">Enable Bottom Navigation</string>
+    <string name="settings_enable_bottom_app_bar_summary">Has No Effect in Anonymous Mode</string>
     <string name="settings_vote_buttons_on_the_right_title">Vote Buttons on the Right</string>
     <string name="settings_volume_keys_navigate_comments_title">Use Volume Keys to Navigate Comments in Posts</string>
     <string name="settings_volume_keys_navigate_posts_title">Use Volume Keys to Navigate Posts</string>
@@ -461,10 +466,11 @@
     <string name="multi_reddit_name_hint">Name (Max 50 Characters)</string>
     <string name="multi_reddit_description_hint">Description</string>
     <string name="private_multi_reddit">Private</string>
-    <string name="select_subreddit">Select Subreddit</string>
+    <string name="select_subreddits">Select Subreddits</string>
     <string name="no_multi_reddit_name">Where is the name?</string>
     <string name="create_multi_reddit_failed">Cannot create this multireddit</string>
     <string name="duplicate_multi_reddit">This multireddit already exists</string>
+    <string name="edit_multi_reddit_failed">Cannot edit this multireddit</string>
     <string name="logged_out">You are logged out</string>
     <string name="subreddit_selected">%1$s selected</string>
     <string name="delete_multi_reddit_success">Delete successfully</string>

@@ -109,7 +109,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                     mFavoriteMultiReddits.size() + 2 : 0;
 
             MultiReddit multiReddit = mMultiReddits.get(holder.getAdapterPosition() - offset);
-            name = multiReddit.getName();
+            name = multiReddit.getDisplayName();
             iconUrl = multiReddit.getIconUrl();
             if(multiReddit.isFavorite()) {
                 ((MultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
@@ -192,7 +192,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
             ((MultiRedditViewHolder) holder).multiRedditNameTextView.setText(name);
         } else if (holder instanceof FavoriteMultiRedditViewHolder) {
             MultiReddit multiReddit = mFavoriteMultiReddits.get(holder.getAdapterPosition() - 1);
-            String name = multiReddit.getName();
+            String name = multiReddit.getDisplayName();
             String iconUrl = multiReddit.getIconUrl();
             if(multiReddit.isFavorite()) {
                 ((FavoriteMultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);

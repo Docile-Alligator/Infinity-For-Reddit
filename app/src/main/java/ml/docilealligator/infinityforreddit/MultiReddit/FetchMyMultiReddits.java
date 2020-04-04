@@ -11,13 +11,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class FetchMultiReddit {
-    public interface FetchMultiRedditListener {
+public class FetchMyMultiReddits {
+    public interface FetchMyMultiRedditsListener {
         void success(ArrayList<MultiReddit> multiReddits);
         void failed();
     }
 
-    public static void fetchMyMultiReddits(Retrofit oauthRetrofit, String accessToken, FetchMultiRedditListener fetchMultiRedditListener) {
+    public static void fetchMyMultiReddits(Retrofit oauthRetrofit, String accessToken, FetchMyMultiRedditsListener fetchMyMultiRedditsListener) {
         oauthRetrofit.create(RedditAPI.class)
                 .getMyMultiReddits(RedditUtils.getOAuthHeader(accessToken)).enqueue(new Callback<String>() {
             @Override
@@ -26,22 +26,22 @@ public class FetchMultiReddit {
                     ParseMultiReddit.parseMultiRedditsList(response.body(), new ParseMultiReddit.ParseMultiRedditsListListener() {
                         @Override
                         public void success(ArrayList<MultiReddit> multiReddits) {
-                            fetchMultiRedditListener.success(multiReddits);
+                            fetchMyMultiRedditsListener.success(multiReddits);
                         }
 
                         @Override
                         public void failed() {
-                            fetchMultiRedditListener.failed();
+                            fetchMyMultiRedditsListener.failed();
                         }
                     });
                 } else {
-                    fetchMultiRedditListener.failed();
+                    fetchMyMultiRedditsListener.failed();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                fetchMultiRedditListener.failed();
+                fetchMyMultiRedditsListener.failed();
             }
         });
     }

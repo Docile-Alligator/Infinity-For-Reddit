@@ -72,7 +72,7 @@ class ParseSubscribedThing {
                 JSONArray children = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
                 for (int i = 0; i < children.length(); i++) {
                     JSONObject data = children.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
-                    String name = data.getString(JSONUtils.DISPLAY_NAME);
+                    String name = data.getString(JSONUtils.DISPLAY_NAME_KEY);
                     String bannerImageUrl = data.getString(JSONUtils.BANNER_BACKGROUND_IMAGE_KEY);
                     if (bannerImageUrl.equals("") || bannerImageUrl.equals("null")) {
                         bannerImageUrl = data.getString(JSONUtils.BANNER_IMG_KEY);
@@ -95,7 +95,7 @@ class ParseSubscribedThing {
                         //It's a user
                         newSubscribedUserData.add(new SubscribedUserData(name.substring(2), iconUrl, accountName, isFavorite));
                     } else {
-                        String subredditFullName = data.getString(JSONUtils.DISPLAY_NAME);
+                        String subredditFullName = data.getString(JSONUtils.DISPLAY_NAME_KEY);
                         String description = data.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY).trim();
                         String sidebarDescription = data.getString(JSONUtils.DESCRIPTION_KEY);
                         int nSubscribers = data.getInt(JSONUtils.SUBSCRIBERS_KEY);

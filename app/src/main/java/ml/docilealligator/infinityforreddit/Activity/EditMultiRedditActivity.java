@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,8 +23,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -31,44 +31,52 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.MultiReddit.CreateMultiReddit;
+import ml.docilealligator.infinityforreddit.MultiReddit.EditMultiReddit;
+import ml.docilealligator.infinityforreddit.MultiReddit.FetchMultiRedditInfo;
+import ml.docilealligator.infinityforreddit.MultiReddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiRedditJSONModel;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import retrofit2.Retrofit;
 
-public class CreateMultiRedditActivity extends BaseActivity {
-
+public class EditMultiRedditActivity extends BaseActivity {
+    public static final String EXTRA_MULTI_REDDIT = "EMR";
+    public static final String EXTRA_MULTI_PATH = "EMP";
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 1;
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
-    private static final String SELECTED_SUBREDDITS_STATE = "SSS";
-    @BindView(R.id.coordinator_layout_create_multi_reddit_activity)
+    private static final String MULTI_REDDIT_STATE = "MRS";
+    private static final String MULTI_PATH_STATE = "MPS";
+    @BindView(R.id.coordinator_layout_edit_multi_reddit_activity)
     CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_create_multi_reddit_activity)
+    @BindView(R.id.appbar_layout_edit_multi_reddit_activity)
     AppBarLayout appBarLayout;
-    @BindView(R.id.toolbar_create_multi_reddit_activity)
+    @BindView(R.id.toolbar_edit_multi_reddit_activity)
     Toolbar toolbar;
-    @BindView(R.id.multi_reddit_name_edit_text_create_multi_reddit_activity)
+    @BindView(R.id.progress_bar_edit_multi_reddit_activity)
+    ProgressBar progressBar;
+    @BindView(R.id.linear_layout_edit_multi_reddit_activity)
+    LinearLayout linearLayout;
+    @BindView(R.id.multi_reddit_name_edit_text_edit_multi_reddit_activity)
     EditText nameEditText;
-    @BindView(R.id.divider_1_create_multi_reddit_activity)
+    @BindView(R.id.divider_1_edit_multi_reddit_activity)
     View divider1;
-    @BindView(R.id.description_edit_text_create_multi_reddit_activity)
+    @BindView(R.id.description_edit_text_edit_multi_reddit_activity)
     EditText descriptionEditText;
-    @BindView(R.id.divider_2_create_multi_reddit_activity)
+    @BindView(R.id.divider_2_edit_multi_reddit_activity)
     View divider2;
-    @BindView(R.id.visibility_wrapper_linear_layout_create_multi_reddit_activity)
+    @BindView(R.id.visibility_wrapper_linear_layout_edit_multi_reddit_activity)
     LinearLayout visibilityLinearLayout;
-    @BindView(R.id.visibility_text_view_create_multi_reddit_activity)
+    @BindView(R.id.visibility_text_view_edit_multi_reddit_activity)
     TextView visibilityTextView;
-    @BindView(R.id.visibility_switch_create_multi_reddit_activity)
+    @BindView(R.id.visibility_switch_edit_multi_reddit_activity)
     Switch visibilitySwitch;
-    @BindView(R.id.select_subreddit_text_view_create_multi_reddit_activity)
+    @BindView(R.id.select_subreddit_text_view_edit_multi_reddit_activity)
     TextView selectSubredditTextView;
     @Inject
     @Named("oauth")
-    Retrofit mOauthRetrofit;
+    Retrofit mRetrofit;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -79,13 +87,14 @@ public class CreateMultiRedditActivity extends BaseActivity {
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
-    private ArrayList<String> mSubreddits;
+    private MultiReddit multiReddit;
+    private String multipath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_multi_reddit);
+        setContentView(R.layout.activity_edit_multi_reddit);
 
         ButterKnife.bind(this);
 
@@ -102,7 +111,8 @@ public class CreateMultiRedditActivity extends BaseActivity {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
-            mSubreddits = savedInstanceState.getStringArrayList(SELECTED_SUBREDDITS_STATE);
+            multiReddit = savedInstanceState.getParcelable(MULTI_REDDIT_STATE);
+            multipath = savedInstanceState.getString(MULTI_PATH_STATE);
 
             if (!mNullAccessToken && mAccountName == null) {
                 getCurrentAccountAndBindView();
@@ -110,7 +120,8 @@ public class CreateMultiRedditActivity extends BaseActivity {
                 bindView();
             }
         } else {
-            mSubreddits = new ArrayList<>();
+            multiReddit = getIntent().getParcelableExtra(EXTRA_MULTI_REDDIT);
+            multipath = getIntent().getStringExtra(EXTRA_MULTI_PATH);
             getCurrentAccountAndBindView();
         }
     }
@@ -130,16 +141,43 @@ public class CreateMultiRedditActivity extends BaseActivity {
     }
 
     private void bindView() {
+        if (multiReddit == null) {
+            FetchMultiRedditInfo.fetchMultiRedditInfo(mRetrofit, mAccessToken, multipath, new FetchMultiRedditInfo.FetchMultiRedditInfoListener() {
+                @Override
+                public void success(MultiReddit multiReddit) {
+                    EditMultiRedditActivity.this.multiReddit = multiReddit;
+                    progressBar.setVisibility(View.GONE);
+                    linearLayout.setVisibility(View.VISIBLE);
+                    nameEditText.setText(multiReddit.getDisplayName());
+                    descriptionEditText.setText(multiReddit.getDescription());
+                    visibilitySwitch.setChecked(!multiReddit.getVisibility().equals("public"));
+                }
+
+                @Override
+                public void failed() {
+                    Snackbar.make(coordinatorLayout, R.string.cannot_fetch_multireddit, Snackbar.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            progressBar.setVisibility(View.GONE);
+            linearLayout.setVisibility(View.VISIBLE);
+            nameEditText.setText(multiReddit.getDisplayName());
+            descriptionEditText.setText(multiReddit.getDescription());
+            visibilitySwitch.setChecked(!multiReddit.getVisibility().equals("public"));
+        }
+
         selectSubredditTextView.setOnClickListener(view -> {
-            Intent intent = new Intent(CreateMultiRedditActivity.this, SelectedSubredditsActivity.class);
-            intent.putStringArrayListExtra(SelectedSubredditsActivity.EXTRA_SELECTED_SUBREDDITS, mSubreddits);
+            Intent intent = new Intent(EditMultiRedditActivity.this, SelectedSubredditsActivity.class);
+            if (multiReddit.getSubreddits() != null) {
+                intent.putStringArrayListExtra(SelectedSubredditsActivity.EXTRA_SELECTED_SUBREDDITS, multiReddit.getSubreddits());
+            }
             startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
         });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.create_multi_reddit_activity, menu);
+        getMenuInflater().inflate(R.menu.edit_multi_reddit_activity, menu);
         applyMenuItemTheme(menu);
         return true;
     }
@@ -150,7 +188,7 @@ public class CreateMultiRedditActivity extends BaseActivity {
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.action_save_create_multi_reddit_activity:
+            case R.id.action_save_edit_multi_reddit_activity:
                 if (mAccountName == null || mAccessToken == null) {
                     Snackbar.make(coordinatorLayout, R.string.something_went_wrong, Snackbar.LENGTH_SHORT).show();
                     return true;
@@ -161,22 +199,17 @@ public class CreateMultiRedditActivity extends BaseActivity {
                 }
 
                 String jsonModel = new MultiRedditJSONModel(nameEditText.getText().toString(), descriptionEditText.getText().toString(),
-                        visibilitySwitch.isChecked(), mSubreddits).createJSONModel();
-                CreateMultiReddit.createMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
-                        "/user/" + mAccountName + "/m/" + nameEditText.getText().toString(),
-                        jsonModel, new CreateMultiReddit.CreateMultiRedditListener() {
+                        visibilitySwitch.isChecked(), multiReddit.getSubreddits()).createJSONModel();
+                EditMultiReddit.editMultiReddit(mRetrofit, mAccessToken, multiReddit.getPath(),
+                        jsonModel, new EditMultiReddit.EditMultiRedditListener() {
                             @Override
                             public void success() {
                                 finish();
                             }
 
                             @Override
-                            public void failed(int errorCode) {
-                                if (errorCode == 409) {
-                                    Snackbar.make(coordinatorLayout, R.string.duplicate_multi_reddit, Snackbar.LENGTH_SHORT).show();
-                                } else {
-                                    Snackbar.make(coordinatorLayout, R.string.create_multi_reddit_failed, Snackbar.LENGTH_SHORT).show();
-                                }
+                            public void failed() {
+                                Snackbar.make(coordinatorLayout, R.string.edit_multi_reddit_failed, Snackbar.LENGTH_SHORT).show();
                             }
                         });
         }
@@ -188,8 +221,8 @@ public class CreateMultiRedditActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SUBREDDIT_SELECTION_REQUEST_CODE && resultCode == RESULT_OK) {
             if (data != null) {
-                mSubreddits = data.getStringArrayListExtra(
-                        SubredditMultiselectionActivity.EXTRA_RETURN_SELECTED_SUBREDDITS);
+                multiReddit.setSubreddits(data.getStringArrayListExtra(
+                        SubredditMultiselectionActivity.EXTRA_RETURN_SELECTED_SUBREDDITS));
             }
         }
     }
@@ -200,7 +233,8 @@ public class CreateMultiRedditActivity extends BaseActivity {
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
         outState.putString(ACCOUNT_NAME_STATE, mAccountName);
-        outState.putStringArrayList(SELECTED_SUBREDDITS_STATE, mSubreddits);
+        outState.putParcelable(MULTI_REDDIT_STATE, multiReddit);
+        outState.putString(MULTI_PATH_STATE, multipath);
     }
 
     @Override
@@ -216,6 +250,7 @@ public class CreateMultiRedditActivity extends BaseActivity {
     @Override
     protected void applyCustomTheme() {
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        progressBar.setIndeterminateTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorAccent()));
         int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         nameEditText.setTextColor(primaryTextColor);
         int dividerColor = mCustomThemeWrapper.getDividerColor();

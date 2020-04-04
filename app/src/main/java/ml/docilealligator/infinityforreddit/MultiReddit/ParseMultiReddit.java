@@ -32,9 +32,9 @@ public class ParseMultiReddit {
     }
 
     private static MultiReddit parseMultiReddit(JSONObject singleMultiRedditJSON) throws JSONException {
-        String displayName = singleMultiRedditJSON.getString(JSONUtils.DISPLAY_NAME);
+        String displayName = singleMultiRedditJSON.getString(JSONUtils.DISPLAY_NAME_KEY);
         String name = singleMultiRedditJSON.getString(JSONUtils.NAME_KEY);
-        String description = singleMultiRedditJSON.getString(JSONUtils.DESCRIPTION_HTML_KEY);
+        String description = singleMultiRedditJSON.getString(JSONUtils.DESCRIPTION_MD_KEY);
         int nSubscribers = singleMultiRedditJSON.getInt(JSONUtils.NUM_SUBSCRIBERS_KEY);
         String copiedFrom = singleMultiRedditJSON.getString(JSONUtils.COPIED_FROM_KEY);
         String iconUrl = singleMultiRedditJSON.getString(JSONUtils.ICON_URL_KEY);

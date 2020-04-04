@@ -12,6 +12,7 @@ import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
@@ -294,6 +295,13 @@ public interface RedditAPI {
     @POST("/api/multi/multipath")
     Call<String> createMultiReddit(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
+    @FormUrlEncoded
+    @PUT("/api/multi/multipath")
+    Call<String> updateMultiReddit(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
     @DELETE("/api/multi/multipath")
     Call<String> deleteMultiReddit(@HeaderMap Map<String, String> headers, @Query("multipath") String multipath);
+
+    @GET("/api/multi/multipath/")
+    Call<String> getMultiRedditInfo(@HeaderMap Map<String, String> headers, @Query("multipath") String multipath);
 }

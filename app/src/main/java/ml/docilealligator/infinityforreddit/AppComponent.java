@@ -10,6 +10,7 @@ import ml.docilealligator.infinityforreddit.Activity.CreateMultiRedditActivity;
 import ml.docilealligator.infinityforreddit.Activity.CustomThemeListingActivity;
 import ml.docilealligator.infinityforreddit.Activity.CustomizeThemeActivity;
 import ml.docilealligator.infinityforreddit.Activity.EditCommentActivity;
+import ml.docilealligator.infinityforreddit.Activity.EditMultiRedditActivity;
 import ml.docilealligator.infinityforreddit.Activity.EditPostActivity;
 import ml.docilealligator.infinityforreddit.Activity.FilteredThingActivity;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
@@ -24,6 +25,7 @@ import ml.docilealligator.infinityforreddit.Activity.RulesActivity;
 import ml.docilealligator.infinityforreddit.Activity.SearchActivity;
 import ml.docilealligator.infinityforreddit.Activity.SearchResultActivity;
 import ml.docilealligator.infinityforreddit.Activity.SearchSubredditsResultActivity;
+import ml.docilealligator.infinityforreddit.Activity.SelectedSubredditsActivity;
 import ml.docilealligator.infinityforreddit.Activity.SettingsActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubredditMultiselectionActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubredditSelectionActivity;
@@ -155,4 +157,8 @@ public interface AppComponent {
     void inject(AdvancedPreferenceFragment advancedPreferenceFragment);
 
     void inject(ThemePreviewActivity themePreviewActivity);
+
+    void inject(EditMultiRedditActivity editMultiRedditActivity);
+
+    void inject(SelectedSubredditsActivity selectedSubredditsActivity);
 }

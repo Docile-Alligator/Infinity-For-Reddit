@@ -38,7 +38,7 @@ import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertMultiRedditAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.MultiReddit.FetchMultiReddit;
+import ml.docilealligator.infinityforreddit.MultiReddit.FetchMyMultiReddits;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiRedditViewModel;
 import ml.docilealligator.infinityforreddit.R;
@@ -204,7 +204,7 @@ public class MultiRedditListingActivity extends BaseActivity {
 
     private void loadMultiReddits() {
         mSwipeRefreshLayout.setRefreshing(true);
-        FetchMultiReddit.fetchMyMultiReddits(mOauthRetrofit, mAccessToken, new FetchMultiReddit.FetchMultiRedditListener() {
+        FetchMyMultiReddits.fetchMyMultiReddits(mOauthRetrofit, mAccessToken, new FetchMyMultiReddits.FetchMyMultiRedditsListener() {
             @Override
             public void success(ArrayList<MultiReddit> multiReddits) {
                 new InsertMultiRedditAsyncTask(mRedditDataRoomDatabase, multiReddits, mAccountName, () -> {

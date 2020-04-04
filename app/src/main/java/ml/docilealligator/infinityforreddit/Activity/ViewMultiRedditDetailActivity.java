@@ -33,6 +33,7 @@ import ml.docilealligator.infinityforreddit.Fragment.SortTypeBottomSheetFragment
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MultiReddit.DeleteMultiReddit;
+import ml.docilealligator.infinityforreddit.MultiReddit.EditMultiReddit;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.Post.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
@@ -248,7 +249,12 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
             case R.id.action_change_post_layout_view_multi_reddit_detail_activity:
                 postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
                 return true;
-            case R.id.action_delte_view_multi_reddit_detail_activity:
+            case R.id.action_edit_view_multi_reddit_detail_activity:
+                Intent editIntent = new Intent(this, EditMultiRedditActivity.class);
+                editIntent.putExtra(EditMultiRedditActivity.EXTRA_MULTI_PATH, multiPath);
+                startActivity(editIntent);
+                return true;
+            case R.id.action_delete_view_multi_reddit_detail_activity:
                 new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                         .setTitle(R.string.delete)
                         .setMessage(R.string.delete_multi_reddit_dialog_message)

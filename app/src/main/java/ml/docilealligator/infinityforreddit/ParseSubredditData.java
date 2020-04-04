@@ -22,7 +22,7 @@ class ParseSubredditData {
 
     private static SubredditData parseSubredditData(JSONObject subredditDataJsonObject) throws JSONException {
         String id = subredditDataJsonObject.getString(JSONUtils.NAME_KEY);
-        String subredditFullName = subredditDataJsonObject.getString(JSONUtils.DISPLAY_NAME);
+        String subredditFullName = subredditDataJsonObject.getString(JSONUtils.DISPLAY_NAME_KEY);
         String description = subredditDataJsonObject.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY).trim();
         String sidebarDescription = subredditDataJsonObject.getString(JSONUtils.DESCRIPTION_KEY).trim();
 

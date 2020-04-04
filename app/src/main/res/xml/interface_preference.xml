@@ -16,7 +16,8 @@
     <SwitchPreference
         app:defaultValue="false"
         app:key="bottom_app_bar"
-        app:title="@string/settings_enable_bottom_app_bar_title" />
+        app:title="@string/settings_enable_bottom_app_bar_title"
+        app:summary="@string/settings_enable_bottom_app_bar_summary" />
 
     <SwitchPreference
         app:defaultValue="false"

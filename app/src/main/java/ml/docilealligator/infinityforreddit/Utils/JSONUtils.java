@@ -58,7 +58,7 @@ public class JSONUtils {
     public static final String COMMUNITY_ICON_KEY = "community_icon";
     public static final String LINK_KARMA_KEY = "link_karma";
     public static final String COMMENT_KARMA_KEY = "comment_karma";
-    public static final String DISPLAY_NAME = "display_name";
+    public static final String DISPLAY_NAME_KEY = "display_name";
     public static final String SUBREDDIT_TYPE_KEY = "subreddit_type";
     public static final String SUBREDDIT_TYPE_VALUE_USER = "user";
     public static final String SUBSCRIBERS_KEY = "subscribers";
@@ -80,6 +80,7 @@ public class JSONUtils {
     public static final String SHORT_NAME_KEY = "short_name";
     public static final String DESCRIPTION_KEY = "description";
     public static final String DESCRIPTION_HTML_KEY = "description_html";
+    public static final String DESCRIPTION_MD_KEY = "description_md";
     public static final String ARCHIVED_KEY = "archived";
     public static final String LOCKEC_KEY = "locked";
     public static final String SAVED_KEY = "saved";

@@ -21,7 +21,16 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
-        <activity android:name=".Activity.ThemePreviewActivity"
+        <activity android:name=".Activity.SelectedSubredditsActivity"
+            android:label="@string/selected_subeddits_activity_label"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activity.EditMultiRedditActivity"
+            android:label="@string/edit_multi_reddit_activity_label"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".Activity.ThemePreviewActivity"
             android:label="@string/theme_preview_activity_label"
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />

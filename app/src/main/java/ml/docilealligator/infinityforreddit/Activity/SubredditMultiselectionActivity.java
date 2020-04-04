@@ -40,24 +40,17 @@ import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
-import ml.docilealligator.infinityforreddit.SubredditWithSelection;
 import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditViewModel;
 import retrofit2.Retrofit;
 
 public class SubredditMultiselectionActivity extends BaseActivity {
 
-    static final String EXTRA_SELECTED_SUBSCRIBED_SUBREDDITS = "ESS";
-    static final String EXTRA_SELECTED_OTHER_SUBREDDITS = "EOSS";
-    static final String EXTRA_RETURN_SELECTED_SUBSCRIBED_SUBREDDITS = "ERSSS";
-    static final String EXTRA_RETURN_SUBSCRIBED_OTHER_SUBREDDITS = "EROSS";
+    static final String EXTRA_RETURN_SELECTED_SUBREDDITS = "ERSS";
 
     private static final int SUBREDDIT_SEARCH_REQUEST_CODE = 1;
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
-    private static final String SELECTED_SUBSCRIBED_SUBREDDITS_STATE = "SSSS";
-    private static final String SELECTED_OTHER_SUBREDDITS_STATE = "SOSS";
 
     @BindView(R.id.coordinator_layout_subreddits_multiselection_activity)
     CoordinatorLayout mCoordinatorLayout;
@@ -132,20 +125,16 @@ public class SubredditMultiselectionActivity extends BaseActivity {
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
 
             if (!mNullAccessToken && mAccountName == null) {
-                getCurrentAccountAndBindView(savedInstanceState.getParcelableArrayList(SELECTED_SUBSCRIBED_SUBREDDITS_STATE),
-                        savedInstanceState.getParcelableArrayList(SELECTED_OTHER_SUBREDDITS_STATE));
+                getCurrentAccountAndBindView();
             } else {
-                bindView(savedInstanceState.getParcelableArrayList(SELECTED_SUBSCRIBED_SUBREDDITS_STATE),
-                        savedInstanceState.getParcelableArrayList(SELECTED_OTHER_SUBREDDITS_STATE));
+                bindView();
             }
         } else {
-            getCurrentAccountAndBindView(getIntent().getParcelableArrayListExtra(EXTRA_SELECTED_SUBSCRIBED_SUBREDDITS),
-                    getIntent().getParcelableArrayListExtra(EXTRA_SELECTED_OTHER_SUBREDDITS));
+            getCurrentAccountAndBindView();
         }
     }
 
-    private void getCurrentAccountAndBindView(ArrayList<SubredditWithSelection> selectedSubscribedSubreddits,
-                                              ArrayList<SubredditWithSelection> otherSubreddits) {
+    private void getCurrentAccountAndBindView() {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
             if (account == null) {
                 mNullAccessToken = true;
@@ -154,16 +143,14 @@ public class SubredditMultiselectionActivity extends BaseActivity {
             } else {
                 mAccessToken = account.getAccessToken();
                 mAccountName = account.getUsername();
-                bindView(selectedSubscribedSubreddits, otherSubreddits);
+                bindView();
             }
         }).execute();
     }
 
-    private void bindView(ArrayList<SubredditWithSelection> selectedSubscribedSubreddits,
-                          ArrayList<SubredditWithSelection> otherSubreddits) {
+    private void bindView() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new SubredditMultiselectionRecyclerViewAdapter(this, mCustomThemeWrapper,
-                selectedSubscribedSubreddits, otherSubreddits);
+        mAdapter = new SubredditMultiselectionRecyclerViewAdapter(this, mCustomThemeWrapper);
         mRecyclerView.setAdapter(mAdapter);
 
         mSubscribedSubredditViewModel = new ViewModelProvider(this,
@@ -201,10 +188,8 @@ public class SubredditMultiselectionActivity extends BaseActivity {
             case R.id.action_save_subreddit_multiselection_activity:
                 if (mAdapter != null) {
                     Intent returnIntent = new Intent();
-                    returnIntent.putParcelableArrayListExtra(EXTRA_RETURN_SELECTED_SUBSCRIBED_SUBREDDITS,
-                            mAdapter.getAllSelectedSubscribedSubreddits());
-                    returnIntent.putParcelableArrayListExtra(EXTRA_RETURN_SUBSCRIBED_OTHER_SUBREDDITS,
-                            mAdapter.getAllSelectedOtherSubreddits());
+                    returnIntent.putStringArrayListExtra(EXTRA_RETURN_SELECTED_SUBREDDITS,
+                            mAdapter.getAllSelectedSubreddits());
                     setResult(RESULT_OK, returnIntent);
                 }
                 finish();
@@ -221,12 +206,13 @@ public class SubredditMultiselectionActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SUBREDDIT_SEARCH_REQUEST_CODE && resultCode == RESULT_OK && data != null
-                && mAdapter != null) {
-            String subredditName = data.getStringExtra(SearchActivity.EXTRA_RETURN_SUBREDDIT_NAME);
-            String subredditIconUrl = data.getStringExtra(SearchActivity.EXTRA_RETURN_SUBREDDIT_ICON_URL);
-            mAdapter.addOtherSubreddit(new SubredditData("-1", subredditName, subredditIconUrl,
-                    null, null, null, 0));
+        if (requestCode == SUBREDDIT_SEARCH_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            Intent returnIntent = new Intent();
+            ArrayList<String> selectedSubreddits = mAdapter.getAllSelectedSubreddits();
+            selectedSubreddits.add(data.getStringExtra(SearchActivity.EXTRA_RETURN_SUBREDDIT_NAME));
+            returnIntent.putStringArrayListExtra(EXTRA_RETURN_SELECTED_SUBREDDITS, selectedSubreddits);
+            setResult(RESULT_OK, returnIntent);
+            finish();
         }
     }
 
@@ -236,8 +222,6 @@ public class SubredditMultiselectionActivity extends BaseActivity {
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
         outState.putString(ACCOUNT_NAME_STATE, mAccountName);
-        outState.putParcelableArrayList(SELECTED_SUBSCRIBED_SUBREDDITS_STATE, mAdapter.getAllSelectedSubscribedSubreddits());
-        outState.putParcelableArrayList(SELECTED_OTHER_SUBREDDITS_STATE, mAdapter.getAllOtherSubreddits());
     }
 
     @Override
