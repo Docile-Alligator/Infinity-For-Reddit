@@ -51,6 +51,7 @@
                     android:elevation="4dp" />
 
                 <LinearLayout
+                    android:id="@+id/toolbar_linear_layout_view_user_detail_activity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"

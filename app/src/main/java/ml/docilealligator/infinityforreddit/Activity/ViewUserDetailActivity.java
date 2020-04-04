@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -99,6 +100,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_view_user_detail_activity)
     Toolbar toolbar;
+    @BindView(R.id.toolbar_linear_layout_view_user_detail_activity)
+    LinearLayout linearLayout;
     @BindView(R.id.tab_layout_view_user_detail_activity)
     TabLayout tabLayout;
     @BindView(R.id.collapsing_toolbar_layout_view_user_detail_activity)
@@ -424,6 +427,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         collapsedTabTextColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTextColor();
         collapsedTabIndicatorColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabIndicator();
         collapsedTabBackgroundColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabBackground();
+        linearLayout.setBackgroundColor(expandedTabBackgroundColor);
         unsubscribedColor = mCustomThemeWrapper.getUnsubscribed();
         subscribedColor = mCustomThemeWrapper.getSubscribed();
         userNameTextView.setTextColor(mCustomThemeWrapper.getUsername());

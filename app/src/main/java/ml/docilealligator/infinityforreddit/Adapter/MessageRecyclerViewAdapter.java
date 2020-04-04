@@ -252,6 +252,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
         DataViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setBackgroundColor(mMessageBackgroundColor);
             authorTextView.setTextColor(mUsernameColor);
             subjectTextView.setTextColor(mPrimaryTextColor);
             titleTextView.setTextColor(mPrimaryTextColor);

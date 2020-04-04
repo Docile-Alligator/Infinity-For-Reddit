@@ -319,13 +319,13 @@ public class ThemePreviewActivity extends AppCompatActivity {
         collapsedTabTextColor = customTheme.tabLayoutWithCollapsedCollapsingToolbarTextColor;
         collapsedTabIndicatorColor = customTheme.tabLayoutWithCollapsedCollapsingToolbarTabIndicator;
         collapsedTabBackgroundColor = customTheme.tabLayoutWithCollapsedCollapsingToolbarTabBackground;
-        linearLayout.setBackgroundColor(customTheme.backgroundColor);
+        linearLayout.setBackgroundColor(customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground);
         subredditNameTextView.setTextColor(customTheme.subreddit);
         usernameTextView.setTextColor(customTheme.username);
         subscribeSubredditChip.setTextColor(customTheme.chipTextColor);
         primaryTextView.setTextColor(customTheme.primaryTextColor);
         secondaryTextView.setTextColor(customTheme.secondaryTextColor);
-        bottomNavigationView.setBackgroundTint(ColorStateList.valueOf(customTheme.backgroundColor));
+        bottomNavigationView.setBackgroundTint(ColorStateList.valueOf(customTheme.bottomAppBarBackgroundColor));
         int primaryIconColor = customTheme.primaryIconColor;
         subscriptionsBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         multiRedditBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
@@ -358,10 +358,8 @@ public class ThemePreviewActivity extends AppCompatActivity {
             TypedValue tv = new TypedValue();
             if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
             {
-                int dp16 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics());
-                linearLayout.setPadding(dp16,
-                        TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics()) + statusBarHeight,
-                        dp16, 0);
+                ((ViewGroup.MarginLayoutParams)linearLayout.getLayoutParams()).setMargins(0,
+                        TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics()) + statusBarHeight, 0, 0);
             }
         }
     }

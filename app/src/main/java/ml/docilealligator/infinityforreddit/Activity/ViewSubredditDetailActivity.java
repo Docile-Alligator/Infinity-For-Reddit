@@ -401,8 +401,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     @Override
     protected void applyCustomTheme() {
-        int backgroundColor = mCustomThemeWrapper.getBackgroundColor();
-        coordinatorLayout.setBackgroundColor(backgroundColor);
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         collapsingToolbarLayout.setContentScrimColor(mCustomThemeWrapper.getColorPrimary());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         expandedTabTextColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTextColor();
@@ -411,14 +410,14 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         collapsedTabTextColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTextColor();
         collapsedTabIndicatorColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabIndicator();
         collapsedTabBackgroundColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabBackground();
-        linearLayout.setBackgroundColor(backgroundColor);
+        linearLayout.setBackgroundColor(expandedTabBackgroundColor);
         subredditNameTextView.setTextColor(mCustomThemeWrapper.getSubreddit());
         subscribeSubredditChip.setTextColor(mCustomThemeWrapper.getChipTextColor());
         int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         nSubscribersTextView.setTextColor(primaryTextColor);
         nOnlineSubscribersTextView.setTextColor(primaryTextColor);
         descriptionTextView.setTextColor(primaryTextColor);
-        bottomNavigationView.setBackgroundTint(ColorStateList.valueOf(backgroundColor));
+        bottomNavigationView.setBackgroundTint(ColorStateList.valueOf(mCustomThemeWrapper.getBottomAppBarBackgroundColor()));
         int primaryIconColor = mCustomThemeWrapper.getPrimaryIconColor();
         subscriptionsBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         multiRedditBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
