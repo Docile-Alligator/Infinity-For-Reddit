@@ -394,6 +394,8 @@ public class CustomThemeWrapper {
             return getRedDark(context);
         } else if (name.equals(context.getString(R.string.theme_name_red_amoled))) {
             return getRedAmoled(context);
+        } else if (name.equals(context.getString(R.string.theme_name_dracula))) {
+            return getDracula(context);
         } else {
             return getIndigo(context);
         }
@@ -410,6 +412,7 @@ public class CustomThemeWrapper {
         customThemes.add(getRed(context));
         customThemes.add(getRedDark(context));
         customThemes.add(getRedAmoled(context));
+        customThemes.add(getDracula(context));
         return customThemes;
     }
 
@@ -1072,6 +1075,80 @@ public class CustomThemeWrapper {
         customTheme.fabIconColor = Color.parseColor("#FFFFFF");
         customTheme.chipTextColor = Color.parseColor("#FFFFFF");
         customTheme.navBarColor = Color.parseColor("#000000");
+        customTheme.isLightStatusBar = false;
+        customTheme.isLightNavBar = false;
+        customTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface = false;
+
+        return customTheme;
+    }
+
+    public static CustomTheme getDracula(Context context) {
+        CustomTheme customTheme = new CustomTheme(context.getString(R.string.theme_name_dracula));
+        customTheme.isLightTheme = true;
+        customTheme.isDarkTheme = true;
+        customTheme.isAmoledTheme = true;
+        customTheme.colorPrimary = Color.parseColor("#393A59");
+        customTheme.colorPrimaryDark = Color.parseColor("#393A59");
+        customTheme.colorAccent = Color.parseColor("#F8F8F2");
+        customTheme.colorPrimaryLightTheme = Color.parseColor("#393A59");
+        customTheme.primaryTextColor = Color.parseColor("#FFFFFF");
+        customTheme.secondaryTextColor = Color.parseColor("#B3FFFFFF");
+        customTheme.postTitleColor = Color.parseColor("#FFFFFF");
+        customTheme.postContentColor = Color.parseColor("#B3FFFFFF");
+        customTheme.commentColor = Color.parseColor("#FFFFFF");
+        customTheme.buttonTextColor = Color.parseColor("#FFFFFF");
+        customTheme.backgroundColor = Color.parseColor("#282A36");
+        customTheme.cardViewBackgroundColor = Color.parseColor("#393A59");
+        customTheme.commentBackgroundColor = Color.parseColor("#393A59");
+        customTheme.bottomAppBarBackgroundColor = Color.parseColor("#393A59");
+        customTheme.primaryIconColor = Color.parseColor("#FFFFFF");
+        customTheme.postIconAndInfoColor = Color.parseColor("#FFFFFF");
+        customTheme.commentIconAndInfoColor = Color.parseColor("#FFFFFF");
+        customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
+        customTheme.toolbarSecondaryTextColor = Color.parseColor("#FFFFFF");
+        customTheme.circularProgressBarBackground = Color.parseColor("#393A59");
+        customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground = Color.parseColor("#393A59");
+        customTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = Color.parseColor("#FFFFFF");
+        customTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = Color.parseColor("#FFFFFF");
+        customTheme.tabLayoutWithCollapsedCollapsingToolbarTabBackground = Color.parseColor("#393A59");
+        customTheme.tabLayoutWithCollapsedCollapsingToolbarTextColor = Color.parseColor("#FFFFFF");
+        customTheme.tabLayoutWithCollapsedCollapsingToolbarTabIndicator = Color.parseColor("#FFFFFF");
+        customTheme.upvoted = Color.parseColor("#FF008C");
+        customTheme.downvoted = Color.parseColor("#007DDE");
+        customTheme.postTypeBackgroundColor = Color.parseColor("#1565C0");
+        customTheme.postTypeTextColor = Color.parseColor("#FFFFFF");
+        customTheme.spoilerBackgroundColor = Color.parseColor("#EE02EB");
+        customTheme.spoilerTextColor = Color.parseColor("#FFFFFF");
+        customTheme.nsfwBackgroundColor = Color.parseColor("#FF4081");
+        customTheme.nsfwTextColor = Color.parseColor("#FFFFFF");
+        customTheme.flairBackgroundColor = Color.parseColor("#00AA8C");
+        customTheme.flairTextColor = Color.parseColor("#FFFFFF");
+        customTheme.archivedTint = Color.parseColor("#B4009F");
+        customTheme.lockedIconTint = Color.parseColor("#EE7302");
+        customTheme.crosspostIconTint = Color.parseColor("#FF4081");
+        customTheme.stickiedPostIconTint = Color.parseColor("#0D47A1");
+        customTheme.subscribed = Color.parseColor("#FF4081");
+        customTheme.unsubscribed = Color.parseColor("#0D47A1");
+        customTheme.username = Color.parseColor("#1E88E5");
+        customTheme.subreddit = Color.parseColor("#FF4B9C");
+        customTheme.authorFlairTextColor = Color.parseColor("#EE02C4");
+        customTheme.submitter = Color.parseColor("#EE8A02");
+        customTheme.moderator = Color.parseColor("#00BA81");
+        customTheme.singleCommentThreadBackgroundColor = Color.parseColor("#5F5B85");
+        customTheme.unreadMessageBackgroundColor = Color.parseColor("#5F5B85");
+        customTheme.dividerColor = Color.parseColor("#69666C");
+        customTheme.noPreviewLinkBackgroundColor = Color.parseColor("#6272A4");
+        customTheme.voteAndReplyUnavailableButtonColor = Color.parseColor("#777C82");
+        customTheme.commentVerticalBarColor1 = Color.parseColor("#8BE9FD");
+        customTheme.commentVerticalBarColor2 = Color.parseColor("#50FA7B");
+        customTheme.commentVerticalBarColor3 = Color.parseColor("#FFB86C");
+        customTheme.commentVerticalBarColor4 = Color.parseColor("#FF79C6");
+        customTheme.commentVerticalBarColor5 = Color.parseColor("#BD93F9");
+        customTheme.commentVerticalBarColor6 = Color.parseColor("#FF5555");
+        customTheme.commentVerticalBarColor7 = Color.parseColor("#F1FA8C");
+        customTheme.fabIconColor = Color.parseColor("#FFFFFF");
+        customTheme.chipTextColor = Color.parseColor("#FFFFFF");
+        customTheme.navBarColor = Color.parseColor("#393A59");
         customTheme.isLightStatusBar = false;
         customTheme.isLightNavBar = false;
         customTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface = false;
