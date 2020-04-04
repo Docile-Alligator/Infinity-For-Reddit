@@ -64,6 +64,7 @@ public class ColorPickerDialog extends AlertDialog {
                     try {
                         changeColorValueEditText = false;
                         colorValue = Color.parseColor("#" + s);
+                        colorView.setBackgroundColor(colorValue);
                         seekBarA.setProgress(255);
                         seekBarR.setProgress(Integer.parseInt(s.substring(0, 2), 16));
                         seekBarG.setProgress(Integer.parseInt(s.substring(2, 4), 16));
@@ -76,6 +77,7 @@ public class ColorPickerDialog extends AlertDialog {
                     try {
                         changeColorValueEditText = false;
                         colorValue = Color.parseColor("#" + s);
+                        colorView.setBackgroundColor(colorValue);
                         seekBarA.setProgress(Integer.parseInt(s.substring(0, 2), 16));
                         seekBarR.setProgress(Integer.parseInt(s.substring(2, 4), 16));
                         seekBarG.setProgress(Integer.parseInt(s.substring(4, 6), 16));
