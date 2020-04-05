@@ -634,6 +634,7 @@
     <string name="theme_name_red_dark">Red Dark</string>
     <string name="theme_name_red_amoled">Red Amoled</string>
     <string name="theme_name_dracula">Dracula</string>
+    <string name="theme_name_calm_pastel">Calm Pastel</string>
     <string name="create_light_theme">Create a Light Theme\nBase on Indigo Theme</string>
     <string name="create_dark_theme">Create a Dark Theme\nBase on Indigo Dark Theme</string>
     <string name="create_amoled_theme">Create an Amoled Theme\nBase on Indigo Amoled Theme</string>

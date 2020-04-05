@@ -392,8 +392,8 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
         nsfwBackgroundColor = mCustomThemeWrapper.getNsfwBackgroundColor();
         nsfwTextColor = mCustomThemeWrapper.getNsfwTextColor();
         titleEditText.setTextColor(primaryTextColor);
-        applyFABTheme(captureFab, R.drawable.ic_outline_add_a_photo_24dp);
-        applyFABTheme(selectFromLibraryFab, R.drawable.ic_outline_select_photo_24dp);
+        applyFABTheme(captureFab);
+        applyFABTheme(selectFromLibraryFab);
         selectAgainTextView.setTextColor(mCustomThemeWrapper.getColorAccent());
     }
 

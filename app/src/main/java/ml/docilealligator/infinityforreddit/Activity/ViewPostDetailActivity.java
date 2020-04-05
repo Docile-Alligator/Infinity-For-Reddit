@@ -389,7 +389,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         mFetchPostInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
-        applyFABTheme(fab, R.drawable.ic_keyboard_arrow_down_24dp);
+        applyFABTheme(fab);
     }
 
     private void getCurrentAccountAndBindView() {

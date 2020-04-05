@@ -258,6 +258,6 @@ public class MultiRedditListingActivity extends BaseActivity {
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         mErrorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
-        applyFABTheme(fab, R.drawable.ic_add_day_night_24dp);
+        applyFABTheme(fab);
     }
 }

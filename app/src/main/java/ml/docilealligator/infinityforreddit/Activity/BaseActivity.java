@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -266,14 +264,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                 customThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTextColor());
     }
 
-    protected void applyFABTheme(FloatingActionButton fab, int drawableId) {
+    protected void applyFABTheme(FloatingActionButton fab) {
         fab.setBackgroundTintList(ColorStateList.valueOf(customThemeWrapper.getColorPrimaryLightTheme()));
         fab.setImageTintList(ColorStateList.valueOf(customThemeWrapper.getFABIconColor()));
-        Drawable myFabSrc = getResources().getDrawable(drawableId);
-        if (myFabSrc.getConstantState() != null) {
-            Drawable willBeWhite = myFabSrc.getConstantState().newDrawable();
-            willBeWhite.mutate().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
-            fab.setImageDrawable(willBeWhite);
-        }
     }
 }

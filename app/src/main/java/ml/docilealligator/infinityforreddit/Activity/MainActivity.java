@@ -311,7 +311,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         applyTabLayoutTheme(tabLayout);
         bottomNavigationView.setBackgroundTint(ColorStateList.valueOf(mCustomThemeWrapper.getBottomAppBarBackgroundColor()));
-        applyFABTheme(fab, R.drawable.ic_add_day_night_24dp);
+        applyFABTheme(fab);
     }
 
     private void getCurrentAccountAndBindView() {

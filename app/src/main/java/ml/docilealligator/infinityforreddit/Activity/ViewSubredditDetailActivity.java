@@ -424,7 +424,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         messageBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         profileBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         applyTabLayoutTheme(tabLayout);
-        applyFABTheme(fab, R.drawable.ic_add_day_night_24dp);
+        applyFABTheme(fab);
         unsubscribedColor = mCustomThemeWrapper.getUnsubscribed();
         subscribedColor = mCustomThemeWrapper.getSubscribed();
     }
