@@ -378,6 +378,8 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
+        subredditNameTextView.setTextColor(secondaryTextColor);
         rulesButton.setTextColor(mCustomThemeWrapper.getButtonTextColor());
         rulesButton.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimaryLightTheme()));
         int dividerColor = mCustomThemeWrapper.getDividerColor();
@@ -391,7 +393,11 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
         spoilerTextColor = mCustomThemeWrapper.getSpoilerTextColor();
         nsfwBackgroundColor = mCustomThemeWrapper.getNsfwBackgroundColor();
         nsfwTextColor = mCustomThemeWrapper.getNsfwTextColor();
+        flairTextView.setTextColor(flairTextColor);
+        spoilerTextView.setTextColor(spoilerTextColor);
+        nsfwTextView.setTextColor(nsfwTextColor);
         titleEditText.setTextColor(primaryTextColor);
+        titleEditText.setHintTextColor(secondaryTextColor);
         applyFABTheme(captureFab);
         applyFABTheme(selectFromLibraryFab);
         selectAgainTextView.setTextColor(mCustomThemeWrapper.getColorAccent());

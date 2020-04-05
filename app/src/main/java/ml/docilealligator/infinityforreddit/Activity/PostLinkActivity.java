@@ -317,6 +317,8 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
+        subredditNameTextView.setTextColor(secondaryTextColor);
         rulesButton.setTextColor(mCustomThemeWrapper.getButtonTextColor());
         rulesButton.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimaryLightTheme()));
         int dividerColor = mCustomThemeWrapper.getDividerColor();
@@ -330,8 +332,13 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
         spoilerTextColor = mCustomThemeWrapper.getSpoilerTextColor();
         nsfwBackgroundColor = mCustomThemeWrapper.getNsfwBackgroundColor();
         nsfwTextColor = mCustomThemeWrapper.getNsfwTextColor();
+        flairTextView.setTextColor(flairTextColor);
+        spoilerTextView.setTextColor(spoilerTextColor);
+        nsfwTextView.setTextColor(nsfwTextColor);
         titleEditText.setTextColor(primaryTextColor);
+        titleEditText.setHintTextColor(secondaryTextColor);
         linkEditText.setTextColor(primaryTextColor);
+        linkEditText.setHintTextColor(secondaryTextColor);
     }
 
     private void getCurrentAccount() {

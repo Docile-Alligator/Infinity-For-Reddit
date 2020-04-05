@@ -237,7 +237,9 @@ public class CommentActivity extends BaseActivity {
         commentParentMarkwonView.setTextColor(mCustomThemeWrapper.getCommentColor());
         divider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
         commentEditText.setTextColor(mCustomThemeWrapper.getCommentColor());
-        markdownColor = mCustomThemeWrapper.getSecondaryTextColor();
+        int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
+        commentEditText.setHintTextColor(secondaryTextColor);
+        markdownColor = secondaryTextColor;
     }
 
     private void getCurrentAccount() {

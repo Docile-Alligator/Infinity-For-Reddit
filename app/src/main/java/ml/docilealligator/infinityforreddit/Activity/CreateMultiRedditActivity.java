@@ -215,13 +215,17 @@ public class CreateMultiRedditActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
+        int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
         nameEditText.setTextColor(primaryTextColor);
+        nameEditText.setHintTextColor(secondaryTextColor);
         int dividerColor = mCustomThemeWrapper.getDividerColor();
         divider1.setBackgroundColor(dividerColor);
         divider2.setBackgroundColor(dividerColor);
         descriptionEditText.setTextColor(primaryTextColor);
+        descriptionEditText.setHintTextColor(secondaryTextColor);
         visibilityTextView.setTextColor(primaryTextColor);
         selectSubredditTextView.setTextColor(primaryTextColor);
     }

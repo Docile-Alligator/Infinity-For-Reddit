@@ -154,6 +154,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                 ((SubredditViewHolder) viewHolder).favoriteImageView.setVisibility(View.GONE);
                 name = username;
                 iconUrl = userIconUrl;
+                viewHolder.itemView.setOnClickListener(view -> itemClickListener.onClick(name, iconUrl, true));
             } else if (hasClearSelectionRow && viewHolder.getAdapterPosition() == 1) {
                 ((SubredditViewHolder) viewHolder).favoriteImageView.setVisibility(View.GONE);
                 name = username;
