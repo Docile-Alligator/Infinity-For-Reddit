@@ -641,7 +641,7 @@ public class CustomThemeWrapper {
         return customTheme;
     }
 
-    public static CustomTheme getWhite(Context context) {
+    private static CustomTheme getWhite(Context context) {
         CustomTheme customTheme = new CustomTheme(context.getString(R.string.theme_name_white));
         customTheme.isLightTheme = true;
         customTheme.isDarkTheme = false;
@@ -715,7 +715,7 @@ public class CustomThemeWrapper {
         return customTheme;
     }
 
-    public static CustomTheme getWhiteDark(Context context) {
+    private static CustomTheme getWhiteDark(Context context) {
         CustomTheme customTheme = new CustomTheme(context.getString(R.string.theme_name_white_dark));
         customTheme.isLightTheme = false;
         customTheme.isDarkTheme = true;
@@ -789,7 +789,7 @@ public class CustomThemeWrapper {
         return customTheme;
     }
 
-    public static CustomTheme getWhiteAmoled(Context context) {
+    private static CustomTheme getWhiteAmoled(Context context) {
         CustomTheme customTheme = new CustomTheme(context.getString(R.string.theme_name_white_amoled));
         customTheme.isLightTheme = false;
         customTheme.isDarkTheme = false;
@@ -863,7 +863,7 @@ public class CustomThemeWrapper {
         return customTheme;
     }
 
-    public static CustomTheme getRed(Context context) {
+    private static CustomTheme getRed(Context context) {
         CustomTheme customTheme = new CustomTheme(context.getString(R.string.theme_name_red));
         customTheme.isLightTheme = true;
         customTheme.isDarkTheme = false;
@@ -937,7 +937,7 @@ public class CustomThemeWrapper {
         return customTheme;
     }
 
-    public static CustomTheme getRedDark(Context context) {
+    private static CustomTheme getRedDark(Context context) {
         CustomTheme customTheme = new CustomTheme(context.getString(R.string.theme_name_red_dark));
         customTheme.isLightTheme = false;
         customTheme.isDarkTheme = true;
@@ -1011,7 +1011,7 @@ public class CustomThemeWrapper {
         return customTheme;
     }
 
-    public static CustomTheme getRedAmoled(Context context) {
+    private static CustomTheme getRedAmoled(Context context) {
         CustomTheme customTheme = new CustomTheme(context.getString(R.string.theme_name_red_amoled));
         customTheme.isLightTheme = false;
         customTheme.isDarkTheme = false;
@@ -1085,7 +1085,7 @@ public class CustomThemeWrapper {
         return customTheme;
     }
 
-    public static CustomTheme getDracula(Context context) {
+    private static CustomTheme getDracula(Context context) {
         CustomTheme customTheme = new CustomTheme(context.getString(R.string.theme_name_dracula));
         customTheme.isLightTheme = true;
         customTheme.isDarkTheme = true;
@@ -1159,7 +1159,7 @@ public class CustomThemeWrapper {
         return customTheme;
     }
 
-    public static CustomTheme getCalmPastel(Context context) {
+    private static CustomTheme getCalmPastel(Context context) {
         CustomTheme customTheme = new CustomTheme(context.getString(R.string.theme_name_calm_pastel));
         customTheme.isLightTheme = true;
         customTheme.isDarkTheme = false;
@@ -1177,7 +1177,7 @@ public class CustomThemeWrapper {
         customTheme.backgroundColor = Color.parseColor("#DAD0DE");
         customTheme.cardViewBackgroundColor = Color.parseColor("#C0F0F4");
         customTheme.commentBackgroundColor = Color.parseColor("#C0F0F4");
-        customTheme.bottomAppBarBackgroundColor = Color.parseColor("#C0F0F4");
+        customTheme.bottomAppBarBackgroundColor = Color.parseColor("#D48AE0");
         customTheme.primaryIconColor = Color.parseColor("#000000");
         customTheme.postIconAndInfoColor = Color.parseColor("#000000");
         customTheme.commentIconAndInfoColor = Color.parseColor("#000000");
@@ -1226,9 +1226,9 @@ public class CustomThemeWrapper {
         customTheme.fabIconColor = Color.parseColor("#000000");
         customTheme.chipTextColor = Color.parseColor("#FFFFFF");
         customTheme.navBarColor = Color.parseColor("#D48AE0");
-        customTheme.isLightStatusBar = false;
+        customTheme.isLightStatusBar = true;
         customTheme.isLightNavBar = true;
-        customTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface = true;
+        customTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface = false;
 
         return customTheme;
     }

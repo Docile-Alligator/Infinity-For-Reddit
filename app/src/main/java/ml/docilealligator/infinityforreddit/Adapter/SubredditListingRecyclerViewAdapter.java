@@ -80,7 +80,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
         this.accountName = accountName;
         this.redditDataRoomDatabase = redditDataRoomDatabase;
         this.callback = callback;
-        glide = Glide.with(context.getApplicationContext());
+        glide = Glide.with(context);
         colorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
         primaryTextColor = customThemeWrapper.getPrimaryTextColor();
         secondaryTextColor = customThemeWrapper.getSecondaryTextColor();

@@ -198,7 +198,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 DrawableCompat.setTint(mCommentIcon, mPostIconAndInfoColor);
             }
             mScale = activity.getResources().getDisplayMetrics().density;
-            mGlide = Glide.with(mActivity.getApplicationContext());
+            mGlide = Glide.with(mActivity);
             mRedditDataRoomDatabase = redditDataRoomDatabase;
             mUserDao = redditDataRoomDatabase.userDao();
             mCallback = callback;

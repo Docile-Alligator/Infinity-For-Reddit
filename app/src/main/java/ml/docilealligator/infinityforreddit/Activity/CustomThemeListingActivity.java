@@ -103,6 +103,16 @@ public class CustomThemeListingActivity extends BaseActivity implements
                 CustomThemeWrapper.getPredefinedThemes(this));
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
+                    fab.hide();
+                } else if (dy < 0) {
+                    fab.show();
+                }
+            }
+        });
 
         customThemeViewModel = new ViewModelProvider(this,
                 new CustomThemeViewModel.Factory(redditDataRoomDatabase))

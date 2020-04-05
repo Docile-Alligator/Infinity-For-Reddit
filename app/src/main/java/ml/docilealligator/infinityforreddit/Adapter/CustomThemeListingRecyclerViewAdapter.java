@@ -101,6 +101,10 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
                 customThemeOptionsBottomSheetFragment.setArguments(bundle);
                 customThemeOptionsBottomSheetFragment.show(activity.getSupportFragmentManager(), customThemeOptionsBottomSheetFragment.getTag());
             });
+            ((UserCustomThemeViewHolder) holder).itemView.setOnLongClickListener(view -> {
+                ((UserCustomThemeViewHolder) holder).itemView.performClick();
+                return true;
+            });
         } else if (holder instanceof PreDefinedThemeDividerViewHolder) {
             ((TextView) ((PreDefinedThemeDividerViewHolder) holder).itemView).setText(R.string.predefined_themes);
         } else if (holder instanceof UserThemeDividerViewHolder) {
@@ -127,7 +131,7 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
         @BindView(R.id.add_image_view_item_predefined_custom_theme)
         ImageView createThemeImageView;
 
-        public PredefinedCustomThemeViewHolder(@NonNull View itemView) {
+        PredefinedCustomThemeViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
@@ -144,7 +148,7 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
         @BindView(R.id.share_image_view_item_user_custom_theme)
         ImageView shareImageView;
 
-        public UserCustomThemeViewHolder(@NonNull View itemView) {
+        UserCustomThemeViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
@@ -152,14 +156,14 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
 
     class PreDefinedThemeDividerViewHolder extends RecyclerView.ViewHolder {
 
-        public PreDefinedThemeDividerViewHolder(@NonNull View itemView) {
+        PreDefinedThemeDividerViewHolder(@NonNull View itemView) {
             super(itemView);
         }
     }
 
     class UserThemeDividerViewHolder extends RecyclerView.ViewHolder {
 
-        public UserThemeDividerViewHolder(@NonNull View itemView) {
+        UserThemeDividerViewHolder(@NonNull View itemView) {
             super(itemView);
         }
     }

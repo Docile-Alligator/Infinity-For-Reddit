@@ -81,7 +81,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
         this.accountName = accountName;
         this.subscribedUserDao = subscribedUserDao;
         this.retryLoadingMoreCallback = retryLoadingMoreCallback;
-        glide = Glide.with(context.getApplicationContext());
+        glide = Glide.with(context);
         primaryTextColor = customThemeWrapper.getPrimaryTextColor();
         buttonTextColor = customThemeWrapper.getButtonTextColor();
         colorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();

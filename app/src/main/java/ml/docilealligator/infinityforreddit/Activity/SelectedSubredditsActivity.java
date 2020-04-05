@@ -75,6 +75,17 @@ public class SelectedSubredditsActivity extends BaseActivity {
         adapter = new SelectedSubredditsRecyclerViewAdapter(mCustomThemeWrapper, subreddits);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    fab.hide();
+                } else {
+                    fab.show();
+                }
+            }
+        });
 
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubredditMultiselectionActivity.class);

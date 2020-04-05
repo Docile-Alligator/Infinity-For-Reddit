@@ -57,7 +57,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                                                    CustomThemeWrapper customThemeWrapper,
                                                    String accessToken) {
         mContext = context;
-        glide = Glide.with(context.getApplicationContext());
+        glide = Glide.with(context);
         mOauthRetrofit = oauthRetrofit;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         this.accessToken = accessToken;

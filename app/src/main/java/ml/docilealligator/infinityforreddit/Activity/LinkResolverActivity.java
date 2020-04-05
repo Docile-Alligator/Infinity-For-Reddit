@@ -71,72 +71,76 @@ public class LinkResolverActivity extends AppCompatActivity {
                 String messageFullname = getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME);
                 String newAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
 
-                if (path.matches(POST_PATTERN)) {
-                    List<String> segments = uri.getPathSegments();
-                    int commentsIndex = segments.lastIndexOf("comments");
-                    if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
+                String authority = uri.getAuthority();
+                if (authority != null && (authority.contains("reddit.com") || authority.contains("redd.it") || authority.contains("reddit.app"))) {
+                    if (path.matches(POST_PATTERN)) {
+                        List<String> segments = uri.getPathSegments();
+                        int commentsIndex = segments.lastIndexOf("comments");
+                        if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
+                            Intent intent = new Intent(this, ViewPostDetailActivity.class);
+                            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, segments.get(commentsIndex + 1));
+                            intent.putExtra(ViewPostDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
+                            intent.putExtra(ViewPostDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
+                            startActivity(intent);
+                        } else {
+                            deepLinkError(uri);
+                        }
+                    } else if (path.matches(COMMENT_PATTERN)) {
+                        List<String> segments = uri.getPathSegments();
+                        int commentsIndex = segments.lastIndexOf("comments");
+                        if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
+                            Intent intent = new Intent(this, ViewPostDetailActivity.class);
+                            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, segments.get(commentsIndex + 1));
+                            intent.putExtra(ViewPostDetailActivity.EXTRA_SINGLE_COMMENT_ID, segments.get(segments.size() - 1));
+                            intent.putExtra(ViewPostDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
+                            intent.putExtra(ViewPostDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
+                            startActivity(intent);
+                        } else {
+                            deepLinkError(uri);
+                        }
+                    } else if (path.matches(SUBREDDIT_PATTERN)) {
+                        String subredditName = path.substring(3);
+                        if (subredditName.equals("popular") || subredditName.equals("all")) {
+                            Intent intent = new Intent(this, MainActivity.class);
+                            intent.putExtra(MainActivity.EXTRA_POST_TYPE, subredditName);
+                            intent.putExtra(MainActivity.EXTRA_MESSSAGE_FULLNAME, messageFullname);
+                            intent.putExtra(MainActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(this, ViewSubredditDetailActivity.class);
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, path.substring(3));
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
+                            startActivity(intent);
+                        }
+                    } else if (path.matches(USER_PATTERN_1)) {
+                        Intent intent = new Intent(this, ViewUserDetailActivity.class);
+                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, path.substring(6));
+                        intent.putExtra(ViewUserDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
+                        intent.putExtra(ViewUserDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
+                        startActivity(intent);
+                    } else if (path.matches(USER_PATTERN_2)) {
+                        Intent intent = new Intent(this, ViewUserDetailActivity.class);
+                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, path.substring(3));
+                        intent.putExtra(ViewUserDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
+                        intent.putExtra(ViewUserDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
+                        startActivity(intent);
+                    } else if (path.matches(SIDEBAR_PATTERN)) {
+                        Intent intent = new Intent(this, ViewSidebarActivity.class);
+                        intent.putExtra(ViewSidebarActivity.EXTRA_SUBREDDIT_NAME, path.substring(3, path.length() - 14));
+                        startActivity(intent);
+                    } else if (path.matches(MULTIREDDIT_PATTERN)) {
+                        Intent intent = new Intent(this, ViewMultiRedditDetailActivity.class);
+                        intent.putExtra(ViewMultiRedditDetailActivity.EXTRA_MULTIREDDIT_PATH, path);
+                        startActivity(intent);
+                    } else if (path.matches(REDD_IT_POST_PATTERN)) {
                         Intent intent = new Intent(this, ViewPostDetailActivity.class);
-                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, segments.get(commentsIndex + 1));
-                        intent.putExtra(ViewPostDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
-                        intent.putExtra(ViewPostDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
+                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, path.substring(1));
                         startActivity(intent);
                     } else {
                         deepLinkError(uri);
                     }
-                } else if (path.matches(COMMENT_PATTERN)) {
-                    List<String> segments = uri.getPathSegments();
-                    int commentsIndex = segments.lastIndexOf("comments");
-                    if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
-                        Intent intent = new Intent(this, ViewPostDetailActivity.class);
-                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, segments.get(commentsIndex + 1));
-                        intent.putExtra(ViewPostDetailActivity.EXTRA_SINGLE_COMMENT_ID, segments.get(segments.size() - 1));
-                        intent.putExtra(ViewPostDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
-                        intent.putExtra(ViewPostDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
-                        startActivity(intent);
-                    } else {
-                        deepLinkError(uri);
-                    }
-                } else if (path.matches(SUBREDDIT_PATTERN)) {
-                    String subredditName = path.substring(3);
-                    if (subredditName.equals("popular") || subredditName.equals("all")) {
-                        Intent intent = new Intent(this, MainActivity.class);
-                        intent.putExtra(MainActivity.EXTRA_POST_TYPE, subredditName);
-                        intent.putExtra(MainActivity.EXTRA_MESSSAGE_FULLNAME, messageFullname);
-                        intent.putExtra(MainActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
-                        startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(this, ViewSubredditDetailActivity.class);
-                        intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, path.substring(3));
-                        intent.putExtra(ViewSubredditDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
-                        intent.putExtra(ViewSubredditDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
-                        startActivity(intent);
-                    }
-                } else if (path.matches(USER_PATTERN_1)) {
-                    Intent intent = new Intent(this, ViewUserDetailActivity.class);
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, path.substring(6));
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
-                    startActivity(intent);
-                } else if (path.matches(USER_PATTERN_2)) {
-                    Intent intent = new Intent(this, ViewUserDetailActivity.class);
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, path.substring(3));
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
-                    startActivity(intent);
-                } else if (path.matches(SIDEBAR_PATTERN)) {
-                    Intent intent = new Intent(this, ViewSidebarActivity.class);
-                    intent.putExtra(ViewSidebarActivity.EXTRA_SUBREDDIT_NAME, path.substring(3, path.length() - 14));
-                    startActivity(intent);
-                } else if (path.matches(MULTIREDDIT_PATTERN)) {
-                    Intent intent = new Intent(this, ViewMultiRedditDetailActivity.class);
-                    intent.putExtra(ViewMultiRedditDetailActivity.EXTRA_MULTIREDDIT_PATH, path);
-                    startActivity(intent);
-                } else if (path.matches(REDD_IT_POST_PATTERN)) {
-                    Intent intent = new Intent(this, ViewPostDetailActivity.class);
-                    intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, path.substring(1));
-                    startActivity(intent);
-                }
-                else {
+                } else {
                     deepLinkError(uri);
                 }
             }

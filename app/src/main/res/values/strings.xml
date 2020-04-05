@@ -56,6 +56,7 @@
     <string name="action_edit_multi_reddit">Edit MultiReddit</string>
     <string name="action_delete_multi_reddit">Delete Multireddit</string>
     <string name="action_share">Share</string>
+    <string name="action_preview">Preview</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -682,5 +683,8 @@
     <string name="gilded_preview">x4</string>
     <string name="author_flair_preview">Author Flair</string>
     <string name="comment_content_preview">I got my girlfriend a “Get better soon” card.\nShe\'s not ill or anything, but she could definitely get better.</string>
+
+    <string name="edit_multi_reddit">Edit Multireddit</string>
+    <string name="delete_multi_reddit">Delete Multireddit</string>
 
 </resources>

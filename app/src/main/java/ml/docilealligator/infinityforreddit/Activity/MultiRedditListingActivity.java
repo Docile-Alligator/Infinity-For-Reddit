@@ -24,7 +24,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 
@@ -37,7 +40,9 @@ import ml.docilealligator.infinityforreddit.Adapter.MultiRedditListingRecyclerVi
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertMultiRedditAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.Event.RefreshMultiRedditsEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.MultiReddit.DeleteMultiReddit;
 import ml.docilealligator.infinityforreddit.MultiReddit.FetchMyMultiReddits;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiRedditViewModel;
@@ -259,5 +264,34 @@ public class MultiRedditListingActivity extends BaseActivity {
         mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         mErrorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
         applyFABTheme(fab);
+    }
+
+    public void deleteMultiReddit(MultiReddit multiReddit) {
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                .setTitle(R.string.delete)
+                .setMessage(R.string.delete_multi_reddit_dialog_message)
+                .setPositiveButton(R.string.delete, (dialogInterface, i)
+                        -> DeleteMultiReddit.deleteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase,
+                                mAccessToken, mAccountName, multiReddit.getPath(), new DeleteMultiReddit.DeleteMultiRedditListener() {
+                                    @Override
+                                    public void success() {
+                                        Toast.makeText(MultiRedditListingActivity.this,
+                                                R.string.delete_multi_reddit_success, Toast.LENGTH_SHORT).show();
+                                        loadMultiReddits();
+                                    }
+
+                                    @Override
+                                    public void failed() {
+                                        Toast.makeText(MultiRedditListingActivity.this,
+                                                R.string.delete_multi_reddit_failed, Toast.LENGTH_SHORT).show();
+                                    }
+                                }))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    @Subscribe
+    public void onRefreshMultiRedditsEvent(RefreshMultiRedditsEvent event) {
+        loadMultiReddits();
     }
 }

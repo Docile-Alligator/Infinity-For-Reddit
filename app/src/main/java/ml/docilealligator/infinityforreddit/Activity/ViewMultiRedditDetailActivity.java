@@ -19,6 +19,8 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.greenrobot.eventbus.EventBus;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -26,6 +28,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.Event.RefreshMultiRedditsEvent;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SortTimeBottomSheetFragment;
@@ -33,7 +36,6 @@ import ml.docilealligator.infinityforreddit.Fragment.SortTypeBottomSheetFragment
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MultiReddit.DeleteMultiReddit;
-import ml.docilealligator.infinityforreddit.MultiReddit.EditMultiReddit;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.Post.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
@@ -259,23 +261,22 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                         .setTitle(R.string.delete)
                         .setMessage(R.string.delete_multi_reddit_dialog_message)
                         .setPositiveButton(R.string.delete, (dialogInterface, i)
-                                -> {
-                            DeleteMultiReddit.deleteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase,
-                                    mAccessToken, mAccountName, multiPath, new DeleteMultiReddit.DeleteMultiRedditListener() {
-                                        @Override
-                                        public void success() {
-                                            Toast.makeText(ViewMultiRedditDetailActivity.this,
-                                                    R.string.delete_multi_reddit_success, Toast.LENGTH_SHORT).show();
-                                            finish();
-                                        }
+                                -> DeleteMultiReddit.deleteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase,
+                                        mAccessToken, mAccountName, multiPath, new DeleteMultiReddit.DeleteMultiRedditListener() {
+                                            @Override
+                                            public void success() {
+                                                Toast.makeText(ViewMultiRedditDetailActivity.this,
+                                                        R.string.delete_multi_reddit_success, Toast.LENGTH_SHORT).show();
+                                                EventBus.getDefault().post(new RefreshMultiRedditsEvent());
+                                                finish();
+                                            }
 
-                                        @Override
-                                        public void failed() {
-                                            Toast.makeText(ViewMultiRedditDetailActivity.this,
-                                                    R.string.delete_multi_reddit_failed, Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        })
+                                            @Override
+                                            public void failed() {
+                                                Toast.makeText(ViewMultiRedditDetailActivity.this,
+                                                        R.string.delete_multi_reddit_failed, Toast.LENGTH_SHORT).show();
+                                            }
+                                        }))
                         .setNegativeButton(R.string.cancel, null)
                         .show();
                 return true;
