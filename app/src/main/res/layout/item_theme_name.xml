@@ -11,7 +11,8 @@
         android:id="@+id/theme_name_text_view_item_theme_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="?attr/primaryTextColor" />
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="?attr/font_16" />
 
     <TextView
         android:id="@+id/description_text_view_item_theme_name"
@@ -19,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="@string/theme_name_description"
-        android:textColor="?attr/secondaryTextColor" />
+        android:textColor="?attr/secondaryTextColor"
+        android:textSize="?attr/font_default" />
 
 </LinearLayout>

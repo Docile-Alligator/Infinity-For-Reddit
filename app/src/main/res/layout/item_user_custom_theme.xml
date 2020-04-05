@@ -21,7 +21,8 @@
         android:layout_weight="1"
         android:layout_marginStart="32dp"
         android:layout_gravity="center_vertical"
-        android:textColor="?attr/primaryTextColor" />
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="?attr/font_default" />
 
     <ImageView
         android:id="@+id/share_image_view_item_user_custom_theme"
