@@ -701,7 +701,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 case Post.TEXT_TYPE:
                     ((PostDetailViewHolder) holder).mTypeTextView.setText("TEXT");
 
-                    if (!mPost.getSelfText().equals("")) {
+                    if (mPost.getSelfText() != null && !mPost.getSelfText().equals("")) {
                         ((PostDetailViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
                         LinearLayoutManager linearLayoutManager = new MarkwonLinearLayoutManager(mActivity, new MarkwonLinearLayoutManager.HorizontalScrollViewScrolledListener() {
                             @Override

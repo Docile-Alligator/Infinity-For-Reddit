@@ -169,8 +169,10 @@ public class ViewSidebarActivity extends BaseActivity {
                 .get(SubredditViewModel.class);
         mSubredditViewModel.getSubredditLiveData().observe(this, subredditData -> {
             if (subredditData != null) {
-                markwonAdapter.setMarkdown(markwon, subredditData.getSidebarDescription());
-                markwonAdapter.notifyDataSetChanged();
+                if (subredditData.getSidebarDescription() != null && !subredditData.getSidebarDescription().equals("")) {
+                    markwonAdapter.setMarkdown(markwon, subredditData.getSidebarDescription());
+                    markwonAdapter.notifyDataSetChanged();
+                }
             } else {
                 fetchSubredditData();
             }

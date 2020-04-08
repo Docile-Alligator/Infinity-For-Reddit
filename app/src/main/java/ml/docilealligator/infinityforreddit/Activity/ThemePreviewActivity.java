@@ -4,9 +4,6 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -375,12 +372,6 @@ public class ThemePreviewActivity extends AppCompatActivity {
     protected void applyFABTheme(FloatingActionButton fab) {
         fab.setBackgroundTintList(ColorStateList.valueOf(customTheme.colorPrimaryLightTheme));
         fab.setImageTintList(ColorStateList.valueOf(customTheme.fabIconColor));
-        Drawable myFabSrc = getResources().getDrawable(R.drawable.ic_add_day_night_24dp);
-        if (myFabSrc.getConstantState() != null) {
-            Drawable willBeWhite = myFabSrc.getConstantState().newDrawable();
-            willBeWhite.mutate().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
-            fab.setImageDrawable(willBeWhite);
-        }
     }
 
     public CustomTheme getCustomTheme() {

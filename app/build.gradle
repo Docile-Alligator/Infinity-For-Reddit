@@ -66,11 +66,11 @@ dependencies {
     implementation 'com.github.santalu:aspect-ratio-imageview:1.0.6'
     implementation 'androidx.paging:paging-runtime:2.1.2'
     implementation 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
-    implementation 'io.noties.markwon:core:4.2.0'
-    implementation 'io.noties.markwon:linkify:4.2.0'
-    implementation 'io.noties.markwon:ext-strikethrough:4.2.0'
-    implementation "io.noties.markwon:simple-ext:4.2.0"
-    implementation "io.noties.markwon:recycler-table:4.2.0"
+    implementation 'io.noties.markwon:core:4.3.1'
+    implementation 'io.noties.markwon:linkify:4.3.1'
+    implementation 'io.noties.markwon:ext-strikethrough:4.3.1'
+    implementation "io.noties.markwon:simple-ext:4.3.1"
+    implementation "io.noties.markwon:recycler-table:4.3.1"
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
     implementation 'com.github.Ferfalk:SimpleSearchView:0.1.4'
     implementation 'org.greenrobot:eventbus:3.1.1'
