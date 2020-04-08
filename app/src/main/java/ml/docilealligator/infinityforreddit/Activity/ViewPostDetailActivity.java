@@ -850,7 +850,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     }
 
     void fetchMoreComments() {
-        if (isLoadingMoreChildren || !loadMoreChildrenSuccess) {
+        if (isFetchingComments || isLoadingMoreChildren || !loadMoreChildrenSuccess) {
             return;
         }
 

@@ -1524,7 +1524,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         }
     }
 
-    public void addComments(ArrayList<CommentData> comments, boolean hasMoreComments) {
+    public void addComments(@NonNull ArrayList<CommentData> comments, boolean hasMoreComments) {
         if (mVisibleComments.size() == 0) {
             isInitiallyLoading = false;
             isInitiallyLoadingFailed = false;

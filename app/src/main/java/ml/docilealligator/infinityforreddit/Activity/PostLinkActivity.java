@@ -332,9 +332,9 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
         spoilerTextColor = mCustomThemeWrapper.getSpoilerTextColor();
         nsfwBackgroundColor = mCustomThemeWrapper.getNsfwBackgroundColor();
         nsfwTextColor = mCustomThemeWrapper.getNsfwTextColor();
-        flairTextView.setTextColor(flairTextColor);
-        spoilerTextView.setTextColor(spoilerTextColor);
-        nsfwTextView.setTextColor(nsfwTextColor);
+        flairTextView.setTextColor(primaryTextColor);
+        spoilerTextView.setTextColor(primaryTextColor);
+        nsfwTextView.setTextColor(primaryTextColor);
         titleEditText.setTextColor(primaryTextColor);
         titleEditText.setHintTextColor(secondaryTextColor);
         linkEditText.setTextColor(primaryTextColor);
