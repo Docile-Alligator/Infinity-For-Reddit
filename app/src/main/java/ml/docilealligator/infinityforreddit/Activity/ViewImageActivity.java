@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -69,6 +70,7 @@ public class ViewImageActivity extends AppCompatActivity {
 
     public static final String IMAGE_URL_KEY = "IUK";
     public static final String FILE_NAME_KEY = "FNK";
+    public static final String POST_TITLE_KEY = "PTK";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
     @BindView(R.id.parent_relative_layout_view_image_activity)
     RelativeLayout mRelativeLayout;
@@ -92,6 +94,7 @@ public class ViewImageActivity extends AppCompatActivity {
     private float zoom = 1.0f;
     private boolean isSwiping = false;
     private RequestManager glide;
+    private String postTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,13 +121,15 @@ public class ViewImageActivity extends AppCompatActivity {
         Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setHomeAsUpIndicator(upArrow);
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
-        setTitle("");
 
         glide = Glide.with(this);
 
         Intent intent = getIntent();
         mImageUrl = intent.getStringExtra(IMAGE_URL_KEY);
         mImageFileName = intent.getStringExtra(FILE_NAME_KEY);
+        postTitle = intent.getStringExtra(POST_TITLE_KEY);
+
+        setTitle(Html.fromHtml(String.format("<small>%s</small>", postTitle)));
 
         mLoadErrorLinearLayout.setOnClickListener(view -> {
             if (!isSwiping) {
