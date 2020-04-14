@@ -133,7 +133,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                         Intent intent = new Intent(this, ViewMultiRedditDetailActivity.class);
                         intent.putExtra(ViewMultiRedditDetailActivity.EXTRA_MULTIREDDIT_PATH, path);
                         startActivity(intent);
-                    } else if (path.matches(REDD_IT_POST_PATTERN)) {
+                    } else if (authority.equals("redd.it") && path.matches(REDD_IT_POST_PATTERN)) {
                         Intent intent = new Intent(this, ViewPostDetailActivity.class);
                         intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, path.substring(1));
                         startActivity(intent);

@@ -138,6 +138,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
     private int mColorPrimaryLightTheme;
     private int mColorAccent;
+    private int mCircularProgressBarBackgroundColor;
     private int mCardViewColor;
     private int mSecondaryTextColor;
     private int mPostTitleColor;
@@ -294,6 +295,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
         mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
         mColorAccent = customThemeWrapper.getColorAccent();
+        mCircularProgressBarBackgroundColor = customThemeWrapper.getCircularProgressBarBackground();
         mCardViewColor = customThemeWrapper.getCardViewBackgroundColor();
         mPostTitleColor = customThemeWrapper.getPostTitleColor();
         mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
@@ -2169,6 +2171,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             commentTimeTextView.setTextColor(mSecondaryTextColor);
             commentMarkdownView.setTextColor(mCommentTextColor);
             authorFlairTextView.setTextColor(mAuthorFlairTextColor);
+            topScoreTextView.setTextColor(mSecondaryTextColor);
             commentDivider.setBackgroundColor(mDividerColor);
             upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             scoreTextView.setTextColor(mCommentIconAndInfoColor);
@@ -2209,6 +2212,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         LoadCommentsViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            circleProgressBar.setBackgroundTintList(ColorStateList.valueOf(mCircularProgressBarBackgroundColor));
             circleProgressBar.setColorSchemeColors(mColorAccent);
         }
     }
