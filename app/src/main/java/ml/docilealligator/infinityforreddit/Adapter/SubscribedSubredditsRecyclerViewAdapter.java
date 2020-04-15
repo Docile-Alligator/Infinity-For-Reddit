@@ -21,6 +21,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import me.zhanghai.android.fastscroll.PopupTextProvider;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FavoriteThing;
@@ -30,7 +31,7 @@ import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.Subscrib
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements PopupTextProvider {
     private static final int VIEW_TYPE_FAVORITE_SUBREDDIT_DIVIDER = 0;
     private static final int VIEW_TYPE_FAVORITE_SUBREDDIT = 1;
     private static final int VIEW_TYPE_SUBREDDIT_DIVIDER = 2;
@@ -407,6 +408,51 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
     public void addUser(String username, String userIconUrl) {
         this.username = username;
         this.userIconUrl = userIconUrl;
+    }
+
+    @NonNull
+    @Override
+    public String getPopupText(int position) {
+        switch (getItemViewType(position)) {
+            case VIEW_TYPE_SUBREDDIT:
+                if (hasClearSelectionRow && position == 0) {
+                    return "";
+                } else if (itemClickListener != null && !hasClearSelectionRow && position == 0) {
+                    return "";
+                } else if (hasClearSelectionRow && position == 1) {
+                    return "";
+                } else {
+                    int offset;
+                    if (itemClickListener != null) {
+                        if (hasClearSelectionRow) {
+                            offset = (mFavoriteSubscribedSubredditData != null && mFavoriteSubscribedSubredditData.size() > 0) ?
+                                    mFavoriteSubscribedSubredditData.size() + 4 : 0;
+                        } else {
+                            offset = (mFavoriteSubscribedSubredditData != null && mFavoriteSubscribedSubredditData.size() > 0) ?
+                                    mFavoriteSubscribedSubredditData.size() + 3 : 0;
+                        }
+                    } else {
+                        offset = (mFavoriteSubscribedSubredditData != null && mFavoriteSubscribedSubredditData.size() > 0) ?
+                                mFavoriteSubscribedSubredditData.size() + 2 : 0;
+                    }
+
+                    return mSubscribedSubredditData.get(position - offset).getName().substring(0, 1).toUpperCase();
+                }
+            case VIEW_TYPE_FAVORITE_SUBREDDIT:
+                int offset;
+                if (itemClickListener != null) {
+                    if (hasClearSelectionRow) {
+                        offset = 3;
+                    } else {
+                        offset = 2;
+                    }
+                } else {
+                    offset = 1;
+                }
+                return mFavoriteSubscribedSubredditData.get(position - offset).getName().substring(0, 1).toUpperCase();
+            default:
+                return "";
+        }
     }
 
     public interface ItemClickListener {

@@ -29,6 +29,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 import ml.docilealligator.infinityforreddit.Activity.BaseActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubscribedThingListingActivity;
@@ -122,6 +123,7 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
         }
 
         mRecyclerView.setAdapter(adapter);
+        new FastScrollerBuilder(mRecyclerView).build();
 
         mSubscribedSubredditViewModel = new ViewModelProvider(this,
                 new SubscribedSubredditViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, accountName))

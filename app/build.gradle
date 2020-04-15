@@ -85,4 +85,5 @@ dependencies {
     implementation 'com.r0adkll:slidableactivity:2.1.0'
     implementation 'com.atlassian.commonmark:commonmark:0.13.1'
     implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'me.zhanghai.android.fastscroll:library:1.1.2'
 }
