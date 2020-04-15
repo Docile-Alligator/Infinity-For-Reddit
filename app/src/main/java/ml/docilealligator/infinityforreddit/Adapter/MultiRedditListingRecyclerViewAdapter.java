@@ -22,6 +22,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import me.zhanghai.android.fastscroll.PopupTextProvider;
 import ml.docilealligator.infinityforreddit.Activity.ViewMultiRedditDetailActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Fragment.MultiRedditOptionsBottomSheetFragment;
@@ -32,7 +33,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  implements PopupTextProvider {
 
     private static final int VIEW_TYPE_FAVORITE_MULTI_REDDIT_DIVIDER = 0;
     private static final int VIEW_TYPE_FAVORITE_MULTI_REDDIT = 1;
@@ -326,6 +327,21 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
     public void setFavoriteMultiReddits(List<MultiReddit> favoriteMultiReddits) {
         mFavoriteMultiReddits = favoriteMultiReddits;
         notifyDataSetChanged();
+    }
+
+    @NonNull
+    @Override
+    public String getPopupText(int position) {
+        switch (getItemViewType(position)) {
+            case VIEW_TYPE_MULTI_REDDIT:
+                int offset = (mFavoriteMultiReddits != null && mFavoriteMultiReddits.size() > 0) ?
+                        mFavoriteMultiReddits.size() + 2 : 0;
+                return mMultiReddits.get(position - offset).getDisplayName().substring(0, 1).toUpperCase();
+            case VIEW_TYPE_FAVORITE_MULTI_REDDIT:
+                return mFavoriteMultiReddits.get(position - 1).getDisplayName().substring(0, 1).toUpperCase();
+            default:
+                return "";
+        }
     }
 
     class MultiRedditViewHolder extends RecyclerView.ViewHolder {

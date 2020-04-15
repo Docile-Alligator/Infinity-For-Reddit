@@ -36,6 +36,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 import ml.docilealligator.infinityforreddit.Adapter.MultiRedditListingRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertMultiRedditAsyncTask;
@@ -179,6 +180,7 @@ public class MultiRedditListingActivity extends BaseActivity {
                 }
             }
         });
+        new FastScrollerBuilder(mRecyclerView).build();
 
         mMultiRedditViewModel = new ViewModelProvider(this,
                 new MultiRedditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, mAccountName))

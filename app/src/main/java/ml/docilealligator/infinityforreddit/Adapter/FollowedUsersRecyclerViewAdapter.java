@@ -21,6 +21,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import me.zhanghai.android.fastscroll.PopupTextProvider;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FavoriteThing;
@@ -30,7 +31,7 @@ import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUse
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements PopupTextProvider {
     private static final int VIEW_TYPE_FAVORITE_USER_DIVIDER = 0;
     private static final int VIEW_TYPE_FAVORITE_USER = 1;
     private static final int VIEW_TYPE_USER_DIVIDER = 2;
@@ -287,6 +288,21 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     public void setFavoriteSubscribedUsers(List<SubscribedUserData> favoriteSubscribedUsers) {
         mFavoriteSubscribedUserData = favoriteSubscribedUsers;
         notifyDataSetChanged();
+    }
+
+    @NonNull
+    @Override
+    public String getPopupText(int position) {
+        switch (getItemViewType(position)) {
+            case VIEW_TYPE_USER_DIVIDER:
+                int offset = (mFavoriteSubscribedUserData != null && mFavoriteSubscribedUserData.size() > 0) ?
+                        mFavoriteSubscribedUserData.size() + 2 : 0;
+                return mSubscribedUserData.get(position - offset).getName().substring(0, 1).toUpperCase();
+            case VIEW_TYPE_FAVORITE_USER:
+                return mFavoriteSubscribedUserData.get(position - 1).getName().substring(0, 1).toUpperCase();
+            default:
+                return "";
+        }
     }
 
     class FavoriteUserViewHolder extends RecyclerView.ViewHolder {

@@ -29,6 +29,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 import ml.docilealligator.infinityforreddit.Activity.BaseActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubscribedThingListingActivity;
 import ml.docilealligator.infinityforreddit.Adapter.FollowedUsersRecyclerViewAdapter;
@@ -108,6 +109,7 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
                 mOauthRetrofit, mRedditDataRoomDatabase, customThemeWrapper,
                 getArguments().getString(EXTRA_ACCESS_TOKEN));
         mRecyclerView.setAdapter(adapter);
+        new FastScrollerBuilder(mRecyclerView).build();
 
         mSubscribedUserViewModel = new ViewModelProvider(this,
                 new SubscribedUserViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, getArguments().getString(EXTRA_ACCOUNT_NAME)))
