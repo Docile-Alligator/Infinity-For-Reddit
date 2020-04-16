@@ -492,6 +492,22 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 }
             }
 
+            if (mPost.getAuthorFlairHTML() != null && !mPost.getAuthorFlairHTML().equals("")) {
+                ((PostDetailViewHolder) holder).mAuthorFlairTextView.setVisibility(View.VISIBLE);
+                Spannable flairHTML;
+                GlideImageGetter glideImageGetter = new GlideImageGetter(((PostDetailViewHolder) holder).mAuthorFlairTextView);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    flairHTML = (Spannable) Html.fromHtml(mPost.getAuthorFlairHTML(), Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
+                } else {
+                    flairHTML = (Spannable) Html.fromHtml(mPost.getAuthorFlairHTML(), glideImageGetter, null);
+                }
+                ((PostDetailViewHolder) holder).mAuthorFlairTextView.setText(flairHTML);
+                ((PostDetailViewHolder) holder).mAuthorFlairTextView.setOnClickListener(view -> ((PostDetailViewHolder) holder).mUserTextView.performClick());
+            } else if (mPost.getAuthorFlair() != null && !mPost.getAuthorFlair().equals("")) {
+                ((PostDetailViewHolder) holder).mAuthorFlairTextView.setVisibility(View.VISIBLE);
+                ((PostDetailViewHolder) holder).mAuthorFlairTextView.setText(mPost.getAuthorFlair());
+            }
+
             switch (mPost.getVoteType()) {
                 case 1:
                     //Upvote
@@ -1824,6 +1840,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         TextView mSubredditTextView;
         @BindView(R.id.user_text_view_item_post_detail)
         TextView mUserTextView;
+        @BindView(R.id.author_flair_text_view_item_post_detail)
+        TextView mAuthorFlairTextView;
         @BindView(R.id.post_time_text_view_item_post_detail)
         TextView mPostTimeTextView;
         @BindView(R.id.title_text_view_item_post_detail)
@@ -2093,6 +2111,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             itemView.setBackgroundColor(mCardViewColor);
             mSubredditTextView.setTextColor(mSubredditColor);
             mUserTextView.setTextColor(mUsernameColor);
+            mAuthorFlairTextView.setTextColor(mAuthorFlairTextColor);
             mPostTimeTextView.setTextColor(mSecondaryTextColor);
             mTitleTextView.setTextColor(mPostTitleColor);
             mTypeTextView.setBackgroundColor(mPostTypeBackgroundColor);
