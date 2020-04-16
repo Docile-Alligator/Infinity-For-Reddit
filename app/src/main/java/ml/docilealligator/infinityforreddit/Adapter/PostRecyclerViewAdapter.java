@@ -511,6 +511,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, imageUrl);
                             intent.putExtra(ViewImageActivity.FILE_NAME_KEY, subredditName
                                     + "-" + id + ".jpg");
+                            intent.putExtra(ViewImageActivity.POST_TITLE_KEY, post.getTitle());
                             mActivity.startActivity(intent);
                         });
 
@@ -547,6 +548,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             intent.putExtra(ViewGIFActivity.FILE_NAME_KEY, subredditName
                                     + "-" + id + ".gif");
                             intent.putExtra(ViewGIFActivity.IMAGE_URL_KEY, post.getVideoUrl());
+                            intent.putExtra(ViewGIFActivity.POST_TITLE_KEY, post.getTitle());
                             mActivity.startActivity(intent);
                         });
 
@@ -562,6 +564,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
                             intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, subredditName);
                             intent.putExtra(ViewVideoActivity.EXTRA_ID, fullName);
+                            intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, post.getTitle());
                             mActivity.startActivity(intent);
                         });
 

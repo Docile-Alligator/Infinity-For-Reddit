@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -67,6 +68,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     public static final String EXTRA_VIDEO_DOWNLOAD_URL = "EVDU";
     public static final String EXTRA_SUBREDDIT = "ES";
     public static final String EXTRA_ID = "EI";
+    public static final String EXTRA_POST_TITLE = "EPT";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
     private static final String IS_MUTE_STATE = "IMS";
     @BindView(R.id.relative_layout_view_video_activity)
@@ -90,6 +92,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     private boolean isMute = false;
     private float totalLengthY = 0.0f;
     private float touchY = -1.0f;
+    private String postTitle;
 
     @Inject
     @Named("default")
@@ -111,7 +114,6 @@ public class ViewVideoActivity extends AppCompatActivity {
         Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setHomeAsUpIndicator(upArrow);
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
-        setTitle("");
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || getResources().getBoolean(R.bool.isTablet)) {
             //Set player controller bottom margin in order to display it above the navbar
@@ -131,6 +133,9 @@ public class ViewVideoActivity extends AppCompatActivity {
         mVideoUri = intent.getData();
         videoDownloadUrl = intent.getStringExtra(EXTRA_VIDEO_DOWNLOAD_URL);
         videoFileName = intent.getStringExtra(EXTRA_SUBREDDIT) + "-" + intent.getStringExtra(EXTRA_ID) + ".mp4";
+        postTitle = intent.getStringExtra(EXTRA_POST_TITLE);
+
+        setTitle(Html.fromHtml(String.format("<small>%s</small>", postTitle)));
 
         final float pxHeight = getResources().getDisplayMetrics().heightPixels;
 
