@@ -871,6 +871,18 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 ((CommentViewHolder) holder).topScoreTextView.setVisibility(View.GONE);
             }
 
+            if (comment.getAwards() != null && !comment.getAwards().equals("")) {
+                ((CommentViewHolder) holder).awardsTextView.setVisibility(View.VISIBLE);
+                Spannable awardsHTML;
+                GlideImageGetter glideImageGetter = new GlideImageGetter(((CommentViewHolder) holder).awardsTextView);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    awardsHTML = (Spannable) Html.fromHtml(comment.getAwards(), Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
+                } else {
+                    awardsHTML = (Spannable) Html.fromHtml(comment.getAwards(), glideImageGetter, null);
+                }
+                ((CommentViewHolder) holder).awardsTextView.setText(awardsHTML);
+            }
+
             mCommentMarkwon.setMarkdown(((CommentViewHolder) holder).commentMarkdownView, comment.getCommentMarkdown());
             ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                     comment.getScore() + comment.getVoteType()));
@@ -1749,6 +1761,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             mGlide.clear(((CommentViewHolder) holder).authorTypeImageView);
             ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.GONE);
             ((CommentViewHolder) holder).authorTypeImageView.setVisibility(View.GONE);
+            ((CommentViewHolder) holder).awardsTextView.setText("");
+            ((CommentViewHolder) holder).awardsTextView.setVisibility(View.GONE);
             ((CommentViewHolder) holder).expandButton.setVisibility(View.GONE);
             ((CommentViewHolder) holder).upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             ((CommentViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
@@ -2124,6 +2138,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         TextView commentTimeTextView;
         @BindView(R.id.top_score_text_view_item_post_comment)
         TextView topScoreTextView;
+        @BindView(R.id.awards_text_view_item_comment)
+        TextView awardsTextView;
         @BindView(R.id.comment_markdown_view_item_post_comment)
         TextView commentMarkdownView;
         @BindView(R.id.bottom_constraint_layout_item_post_comment)
@@ -2182,6 +2198,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             commentMarkdownView.setTextColor(mCommentTextColor);
             authorFlairTextView.setTextColor(mAuthorFlairTextColor);
             topScoreTextView.setTextColor(mSecondaryTextColor);
+            awardsTextView.setTextColor(mCommentTextColor);
             commentDivider.setBackgroundColor(mDividerColor);
             upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             scoreTextView.setTextColor(mCommentIconAndInfoColor);

@@ -36,6 +36,8 @@ public class Post implements Parcelable {
     private String author;
     private String authorNamePrefixed;
     private String authorIconUrl;
+    private String authorFlair;
+    private String authorFlairHTML;
     private String postTime;
     private String title;
     private String selfText;
@@ -67,17 +69,19 @@ public class Post implements Parcelable {
     private String crosspostParentId;
 
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed,
-                String author, String postTime, long postTimeMillis, String title, String previewUrl,
-                String thumbnailPreviewUrl, String permalink, int score, int postType,
-                int voteType, int nComments, String flair, String awards, boolean hidden,
-                boolean spoiler, boolean nsfw, boolean stickied, boolean archived, boolean locked,
-                boolean saved, boolean isCrosspost) {
+                String author, String authorFlair, String authorFlairHTML, String postTime,
+                long postTimeMillis, String title, String previewUrl, String thumbnailPreviewUrl,
+                String permalink, int score, int postType, int voteType, int nComments, String flair,
+                String awards, boolean hidden, boolean spoiler, boolean nsfw, boolean stickied,
+                boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
         this.subredditNamePrefixed = subredditNamePrefixed;
         this.author = author;
         this.authorNamePrefixed = "u/" + author;
+        this.authorFlair = authorFlair;
+        this.authorFlairHTML = authorFlairHTML;
         this.postTime = postTime;
         this.postTimeMillis = postTimeMillis;
         this.title = title;
@@ -101,17 +105,19 @@ public class Post implements Parcelable {
     }
 
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed,
-                String author, String postTime, long postTimeMillis, String title, String previewUrl,
-                String thumbnailPreviewUrl, String url, String permalink, int score,
-                int postType, int voteType, int nComments, String flair, String awards,
-                boolean hidden, boolean spoiler, boolean nsfw, boolean stickied, boolean archived,
-                boolean locked, boolean saved, boolean isCrosspost) {
+                String author, String authorFlair, String authorFlairHTML, String postTime,
+                long postTimeMillis, String title, String previewUrl, String thumbnailPreviewUrl,
+                String url, String permalink, int score, int postType, int voteType, int nComments,
+                String flair, String awards, boolean hidden, boolean spoiler, boolean nsfw,
+                boolean stickied, boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
         this.subredditNamePrefixed = subredditNamePrefixed;
         this.author = author;
         this.authorNamePrefixed = "u/" + author;
+        this.authorFlair = authorFlair;
+        this.authorFlairHTML = authorFlairHTML;
         this.postTime = postTime;
         this.postTimeMillis = postTimeMillis;
         this.title = title;
@@ -136,16 +142,19 @@ public class Post implements Parcelable {
     }
 
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed,
-                String author, String postTime, long postTimeMillis, String title, String permalink,
-                int score, int postType, int voteType, int nComments, String flair,
-                String awards, boolean hidden, boolean spoiler, boolean nsfw, boolean stickied,
-                boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
+                String author, String authorFlair, String authorFlairHTML, String postTime,
+                long postTimeMillis, String title, String permalink, int score, int postType,
+                int voteType, int nComments, String flair, String awards, boolean hidden,
+                boolean spoiler, boolean nsfw, boolean stickied, boolean archived, boolean locked,
+                boolean saved, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
         this.subredditNamePrefixed = subredditNamePrefixed;
         this.author = author;
         this.authorNamePrefixed = "u/" + author;
+        this.authorFlair = authorFlair;
+        this.authorFlairHTML = authorFlairHTML;
         this.postTime = postTime;
         this.postTimeMillis = postTimeMillis;
         this.title = title;
@@ -174,6 +183,8 @@ public class Post implements Parcelable {
         subredditIconUrl = in.readString();
         author = in.readString();
         authorNamePrefixed = in.readString();
+        authorFlair = in.readString();
+        authorFlairHTML = in.readString();
         authorIconUrl = in.readString();
         postTime = in.readString();
         postTimeMillis = in.readLong();
@@ -236,6 +247,14 @@ public class Post implements Parcelable {
 
     public String getAuthorNamePrefixed() {
         return authorNamePrefixed;
+    }
+
+    public String getAuthorFlair() {
+        return authorFlair;
+    }
+
+    public String getAuthorFlairHTML() {
+        return authorFlairHTML;
     }
 
     public String getAuthorIconUrl() {
@@ -444,6 +463,8 @@ public class Post implements Parcelable {
         parcel.writeString(subredditIconUrl);
         parcel.writeString(author);
         parcel.writeString(authorNamePrefixed);
+        parcel.writeString(authorFlair);
+        parcel.writeString(authorFlairHTML);
         parcel.writeString(authorIconUrl);
         parcel.writeString(postTime);
         parcel.writeLong(postTimeMillis);

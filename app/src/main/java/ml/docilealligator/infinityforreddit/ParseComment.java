@@ -145,6 +145,20 @@ public class ParseComment {
         String commentRawText = Utils.trimTrailingWhitespace(
                 Html.fromHtml(singleCommentData.getString(JSONUtils.BODY_HTML_KEY))).toString();
         String permalink = Html.fromHtml(singleCommentData.getString(JSONUtils.PERMALINK_KEY)).toString();
+        StringBuilder awardingsBuilder = new StringBuilder();
+        JSONArray awardingsArray = singleCommentData.getJSONArray(JSONUtils.ALL_AWARDINGS_KEY);
+        for (int i = 0; i < awardingsArray.length(); i++) {
+            JSONObject award = awardingsArray.getJSONObject(i);
+            int count = award.getInt(JSONUtils.COUNT_KEY);
+            JSONArray icons = award.getJSONArray(JSONUtils.RESIZED_ICONS_KEY);
+            if (icons.length() > 4) {
+                String iconUrl = icons.getJSONObject(3).getString(JSONUtils.URL_KEY);
+                awardingsBuilder.append("<img src=\"").append(iconUrl).append("\"> ").append("x").append(count).append(" ");
+            } else if (icons.length() > 0) {
+                String iconUrl = icons.getJSONObject(icons.length() - 1).getString(JSONUtils.URL_KEY);
+                awardingsBuilder.append("<img src=\"").append(iconUrl).append("\"> ").append("x").append(count).append(" ");
+            }
+        }
         int score = singleCommentData.getInt(JSONUtils.SCORE_KEY);
         int voteType;
         if (singleCommentData.isNull(JSONUtils.LIKES_KEY)) {
@@ -169,10 +183,10 @@ public class ParseComment {
         boolean collapsed = singleCommentData.getBoolean(JSONUtils.COLLAPSED_KEY);
         boolean hasReply = !(singleCommentData.get(JSONUtils.REPLIES_KEY) instanceof String);
 
-        return new CommentData(id, fullName, author, authorFlair, authorFlairHTMLBuilder.toString(), linkAuthor,
-                formattedSubmitTime, submitTime, commentMarkdown, commentRawText, linkId, subredditName,
-                parentId, score, voteType, isSubmitter, distinguished, permalink, depth, collapsed,
-                hasReply, scoreHidden, saved);
+        return new CommentData(id, fullName, author, authorFlair, authorFlairHTMLBuilder.toString(),
+                linkAuthor, formattedSubmitTime, submitTime, commentMarkdown, commentRawText,
+                linkId, subredditName, parentId, score, voteType, isSubmitter, distinguished,
+                permalink, awardingsBuilder.toString(),depth, collapsed, hasReply, scoreHidden, saved);
     }
 
     @Nullable
