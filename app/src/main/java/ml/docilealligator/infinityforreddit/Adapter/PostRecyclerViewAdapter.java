@@ -239,10 +239,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 final String postTime = post.getPostTime();
                 final String title = post.getTitle();
                 int voteType = post.getVoteType();
-                int gilded = post.getGilded();
                 boolean nsfw = post.isNSFW();
                 boolean spoiler = post.isSpoiler();
                 String flair = post.getFlair();
+                String awards = post.getAwards();
                 boolean isArchived = post.isArchived();
 
                 ((PostViewHolder) holder).cardView.setOnClickListener(view -> {
@@ -418,12 +418,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 ((PostViewHolder) holder).titleTextView.setText(title);
                 ((PostViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
 
-                if (gilded > 0) {
-                    ((PostViewHolder) holder).gildedNumberTextView.setVisibility(View.VISIBLE);
-                    String gildedNumber = mActivity.getResources().getString(R.string.gilded_count, gilded);
-                    ((PostViewHolder) holder).gildedNumberTextView.setText(gildedNumber);
-                }
-
                 if (post.isLocked()) {
                     ((PostViewHolder) holder).lockedImageView.setVisibility(View.VISIBLE);
                 }
@@ -455,6 +449,18 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         flairHTML = (Spannable) Html.fromHtml(flair, glideImageGetter, null);
                     }
                     ((PostViewHolder) holder).flairTextView.setText(flairHTML);
+                }
+
+                if (awards != null && !awards.equals("")) {
+                    ((PostViewHolder) holder).awardsTextView.setVisibility(View.VISIBLE);
+                    Spannable awardsHTML;
+                    GlideImageGetter glideImageGetter = new GlideImageGetter(((PostViewHolder) holder).awardsTextView);
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                        awardsHTML = (Spannable) Html.fromHtml(awards, Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
+                    } else {
+                        awardsHTML = (Spannable) Html.fromHtml(awards, glideImageGetter, null);
+                    }
+                    ((PostViewHolder) holder).awardsTextView.setText(awardsHTML);
                 }
 
                 switch (voteType) {
@@ -810,10 +816,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 final String postTime = post.getPostTime();
                 final String title = post.getTitle();
                 int voteType = post.getVoteType();
-                int gilded = post.getGilded();
                 boolean nsfw = post.isNSFW();
                 boolean spoiler = post.isSpoiler();
                 String flair = post.getFlair();
+                String awards = post.getAwards();
                 boolean isArchived = post.isArchived();
 
                 ((PostCompactViewHolder) holder).itemView.setOnClickListener(view -> {
@@ -983,12 +989,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 ((PostCompactViewHolder) holder).titleTextView.setText(title);
                 ((PostCompactViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
 
-                if (gilded > 0) {
-                    ((PostCompactViewHolder) holder).gildedNumberTextView.setVisibility(View.VISIBLE);
-                    String gildedNumber = mActivity.getResources().getString(R.string.gilded_count, gilded);
-                    ((PostCompactViewHolder) holder).gildedNumberTextView.setText(gildedNumber);
-                }
-
                 if (post.isLocked()) {
                     ((PostCompactViewHolder) holder).lockedImageView.setVisibility(View.VISIBLE);
                 }
@@ -1020,6 +1020,18 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         flairHTML = (Spannable) Html.fromHtml(flair, glideImageGetter, null);
                     }
                     ((PostCompactViewHolder) holder).flairTextView.setText(flairHTML);
+                }
+
+                if (awards != null && !awards.equals("")) {
+                    ((PostCompactViewHolder) holder).awardsTextView.setVisibility(View.VISIBLE);
+                    Spannable awardsHTML;
+                    GlideImageGetter glideImageGetter = new GlideImageGetter(((PostCompactViewHolder) holder).awardsTextView);
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                        awardsHTML = (Spannable) Html.fromHtml(awards, Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
+                    } else {
+                        awardsHTML = (Spannable) Html.fromHtml(awards, glideImageGetter, null);
+                    }
+                    ((PostCompactViewHolder) holder).awardsTextView.setText(awardsHTML);
                 }
 
                 switch (voteType) {
@@ -1517,13 +1529,15 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mGlide.clear(((PostViewHolder) holder).iconGifImageView);
             ((PostViewHolder) holder).stickiedPostImageView.setVisibility(View.GONE);
             ((PostViewHolder) holder).relativeLayout.setVisibility(View.GONE);
-            ((PostViewHolder) holder).gildedNumberTextView.setVisibility(View.GONE);
             ((PostViewHolder) holder).crosspostImageView.setVisibility(View.GONE);
             ((PostViewHolder) holder).archivedImageView.setVisibility(View.GONE);
             ((PostViewHolder) holder).lockedImageView.setVisibility(View.GONE);
             ((PostViewHolder) holder).nsfwTextView.setVisibility(View.GONE);
             ((PostViewHolder) holder).spoilerTextView.setVisibility(View.GONE);
             ((PostViewHolder) holder).flairTextView.setVisibility(View.GONE);
+            ((PostViewHolder) holder).flairTextView.setText("");
+            ((PostViewHolder) holder).awardsTextView.setVisibility(View.GONE);
+            ((PostViewHolder) holder).awardsTextView.setText("");
             ((PostViewHolder) holder).linkTextView.setVisibility(View.GONE);
             ((PostViewHolder) holder).progressBar.setVisibility(View.GONE);
             ((PostViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.FIT_START);
@@ -1541,13 +1555,15 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mGlide.clear(((PostCompactViewHolder) holder).iconGifImageView);
             ((PostCompactViewHolder) holder).stickiedPostImageView.setVisibility(View.GONE);
             ((PostCompactViewHolder) holder).relativeLayout.setVisibility(View.GONE);
-            ((PostCompactViewHolder) holder).gildedNumberTextView.setVisibility(View.GONE);
             ((PostCompactViewHolder) holder).crosspostImageView.setVisibility(View.GONE);
             ((PostCompactViewHolder) holder).archivedImageView.setVisibility(View.GONE);
             ((PostCompactViewHolder) holder).lockedImageView.setVisibility(View.GONE);
             ((PostCompactViewHolder) holder).nsfwTextView.setVisibility(View.GONE);
             ((PostCompactViewHolder) holder).spoilerTextView.setVisibility(View.GONE);
             ((PostCompactViewHolder) holder).flairTextView.setVisibility(View.GONE);
+            ((PostCompactViewHolder) holder).flairTextView.setText("");
+            ((PostCompactViewHolder) holder).awardsTextView.setVisibility(View.GONE);
+            ((PostCompactViewHolder) holder).awardsTextView.setText("");
             ((PostCompactViewHolder) holder).linkTextView.setVisibility(View.GONE);
             ((PostCompactViewHolder) holder).progressBar.setVisibility(View.GONE);
             ((PostCompactViewHolder) holder).imageView.setVisibility(View.GONE);
@@ -1582,8 +1598,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         TextView titleTextView;
         @BindView(R.id.type_text_view_item_post)
         CustomTextView typeTextView;
-        @BindView(R.id.gilded_number_text_view_item_post)
-        TextView gildedNumberTextView;
         @BindView(R.id.archived_image_view_item_post)
         ImageView archivedImageView;
         @BindView(R.id.locked_image_view_item_post)
@@ -1596,6 +1610,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         CustomTextView spoilerTextView;
         @BindView(R.id.flair_custom_text_view_item_post)
         CustomTextView flairTextView;
+        @BindView(R.id.awards_text_view_item_post)
+        TextView awardsTextView;
         @BindView(R.id.link_text_view_item_post)
         TextView linkTextView;
         @BindView(R.id.image_view_wrapper_item_post)
@@ -1675,6 +1691,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             archivedImageView.setColorFilter(mArchivedIconTint, PorterDuff.Mode.SRC_IN);
             lockedImageView.setColorFilter(mLockedIconTint, PorterDuff.Mode.SRC_IN);
             crosspostImageView.setColorFilter(mCrosspostIconTint, PorterDuff.Mode.SRC_IN);
+            awardsTextView.setTextColor(mPostTitleColor);
             linkTextView.setTextColor(mSecondaryTextColor);
             progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
             noPreviewLinkImageView.setBackgroundColor(mNoPreviewLinkBackgroundColor);
@@ -1701,8 +1718,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         TextView titleTextView;
         @BindView(R.id.type_text_view_item_post_compact)
         CustomTextView typeTextView;
-        @BindView(R.id.gilded_number_text_view_item_post_compact)
-        TextView gildedNumberTextView;
         @BindView(R.id.archived_image_view_item_post_compact)
         ImageView archivedImageView;
         @BindView(R.id.locked_image_view_item_post_compact)
@@ -1715,6 +1730,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         CustomTextView spoilerTextView;
         @BindView(R.id.flair_custom_text_view_item_post_compact)
         CustomTextView flairTextView;
+        @BindView(R.id.awards_text_view_item_post_compact)
+        TextView awardsTextView;
         @BindView(R.id.link_text_view_item_post_compact)
         TextView linkTextView;
         @BindView(R.id.image_view_wrapper_item_post_compact)
@@ -1789,6 +1806,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             archivedImageView.setColorFilter(mArchivedIconTint, PorterDuff.Mode.SRC_IN);
             lockedImageView.setColorFilter(mLockedIconTint, PorterDuff.Mode.SRC_IN);
             crosspostImageView.setColorFilter(mCrosspostIconTint, PorterDuff.Mode.SRC_IN);
+            awardsTextView.setTextColor(mPostTitleColor);
             linkTextView.setTextColor(mSecondaryTextColor);
             progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
             noPreviewLinkImageView.setBackgroundColor(mNoPreviewLinkBackgroundColor);

@@ -179,16 +179,6 @@
                 app:lib_setRoundedView="true"
                 app:lib_setShape="rectangle" />
 
-            <TextView
-                android:id="@+id/gilded_number_text_view_item_post"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/gold"
-                android:textSize="?attr/font_default"
-                android:drawableStart="@drawable/gold"
-                android:drawablePadding="4dp"
-                android:visibility="gone" />
-
             <ImageView
                 android:id="@+id/archived_image_view_item_post"
                 android:layout_width="24dp"
@@ -211,6 +201,12 @@
                 android:layout_height="24dp"
                 android:src="@drawable/crosspost"
                 android:tint="?attr/crosspost"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/awards_text_view_item_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:visibility="gone" />
 
         </com.nex3z.flowlayout.FlowLayout>

@@ -195,6 +195,12 @@
             android:tint="?attr/crosspost"
             android:visibility="gone" />
 
+        <TextView
+            android:id="@+id/awards_text_view_item_post_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
     </com.nex3z.flowlayout.FlowLayout>
 
     <TextView

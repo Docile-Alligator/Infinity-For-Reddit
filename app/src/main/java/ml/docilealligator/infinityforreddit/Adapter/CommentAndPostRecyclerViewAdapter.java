@@ -545,12 +545,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 ((PostDetailViewHolder) holder).mPostTimeTextView.setText(mPost.getPostTime());
             }
 
-            if (mPost.getGilded() > 0) {
-                ((PostDetailViewHolder) holder).mGildedNumberTextView.setVisibility(View.VISIBLE);
-                String gildedNumber = mActivity.getResources().getString(R.string.gilded_count, mPost.getGilded());
-                ((PostDetailViewHolder) holder).mGildedNumberTextView.setText(gildedNumber);
-            }
-
             if (mPost.isArchived()) {
                 ((PostDetailViewHolder) holder).mArchivedImageView.setVisibility(View.VISIBLE);
             }
@@ -573,6 +567,18 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     flairHTML = (Spannable) Html.fromHtml(mPost.getFlair(), glideImageGetter, null);
                 }
                 ((PostDetailViewHolder) holder).mFlairTextView.setText(flairHTML);
+            }
+
+            if (mPost.getAwards() != null && !mPost.getAwards().equals("")) {
+                ((PostDetailViewHolder) holder).mAwardsTextView.setVisibility(View.VISIBLE);
+                Spannable awardsHTML;
+                GlideImageGetter glideImageGetter = new GlideImageGetter(((PostDetailViewHolder) holder).mAwardsTextView);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    awardsHTML = (Spannable) Html.fromHtml(mPost.getAwards(), Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
+                } else {
+                    awardsHTML = (Spannable) Html.fromHtml(mPost.getAwards(), glideImageGetter, null);
+                }
+                ((PostDetailViewHolder) holder).mAwardsTextView.setText(awardsHTML);
             }
 
             if (mPost.isNSFW()) {
@@ -1809,8 +1815,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         RecyclerView mContentMarkdownView;
         @BindView(R.id.type_text_view_item_post_detail)
         CustomTextView mTypeTextView;
-        @BindView(R.id.gilded_number_text_view_item_post_detail)
-        TextView mGildedNumberTextView;
         @BindView(R.id.crosspost_image_view_item_post_detail)
         ImageView mCrosspostImageView;
         @BindView(R.id.archived_image_view_item_post_detail)
@@ -1823,6 +1827,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         CustomTextView mSpoilerTextView;
         @BindView(R.id.flair_custom_text_view_item_post_detail)
         CustomTextView mFlairTextView;
+        @BindView(R.id.awards_text_view_item_post_detail)
+        TextView mAwardsTextView;
         @BindView(R.id.link_text_view_item_post_detail)
         TextView mLinkTextView;
         @BindView(R.id.image_view_wrapper_item_post_detail)
@@ -2087,6 +2093,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             mArchivedImageView.setColorFilter(mArchivedTintColor, PorterDuff.Mode.SRC_IN);
             mLockedImageView.setColorFilter(mLockedTintColor, PorterDuff.Mode.SRC_IN);
             mCrosspostImageView.setColorFilter(mCrosspostTintColor, PorterDuff.Mode.SRC_IN);
+            mAwardsTextView.setTextColor(mPostTitleColor);
             mLinkTextView.setTextColor(mSecondaryTextColor);
             mLoadImageProgressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
             mNoPreviewLinkImageView.setBackgroundColor(mNoPreviewLinkBackgroundColor);
