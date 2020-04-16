@@ -17,6 +17,7 @@ public class JSONUtils {
     public static final String SELFTEXT_HTML_KEY = "selftext_html";
     public static final String AUTHOR_KEY = "author";
     public static final String AUTHOR_FLAIR_RICHTEXT_KEY = "author_flair_richtext";
+    public static final String AUTHOR_FLAIR_TEXT_KEY = "author_flair_text";
     public static final String E_KEY = "e";
     public static final String T_KEY = "t";
     public static final String U_KEY = "u";

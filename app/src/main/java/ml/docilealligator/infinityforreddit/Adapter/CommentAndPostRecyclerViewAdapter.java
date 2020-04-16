@@ -826,17 +826,20 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             String authorPrefixed = "u/" + comment.getAuthor();
             ((CommentViewHolder) holder).authorTextView.setText(authorPrefixed);
 
-            if (comment.getAuthorFlair() != null && !comment.getAuthorFlair().equals("")) {
+            if (comment.getAuthorFlairHTML() != null && !comment.getAuthorFlairHTML().equals("")) {
                 ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.VISIBLE);
                 Spannable flairHTML;
                 GlideImageGetter glideImageGetter = new GlideImageGetter(((CommentViewHolder) holder).authorFlairTextView);
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                    flairHTML = (Spannable) Html.fromHtml(comment.getAuthorFlair(), Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
+                    flairHTML = (Spannable) Html.fromHtml(comment.getAuthorFlairHTML(), Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
                 } else {
-                    flairHTML = (Spannable) Html.fromHtml(comment.getAuthorFlair(), glideImageGetter, null);
+                    flairHTML = (Spannable) Html.fromHtml(comment.getAuthorFlairHTML(), glideImageGetter, null);
                 }
                 ((CommentViewHolder) holder).authorFlairTextView.setText(flairHTML);
                 ((CommentViewHolder) holder).authorFlairTextView.setOnClickListener(view -> ((CommentViewHolder) holder).authorTextView.performClick());
+            } else if (comment.getAuthorFlair() != null && !comment.getAuthorFlair().equals("")) {
+                ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.VISIBLE);
+                ((CommentViewHolder) holder).authorFlairTextView.setText(comment.getAuthorFlair());
             }
 
             if (comment.isSubmitter()) {

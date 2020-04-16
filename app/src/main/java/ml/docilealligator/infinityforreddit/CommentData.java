@@ -26,6 +26,7 @@ public class CommentData implements Parcelable {
     private String fullName;
     private String author;
     private String authorFlair;
+    private String authorFlairHTML;
     private String linkAuthor;
     private String commentTime;
     private long commentTimeMillis;
@@ -52,15 +53,17 @@ public class CommentData implements Parcelable {
     private boolean isLoadingMoreChildren;
     private boolean loadMoreChildrenFailed;
 
-    public CommentData(String id, String fullName, String author, String authorFlair, String linkAuthor,
-                       String commentTime, long commentTimeMillis, String commentMarkdown,
-                       String commentRawText, String linkId, String subredditName, String parentId,
-                       int score, int voteType, boolean isSubmitter, String distinguished, String permalink,
-                       int depth, boolean collapsed, boolean hasReply, boolean scoreHidden, boolean saved) {
+    public CommentData(String id, String fullName, String author, String authorFlair,
+                       String authorFlairHTML, String linkAuthor, String commentTime,
+                       long commentTimeMillis, String commentMarkdown, String commentRawText,
+                       String linkId, String subredditName, String parentId, int score, int voteType,
+                       boolean isSubmitter, String distinguished, String permalink, int depth,
+                       boolean collapsed, boolean hasReply, boolean scoreHidden, boolean saved) {
         this.id = id;
         this.fullName = fullName;
         this.author = author;
         this.authorFlair = authorFlair;
+        this.authorFlairHTML = authorFlairHTML;
         this.linkAuthor = linkAuthor;
         this.commentTime = commentTime;
         this.commentTimeMillis = commentTimeMillis;
@@ -97,6 +100,7 @@ public class CommentData implements Parcelable {
         fullName = in.readString();
         author = in.readString();
         authorFlair = in.readString();
+        authorFlairHTML = in.readString();
         linkAuthor = in.readString();
         commentTime = in.readString();
         commentTimeMillis = in.readLong();
@@ -141,6 +145,10 @@ public class CommentData implements Parcelable {
 
     public String getAuthorFlair() {
         return authorFlair;
+    }
+
+    public String getAuthorFlairHTML() {
+        return authorFlairHTML;
     }
 
     public String getLinkAuthor() {
@@ -337,6 +345,7 @@ public class CommentData implements Parcelable {
         parcel.writeString(fullName);
         parcel.writeString(author);
         parcel.writeString(authorFlair);
+        parcel.writeString(authorFlairHTML);
         parcel.writeString(linkAuthor);
         parcel.writeString(commentTime);
         parcel.writeLong(commentTimeMillis);
