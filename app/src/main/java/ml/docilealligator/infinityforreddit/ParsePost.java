@@ -46,7 +46,7 @@ public class ParsePost {
                 if (e.equals("text")) {
                     authorFlairHTMLBuilder.append(flairObject.getString(JSONUtils.T_KEY));
                 } else if (e.equals("emoji")) {
-                    authorFlairHTMLBuilder.append("<img src=\"").append(flairObject.getString(JSONUtils.U_KEY)).append("\">");
+                    authorFlairHTMLBuilder.append("<img src=\"").append(Html.escapeHtml(flairObject.getString(JSONUtils.U_KEY))).append("\">");
                 }
             }
         }
@@ -70,9 +70,9 @@ public class ParsePost {
                 JSONObject flairObject = flairArray.getJSONObject(i);
                 String e = flairObject.getString(JSONUtils.E_KEY);
                 if (e.equals("text")) {
-                    postFlairHTMLBuilder.append(flairObject.getString(JSONUtils.T_KEY));
+                    postFlairHTMLBuilder.append(Html.escapeHtml(flairObject.getString(JSONUtils.T_KEY)));
                 } else if (e.equals("emoji")) {
-                    postFlairHTMLBuilder.append("<img src=\"").append(flairObject.getString(JSONUtils.U_KEY)).append("\">");
+                    postFlairHTMLBuilder.append("<img src=\"").append(Html.escapeHtml(flairObject.getString(JSONUtils.U_KEY))).append("\">");
                 }
             }
         }
@@ -85,10 +85,10 @@ public class ParsePost {
             JSONArray icons = award.getJSONArray(JSONUtils.RESIZED_ICONS_KEY);
             if (icons.length() > 4) {
                 String iconUrl = icons.getJSONObject(3).getString(JSONUtils.URL_KEY);
-                awardingsBuilder.append("<img src=\"").append(iconUrl).append("\"> ").append("x").append(count).append(" ");
+                awardingsBuilder.append("<img src=\"").append(Html.escapeHtml(iconUrl)).append("\"> ").append("x").append(count).append(" ");
             } else if (icons.length() > 0) {
                 String iconUrl = icons.getJSONObject(icons.length() - 1).getString(JSONUtils.URL_KEY);
-                awardingsBuilder.append("<img src=\"").append(iconUrl).append("\"> ").append("x").append(count).append(" ");
+                awardingsBuilder.append("<img src=\"").append(Html.escapeHtml(iconUrl)).append("\"> ").append("x").append(count).append(" ");
             }
         }
 

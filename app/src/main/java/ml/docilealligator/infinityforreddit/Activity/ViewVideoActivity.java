@@ -135,7 +135,11 @@ public class ViewVideoActivity extends AppCompatActivity {
         videoFileName = intent.getStringExtra(EXTRA_SUBREDDIT) + "-" + intent.getStringExtra(EXTRA_ID) + ".mp4";
         postTitle = intent.getStringExtra(EXTRA_POST_TITLE);
 
-        setTitle(Html.fromHtml(String.format("<small>%s</small>", postTitle)));
+        if (postTitle != null) {
+            setTitle(Html.fromHtml(String.format("<small>%s</small>", postTitle)));
+        } else {
+            setTitle("");
+        }
 
         final float pxHeight = getResources().getDisplayMetrics().heightPixels;
 

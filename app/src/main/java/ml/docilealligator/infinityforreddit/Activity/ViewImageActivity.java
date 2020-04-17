@@ -129,7 +129,11 @@ public class ViewImageActivity extends AppCompatActivity {
         mImageFileName = intent.getStringExtra(FILE_NAME_KEY);
         postTitle = intent.getStringExtra(POST_TITLE_KEY);
 
-        setTitle(Html.fromHtml(String.format("<small>%s</small>", postTitle)));
+        if (postTitle != null) {
+            setTitle(Html.fromHtml(String.format("<small>%s</small>", postTitle)));
+        } else {
+            setTitle("");
+        }
 
         mLoadErrorLinearLayout.setOnClickListener(view -> {
             if (!isSwiping) {

@@ -64,7 +64,7 @@ import pl.droidsonroids.gif.GifImageView;
 
 public class ViewGIFActivity extends AppCompatActivity {
 
-    public static final String IMAGE_URL_KEY = "IUK";
+    public static final String GIF_URL_KEY = "GUK";
     public static final String FILE_NAME_KEY = "FNK";
     public static final String POST_TITLE_KEY = "PTK";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
@@ -120,11 +120,15 @@ public class ViewGIFActivity extends AppCompatActivity {
         glide = Glide.with(this);
 
         Intent intent = getIntent();
-        mImageUrl = intent.getStringExtra(IMAGE_URL_KEY);
+        mImageUrl = intent.getStringExtra(GIF_URL_KEY);
         mImageFileName = intent.getStringExtra(FILE_NAME_KEY);
         postTitle = intent.getStringExtra(POST_TITLE_KEY);
 
-        setTitle(Html.fromHtml(String.format("<small>%s</small>", postTitle)));
+        if (postTitle != null) {
+            setTitle(Html.fromHtml(String.format("<small>%s</small>", postTitle)));
+        } else {
+            setTitle("");
+        }
 
         mLoadErrorLinearLayout.setOnClickListener(view -> {
             if (!isSwiping) {

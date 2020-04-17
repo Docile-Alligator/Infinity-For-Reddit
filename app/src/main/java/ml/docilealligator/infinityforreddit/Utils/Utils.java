@@ -1,6 +1,9 @@
 package ml.docilealligator.infinityforreddit.Utils;
 
 import android.content.Context;
+import android.text.Html;
+import android.text.Spannable;
+import android.widget.TextView;
 
 import java.util.Locale;
 
@@ -72,5 +75,16 @@ public class Utils {
             }
             return String.format(Locale.US, "%.1f", (float) votes / 1000) + "K";
         }
+    }
+
+    public static void setHTMLWithImageToTextView(TextView textView, String content) {
+        Spannable html;
+        GlideImageGetter glideImageGetter = new GlideImageGetter(textView);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            html = (Spannable) Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
+        } else {
+            html = (Spannable) Html.fromHtml(content, glideImageGetter, null);
+        }
+        textView.setText(html);
     }
 }

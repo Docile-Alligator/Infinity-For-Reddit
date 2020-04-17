@@ -494,14 +494,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if (mPost.getAuthorFlairHTML() != null && !mPost.getAuthorFlairHTML().equals("")) {
                 ((PostDetailViewHolder) holder).mAuthorFlairTextView.setVisibility(View.VISIBLE);
-                Spannable flairHTML;
-                GlideImageGetter glideImageGetter = new GlideImageGetter(((PostDetailViewHolder) holder).mAuthorFlairTextView);
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                    flairHTML = (Spannable) Html.fromHtml(mPost.getAuthorFlairHTML(), Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
-                } else {
-                    flairHTML = (Spannable) Html.fromHtml(mPost.getAuthorFlairHTML(), glideImageGetter, null);
-                }
-                ((PostDetailViewHolder) holder).mAuthorFlairTextView.setText(flairHTML);
+                Utils.setHTMLWithImageToTextView(((PostDetailViewHolder) holder).mAuthorFlairTextView, mPost.getAuthorFlairHTML());
                 ((PostDetailViewHolder) holder).mAuthorFlairTextView.setOnClickListener(view -> ((PostDetailViewHolder) holder).mUserTextView.performClick());
             } else if (mPost.getAuthorFlair() != null && !mPost.getAuthorFlair().equals("")) {
                 ((PostDetailViewHolder) holder).mAuthorFlairTextView.setVisibility(View.VISIBLE);
@@ -587,14 +580,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if (mPost.getAwards() != null && !mPost.getAwards().equals("")) {
                 ((PostDetailViewHolder) holder).mAwardsTextView.setVisibility(View.VISIBLE);
-                Spannable awardsHTML;
-                GlideImageGetter glideImageGetter = new GlideImageGetter(((PostDetailViewHolder) holder).mAwardsTextView);
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                    awardsHTML = (Spannable) Html.fromHtml(mPost.getAwards(), Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
-                } else {
-                    awardsHTML = (Spannable) Html.fromHtml(mPost.getAwards(), glideImageGetter, null);
-                }
-                ((PostDetailViewHolder) holder).mAwardsTextView.setText(awardsHTML);
+                Utils.setHTMLWithImageToTextView(((PostDetailViewHolder) holder).mAwardsTextView, mPost.getAwards());
             }
 
             if (mPost.isNSFW()) {
@@ -630,6 +616,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, mPost.getUrl());
                         intent.putExtra(ViewImageActivity.FILE_NAME_KEY, mPost.getSubredditNamePrefixed().substring(2)
                                 + "-" + mPost.getId().substring(3) + ".jpg");
+                        intent.putExtra(ViewImageActivity.POST_TITLE_KEY, mPost.getTitle());
                         mActivity.startActivity(intent);
                     });
 
@@ -663,7 +650,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         Intent intent = new Intent(mActivity, ViewGIFActivity.class);
                         intent.putExtra(ViewGIFActivity.FILE_NAME_KEY, mPost.getSubredditName()
                                 + "-" + mPost.getId() + ".gif");
-                        intent.putExtra(ViewGIFActivity.IMAGE_URL_KEY, mPost.getVideoUrl());
+                        intent.putExtra(ViewGIFActivity.GIF_URL_KEY, mPost.getVideoUrl());
+                        intent.putExtra(ViewImageActivity.POST_TITLE_KEY, mPost.getTitle());
                         mActivity.startActivity(intent);
                     });
 
@@ -679,6 +667,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
                         intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, mPost.getSubredditName());
                         intent.putExtra(ViewVideoActivity.EXTRA_ID, mPost.getId());
+                        intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, mPost.getTitle());
                         mActivity.startActivity(intent);
                     });
 
@@ -844,14 +833,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if (comment.getAuthorFlairHTML() != null && !comment.getAuthorFlairHTML().equals("")) {
                 ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.VISIBLE);
-                Spannable flairHTML;
-                GlideImageGetter glideImageGetter = new GlideImageGetter(((CommentViewHolder) holder).authorFlairTextView);
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                    flairHTML = (Spannable) Html.fromHtml(comment.getAuthorFlairHTML(), Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
-                } else {
-                    flairHTML = (Spannable) Html.fromHtml(comment.getAuthorFlairHTML(), glideImageGetter, null);
-                }
-                ((CommentViewHolder) holder).authorFlairTextView.setText(flairHTML);
+                Utils.setHTMLWithImageToTextView(((CommentViewHolder) holder).authorFlairTextView, comment.getAuthorFlairHTML());
                 ((CommentViewHolder) holder).authorFlairTextView.setOnClickListener(view -> ((CommentViewHolder) holder).authorTextView.performClick());
             } else if (comment.getAuthorFlair() != null && !comment.getAuthorFlair().equals("")) {
                 ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.VISIBLE);
@@ -2217,7 +2199,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             commentMarkdownView.setTextColor(mCommentTextColor);
             authorFlairTextView.setTextColor(mAuthorFlairTextColor);
             topScoreTextView.setTextColor(mSecondaryTextColor);
-            awardsTextView.setTextColor(mCommentTextColor);
+            awardsTextView.setTextColor(mSecondaryTextColor);
             commentDivider.setBackgroundColor(mDividerColor);
             upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             scoreTextView.setTextColor(mCommentIconAndInfoColor);

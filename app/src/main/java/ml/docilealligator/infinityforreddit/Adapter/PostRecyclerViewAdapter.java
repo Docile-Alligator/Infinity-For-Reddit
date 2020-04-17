@@ -453,14 +453,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                 if (awards != null && !awards.equals("")) {
                     ((PostViewHolder) holder).awardsTextView.setVisibility(View.VISIBLE);
-                    Spannable awardsHTML;
-                    GlideImageGetter glideImageGetter = new GlideImageGetter(((PostViewHolder) holder).awardsTextView);
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                        awardsHTML = (Spannable) Html.fromHtml(awards, Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
-                    } else {
-                        awardsHTML = (Spannable) Html.fromHtml(awards, glideImageGetter, null);
-                    }
-                    ((PostViewHolder) holder).awardsTextView.setText(awardsHTML);
+                    Utils.setHTMLWithImageToTextView(((PostViewHolder) holder).awardsTextView, awards);
                 }
 
                 switch (voteType) {
@@ -553,7 +546,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             intent.setData(gifVideoUri);
                             intent.putExtra(ViewGIFActivity.FILE_NAME_KEY, subredditName
                                     + "-" + id + ".gif");
-                            intent.putExtra(ViewGIFActivity.IMAGE_URL_KEY, post.getVideoUrl());
+                            intent.putExtra(ViewGIFActivity.GIF_URL_KEY, post.getVideoUrl());
                             intent.putExtra(ViewGIFActivity.POST_TITLE_KEY, post.getTitle());
                             mActivity.startActivity(intent);
                         });
@@ -1118,7 +1111,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             intent.setData(gifVideoUri);
                             intent.putExtra(ViewGIFActivity.FILE_NAME_KEY, subredditName
                                     + "-" + id + ".gif");
-                            intent.putExtra(ViewGIFActivity.IMAGE_URL_KEY, post.getVideoUrl());
+                            intent.putExtra(ViewGIFActivity.GIF_URL_KEY, post.getVideoUrl());
                             mActivity.startActivity(intent);
                         });
 
@@ -1691,7 +1684,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             archivedImageView.setColorFilter(mArchivedIconTint, PorterDuff.Mode.SRC_IN);
             lockedImageView.setColorFilter(mLockedIconTint, PorterDuff.Mode.SRC_IN);
             crosspostImageView.setColorFilter(mCrosspostIconTint, PorterDuff.Mode.SRC_IN);
-            awardsTextView.setTextColor(mPostTitleColor);
+            awardsTextView.setTextColor(mSecondaryTextColor);
             linkTextView.setTextColor(mSecondaryTextColor);
             progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
             noPreviewLinkImageView.setBackgroundColor(mNoPreviewLinkBackgroundColor);
