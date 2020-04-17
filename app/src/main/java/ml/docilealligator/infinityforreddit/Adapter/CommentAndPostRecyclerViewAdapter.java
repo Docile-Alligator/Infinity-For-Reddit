@@ -2111,7 +2111,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             mArchivedImageView.setColorFilter(mArchivedTintColor, PorterDuff.Mode.SRC_IN);
             mLockedImageView.setColorFilter(mLockedTintColor, PorterDuff.Mode.SRC_IN);
             mCrosspostImageView.setColorFilter(mCrosspostTintColor, PorterDuff.Mode.SRC_IN);
-            mAwardsTextView.setTextColor(mPostTitleColor);
+            mAwardsTextView.setTextColor(mSecondaryTextColor);
             mLinkTextView.setTextColor(mSecondaryTextColor);
             mLoadImageProgressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
             mNoPreviewLinkImageView.setBackgroundColor(mNoPreviewLinkBackgroundColor);

@@ -655,7 +655,7 @@ public class CustomThemeWrapper {
         customTheme.postTitleColor = Color.parseColor("#000000");
         customTheme.postContentColor = Color.parseColor("#8A000000");
         customTheme.commentColor = Color.parseColor("#000000");
-        customTheme.buttonTextColor = Color.parseColor("#FFFFFF");
+        customTheme.buttonTextColor = Color.parseColor("#000000");
         customTheme.backgroundColor = Color.parseColor("#FFFFFF");
         customTheme.cardViewBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.commentBackgroundColor = Color.parseColor("#FFFFFF");

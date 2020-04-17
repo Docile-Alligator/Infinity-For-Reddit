@@ -2,9 +2,9 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_layout_post_video_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinator_layout_post_video_activity"
     android:background="?attr/backgroundColor"
     tools:application=".PostImageActivity">
 
@@ -15,21 +15,12 @@
         android:background="?attr/toolbarAndTabBackgroundColor"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_post_video_activity"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:titleEnabled="false"
-            app:toolbarId="@+id/toolbar_post_text_activity">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar_post_video_activity"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:navigationIcon="?attr/homeAsUpIndicator" />
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -46,10 +37,10 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:paddingTop="8dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp">
 
                 <pl.droidsonroids.gif.GifImageView
                     android:id="@+id/subreddit_icon_gif_image_view_post_video_activity"
@@ -62,11 +53,11 @@
                     android:id="@+id/subreddit_name_text_view_post_video_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toStartOf="@id/rules_button_post_video_activity"
-                    android:layout_toEndOf="@id/subreddit_icon_gif_image_view_post_video_activity"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="16dp"
+                    android:layout_toStartOf="@id/rules_button_post_video_activity"
+                    android:layout_toEndOf="@id/subreddit_icon_gif_image_view_post_video_activity"
                     android:text="@string/choose_a_subreddit"
                     android:textSize="?attr/font_default" />
 
@@ -147,13 +138,13 @@
                 android:id="@+id/post_title_edit_text_post_video_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#00000000"
                 android:gravity="top"
-                android:padding="16dp"
                 android:hint="@string/post_title_hint"
                 android:inputType="textCapSentences|textMultiLine"
-                android:textSize="?attr/title_font_18"
-                android:background="#00000000"
-                android:textColor="?attr/primaryTextColor" />
+                android:padding="16dp"
+                android:textColor="?attr/primaryTextColor"
+                android:textSize="?attr/title_font_18" />
 
             <View
                 android:id="@+id/divider_3_post_video_activity"
@@ -172,12 +163,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_outline_add_a_photo_24dp"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:backgroundTint="?attr/colorPrimaryLightTheme"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/select_from_library_fab_post_video_activity"
                     app:layout_constraintHorizontal_chainStyle="spread"
-                    app:backgroundTint="?attr/colorPrimaryLightTheme"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:tint="@android:color/white" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -185,12 +176,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_outline_select_photo_24dp"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:backgroundTint="?attr/colorPrimaryLightTheme"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/capture_fab_post_video_activity"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_chainStyle="spread"
-                    app:backgroundTint="?attr/colorPrimaryLightTheme"
+                    app:layout_constraintStart_toEndOf="@+id/capture_fab_post_video_activity"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:tint="@android:color/white" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,9 +2,9 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_layout_edit_comment_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinator_layout_edit_comment_activity"
     android:background="?attr/backgroundColor"
     tools:context=".Activity.EditCommentActivity">
 
@@ -15,21 +15,12 @@
         android:background="?attr/toolbarAndTabBackgroundColor"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_edit_comment_activity"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:titleEnabled="false"
-            app:toolbarId="@+id/toolbar_edit_comment_activity">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar_edit_comment_activity"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:navigationIcon="?attr/homeAsUpIndicator" />
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -37,13 +28,13 @@
         android:id="@+id/comment_edit_text_edit_comment_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#00000000"
         android:gravity="top"
-        android:padding="16dp"
         android:hint="@string/post_text_content_hint"
         android:inputType="textCapSentences|textMultiLine"
-        android:textSize="?attr/content_font_18"
-        android:background="#00000000"
+        android:padding="16dp"
         android:textColor="?attr/primaryTextColor"
+        android:textSize="?attr/content_font_18"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -2,9 +2,9 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_layout_post_text_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinator_layout_post_text_activity"
     android:background="?attr/backgroundColor"
     tools:application=".PostTextActivity">
 
@@ -15,21 +15,12 @@
         android:background="?attr/toolbarAndTabBackgroundColor"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_post_text_activity"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:titleEnabled="false"
-            app:toolbarId="@+id/toolbar_post_text_activity">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar_post_text_activity"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:navigationIcon="?attr/homeAsUpIndicator" />
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -46,10 +37,10 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:paddingTop="8dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp">
 
                 <pl.droidsonroids.gif.GifImageView
                     android:id="@+id/subreddit_icon_gif_image_view_search_activity"
@@ -62,11 +53,11 @@
                     android:id="@+id/subreddit_name_text_view_search_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toStartOf="@id/rules_button_post_text_activity"
-                    android:layout_toEndOf="@id/subreddit_icon_gif_image_view_search_activity"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="16dp"
+                    android:layout_toStartOf="@id/rules_button_post_text_activity"
+                    android:layout_toEndOf="@id/subreddit_icon_gif_image_view_search_activity"
                     android:text="@string/choose_a_subreddit"
                     android:textSize="?attr/font_default" />
 
@@ -87,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="?attr/dividerColor" />
-            
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -147,13 +138,13 @@
                 android:id="@+id/post_title_edit_text_post_text_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#00000000"
                 android:gravity="top"
-                android:padding="16dp"
                 android:hint="@string/post_title_hint"
                 android:inputType="textCapSentences|textMultiLine"
-                android:textSize="?attr/title_font_18"
-                android:background="#00000000"
-                android:textColor="?attr/primaryTextColor" />
+                android:padding="16dp"
+                android:textColor="?attr/primaryTextColor"
+                android:textSize="?attr/title_font_18" />
 
             <View
                 android:id="@+id/divider_3_post_text_activity"
@@ -165,13 +156,13 @@
                 android:id="@+id/post_text_content_edit_text_post_text_activity"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="#00000000"
                 android:gravity="top"
-                android:padding="16dp"
                 android:hint="@string/post_text_content_hint"
                 android:inputType="textCapSentences|textMultiLine"
-                android:textSize="?attr/content_font_18"
-                android:background="#00000000"
-                android:textColor="?attr/primaryTextColor" />
+                android:padding="16dp"
+                android:textColor="?attr/primaryTextColor"
+                android:textSize="?attr/content_font_18" />
 
         </LinearLayout>
 
