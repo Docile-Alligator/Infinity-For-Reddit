@@ -51,6 +51,7 @@ public class Post implements Parcelable {
     private String permalink;
     private String flair;
     private String awards;
+    private int nAwards;
     private long postTimeMillis;
     private int score;
     private int postType;
@@ -72,7 +73,7 @@ public class Post implements Parcelable {
                 String author, String authorFlair, String authorFlairHTML, String postTime,
                 long postTimeMillis, String title, String previewUrl, String thumbnailPreviewUrl,
                 String permalink, int score, int postType, int voteType, int nComments, String flair,
-                String awards, boolean hidden, boolean spoiler, boolean nsfw, boolean stickied,
+                String awards, int nAwards, boolean hidden, boolean spoiler, boolean nsfw, boolean stickied,
                 boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
@@ -94,6 +95,7 @@ public class Post implements Parcelable {
         this.nComments = nComments;
         this.flair = flair;
         this.awards = awards;
+        this.nAwards = nAwards;
         this.hidden = hidden;
         this.spoiler = spoiler;
         this.nsfw = nsfw;
@@ -108,7 +110,7 @@ public class Post implements Parcelable {
                 String author, String authorFlair, String authorFlairHTML, String postTime,
                 long postTimeMillis, String title, String previewUrl, String thumbnailPreviewUrl,
                 String url, String permalink, int score, int postType, int voteType, int nComments,
-                String flair, String awards, boolean hidden, boolean spoiler, boolean nsfw,
+                String flair, String awards, int nAwards, boolean hidden, boolean spoiler, boolean nsfw,
                 boolean stickied, boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
@@ -131,6 +133,7 @@ public class Post implements Parcelable {
         this.nComments = nComments;
         this.flair = flair;
         this.awards = awards;
+        this.nAwards = nAwards;
         this.hidden = hidden;
         this.spoiler = spoiler;
         this.nsfw = nsfw;
@@ -144,7 +147,7 @@ public class Post implements Parcelable {
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed,
                 String author, String authorFlair, String authorFlairHTML, String postTime,
                 long postTimeMillis, String title, String permalink, int score, int postType,
-                int voteType, int nComments, String flair, String awards, boolean hidden,
+                int voteType, int nComments, String flair, String awards, int nAwards, boolean hidden,
                 boolean spoiler, boolean nsfw, boolean stickied, boolean archived, boolean locked,
                 boolean saved, boolean isCrosspost) {
         this.id = id;
@@ -165,6 +168,7 @@ public class Post implements Parcelable {
         this.nComments = nComments;
         this.flair = flair;
         this.awards = awards;
+        this.nAwards = nAwards;
         this.hidden = hidden;
         this.spoiler = spoiler;
         this.nsfw = nsfw;
@@ -200,6 +204,7 @@ public class Post implements Parcelable {
         permalink = in.readString();
         flair = in.readString();
         awards = in.readString();
+        nAwards = in.readInt();
         score = in.readInt();
         postType = in.readInt();
         voteType = in.readInt();
@@ -349,6 +354,10 @@ public class Post implements Parcelable {
         return awards;
     }
 
+    public int getnAwards() {
+        return nAwards;
+    }
+
     public int getScore() {
         return score;
     }
@@ -480,6 +489,7 @@ public class Post implements Parcelable {
         parcel.writeString(permalink);
         parcel.writeString(flair);
         parcel.writeString(awards);
+        parcel.writeInt(nAwards);
         parcel.writeInt(score);
         parcel.writeInt(postType);
         parcel.writeInt(voteType);

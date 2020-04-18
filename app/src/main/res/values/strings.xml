@@ -687,4 +687,6 @@
     <string name="edit_multi_reddit">Edit Multireddit</string>
     <string name="delete_multi_reddit">Delete Multireddit</string>
 
+    <string name="n_awards">%1$d Awards</string>
+
 </resources>

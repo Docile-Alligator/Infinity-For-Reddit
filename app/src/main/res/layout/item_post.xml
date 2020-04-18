@@ -94,8 +94,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textSize="?attr/title_font_18"
-            android:textColor="?attr/primaryTextColor" />
+            android:textSize="?attr/title_font_18" />
 
         <TextView
             android:id="@+id/content_text_view_item_post"
@@ -123,7 +122,6 @@
                 android:layout_height="wrap_content"
                 android:padding="4dp"
                 android:textSize="?attr/font_12"
-                android:textColor="@android:color/white"
                 app:lib_setRadius="3dp"
                 app:lib_setRoundedView="true"
                 app:lib_setShape="rectangle" />
@@ -135,7 +133,6 @@
                 android:layout_gravity="center"
                 android:text="@string/spoiler"
                 android:textSize="?attr/font_12"
-                android:textColor="@android:color/white"
                 android:padding="4dp"
                 android:visibility="gone"
                 app:lib_setRadius="3dp"
@@ -149,7 +146,6 @@
                 android:padding="4dp"
                 android:text="@string/nsfw"
                 android:textSize="?attr/font_12"
-                android:textColor="@android:color/white"
                 android:visibility="gone"
                 app:lib_setRadius="3dp"
                 app:lib_setRoundedView="true"
@@ -161,8 +157,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textSize="?attr/font_12"
-                android:textColor="@android:color/white"
                 android:padding="4dp"
+                android:visibility="gone"
+                app:lib_setRadius="3dp"
+                app:lib_setRoundedView="true"
+                app:lib_setShape="rectangle" />
+
+            <com.libRG.CustomTextView
+                android:id="@+id/awards_text_view_item_post"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:textSize="?attr/font_12"
+                android:textColor="#EEAB02"
                 android:visibility="gone"
                 app:lib_setRadius="3dp"
                 app:lib_setRoundedView="true"
@@ -187,12 +194,6 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/crosspost"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/awards_text_view_item_post"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:visibility="gone" />
 
         </com.nex3z.flowlayout.FlowLayout>
