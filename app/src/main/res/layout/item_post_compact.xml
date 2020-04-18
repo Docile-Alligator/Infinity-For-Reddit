@@ -47,7 +47,6 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginEnd="8dp"
-                android:tint="?attr/stickiedPost"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
@@ -115,8 +114,6 @@
                     android:textColor="@android:color/white"
                     android:textSize="?attr/font_10"
                     app:lib_setRadius="3dp"
-                    app:lib_setRoundedBGColor="?attr/postType"
-                    app:lib_setRoundedBorderColor="?attr/postType"
                     app:lib_setRoundedView="true"
                     app:lib_setShape="rectangle" />
 
@@ -131,8 +128,6 @@
                     android:textSize="?attr/font_10"
                     android:visibility="gone"
                     app:lib_setRadius="3dp"
-                    app:lib_setRoundedBGColor="?attr/spoilerColor"
-                    app:lib_setRoundedBorderColor="?attr/spoilerColor"
                     app:lib_setRoundedView="true"
                     app:lib_setShape="rectangle" />
 
@@ -146,8 +141,6 @@
                     android:textSize="?attr/font_10"
                     android:visibility="gone"
                     app:lib_setRadius="3dp"
-                    app:lib_setRoundedBGColor="?attr/nsfwColor"
-                    app:lib_setRoundedBorderColor="?attr/nsfwColor"
                     app:lib_setRoundedView="true"
                     app:lib_setShape="rectangle" />
 
@@ -161,8 +154,6 @@
                     android:textSize="?attr/font_10"
                     android:visibility="gone"
                     app:lib_setRadius="3dp"
-                    app:lib_setRoundedBGColor="?attr/flairColor"
-                    app:lib_setRoundedBorderColor="?attr/flairColor"
                     app:lib_setRoundedView="true"
                     app:lib_setShape="rectangle" />
 
@@ -171,7 +162,6 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_archive_outline"
-                    android:tint="?attr/archivedTint"
                     android:visibility="gone" />
 
                 <ImageView
@@ -179,7 +169,6 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_outline_lock_24dp"
-                    android:tint="?attr/lockedIconTint"
                     android:visibility="gone" />
 
                 <ImageView
@@ -187,7 +176,6 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/crosspost"
-                    android:tint="?attr/crosspost"
                     android:visibility="gone" />
 
                 <TextView
@@ -261,7 +249,6 @@
                 android:scaleType="center"
                 android:src="@drawable/ic_link"
                 android:tint="@android:color/tab_indicator_text"
-                android:background="?attr/noPreviewLinkBackgroundColor"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/barrier2"
@@ -380,8 +367,7 @@
         <View
             android:id="@+id/divider_item_post_compact"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?attr/dividerColor" />
+            android:layout_height="1dp" />
 
     </LinearLayout>
 

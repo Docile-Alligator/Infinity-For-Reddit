@@ -5,14 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/coordinator_layout_subscribed_thing_listing_activity"
-    android:background="?attr/backgroundColor"
     tools:application=".SubscribedThingListingActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_subscribed_thing_listing_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/toolbarAndTabBackgroundColor"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -37,14 +35,10 @@
             android:id="@+id/tab_layout_subscribed_thing_listing_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/toolbarAndTabBackgroundColor"
             app:layout_scrollFlags="scroll|enterAlways"
             app:tabGravity="fill"
             app:tabMode="fixed"
-            app:tabIndicatorColor="?attr/tabLayoutWithCollapsedCollapsingToolbarTabIndicator"
             app:tabIndicatorHeight="3dp"
-            app:tabSelectedTextColor="?attr/tabLayoutWithCollapsedCollapsingToolbarTextColor"
-            app:tabTextColor="?attr/tabLayoutWithCollapsedCollapsingToolbarTextColor"
             app:tabRippleColor="?attr/colorControlHighlight"
             app:tabUnboundedRipple="false" />
 

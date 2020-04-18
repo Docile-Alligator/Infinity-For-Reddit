@@ -11,7 +11,6 @@
         android:id="@+id/appbar_layout_multi_reddit_listing_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/toolbarAndTabBackgroundColor"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -77,7 +76,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:layout_gravity="bottom|end"
-        app:backgroundTint="?attr/colorPrimaryLightTheme"
         app:srcCompat="@drawable/ic_add_day_night_24dp"
         app:tint="@android:color/white" />
 

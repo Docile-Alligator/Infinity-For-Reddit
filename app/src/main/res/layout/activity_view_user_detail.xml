@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/coordinator_layout_view_user_detail_activity"
-    android:background="?attr/backgroundColor"
     tools:application=".ViewUserDetailActivity">
 
     <androidx.viewpager.widget.ViewPager
@@ -18,7 +17,6 @@
         android:id="@+id/appbar_layout_view_user_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/toolbarAndTabBackgroundColor"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -26,7 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:titleEnabled="false"
-            app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
             app:toolbarId="@+id/toolbar_view_user_detail_activity">
 
@@ -58,8 +55,7 @@
                     android:paddingTop="36dp"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    android:layout_below="@id/banner_image_view_view_user_detail_activity"
-                    android:background="?attr/backgroundColor">
+                    android:layout_below="@id/banner_image_view_view_user_detail_activity">
 
                     <TextView
                         android:id="@+id/user_name_text_view_view_user_detail_activity"
@@ -67,7 +63,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:textSize="?attr/font_18"
-                        android:textColor="?attr/username"
                         android:layout_gravity="center_horizontal"/>
 
                     <TextView
@@ -76,7 +71,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
-                        android:textColor="?attr/primaryTextColor"
                         android:textSize="?attr/font_default"
                         android:layout_gravity="center_horizontal"/>
 
@@ -109,7 +103,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="?attr/toolbarAndTabBackgroundColor"
             app:layout_scrollFlags="scroll|enterAlways"
             app:tabGravity="fill"
             app:tabMode="fixed"

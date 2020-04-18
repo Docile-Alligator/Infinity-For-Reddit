@@ -47,7 +47,6 @@
                     android:layout_marginEnd="8dp"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:textColor="?attr/username"
                     android:textSize="?attr/font_default"
                     app:layout_constraintBottom_toTopOf="@id/author_flair_text_view_item_post_comment"
                     app:layout_constraintEnd_toStartOf="@+id/barrier"
@@ -61,7 +60,6 @@
                     android:layout_marginEnd="8dp"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:textColor="?attr/authorFlairTextColor"
                     android:textSize="?attr/font_12"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -236,7 +234,6 @@
         android:id="@+id/divider_item_comment"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?attr/dividerColor"
         android:visibility="gone" />
 
 </LinearLayout>

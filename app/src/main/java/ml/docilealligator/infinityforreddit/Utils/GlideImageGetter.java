@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit.Utils;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
@@ -53,10 +55,13 @@ public class GlideImageGetter implements Html.ImageGetter {
 
         BitmapDrawablePlaceholder drawable = new BitmapDrawablePlaceholder(textSize);
 
-        container.get().post(() -> Glide.with(container.get().getContext())
-                .asBitmap()
-                .load(source)
-                .into(drawable));
+        Context context = container.get().getContext();
+        if (!(context instanceof Activity && ((Activity) context).isFinishing())) {
+            container.get().post(() -> Glide.with(context)
+                    .asBitmap()
+                    .load(source)
+                    .into(drawable));
+        }
 
         return drawable;
     }

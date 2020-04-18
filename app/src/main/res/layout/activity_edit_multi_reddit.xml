@@ -11,7 +11,6 @@
         android:id="@+id/appbar_layout_edit_multi_reddit_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/toolbarAndTabBackgroundColor"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -65,8 +64,7 @@
             <View
                 android:id="@+id/divider_1_edit_multi_reddit_activity"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="?attr/dividerColor" />
+                android:layout_height="1dp" />
 
             <EditText
                 android:id="@+id/description_edit_text_edit_multi_reddit_activity"
@@ -82,8 +80,7 @@
             <View
                 android:id="@+id/divider_2_edit_multi_reddit_activity"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="?attr/dividerColor" />
+                android:layout_height="1dp" />
 
             <LinearLayout
                 android:id="@+id/visibility_wrapper_linear_layout_edit_multi_reddit_activity"

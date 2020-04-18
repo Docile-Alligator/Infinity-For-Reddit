@@ -5,14 +5,12 @@
     android:id="@+id/coordinator_layout_post_video_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundColor"
     tools:application=".PostImageActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_post_video_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/toolbarAndTabBackgroundColor"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
@@ -76,8 +74,7 @@
             <View
                 android:id="@+id/divider_1_post_video_activity"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="?attr/dividerColor" />
+                android:layout_height="1dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -94,7 +91,6 @@
                     android:textSize="?attr/font_default"
                     android:visibility="gone"
                     app:lib_setRadius="3dp"
-                    app:lib_setRoundedBorderColor="?attr/flairColor"
                     app:lib_setRoundedView="true"
                     app:lib_setShape="rectangle" />
 
@@ -108,7 +104,6 @@
                     android:textColor="?attr/primaryTextColor"
                     android:textSize="?attr/font_default"
                     app:lib_setRadius="3dp"
-                    app:lib_setRoundedBorderColor="?attr/spoilerColor"
                     app:lib_setRoundedView="true"
                     app:lib_setShape="rectangle" />
 
@@ -122,7 +117,6 @@
                     android:textColor="?attr/primaryTextColor"
                     android:textSize="?attr/font_default"
                     app:lib_setRadius="3dp"
-                    app:lib_setRoundedBorderColor="?attr/nsfwColor"
                     app:lib_setRoundedView="true"
                     app:lib_setShape="rectangle" />
 
@@ -131,8 +125,7 @@
             <View
                 android:id="@+id/divider_2_post_video_activity"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="?attr/dividerColor" />
+                android:layout_height="1dp" />
 
             <EditText
                 android:id="@+id/post_title_edit_text_post_video_activity"
@@ -149,8 +142,7 @@
             <View
                 android:id="@+id/divider_3_post_video_activity"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="?attr/dividerColor" />
+                android:layout_height="1dp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/select_video_constraint_layout_post_video_activity"
@@ -163,7 +155,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_outline_add_a_photo_24dp"
-                    app:backgroundTint="?attr/colorPrimaryLightTheme"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/select_from_library_fab_post_video_activity"
                     app:layout_constraintHorizontal_chainStyle="spread"
@@ -176,7 +167,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_outline_select_photo_24dp"
-                    app:backgroundTint="?attr/colorPrimaryLightTheme"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_chainStyle="spread"

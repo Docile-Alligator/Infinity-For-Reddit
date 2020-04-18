@@ -5,14 +5,12 @@
     android:id="@+id/coordinator_layout_comment_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundColor"
     tools:application=".CommentActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_comment_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/toolbarAndTabBackgroundColor"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
@@ -39,7 +37,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:textColor="?attr/commentColor"
                 android:textSize="?attr/title_font_16" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -55,8 +52,7 @@
                 android:id="@+id/divider_comment_activity"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginBottom="16dp"
-                android:background="?attr/dividerColor" />
+                android:layout_marginBottom="16dp" />
 
             <EditText
                 android:id="@+id/comment_edit_text_comment_activity"

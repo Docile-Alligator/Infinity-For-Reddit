@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/coordinator_layout_view_subreddit_detail_activity"
-    android:background="?attr/backgroundColor"
     tools:application=".Activity.ViewSubredditDetailActivity">
 
     <androidx.viewpager.widget.ViewPager
@@ -18,7 +17,6 @@
         android:id="@+id/appbar_layout_view_subreddit_detail_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/toolbarAndTabBackgroundColor"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -58,8 +56,7 @@
                     android:paddingTop="36dp"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    android:layout_below="@id/banner_image_view_view_subreddit_detail_activity"
-                    android:background="?attr/backgroundColor">
+                    android:layout_below="@id/banner_image_view_view_subreddit_detail_activity">
 
                     <TextView
                         android:id="@+id/subreddit_name_text_view_view_subreddit_detail_activity"
@@ -68,7 +65,6 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
                         android:textSize="?attr/font_18"
-                        android:textColor="?attr/subreddit"
                         android:layout_gravity="center_horizontal"/>
 
                     <com.google.android.material.chip.Chip
@@ -132,7 +128,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="?attr/toolbarAndTabBackgroundColor"
             app:layout_scrollFlags="scroll|enterAlways"
             app:tabGravity="fill"
             app:tabMode="fixed"
@@ -148,7 +143,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:visibility="gone"
-        app:backgroundTint="?attr/backgroundColor"
         app:fabAlignmentMode="center">
 
         <LinearLayout
@@ -217,7 +211,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:visibility="gone"
-        app:backgroundTint="?attr/colorPrimaryLightTheme"
         app:srcCompat="@drawable/ic_add_day_night_24dp"
         app:tint="@android:color/white"
         app:layout_anchor="@id/bottom_navigation_view_subreddit_detail_activity" />

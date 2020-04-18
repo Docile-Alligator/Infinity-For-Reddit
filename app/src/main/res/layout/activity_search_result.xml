@@ -4,14 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinator_layout_search_result_activity"
-    android:background="?attr/backgroundColor">
+    android:id="@+id/coordinator_layout_search_result_activity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_search_result_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/toolbarAndTabBackgroundColor"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -34,14 +32,10 @@
             android:id="@+id/tab_layout_search_result_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/toolbarAndTabBackgroundColor"
             app:layout_scrollFlags="scroll|enterAlways"
             app:tabGravity="fill"
             app:tabMode="fixed"
-            app:tabIndicatorColor="?attr/tabLayoutWithCollapsedCollapsingToolbarTabIndicator"
             app:tabIndicatorHeight="3dp"
-            app:tabSelectedTextColor="?attr/tabLayoutWithCollapsedCollapsingToolbarTextColor"
-            app:tabTextColor="?attr/tabLayoutWithCollapsedCollapsingToolbarTextColor"
             app:tabRippleColor="?attr/colorControlHighlight"
             app:tabUnboundedRipple="false"/>
 

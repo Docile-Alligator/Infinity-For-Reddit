@@ -224,8 +224,7 @@
                 android:layout_height="150dp"
                 android:scaleType="center"
                 android:src="@drawable/ic_link"
-                android:tint="@android:color/tab_indicator_text"
-                android:background="?attr/noPreviewLinkBackgroundColor" />
+                android:tint="@android:color/tab_indicator_text" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
