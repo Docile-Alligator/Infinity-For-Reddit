@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
+import android.graphics.Color;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -25,7 +26,7 @@ import ml.docilealligator.infinityforreddit.User.UserDao;
 import ml.docilealligator.infinityforreddit.User.UserData;
 
 @Database(entities = {Account.class, SubredditData.class, SubscribedSubredditData.class, UserData.class,
-        SubscribedUserData.class, MultiReddit.class, CustomTheme.class}, version = 6)
+        SubscribedUserData.class, MultiReddit.class, CustomTheme.class}, version = 7)
 public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static RedditDataRoomDatabase INSTANCE;
 
@@ -36,7 +37,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             RedditDataRoomDatabase.class, "reddit_data")
                             .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
-                                    MIGRATION_5_6)
+                                    MIGRATION_5_6, MIGRATION_6_7)
                             .build();
                 }
             }
@@ -154,6 +155,14 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                     "chip_text_color INTEGER NOT NULL, is_light_status_bar INTEGER NOT NULL," +
                     "is_light_nav_bar INTEGER NOT NULL," +
                     "is_change_status_bar_icon_color_after_toolbar_collapsed_in_immersive_interface INTEGER NOT NULL)");
+        }
+    };
+
+    private static final Migration MIGRATION_6_7 = new Migration(6, 7) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE custom_themes ADD COLUMN awards_background_color INTEGER DEFAULT " + Color.parseColor("#EEAB02") + " NOT NULL");
+            database.execSQL("ALTER TABLE custom_themes ADD COLUMN awards_text_color INTEGER DEFAULT " + Color.parseColor("#FFFFFF") + " NOT NULL");
         }
     };
 }

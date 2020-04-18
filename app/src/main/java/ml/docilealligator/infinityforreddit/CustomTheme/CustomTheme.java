@@ -95,6 +95,10 @@ public class CustomTheme {
     public int flairBackgroundColor;
     @ColumnInfo(name = "flair_text_color")
     public int flairTextColor;
+    @ColumnInfo(name = "awards_background_color")
+    public int awardsBackgroundColor;
+    @ColumnInfo(name = "awards_text_color")
+    public int awardsTextColor;
     @ColumnInfo(name = "archived_tint")
     public int archivedTint;
     @ColumnInfo(name = "locked_icon_tint")
@@ -211,33 +215,35 @@ public class CustomTheme {
         customTheme.nsfwTextColor = customThemeSettingsItems.get(38).colorValue;
         customTheme.flairBackgroundColor = customThemeSettingsItems.get(39).colorValue;
         customTheme.flairTextColor = customThemeSettingsItems.get(40).colorValue;
-        customTheme.archivedTint = customThemeSettingsItems.get(41).colorValue;
-        customTheme.lockedIconTint = customThemeSettingsItems.get(42).colorValue;
-        customTheme.crosspostIconTint = customThemeSettingsItems.get(43).colorValue;
-        customTheme.stickiedPostIconTint = customThemeSettingsItems.get(44).colorValue;
-        customTheme.subscribed = customThemeSettingsItems.get(45).colorValue;
-        customTheme.unsubscribed = customThemeSettingsItems.get(46).colorValue;
-        customTheme.username = customThemeSettingsItems.get(47).colorValue;
-        customTheme.subreddit = customThemeSettingsItems.get(48).colorValue;
-        customTheme.authorFlairTextColor = customThemeSettingsItems.get(49).colorValue;
-        customTheme.submitter = customThemeSettingsItems.get(50).colorValue;
-        customTheme.moderator = customThemeSettingsItems.get(51).colorValue;
-        customTheme.singleCommentThreadBackgroundColor = customThemeSettingsItems.get(52).colorValue;
-        customTheme.unreadMessageBackgroundColor = customThemeSettingsItems.get(53).colorValue;
-        customTheme.dividerColor = customThemeSettingsItems.get(54).colorValue;
-        customTheme.noPreviewLinkBackgroundColor = customThemeSettingsItems.get(55).colorValue;
-        customTheme.voteAndReplyUnavailableButtonColor = customThemeSettingsItems.get(56).colorValue;
-        customTheme.commentVerticalBarColor1 = customThemeSettingsItems.get(57).colorValue;
-        customTheme.commentVerticalBarColor2 = customThemeSettingsItems.get(58).colorValue;
-        customTheme.commentVerticalBarColor3 = customThemeSettingsItems.get(59).colorValue;
-        customTheme.commentVerticalBarColor4 = customThemeSettingsItems.get(60).colorValue;
-        customTheme.commentVerticalBarColor5 = customThemeSettingsItems.get(61).colorValue;
-        customTheme.commentVerticalBarColor6 = customThemeSettingsItems.get(62).colorValue;
-        customTheme.commentVerticalBarColor7 = customThemeSettingsItems.get(63).colorValue;
-        customTheme.navBarColor = customThemeSettingsItems.get(64).colorValue;
-        customTheme.isLightStatusBar = customThemeSettingsItems.get(65).isEnabled;
-        customTheme.isLightNavBar = customThemeSettingsItems.get(66).isEnabled;
-        customTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface = customThemeSettingsItems.get(67).isEnabled;
+        customTheme.awardsBackgroundColor = customThemeSettingsItems.get(41).colorValue;
+        customTheme.awardsTextColor = customThemeSettingsItems.get(42).colorValue;
+        customTheme.archivedTint = customThemeSettingsItems.get(43).colorValue;
+        customTheme.lockedIconTint = customThemeSettingsItems.get(44).colorValue;
+        customTheme.crosspostIconTint = customThemeSettingsItems.get(45).colorValue;
+        customTheme.stickiedPostIconTint = customThemeSettingsItems.get(46).colorValue;
+        customTheme.subscribed = customThemeSettingsItems.get(47).colorValue;
+        customTheme.unsubscribed = customThemeSettingsItems.get(48).colorValue;
+        customTheme.username = customThemeSettingsItems.get(49).colorValue;
+        customTheme.subreddit = customThemeSettingsItems.get(50).colorValue;
+        customTheme.authorFlairTextColor = customThemeSettingsItems.get(51).colorValue;
+        customTheme.submitter = customThemeSettingsItems.get(52).colorValue;
+        customTheme.moderator = customThemeSettingsItems.get(53).colorValue;
+        customTheme.singleCommentThreadBackgroundColor = customThemeSettingsItems.get(54).colorValue;
+        customTheme.unreadMessageBackgroundColor = customThemeSettingsItems.get(55).colorValue;
+        customTheme.dividerColor = customThemeSettingsItems.get(56).colorValue;
+        customTheme.noPreviewLinkBackgroundColor = customThemeSettingsItems.get(57).colorValue;
+        customTheme.voteAndReplyUnavailableButtonColor = customThemeSettingsItems.get(58).colorValue;
+        customTheme.commentVerticalBarColor1 = customThemeSettingsItems.get(59).colorValue;
+        customTheme.commentVerticalBarColor2 = customThemeSettingsItems.get(60).colorValue;
+        customTheme.commentVerticalBarColor3 = customThemeSettingsItems.get(61).colorValue;
+        customTheme.commentVerticalBarColor4 = customThemeSettingsItems.get(62).colorValue;
+        customTheme.commentVerticalBarColor5 = customThemeSettingsItems.get(63).colorValue;
+        customTheme.commentVerticalBarColor6 = customThemeSettingsItems.get(64).colorValue;
+        customTheme.commentVerticalBarColor7 = customThemeSettingsItems.get(65).colorValue;
+        customTheme.navBarColor = customThemeSettingsItems.get(66).colorValue;
+        customTheme.isLightStatusBar = customThemeSettingsItems.get(67).isEnabled;
+        customTheme.isLightNavBar = customThemeSettingsItems.get(68).isEnabled;
+        customTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface = customThemeSettingsItems.get(69).isEnabled;
 
         return customTheme;
     }

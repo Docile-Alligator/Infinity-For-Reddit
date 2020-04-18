@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit.Adapter;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -120,6 +119,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private int mSpoilerTextColor;
     private int mFlairBackgroundColor;
     private int mFlairTextColor;
+    private int mAwardsBackgroundColor;
+    private int mAwardsTextColor;
     private int mNSFWBackgroundColor;
     private int mNSFWTextColor;
     private int mArchivedIconTint;
@@ -182,6 +183,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mSpoilerTextColor = customThemeWrapper.getSpoilerTextColor();
             mFlairBackgroundColor = customThemeWrapper.getFlairBackgroundColor();
             mFlairTextColor = customThemeWrapper.getFlairTextColor();
+            mAwardsBackgroundColor = customThemeWrapper.getAwardsBackgroundColor();
+            mAwardsTextColor = customThemeWrapper.getAwardsTextColor();
             mNSFWBackgroundColor = customThemeWrapper.getNsfwBackgroundColor();
             mNSFWTextColor = customThemeWrapper.getNsfwTextColor();
             mArchivedIconTint = customThemeWrapper.getArchivedIconTint();
@@ -813,7 +816,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 boolean nsfw = post.isNSFW();
                 boolean spoiler = post.isSpoiler();
                 String flair = post.getFlair();
-                String awards = post.getAwards();
+                int nAwards = post.getnAwards();
                 boolean isArchived = post.isArchived();
 
                 ((PostCompactViewHolder) holder).itemView.setOnClickListener(view -> {
@@ -1006,26 +1009,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                 if (flair != null && !flair.equals("")) {
                     ((PostCompactViewHolder) holder).flairTextView.setVisibility(View.VISIBLE);
-                    Spannable flairHTML;
-                    GlideImageGetter glideImageGetter = new GlideImageGetter(((PostCompactViewHolder) holder).flairTextView);
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                        flairHTML = (Spannable) Html.fromHtml(flair, Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
-                    } else {
-                        flairHTML = (Spannable) Html.fromHtml(flair, glideImageGetter, null);
-                    }
-                    ((PostCompactViewHolder) holder).flairTextView.setText(flairHTML);
+                    Utils.setHTMLWithImageToTextView(((PostCompactViewHolder) holder).flairTextView, flair);
                 }
 
-                if (awards != null && !awards.equals("")) {
+                if (nAwards > 0) {
                     ((PostCompactViewHolder) holder).awardsTextView.setVisibility(View.VISIBLE);
-                    Spannable awardsHTML;
-                    GlideImageGetter glideImageGetter = new GlideImageGetter(((PostCompactViewHolder) holder).awardsTextView);
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                        awardsHTML = (Spannable) Html.fromHtml(awards, Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
-                    } else {
-                        awardsHTML = (Spannable) Html.fromHtml(awards, glideImageGetter, null);
-                    }
-                    ((PostCompactViewHolder) holder).awardsTextView.setText(awardsHTML);
+                    ((PostCompactViewHolder) holder).awardsTextView.setText(mActivity.getString(R.string.n_awards, post.getnAwards()));
                 }
 
                 switch (voteType) {
@@ -1682,11 +1671,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             flairTextView.setBackgroundColor(mFlairBackgroundColor);
             flairTextView.setBorderColor(mFlairBackgroundColor);
             flairTextView.setTextColor(mFlairTextColor);
+            awardsTextView.setBackgroundColor(mAwardsBackgroundColor);
+            awardsTextView.setBorderColor(mAwardsBackgroundColor);
+            awardsTextView.setTextColor(mAwardsTextColor);
             archivedImageView.setColorFilter(mArchivedIconTint, PorterDuff.Mode.SRC_IN);
             lockedImageView.setColorFilter(mLockedIconTint, PorterDuff.Mode.SRC_IN);
             crosspostImageView.setColorFilter(mCrosspostIconTint, PorterDuff.Mode.SRC_IN);
-            awardsTextView.setBackgroundColor(Color.parseColor("#EEAB02"));
-            awardsTextView.setTextColor(Color.parseColor("#FFFFFF"));
             linkTextView.setTextColor(mSecondaryTextColor);
             progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
             noPreviewLinkImageView.setBackgroundColor(mNoPreviewLinkBackgroundColor);
@@ -1726,7 +1716,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         @BindView(R.id.flair_custom_text_view_item_post_compact)
         CustomTextView flairTextView;
         @BindView(R.id.awards_text_view_item_post_compact)
-        TextView awardsTextView;
+        CustomTextView awardsTextView;
         @BindView(R.id.link_text_view_item_post_compact)
         TextView linkTextView;
         @BindView(R.id.image_view_wrapper_item_post_compact)
@@ -1798,10 +1788,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             flairTextView.setBackgroundColor(mFlairBackgroundColor);
             flairTextView.setBorderColor(mFlairBackgroundColor);
             flairTextView.setTextColor(mFlairTextColor);
+            awardsTextView.setBackgroundColor(mAwardsBackgroundColor);
+            awardsTextView.setBorderColor(mAwardsBackgroundColor);
+            awardsTextView.setTextColor(mAwardsTextColor);
             archivedImageView.setColorFilter(mArchivedIconTint, PorterDuff.Mode.SRC_IN);
             lockedImageView.setColorFilter(mLockedIconTint, PorterDuff.Mode.SRC_IN);
             crosspostImageView.setColorFilter(mCrosspostIconTint, PorterDuff.Mode.SRC_IN);
-            awardsTextView.setTextColor(mPostTitleColor);
             linkTextView.setTextColor(mSecondaryTextColor);
             progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
             noPreviewLinkImageView.setBackgroundColor(mNoPreviewLinkBackgroundColor);

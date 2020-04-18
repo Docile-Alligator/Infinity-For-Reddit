@@ -567,6 +567,10 @@
     <string name="theme_item_flair_background_color_detail">Applied to: Background of the flair tag</string>
     <string name="theme_item_flair_text_color">Flair Text Color</string>
     <string name="theme_item_flair_text_color_detail">Applied to: Text color of the flair tag</string>
+    <string name="theme_item_awards_background_color">Awards Background Color</string>
+    <string name="theme_item_awards_background_color_detail">Applied to: Background of the awards tag</string>
+    <string name="theme_item_awards_text_color">Awards Text Color</string>
+    <string name="theme_item_awards_text_color_detail">Applied to: Text color of the awards tag</string>
     <string name="theme_item_archived_tint">Archived Icon Color</string>
     <string name="theme_item_archived_tint_detail">Applied to: Archived icon</string>
     <string name="theme_item_locked_icon_tint">Locked Icon Color</string>
