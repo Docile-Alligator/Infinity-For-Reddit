@@ -457,7 +457,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                 if (nAwards > 0) {
                     ((PostViewHolder) holder).awardsTextView.setVisibility(View.VISIBLE);
-                    ((PostViewHolder) holder).awardsTextView.setText(mActivity.getString(R.string.n_awards, nAwards));
+                    if (nAwards == 1) {
+                        ((PostViewHolder) holder).awardsTextView.setText(mActivity.getString(R.string.one_award));
+                    } else {
+                        ((PostViewHolder) holder).awardsTextView.setText(mActivity.getString(R.string.n_awards, nAwards));
+                    }
                 }
 
                 switch (voteType) {
@@ -1014,7 +1018,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                 if (nAwards > 0) {
                     ((PostCompactViewHolder) holder).awardsTextView.setVisibility(View.VISIBLE);
-                    ((PostCompactViewHolder) holder).awardsTextView.setText(mActivity.getString(R.string.n_awards, post.getnAwards()));
+                    if (nAwards == 1) {
+                        ((PostCompactViewHolder) holder).awardsTextView.setText(mActivity.getString(R.string.one_award));
+                    } else {
+                        ((PostCompactViewHolder) holder).awardsTextView.setText(mActivity.getString(R.string.n_awards, nAwards));
+                    }
                 }
 
                 switch (voteType) {
