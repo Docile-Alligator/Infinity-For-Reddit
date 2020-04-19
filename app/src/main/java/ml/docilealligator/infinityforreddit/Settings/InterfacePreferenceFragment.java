@@ -30,6 +30,7 @@ public class InterfacePreferenceFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.interface_preference, rootKey);
 
         SwitchPreference immersiveInterfaceSwitch = findPreference(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY);
+        SwitchPreference immersiveInterfaceIgnoreNavBarSwitch = findPreference(SharedPreferencesUtils.IMMERSIVE_INTERFACE_IGNORE_NAV_BAR_KEY);
         SwitchPreference bottomAppBarSwitch = findPreference(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY);
         SwitchPreference voteButtonsOnTheRightSwitch = findPreference(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY);
         SwitchPreference showElapsedTimeSwitch = findPreference(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY);
@@ -37,15 +38,32 @@ public class InterfacePreferenceFragment extends PreferenceFragmentCompat {
         SwitchPreference showDividerInCompactLayout = findPreference(SharedPreferencesUtils.SHOW_DIVIDER_IN_COMPACT_LAYOUT);
         SwitchPreference showAbsoluteNumberOfVotes = findPreference(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES);
 
-        if (immersiveInterfaceSwitch != null) {
+        if (immersiveInterfaceSwitch != null && immersiveInterfaceIgnoreNavBarSwitch != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 immersiveInterfaceSwitch.setVisible(true);
                 immersiveInterfaceSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                    if ((Boolean) newValue) {
+                        immersiveInterfaceIgnoreNavBarSwitch.setVisible(true);
+                    } else {
+                        immersiveInterfaceIgnoreNavBarSwitch.setVisible(false);
+                    }
+                    EventBus.getDefault().post(new RecreateActivityEvent());
+                    return true;
+                });
+
+                if (immersiveInterfaceSwitch.isChecked()) {
+                    immersiveInterfaceIgnoreNavBarSwitch.setVisible(true);
+                } else {
+                    immersiveInterfaceIgnoreNavBarSwitch.setVisible(false);
+                }
+
+                immersiveInterfaceIgnoreNavBarSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                     EventBus.getDefault().post(new RecreateActivityEvent());
                     return true;
                 });
             } else {
                 immersiveInterfaceSwitch.setVisible(false);
+                immersiveInterfaceIgnoreNavBarSwitch.setVisible(false);
             }
         }
 

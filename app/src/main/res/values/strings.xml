@@ -312,6 +312,8 @@
     <string name="settings_gestures_and_buttons_title">Gestures &amp; Buttons</string>
     <string name="settings_open_link_in_app_title">Open Link In App</string>
     <string name="settings_immersive_interface_title">Immersive Interface</string>
+    <string name="settings_immersive_interface_ignore_nav_bar_title">Ignore Navigation Bar in Immersive Interface</string>
+    <string name="settings_immersive_interface_ignore_nav_bar_summary">Prevent the Bottom Navigation Bar Having Extra Padding</string>
     <string name="settings_enable_bottom_app_bar_title">Enable Bottom Navigation</string>
     <string name="settings_enable_bottom_app_bar_summary">Has No Effect in Anonymous Mode</string>
     <string name="settings_vote_buttons_on_the_right_title">Vote Buttons on the Right</string>

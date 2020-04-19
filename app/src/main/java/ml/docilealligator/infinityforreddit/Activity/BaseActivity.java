@@ -207,6 +207,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public int getNavBarHeight() {
+        if (getSharedPreferences().getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_IGNORE_NAV_BAR_KEY, false)) {
+            return 0;
+        }
+
         Resources resources = getResources();
         int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
         if (navBarResourceId > 0) {
