@@ -86,4 +86,6 @@ dependencies {
     implementation 'com.atlassian.commonmark:commonmark:0.13.1'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'me.zhanghai.android.fastscroll:library:1.1.2'
+    implementation "im.ene.toro3:toro:$rootProject.toroVersion"
+    implementation "im.ene.toro3:toro-ext-exoplayer:$rootProject.toroVersion"
 }

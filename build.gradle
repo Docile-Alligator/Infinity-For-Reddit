@@ -33,4 +33,5 @@ task clean(type: Delete) {
 ext {
     roomVersion = '2.2.5'
     archLifecycleVersion = '2.2.0'
+    toroVersion = '3.7.0.2010003'
 }

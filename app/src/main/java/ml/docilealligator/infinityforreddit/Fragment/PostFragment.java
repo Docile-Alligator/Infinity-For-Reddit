@@ -46,6 +46,8 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import im.ene.toro.exoplayer.ExoCreator;
+import im.ene.toro.widget.Container;
 import ml.docilealligator.infinityforreddit.Activity.BaseActivity;
 import ml.docilealligator.infinityforreddit.Activity.FilteredThingActivity;
 import ml.docilealligator.infinityforreddit.Activity.MainActivity;
@@ -94,7 +96,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @BindView(R.id.swipe_refresh_layout_post_fragment)
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view_post_fragment)
-    RecyclerView mPostRecyclerView;
+    Container mPostRecyclerView;
     @BindView(R.id.fetch_post_info_linear_layout_post_fragment)
     LinearLayout mFetchPostInfoLinearLayout;
     @BindView(R.id.fetch_post_info_image_view_post_fragment)
@@ -121,6 +123,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     SharedPreferences mPostLayoutSharedPreferences;
     @Inject
     CustomThemeWrapper customThemeWrapper;
+    @Inject
+    ExoCreator exoCreator;
     private RequestManager mGlide;
     private AppCompatActivity activity;
     private LinearLayoutManager mLinearLayoutManager;
@@ -323,12 +327,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         int filter = getArguments().getInt(EXTRA_FILTER);
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         boolean nsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_KEY, false);
-        boolean needBlurNsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_NSFW_KEY, true);
-        boolean needBlurSpoiler = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_SPOILER_KEY, false);
-        boolean voteButtonsOnTheRight = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
-        boolean showElapsedTime = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
-        boolean showDividerInCompactLayout = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_DIVIDER_IN_COMPACT_LAYOUT, true);
-        boolean showAbsoluteNumberOfVotes = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
         int defaultPostLayout = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY, "0"));
 
         if (postType == PostDataSource.TYPE_SEARCH) {
@@ -342,9 +340,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     customThemeWrapper, accessToken, postType, postLayout, true,
-                    needBlurNsfw, needBlurSpoiler, voteButtonsOnTheRight, showElapsedTime,
-                    showDividerInCompactLayout, showAbsoluteNumberOfVotes,
-                    new PostRecyclerViewAdapter.Callback() {
+                    mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -407,9 +403,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     customThemeWrapper, accessToken, postType, postLayout, displaySubredditName,
-                    needBlurNsfw, needBlurSpoiler, voteButtonsOnTheRight, showElapsedTime,
-                    showDividerInCompactLayout, showAbsoluteNumberOfVotes,
-                    new PostRecyclerViewAdapter.Callback() {
+                    mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -457,9 +451,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     customThemeWrapper, accessToken, postType, postLayout, true,
-                    needBlurNsfw, needBlurSpoiler, voteButtonsOnTheRight, showElapsedTime,
-                    showDividerInCompactLayout, showAbsoluteNumberOfVotes,
-                    new PostRecyclerViewAdapter.Callback() {
+                    mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -505,9 +497,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     customThemeWrapper, accessToken, postType, postLayout, true,
-                    needBlurNsfw, needBlurSpoiler, voteButtonsOnTheRight, showElapsedTime,
-                    showDividerInCompactLayout, showAbsoluteNumberOfVotes,
-                    new PostRecyclerViewAdapter.Callback() {
+                    mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -546,9 +536,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     customThemeWrapper, accessToken, postType, postLayout, true,
-                    needBlurNsfw, needBlurSpoiler, voteButtonsOnTheRight, showElapsedTime,
-                    showDividerInCompactLayout, showAbsoluteNumberOfVotes,
-                    new PostRecyclerViewAdapter.Callback() {
+                    mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -569,6 +557,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
 
         mPostRecyclerView.setAdapter(mAdapter);
+        mPostRecyclerView.setCacheManager(mAdapter);
         mPostViewModel.getPosts().observe(this, posts -> mAdapter.submitList(posts));
 
         mPostViewModel.hasPost().observe(this, hasPost -> {
