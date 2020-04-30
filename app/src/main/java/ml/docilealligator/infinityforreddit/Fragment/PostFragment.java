@@ -62,6 +62,7 @@ import ml.docilealligator.infinityforreddit.Event.ChangeShowElapsedTimeEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVideoAutoplayEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVoteButtonsPositionEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeWifiStatusEvent;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.Event.ShowDividerInCompactLayoutPreferenceEvent;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
@@ -851,6 +852,17 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
             mAdapter.setAutoplay(autoplay);
             refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeWifiStatusEvent(ChangeWifiStatusEvent changeWifiStatusEvent) {
+        if (mAdapter != null) {
+            String autoplay = mSharedPreferences.getString(SharedPreferencesUtils.VIDEO_AUTOPLAY, SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_NEVER);
+            if (autoplay.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI)) {
+                mAdapter.setAutoplay(changeWifiStatusEvent.isConnectedToWifi);
+                refreshAdapter();
+            }
         }
     }
 
