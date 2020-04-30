@@ -1,6 +1,9 @@
 package ml.docilealligator.infinityforreddit.Utils;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.text.Html;
 import android.text.Spannable;
 import android.widget.TextView;
@@ -86,5 +89,19 @@ public class Utils {
             html = (Spannable) Html.fromHtml(content, glideImageGetter, null);
         }
         textView.setText(html);
+    }
+
+    public static boolean isConnectedToWifi(Context context) {
+        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connMgr != null) {
+            for (Network network : connMgr.getAllNetworks()) {
+                NetworkInfo networkInfo = connMgr.getNetworkInfo(network);
+                if (networkInfo != null && networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                    return networkInfo.isConnected();
+                }
+            }
+        }
+
+        return false;
     }
 }

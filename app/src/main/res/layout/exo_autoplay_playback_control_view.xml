@@ -7,8 +7,6 @@
     android:gravity="bottom"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
-    android:paddingBottom="16dp"
-    android:background="@color/transparentActionBarAndExoPlayerControllerColor"
     android:orientation="vertical">
 
     <RelativeLayout
