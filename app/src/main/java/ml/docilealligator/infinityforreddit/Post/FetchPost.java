@@ -1,10 +1,10 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Post;
 
 import androidx.annotation.NonNull;
 
 import java.util.Locale;
 
-import ml.docilealligator.infinityforreddit.Post.Post;
+import ml.docilealligator.infinityforreddit.RedditAPI;
 import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
 import retrofit2.Call;
 import retrofit2.Callback;

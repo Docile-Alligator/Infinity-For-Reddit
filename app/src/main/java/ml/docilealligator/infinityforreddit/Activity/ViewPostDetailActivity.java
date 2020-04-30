@@ -64,14 +64,14 @@ import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToDetailActivit
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchComment;
-import ml.docilealligator.infinityforreddit.FetchPost;
+import ml.docilealligator.infinityforreddit.Post.FetchPost;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Fragment.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostCommentSortTypeBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.HidePost;
+import ml.docilealligator.infinityforreddit.Post.HidePost;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.ParseComment;
-import ml.docilealligator.infinityforreddit.ParsePost;
+import ml.docilealligator.infinityforreddit.Post.ParsePost;
 import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.ReadMessage;

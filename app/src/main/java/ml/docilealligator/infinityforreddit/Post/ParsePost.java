@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Post;
 
 import android.os.AsyncTask;
 import android.text.Html;
@@ -8,12 +8,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
-import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 
@@ -357,7 +356,7 @@ public class ParsePost {
     }
 
     public interface ParsePostsListingListener {
-        void onParsePostsListingSuccess(ArrayList<Post> newPostData, String lastItem);
+        void onParsePostsListingSuccess(LinkedHashSet<Post> newPostData, String lastItem);
 
         void onParsePostsListingFail();
     }
@@ -376,7 +375,7 @@ public class ParsePost {
         private boolean nsfw;
         private ParsePostsListingListener parsePostsListingListener;
         private ParsePostListener parsePostListener;
-        private ArrayList<Post> newPosts;
+        private LinkedHashSet<Post> newPosts;
         private Post post;
         private String lastItem;
         private boolean parseFailed;
@@ -392,7 +391,7 @@ public class ParsePost {
                 this.nPosts = nPosts;
                 this.filter = filter;
                 this.nsfw = nsfw;
-                newPosts = new ArrayList<>();
+                newPosts = new LinkedHashSet<>();
                 parseFailed = false;
             } catch (JSONException e) {
                 e.printStackTrace();

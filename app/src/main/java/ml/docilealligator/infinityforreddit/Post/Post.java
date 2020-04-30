@@ -3,6 +3,8 @@ package ml.docilealligator.infinityforreddit.Post;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.Nullable;
+
 import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
 
 /**
@@ -505,5 +507,13 @@ public class Post implements Parcelable {
         parcel.writeByte((byte) (saved ? 1 : 0));
         parcel.writeByte((byte) (isCrosspost ? 1 : 0));
         parcel.writeString(crosspostParentId);
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (!(obj instanceof Post)) {
+            return false;
+        }
+        return ((Post) obj).getFullName().equals(fullName);
     }
 }
