@@ -54,6 +54,7 @@ import ml.docilealligator.infinityforreddit.Activity.MainActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.Adapter.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.CustomView.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.Event.ChangeDefaultPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangePostLayoutEvent;
@@ -96,7 +97,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @BindView(R.id.swipe_refresh_layout_post_fragment)
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view_post_fragment)
-    Container mPostRecyclerView;
+    CustomToroContainer mPostRecyclerView;
     @BindView(R.id.fetch_post_info_linear_layout_post_fragment)
     LinearLayout mFetchPostInfoLinearLayout;
     @BindView(R.id.fetch_post_info_image_view_post_fragment)
@@ -154,6 +155,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
         if (isInLazyMode && isLazyModePaused) {
             resumeLazyMode(false);
+        }
+        if (mAdapter != null && mPostRecyclerView != null) {
+            mPostRecyclerView.onWindowVisibilityChanged(View.VISIBLE);
         }
     }
 
@@ -860,6 +864,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         super.onPause();
         if (isInLazyMode) {
             pauseLazyMode(false);
+        }
+        if (mAdapter != null && mPostRecyclerView != null) {
+            mPostRecyclerView.onWindowVisibilityChanged(View.GONE);
         }
     }
 

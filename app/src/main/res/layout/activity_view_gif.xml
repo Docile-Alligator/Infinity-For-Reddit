@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/parent_relative_layout_view_gif_activity"
-    android:background="@android:color/black"
+    android:background="#000000"
+    android:keepScreenOn="true"
     tools:application="ml.docilealligator.infinityforreddit.Activity.ViewGIFActivity">
 
     <ProgressBar

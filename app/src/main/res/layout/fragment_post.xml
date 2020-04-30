@@ -16,7 +16,7 @@
             android:layout_height="match_parent"
             android:clipToPadding="false" />-->
 
-        <im.ene.toro.widget.Container
+        <ml.docilealligator.infinityforreddit.CustomView.CustomToroContainer
             android:id="@+id/recycler_view_post_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
