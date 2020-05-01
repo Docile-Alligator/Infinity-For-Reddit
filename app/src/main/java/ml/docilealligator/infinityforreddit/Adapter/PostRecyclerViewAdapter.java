@@ -1867,6 +1867,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         @Nullable
         ExoPlayerViewHelper helper;
         private Uri mediaUri;
+        private float volume = 0f;
 
         PostVideoAutoplayViewHolder(View itemView) {
             super(itemView);
@@ -1901,9 +1902,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     if (helper.getVolume() != 0) {
                         muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_mute_24dp));
                         helper.setVolume(0f);
+                        volume = 0f;
                     } else {
                         muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_unmute_24dp));
                         helper.setVolume(1f);
+                        volume = 1f;
                     }
                 }
             });
@@ -1936,8 +1939,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             for (int i = 0; i < trackGroups.length; i++) {
                                 String mimeType = trackGroups.get(i).getFormat(0).sampleMimeType;
                                 if (mimeType != null && mimeType.contains("audio")) {
-                                    helper.setVolume(0f);
+                                    helper.setVolume(volume);
                                     muteButton.setVisibility(View.VISIBLE);
+                                    if (volume != 0f) {
+                                        muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_unmute_24dp));
+                                    } else {
+                                        muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_mute_24dp));
+                                    }
                                     break;
                                 }
                             }
