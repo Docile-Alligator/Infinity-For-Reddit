@@ -47,6 +47,9 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import im.ene.toro.exoplayer.ExoCreator;
+import im.ene.toro.media.PlaybackInfo;
+import im.ene.toro.media.VolumeInfo;
+import im.ene.toro.widget.Container;
 import ml.docilealligator.infinityforreddit.Activity.BaseActivity;
 import ml.docilealligator.infinityforreddit.Activity.FilteredThingActivity;
 import ml.docilealligator.infinityforreddit.Activity.MainActivity;
@@ -77,6 +80,9 @@ import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
+
+import static im.ene.toro.media.PlaybackInfo.INDEX_UNSET;
+import static im.ene.toro.media.PlaybackInfo.TIME_UNSET;
 
 
 /**
@@ -564,6 +570,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         mPostRecyclerView.setAdapter(mAdapter);
         mPostRecyclerView.setCacheManager(mAdapter);
+        mPostRecyclerView.setPlayerInitializer(order -> {
+            VolumeInfo volumeInfo = new VolumeInfo(true, 0f);
+            return new PlaybackInfo(INDEX_UNSET, TIME_UNSET, volumeInfo);
+        });
+
         mPostViewModel.getPosts().observe(this, posts -> mAdapter.submitList(posts));
 
         mPostViewModel.hasPost().observe(this, hasPost -> {

@@ -248,7 +248,6 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                             nextPageKey = lastItem;
                                         }
 
-                                        int currentPostsSize = postLinkedHashSet.size();
                                         if (newPosts.size() != 0) {
                                             postLinkedHashSet.addAll(newPosts);
                                             callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);

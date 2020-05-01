@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -37,12 +38,18 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
+import com.google.android.exoplayer2.metadata.Metadata;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.text.Cue;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.material.card.MaterialCardView;
 import com.libRG.CustomTextView;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,6 +58,7 @@ import im.ene.toro.ToroPlayer;
 import im.ene.toro.ToroUtil;
 import im.ene.toro.exoplayer.ExoCreator;
 import im.ene.toro.exoplayer.ExoPlayerViewHelper;
+import im.ene.toro.exoplayer.Playable;
 import im.ene.toro.media.PlaybackInfo;
 import im.ene.toro.widget.Container;
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -1301,7 +1309,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
         if (holder instanceof PostBaseViewHolder) {
-            if (holder instanceof PostImageAndGifAutoplayTypeViewHolder) {
+            if (holder instanceof PostVideoAutoplayViewHolder) {
+                ((PostVideoAutoplayViewHolder) holder).muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_mute_24dp));
+                ((PostVideoAutoplayViewHolder) holder).muteButton.setVisibility(View.GONE);
+            } else if (holder instanceof PostImageAndGifAutoplayTypeViewHolder) {
                 mGlide.clear(((PostImageAndGifAutoplayTypeViewHolder) holder).imageView);
                 ((PostImageAndGifAutoplayTypeViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.FIT_START);
                 ((PostImageAndGifAutoplayTypeViewHolder) holder).imageView.getLayoutParams().height = FrameLayout.LayoutParams.WRAP_CONTENT;
@@ -1452,9 +1463,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             this.saveButton = saveButton;
             this.shareButton = shareButton;
 
-            scoreTextView.setOnClickListener(view -> {
-                //Do nothing in order to prevent clicking this to start ViewPostDetailActivity
-            });
+            scoreTextView.setOnClickListener(null);
 
             if (mVoteButtonsOnTheRight) {
                 ConstraintSet constraintSet = new ConstraintSet();
@@ -1520,10 +1529,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             userTextView.setOnClickListener(view -> {
                 if (canStartActivity) {
-                    canStartActivity = false;
-                    Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, getItem(getAdapterPosition()).getAuthor());
-                    mActivity.startActivity(intent);
+                    Post post = getItem(getAdapterPosition());
+                    if (post != null) {
+                        canStartActivity = false;
+                        Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
+                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, post.getAuthor());
+                        mActivity.startActivity(intent);
+                    }
                 }
             });
 
@@ -1835,6 +1847,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         AspectRatioFrameLayout aspectRatioFrameLayout;
         @BindView(R.id.player_view_item_post_video_type_autoplay)
         PlayerView videoPlayer;
+        @BindView(R.id.mute_exo_playback_control_view)
+        ImageButton muteButton;
         @BindView(R.id.bottom_constraint_layout_item_post_video_type_autoplay)
         ConstraintLayout bottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_video_type_autoplay)
@@ -1881,6 +1895,18 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     shareButton);
 
             aspectRatioFrameLayout.setOnClickListener(null);
+
+            muteButton.setOnClickListener(view -> {
+                if (helper != null) {
+                    if (helper.getVolume() != 0) {
+                        muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_mute_24dp));
+                        helper.setVolume(0f);
+                    } else {
+                        muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_unmute_24dp));
+                        helper.setVolume(1f);
+                    }
+                }
+            });
         }
 
         void bindVideoUri(Uri videoUri) {
@@ -1903,6 +1929,33 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         public void initialize(@NonNull Container container, @NonNull PlaybackInfo playbackInfo) {
             if (helper == null) {
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
+                helper.addEventListener(new Playable.EventListener() {
+                    @Override
+                    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+                        if (!trackGroups.isEmpty()) {
+                            for (int i = 0; i < trackGroups.length; i++) {
+                                String mimeType = trackGroups.get(i).getFormat(0).sampleMimeType;
+                                if (mimeType != null && mimeType.contains("audio")) {
+                                    helper.setVolume(0f);
+                                    muteButton.setVisibility(View.VISIBLE);
+                                    break;
+                                }
+                            }
+                        } else {
+                            muteButton.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onMetadata(Metadata metadata) {
+
+                    }
+
+                    @Override
+                    public void onCues(List<Cue> cues) {
+
+                    }
+                });
             }
             helper.initialize(container, playbackInfo);
         }

@@ -26,7 +26,9 @@
         <ImageButton
             android:id="@+id/mute_exo_playback_control_view"
             style="@style/ExoMediaButton"
-            android:layout_alignParentEnd="true"/>
+            android:src="@drawable/ic_mute_24dp"
+            android:layout_alignParentEnd="true"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

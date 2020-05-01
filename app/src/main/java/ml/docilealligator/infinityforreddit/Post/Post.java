@@ -514,6 +514,6 @@ public class Post implements Parcelable {
         if (!(obj instanceof Post)) {
             return false;
         }
-        return ((Post) obj).getFullName().equals(fullName);
+        return ((Post) obj).id.equals(id);
     }
 }
