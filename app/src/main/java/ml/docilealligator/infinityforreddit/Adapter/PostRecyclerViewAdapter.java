@@ -1848,7 +1848,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         @BindView(R.id.player_view_item_post_video_type_autoplay)
         PlayerView videoPlayer;
         @BindView(R.id.mute_exo_playback_control_view)
-        ImageButton muteButton;
+        ImageView muteButton;
         @BindView(R.id.bottom_constraint_layout_item_post_video_type_autoplay)
         ConstraintLayout bottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_video_type_autoplay)
@@ -1900,11 +1900,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             muteButton.setOnClickListener(view -> {
                 if (helper != null) {
                     if (helper.getVolume() != 0) {
-                        muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_mute_24dp));
+                        muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_mute_white_rounded_18dp));
                         helper.setVolume(0f);
                         volume = 0f;
                     } else {
-                        muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_unmute_24dp));
+                        muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_unmute_white_rounded_18dp));
                         helper.setVolume(1f);
                         volume = 1f;
                     }
@@ -1942,9 +1942,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     helper.setVolume(volume);
                                     muteButton.setVisibility(View.VISIBLE);
                                     if (volume != 0f) {
-                                        muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_unmute_24dp));
+                                        muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_unmute_white_rounded_18dp));
                                     } else {
-                                        muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_mute_24dp));
+                                        muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_mute_white_rounded_18dp));
                                     }
                                     break;
                                 }

@@ -1,70 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/linear_layout_exo_playback_control_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="bottom"
-    android:gravity="bottom"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    android:orientation="vertical">
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:layout_gravity="bottom">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <TextView android:id="@id/exo_position"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="4dp"
-        android:orientation="horizontal">
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:includeFontPadding="false"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:textStyle="bold" />
 
-        <ImageButton android:id="@id/exo_play"
-            style="@style/ExoMediaButton.Play"
-            android:layout_centerInParent="true" />
-
-        <ImageButton android:id="@id/exo_pause"
-            style="@style/ExoMediaButton.Pause"
-            android:layout_centerInParent="true" />
-
-        <ImageButton
-            android:id="@+id/mute_exo_playback_control_view"
-            style="@style/ExoMediaButton"
-            android:src="@drawable/ic_mute_24dp"
-            android:layout_alignParentEnd="true"
-            android:visibility="gone" />
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/slash"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_toEndOf="@id/exo_position"
+        android:layout_centerVertical="true"
+        android:text="/"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:textStyle="bold" />
 
-        <TextView android:id="@id/exo_position"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:includeFontPadding="false"
-            android:textColor="#FFBEBEBE"/>
+    <TextView android:id="@id/exo_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/slash"
+        android:layout_centerVertical="true"
+        android:includeFontPadding="false"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:textStyle="bold" />
 
-        <com.google.android.exoplayer2.ui.DefaultTimeBar
-            android:id="@id/exo_progress"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="26dp"/>
+    <ImageView android:id="@id/exo_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_play_arrow_white_rounded_18dp" />
 
-        <TextView android:id="@id/exo_duration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:includeFontPadding="false"
-            android:textColor="#FFBEBEBE"/>
+    <ImageView android:id="@id/exo_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_pause_white_rounded_18dp" />
 
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/mute_exo_playback_control_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_mute_white_rounded_18dp"
+        android:visibility="gone" />
 
-</LinearLayout>
+</RelativeLayout>
