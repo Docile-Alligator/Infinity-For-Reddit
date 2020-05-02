@@ -99,9 +99,10 @@ class ParseSubscribedThing {
                         String description = data.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY).trim();
                         String sidebarDescription = data.getString(JSONUtils.DESCRIPTION_KEY);
                         int nSubscribers = data.getInt(JSONUtils.SUBSCRIBERS_KEY);
+                        long createdUTC = data.getLong(JSONUtils.CREATED_UTC_KEY);
                         newSubscribedSubredditData.add(new SubscribedSubredditData(id, name, iconUrl, accountName, isFavorite));
                         newSubredditData.add(new SubredditData(id, subredditFullName, iconUrl,
-                                bannerImageUrl, description, sidebarDescription, nSubscribers));
+                                bannerImageUrl, description, sidebarDescription, nSubscribers, createdUTC));
                     }
                 }
                 lastItem = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);

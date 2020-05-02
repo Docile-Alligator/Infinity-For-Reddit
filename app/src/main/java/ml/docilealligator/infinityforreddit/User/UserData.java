@@ -15,23 +15,33 @@ public class UserData {
     private String iconUrl;
     @ColumnInfo(name = "banner")
     private String banner;
-    @ColumnInfo(name = "karma")
-    private int karma;
+    @ColumnInfo(name = "link_karma")
+    private int linkKarma;
+    @ColumnInfo(name = "comment_karma")
+    private int commentKarma;
+    @ColumnInfo(name = "created_utc")
+    private long cakeday;
     @ColumnInfo(name = "is_gold")
     private boolean isGold;
     @ColumnInfo(name = "is_friend")
     private boolean isFriend;
     @ColumnInfo(name = "can_be_followed")
     private boolean canBeFollowed;
+    @ColumnInfo(name = "description")
+    private String description;
 
-    public UserData(@NonNull String name, String iconUrl, String banner, int karma, boolean isGold, boolean isFriend, boolean canBeFollowed) {
+    public UserData(@NonNull String name, String iconUrl, String banner, int linkKarma, int commentKarma,
+                    long cakeday, boolean isGold, boolean isFriend, boolean canBeFollowed, String description) {
         this.name = name;
         this.iconUrl = iconUrl;
         this.banner = banner;
-        this.karma = karma;
+        this.commentKarma = commentKarma;
+        this.linkKarma = linkKarma;
+        this.cakeday = cakeday;
         this.isGold = isGold;
         this.isFriend = isFriend;
         this.canBeFollowed = canBeFollowed;
+        this.description = description;
     }
 
     @NonNull
@@ -47,8 +57,20 @@ public class UserData {
         return banner;
     }
 
+    public int getLinkKarma() {
+        return linkKarma;
+    }
+
+    public int getCommentKarma() {
+        return commentKarma;
+    }
+
     public int getKarma() {
-        return karma;
+        return linkKarma + commentKarma;
+    }
+
+    public long getCakeday() {
+        return cakeday;
     }
 
     public boolean isGold() {
@@ -61,5 +83,9 @@ public class UserData {
 
     public boolean isCanBeFollowed() {
         return canBeFollowed;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

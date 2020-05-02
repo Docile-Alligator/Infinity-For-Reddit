@@ -302,11 +302,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         int backgroundColor = mCustomThemeWrapper.getBackgroundColor();
         drawer.setBackgroundColor(backgroundColor);
         drawer.setStatusBarBackgroundColor(mCustomThemeWrapper.getColorPrimaryDark());
-        int primaryIconColor = mCustomThemeWrapper.getPrimaryIconColor();
-        subscriptionsBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        multiRedditBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        messageBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        profileBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        int bottomAppBarIconColor = mCustomThemeWrapper.getBottomAppBarIconColor();
+        subscriptionsBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        multiRedditBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        messageBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        profileBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         navigationView.setBackgroundColor(backgroundColor);
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         applyTabLayoutTheme(tabLayout);

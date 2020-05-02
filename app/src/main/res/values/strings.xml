@@ -525,7 +525,9 @@
     <string name="theme_item_bottom_app_bar_background_color">Bottom Navigation Bar Color</string>
     <string name="theme_item_bottom_app_bar_background_color_detail">Applied to: Bottom navigation bar</string>
     <string name="theme_item_primary_icon_color">Primary Icon Color</string>
-    <string name="theme_item_primary_icon_color_detail">Applied to: Icons in the bottom navigation bar and the navigation drawer.</string>
+    <string name="theme_item_primary_icon_color_detail">Applied to: Icons in the navigation drawer.</string>
+    <string name="theme_item_bottom_app_bar_icon_color">Bottom Navigation Bar Icon Color</string>
+    <string name="theme_item_bottom_app_bar_icon_color_detail">Applied to: Icons in the bottom navigation bar</string>
     <string name="theme_item_post_icon_and_info_color">Post Icon and Info Color</string>
     <string name="theme_item_post_icon_and_info_color_detail">Applied to: Icons, score and the number of comments in posts</string>
     <string name="theme_item_comment_icon_and_info_color">Comment Icon and Info Color</string>

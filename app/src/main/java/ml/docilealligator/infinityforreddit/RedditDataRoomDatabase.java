@@ -26,7 +26,7 @@ import ml.docilealligator.infinityforreddit.User.UserDao;
 import ml.docilealligator.infinityforreddit.User.UserData;
 
 @Database(entities = {Account.class, SubredditData.class, SubscribedSubredditData.class, UserData.class,
-        SubscribedUserData.class, MultiReddit.class, CustomTheme.class}, version = 7)
+        SubscribedUserData.class, MultiReddit.class, CustomTheme.class}, version = 8)
 public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static RedditDataRoomDatabase INSTANCE;
 
@@ -37,7 +37,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             RedditDataRoomDatabase.class, "reddit_data")
                             .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
-                                    MIGRATION_5_6, MIGRATION_6_7)
+                                    MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
                             .build();
                 }
             }
@@ -163,6 +163,27 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE custom_themes ADD COLUMN awards_background_color INTEGER DEFAULT " + Color.parseColor("#EEAB02") + " NOT NULL");
             database.execSQL("ALTER TABLE custom_themes ADD COLUMN awards_text_color INTEGER DEFAULT " + Color.parseColor("#FFFFFF") + " NOT NULL");
+        }
+    };
+
+    private static final Migration MIGRATION_7_8 = new Migration(7, 8) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE users_temp " +
+                    "(name TEXT NOT NULL PRIMARY KEY, icon TEXT, banner TEXT, " +
+                    "link_karma INTEGER NOT NULL, comment_karma INTEGER DEFAULT 0 NOT NULL, created_utc INTEGER DEFAULT 0 NOT NULL," +
+                    "is_gold INTEGER NOT NULL, is_friend INTEGER NOT NULL, can_be_followed INTEGER NOT NULL," +
+                    "description TEXT)");
+            database.execSQL(
+                    "INSERT INTO users_temp(name, icon, banner, link_karma, is_gold, is_friend, can_be_followed) SELECT * FROM users");
+            database.execSQL("DROP TABLE users");
+            database.execSQL("ALTER TABLE users_temp RENAME TO users");
+
+            database.execSQL("ALTER TABLE subreddits"
+                    + " ADD COLUMN created_utc INTEGER DEFAULT 0 NOT NULL");
+
+            database.execSQL("ALTER TABLE custom_themes"
+                    + " ADD COLUMN bottom_app_bar_icon_color INTEGER DEFAULT " + Color.parseColor("#000000") + " NOT NULL");
         }
     };
 }

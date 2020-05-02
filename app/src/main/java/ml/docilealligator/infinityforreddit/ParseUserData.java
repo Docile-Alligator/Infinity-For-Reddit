@@ -38,11 +38,13 @@ public class ParseUserData {
         }
         int linkKarma = userDataJson.getInt(JSONUtils.LINK_KARMA_KEY);
         int commentKarma = userDataJson.getInt(JSONUtils.COMMENT_KARMA_KEY);
-        int karma = linkKarma + commentKarma;
+        long cakeday = userDataJson.getLong(JSONUtils.CREATED_UTC_KEY) * 1000;
         boolean isGold = userDataJson.getBoolean(JSONUtils.IS_GOLD_KEY);
         boolean isFriend = userDataJson.getBoolean(JSONUtils.IS_FRIEND_KEY);
+        String description = userDataJson.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY);
 
-        return new UserData(userName, iconImageUrl, bannerImageUrl, karma, isGold, isFriend, canBeFollowed);
+        return new UserData(userName, iconImageUrl, bannerImageUrl, linkKarma, commentKarma, cakeday,
+                isGold, isFriend, canBeFollowed, description);
     }
 
     interface ParseUserDataListener {

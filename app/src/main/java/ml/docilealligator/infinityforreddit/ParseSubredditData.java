@@ -25,6 +25,7 @@ class ParseSubredditData {
         String subredditFullName = subredditDataJsonObject.getString(JSONUtils.DISPLAY_NAME_KEY);
         String description = subredditDataJsonObject.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY).trim();
         String sidebarDescription = subredditDataJsonObject.getString(JSONUtils.DESCRIPTION_KEY).trim();
+        long createdUTC = subredditDataJsonObject.getLong(JSONUtils.CREATED_UTC_KEY) * 1000;
 
         String bannerImageUrl;
         if (subredditDataJsonObject.isNull(JSONUtils.BANNER_BACKGROUND_IMAGE_KEY)) {
@@ -52,7 +53,7 @@ class ParseSubredditData {
         }
 
         return new SubredditData(id, subredditFullName, iconUrl, bannerImageUrl, description,
-                sidebarDescription, nSubscribers);
+                sidebarDescription, nSubscribers, createdUTC);
     }
 
     interface ParseSubredditDataListener {
