@@ -41,7 +41,7 @@ public class ParseUserData {
         long cakeday = userDataJson.getLong(JSONUtils.CREATED_UTC_KEY) * 1000;
         boolean isGold = userDataJson.getBoolean(JSONUtils.IS_GOLD_KEY);
         boolean isFriend = userDataJson.getBoolean(JSONUtils.IS_FRIEND_KEY);
-        String description = userDataJson.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY);
+        String description = userDataJson.getJSONObject(JSONUtils.SUBREDDIT_KEY).getString(JSONUtils.PUBLIC_DESCRIPTION_KEY);
 
         return new UserData(userName, iconImageUrl, bannerImageUrl, linkKarma, commentKarma, cakeday,
                 isGold, isFriend, canBeFollowed, description);
