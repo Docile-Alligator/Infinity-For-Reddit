@@ -706,6 +706,16 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 sidebarIntent.putExtra(ViewSidebarActivity.EXTRA_SUBREDDIT_NAME, subredditName);
                 startActivity(sidebarIntent);
                 return true;
+            case R.id.action_share_view_subreddit_detail_activity:
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "https://www.reddit.com/r/" + subredditName);
+                if (shareIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
+                } else {
+                    Toast.makeText(this, R.string.no_app, Toast.LENGTH_SHORT).show();
+                }
+                return true;
         }
         return false;
     }

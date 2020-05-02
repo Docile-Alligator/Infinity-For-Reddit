@@ -280,9 +280,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         userViewModel.getUserLiveData().observe(this, userData -> {
             if (userData != null) {
                 if (userData.getBanner().equals("")) {
-                    bannerImageView.setOnClickListener(view -> {
-                        //Do nothing since the user has no banner image
-                    });
+                    bannerImageView.setOnClickListener(null);
                 } else {
                     glide.load(userData.getBanner()).into(bannerImageView);
                     bannerImageView.setOnClickListener(view -> {
@@ -297,9 +295,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                     glide.load(getDrawable(R.drawable.subreddit_default_icon))
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0)))
                             .into(iconGifImageView);
-                    iconGifImageView.setOnClickListener(view -> {
-                        //Do nothing since the user has no icon image
-                    });
+                    iconGifImageView.setOnClickListener(null);
                 } else {
                     glide.load(userData.getIconUrl())
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0)))
@@ -620,6 +616,16 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 return true;
             case R.id.action_change_post_layout_view_user_detail_activity:
                 postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+                return true;
+            case R.id.action_share_view_user_detail_activity:
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "https://www.reddit.com/user/" + username);
+                if (shareIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
+                } else {
+                    Toast.makeText(this, R.string.no_app, Toast.LENGTH_SHORT).show();
+                }
                 return true;
         }
         return false;
