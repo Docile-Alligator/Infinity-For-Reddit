@@ -74,7 +74,7 @@
                         android:textColor="@android:color/white"
                         android:layout_gravity="center_horizontal"/>
 
-                    <RelativeLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -84,20 +84,51 @@
                             android:id="@+id/subscriber_count_text_view_view_subreddit_detail_activity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="?attr/primaryTextColor"
                             android:textSize="?attr/font_default"
-                            android:layout_alignParentStart="true"
-                            android:layout_toStartOf="@id/online_subscriber_count_text_view_view_subreddit_detail_activity" />
+                            app:layout_constraintBottom_toTopOf="@id/online_subscriber_count_text_view_view_subreddit_detail_activity"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/barrier"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintHorizontal_bias="0" />
 
                         <TextView
                             android:id="@+id/online_subscriber_count_text_view_view_subreddit_detail_activity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:textColor="?attr/primaryTextColor"
-                            android:textSize="?attr/font_default" />
+                            android:textSize="?attr/font_default"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/barrier"
+                            app:layout_constraintTop_toBottomOf="@id/subscriber_count_text_view_view_subreddit_detail_activity"
+                            app:layout_constraintHorizontal_bias="0" />
 
-                    </RelativeLayout>
+                        <TextView
+                            android:id="@+id/since_text_view_view_subreddit_detail_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/since"
+                            app:layout_constraintBottom_toTopOf="@id/creation_time_text_view_view_subreddit_detail_activity"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/creation_time_text_view_view_subreddit_detail_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:textSize="?attr/font_default"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/since_text_view_view_subreddit_detail_activity" />
+
+                        <androidx.constraintlayout.widget.Barrier
+                            android:id="@+id/barrier"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:barrierDirection="start"
+                            app:constraint_referenced_ids="creation_time_text_view_view_subreddit_detail_activity, since_text_view_view_subreddit_detail_activity" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <TextView
                         android:id="@+id/description_text_view_view_subreddit_detail_activity"

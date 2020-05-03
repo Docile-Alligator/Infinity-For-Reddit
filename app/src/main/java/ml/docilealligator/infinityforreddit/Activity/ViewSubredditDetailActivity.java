@@ -41,6 +41,9 @@ import com.google.android.material.tabs.TabLayout;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -119,6 +122,10 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     TextView nSubscribersTextView;
     @BindView(R.id.online_subscriber_count_text_view_view_subreddit_detail_activity)
     TextView nOnlineSubscribersTextView;
+    @BindView(R.id.since_text_view_view_subreddit_detail_activity)
+    TextView sinceTextView;
+    @BindView(R.id.creation_time_text_view_view_subreddit_detail_activity)
+    TextView creationTimeTextView;
     @BindView(R.id.description_text_view_view_subreddit_detail_activity)
     TextView descriptionTextView;
     @BindView(R.id.bottom_navigation_view_subreddit_detail_activity)
@@ -322,6 +329,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         setSupportActionBar(toolbar);
 
         glide = Glide.with(this);
+        Locale locale = getResources().getConfiguration().locale;
 
         mSubredditViewModel = new ViewModelProvider(this,
                 new SubredditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, subredditName))
@@ -370,6 +378,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 subredditNameTextView.setText(subredditFullName);
                 String nSubscribers = getString(R.string.subscribers_number_detail, subredditData.getNSubscribers());
                 nSubscribersTextView.setText(nSubscribers);
+                creationTimeTextView.setText(new SimpleDateFormat("MMM d, yyyy",
+                        locale).format(subredditData.getCreatedUTC()));
                 if (subredditData.getDescription().equals("")) {
                     descriptionTextView.setVisibility(View.GONE);
                 } else {
@@ -416,6 +426,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         nSubscribersTextView.setTextColor(primaryTextColor);
         nOnlineSubscribersTextView.setTextColor(primaryTextColor);
+        sinceTextView.setTextColor(primaryTextColor);
+        creationTimeTextView.setTextColor(primaryTextColor);
         descriptionTextView.setTextColor(primaryTextColor);
         bottomNavigationView.setBackgroundTint(ColorStateList.valueOf(mCustomThemeWrapper.getBottomAppBarBackgroundColor()));
         int bottomAppBarIconColor = mCustomThemeWrapper.getBottomAppBarIconColor();
