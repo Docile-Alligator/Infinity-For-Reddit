@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -1849,6 +1848,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         PlayerView videoPlayer;
         @BindView(R.id.mute_exo_playback_control_view)
         ImageView muteButton;
+        @BindView(R.id.fullscreen_exo_playback_control_view)
+        ImageView fullscreenButton;
         @BindView(R.id.bottom_constraint_layout_item_post_video_type_autoplay)
         ConstraintLayout bottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_video_type_autoplay)
@@ -1908,6 +1909,19 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         helper.setVolume(1f);
                         volume = 1f;
                     }
+                }
+            });
+
+            fullscreenButton.setOnClickListener(view -> {
+                Post post = getItem(getAdapterPosition());
+                if (post != null) {
+                    Intent intent = new Intent(mActivity, ViewVideoActivity.class);
+                    intent.setData(Uri.parse(post.getVideoUrl()));
+                    intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
+                    intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, post.getSubredditName());
+                    intent.putExtra(ViewVideoActivity.EXTRA_ID, post.getId());
+                    intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, post.getTitle());
+                    mActivity.startActivity(intent);
                 }
             });
         }

@@ -473,6 +473,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                         hideItem.setVisible(true);
                         hideItem.setTitle(R.string.action_hide_post);
                     }
+
+                    mMenu.findItem(R.id.action_report_view_post_detail_activity).setVisible(true);
                 } else {
                     saveItem.setVisible(false);
                     hideItem.setVisible(false);
@@ -622,6 +624,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                         hideItem.setVisible(true);
                                         hideItem.setTitle(R.string.action_hide_post);
                                     }
+
+                                    mMenu.findItem(R.id.action_report_view_post_detail_activity).setVisible(true);
                                 } else {
                                     saveItem.setVisible(false);
                                     hideItem.setVisible(false);
@@ -931,6 +935,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                             hideItem.setVisible(true);
                                             hideItem.setTitle(R.string.action_hide_post);
                                         }
+
+                                        mMenu.findItem(R.id.action_report_view_post_detail_activity).setVisible(true);
                                     } else {
                                         saveItem.setVisible(false);
                                         hideItem.setVisible(false);
@@ -1264,6 +1270,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                     hideItem.setVisible(true);
                     hideItem.setTitle(R.string.action_hide_post);
                 }
+
+                mMenu.findItem(R.id.action_report_view_post_detail_activity).setVisible(true);
             } else {
                 saveItem.setVisible(false);
                 hideItem.setVisible(false);
@@ -1481,6 +1489,11 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 flairBottomSheetFragment.setArguments(bundle);
                 flairBottomSheetFragment.show(getSupportFragmentManager(), flairBottomSheetFragment.getTag());
                 return true;
+            case R.id.action_report_view_post_detail_activity:
+                Intent intent = new Intent(this, ReportActivity.class);
+                intent.putExtra(ReportActivity.EXTRA_SUBREDDIT_NAME, mPost.getSubredditName());
+                intent.putExtra(ReportActivity.EXTRA_THING_FULLNAME, mPost.getFullName());
+                startActivity(intent);
             case android.R.id.home:
                 onBackPressed();
                 return true;

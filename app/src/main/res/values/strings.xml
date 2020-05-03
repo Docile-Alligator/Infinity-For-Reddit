@@ -25,6 +25,7 @@
     <string name="theme_preview_activity_label">Theme Preview</string>
     <string name="edit_multi_reddit_activity_label">Edit Multireddit</string>
     <string name="selected_subeddits_activity_label">Selected Subreddits</string>
+    <string name="report_activity_label">Report</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -57,6 +58,7 @@
     <string name="action_delete_multi_reddit">Delete Multireddit</string>
     <string name="action_share">Share</string>
     <string name="action_preview">Preview</string>
+    <string name="action_report">Report</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -701,5 +703,14 @@
 
     <string name="n_awards">%1$d Awards</string>
     <string name="one_award">1 Award</string>
+
+    <string name="report_successful">Reported</string>
+    <string name="report_failed">Report failed</string>
+    <string name="report_reason_not_selected">You haven\'t selected a reason</string>
+    
+    <string name="report_reason_general_spam">Spam</string>
+    <string name="report_reason_general_copyright_issue">Copyright Issue</string>
+    <string name="report_reason_general_child_pornography">Child Pornography</string>
+    <string name="report_reason_general_abusive_content">Abusive Content</string>
 
 </resources>

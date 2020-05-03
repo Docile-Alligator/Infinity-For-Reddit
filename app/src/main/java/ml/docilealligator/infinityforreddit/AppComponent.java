@@ -21,6 +21,7 @@ import ml.docilealligator.infinityforreddit.Activity.PostImageActivity;
 import ml.docilealligator.infinityforreddit.Activity.PostLinkActivity;
 import ml.docilealligator.infinityforreddit.Activity.PostTextActivity;
 import ml.docilealligator.infinityforreddit.Activity.PostVideoActivity;
+import ml.docilealligator.infinityforreddit.Activity.ReportActivity;
 import ml.docilealligator.infinityforreddit.Activity.RulesActivity;
 import ml.docilealligator.infinityforreddit.Activity.SearchActivity;
 import ml.docilealligator.infinityforreddit.Activity.SearchResultActivity;
@@ -161,4 +162,6 @@ public interface AppComponent {
     void inject(EditMultiRedditActivity editMultiRedditActivity);
 
     void inject(SelectedSubredditsActivity selectedSubredditsActivity);
+
+    void inject(ReportActivity reportActivity);
 }
