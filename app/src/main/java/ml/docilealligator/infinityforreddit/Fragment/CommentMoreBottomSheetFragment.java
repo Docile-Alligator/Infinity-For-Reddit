@@ -22,6 +22,7 @@ import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Activity.EditCommentActivity;
+import ml.docilealligator.infinityforreddit.Activity.ReportActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.CommentData;
@@ -44,6 +45,8 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
     TextView shareTextView;
     @BindView(R.id.copy_text_view_comment_more_bottom_sheet_fragment)
     TextView copyTextView;
+    @BindView(R.id.report_view_comment_more_bottom_sheet_fragment)
+    TextView reportTextView;
     private AppCompatActivity activity;
     public CommentMoreBottomSheetFragment() {
         // Required empty public constructor
@@ -117,6 +120,15 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
             copyBundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, commentData.getCommentRawText());
             copyTextBottomSheetFragment.setArguments(copyBundle);
             copyTextBottomSheetFragment.show(activity.getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
+        });
+
+        reportTextView.setOnClickListener(view -> {
+            Intent intent = new Intent(activity, ReportActivity.class);
+            intent.putExtra(ReportActivity.EXTRA_SUBREDDIT_NAME, commentData.getSubredditName());
+            intent.putExtra(ReportActivity.EXTRA_THING_FULLNAME, commentData.getFullName());
+            activity.startActivity(intent);
+
+            dismiss();
         });
 
         return rootView;

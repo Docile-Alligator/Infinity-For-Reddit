@@ -127,6 +127,11 @@ public class CustomThemeWrapper {
                 getDefaultColor("#000000", "#FFFFFF", "#FFFFFF"));
     }
 
+    public int getBottomAppBarIconColor() {
+        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.BOTTOM_APP_BAR_ICON_COLOR,
+                getDefaultColor("#000000", "#FFFFFF", "#FFFFFF"));
+    }
+
     public int getPostIconAndInfoColor() {
         return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.POST_ICON_AND_INFO_COLOR,
                 getDefaultColor("#8A000000", "#B3FFFFFF", "#B3FFFFFF"));
@@ -449,6 +454,7 @@ public class CustomThemeWrapper {
         customTheme.commentBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.primaryIconColor = Color.parseColor("#000000");
+        customTheme.bottomAppBarIconColor = Color.parseColor("#000000");
         customTheme.postIconAndInfoColor = Color.parseColor("#8A000000");
         customTheme.commentIconAndInfoColor = Color.parseColor("#8A000000");
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
@@ -525,6 +531,7 @@ public class CustomThemeWrapper {
         customTheme.commentBackgroundColor = Color.parseColor("#242424");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#121212");
         customTheme.primaryIconColor = Color.parseColor("#FFFFFF");
+        customTheme.bottomAppBarIconColor = Color.parseColor("#FFFFFF");
         customTheme.postIconAndInfoColor = Color.parseColor("#B3FFFFFF");
         customTheme.commentIconAndInfoColor = Color.parseColor("#B3FFFFFF");
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
@@ -601,6 +608,7 @@ public class CustomThemeWrapper {
         customTheme.commentBackgroundColor = Color.parseColor("#000000");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#000000");
         customTheme.primaryIconColor = Color.parseColor("#FFFFFF");
+        customTheme.bottomAppBarIconColor = Color.parseColor("#FFFFFF");
         customTheme.postIconAndInfoColor = Color.parseColor("#B3FFFFFF");
         customTheme.commentIconAndInfoColor = Color.parseColor("#B3FFFFFF");
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
@@ -677,6 +685,7 @@ public class CustomThemeWrapper {
         customTheme.commentBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.primaryIconColor = Color.parseColor("#000000");
+        customTheme.bottomAppBarIconColor = Color.parseColor("#000000");
         customTheme.postIconAndInfoColor = Color.parseColor("#3C4043");
         customTheme.commentIconAndInfoColor = Color.parseColor("#3C4043");
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#3C4043");
@@ -753,6 +762,7 @@ public class CustomThemeWrapper {
         customTheme.commentBackgroundColor = Color.parseColor("#242424");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#121212");
         customTheme.primaryIconColor = Color.parseColor("#FFFFFF");
+        customTheme.bottomAppBarIconColor = Color.parseColor("#FFFFFF");
         customTheme.postIconAndInfoColor = Color.parseColor("#B3FFFFFF");
         customTheme.commentIconAndInfoColor = Color.parseColor("#B3FFFFFF");
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
@@ -829,6 +839,7 @@ public class CustomThemeWrapper {
         customTheme.commentBackgroundColor = Color.parseColor("#000000");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#000000");
         customTheme.primaryIconColor = Color.parseColor("#FFFFFF");
+        customTheme.bottomAppBarIconColor = Color.parseColor("#FFFFFF");
         customTheme.postIconAndInfoColor = Color.parseColor("#B3FFFFFF");
         customTheme.commentIconAndInfoColor = Color.parseColor("#B3FFFFFF");
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
@@ -905,6 +916,7 @@ public class CustomThemeWrapper {
         customTheme.commentBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.primaryIconColor = Color.parseColor("#000000");
+        customTheme.bottomAppBarIconColor = Color.parseColor("#000000");
         customTheme.postIconAndInfoColor = Color.parseColor("#8A000000");
         customTheme.commentIconAndInfoColor = Color.parseColor("#8A000000");
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
@@ -981,6 +993,7 @@ public class CustomThemeWrapper {
         customTheme.commentBackgroundColor = Color.parseColor("#242424");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#121212");
         customTheme.primaryIconColor = Color.parseColor("#FFFFFF");
+        customTheme.bottomAppBarIconColor = Color.parseColor("#FFFFFF");
         customTheme.postIconAndInfoColor = Color.parseColor("#B3FFFFFF");
         customTheme.commentIconAndInfoColor = Color.parseColor("#B3FFFFFF");
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
@@ -1057,6 +1070,7 @@ public class CustomThemeWrapper {
         customTheme.commentBackgroundColor = Color.parseColor("#000000");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#000000");
         customTheme.primaryIconColor = Color.parseColor("#FFFFFF");
+        customTheme.bottomAppBarIconColor = Color.parseColor("#FFFFFF");
         customTheme.postIconAndInfoColor = Color.parseColor("#B3FFFFFF");
         customTheme.commentIconAndInfoColor = Color.parseColor("#B3FFFFFF");
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
@@ -1133,6 +1147,7 @@ public class CustomThemeWrapper {
         customTheme.commentBackgroundColor = Color.parseColor("#393A59");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#393A59");
         customTheme.primaryIconColor = Color.parseColor("#FFFFFF");
+        customTheme.bottomAppBarIconColor = Color.parseColor("#FFFFFF");
         customTheme.postIconAndInfoColor = Color.parseColor("#FFFFFF");
         customTheme.commentIconAndInfoColor = Color.parseColor("#FFFFFF");
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
@@ -1209,6 +1224,7 @@ public class CustomThemeWrapper {
         customTheme.commentBackgroundColor = Color.parseColor("#C0F0F4");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#D48AE0");
         customTheme.primaryIconColor = Color.parseColor("#000000");
+        customTheme.bottomAppBarIconColor = Color.parseColor("#000000");
         customTheme.postIconAndInfoColor = Color.parseColor("#000000");
         customTheme.commentIconAndInfoColor = Color.parseColor("#000000");
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#3C4043");

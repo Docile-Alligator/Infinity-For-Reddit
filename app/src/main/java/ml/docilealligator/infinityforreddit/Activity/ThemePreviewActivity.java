@@ -323,11 +323,11 @@ public class ThemePreviewActivity extends AppCompatActivity {
         primaryTextView.setTextColor(customTheme.primaryTextColor);
         secondaryTextView.setTextColor(customTheme.secondaryTextColor);
         bottomNavigationView.setBackgroundTint(ColorStateList.valueOf(customTheme.bottomAppBarBackgroundColor));
-        int primaryIconColor = customTheme.primaryIconColor;
-        subscriptionsBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        multiRedditBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        messageBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        profileBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        int bottomAppBarIconColor = customTheme.bottomAppBarIconColor;
+        subscriptionsBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        multiRedditBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        messageBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        profileBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         applyTabLayoutTheme(tabLayout);
         applyFABTheme(fab);
         unsubscribedColor = customTheme.unsubscribed;

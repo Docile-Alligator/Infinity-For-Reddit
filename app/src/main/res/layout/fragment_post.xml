@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <ml.docilealligator.infinityforreddit.CustomView.CustomToroContainer
             android:id="@+id/recycler_view_post_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

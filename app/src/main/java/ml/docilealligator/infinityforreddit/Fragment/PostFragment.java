@@ -46,19 +46,26 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import im.ene.toro.exoplayer.ExoCreator;
+import im.ene.toro.media.PlaybackInfo;
+import im.ene.toro.media.VolumeInfo;
+import im.ene.toro.widget.Container;
 import ml.docilealligator.infinityforreddit.Activity.BaseActivity;
 import ml.docilealligator.infinityforreddit.Activity.FilteredThingActivity;
 import ml.docilealligator.infinityforreddit.Activity.MainActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.Adapter.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.CustomView.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.Event.ChangeDefaultPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangePostLayoutEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeShowAbsoluteNumberOfVotesEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeShowElapsedTimeEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeVideoAutoplayEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVoteButtonsPositionEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeWifiStatusEvent;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.Event.ShowDividerInCompactLayoutPreferenceEvent;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
@@ -71,7 +78,11 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
+
+import static im.ene.toro.media.PlaybackInfo.INDEX_UNSET;
+import static im.ene.toro.media.PlaybackInfo.TIME_UNSET;
 
 
 /**
@@ -94,7 +105,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @BindView(R.id.swipe_refresh_layout_post_fragment)
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view_post_fragment)
-    RecyclerView mPostRecyclerView;
+    CustomToroContainer mPostRecyclerView;
     @BindView(R.id.fetch_post_info_linear_layout_post_fragment)
     LinearLayout mFetchPostInfoLinearLayout;
     @BindView(R.id.fetch_post_info_image_view_post_fragment)
@@ -121,6 +132,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     SharedPreferences mPostLayoutSharedPreferences;
     @Inject
     CustomThemeWrapper customThemeWrapper;
+    @Inject
+    ExoCreator exoCreator;
     private RequestManager mGlide;
     private AppCompatActivity activity;
     private LinearLayoutManager mLinearLayoutManager;
@@ -150,6 +163,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
         if (isInLazyMode && isLazyModePaused) {
             resumeLazyMode(false);
+        }
+        if (mAdapter != null && mPostRecyclerView != null) {
+            mPostRecyclerView.onWindowVisibilityChanged(View.VISIBLE);
         }
     }
 
@@ -323,12 +339,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         int filter = getArguments().getInt(EXTRA_FILTER);
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         boolean nsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_KEY, false);
-        boolean needBlurNsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_NSFW_KEY, true);
-        boolean needBlurSpoiler = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_SPOILER_KEY, false);
-        boolean voteButtonsOnTheRight = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
-        boolean showElapsedTime = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
-        boolean showDividerInCompactLayout = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_DIVIDER_IN_COMPACT_LAYOUT, true);
-        boolean showAbsoluteNumberOfVotes = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
         int defaultPostLayout = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY, "0"));
 
         if (postType == PostDataSource.TYPE_SEARCH) {
@@ -342,9 +352,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     customThemeWrapper, accessToken, postType, postLayout, true,
-                    needBlurNsfw, needBlurSpoiler, voteButtonsOnTheRight, showElapsedTime,
-                    showDividerInCompactLayout, showAbsoluteNumberOfVotes,
-                    new PostRecyclerViewAdapter.Callback() {
+                    mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -407,9 +415,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     customThemeWrapper, accessToken, postType, postLayout, displaySubredditName,
-                    needBlurNsfw, needBlurSpoiler, voteButtonsOnTheRight, showElapsedTime,
-                    showDividerInCompactLayout, showAbsoluteNumberOfVotes,
-                    new PostRecyclerViewAdapter.Callback() {
+                    mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -457,9 +463,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     customThemeWrapper, accessToken, postType, postLayout, true,
-                    needBlurNsfw, needBlurSpoiler, voteButtonsOnTheRight, showElapsedTime,
-                    showDividerInCompactLayout, showAbsoluteNumberOfVotes,
-                    new PostRecyclerViewAdapter.Callback() {
+                    mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -505,9 +509,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     customThemeWrapper, accessToken, postType, postLayout, true,
-                    needBlurNsfw, needBlurSpoiler, voteButtonsOnTheRight, showElapsedTime,
-                    showDividerInCompactLayout, showAbsoluteNumberOfVotes,
-                    new PostRecyclerViewAdapter.Callback() {
+                    mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -546,9 +548,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
                     customThemeWrapper, accessToken, postType, postLayout, true,
-                    needBlurNsfw, needBlurSpoiler, voteButtonsOnTheRight, showElapsedTime,
-                    showDividerInCompactLayout, showAbsoluteNumberOfVotes,
-                    new PostRecyclerViewAdapter.Callback() {
+                    mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
                             mPostViewModel.retryLoadingMore();
@@ -569,6 +569,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
 
         mPostRecyclerView.setAdapter(mAdapter);
+        mPostRecyclerView.setCacheManager(mAdapter);
+        mPostRecyclerView.setPlayerInitializer(order -> {
+            VolumeInfo volumeInfo = new VolumeInfo(true, 0f);
+            return new PlaybackInfo(INDEX_UNSET, TIME_UNSET, volumeInfo);
+        });
+
         mPostViewModel.getPosts().observe(this, posts -> mAdapter.submitList(posts));
 
         mPostViewModel.hasPost().observe(this, hasPost -> {
@@ -846,6 +852,31 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
     }
 
+    @Subscribe
+    public void onChangeVideoAutoplayEvent(ChangeVideoAutoplayEvent changeVideoAutoplayEvent) {
+        if (mAdapter != null) {
+            boolean autoplay = false;
+            if (changeVideoAutoplayEvent.autoplay.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ALWAYS_ON)) {
+                autoplay = true;
+            } else if (changeVideoAutoplayEvent.autoplay.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI)) {
+                autoplay = Utils.isConnectedToWifi(activity);
+            }
+            mAdapter.setAutoplay(autoplay);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeWifiStatusEvent(ChangeWifiStatusEvent changeWifiStatusEvent) {
+        if (mAdapter != null) {
+            String autoplay = mSharedPreferences.getString(SharedPreferencesUtils.VIDEO_AUTOPLAY, SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_NEVER);
+            if (autoplay.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI)) {
+                mAdapter.setAutoplay(changeWifiStatusEvent.isConnectedToWifi);
+                refreshAdapter();
+            }
+        }
+    }
+
     private void refreshAdapter() {
         int previousPosition = -1;
         if (mLinearLayoutManager != null) {
@@ -871,6 +902,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         super.onPause();
         if (isInLazyMode) {
             pauseLazyMode(false);
+        }
+        if (mAdapter != null && mPostRecyclerView != null) {
+            mPostRecyclerView.onWindowVisibilityChanged(View.GONE);
         }
     }
 

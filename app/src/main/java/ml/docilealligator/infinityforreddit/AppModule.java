@@ -6,6 +6,11 @@ import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
+import com.google.android.exoplayer2.database.ExoDatabaseProvider;
+import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
+import com.google.android.exoplayer2.upstream.cache.SimpleCache;
+
+import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Named;
@@ -13,6 +18,10 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import im.ene.toro.exoplayer.Config;
+import im.ene.toro.exoplayer.ExoCreator;
+import im.ene.toro.exoplayer.MediaSourceBuilder;
+import im.ene.toro.exoplayer.ToroExo;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
@@ -146,5 +155,15 @@ class AppModule {
                                                  @Named("dark_theme") SharedPreferences darkThemeSharedPreferences,
                                                  @Named("amoled_theme") SharedPreferences amoledThemeSharedPreferences) {
         return new CustomThemeWrapper(lightThemeSharedPreferences, darkThemeSharedPreferences, amoledThemeSharedPreferences);
+    }
+
+    @Provides
+    @Singleton
+    ExoCreator provideExoCreator() {
+        SimpleCache cache = new SimpleCache(new File(mApplication.getCacheDir(), "/toro_cache"),
+                new LeastRecentlyUsedCacheEvictor(200 * 1024 * 1024), new ExoDatabaseProvider(mApplication));
+        Config config = new Config.Builder(mApplication).setMediaSourceBuilder(MediaSourceBuilder.LOOPING).setCache(cache)
+                .build();
+        return ToroExo.with(mApplication).getCreator(config);
     }
 }

@@ -304,4 +304,8 @@ public interface RedditAPI {
 
     @GET("/api/multi/multipath/")
     Call<String> getMultiRedditInfo(@HeaderMap Map<String, String> headers, @Query("multipath") String multipath);
+
+    @FormUrlEncoded
+    @POST("/api/report")
+    Call<String> report(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }

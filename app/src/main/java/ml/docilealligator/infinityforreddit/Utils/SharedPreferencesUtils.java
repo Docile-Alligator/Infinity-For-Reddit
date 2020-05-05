@@ -76,6 +76,10 @@ public class SharedPreferencesUtils {
     public static final String VOLUME_KEYS_NAVIGATE_POSTS = "volume_keys_navigate_posts";
     public static final String MUTE_VIDEO = "mute_video";
     public static final String OPEN_LINK_IN_APP = "open_link_in_app";
+    public static final String VIDEO_AUTOPLAY = "video_autoplay";
+    public static final String VIDEO_AUTOPLAY_VALUE_ALWAYS_ON = "2";
+    public static final String VIDEO_AUTOPLAY_VALUE_ON_WIFI = "1";
+    public static final String VIDEO_AUTOPLAY_VALUE_NEVER = "0";
     public static final String LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON = "lock_jump_to_next_top_level_comment_button";
     public static final String SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON = "swipe_up_to_hide_jump_to_next_top_level_comments_button";
     public static final String SHOW_TOP_LEVEL_COMMENTS_FIRST = "show_top_level_comments_first";
@@ -89,10 +93,10 @@ public class SharedPreferencesUtils {
     public static final String CUSTOMIZE_DARK_THEME = "customize_dark_theme";
     public static final String CUSTOMIZE_AMOLED_THEME = "customize_amoled_theme";
     public static final String MANAGE_THEMES = "manage_themes";
-    public static final String DELETE_ALL_SUBREDDITS_DATA_IN_DATABASE= "delete_all_subreddits_data_in_database";
-    public static final String DELETE_ALL_USERS_DATA_IN_DATABASE= "delete_all_users_data_in_database";
-    public static final String DELETE_ALL_SORT_TYPE_DATA_IN_DATABASE= "delete_all_sort_type_data_in_database";
-    public static final String DELETE_ALL_POST_LAYOUT_DATA_IN_DATABASE= "delete_all_post_layout_data_in_database";
+    public static final String DELETE_ALL_SUBREDDITS_DATA_IN_DATABASE = "delete_all_subreddits_data_in_database";
+    public static final String DELETE_ALL_USERS_DATA_IN_DATABASE = "delete_all_users_data_in_database";
+    public static final String DELETE_ALL_SORT_TYPE_DATA_IN_DATABASE = "delete_all_sort_type_data_in_database";
+    public static final String DELETE_ALL_POST_LAYOUT_DATA_IN_DATABASE = "delete_all_post_layout_data_in_database";
     public static final String DELETE_ALL_THEMES_IN_DATABASE = "delete_all_themes_in_database";
     public static final String RESET_ALL_SETTINGS = "reset_all_settings";
 }

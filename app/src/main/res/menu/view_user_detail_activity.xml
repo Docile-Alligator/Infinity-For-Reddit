@@ -31,4 +31,10 @@
         android:orderInCategory="5"
         android:title="@string/action_change_post_layout"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_share_view_user_detail_activity"
+        android:orderInCategory="6"
+        android:title="@string/action_share"
+        app:showAsAction="never" />
 </menu>

@@ -39,7 +39,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NotificationUtils;
 import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.SubmitPost;
+import ml.docilealligator.infinityforreddit.Post.SubmitPost;
 import retrofit2.Retrofit;
 
 public class SubmitPostService extends Service {

@@ -5,10 +5,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 
 import ml.docilealligator.infinityforreddit.NetworkState;
-import ml.docilealligator.infinityforreddit.ParsePost;
 import ml.docilealligator.infinityforreddit.RedditAPI;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
@@ -42,6 +43,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     private int filter;
     private String userWhere;
     private String multiRedditPath;
+    private LinkedHashSet<Post> postLinkedHashSet;
 
     private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
     private MutableLiveData<NetworkState> initialLoadStateLiveData;
@@ -62,6 +64,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         this.sortType = sortType == null ? new SortType(SortType.Type.BEST) : sortType;
         this.filter = filter;
         this.nsfw = nsfw;
+        postLinkedHashSet = new LinkedHashSet<>();
     }
 
     PostDataSource(Retrofit retrofit, String accessToken, Locale locale, String path, int postType,
@@ -97,6 +100,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         }
         this.filter = filter;
         this.nsfw = nsfw;
+        postLinkedHashSet = new LinkedHashSet<>();
     }
 
     PostDataSource(Retrofit retrofit, String accessToken, Locale locale, String subredditOrUserName, int postType,
@@ -113,6 +117,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         userWhere = where;
         this.filter = filter;
         this.nsfw = nsfw;
+        postLinkedHashSet = new LinkedHashSet<>();
     }
 
     PostDataSource(Retrofit retrofit, String accessToken, Locale locale, String subredditOrUserName, String query,
@@ -129,6 +134,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         this.sortType = sortType == null ? new SortType(SortType.Type.RELEVANCE) : sortType;
         this.filter = filter;
         this.nsfw = nsfw;
+        postLinkedHashSet = new LinkedHashSet<>();
     }
 
     MutableLiveData<NetworkState> getPaginationNetworkStateLiveData() {
@@ -234,7 +240,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                         ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
                                 new ParsePost.ParsePostsListingListener() {
                                     @Override
-                                    public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                    public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
                                         String nextPageKey;
                                         if (lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
                                             nextPageKey = null;
@@ -243,13 +249,15 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                         }
 
                                         if (newPosts.size() != 0) {
-                                            callback.onResult(newPosts, null, nextPageKey);
+                                            postLinkedHashSet.addAll(newPosts);
+                                            callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);
                                             hasPostLiveData.postValue(true);
                                         } else if (nextPageKey != null) {
                                             loadBestPostsInitial(callback, nextPageKey);
                                             return;
                                         } else {
-                                            callback.onResult(newPosts, null, nextPageKey);
+                                            postLinkedHashSet.addAll(newPosts);
+                                            callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);
                                             hasPostLiveData.postValue(false);
                                         }
 
@@ -296,11 +304,18 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                     ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
-                                public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
                                     if (newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
                                         loadBestPostsAfter(params, callback, lastItem);
                                     } else {
-                                        callback.onResult(newPosts, lastItem);
+                                        int currentPostsSize = postLinkedHashSet.size();
+                                        postLinkedHashSet.addAll(newPosts);
+                                        if (currentPostsSize == postLinkedHashSet.size()) {
+                                            callback.onResult(new ArrayList<>(), lastItem);
+                                        } else {
+                                            List<Post> newPostsList = new ArrayList<>(postLinkedHashSet).subList(currentPostsSize, postLinkedHashSet.size());
+                                            callback.onResult(newPostsList, lastItem);
+                                        }
                                         paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                                     }
                                 }
@@ -366,7 +381,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                         ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
                                 new ParsePost.ParsePostsListingListener() {
                                     @Override
-                                    public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                    public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
                                         String nextPageKey;
                                         if (lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
                                             nextPageKey = null;
@@ -375,13 +390,15 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                         }
 
                                         if (newPosts.size() != 0) {
-                                            callback.onResult(newPosts, null, nextPageKey);
+                                            postLinkedHashSet.addAll(newPosts);
+                                            callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);
                                             hasPostLiveData.postValue(true);
                                         } else if (nextPageKey != null) {
                                             loadSubredditPostsInitial(callback, nextPageKey);
                                             return;
                                         } else {
-                                            callback.onResult(newPosts, null, nextPageKey);
+                                            postLinkedHashSet.addAll(newPosts);
+                                            callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);
                                             hasPostLiveData.postValue(false);
                                         }
 
@@ -439,11 +456,18 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                     ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
-                                public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
                                     if (newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
                                         loadSubredditPostsAfter(params, callback, lastItem);
                                     } else {
-                                        callback.onResult(newPosts, lastItem);
+                                        int currentPostsSize = postLinkedHashSet.size();
+                                        postLinkedHashSet.addAll(newPosts);
+                                        if (currentPostsSize == postLinkedHashSet.size()) {
+                                            callback.onResult(new ArrayList<>(), lastItem);
+                                        } else {
+                                            List<Post> newPostsList = new ArrayList<>(postLinkedHashSet).subList(currentPostsSize, postLinkedHashSet.size());
+                                            callback.onResult(newPostsList, lastItem);
+                                        }
                                         paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                                     }
                                 }
@@ -493,7 +517,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                     ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
-                                public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
                                     String nextPageKey;
                                     if (lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
                                         nextPageKey = null;
@@ -502,13 +526,15 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                     }
 
                                     if (newPosts.size() != 0) {
-                                        callback.onResult(newPosts, null, nextPageKey);
+                                        postLinkedHashSet.addAll(newPosts);
+                                        callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);
                                         hasPostLiveData.postValue(true);
                                     } else if (nextPageKey != null) {
                                         loadUserPostsInitial(callback, nextPageKey);
                                         return;
                                     } else {
-                                        callback.onResult(newPosts, null, nextPageKey);
+                                        postLinkedHashSet.addAll(newPosts);
+                                        callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);
                                         hasPostLiveData.postValue(false);
                                     }
 
@@ -562,11 +588,18 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                     ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
-                                public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
                                     if (newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
                                         loadUserPostsAfter(params, callback, lastItem);
                                     } else {
-                                        callback.onResult(newPosts, lastItem);
+                                        int currentPostsSize = postLinkedHashSet.size();
+                                        postLinkedHashSet.addAll(newPosts);
+                                        if (currentPostsSize == postLinkedHashSet.size()) {
+                                            callback.onResult(new ArrayList<>(), lastItem);
+                                        } else {
+                                            List<Post> newPostsList = new ArrayList<>(postLinkedHashSet).subList(currentPostsSize, postLinkedHashSet.size());
+                                            callback.onResult(newPostsList, lastItem);
+                                        }
                                         paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                                     }
                                 }
@@ -638,7 +671,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                     ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
-                                public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
                                     String nextPageKey;
                                     if (lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
                                         nextPageKey = null;
@@ -647,13 +680,15 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                     }
 
                                     if (newPosts.size() != 0) {
-                                        callback.onResult(newPosts, null, nextPageKey);
+                                        postLinkedHashSet.addAll(newPosts);
+                                        callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);
                                         hasPostLiveData.postValue(true);
                                     } else if (nextPageKey != null) {
                                         loadSearchPostsInitial(callback, nextPageKey);
                                         return;
                                     } else {
-                                        callback.onResult(newPosts, null, nextPageKey);
+                                        postLinkedHashSet.addAll(newPosts);
+                                        callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);
                                         hasPostLiveData.postValue(false);
                                     }
 
@@ -727,11 +762,18 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                     ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
-                                public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
                                     if (newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
                                         loadSearchPostsAfter(params, callback, lastItem);
                                     } else {
-                                        callback.onResult(newPosts, lastItem);
+                                        int currentPostsSize = postLinkedHashSet.size();
+                                        postLinkedHashSet.addAll(newPosts);
+                                        if (currentPostsSize == postLinkedHashSet.size()) {
+                                            callback.onResult(new ArrayList<>(), lastItem);
+                                        } else {
+                                            List<Post> newPostsList = new ArrayList<>(postLinkedHashSet).subList(currentPostsSize, postLinkedHashSet.size());
+                                            callback.onResult(newPostsList, lastItem);
+                                        }
                                         paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                                     }
                                 }
@@ -780,7 +822,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                     ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
-                                public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
                                     String nextPageKey;
                                     if (lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
                                         nextPageKey = null;
@@ -789,13 +831,15 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                     }
 
                                     if (newPosts.size() != 0) {
-                                        callback.onResult(newPosts, null, nextPageKey);
+                                        postLinkedHashSet.addAll(newPosts);
+                                        callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);
                                         hasPostLiveData.postValue(true);
                                     } else if (nextPageKey != null) {
                                         loadMultiRedditPostsInitial(callback, nextPageKey);
                                         return;
                                     } else {
-                                        callback.onResult(newPosts, null, nextPageKey);
+                                        postLinkedHashSet.addAll(newPosts);
+                                        callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);
                                         hasPostLiveData.postValue(false);
                                     }
 
@@ -849,11 +893,18 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                     ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
-                                public void onParsePostsListingSuccess(ArrayList<Post> newPosts, String lastItem) {
+                                public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
                                     if (newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
                                         loadMultiRedditPostsAfter(params, callback, lastItem);
                                     } else {
-                                        callback.onResult(newPosts, lastItem);
+                                        int currentPostsSize = postLinkedHashSet.size();
+                                        postLinkedHashSet.addAll(newPosts);
+                                        if (currentPostsSize == postLinkedHashSet.size()) {
+                                            callback.onResult(new ArrayList<>(), lastItem);
+                                        } else {
+                                            List<Post> newPostsList = new ArrayList<>(postLinkedHashSet).subList(currentPostsSize, postLinkedHashSet.size());
+                                            callback.onResult(newPostsList, lastItem);
+                                        }
                                         paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                                     }
                                 }

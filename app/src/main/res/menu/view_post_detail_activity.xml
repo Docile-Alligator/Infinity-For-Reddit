@@ -74,4 +74,11 @@
         android:title="@string/action_edit_flair"
         app:showAsAction="never"
         android:visible="false" />
+
+    <item
+        android:id="@+id/action_report_view_post_detail_activity"
+        android:orderInCategory="12"
+        android:title="@string/action_report"
+        app:showAsAction="never"
+        android:visible="false" />
 </menu>

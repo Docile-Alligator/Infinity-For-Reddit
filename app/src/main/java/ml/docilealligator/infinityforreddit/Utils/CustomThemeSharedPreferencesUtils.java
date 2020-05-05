@@ -29,6 +29,7 @@ public class CustomThemeSharedPreferencesUtils {
     public static final String COMMENT_BACKGROUND_COLOR = "commentBackgroundColor";
     public static final String BOTTOM_APP_BAR_BACKGROUND_COLOR = "bottomAppBarBackgroundColor";
     public static final String PRIMARY_ICON_COLOR = "primaryIconColor";
+    public static final String BOTTOM_APP_BAR_ICON_COLOR = "bottomAppBarIconColor";
     public static final String POST_ICON_AND_INFO_COLOR = "postIconAndInfoColor";
     public static final String COMMENT_ICON_AND_INFO_COLOR = "commentIconAndInfoColor";
     public static final String TOOLBAR_PRIMARY_TEXT_AND_ICON_COLOR = "toolbarPrimaryTextAndIconColor";
@@ -96,6 +97,7 @@ public class CustomThemeSharedPreferencesUtils {
         editor.putInt(COMMENT_BACKGROUND_COLOR, customTheme.commentBackgroundColor);
         editor.putInt(BOTTOM_APP_BAR_BACKGROUND_COLOR, customTheme.bottomAppBarBackgroundColor);
         editor.putInt(PRIMARY_ICON_COLOR, customTheme.primaryIconColor);
+        editor.putInt(BOTTOM_APP_BAR_ICON_COLOR, customTheme.bottomAppBarIconColor);
         editor.putInt(POST_ICON_AND_INFO_COLOR, customTheme.postIconAndInfoColor);
         editor.putInt(COMMENT_ICON_AND_INFO_COLOR, customTheme.commentIconAndInfoColor);
         editor.putInt(TOOLBAR_PRIMARY_TEXT_AND_ICON_COLOR, customTheme.toolbarPrimaryTextAndIconColor);
@@ -118,6 +120,8 @@ public class CustomThemeSharedPreferencesUtils {
         editor.putInt(NSFW_TEXT_COLOR, customTheme.nsfwTextColor);
         editor.putInt(FLAIR_BACKGROUND_COLOR, customTheme.flairBackgroundColor);
         editor.putInt(FLAIR_TEXT_COLOR, customTheme.flairTextColor);
+        editor.putInt(AWARDS_BACKGROUND_COLOR, customTheme.awardsBackgroundColor);
+        editor.putInt(AWARDS_TEXT_COLOR, customTheme.awardsTextColor);
         editor.putInt(ARCHIVED_ICON_TINT, customTheme.archivedTint);
         editor.putInt(LOCKED_ICON_TINT, customTheme.lockedIconTint);
         editor.putInt(CROSSPOST_ICON_TINT, customTheme.crosspostIconTint);

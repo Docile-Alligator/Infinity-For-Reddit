@@ -23,9 +23,11 @@ public class SubredditData {
     private String sidebarDescription;
     @ColumnInfo(name = "subscribers_count")
     private int nSubscribers;
+    @ColumnInfo(name = "created_utc")
+    private long createdUTC;
 
     public SubredditData(@NonNull String id, String name, String iconUrl, String bannerUrl,
-                         String description, String sidebarDescription, int nSubscribers) {
+                         String description, String sidebarDescription, int nSubscribers, long createdUTC) {
         this.id = id;
         this.name = name;
         this.iconUrl = iconUrl;
@@ -33,6 +35,7 @@ public class SubredditData {
         this.description = description;
         this.sidebarDescription = sidebarDescription;
         this.nSubscribers = nSubscribers;
+        this.createdUTC = createdUTC;
     }
 
     @NonNull
@@ -62,5 +65,9 @@ public class SubredditData {
 
     public int getNSubscribers() {
         return nSubscribers;
+    }
+
+    public long getCreatedUTC() {
+        return createdUTC;
     }
 }

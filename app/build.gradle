@@ -76,6 +76,10 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'me.zhanghai.android.fastscroll:library:1.1.2'
 
+    def toroVersion = '3.7.0.2010003'
+    implementation "im.ene.toro3:toro:$toroVersion"
+    implementation "im.ene.toro3:toro-ext-exoplayer:$toroVersion"
+
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

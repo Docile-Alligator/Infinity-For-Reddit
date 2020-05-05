@@ -41,6 +41,9 @@ import com.google.android.material.tabs.TabLayout;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -119,6 +122,10 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     TextView nSubscribersTextView;
     @BindView(R.id.online_subscriber_count_text_view_view_subreddit_detail_activity)
     TextView nOnlineSubscribersTextView;
+    @BindView(R.id.since_text_view_view_subreddit_detail_activity)
+    TextView sinceTextView;
+    @BindView(R.id.creation_time_text_view_view_subreddit_detail_activity)
+    TextView creationTimeTextView;
     @BindView(R.id.description_text_view_view_subreddit_detail_activity)
     TextView descriptionTextView;
     @BindView(R.id.bottom_navigation_view_subreddit_detail_activity)
@@ -322,6 +329,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         setSupportActionBar(toolbar);
 
         glide = Glide.with(this);
+        Locale locale = getResources().getConfiguration().locale;
 
         mSubredditViewModel = new ViewModelProvider(this,
                 new SubredditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, subredditName))
@@ -370,6 +378,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 subredditNameTextView.setText(subredditFullName);
                 String nSubscribers = getString(R.string.subscribers_number_detail, subredditData.getNSubscribers());
                 nSubscribersTextView.setText(nSubscribers);
+                creationTimeTextView.setText(new SimpleDateFormat("MMM d, yyyy",
+                        locale).format(subredditData.getCreatedUTC()));
                 if (subredditData.getDescription().equals("")) {
                     descriptionTextView.setVisibility(View.GONE);
                 } else {
@@ -416,13 +426,15 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         nSubscribersTextView.setTextColor(primaryTextColor);
         nOnlineSubscribersTextView.setTextColor(primaryTextColor);
+        sinceTextView.setTextColor(primaryTextColor);
+        creationTimeTextView.setTextColor(primaryTextColor);
         descriptionTextView.setTextColor(primaryTextColor);
         bottomNavigationView.setBackgroundTint(ColorStateList.valueOf(mCustomThemeWrapper.getBottomAppBarBackgroundColor()));
-        int primaryIconColor = mCustomThemeWrapper.getPrimaryIconColor();
-        subscriptionsBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        multiRedditBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        messageBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        profileBottomAppBar.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        int bottomAppBarIconColor = mCustomThemeWrapper.getBottomAppBarIconColor();
+        subscriptionsBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        multiRedditBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        messageBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        profileBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         applyTabLayoutTheme(tabLayout);
         applyFABTheme(fab);
         unsubscribedColor = mCustomThemeWrapper.getUnsubscribed();
@@ -705,6 +717,16 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 Intent sidebarIntent = new Intent(this, ViewSidebarActivity.class);
                 sidebarIntent.putExtra(ViewSidebarActivity.EXTRA_SUBREDDIT_NAME, subredditName);
                 startActivity(sidebarIntent);
+                return true;
+            case R.id.action_share_view_subreddit_detail_activity:
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "https://www.reddit.com/r/" + subredditName);
+                if (shareIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
+                } else {
+                    Toast.makeText(this, R.string.no_app, Toast.LENGTH_SHORT).show();
+                }
                 return true;
         }
         return false;

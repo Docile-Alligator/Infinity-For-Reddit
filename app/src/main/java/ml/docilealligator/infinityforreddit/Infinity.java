@@ -1,6 +1,8 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.app.Application;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,8 +12,15 @@ import com.evernote.android.state.StateSaver;
 import com.livefront.bridge.Bridge;
 import com.livefront.bridge.SavedStateHandler;
 
+import org.greenrobot.eventbus.EventBus;
+
+import ml.docilealligator.infinityforreddit.BroadcastReceiver.NetworkWifiStatusReceiver;
+import ml.docilealligator.infinityforreddit.Event.ChangeWifiStatusEvent;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
+
 public class Infinity extends Application {
     private AppComponent mAppComponent;
+    private NetworkWifiStatusReceiver mNetworkWifiStatusReceiver;
 
     @Override
     public void onCreate() {
@@ -32,6 +41,10 @@ public class Infinity extends Application {
                 StateSaver.restoreInstanceState(target, state);
             }
         });
+
+        mNetworkWifiStatusReceiver =
+                new NetworkWifiStatusReceiver(() -> EventBus.getDefault().post(new ChangeWifiStatusEvent(Utils.isConnectedToWifi(getApplicationContext()))));
+        registerReceiver(mNetworkWifiStatusReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
     public AppComponent getAppComponent() {

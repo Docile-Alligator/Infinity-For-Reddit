@@ -40,6 +40,9 @@ import com.google.android.material.tabs.TabLayout;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -116,6 +119,10 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     Chip subscribeUserChip;
     @BindView(R.id.karma_text_view_view_user_detail_activity)
     TextView karmaTextView;
+    @BindView(R.id.cakeday_text_view_view_user_detail_activity)
+    TextView cakedayTextView;
+    @BindView(R.id.description_text_view_view_user_detail_activity)
+    TextView descriptionTextView;
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
@@ -274,15 +281,14 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
         subscribedUserDao = mRedditDataRoomDatabase.subscribedUserDao();
         glide = Glide.with(this);
+        Locale locale = getResources().getConfiguration().locale;
 
         userViewModel = new ViewModelProvider(this, new UserViewModel.Factory(getApplication(), mRedditDataRoomDatabase, username))
                 .get(UserViewModel.class);
         userViewModel.getUserLiveData().observe(this, userData -> {
             if (userData != null) {
                 if (userData.getBanner().equals("")) {
-                    bannerImageView.setOnClickListener(view -> {
-                        //Do nothing since the user has no banner image
-                    });
+                    bannerImageView.setOnClickListener(null);
                 } else {
                     glide.load(userData.getBanner()).into(bannerImageView);
                     bannerImageView.setOnClickListener(view -> {
@@ -297,9 +303,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                     glide.load(getDrawable(R.drawable.subreddit_default_icon))
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0)))
                             .into(iconGifImageView);
-                    iconGifImageView.setOnClickListener(view -> {
-                        //Do nothing since the user has no icon image
-                    });
+                    iconGifImageView.setOnClickListener(null);
                 } else {
                     glide.load(userData.getIconUrl())
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0)))
@@ -387,8 +391,17 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 if (!title.equals(userFullName)) {
                     getSupportActionBar().setTitle(userFullName);
                 }
-                String karma = getString(R.string.karma_info, userData.getKarma());
+                String karma = getString(R.string.karma_info_user_detail, userData.getKarma(), userData.getLinkKarma(), userData.getCommentKarma());
                 karmaTextView.setText(karma);
+                cakedayTextView.setText(getString(R.string.cakeday_info, new SimpleDateFormat("MMM d, yyyy",
+                        locale).format(userData.getCakeday())));
+
+                if (userData.getDescription() == null || userData.getDescription().equals("")) {
+                    descriptionTextView.setVisibility(View.GONE);
+                } else {
+                    descriptionTextView.setVisibility(View.VISIBLE);
+                    descriptionTextView.setText(userData.getDescription());
+                }
             }
         });
 
@@ -432,6 +445,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         subscribedColor = mCustomThemeWrapper.getSubscribed();
         userNameTextView.setTextColor(mCustomThemeWrapper.getUsername());
         karmaTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+        cakedayTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+        descriptionTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
         subscribeUserChip.setTextColor(mCustomThemeWrapper.getChipTextColor());
         applyTabLayoutTheme(tabLayout);
     }
@@ -620,6 +635,16 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 return true;
             case R.id.action_change_post_layout_view_user_detail_activity:
                 postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+                return true;
+            case R.id.action_share_view_user_detail_activity:
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "https://www.reddit.com/user/" + username);
+                if (shareIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
+                } else {
+                    Toast.makeText(this, R.string.no_app, Toast.LENGTH_SHORT).show();
+                }
                 return true;
         }
         return false;

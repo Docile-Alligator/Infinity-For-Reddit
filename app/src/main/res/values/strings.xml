@@ -25,6 +25,7 @@
     <string name="theme_preview_activity_label">Theme Preview</string>
     <string name="edit_multi_reddit_activity_label">Edit Multireddit</string>
     <string name="selected_subeddits_activity_label">Selected Subreddits</string>
+    <string name="report_activity_label">Report</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -57,6 +58,7 @@
     <string name="action_delete_multi_reddit">Delete Multireddit</string>
     <string name="action_share">Share</string>
     <string name="action_preview">Preview</string>
+    <string name="action_report">Report</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -90,6 +92,9 @@
 
     <string name="nsfw">NSFW</string>
     <string name="karma_info">Karma: %1$d</string>
+    <string name="karma_info_user_detail">Karma:\n%1$d (%2$d + %3$d)</string>
+    <string name="cakeday_info">Cakeday:\n%1$s</string>
+    <string name="since">Since:</string>
 
     <string name="profile">Profile</string>
     <string name="following">Following</string>
@@ -193,6 +198,7 @@
 
     <string name="no_rule">No rule</string>
     <string name="error_loading_rules">Error loading rules.\nTap to retry.</string>
+    <string name="error_loading_rules_without_retry">Error Loading Rules</string>
 
     <string name="search_in">Search in</string>
     <string name="all_subreddits">All subreddits</string>
@@ -311,6 +317,7 @@
     <string name="settings_interface_title">Interface</string>
     <string name="settings_gestures_and_buttons_title">Gestures &amp; Buttons</string>
     <string name="settings_open_link_in_app_title">Open Link In App</string>
+    <string name="settings_video_autoplay_title">Video Autoplay</string>
     <string name="settings_immersive_interface_title">Immersive Interface</string>
     <string name="settings_immersive_interface_ignore_nav_bar_title">Ignore Navigation Bar in Immersive Interface</string>
     <string name="settings_immersive_interface_ignore_nav_bar_summary">Prevent the Bottom Navigation Bar Having Extra Padding</string>
@@ -524,7 +531,9 @@
     <string name="theme_item_bottom_app_bar_background_color">Bottom Navigation Bar Color</string>
     <string name="theme_item_bottom_app_bar_background_color_detail">Applied to: Bottom navigation bar</string>
     <string name="theme_item_primary_icon_color">Primary Icon Color</string>
-    <string name="theme_item_primary_icon_color_detail">Applied to: Icons in the bottom navigation bar and the navigation drawer.</string>
+    <string name="theme_item_primary_icon_color_detail">Applied to: Icons in the navigation drawer.</string>
+    <string name="theme_item_bottom_app_bar_icon_color">Bottom Navigation Bar Icon Color</string>
+    <string name="theme_item_bottom_app_bar_icon_color_detail">Applied to: Icons in the bottom navigation bar</string>
     <string name="theme_item_post_icon_and_info_color">Post Icon and Info Color</string>
     <string name="theme_item_post_icon_and_info_color_detail">Applied to: Icons, score and the number of comments in posts</string>
     <string name="theme_item_comment_icon_and_info_color">Comment Icon and Info Color</string>
@@ -695,5 +704,16 @@
 
     <string name="n_awards">%1$d Awards</string>
     <string name="one_award">1 Award</string>
+
+    <string name="report">Report</string>
+    <string name="reporting">Reporting</string>
+    <string name="report_successful">Reported</string>
+    <string name="report_failed">Report failed</string>
+    <string name="report_reason_not_selected">You haven\'t selected a reason</string>
+    
+    <string name="report_reason_general_spam">It Is Spam</string>
+    <string name="report_reason_general_copyright_issue">It Contains Copyright Issue</string>
+    <string name="report_reason_general_child_pornography">It Contains Child Pornography</string>
+    <string name="report_reason_general_abusive_content">It Contains Abusive Content</string>
 
 </resources>
