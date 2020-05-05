@@ -27,7 +27,6 @@ public class ReportReasonRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
 
     public ReportReasonRecyclerViewAdapter(CustomThemeWrapper customThemeWrapper, ArrayList<ReportReason> generalReasons) {
         this.generalReasons = generalReasons;
-        rules = new ArrayList<>();
         primaryTextColor = customThemeWrapper.getPrimaryTextColor();
         colorAccent = customThemeWrapper.getColorAccent();
     }
@@ -54,7 +53,7 @@ public class ReportReasonRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
 
     @Override
     public int getItemCount() {
-        return rules.size() + generalReasons.size();
+        return rules == null ? generalReasons.size() : rules.size() + generalReasons.size();
     }
 
     public void setRules(ArrayList<ReportReason> reportReasons) {
@@ -76,6 +75,14 @@ public class ReportReasonRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         }
 
         return null;
+    }
+
+    public ArrayList<ReportReason> getGeneralReasons() {
+        return generalReasons;
+    }
+
+    public ArrayList<ReportReason> getRules() {
+        return rules;
     }
 
     class ReasonViewHolder extends RecyclerView.ViewHolder {
@@ -101,10 +108,12 @@ public class ReportReasonRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
                     }
                 }
 
-                for (int i = 0; i < rules.size(); i++) {
-                    if (rules.get(i).isSelected()) {
-                        rules.get(i).setSelected(false);
-                        notifyItemChanged(i + generalReasons.size());
+                if (rules != null) {
+                    for (int i = 0; i < rules.size(); i++) {
+                        if (rules.get(i).isSelected()) {
+                            rules.get(i).setSelected(false);
+                            notifyItemChanged(i + generalReasons.size());
+                        }
                     }
                 }
 

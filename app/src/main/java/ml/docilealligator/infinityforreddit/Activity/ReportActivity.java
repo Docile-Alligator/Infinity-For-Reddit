@@ -14,6 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -23,11 +26,13 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Adapter.ReportReasonRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.FetchRules;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.ReportReason;
 import ml.docilealligator.infinityforreddit.ReportThing;
+import ml.docilealligator.infinityforreddit.Rule;
 import retrofit2.Retrofit;
 
 public class ReportActivity extends BaseActivity {
@@ -36,6 +41,8 @@ public class ReportActivity extends BaseActivity {
     public static final String EXTRA_THING_FULLNAME = "ETF";
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
+    private static final String GENERAL_REASONS_STATE = "GRS";
+    private static final String RULES_REASON_STATE = "RRS";
 
     @BindView(R.id.coordinator_layout_report_activity)
     CoordinatorLayout coordinatorLayout;
@@ -49,6 +56,9 @@ public class ReportActivity extends BaseActivity {
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+    @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
@@ -59,6 +69,8 @@ public class ReportActivity extends BaseActivity {
     private String mAccessToken;
     private String mFullname;
     private String mSubredditName;
+    private ArrayList<ReportReason> generalReasons;
+    private ArrayList<ReportReason> rulesReasons;
     private ReportReasonRecyclerViewAdapter mAdapter;
 
     @Override
@@ -83,9 +95,6 @@ public class ReportActivity extends BaseActivity {
 
         mFullname = getIntent().getStringExtra(EXTRA_THING_FULLNAME);
         mSubredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME);
-        mAdapter = new ReportReasonRecyclerViewAdapter(mCustomThemeWrapper, ReportReason.getGeneralReasons(this));
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(mAdapter);
 
         if (savedInstanceState != null) {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
@@ -94,8 +103,35 @@ public class ReportActivity extends BaseActivity {
             if (!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccount();
             }
+
+            generalReasons = savedInstanceState.getParcelableArrayList(GENERAL_REASONS_STATE);
+            rulesReasons = savedInstanceState.getParcelableArrayList(RULES_REASON_STATE);
         } else {
             getCurrentAccount();
+        }
+
+        if (generalReasons != null) {
+            mAdapter = new ReportReasonRecyclerViewAdapter(mCustomThemeWrapper, generalReasons);
+        } else {
+            mAdapter = new ReportReasonRecyclerViewAdapter(mCustomThemeWrapper, ReportReason.getGeneralReasons(this));
+        }
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(mAdapter);
+
+        if (rulesReasons == null) {
+            FetchRules.fetchRules(mRetrofit, mSubredditName, new FetchRules.FetchRulesListener() {
+                @Override
+                public void success(ArrayList<Rule> rules) {
+                    mAdapter.setRules(ReportReason.convertRulesToReasons(rules));
+                }
+
+                @Override
+                public void failed() {
+                    Snackbar.make(coordinatorLayout, R.string.error_loading_rules_without_retry, Snackbar.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            mAdapter.setRules(rulesReasons);
         }
     }
 
@@ -152,6 +188,10 @@ public class ReportActivity extends BaseActivity {
         super.onSaveInstanceState(outState);
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
+        if (mAdapter != null) {
+            outState.putParcelableArrayList(GENERAL_REASONS_STATE, mAdapter.getGeneralReasons());
+            outState.putParcelableArrayList(RULES_REASON_STATE, mAdapter.getRules());
+        }
     }
 
     @Override

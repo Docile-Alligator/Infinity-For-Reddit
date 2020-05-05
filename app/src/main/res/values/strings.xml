@@ -198,6 +198,7 @@
 
     <string name="no_rule">No rule</string>
     <string name="error_loading_rules">Error loading rules.\nTap to retry.</string>
+    <string name="error_loading_rules_without_retry">Error Loading Rules</string>
 
     <string name="search_in">Search in</string>
     <string name="all_subreddits">All subreddits</string>
@@ -708,9 +709,9 @@
     <string name="report_failed">Report failed</string>
     <string name="report_reason_not_selected">You haven\'t selected a reason</string>
     
-    <string name="report_reason_general_spam">Spam</string>
-    <string name="report_reason_general_copyright_issue">Copyright Issue</string>
-    <string name="report_reason_general_child_pornography">Child Pornography</string>
-    <string name="report_reason_general_abusive_content">Abusive Content</string>
+    <string name="report_reason_general_spam">It Is Spam</string>
+    <string name="report_reason_general_copyright_issue">It Contains Copyright Issue</string>
+    <string name="report_reason_general_child_pornography">It Contains Child Pornography</string>
+    <string name="report_reason_general_abusive_content">It Contains Abusive Content</string>
 
 </resources>

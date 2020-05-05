@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -22,9 +21,6 @@ import com.google.android.material.appbar.AppBarLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -36,15 +32,10 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Adapter.RulesRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.FetchRules;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditAPI;
 import ml.docilealligator.infinityforreddit.Rule;
-import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
-import ml.docilealligator.infinityforreddit.Utils.Utils;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class RulesActivity extends BaseActivity {
@@ -116,7 +107,26 @@ public class RulesActivity extends BaseActivity {
         mAdapter = new RulesRecyclerViewAdapter(this, mCustomThemeWrapper);
         recyclerView.setAdapter(mAdapter);
 
-        fetchRules();
+        //fetchRules();
+
+        FetchRules.fetchRules(mRetrofit, mSubredditName, new FetchRules.FetchRulesListener() {
+            @Override
+            public void success(ArrayList<Rule> rules) {
+                progressBar.setVisibility(View.GONE);
+                if (rules == null || rules.size() == 0) {
+                    errorTextView.setVisibility(View.VISIBLE);
+                    errorTextView.setText(R.string.no_rule);
+                    errorTextView.setOnClickListener(view -> {
+                    });
+                }
+                mAdapter.changeDataset(rules);
+            }
+
+            @Override
+            public void failed() {
+                displayError();
+            }
+        });
     }
 
     @Override
@@ -137,7 +147,7 @@ public class RulesActivity extends BaseActivity {
         errorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
     }
 
-    private void fetchRules() {
+    /*private void fetchRules() {
         progressBar.setVisibility(View.VISIBLE);
         errorTextView.setVisibility(View.GONE);
 
@@ -175,13 +185,34 @@ public class RulesActivity extends BaseActivity {
                 displayError();
             }
         });
-    }
+    }*/
 
     private void displayError() {
         progressBar.setVisibility(View.GONE);
         errorTextView.setVisibility(View.VISIBLE);
         errorTextView.setText(R.string.error_loading_rules);
-        errorTextView.setOnClickListener(view -> fetchRules());
+        errorTextView.setOnClickListener(view -> {
+            progressBar.setVisibility(View.VISIBLE);
+            errorTextView.setVisibility(View.GONE);
+            FetchRules.fetchRules(mRetrofit, mSubredditName, new FetchRules.FetchRulesListener() {
+                @Override
+                public void success(ArrayList<Rule> rules) {
+                    progressBar.setVisibility(View.GONE);
+                    if (rules == null || rules.size() == 0) {
+                        errorTextView.setVisibility(View.VISIBLE);
+                        errorTextView.setText(R.string.no_rule);
+                        errorTextView.setOnClickListener(view -> {
+                        });
+                    }
+                    mAdapter.changeDataset(rules);
+                }
+
+                @Override
+                public void failed() {
+                    displayError();
+                }
+            });
+        });
     }
 
     @Override
@@ -205,7 +236,7 @@ public class RulesActivity extends BaseActivity {
         finish();
     }
 
-    private static class ParseRulesAsyncTask extends AsyncTask<Void, ArrayList<Rule>, ArrayList<Rule>> {
+    /*private static class ParseRulesAsyncTask extends AsyncTask<Void, ArrayList<Rule>, ArrayList<Rule>> {
         private String response;
         private ParseRulesAsyncTaskListener parseRulesAsyncTaskListener;
 
@@ -248,5 +279,5 @@ public class RulesActivity extends BaseActivity {
 
             void parseFailed();
         }
-    }
+    }*/
 }

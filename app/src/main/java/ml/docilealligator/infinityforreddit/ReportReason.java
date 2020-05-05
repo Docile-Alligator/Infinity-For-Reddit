@@ -7,8 +7,12 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 public class ReportReason implements Parcelable {
+    public static final String REASON_TYPE_SITE_REASON = "site_reason";
     public static final String REASON_TYPE_RULE_REASON = "rule_reason";
-    public static final String REASON_TYPE_REASON = "reason";
+    public static final String REASON_TYPE_OTHER_REASON = "other_reason";
+    public static final String REASON_SITE_REASON_SELECTED = "site_reason_selected";
+    public static final String REASON_RULE_REASON_SELECTED = "rule_reason_selected";
+    public static final String REASON_OTHER = "other";
 
     private String reportReason;
     private String reasonType;
@@ -68,10 +72,19 @@ public class ReportReason implements Parcelable {
 
     public static ArrayList<ReportReason> getGeneralReasons(Context context) {
         ArrayList<ReportReason> reportReasons = new ArrayList<>();
-        reportReasons.add(new ReportReason(context.getString(R.string.report_reason_general_spam), REASON_TYPE_REASON));
-        reportReasons.add(new ReportReason(context.getString(R.string.report_reason_general_copyright_issue), REASON_TYPE_REASON));
-        reportReasons.add(new ReportReason(context.getString(R.string.report_reason_general_child_pornography), REASON_TYPE_REASON));
-        reportReasons.add(new ReportReason(context.getString(R.string.report_reason_general_abusive_content), REASON_TYPE_REASON));
+        reportReasons.add(new ReportReason(context.getString(R.string.report_reason_general_spam), REASON_TYPE_SITE_REASON));
+        reportReasons.add(new ReportReason(context.getString(R.string.report_reason_general_copyright_issue), REASON_TYPE_SITE_REASON));
+        reportReasons.add(new ReportReason(context.getString(R.string.report_reason_general_child_pornography), REASON_TYPE_SITE_REASON));
+        reportReasons.add(new ReportReason(context.getString(R.string.report_reason_general_abusive_content), REASON_TYPE_SITE_REASON));
+        return reportReasons;
+    }
+
+    public static ArrayList<ReportReason> convertRulesToReasons(ArrayList<Rule> rules) {
+        ArrayList<ReportReason> reportReasons = new ArrayList<>();
+        for (Rule r : rules) {
+            reportReasons.add(new ReportReason(r.getShortName(), REASON_TYPE_RULE_REASON));
+        }
+
         return reportReasons;
     }
 }

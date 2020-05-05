@@ -26,6 +26,14 @@ public class ReportThing {
         params.put(RedditUtils.THING_ID_KEY, thingFullname);
         params.put(RedditUtils.SR_NAME_KEY, subredditName);
         params.put(reasonType, reason);
+        if (reasonType.equals(ReportReason.REASON_TYPE_SITE_REASON)) {
+            params.put(RedditUtils.REASON_KEY, ReportReason.REASON_SITE_REASON_SELECTED);
+        } else if (reasonType.equals(ReportReason.REASON_TYPE_RULE_REASON)) {
+            params.put(RedditUtils.REASON_KEY, ReportReason.REASON_RULE_REASON_SELECTED);
+        } else {
+            params.put(RedditUtils.REASON_KEY, ReportReason.REASON_OTHER);
+        }
+        params.put(RedditUtils.API_TYPE_KEY, RedditUtils.API_TYPE_JSON);
 
         oauthRetrofit.create(RedditAPI.class).report(header, params).enqueue(new Callback<String>() {
             @Override
