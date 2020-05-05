@@ -705,6 +705,8 @@
     <string name="n_awards">%1$d Awards</string>
     <string name="one_award">1 Award</string>
 
+    <string name="report">Report</string>
+    <string name="reporting">Reporting</string>
     <string name="report_successful">Reported</string>
     <string name="report_failed">Report failed</string>
     <string name="report_reason_not_selected">You haven\'t selected a reason</string>

@@ -161,6 +161,7 @@ public class ReportActivity extends BaseActivity {
             case R.id.action_send_report_activity:
                 ReportReason reportReason = mAdapter.getSelectedReason();
                 if (reportReason != null) {
+                    Toast.makeText(ReportActivity.this, R.string.reporting, Toast.LENGTH_SHORT).show();
                     ReportThing.reportThing(mOauthRetrofit, mAccessToken, mFullname, mSubredditName,
                             reportReason.getReasonType(), reportReason.getReportReason(), new ReportThing.ReportThingListener() {
                                 @Override
