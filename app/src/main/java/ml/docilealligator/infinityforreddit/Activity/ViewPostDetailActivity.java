@@ -52,11 +52,15 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import im.ene.toro.exoplayer.ExoCreator;
+import im.ene.toro.media.PlaybackInfo;
+import im.ene.toro.media.VolumeInfo;
 import ml.docilealligator.infinityforreddit.Adapter.CommentAndPostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CommentData;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.CustomView.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.DeleteThing;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
@@ -64,13 +68,13 @@ import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToDetailActivit
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchComment;
-import ml.docilealligator.infinityforreddit.Post.FetchPost;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Fragment.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostCommentSortTypeBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.Post.HidePost;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.ParseComment;
+import ml.docilealligator.infinityforreddit.Post.FetchPost;
+import ml.docilealligator.infinityforreddit.Post.HidePost;
 import ml.docilealligator.infinityforreddit.Post.ParsePost;
 import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.R;
@@ -87,6 +91,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static im.ene.toro.media.PlaybackInfo.INDEX_UNSET;
+import static im.ene.toro.media.PlaybackInfo.TIME_UNSET;
 import static ml.docilealligator.infinityforreddit.Activity.CommentActivity.RETURN_EXTRA_COMMENT_DATA_KEY;
 import static ml.docilealligator.infinityforreddit.Activity.CommentActivity.WRITE_COMMENT_REQUEST_CODE;
 
@@ -140,7 +146,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     @BindView(R.id.swipe_refresh_layout_view_post_detail_activity)
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view_view_post_detail)
-    RecyclerView mRecyclerView;
+    CustomToroContainer mRecyclerView;
     @BindView(R.id.fetch_post_info_linear_layout_view_post_detail_activity)
     LinearLayout mFetchPostInfoLinearLayout;
     @BindView(R.id.fetch_post_info_image_view_view_post_detail_activity)
@@ -165,16 +171,14 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     SharedPreferences mSortTypeSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    ExoCreator mExoCreator;
     private RequestManager mGlide;
     private Locale mLocale;
     private Menu mMenu;
     private int orientation;
     private int postListPosition = -1;
     private String mSingleCommentId;
-    private boolean mNeedBlurNsfw;
-    private boolean mNeedBlurSpoiler;
-    private boolean mVoteButtonsOnTheRight;
-    private boolean mShowElapsedTime;
     private boolean showToast = false;
     private boolean isSortingComments = false;
     private boolean mVolumeKeysNavigateComments;
@@ -182,10 +186,6 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     private boolean mLockFab;
     private boolean mSwipeUpToHideFab;
     private boolean mExpandChildren;
-    private boolean mCommentToolbarHidden;
-    private boolean mCommentToolbarHideOnClick;
-    private boolean mShowCommentDivider;
-    private boolean mShowAbsoluteNumberOfVotes;
     private LinearLayoutManager mLinearLayoutManager;
     private CommentAndPostRecyclerViewAdapter mAdapter;
     private RecyclerView.SmoothScroller mSmoothScroller;
@@ -242,18 +242,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
 
-        mNeedBlurNsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_NSFW_KEY, true);
-        mNeedBlurSpoiler = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_SPOILER_KEY, false);
-        mVoteButtonsOnTheRight = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
-        mShowElapsedTime = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
         mVolumeKeysNavigateComments = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOLUME_KEYS_NAVIGATE_COMMENTS, false);
         mLockFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
         mSwipeUpToHideFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
         mExpandChildren = !mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_TOP_LEVEL_COMMENTS_FIRST, false);
-        mCommentToolbarHidden = mSharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDDEN, false);
-        mCommentToolbarHideOnClick= mSharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDE_ON_CLICK, true);
-        mShowCommentDivider = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER, false);
-        mShowAbsoluteNumberOfVotes = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
 
         mGlide = Glide.with(this);
         mLocale = getResources().getConfiguration().locale;
@@ -511,8 +503,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this,
                     mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mGlide,
                     mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId, isSingleCommentThreadMode,
-                    mNeedBlurNsfw, mNeedBlurSpoiler, mVoteButtonsOnTheRight, mShowElapsedTime, mExpandChildren,
-                    mCommentToolbarHidden, mCommentToolbarHideOnClick, mShowCommentDivider,mShowAbsoluteNumberOfVotes,
+                    mSharedPreferences, mExoCreator,
                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                         @Override
                         public void updatePost(Post post) {
@@ -551,6 +542,12 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 }
             }
         }
+
+        mRecyclerView.setCacheManager(mAdapter);
+        mRecyclerView.setPlayerInitializer(order -> {
+            VolumeInfo volumeInfo = new VolumeInfo(true, 0f);
+            return new PlaybackInfo(INDEX_UNSET, TIME_UNSET, volumeInfo);
+        });
 
         fab.setOnClickListener(view -> scrollToNextParentComment());
     }
@@ -644,8 +641,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this,
                                     mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mGlide,
                                     mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId, isSingleCommentThreadMode,
-                                    mNeedBlurNsfw, mNeedBlurSpoiler, mVoteButtonsOnTheRight, mShowElapsedTime, mExpandChildren,
-                                    mCommentToolbarHidden, mCommentToolbarHideOnClick, mShowCommentDivider, mShowAbsoluteNumberOfVotes,
+                                    mSharedPreferences, mExoCreator,
                                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                                         @Override
                                         public void updatePost(Post post) {

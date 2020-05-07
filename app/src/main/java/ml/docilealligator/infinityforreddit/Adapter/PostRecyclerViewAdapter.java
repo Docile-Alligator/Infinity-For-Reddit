@@ -127,6 +127,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private int mColorPrimaryLightTheme;
     private int mColorAccent;
     private int mCardViewBackgroundColor;
+    private int mPrimaryTextColor;
     private int mSecondaryTextColor;
     private int mPostTitleColor;
     private int mPostContentColor;
@@ -198,6 +199,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
             mColorAccent = customThemeWrapper.getColorAccent();
             mCardViewBackgroundColor = customThemeWrapper.getCardViewBackgroundColor();
+            mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
             mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
             mPostTitleColor = customThemeWrapper.getPostTitleColor();
             mPostContentColor = customThemeWrapper.getPostContentColor();
@@ -289,15 +291,15 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         if (viewType == VIEW_TYPE_POST_CARD_VIDEO_TYPE_AUTOPLAY) {
             return new PostVideoAutoplayViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_video_type_autoplay, parent, false));
         } else if (viewType == VIEW_TYPE_POST_CARD_VIDEO_AND_GIF_PREVIEW_TYPE) {
-            return new PostGifAndVideoPreviewViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_video_and_gif_preview_type, parent, false));
+            return new PostVideoAndGifPreviewViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_video_and_gif_preview, parent, false));
         } else if (viewType == VIEW_TYPE_POST_CARD_IMAGE_AND_GIF_AUTOPLAY_TYPE) {
-            return new PostImageAndGifAutoplayTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_image_and_gif_autoplay_type, parent, false));
+            return new PostImageAndGifAutoplayViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_image_and_gif_autoplay, parent, false));
         } else if (viewType == VIEW_TYPE_POST_CARD_LINK_TYPE) {
-            return new PostLinkTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_link_type, parent, false));
+            return new PostLinkTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_link, parent, false));
         } else if (viewType == VIEW_TYPE_POST_CARD_NO_PREVIEW_LINK_TYPE) {
-            return new PostNoPreviewLinkTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_no_preview_link_type, parent, false));
+            return new PostNoPreviewLinkTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_no_preview_link, parent, false));
         } else if (viewType == VIEW_TYPE_POST_CARD_TEXT_TYPE) {
-            return new PostTextTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_text_type, parent, false));
+            return new PostTextTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_text, parent, false));
         } else if (viewType == VIEW_TYPE_POST_COMPACT) {
             return new PostCompactViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_compact, parent, false));
         } else if (viewType == VIEW_TYPE_ERROR) {
@@ -500,35 +502,35 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 if (holder instanceof PostVideoAutoplayViewHolder) {
                     ((PostVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio((float) post.getPreviewWidth() / post.getPreviewHeight());
                     ((PostVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
-                } else if (holder instanceof PostGifAndVideoPreviewViewHolder) {
+                } else if (holder instanceof PostVideoAndGifPreviewViewHolder) {
                     if (post.getPostType() == Post.VIDEO_TYPE) {
-                        ((PostGifAndVideoPreviewViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.video));
+                        ((PostVideoAndGifPreviewViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.video));
                     } else {
-                        ((PostGifAndVideoPreviewViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.gif));
+                        ((PostVideoAndGifPreviewViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.gif));
                     }
-                    ((PostGifAndVideoPreviewViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
-                    ((PostGifAndVideoPreviewViewHolder) holder).imageView
+                    ((PostVideoAndGifPreviewViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
+                    ((PostVideoAndGifPreviewViewHolder) holder).imageView
                             .setRatio((float) post.getPreviewHeight() / post.getPreviewWidth());
                     loadImage(holder, post);
 
                     if (post.getPreviewWidth() <= 0 || post.getPreviewHeight() <= 0) {
-                        ((PostGifAndVideoPreviewViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                        ((PostGifAndVideoPreviewViewHolder) holder).imageView.getLayoutParams().height = (int) (400 * mScale);
+                        ((PostVideoAndGifPreviewViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        ((PostVideoAndGifPreviewViewHolder) holder).imageView.getLayoutParams().height = (int) (400 * mScale);
                     }
-                } else if (holder instanceof PostImageAndGifAutoplayTypeViewHolder) {
+                } else if (holder instanceof PostImageAndGifAutoplayViewHolder) {
                     if (post.getPostType() == Post.GIF_TYPE) {
-                        ((PostImageAndGifAutoplayTypeViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.gif));
+                        ((PostImageAndGifAutoplayViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.gif));
                     } else {
-                        ((PostImageAndGifAutoplayTypeViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.image));
+                        ((PostImageAndGifAutoplayViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.image));
                     }
-                    ((PostImageAndGifAutoplayTypeViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
-                    ((PostImageAndGifAutoplayTypeViewHolder) holder).imageView
+                    ((PostImageAndGifAutoplayViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
+                    ((PostImageAndGifAutoplayViewHolder) holder).imageView
                             .setRatio((float) post.getPreviewHeight() / post.getPreviewWidth());
                     loadImage(holder, post);
 
                     if (post.getPreviewWidth() <= 0 || post.getPreviewHeight() <= 0) {
-                        ((PostImageAndGifAutoplayTypeViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                        ((PostImageAndGifAutoplayTypeViewHolder) holder).imageView.getLayoutParams().height = (int) (400 * mScale);
+                        ((PostImageAndGifAutoplayViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        ((PostImageAndGifAutoplayViewHolder) holder).imageView.getLayoutParams().height = (int) (400 * mScale);
                     }
                 } else if (holder instanceof PostLinkTypeViewHolder) {
                     ((PostLinkTypeViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
@@ -536,13 +538,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             .setRatio((float) post.getPreviewHeight() / post.getPreviewWidth());
                     loadImage(holder, post);
 
-                    ((PostLinkTypeViewHolder) holder).linkTextView.setVisibility(View.VISIBLE);
                     String domain = Uri.parse(post.getUrl()).getHost();
+                    ((PostLinkTypeViewHolder) holder).linkTextView.setVisibility(View.VISIBLE);
                     ((PostLinkTypeViewHolder) holder).linkTextView.setText(domain);
                 } else if (holder instanceof PostNoPreviewLinkTypeViewHolder) {
-                    String noPreviewLinkUrl = post.getUrl();
+                    String noPreviewLinkDomain = Uri.parse(post.getUrl()).getHost();
                     ((PostNoPreviewLinkTypeViewHolder) holder).linkTextView.setVisibility(View.VISIBLE);
-                    String noPreviewLinkDomain = Uri.parse(noPreviewLinkUrl).getHost();
                     ((PostNoPreviewLinkTypeViewHolder) holder).linkTextView.setText(noPreviewLinkDomain);
                 } else if (holder instanceof PostTextTypeViewHolder) {
                     if (post.getSelfTextPlainTrimmed() != null && !post.getSelfTextPlainTrimmed().equals("")) {
@@ -1104,16 +1105,16 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     }
 
     private void loadImage(final RecyclerView.ViewHolder holder, final Post post) {
-        if (holder instanceof PostImageAndGifAutoplayTypeViewHolder) {
+        if (holder instanceof PostImageAndGifAutoplayViewHolder) {
             String url = mAutoplay && post.getPostType() == Post.GIF_TYPE ? post.getUrl() : post.getPreviewUrl();
             RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(url).listener(new RequestListener<Drawable>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                    ((PostImageAndGifAutoplayTypeViewHolder) holder).progressBar.setVisibility(View.GONE);
-                    ((PostImageAndGifAutoplayTypeViewHolder) holder).errorRelativeLayout.setVisibility(View.VISIBLE);
-                    ((PostImageAndGifAutoplayTypeViewHolder) holder).errorRelativeLayout.setOnClickListener(view -> {
-                        ((PostImageAndGifAutoplayTypeViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
-                        ((PostImageAndGifAutoplayTypeViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
+                    ((PostImageAndGifAutoplayViewHolder) holder).progressBar.setVisibility(View.GONE);
+                    ((PostImageAndGifAutoplayViewHolder) holder).errorRelativeLayout.setVisibility(View.VISIBLE);
+                    ((PostImageAndGifAutoplayViewHolder) holder).errorRelativeLayout.setOnClickListener(view -> {
+                        ((PostImageAndGifAutoplayViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
+                        ((PostImageAndGifAutoplayViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
                         loadImage(holder, post);
                     });
                     return false;
@@ -1121,27 +1122,27 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                 @Override
                 public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                    ((PostImageAndGifAutoplayTypeViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
-                    ((PostImageAndGifAutoplayTypeViewHolder) holder).progressBar.setVisibility(View.GONE);
+                    ((PostImageAndGifAutoplayViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
+                    ((PostImageAndGifAutoplayViewHolder) holder).progressBar.setVisibility(View.GONE);
                     return false;
                 }
             });
 
             if ((post.isNSFW() && mNeedBlurNSFW) || post.isSpoiler() && mNeedBlurSpoiler) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
-                        .into(((PostImageAndGifAutoplayTypeViewHolder) holder).imageView);
+                        .into(((PostImageAndGifAutoplayViewHolder) holder).imageView);
             } else {
-                imageRequestBuilder.into(((PostImageAndGifAutoplayTypeViewHolder) holder).imageView);
+                imageRequestBuilder.into(((PostImageAndGifAutoplayViewHolder) holder).imageView);
             }
-        } else if (holder instanceof PostGifAndVideoPreviewViewHolder) {
+        } else if (holder instanceof PostVideoAndGifPreviewViewHolder) {
             RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(post.getPreviewUrl()).listener(new RequestListener<Drawable>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                    ((PostGifAndVideoPreviewViewHolder) holder).progressBar.setVisibility(View.GONE);
-                    ((PostGifAndVideoPreviewViewHolder) holder).errorRelativeLayout.setVisibility(View.VISIBLE);
-                    ((PostGifAndVideoPreviewViewHolder) holder).errorRelativeLayout.setOnClickListener(view -> {
-                        ((PostGifAndVideoPreviewViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
-                        ((PostGifAndVideoPreviewViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
+                    ((PostVideoAndGifPreviewViewHolder) holder).progressBar.setVisibility(View.GONE);
+                    ((PostVideoAndGifPreviewViewHolder) holder).errorRelativeLayout.setVisibility(View.VISIBLE);
+                    ((PostVideoAndGifPreviewViewHolder) holder).errorRelativeLayout.setOnClickListener(view -> {
+                        ((PostVideoAndGifPreviewViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
+                        ((PostVideoAndGifPreviewViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
                         loadImage(holder, post);
                     });
                     return false;
@@ -1149,17 +1150,17 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                 @Override
                 public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                    ((PostGifAndVideoPreviewViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
-                    ((PostGifAndVideoPreviewViewHolder) holder).progressBar.setVisibility(View.GONE);
+                    ((PostVideoAndGifPreviewViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
+                    ((PostVideoAndGifPreviewViewHolder) holder).progressBar.setVisibility(View.GONE);
                     return false;
                 }
             });
 
             if ((post.isNSFW() && mNeedBlurNSFW) || post.isSpoiler() && mNeedBlurSpoiler) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
-                        .into(((PostGifAndVideoPreviewViewHolder) holder).imageView);
+                        .into(((PostVideoAndGifPreviewViewHolder) holder).imageView);
             } else {
-                imageRequestBuilder.into(((PostGifAndVideoPreviewViewHolder) holder).imageView);
+                imageRequestBuilder.into(((PostVideoAndGifPreviewViewHolder) holder).imageView);
             }
         } else if (holder instanceof PostLinkTypeViewHolder) {
             RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(post.getPreviewUrl()).listener(new RequestListener<Drawable>() {
@@ -1309,13 +1310,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         super.onViewRecycled(holder);
         if (holder instanceof PostBaseViewHolder) {
             if (holder instanceof PostVideoAutoplayViewHolder) {
-                ((PostVideoAutoplayViewHolder) holder).muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_mute_24dp));
                 ((PostVideoAutoplayViewHolder) holder).muteButton.setVisibility(View.GONE);
-            } else if (holder instanceof PostImageAndGifAutoplayTypeViewHolder) {
-                mGlide.clear(((PostImageAndGifAutoplayTypeViewHolder) holder).imageView);
-                ((PostImageAndGifAutoplayTypeViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.FIT_START);
-                ((PostImageAndGifAutoplayTypeViewHolder) holder).imageView.getLayoutParams().height = FrameLayout.LayoutParams.WRAP_CONTENT;
-                ((PostImageAndGifAutoplayTypeViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
+                ((PostVideoAutoplayViewHolder) holder).resetVolume();
+            } else if (holder instanceof PostImageAndGifAutoplayViewHolder) {
+                mGlide.clear(((PostImageAndGifAutoplayViewHolder) holder).imageView);
+                ((PostImageAndGifAutoplayViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.FIT_START);
+                ((PostImageAndGifAutoplayViewHolder) holder).imageView.getLayoutParams().height = FrameLayout.LayoutParams.WRAP_CONTENT;
+                ((PostImageAndGifAutoplayViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
             } else if (holder instanceof PostLinkTypeViewHolder) {
                 mGlide.clear(((PostLinkTypeViewHolder) holder).imageView);
                 ((PostLinkTypeViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.FIT_START);
@@ -1822,9 +1823,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         TextView userTextView;
         @BindView(R.id.stickied_post_image_view_item_post_video_type_autoplay)
         ImageView stickiedPostImageView;
-        @BindView(R.id.post_time_text_view_best_item_post_video_type_autoplay)
+        @BindView(R.id.post_time_text_view_item_post_video_type_autoplay)
         TextView postTimeTextView;
-        @BindView(R.id.title_text_view_best_item_post_video_type_autoplay)
+        @BindView(R.id.title_text_view_item_post_video_type_autoplay)
         TextView titleTextView;
         @BindView(R.id.type_text_view_item_post_video_type_autoplay)
         CustomTextView typeTextView;
@@ -1842,7 +1843,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         CustomTextView flairTextView;
         @BindView(R.id.awards_text_view_item_post_video_type_autoplay)
         CustomTextView awardsTextView;
-        @BindView(R.id.aspect)
+        @BindView(R.id.aspect_ratio_frame_layout_item_post_video_type_autoplay)
         AspectRatioFrameLayout aspectRatioFrameLayout;
         @BindView(R.id.player_view_item_post_video_type_autoplay)
         PlayerView videoPlayer;
@@ -1928,6 +1929,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
         void bindVideoUri(Uri videoUri) {
             mediaUri = videoUri;
+        }
+
+        void resetVolume() {
+            volume = 0f;
         }
 
         @NonNull
@@ -2016,61 +2021,61 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         }
     }
 
-    class PostGifAndVideoPreviewViewHolder extends PostBaseViewHolder {
-        @BindView(R.id.card_view_item_post_gif_type_autoplay)
+    class PostVideoAndGifPreviewViewHolder extends PostBaseViewHolder {
+        @BindView(R.id.card_view_item_post_video_and_gif_preview)
         MaterialCardView cardView;
-        @BindView(R.id.icon_gif_image_view_item_post_gif_type_autoplay)
+        @BindView(R.id.icon_gif_image_view_item_post_video_and_gif_preview)
         AspectRatioGifImageView iconGifImageView;
-        @BindView(R.id.subreddit_name_text_view_item_post_gif_type_autoplay)
+        @BindView(R.id.subreddit_name_text_view_item_post_video_and_gif_preview)
         TextView subredditTextView;
-        @BindView(R.id.user_text_view_item_post_gif_type_autoplay)
+        @BindView(R.id.user_text_view_item_post_video_and_gif_preview)
         TextView userTextView;
-        @BindView(R.id.stickied_post_image_view_item_post_gif_type_autoplay)
+        @BindView(R.id.stickied_post_image_view_item_post_video_and_gif_preview)
         ImageView stickiedPostImageView;
-        @BindView(R.id.post_time_text_view_best_item_post_gif_type_autoplay)
+        @BindView(R.id.post_time_text_view_item_post_video_and_gif_preview)
         TextView postTimeTextView;
-        @BindView(R.id.title_text_view_best_item_post_gif_type_autoplay)
+        @BindView(R.id.title_text_view_item_post_video_and_gif_preview)
         TextView titleTextView;
-        @BindView(R.id.type_text_view_item_post_gif_type_autoplay)
+        @BindView(R.id.type_text_view_item_post_video_and_gif_preview)
         CustomTextView typeTextView;
-        @BindView(R.id.archived_image_view_item_post_gif_type_autoplay)
+        @BindView(R.id.archived_image_view_item_post_video_and_gif_preview)
         ImageView archivedImageView;
-        @BindView(R.id.locked_image_view_item_post_gif_type_autoplay)
+        @BindView(R.id.locked_image_view_item_post_video_and_gif_preview)
         ImageView lockedImageView;
-        @BindView(R.id.crosspost_image_view_item_post_gif_type_autoplay)
+        @BindView(R.id.crosspost_image_view_item_post_video_and_gif_preview)
         ImageView crosspostImageView;
-        @BindView(R.id.nsfw_text_view_item_post_gif_type_autoplay)
+        @BindView(R.id.nsfw_text_view_item_post_video_and_gif_preview)
         CustomTextView nsfwTextView;
-        @BindView(R.id.spoiler_custom_text_view_item_post_gif_type_autoplay)
+        @BindView(R.id.spoiler_custom_text_view_item_post_video_and_gif_preview)
         CustomTextView spoilerTextView;
-        @BindView(R.id.flair_custom_text_view_item_post_gif_type_autoplay)
+        @BindView(R.id.flair_custom_text_view_item_post_video_and_gif_preview)
         CustomTextView flairTextView;
-        @BindView(R.id.awards_text_view_item_post_gif_type_autoplay)
+        @BindView(R.id.awards_text_view_item_post_video_and_gif_preview)
         CustomTextView awardsTextView;
-        @BindView(R.id.image_view_wrapper_item_post_gif_type_autoplay)
-        RelativeLayout relativeLayout;
-        @BindView(R.id.progress_bar_item_post_gif_type_autoplay)
+        @BindView(R.id.progress_bar_item_post_video_and_gif_preview)
         ProgressBar progressBar;
-        @BindView(R.id.image_view_item_post_gif_type_autoplay)
+        @BindView(R.id.image_view_item_post_video_and_gif_preview)
         AspectRatioGifImageView imageView;
-        @BindView(R.id.load_image_error_relative_layout_item_post_gif_type_autoplay)
+        @BindView(R.id.load_image_error_relative_layout_item_post_video_and_gif_preview)
         RelativeLayout errorRelativeLayout;
-        @BindView(R.id.bottom_constraint_layout_item_post_gif_type_autoplay)
+        @BindView(R.id.load_image_error_text_view_item_post_video_and_gif_preview)
+        TextView errorTextView;
+        @BindView(R.id.bottom_constraint_layout_item_post_video_and_gif_preview)
         ConstraintLayout bottomConstraintLayout;
-        @BindView(R.id.plus_button_item_post_gif_type_autoplay)
+        @BindView(R.id.plus_button_item_post_video_and_gif_preview)
         ImageView upvoteButton;
-        @BindView(R.id.score_text_view_item_post_gif_type_autoplay)
+        @BindView(R.id.score_text_view_item_post_video_and_gif_preview)
         TextView scoreTextView;
-        @BindView(R.id.minus_button_item_post_gif_type_autoplay)
+        @BindView(R.id.minus_button_item_post_video_and_gif_preview)
         ImageView downvoteButton;
-        @BindView(R.id.comments_count_item_post_gif_type_autoplay)
+        @BindView(R.id.comments_count_item_post_video_and_gif_preview)
         TextView commentsCountTextView;
-        @BindView(R.id.save_button_item_post_gif_type_autoplay)
+        @BindView(R.id.save_button_item_post_video_and_gif_preview)
         ImageView saveButton;
-        @BindView(R.id.share_button_item_post_gif_type_autoplay)
+        @BindView(R.id.share_button_item_post_video_and_gif_preview)
         ImageView shareButton;
 
-        PostGifAndVideoPreviewViewHolder(View itemView) {
+        PostVideoAndGifPreviewViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             setBaseView(cardView,
@@ -2097,6 +2102,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     shareButton);
 
             progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
+            errorTextView.setTextColor(mPrimaryTextColor);
 
             imageView.setOnClickListener(view -> {
                 Post post = getItem(getAdapterPosition());
@@ -2123,61 +2129,61 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         }
     }
 
-    class PostImageAndGifAutoplayTypeViewHolder extends PostBaseViewHolder {
-        @BindView(R.id.card_view_item_post_image_type)
+    class PostImageAndGifAutoplayViewHolder extends PostBaseViewHolder {
+        @BindView(R.id.card_view_item_post_image_and_gif_autoplay)
         MaterialCardView cardView;
-        @BindView(R.id.icon_gif_image_view_item_post_image_type)
+        @BindView(R.id.icon_gif_image_view_item_post_image_and_gif_autoplay)
         AspectRatioGifImageView iconGifImageView;
-        @BindView(R.id.subreddit_name_text_view_item_post_image_type)
+        @BindView(R.id.subreddit_name_text_view_item_post_image_and_gif_autoplay)
         TextView subredditTextView;
-        @BindView(R.id.user_text_view_item_post_image_type)
+        @BindView(R.id.user_text_view_item_post_image_and_gif_autoplay)
         TextView userTextView;
-        @BindView(R.id.stickied_post_image_view_item_post_image_type)
+        @BindView(R.id.stickied_post_image_view_item_post_image_and_gif_autoplay)
         ImageView stickiedPostImageView;
-        @BindView(R.id.post_time_text_view_best_item_post_image_type)
+        @BindView(R.id.post_time_text_view_item_post_image_and_gif_autoplay)
         TextView postTimeTextView;
-        @BindView(R.id.title_text_view_best_item_post_image_type)
+        @BindView(R.id.title_text_view_item_post_image_and_gif_autoplay)
         TextView titleTextView;
-        @BindView(R.id.type_text_view_item_post_image_type)
+        @BindView(R.id.type_text_view_item_post_image_and_gif_autoplay)
         CustomTextView typeTextView;
-        @BindView(R.id.archived_image_view_item_post_image_type)
+        @BindView(R.id.archived_image_view_item_post_image_and_gif_autoplay)
         ImageView archivedImageView;
-        @BindView(R.id.locked_image_view_item_post_image_type)
+        @BindView(R.id.locked_image_view_item_post_image_and_gif_autoplay)
         ImageView lockedImageView;
-        @BindView(R.id.crosspost_image_view_item_post_image_type)
+        @BindView(R.id.crosspost_image_view_item_post_image_and_gif_autoplay)
         ImageView crosspostImageView;
-        @BindView(R.id.nsfw_text_view_item_post_image_type)
+        @BindView(R.id.nsfw_text_view_item_post_image_and_gif_autoplay)
         CustomTextView nsfwTextView;
-        @BindView(R.id.spoiler_custom_text_view_item_post_image_type)
+        @BindView(R.id.spoiler_custom_text_view_item_post_image_and_gif_autoplay)
         CustomTextView spoilerTextView;
-        @BindView(R.id.flair_custom_text_view_item_post_image_type)
+        @BindView(R.id.flair_custom_text_view_item_post_image_and_gif_autoplay)
         CustomTextView flairTextView;
-        @BindView(R.id.awards_text_view_item_post_image_type)
+        @BindView(R.id.awards_text_view_item_post_image_and_gif_autoplay)
         CustomTextView awardsTextView;
-        @BindView(R.id.image_view_wrapper_item_post_image_type)
-        RelativeLayout relativeLayout;
-        @BindView(R.id.progress_bar_item_post_image_type)
+        @BindView(R.id.progress_bar_item_post_image_and_gif_autoplay)
         ProgressBar progressBar;
-        @BindView(R.id.image_view_best_post_item)
+        @BindView(R.id.image_view_item_post_image_and_gif_autoplay)
         AspectRatioGifImageView imageView;
-        @BindView(R.id.load_image_error_relative_layout_item_post_image_type)
+        @BindView(R.id.load_image_error_relative_layout_item_post_image_and_gif_autoplay)
         RelativeLayout errorRelativeLayout;
-        @BindView(R.id.bottom_constraint_layout_item_post_image_type)
+        @BindView(R.id.load_image_error_text_view_item_post_image_and_gif_autoplay)
+        TextView errorTextView;
+        @BindView(R.id.bottom_constraint_layout_item_post_image_and_gif_autoplay)
         ConstraintLayout bottomConstraintLayout;
-        @BindView(R.id.plus_button_item_post_image_type)
+        @BindView(R.id.plus_button_item_post_image_and_gif_autoplay)
         ImageView upvoteButton;
-        @BindView(R.id.score_text_view_item_post_image_type)
+        @BindView(R.id.score_text_view_item_post_image_and_gif_autoplay)
         TextView scoreTextView;
-        @BindView(R.id.minus_button_item_post_image_type)
+        @BindView(R.id.minus_button_item_post_image_and_gif_autoplay)
         ImageView downvoteButton;
-        @BindView(R.id.comments_count_item_post_image_type)
+        @BindView(R.id.comments_count_item_post_image_and_gif_autoplay)
         TextView commentsCountTextView;
-        @BindView(R.id.save_button_item_post_image_type)
+        @BindView(R.id.save_button_item_post_image_and_gif_autoplay)
         ImageView saveButton;
-        @BindView(R.id.share_button_item_post_image_type)
+        @BindView(R.id.share_button_item_post_image_and_gif_autoplay)
         ImageView shareButton;
 
-        PostImageAndGifAutoplayTypeViewHolder(View itemView) {
+        PostImageAndGifAutoplayViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             setBaseView(cardView,
@@ -2204,6 +2210,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     shareButton);
 
             progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
+            errorTextView.setTextColor(mPrimaryTextColor);
 
             imageView.setOnClickListener(view -> {
                 Post post = getItem(getAdapterPosition());
@@ -2220,59 +2227,59 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     }
 
     class PostLinkTypeViewHolder extends PostBaseViewHolder {
-        @BindView(R.id.card_view_item_post_link_type)
+        @BindView(R.id.card_view_item_post_link)
         MaterialCardView cardView;
-        @BindView(R.id.icon_gif_image_view_item_post_link_type)
+        @BindView(R.id.icon_gif_image_view_item_post_link)
         AspectRatioGifImageView iconGifImageView;
-        @BindView(R.id.subreddit_name_text_view_item_post_link_type)
+        @BindView(R.id.subreddit_name_text_view_item_post_link)
         TextView subredditTextView;
-        @BindView(R.id.user_text_view_item_post_link_type)
+        @BindView(R.id.user_text_view_item_post_link)
         TextView userTextView;
-        @BindView(R.id.stickied_post_image_view_item_post_link_type)
+        @BindView(R.id.stickied_post_image_view_item_post_link)
         ImageView stickiedPostImageView;
-        @BindView(R.id.post_time_text_view_best_item_post_link_type)
+        @BindView(R.id.post_time_text_view_item_post_link)
         TextView postTimeTextView;
-        @BindView(R.id.title_text_view_best_item_post_link_type)
+        @BindView(R.id.title_text_view_item_post_link)
         TextView titleTextView;
-        @BindView(R.id.type_text_view_item_post_link_type)
+        @BindView(R.id.type_text_view_item_post_link)
         CustomTextView typeTextView;
-        @BindView(R.id.archived_image_view_item_post_link_type)
+        @BindView(R.id.archived_image_view_item_post_link)
         ImageView archivedImageView;
-        @BindView(R.id.locked_image_view_item_post_link_type)
+        @BindView(R.id.locked_image_view_item_post_link)
         ImageView lockedImageView;
-        @BindView(R.id.crosspost_image_view_item_post_link_type)
+        @BindView(R.id.crosspost_image_view_item_post_link)
         ImageView crosspostImageView;
-        @BindView(R.id.nsfw_text_view_item_post_link_type)
+        @BindView(R.id.nsfw_text_view_item_post_link)
         CustomTextView nsfwTextView;
-        @BindView(R.id.spoiler_custom_text_view_item_post_link_type)
+        @BindView(R.id.spoiler_custom_text_view_item_post_link)
         CustomTextView spoilerTextView;
-        @BindView(R.id.flair_custom_text_view_item_post_link_type)
+        @BindView(R.id.flair_custom_text_view_item_post_link)
         CustomTextView flairTextView;
-        @BindView(R.id.awards_text_view_item_post_link_type)
+        @BindView(R.id.awards_text_view_item_post_link)
         CustomTextView awardsTextView;
-        @BindView(R.id.link_text_view_item_post_link_type)
+        @BindView(R.id.link_text_view_item_post_link)
         TextView linkTextView;
-        @BindView(R.id.image_view_wrapper_item_post_link_type)
-        RelativeLayout relativeLayout;
-        @BindView(R.id.progress_bar_item_post_link_type)
+        @BindView(R.id.progress_bar_item_post_link)
         ProgressBar progressBar;
-        @BindView(R.id.image_view_best_post_item)
+        @BindView(R.id.image_view_item_post_link)
         AspectRatioGifImageView imageView;
-        @BindView(R.id.load_image_error_relative_layout_item_post_link_type)
+        @BindView(R.id.load_image_error_relative_layout_item_post_link)
         RelativeLayout errorRelativeLayout;
-        @BindView(R.id.bottom_constraint_layout_item_post_link_type)
+        @BindView(R.id.load_image_error_text_view_item_post_link)
+        TextView errorTextView;
+        @BindView(R.id.bottom_constraint_layout_item_post_link)
         ConstraintLayout bottomConstraintLayout;
-        @BindView(R.id.plus_button_item_post_link_type)
+        @BindView(R.id.plus_button_item_post_link)
         ImageView upvoteButton;
-        @BindView(R.id.score_text_view_item_post_link_type)
+        @BindView(R.id.score_text_view_item_post_link)
         TextView scoreTextView;
-        @BindView(R.id.minus_button_item_post_link_type)
+        @BindView(R.id.minus_button_item_post_link)
         ImageView downvoteButton;
-        @BindView(R.id.comments_count_item_post_link_type)
+        @BindView(R.id.comments_count_item_post_link)
         TextView commentsCountTextView;
-        @BindView(R.id.save_button_item_post_link_type)
+        @BindView(R.id.save_button_item_post_link)
         ImageView saveButton;
-        @BindView(R.id.share_button_item_post_link_type)
+        @BindView(R.id.share_button_item_post_link)
         ImageView shareButton;
 
         PostLinkTypeViewHolder(View itemView) {
@@ -2303,6 +2310,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             linkTextView.setTextColor(mSecondaryTextColor);
             progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
+            errorTextView.setTextColor(mPrimaryTextColor);
 
             imageView.setOnClickListener(view -> {
                 Post post = getItem(getAdapterPosition());
@@ -2331,9 +2339,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         TextView userTextView;
         @BindView(R.id.stickied_post_image_view_item_post_no_preview_link_type)
         ImageView stickiedPostImageView;
-        @BindView(R.id.post_time_text_view_best_item_post_no_preview_link_type)
+        @BindView(R.id.post_time_text_view_item_post_no_preview_link_type)
         TextView postTimeTextView;
-        @BindView(R.id.title_text_view_best_item_post_no_preview_link_type)
+        @BindView(R.id.title_text_view_item_post_no_preview_link_type)
         TextView titleTextView;
         @BindView(R.id.type_text_view_item_post_no_preview_link_type)
         CustomTextView typeTextView;
@@ -2426,9 +2434,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         TextView userTextView;
         @BindView(R.id.stickied_post_image_view_item_post_text_type)
         ImageView stickiedPostImageView;
-        @BindView(R.id.post_time_text_view_best_item_post_text_type)
+        @BindView(R.id.post_time_text_view_item_post_text_type)
         TextView postTimeTextView;
-        @BindView(R.id.title_text_view_best_item_post_text_type)
+        @BindView(R.id.title_text_view_item_post_text_type)
         TextView titleTextView;
         @BindView(R.id.type_text_view_item_post_text_type)
         CustomTextView typeTextView;
@@ -2500,9 +2508,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         TextView nameTextView;
         @BindView(R.id.stickied_post_image_view_item_post_compact)
         ImageView stickiedPostImageView;
-        @BindView(R.id.post_time_text_view_best_item_post_compact)
+        @BindView(R.id.post_time_text_view_item_post_compact)
         TextView postTimeTextView;
-        @BindView(R.id.title_text_view_best_item_post_compact)
+        @BindView(R.id.title_text_view_item_post_compact)
         TextView titleTextView;
         @BindView(R.id.type_text_view_item_post_compact)
         CustomTextView typeTextView;
@@ -2526,7 +2534,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         RelativeLayout relativeLayout;
         @BindView(R.id.progress_bar_item_post_compact)
         ProgressBar progressBar;
-        @BindView(R.id.image_view_best_post_item)
+        @BindView(R.id.image_view_item_post_compact)
         ImageView imageView;
         @BindView(R.id.play_button_image_view_item_post_compact)
         ImageView playButtonImageView;
