@@ -64,6 +64,7 @@ import ml.docilealligator.infinityforreddit.CustomView.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.DeleteThing;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeWifiStatusEvent;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToDetailActivity;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
@@ -1235,6 +1236,17 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
         if (!getClass().getName().equals(event.excludeActivityClassName)) {
             finish();
+        }
+    }
+
+    @Subscribe
+    public void onChangeWifiStatusEvent(ChangeWifiStatusEvent changeWifiStatusEvent) {
+        if (mAdapter != null) {
+            String autoplay = mSharedPreferences.getString(SharedPreferencesUtils.VIDEO_AUTOPLAY, SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_NEVER);
+            if (autoplay.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI)) {
+                mAdapter.setAutoplay(changeWifiStatusEvent.isConnectedToWifi);
+                refreshAdapter();
+            }
         }
     }
 

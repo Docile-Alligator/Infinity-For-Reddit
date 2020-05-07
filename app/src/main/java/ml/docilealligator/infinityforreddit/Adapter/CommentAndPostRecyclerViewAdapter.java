@@ -1451,6 +1451,10 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         return -1;
     }
 
+    public void setAutoplay(boolean autoplay) {
+        mAutoplay = autoplay;
+    }
+
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof CommentViewHolder) {
