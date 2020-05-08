@@ -91,6 +91,7 @@ public class ViewImageActivity extends AppCompatActivity {
     private String mImageFileName;
     private float totalLengthY = 0.0f;
     private float touchY = -1.0f;
+    private float initialZoom = 1.0f;
     private float zoom = 1.0f;
     private boolean isSwiping = false;
     private RequestManager glide;
@@ -327,7 +328,7 @@ public class ViewImageActivity extends AppCompatActivity {
 
             @Override
             public void onStateReset(State oldState, State newState) {
-
+                initialZoom = newState.getZoom();
             }
         });
 
@@ -367,7 +368,7 @@ public class ViewImageActivity extends AppCompatActivity {
                 mProgressBar.setVisibility(View.GONE);
                 return false;
             }
-        }).apply(new RequestOptions().fitCenter()).into(mImageView);
+        }).into(mImageView);
     }
 
     @Override
@@ -455,7 +456,7 @@ public class ViewImageActivity extends AppCompatActivity {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (zoom == 1.0) {
+        if (Math.abs(zoom - initialZoom) <= 0.000001) {
             swipe.dispatchTouchEvent(ev);
         }
         return super.dispatchTouchEvent(ev);
