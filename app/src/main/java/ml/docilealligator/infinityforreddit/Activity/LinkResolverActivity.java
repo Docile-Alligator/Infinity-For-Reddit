@@ -56,6 +56,10 @@ public class LinkResolverActivity extends AppCompatActivity {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
         Uri uri = getIntent().getData();
+        handleUri(uri);
+    }
+
+    private void handleUri(Uri uri) {
         if (uri == null) {
             Toast.makeText(this, R.string.no_link_available, Toast.LENGTH_SHORT).show();
             finish();
@@ -73,7 +77,10 @@ public class LinkResolverActivity extends AppCompatActivity {
 
                 String authority = uri.getAuthority();
                 if (authority != null && (authority.contains("reddit.com") || authority.contains("redd.it") || authority.contains("reddit.app"))) {
-                    if (path.matches(POST_PATTERN)) {
+                    if (authority.equals("reddit.app.link") && path.isEmpty()) {
+                        String redirect = uri.getQueryParameter("$og_redirect");
+                        handleUri(Uri.parse(redirect));
+                    } else if (path.matches(POST_PATTERN)) {
                         List<String> segments = uri.getPathSegments();
                         int commentsIndex = segments.lastIndexOf("comments");
                         if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
