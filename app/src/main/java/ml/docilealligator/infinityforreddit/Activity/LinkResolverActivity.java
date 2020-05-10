@@ -80,6 +80,9 @@ public class LinkResolverActivity extends AppCompatActivity {
                     if (authority.equals("reddit.app.link") && path.isEmpty()) {
                         String redirect = uri.getQueryParameter("$og_redirect");
                         handleUri(Uri.parse(redirect));
+                    } else if (path.isEmpty()) {
+                        Intent intent = new Intent(this, MainActivity.class);
+                        startActivity(intent);
                     } else if (path.matches(POST_PATTERN)) {
                         List<String> segments = uri.getPathSegments();
                         int commentsIndex = segments.lastIndexOf("comments");
