@@ -30,14 +30,14 @@ public class LinkResolverActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE_FULLNAME = "ENF";
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
 
-    private static final String POST_PATTERN = "/r/\\w+/comments/\\w+/{0,1}\\w+/{0,1}";
-    private static final String COMMENT_PATTERN = "/(r|u|U|user)/\\w+/comments/\\w+/{0,1}\\w+/\\w+/{0,1}";
-    private static final String SUBREDDIT_PATTERN = "/[rR]/\\w+/{0,1}";
-    private static final String USER_PATTERN = "/([uU]|user)/\\w+/{0,1}";
+    private static final String POST_PATTERN = "/r/\\w+/comments/\\w+/?\\w+/?";
+    private static final String COMMENT_PATTERN = "/(r|u|U|user)/\\w+/comments/\\w+/?\\w+/\\w+/?";
+    private static final String SUBREDDIT_PATTERN = "/[rR]/\\w+/?";
+    private static final String USER_PATTERN = "/(u|U|user)/\\w+/?";
     private static final String SIDEBAR_PATTERN = "/[rR]/\\w+/about/sidebar";
-    private static final String MULTIREDDIT_PATTERN = "/user/\\w+/m/\\w+/{0,1}";
+    private static final String MULTIREDDIT_PATTERN = "/user/\\w+/m/\\w+/?";
     private static final String MULTIREDDIT_PATTERN_2 = "/[rR]/(\\w+\\+?)+/?";
-    private static final String REDD_IT_POST_PATTERN = "/\\w+/{0,1}";
+    private static final String REDD_IT_POST_PATTERN = "/\\w+/?";
 
     @Inject
     @Named("default")
