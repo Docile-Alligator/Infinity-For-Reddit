@@ -31,10 +31,9 @@ public class LinkResolverActivity extends AppCompatActivity {
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
 
     private static final String POST_PATTERN = "/r/\\w+/comments/\\w+/{0,1}\\w+/{0,1}";
-    private static final String COMMENT_PATTERN = "/(r|u|user)/\\w+/comments/\\w+/{0,1}\\w+/\\w+/{0,1}";
+    private static final String COMMENT_PATTERN = "/(r|u|U|user)/\\w+/comments/\\w+/{0,1}\\w+/\\w+/{0,1}";
     private static final String SUBREDDIT_PATTERN = "/[rR]/\\w+/{0,1}";
-    private static final String USER_PATTERN_1 = "/user/\\w+/{0,1}";
-    private static final String USER_PATTERN_2 = "/[uU]/\\w+/{0,1}";
+    private static final String USER_PATTERN = "/([uU]|user)/\\w+/{0,1}";
     private static final String SIDEBAR_PATTERN = "/[rR]/\\w+/about/sidebar";
     private static final String MULTIREDDIT_PATTERN = "/user/\\w+/m/\\w+/{0,1}";
     private static final String REDD_IT_POST_PATTERN = "/\\w+/{0,1}";
@@ -123,13 +122,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                             intent.putExtra(ViewSubredditDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
                             startActivity(intent);
                         }
-                    } else if (path.matches(USER_PATTERN_1)) {
-                        Intent intent = new Intent(this, ViewUserDetailActivity.class);
-                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, segments.get(1));
-                        intent.putExtra(ViewUserDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
-                        intent.putExtra(ViewUserDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
-                        startActivity(intent);
-                    } else if (path.matches(USER_PATTERN_2)) {
+                    } else if (path.matches(USER_PATTERN)) {
                         Intent intent = new Intent(this, ViewUserDetailActivity.class);
                         intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, segments.get(1));
                         intent.putExtra(ViewUserDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
