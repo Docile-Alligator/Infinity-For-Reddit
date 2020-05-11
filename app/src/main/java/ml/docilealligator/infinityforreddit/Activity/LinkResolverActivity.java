@@ -31,7 +31,7 @@ public class LinkResolverActivity extends AppCompatActivity {
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
 
     private static final String POST_PATTERN = "/r/\\w+/comments/\\w+/{0,1}\\w+/{0,1}";
-    private static final String COMMENT_PATTERN = "/r/\\w+/comments/\\w+/{0,1}\\w+/\\w+/{0,1}";
+    private static final String COMMENT_PATTERN = "/(r|u|user)/\\w+/comments/\\w+/{0,1}\\w+/\\w+/{0,1}";
     private static final String SUBREDDIT_PATTERN = "/[rR]/\\w+/{0,1}";
     private static final String USER_PATTERN_1 = "/user/\\w+/{0,1}";
     private static final String USER_PATTERN_2 = "/[uU]/\\w+/{0,1}";
@@ -76,6 +76,8 @@ public class LinkResolverActivity extends AppCompatActivity {
                 String newAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
 
                 String authority = uri.getAuthority();
+                List<String> segments = uri.getPathSegments();
+
                 if (authority != null && (authority.contains("reddit.com") || authority.contains("redd.it") || authority.contains("reddit.app"))) {
                     if (authority.equals("reddit.app.link") && path.isEmpty()) {
                         String redirect = uri.getQueryParameter("$og_redirect");
@@ -84,7 +86,6 @@ public class LinkResolverActivity extends AppCompatActivity {
                         Intent intent = new Intent(this, MainActivity.class);
                         startActivity(intent);
                     } else if (path.matches(POST_PATTERN)) {
-                        List<String> segments = uri.getPathSegments();
                         int commentsIndex = segments.lastIndexOf("comments");
                         if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
                             Intent intent = new Intent(this, ViewPostDetailActivity.class);
@@ -96,7 +97,6 @@ public class LinkResolverActivity extends AppCompatActivity {
                             deepLinkError(uri);
                         }
                     } else if (path.matches(COMMENT_PATTERN)) {
-                        List<String> segments = uri.getPathSegments();
                         int commentsIndex = segments.lastIndexOf("comments");
                         if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
                             Intent intent = new Intent(this, ViewPostDetailActivity.class);
@@ -125,13 +125,13 @@ public class LinkResolverActivity extends AppCompatActivity {
                         }
                     } else if (path.matches(USER_PATTERN_1)) {
                         Intent intent = new Intent(this, ViewUserDetailActivity.class);
-                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, path.substring(6));
+                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, segments.get(1));
                         intent.putExtra(ViewUserDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
                         intent.putExtra(ViewUserDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
                         startActivity(intent);
                     } else if (path.matches(USER_PATTERN_2)) {
                         Intent intent = new Intent(this, ViewUserDetailActivity.class);
-                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, path.substring(3));
+                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, segments.get(1));
                         intent.putExtra(ViewUserDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
                         intent.putExtra(ViewUserDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
                         startActivity(intent);
