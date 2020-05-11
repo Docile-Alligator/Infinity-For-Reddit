@@ -9,11 +9,23 @@ android {
         versionCode 33
         versionName "3.0.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        resValue "string", "application_name" , "Infinity"
     }
     buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+            resValue "string", "application_name" , "Infinity Debug"
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        beta {
+            initWith release
+            applicationIdSuffix = ".beta"
+            resValue "string", "application_name" , "Infinity Beta"
         }
     }
     compileOptions {

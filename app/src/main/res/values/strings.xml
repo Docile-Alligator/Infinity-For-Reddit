@@ -1,5 +1,4 @@
 <resources>
-    <string name="application_name">Infinity</string>
     <string name="login_activity_label">Login</string>
     <string name="search_activity_label">Search</string>
     <string name="comment_activity_label">Send Comment</string>
