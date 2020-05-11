@@ -33,4 +33,9 @@
         app:key="volume_keys_navigate_posts"
         app:title="@string/settings_volume_keys_navigate_posts_title" />
 
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="swap_tap_and_long_in_comments"
+        app:title="@string/settings_swap_tap_and_long_title" />
+
 </PreferenceScreen>

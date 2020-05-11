@@ -150,6 +150,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private boolean mExpandChildren;
     private boolean mCommentToolbarHidden;
     private boolean mCommentToolbarHideOnClick;
+    private boolean mSwapTapAndLong;
     private boolean mShowCommentDivider;
     private boolean mShowAbsoluteNumberOfVotes;
     private boolean mAutoplay = false;
@@ -306,6 +307,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mExpandChildren = !mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_TOP_LEVEL_COMMENTS_FIRST, false);
         mCommentToolbarHidden = mSharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDDEN, false);
         mCommentToolbarHideOnClick= mSharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDE_ON_CLICK, true);
+        mSwapTapAndLong = mSharedPreferences.getBoolean(SharedPreferencesUtils.SWAP_TAP_AND_LONG_COMMENTS, false);
         mShowCommentDivider = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER, false);
         mShowAbsoluteNumberOfVotes = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
 
@@ -2703,23 +2705,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             authorFlairTextView.setOnClickListener(view -> authorTextView.performClick());
 
-            View.OnClickListener hideToolbarOnClickListener = view -> {
-                if (mCommentToolbarHideOnClick) {
-                    if (bottomConstraintLayout.getLayoutParams().height == 0) {
-                        bottomConstraintLayout.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                        topScoreTextView.setVisibility(View.GONE);
-                        ((ViewPostDetailActivity) mActivity).delayTransition();
-                    } else {
-                        ((ViewPostDetailActivity) mActivity).delayTransition();
-                        bottomConstraintLayout.getLayoutParams().height = 0;
-                        topScoreTextView.setVisibility(View.VISIBLE);
-                    }
-                }
-            };
-            linearLayout.setOnClickListener(hideToolbarOnClickListener);
-            commentMarkdownView.setOnClickListener(hideToolbarOnClickListener);
-            commentTimeTextView.setOnClickListener(hideToolbarOnClickListener);
-
             moreButton.setOnClickListener(view -> {
                 CommentData comment = getCurrentComment();
                 Bundle bundle = new Bundle();
@@ -2961,15 +2946,45 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 }
             });
 
-            commentMarkdownView.setOnLongClickListener(view -> {
-                expandButton.performClick();
-                return true;
-            });
+            if (mSwapTapAndLong) {
+                if (mCommentToolbarHideOnClick) {
+                    View.OnLongClickListener hideToolbarOnLongClickListener = view -> hideToolbar();
+                    linearLayout.setOnLongClickListener(hideToolbarOnLongClickListener);
+                    commentMarkdownView.setOnLongClickListener(hideToolbarOnLongClickListener);
+                    commentTimeTextView.setOnLongClickListener(hideToolbarOnLongClickListener);
+                }
+                View.OnClickListener expandCommentsOnClickListener = view -> expandComments();
+                commentMarkdownView.setOnClickListener(expandCommentsOnClickListener);
+                itemView.setOnClickListener(expandCommentsOnClickListener);
+            } else {
+                if (mCommentToolbarHideOnClick) {
+                    View.OnClickListener hideToolbarOnClickListener = view -> hideToolbar();
+                    linearLayout.setOnClickListener(hideToolbarOnClickListener);
+                    commentMarkdownView.setOnClickListener(hideToolbarOnClickListener);
+                    commentTimeTextView.setOnClickListener(hideToolbarOnClickListener);
+                }
+                View.OnLongClickListener expandsCommentsOnLongClickListener = view -> expandComments();
+                commentMarkdownView.setOnLongClickListener(expandsCommentsOnLongClickListener);
+                itemView.setOnLongClickListener(expandsCommentsOnLongClickListener);
+            }
+        }
 
-            itemView.setOnLongClickListener(view -> {
-                expandButton.performClick();
-                return true;
-            });
+        private boolean expandComments() {
+            expandButton.performClick();
+            return true;
+        }
+
+        private boolean hideToolbar() {
+            if (bottomConstraintLayout.getLayoutParams().height == 0) {
+                bottomConstraintLayout.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                topScoreTextView.setVisibility(View.GONE);
+                ((ViewPostDetailActivity) mActivity).delayTransition();
+            } else {
+                ((ViewPostDetailActivity) mActivity).delayTransition();
+                bottomConstraintLayout.getLayoutParams().height = 0;
+                topScoreTextView.setVisibility(View.VISIBLE);
+            }
+            return true;
         }
 
         private CommentData getCurrentComment() {

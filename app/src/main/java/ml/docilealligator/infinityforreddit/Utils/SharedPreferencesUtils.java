@@ -81,6 +81,7 @@ public class SharedPreferencesUtils {
     public static final String VIDEO_AUTOPLAY_VALUE_ON_WIFI = "1";
     public static final String VIDEO_AUTOPLAY_VALUE_NEVER = "0";
     public static final String LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON = "lock_jump_to_next_top_level_comment_button";
+    public static final String SWAP_TAP_AND_LONG_COMMENTS = "swap_tap_and_long_in_comments";
     public static final String SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON = "swipe_up_to_hide_jump_to_next_top_level_comments_button";
     public static final String SHOW_TOP_LEVEL_COMMENTS_FIRST = "show_top_level_comments_first";
     public static final String CONFIRM_TO_EXIT = "confirm_to_exit";
