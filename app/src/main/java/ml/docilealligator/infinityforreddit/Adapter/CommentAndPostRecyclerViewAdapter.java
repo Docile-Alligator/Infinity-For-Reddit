@@ -2057,6 +2057,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, mPost.getSubredditName());
                 intent.putExtra(ViewVideoActivity.EXTRA_ID, mPost.getId());
                 intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, mPost.getTitle());
+                intent.putExtra(ViewVideoActivity.EXTRA_PROGRESS_SECONDS, helper.getLatestPlaybackInfo().getResumePosition());
                 mActivity.startActivity(intent);
             });
         }

@@ -1922,6 +1922,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, post.getSubredditName());
                     intent.putExtra(ViewVideoActivity.EXTRA_ID, post.getId());
                     intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, post.getTitle());
+                    intent.putExtra(ViewVideoActivity.EXTRA_PROGRESS_SECONDS, helper.getLatestPlaybackInfo().getResumePosition());
                     mActivity.startActivity(intent);
                 }
             });
