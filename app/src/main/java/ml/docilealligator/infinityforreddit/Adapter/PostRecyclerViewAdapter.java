@@ -1305,6 +1305,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         mAutoplay = autoplay;
     }
 
+    public boolean isAutoplay() {
+        return mAutoplay;
+    }
+
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
