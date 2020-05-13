@@ -20,6 +20,11 @@
         app:summary="@string/settings_immersive_interface_ignore_nav_bar_summary"
         app:isPreferenceVisible="false" />
 
+    <Preference
+        app:title="@string/settings_customize_tabs_in_main_page_title"
+        app:summary="@string/settings_customize_tabs_in_main_page_summary"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.CustomizeMainPageTabsFragment" />
+
     <SwitchPreference
         app:defaultValue="false"
         app:key="bottom_app_bar"

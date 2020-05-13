@@ -122,4 +122,22 @@
         <item>XLarge</item>
         <item>XXLarge</item>
     </string-array>
+    
+    <string-array name="settings_tab_post_type">
+        <item>Home</item>
+        <item>Popular</item>
+        <item>All</item>
+        <item>Subreddit</item>
+        <item>MultiReddit</item>
+        <item>User</item>
+    </string-array>
+
+    <string-array name="settings_tab_post_type_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
 </resources>
