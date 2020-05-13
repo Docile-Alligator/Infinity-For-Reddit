@@ -401,9 +401,9 @@
     <string name="settings_tab_3_summary">Tab 3</string>
     <string name="settings_tab_title">Title</string>
     <string name="settings_tab_post_type">Type</string>
-    <string name="settings_tab_subreddit_name">Subreddit Name</string>
-    <string name="settings_tab_multi_reddit_name">MultiReddit Name</string>
-    <string name="settings_tab_username">Username</string>
+    <string name="settings_tab_subreddit_name">Subreddit Name (Without r/ prefix)</string>
+    <string name="settings_tab_multi_reddit_name">MultiReddit Name (/user/yourusername/m/yourmultiredditname)</string>
+    <string name="settings_tab_username">Username (Without u/ prefix)</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
