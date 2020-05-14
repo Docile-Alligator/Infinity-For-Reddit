@@ -960,11 +960,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 String name = mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, "");
                 return generatePostFragment(postType, name);
             } else if (position == 1) {
-                String postType = mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_2_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HOME);
+                String postType = mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_2_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_POPULAR);
                 String name = mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, "");
                 return generatePostFragment(postType, name);
             } else {
-                String postType = mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_3_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HOME);
+                String postType = mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_3_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_ALL);
                 String name = mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, "");
                 return generatePostFragment(postType, name);
             }
