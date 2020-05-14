@@ -729,6 +729,6 @@
     <string name="report_reason_general_abusive_content">It Contains Abusive Content</string>
 
     <string name="home">Home</string>
-    <string name="popular">Best</string>
+    <string name="popular">Popular</string>
 
 </resources>

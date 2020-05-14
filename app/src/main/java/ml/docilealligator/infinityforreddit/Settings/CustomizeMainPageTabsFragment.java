@@ -55,15 +55,15 @@ public class CustomizeMainPageTabsFragment extends PreferenceFragmentCompat {
         EditTextPreference tab3NamePreference = findPreference(SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME);
 
         if (tab1TitlePreference != null && tab1PostTypePreference != null && tab1NamePreference != null) {
-            String string = mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_1_POST_TYPE,
+            String postType = mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_1_POST_TYPE,
                     SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HOME);
-            if (SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_SUBREDDIT.equals(string)) {
+            if (SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_SUBREDDIT.equals(postType)) {
                 tab1NamePreference.setVisible(true);
                 tab1NamePreference.setTitle(R.string.settings_tab_subreddit_name);
-            } else if (SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_MULTIREDDIT.equals(string)) {
+            } else if (SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_MULTIREDDIT.equals(postType)) {
                 tab1NamePreference.setVisible(true);
                 tab1NamePreference.setTitle(R.string.settings_tab_multi_reddit_name);
-            } else if (SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_USER.equals(string)) {
+            } else if (SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_USER.equals(postType)) {
                 tab1NamePreference.setVisible(true);
                 tab1NamePreference.setTitle(R.string.settings_tab_username);
             }
@@ -92,15 +92,15 @@ public class CustomizeMainPageTabsFragment extends PreferenceFragmentCompat {
         }
 
         if (tab2TitlePreference != null && tab2PostTypePreference != null && tab2NamePreference != null) {
-            String string = mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_2_POST_TYPE,
-                    SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HOME);
-            if (SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_SUBREDDIT.equals(string)) {
+            String postType = mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_2_POST_TYPE,
+                    SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_POPULAR);
+            if (SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_SUBREDDIT.equals(postType)) {
                 tab2NamePreference.setVisible(true);
                 tab2NamePreference.setTitle(R.string.settings_tab_subreddit_name);
-            } else if (SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_MULTIREDDIT.equals(string)) {
+            } else if (SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_MULTIREDDIT.equals(postType)) {
                 tab2NamePreference.setVisible(true);
                 tab2NamePreference.setTitle(R.string.settings_tab_multi_reddit_name);
-            } else if (SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_USER.equals(string)) {
+            } else if (SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_USER.equals(postType)) {
                 tab2NamePreference.setVisible(true);
                 tab2NamePreference.setTitle(R.string.settings_tab_username);
             }
@@ -129,15 +129,15 @@ public class CustomizeMainPageTabsFragment extends PreferenceFragmentCompat {
         }
 
         if (tab3TitlePreference != null && tab3PostTypePreference != null && tab3NamePreference != null) {
-            String string = mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_3_POST_TYPE,
-                    SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HOME);
-            if (SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_SUBREDDIT.equals(string)) {
+            String postType = mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_3_POST_TYPE,
+                    SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_ALL);
+            if (SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_SUBREDDIT.equals(postType)) {
                 tab3NamePreference.setVisible(true);
                 tab3NamePreference.setTitle(R.string.settings_tab_subreddit_name);
-            } else if (SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_MULTIREDDIT.equals(string)) {
+            } else if (SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_MULTIREDDIT.equals(postType)) {
                 tab3NamePreference.setVisible(true);
                 tab3NamePreference.setTitle(R.string.settings_tab_multi_reddit_name);
-            } else if (SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_USER.equals(string)) {
+            } else if (SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_USER.equals(postType)) {
                 tab3NamePreference.setVisible(true);
                 tab3NamePreference.setTitle(R.string.settings_tab_username);
             }
