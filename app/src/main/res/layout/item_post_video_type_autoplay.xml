@@ -69,7 +69,7 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
-                android:id="@+id/post_time_text_view_best_item_post_video_type_autoplay"
+                android:id="@+id/post_time_text_view_item_post_video_type_autoplay"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="end"
@@ -89,7 +89,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/title_text_view_best_item_post_video_type_autoplay"
+            android:id="@+id/title_text_view_item_post_video_type_autoplay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
@@ -187,7 +187,7 @@
         </com.nex3z.flowlayout.FlowLayout>
 
         <com.google.android.exoplayer2.ui.AspectRatioFrameLayout
-            android:id="@+id/aspect"
+            android:id="@+id/aspect_ratio_frame_layout_item_post_video_type_autoplay"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="#000000"

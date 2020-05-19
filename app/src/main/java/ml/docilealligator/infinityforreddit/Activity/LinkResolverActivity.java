@@ -30,14 +30,14 @@ public class LinkResolverActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE_FULLNAME = "ENF";
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
 
-    private static final String POST_PATTERN = "/r/\\w+/comments/\\w+/{0,1}\\w+/{0,1}";
-    private static final String COMMENT_PATTERN = "/r/\\w+/comments/\\w+/{0,1}\\w+/\\w+/{0,1}";
-    private static final String SUBREDDIT_PATTERN = "/[rR]/\\w+/{0,1}";
-    private static final String USER_PATTERN_1 = "/user/\\w+/{0,1}";
-    private static final String USER_PATTERN_2 = "/[uU]/\\w+/{0,1}";
+    private static final String POST_PATTERN = "/r/\\w+/comments/\\w+/?\\w+/?";
+    private static final String COMMENT_PATTERN = "/(r|u|U|user)/\\w+/comments/\\w+/?\\w+/\\w+/?";
+    private static final String SUBREDDIT_PATTERN = "/[rR]/\\w+/?";
+    private static final String USER_PATTERN = "/(u|U|user)/\\w+/?";
     private static final String SIDEBAR_PATTERN = "/[rR]/\\w+/about/sidebar";
-    private static final String MULTIREDDIT_PATTERN = "/user/\\w+/m/\\w+/{0,1}";
-    private static final String REDD_IT_POST_PATTERN = "/\\w+/{0,1}";
+    private static final String MULTIREDDIT_PATTERN = "/user/\\w+/m/\\w+/?";
+    private static final String MULTIREDDIT_PATTERN_2 = "/[rR]/(\\w+\\+?)+/?";
+    private static final String REDD_IT_POST_PATTERN = "/\\w+/?";
 
     @Inject
     @Named("default")
@@ -56,6 +56,10 @@ public class LinkResolverActivity extends AppCompatActivity {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
         Uri uri = getIntent().getData();
+        handleUri(uri);
+    }
+
+    private void handleUri(Uri uri) {
         if (uri == null) {
             Toast.makeText(this, R.string.no_link_available, Toast.LENGTH_SHORT).show();
             finish();
@@ -72,9 +76,16 @@ public class LinkResolverActivity extends AppCompatActivity {
                 String newAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
 
                 String authority = uri.getAuthority();
+                List<String> segments = uri.getPathSegments();
+
                 if (authority != null && (authority.contains("reddit.com") || authority.contains("redd.it") || authority.contains("reddit.app"))) {
-                    if (path.matches(POST_PATTERN)) {
-                        List<String> segments = uri.getPathSegments();
+                    if (authority.equals("reddit.app.link") && path.isEmpty()) {
+                        String redirect = uri.getQueryParameter("$og_redirect");
+                        handleUri(Uri.parse(redirect));
+                    } else if (path.isEmpty()) {
+                        Intent intent = new Intent(this, MainActivity.class);
+                        startActivity(intent);
+                    } else if (path.matches(POST_PATTERN)) {
                         int commentsIndex = segments.lastIndexOf("comments");
                         if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
                             Intent intent = new Intent(this, ViewPostDetailActivity.class);
@@ -86,7 +97,6 @@ public class LinkResolverActivity extends AppCompatActivity {
                             deepLinkError(uri);
                         }
                     } else if (path.matches(COMMENT_PATTERN)) {
-                        List<String> segments = uri.getPathSegments();
                         int commentsIndex = segments.lastIndexOf("comments");
                         if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
                             Intent intent = new Intent(this, ViewPostDetailActivity.class);
@@ -113,15 +123,9 @@ public class LinkResolverActivity extends AppCompatActivity {
                             intent.putExtra(ViewSubredditDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
                             startActivity(intent);
                         }
-                    } else if (path.matches(USER_PATTERN_1)) {
+                    } else if (path.matches(USER_PATTERN)) {
                         Intent intent = new Intent(this, ViewUserDetailActivity.class);
-                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, path.substring(6));
-                        intent.putExtra(ViewUserDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
-                        intent.putExtra(ViewUserDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
-                        startActivity(intent);
-                    } else if (path.matches(USER_PATTERN_2)) {
-                        Intent intent = new Intent(this, ViewUserDetailActivity.class);
-                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, path.substring(3));
+                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, segments.get(1));
                         intent.putExtra(ViewUserDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
                         intent.putExtra(ViewUserDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
                         startActivity(intent);
@@ -132,6 +136,13 @@ public class LinkResolverActivity extends AppCompatActivity {
                     } else if (path.matches(MULTIREDDIT_PATTERN)) {
                         Intent intent = new Intent(this, ViewMultiRedditDetailActivity.class);
                         intent.putExtra(ViewMultiRedditDetailActivity.EXTRA_MULTIREDDIT_PATH, path);
+                        startActivity(intent);
+                    } else if (path.matches(MULTIREDDIT_PATTERN_2)) {
+                        String subredditName = path.substring(3);
+                        Intent intent = new Intent(this, ViewSubredditDetailActivity.class);
+                        intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditName);
+                        intent.putExtra(ViewSubredditDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
+                        intent.putExtra(ViewSubredditDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
                         startActivity(intent);
                     } else if (authority.equals("redd.it") && path.matches(REDD_IT_POST_PATTERN)) {
                         Intent intent = new Intent(this, ViewPostDetailActivity.class);

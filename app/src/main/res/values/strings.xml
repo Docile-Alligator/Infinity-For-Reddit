@@ -321,6 +321,8 @@
     <string name="settings_immersive_interface_title">Immersive Interface</string>
     <string name="settings_immersive_interface_ignore_nav_bar_title">Ignore Navigation Bar in Immersive Interface</string>
     <string name="settings_immersive_interface_ignore_nav_bar_summary">Prevent the Bottom Navigation Bar Having Extra Padding</string>
+    <string name="settings_customize_tabs_in_main_page_title">Customize Tabs in Main Page</string>
+    <string name="settings_customize_tabs_in_main_page_summary">Only for Logged-in User</string>
     <string name="settings_enable_bottom_app_bar_title">Enable Bottom Navigation</string>
     <string name="settings_enable_bottom_app_bar_summary">Has No Effect in Anonymous Mode</string>
     <string name="settings_vote_buttons_on_the_right_title">Vote Buttons on the Right</string>
@@ -336,6 +338,7 @@
     <string name="settings_show_elapsed_time">Show Elapsed Time in Posts and Comments</string>
     <string name="settings_default_post_layout">Default Post Layout</string>
     <string name="settings_show_divider_in_compact_layout">Show Divider in Compact Layout</string>
+    <string name="settings_swap_tap_and_long_title">Swap Tap and Long Press in Comments</string>
     <string name="settings_swipe_to_go_back_from_post_detail_title">Swipe Right to Go Back From Comments</string>
     <string name="settings_lock_jump_to_next_top_level_comment_button_title">Lock Jump to Next Top-level Comment Button</string>
     <string name="settings_lock_bottom_app_bar_title">Lock Bottom Navigation Bar</string>
@@ -392,6 +395,15 @@
     <string name="settings_delete_all_themes_in_database_title">Delete All Themes in Database</string>
     <string name="settings_reset_all_settings_title">Reset All Settings</string>
     <string name="settings_advanced_settings_summary">Clean the database and shared preferences</string>
+    <string name="settings_tab_info">Restart the app to see the changes</string>
+    <string name="settings_tab_1_summary">Tab 1</string>
+    <string name="settings_tab_2_summary">Tab 2</string>
+    <string name="settings_tab_3_summary">Tab 3</string>
+    <string name="settings_tab_title">Title</string>
+    <string name="settings_tab_post_type">Type</string>
+    <string name="settings_tab_subreddit_name">Subreddit Name (Without r/ prefix)</string>
+    <string name="settings_tab_multi_reddit_name">MultiReddit Name (/user/yourusername/m/yourmultiredditname)</string>
+    <string name="settings_tab_username">Username (Without u/ prefix)</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -710,10 +722,13 @@
     <string name="report_successful">Reported</string>
     <string name="report_failed">Report failed</string>
     <string name="report_reason_not_selected">You haven\'t selected a reason</string>
-    
+
     <string name="report_reason_general_spam">It Is Spam</string>
     <string name="report_reason_general_copyright_issue">It Contains Copyright Issue</string>
     <string name="report_reason_general_child_pornography">It Contains Child Pornography</string>
     <string name="report_reason_general_abusive_content">It Contains Abusive Content</string>
+
+    <string name="home">Home</string>
+    <string name="popular">Popular</string>
 
 </resources>

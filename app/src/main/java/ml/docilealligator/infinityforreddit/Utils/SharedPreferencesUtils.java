@@ -81,6 +81,7 @@ public class SharedPreferencesUtils {
     public static final String VIDEO_AUTOPLAY_VALUE_ON_WIFI = "1";
     public static final String VIDEO_AUTOPLAY_VALUE_NEVER = "0";
     public static final String LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON = "lock_jump_to_next_top_level_comment_button";
+    public static final String SWAP_TAP_AND_LONG_COMMENTS = "swap_tap_and_long_in_comments";
     public static final String SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON = "swipe_up_to_hide_jump_to_next_top_level_comments_button";
     public static final String SHOW_TOP_LEVEL_COMMENTS_FIRST = "show_top_level_comments_first";
     public static final String CONFIRM_TO_EXIT = "confirm_to_exit";
@@ -99,4 +100,19 @@ public class SharedPreferencesUtils {
     public static final String DELETE_ALL_POST_LAYOUT_DATA_IN_DATABASE = "delete_all_post_layout_data_in_database";
     public static final String DELETE_ALL_THEMES_IN_DATABASE = "delete_all_themes_in_database";
     public static final String RESET_ALL_SETTINGS = "reset_all_settings";
+    public static final String MAIN_PAGE_TAB_1_TITLE = "main_page_tab_1_title";
+    public static final String MAIN_PAGE_TAB_2_TITLE = "main_page_tab_2_title";
+    public static final String MAIN_PAGE_TAB_3_TITLE = "main_page_tab_3_title";
+    public static final String MAIN_PAGE_TAB_1_POST_TYPE = "main_page_tab_1_post_type";
+    public static final String MAIN_PAGE_TAB_2_POST_TYPE = "main_page_tab_2_post_type";
+    public static final String MAIN_PAGE_TAB_3_POST_TYPE = "main_page_tab_3_post_type";
+    public static final String MAIN_PAGE_TAB_1_NAME = "main_page_tab_1_name";
+    public static final String MAIN_PAGE_TAB_2_NAME = "main_page_tab_2_name";
+    public static final String MAIN_PAGE_TAB_3_NAME = "main_page_tab_3_name";
+    public static final String MAIN_PAGE_TAB_POST_TYPE_HOME = "0";
+    public static final String MAIN_PAGE_TAB_POST_TYPE_POPULAR = "1";
+    public static final String MAIN_PAGE_TAB_POST_TYPE_ALL = "2";
+    public static final String MAIN_PAGE_TAB_POST_TYPE_SUBREDDIT = "3";
+    public static final String MAIN_PAGE_TAB_POST_TYPE_MULTIREDDIT = "4";
+    public static final String MAIN_PAGE_TAB_POST_TYPE_USER = "5";
 }

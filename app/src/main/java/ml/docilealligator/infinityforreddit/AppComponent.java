@@ -51,6 +51,7 @@ import ml.docilealligator.infinityforreddit.Fragment.SubscribedSubredditsListing
 import ml.docilealligator.infinityforreddit.Fragment.UserListingFragment;
 import ml.docilealligator.infinityforreddit.Service.SubmitPostService;
 import ml.docilealligator.infinityforreddit.Settings.AdvancedPreferenceFragment;
+import ml.docilealligator.infinityforreddit.Settings.CustomizeMainPageTabsFragment;
 import ml.docilealligator.infinityforreddit.Settings.GesturesAndButtonsPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.MainPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.NotificationPreferenceFragment;
@@ -164,4 +165,6 @@ public interface AppComponent {
     void inject(SelectedSubredditsActivity selectedSubredditsActivity);
 
     void inject(ReportActivity reportActivity);
+
+    void inject(CustomizeMainPageTabsFragment customizeMainPageTabsFragment);
 }

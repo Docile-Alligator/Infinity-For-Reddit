@@ -37,7 +37,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <ml.docilealligator.infinityforreddit.CustomView.CustomToroContainer
             android:id="@+id/recycler_view_view_post_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

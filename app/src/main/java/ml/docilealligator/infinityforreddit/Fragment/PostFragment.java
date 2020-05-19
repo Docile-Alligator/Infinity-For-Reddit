@@ -674,6 +674,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             return false;
         }
 
+        if (mAdapter != null && mAdapter.isAutoplay()) {
+            mAdapter.setAutoplay(false);
+            refreshAdapter();
+        }
+
         isInLazyMode = true;
         isLazyModePaused = false;
 
@@ -688,6 +693,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void stopLazyMode() {
+        if (mAdapter != null) {
+            String autoplayString = mSharedPreferences.getString(SharedPreferencesUtils.VIDEO_AUTOPLAY, SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_NEVER);
+            if (autoplayString.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ALWAYS_ON) ||
+                    (autoplayString.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI) && Utils.isConnectedToWifi(activity))) {
+                mAdapter.setAutoplay(true);
+                refreshAdapter();
+            }
+        }
         isInLazyMode = false;
         isLazyModePaused = false;
         lazyModeRunnable.resetOldPosition();
@@ -700,6 +713,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Override
     public void resumeLazyMode(boolean resumeNow) {
         if (isInLazyMode) {
+            if (mAdapter != null && mAdapter.isAutoplay()) {
+                mAdapter.setAutoplay(false);
+                refreshAdapter();
+            }
             isLazyModePaused = false;
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 

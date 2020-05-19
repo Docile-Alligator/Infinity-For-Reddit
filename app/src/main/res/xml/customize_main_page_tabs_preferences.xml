@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        android:icon="@drawable/ic_info_preference_24dp"
+        app:summary="@string/settings_tab_info"
+        app:enabled="false" />
+
+    <PreferenceCategory
+        app:title="@string/settings_tab_1_summary" />
+
+    <EditTextPreference
+        app:defaultValue="@string/home"
+        app:key="main_page_tab_1_title"
+        app:title="@string/settings_tab_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        app:defaultValue="0"
+        android:entries="@array/settings_tab_post_type"
+        app:entryValues="@array/settings_tab_post_type_values"
+        app:key="main_page_tab_1_post_type"
+        app:title="@string/settings_tab_post_type"
+        app:useSimpleSummaryProvider="true" />
+
+    <EditTextPreference
+        app:key="main_page_tab_1_name"
+        app:isPreferenceVisible="false"
+        app:useSimpleSummaryProvider="true" />
+
+    <PreferenceCategory
+        app:title="@string/settings_tab_2_summary" />
+
+    <EditTextPreference
+        app:defaultValue="@string/popular"
+        app:key="main_page_tab_2_title"
+        app:title="@string/settings_tab_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        app:defaultValue="1"
+        android:entries="@array/settings_tab_post_type"
+        app:entryValues="@array/settings_tab_post_type_values"
+        app:key="main_page_tab_2_post_type"
+        app:title="@string/settings_tab_post_type"
+        app:useSimpleSummaryProvider="true" />
+
+    <EditTextPreference
+        app:key="main_page_tab_2_name"
+        app:isPreferenceVisible="false"
+        app:useSimpleSummaryProvider="true" />
+
+    <PreferenceCategory
+        app:title="@string/settings_tab_3_summary" />
+
+    <EditTextPreference
+        app:defaultValue="@string/all"
+        app:key="main_page_tab_3_title"
+        app:title="@string/settings_tab_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        app:defaultValue="2"
+        android:entries="@array/settings_tab_post_type"
+        app:entryValues="@array/settings_tab_post_type_values"
+        app:key="main_page_tab_3_post_type"
+        app:title="@string/settings_tab_post_type"
+        app:useSimpleSummaryProvider="true" />
+
+    <EditTextPreference
+        app:key="main_page_tab_3_name"
+        app:isPreferenceVisible="false"
+        app:useSimpleSummaryProvider="true" />
+
+</PreferenceScreen>

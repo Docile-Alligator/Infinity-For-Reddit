@@ -69,6 +69,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     public static final String EXTRA_SUBREDDIT = "ES";
     public static final String EXTRA_ID = "EI";
     public static final String EXTRA_POST_TITLE = "EPT";
+    public static final String EXTRA_PROGRESS_SECONDS = "EPS";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
     private static final String IS_MUTE_STATE = "IMS";
     @BindView(R.id.relative_layout_view_video_activity)
@@ -93,6 +94,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     private float totalLengthY = 0.0f;
     private float touchY = -1.0f;
     private String postTitle;
+    private long resumePosition = -1;
 
     @Inject
     @Named("default")
@@ -134,6 +136,9 @@ public class ViewVideoActivity extends AppCompatActivity {
         videoDownloadUrl = intent.getStringExtra(EXTRA_VIDEO_DOWNLOAD_URL);
         videoFileName = intent.getStringExtra(EXTRA_SUBREDDIT) + "-" + intent.getStringExtra(EXTRA_ID) + ".mp4";
         postTitle = intent.getStringExtra(EXTRA_POST_TITLE);
+        if (savedInstanceState == null) {
+            resumePosition = intent.getLongExtra(EXTRA_PROGRESS_SECONDS, -1);
+        }
 
         if (postTitle != null) {
             setTitle(Html.fromHtml(String.format("<small>%s</small>", postTitle)));
@@ -320,6 +325,9 @@ public class ViewVideoActivity extends AppCompatActivity {
         player.prepare(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
 
         player.setRepeatMode(Player.REPEAT_MODE_ALL);
+        if (resumePosition > 0) {
+            player.seekTo(resumePosition);
+        }
         player.setPlayWhenReady(true);
         wasPlaying = true;
 
