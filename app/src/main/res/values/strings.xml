@@ -731,4 +731,7 @@
     <string name="home">Home</string>
     <string name="popular">Popular</string>
 
+    <string name="fetch_gfycat_video_failed">Fetch Gfycat video failed</string>
+    <string name="fetching_video_info_please_wait">Fetching video info. Please wait.</string>
+
 </resources>

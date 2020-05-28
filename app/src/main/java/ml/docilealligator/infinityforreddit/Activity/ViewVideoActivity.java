@@ -40,7 +40,9 @@ import com.github.pwittchen.swipe.library.rx2.Swipe;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
@@ -49,6 +51,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
@@ -59,9 +62,11 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.FetchGfycatVideoLinks;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import retrofit2.Retrofit;
 
 public class ViewVideoActivity extends AppCompatActivity {
 
@@ -70,8 +75,14 @@ public class ViewVideoActivity extends AppCompatActivity {
     public static final String EXTRA_ID = "EI";
     public static final String EXTRA_POST_TITLE = "EPT";
     public static final String EXTRA_PROGRESS_SECONDS = "EPS";
+    public static final String EXTRA_VIDEO_TYPE = "EVT";
+    public static final String EXTRA_GFYCAT_ID = "EGI";
+    public static final int VIDEO_TYPE_GFYCAT = 1;
+    private static final int VIDEO_TYPE_NORMAL = 0;
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
     private static final String IS_MUTE_STATE = "IMS";
+    private static final String VIDEO_DOWNLOAD_URL_STATE = "VDUS";
+    private static final String VIDEO_URI_STATE = "VUS";
     @BindView(R.id.relative_layout_view_video_activity)
     RelativeLayout relativeLayout;
     @BindView(R.id.player_view_view_video_activity)
@@ -95,6 +106,10 @@ public class ViewVideoActivity extends AppCompatActivity {
     private float touchY = -1.0f;
     private String postTitle;
     private long resumePosition = -1;
+
+    @Inject
+    @Named("gfycat")
+    Retrofit gfycatRetrofit;
 
     @Inject
     @Named("default")
@@ -133,8 +148,6 @@ public class ViewVideoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         mVideoUri = intent.getData();
-        videoDownloadUrl = intent.getStringExtra(EXTRA_VIDEO_DOWNLOAD_URL);
-        videoFileName = intent.getStringExtra(EXTRA_SUBREDDIT) + "-" + intent.getStringExtra(EXTRA_ID) + ".mp4";
         postTitle = intent.getStringExtra(EXTRA_POST_TITLE);
         if (savedInstanceState == null) {
             resumePosition = intent.getLongExtra(EXTRA_PROGRESS_SECONDS, -1);
@@ -319,11 +332,57 @@ public class ViewVideoActivity extends AppCompatActivity {
         TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
         player = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
         videoPlayerView.setPlayer(player);
-        // Produces DataSource instances through which media data is loaded.
-        dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "Infinity"));
-        // Prepare the player with the source.
-        player.prepare(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
+        if (getIntent().getIntExtra(EXTRA_VIDEO_TYPE, VIDEO_TYPE_NORMAL) == VIDEO_TYPE_GFYCAT) {
+            if (savedInstanceState != null) {
+                String videoUrl = savedInstanceState.getString(VIDEO_URI_STATE);
+                if (videoUrl != null) {
+                    mVideoUri = Uri.parse(videoUrl);
+                    videoDownloadUrl = savedInstanceState.getString(VIDEO_DOWNLOAD_URL_STATE);
+                }
+            }
 
+            if (mVideoUri == null) {
+                String gfycatId = intent.getStringExtra(EXTRA_GFYCAT_ID);
+                if (gfycatId != null && gfycatId.contains("-")) {
+                    gfycatId = gfycatId.substring(0, gfycatId.indexOf('-'));
+                }
+                videoFileName = "Gfycat-" + gfycatId + ".mp4";
+                FetchGfycatVideoLinks.fetchGfycatVideoLinks(gfycatRetrofit, gfycatId,
+                        new FetchGfycatVideoLinks.FetchGfycatVideoLinksListener() {
+                            @Override
+                            public void success(String webm, String mp4) {
+                                mVideoUri = Uri.parse(webm);
+                                videoDownloadUrl = mp4;
+                                dataSourceFactory = new DefaultDataSourceFactory(ViewVideoActivity.this,
+                                        Util.getUserAgent(ViewVideoActivity.this, "Infinity"));
+                                player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
+                                preparePlayer(savedInstanceState);
+                            }
+
+                            @Override
+                            public void failed() {
+                                Toast.makeText(ViewVideoActivity.this, R.string.fetch_gfycat_video_failed, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            } else {
+                dataSourceFactory = new DefaultDataSourceFactory(ViewVideoActivity.this,
+                        Util.getUserAgent(ViewVideoActivity.this, "Infinity"));
+                player.prepare(new DashMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
+                preparePlayer(savedInstanceState);
+            }
+        } else {
+            videoDownloadUrl = intent.getStringExtra(EXTRA_VIDEO_DOWNLOAD_URL);
+            videoFileName = intent.getStringExtra(EXTRA_SUBREDDIT) + "-" + intent.getStringExtra(EXTRA_ID) + ".mp4";
+            // Produces DataSource instances through which media data is loaded.
+            dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "Infinity"));
+            // Prepare the player with the source.
+            player.prepare(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
+        }
+
+        preparePlayer(savedInstanceState);
+    }
+
+    private void preparePlayer(Bundle savedInstanceState) {
         player.setRepeatMode(Player.REPEAT_MODE_ALL);
         if (resumePosition > 0) {
             player.seekTo(resumePosition);
@@ -405,6 +464,11 @@ public class ViewVideoActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_download_view_video_activity:
+                if (videoDownloadUrl == null) {
+                    Toast.makeText(this, R.string.fetching_video_info_please_wait, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+
                 isDownloading = true;
                 if (Build.VERSION.SDK_INT >= 23) {
                     if (ContextCompat.checkSelfPermission(this,
@@ -512,5 +576,9 @@ public class ViewVideoActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_MUTE_STATE, isMute);
+        if (mVideoUri != null) {
+            outState.putString(VIDEO_URI_STATE, mVideoUri.toString());
+            outState.putString(VIDEO_DOWNLOAD_URL_STATE, videoDownloadUrl);
+        }
     }
 }

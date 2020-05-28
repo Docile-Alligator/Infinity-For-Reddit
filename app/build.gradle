@@ -42,6 +42,7 @@ dependencies {
 
     implementation 'com.google.android.exoplayer:exoplayer-core:2.10.4'
     implementation 'com.google.android.exoplayer:exoplayer-hls:2.10.4'
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.10.4'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.10.4'
     implementation 'com.alexvasilkov:gesture-views:2.6.0'
     implementation 'com.github.bumptech.glide:glide:4.10.0'
@@ -64,7 +65,7 @@ dependencies {
     implementation 'io.noties.markwon:simple-ext:4.3.1'
     implementation 'io.noties.markwon:recycler-table:4.3.1'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
-    implementation 'com.github.Ferfalk:SimpleSearchView:0.1.5'
+    implementation 'com.github.Ferfalk:SimpleSearchView:0.1.4'
     implementation 'org.greenrobot:eventbus:3.2.0'
     implementation 'com.libRG:customtextview:2.4'
     implementation 'com.github.Deishelon:RoundedBottomSheet:1.0.1'

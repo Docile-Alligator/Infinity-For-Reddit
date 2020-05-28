@@ -91,6 +91,16 @@ class AppModule {
     }
 
     @Provides
+    @Named("gfycat")
+    @Singleton
+    Retrofit provideGfycatRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(RedditUtils.GFYCAT_API_BASE_URI)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+    }
+
+    @Provides
     @Singleton
     OkHttpClient provideOkHttpClient(@Named("no_oauth") Retrofit retrofit, RedditDataRoomDatabase accountRoomDatabase) {
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();

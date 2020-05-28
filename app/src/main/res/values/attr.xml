@@ -37,4 +37,7 @@
         <attr name="backgroundColor" format="color"/>
         <attr name="cardViewBackgroundColor" format="color"/>
     </declare-styleable>
+
+    <attr name="backIconAlpha"/>
+    <attr name="iconsAlpha"/>
 </resources>

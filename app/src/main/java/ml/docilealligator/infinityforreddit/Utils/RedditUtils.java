@@ -18,6 +18,7 @@ public class RedditUtils {
     public static final String API_BASE_URI = "https://www.reddit.com";
     public static final String API_UPLOAD_MEDIA_URI = "https://reddit-uploaded-media.s3-accelerate.amazonaws.com";
     public static final String API_UPLOAD_VIDEO_URI = "https://reddit-uploaded-video.s3-accelerate.amazonaws.com";
+    public static final String GFYCAT_API_BASE_URI = "https://api.gfycat.com/v1/gfycats/";
 
     public static final String CLIENT_ID_KEY = "client_id";
     public static final String CLIENT_ID = "";
