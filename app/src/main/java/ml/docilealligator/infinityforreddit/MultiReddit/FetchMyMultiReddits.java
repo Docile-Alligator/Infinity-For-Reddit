@@ -4,8 +4,8 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.RedditAPI;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -19,7 +19,7 @@ public class FetchMyMultiReddits {
 
     public static void fetchMyMultiReddits(Retrofit oauthRetrofit, String accessToken, FetchMyMultiRedditsListener fetchMyMultiRedditsListener) {
         oauthRetrofit.create(RedditAPI.class)
-                .getMyMultiReddits(RedditUtils.getOAuthHeader(accessToken)).enqueue(new Callback<String>() {
+                .getMyMultiReddits(APIUtils.getOAuthHeader(accessToken)).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {

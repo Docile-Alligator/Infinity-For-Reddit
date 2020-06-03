@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.API;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

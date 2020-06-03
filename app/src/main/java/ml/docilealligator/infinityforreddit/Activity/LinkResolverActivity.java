@@ -39,6 +39,9 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String MULTIREDDIT_PATTERN_2 = "/[rR]/(\\w+\\+?)+/?";
     private static final String REDD_IT_POST_PATTERN = "/\\w+/?";
     private static final String GFYCAT_PATTERN = "/[\\w-]+$";
+    private static final String IMGUR_GALLERY_PATTERN = "/gallery/\\w+/?";
+    private static final String IMGUR_ALBUM_PATTERN = "/(album|a)/\\w+/?";
+    private static final String IMGUR_IMAGE_PATTERN = "/\\w+/?";
 
     @Inject
     @Named("default")
@@ -162,6 +165,27 @@ public class LinkResolverActivity extends AppCompatActivity {
                         } else {
                             deepLinkError(uri);
                         }
+                    } else if (authority.contains("imgur.com")) {
+                        if (path.matches(IMGUR_GALLERY_PATTERN)) {
+                            Intent intent = new Intent(this, ViewImgurMediaActivity.class);
+                            intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_TYPE, ViewImgurMediaActivity.IMGUR_TYPE_GALLERY);
+                            intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_ID, segments.get(1));
+                            startActivity(intent);
+                        } else if (path.matches(IMGUR_ALBUM_PATTERN)) {
+                            Intent intent = new Intent(this, ViewImgurMediaActivity.class);
+                            intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_TYPE, ViewImgurMediaActivity.IMGUR_TYPE_ALBUM);
+                            intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_ID, segments.get(1));
+                            startActivity(intent);
+                        } else if (path.matches(IMGUR_IMAGE_PATTERN)) {
+                            Intent intent = new Intent(this, ViewImgurMediaActivity.class);
+                            intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_TYPE, ViewImgurMediaActivity.IMGUR_TYPE_IMAGE);
+                            intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_ID, path.substring(1));
+                            startActivity(intent);
+                        } else {
+                            deepLinkError(uri);
+                        }
+                    } else {
+                        deepLinkError(uri);
                     }
                 } else {
                     deepLinkError(uri);

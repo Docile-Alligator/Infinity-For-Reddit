@@ -5,7 +5,8 @@ import androidx.annotation.NonNull;
 import java.util.HashMap;
 import java.util.Map;
 
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -21,19 +22,19 @@ public class ReportThing {
     public static void reportThing(Retrofit oauthRetrofit, String accessToken, String thingFullname,
                                    String subredditName, String reasonType, String reason,
                                    ReportThingListener reportThingListener) {
-        Map<String, String> header = RedditUtils.getOAuthHeader(accessToken);
+        Map<String, String> header = APIUtils.getOAuthHeader(accessToken);
         Map<String, String> params = new HashMap<>();
-        params.put(RedditUtils.THING_ID_KEY, thingFullname);
-        params.put(RedditUtils.SR_NAME_KEY, subredditName);
+        params.put(APIUtils.THING_ID_KEY, thingFullname);
+        params.put(APIUtils.SR_NAME_KEY, subredditName);
         params.put(reasonType, reason);
         if (reasonType.equals(ReportReason.REASON_TYPE_SITE_REASON)) {
-            params.put(RedditUtils.REASON_KEY, ReportReason.REASON_SITE_REASON_SELECTED);
+            params.put(APIUtils.REASON_KEY, ReportReason.REASON_SITE_REASON_SELECTED);
         } else if (reasonType.equals(ReportReason.REASON_TYPE_RULE_REASON)) {
-            params.put(RedditUtils.REASON_KEY, ReportReason.REASON_RULE_REASON_SELECTED);
+            params.put(APIUtils.REASON_KEY, ReportReason.REASON_RULE_REASON_SELECTED);
         } else {
-            params.put(RedditUtils.REASON_KEY, ReportReason.REASON_OTHER);
+            params.put(APIUtils.REASON_KEY, ReportReason.REASON_OTHER);
         }
-        params.put(RedditUtils.API_TYPE_KEY, RedditUtils.API_TYPE_JSON);
+        params.put(APIUtils.API_TYPE_KEY, APIUtils.API_TYPE_JSON);
 
         oauthRetrofit.create(RedditAPI.class).report(header, params).enqueue(new Callback<String>() {
             @Override

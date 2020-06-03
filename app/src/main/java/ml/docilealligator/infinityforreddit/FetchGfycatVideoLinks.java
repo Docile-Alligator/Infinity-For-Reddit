@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ml.docilealligator.infinityforreddit.API.GfycatAPI;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
 import retrofit2.Call;
 import retrofit2.Callback;

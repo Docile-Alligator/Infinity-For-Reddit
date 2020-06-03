@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 
 public class CommentData implements Parcelable {
     public static final int VOTE_TYPE_NO_VOTE = 0;
@@ -78,7 +78,7 @@ public class CommentData implements Parcelable {
         this.voteType = voteType;
         this.isSubmitter = isSubmitter;
         this.distinguished = distinguished;
-        this.permalink = RedditUtils.API_BASE_URI + permalink;
+        this.permalink = APIUtils.API_BASE_URI + permalink;
         this.awards = awards;
         this.depth = depth;
         this.collapsed = collapsed;

@@ -80,12 +80,12 @@ import ml.docilealligator.infinityforreddit.Post.ParsePost;
 import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.ReadMessage;
-import ml.docilealligator.infinityforreddit.RedditAPI;
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -582,10 +582,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         } else {
             if (isSingleCommentThreadMode && mSingleCommentId != null) {
                 postAndComments = mOauthRetrofit.create(RedditAPI.class).getPostAndCommentsSingleThreadByIdOauth(subredditId,
-                        mSingleCommentId, sortType, RedditUtils.getOAuthHeader(mAccessToken));
+                        mSingleCommentId, sortType, APIUtils.getOAuthHeader(mAccessToken));
             } else {
                 postAndComments = mOauthRetrofit.create(RedditAPI.class).getPostAndCommentsByIdOauth(subredditId,
-                        sortType, RedditUtils.getOAuthHeader(mAccessToken));
+                        sortType, APIUtils.getOAuthHeader(mAccessToken));
             }
         }
         postAndComments.enqueue(new Callback<String>() {
@@ -976,8 +976,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         }
 
         Map<String, String> params = new HashMap<>();
-        params.put(RedditUtils.ID_KEY, mPost.getFullName());
-        mOauthRetrofit.create(RedditAPI.class).markNSFW(RedditUtils.getOAuthHeader(mAccessToken), params)
+        params.put(APIUtils.ID_KEY, mPost.getFullName());
+        mOauthRetrofit.create(RedditAPI.class).markNSFW(APIUtils.getOAuthHeader(mAccessToken), params)
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -1014,8 +1014,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         }
 
         Map<String, String> params = new HashMap<>();
-        params.put(RedditUtils.ID_KEY, mPost.getFullName());
-        mOauthRetrofit.create(RedditAPI.class).unmarkNSFW(RedditUtils.getOAuthHeader(mAccessToken), params)
+        params.put(APIUtils.ID_KEY, mPost.getFullName());
+        mOauthRetrofit.create(RedditAPI.class).unmarkNSFW(APIUtils.getOAuthHeader(mAccessToken), params)
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -1052,8 +1052,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         }
 
         Map<String, String> params = new HashMap<>();
-        params.put(RedditUtils.ID_KEY, mPost.getFullName());
-        mOauthRetrofit.create(RedditAPI.class).markSpoiler(RedditUtils.getOAuthHeader(mAccessToken), params)
+        params.put(APIUtils.ID_KEY, mPost.getFullName());
+        mOauthRetrofit.create(RedditAPI.class).markSpoiler(APIUtils.getOAuthHeader(mAccessToken), params)
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -1090,8 +1090,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         }
 
         Map<String, String> params = new HashMap<>();
-        params.put(RedditUtils.ID_KEY, mPost.getFullName());
-        mOauthRetrofit.create(RedditAPI.class).unmarkSpoiler(RedditUtils.getOAuthHeader(mAccessToken), params)
+        params.put(APIUtils.ID_KEY, mPost.getFullName());
+        mOauthRetrofit.create(RedditAPI.class).unmarkSpoiler(APIUtils.getOAuthHeader(mAccessToken), params)
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -1582,13 +1582,13 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     @Override
     public void flairSelected(Flair flair) {
         Map<String, String> params = new HashMap<>();
-        params.put(RedditUtils.API_TYPE_KEY, RedditUtils.API_TYPE_JSON);
-        params.put(RedditUtils.FLAIR_TEMPLATE_ID_KEY, flair.getId());
-        params.put(RedditUtils.LINK_KEY, mPost.getFullName());
-        params.put(RedditUtils.TEXT_KEY, flair.getText());
+        params.put(APIUtils.API_TYPE_KEY, APIUtils.API_TYPE_JSON);
+        params.put(APIUtils.FLAIR_TEMPLATE_ID_KEY, flair.getId());
+        params.put(APIUtils.LINK_KEY, mPost.getFullName());
+        params.put(APIUtils.TEXT_KEY, flair.getText());
 
         mOauthRetrofit.create(RedditAPI.class).selectFlair(mPost.getSubredditNamePrefixed(),
-                RedditUtils.getOAuthHeader(mAccessToken), params).enqueue(new Callback<String>() {
+                APIUtils.getOAuthHeader(mAccessToken), params).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {

@@ -8,7 +8,8 @@ import androidx.annotation.NonNull;
 import java.util.HashMap;
 import java.util.Map;
 
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -25,11 +26,11 @@ public class VoteThing {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
         Map<String, String> params = new HashMap<>();
-        params.put(RedditUtils.DIR_KEY, point);
-        params.put(RedditUtils.ID_KEY, fullName);
-        params.put(RedditUtils.RANK_KEY, RedditUtils.RANK);
+        params.put(APIUtils.DIR_KEY, point);
+        params.put(APIUtils.ID_KEY, fullName);
+        params.put(APIUtils.RANK_KEY, APIUtils.RANK);
 
-        Call<String> voteThingCall = api.voteThing(RedditUtils.getOAuthHeader(accessToken), params);
+        Call<String> voteThingCall = api.voteThing(APIUtils.getOAuthHeader(accessToken), params);
         voteThingCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
@@ -55,11 +56,11 @@ public class VoteThing {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
         Map<String, String> params = new HashMap<>();
-        params.put(RedditUtils.DIR_KEY, point);
-        params.put(RedditUtils.ID_KEY, fullName);
-        params.put(RedditUtils.RANK_KEY, RedditUtils.RANK);
+        params.put(APIUtils.DIR_KEY, point);
+        params.put(APIUtils.ID_KEY, fullName);
+        params.put(APIUtils.RANK_KEY, APIUtils.RANK);
 
-        Call<String> voteThingCall = api.voteThing(RedditUtils.getOAuthHeader(accessToken), params);
+        Call<String> voteThingCall = api.voteThing(APIUtils.getOAuthHeader(accessToken), params);
         voteThingCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {

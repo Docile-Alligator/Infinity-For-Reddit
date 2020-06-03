@@ -14,9 +14,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.Post.PostDataSource;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -78,10 +79,10 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
             if (sortType.getTime() != null) {
                 commentsCall = api.getUserSavedCommentsOauth(username, PostDataSource.USER_WHERE_SAVED,
                         null, sortType.getType().value, sortType.getTime().value,
-                        RedditUtils.getOAuthHeader(accessToken));
+                        APIUtils.getOAuthHeader(accessToken));
             } else {
                 commentsCall = api.getUserSavedCommentsOauth(username, PostDataSource.USER_WHERE_SAVED,
-                        null, sortType.getType().value, RedditUtils.getOAuthHeader(accessToken));
+                        null, sortType.getType().value, APIUtils.getOAuthHeader(accessToken));
             }
         } else {
             if (accessToken == null) {
@@ -93,10 +94,10 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
                 }
             } else {
                 if (sortType.getTime() != null) {
-                    commentsCall = api.getUserCommentsOauth(RedditUtils.getOAuthHeader(accessToken), username,
+                    commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken), username,
                             null, sortType.getType().value, sortType.getTime().value);
                 } else {
-                    commentsCall = api.getUserCommentsOauth(RedditUtils.getOAuthHeader(accessToken), username,
+                    commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken), username,
                             null, sortType.getType().value);
                 }
             }
@@ -156,10 +157,10 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
         if (areSavedComments) {
             if (sortType.getTime() != null) {
                 commentsCall = api.getUserSavedCommentsOauth(username, PostDataSource.USER_WHERE_SAVED, params.key,
-                        sortType.getType().value, sortType.getTime().value, RedditUtils.getOAuthHeader(accessToken));
+                        sortType.getType().value, sortType.getTime().value, APIUtils.getOAuthHeader(accessToken));
             } else {
                 commentsCall = api.getUserSavedCommentsOauth(username, PostDataSource.USER_WHERE_SAVED, params.key,
-                        sortType.getType().value, RedditUtils.getOAuthHeader(accessToken));
+                        sortType.getType().value, APIUtils.getOAuthHeader(accessToken));
             }
         } else {
             if (accessToken == null) {
@@ -171,10 +172,10 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
                 }
             } else {
                 if (sortType.getTime() != null) {
-                    commentsCall = api.getUserCommentsOauth(RedditUtils.getOAuthHeader(accessToken),
+                    commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken),
                             username, params.key, sortType.getType().value, sortType.getTime().value);
                 } else {
-                    commentsCall = api.getUserCommentsOauth(RedditUtils.getOAuthHeader(accessToken),
+                    commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken),
                             username, params.key, sortType.getType().value);
                 }
             }

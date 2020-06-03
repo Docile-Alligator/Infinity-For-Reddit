@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import retrofit2.Call;
 import retrofit2.Callback;

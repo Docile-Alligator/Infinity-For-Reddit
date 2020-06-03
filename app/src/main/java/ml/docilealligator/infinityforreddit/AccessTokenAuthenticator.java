@@ -10,8 +10,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.Account.Account;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import okhttp3.Authenticator;
 import okhttp3.Headers;
 import okhttp3.Request;
@@ -33,7 +34,7 @@ class AccessTokenAuthenticator implements Authenticator {
     @Override
     public Request authenticate(Route route, @NonNull Response response) {
         if (response.code() == 401) {
-            String accessToken = response.request().header(RedditUtils.AUTHORIZATION_KEY).substring(RedditUtils.AUTHORIZATION_BASE.length());
+            String accessToken = response.request().header(APIUtils.AUTHORIZATION_KEY).substring(APIUtils.AUTHORIZATION_BASE.length());
             synchronized (this) {
                 Account account = mRedditDataRoomDatabase.accountDao().getCurrentAccount();
                 if (account == null) {
@@ -43,12 +44,12 @@ class AccessTokenAuthenticator implements Authenticator {
                 if (accessToken.equals(accessTokenFromDatabase)) {
                     String newAccessToken = refreshAccessToken(account);
                     if (!newAccessToken.equals("")) {
-                        return response.request().newBuilder().headers(Headers.of(RedditUtils.getOAuthHeader(newAccessToken))).build();
+                        return response.request().newBuilder().headers(Headers.of(APIUtils.getOAuthHeader(newAccessToken))).build();
                     } else {
                         return null;
                     }
                 } else {
-                    return response.request().newBuilder().headers(Headers.of(RedditUtils.getOAuthHeader(accessTokenFromDatabase))).build();
+                    return response.request().newBuilder().headers(Headers.of(APIUtils.getOAuthHeader(accessTokenFromDatabase))).build();
                 }
             }
         }
@@ -61,15 +62,15 @@ class AccessTokenAuthenticator implements Authenticator {
         RedditAPI api = mRetrofit.create(RedditAPI.class);
 
         Map<String, String> params = new HashMap<>();
-        params.put(RedditUtils.GRANT_TYPE_KEY, RedditUtils.GRANT_TYPE_REFRESH_TOKEN);
-        params.put(RedditUtils.REFRESH_TOKEN_KEY, refreshToken);
+        params.put(APIUtils.GRANT_TYPE_KEY, APIUtils.GRANT_TYPE_REFRESH_TOKEN);
+        params.put(APIUtils.REFRESH_TOKEN_KEY, refreshToken);
 
-        Call<String> accessTokenCall = api.getAccessToken(RedditUtils.getHttpBasicAuthHeader(), params);
+        Call<String> accessTokenCall = api.getAccessToken(APIUtils.getHttpBasicAuthHeader(), params);
         try {
             retrofit2.Response response = accessTokenCall.execute();
             if (response.isSuccessful() && response.body() != null) {
                 JSONObject jsonObject = new JSONObject((String) response.body());
-                String newAccessToken = jsonObject.getString(RedditUtils.ACCESS_TOKEN_KEY);
+                String newAccessToken = jsonObject.getString(APIUtils.ACCESS_TOKEN_KEY);
                 mRedditDataRoomDatabase.accountDao().changeAccessToken(account.getUsername(), newAccessToken);
 
                 return newAccessToken;

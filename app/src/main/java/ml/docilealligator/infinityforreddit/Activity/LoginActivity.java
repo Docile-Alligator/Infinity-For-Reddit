@@ -34,9 +34,9 @@ import ml.docilealligator.infinityforreddit.FetchMyInfo;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.ParseAndSaveAccountInfo;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditAPI;
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -83,14 +83,14 @@ public class LoginActivity extends BaseActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
 
-        Uri baseUri = Uri.parse(RedditUtils.OAUTH_URL);
+        Uri baseUri = Uri.parse(APIUtils.OAUTH_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
-        uriBuilder.appendQueryParameter(RedditUtils.CLIENT_ID_KEY, RedditUtils.CLIENT_ID);
-        uriBuilder.appendQueryParameter(RedditUtils.RESPONSE_TYPE_KEY, RedditUtils.RESPONSE_TYPE);
-        uriBuilder.appendQueryParameter(RedditUtils.STATE_KEY, RedditUtils.STATE);
-        uriBuilder.appendQueryParameter(RedditUtils.REDIRECT_URI_KEY, RedditUtils.REDIRECT_URI);
-        uriBuilder.appendQueryParameter(RedditUtils.DURATION_KEY, RedditUtils.DURATION);
-        uriBuilder.appendQueryParameter(RedditUtils.SCOPE_KEY, RedditUtils.SCOPE);
+        uriBuilder.appendQueryParameter(APIUtils.CLIENT_ID_KEY, APIUtils.CLIENT_ID);
+        uriBuilder.appendQueryParameter(APIUtils.RESPONSE_TYPE_KEY, APIUtils.RESPONSE_TYPE);
+        uriBuilder.appendQueryParameter(APIUtils.STATE_KEY, APIUtils.STATE);
+        uriBuilder.appendQueryParameter(APIUtils.REDIRECT_URI_KEY, APIUtils.REDIRECT_URI);
+        uriBuilder.appendQueryParameter(APIUtils.DURATION_KEY, APIUtils.DURATION);
+        uriBuilder.appendQueryParameter(APIUtils.SCOPE_KEY, APIUtils.SCOPE);
 
         String url = uriBuilder.toString();
 
@@ -104,16 +104,16 @@ public class LoginActivity extends BaseActivity {
                 if (url.contains("&code=") || url.contains("?code=")) {
                     Uri uri = Uri.parse(url);
                     String state = uri.getQueryParameter("state");
-                    if (state.equals(RedditUtils.STATE)) {
+                    if (state.equals(APIUtils.STATE)) {
                         authCode = uri.getQueryParameter("code");
 
                         Map<String, String> params = new HashMap<>();
-                        params.put(RedditUtils.GRANT_TYPE_KEY, "authorization_code");
+                        params.put(APIUtils.GRANT_TYPE_KEY, "authorization_code");
                         params.put("code", authCode);
-                        params.put("redirect_uri", RedditUtils.REDIRECT_URI);
+                        params.put("redirect_uri", APIUtils.REDIRECT_URI);
 
                         RedditAPI api = mRetrofit.create(RedditAPI.class);
-                        Call<String> accessTokenCall = api.getAccessToken(RedditUtils.getHttpBasicAuthHeader(), params);
+                        Call<String> accessTokenCall = api.getAccessToken(APIUtils.getHttpBasicAuthHeader(), params);
                         accessTokenCall.enqueue(new Callback<String>() {
                             @Override
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -126,8 +126,8 @@ public class LoginActivity extends BaseActivity {
                                         }
 
                                         JSONObject responseJSON = new JSONObject(accountResponse);
-                                        String accessToken = responseJSON.getString(RedditUtils.ACCESS_TOKEN_KEY);
-                                        String refreshToken = responseJSON.getString(RedditUtils.REFRESH_TOKEN_KEY);
+                                        String accessToken = responseJSON.getString(APIUtils.ACCESS_TOKEN_KEY);
+                                        String refreshToken = responseJSON.getString(APIUtils.REFRESH_TOKEN_KEY);
 
                                         FetchMyInfo.fetchAccountInfo(mOauthRetrofit, accessToken, new FetchMyInfo.FetchUserMyListener() {
                                             @Override

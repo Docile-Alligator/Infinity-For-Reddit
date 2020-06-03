@@ -5,8 +5,8 @@ import androidx.annotation.NonNull;
 import java.util.HashMap;
 import java.util.Map;
 
-import ml.docilealligator.infinityforreddit.RedditAPI;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -21,9 +21,9 @@ public class EditMultiReddit {
     public static void editMultiReddit(Retrofit oauthRetrofit, String accessToken, String multipath, String model,
                                        EditMultiRedditListener editMultiRedditListener) {
         Map<String, String> params = new HashMap<>();
-        params.put(RedditUtils.MULTIPATH_KEY, multipath);
-        params.put(RedditUtils.MODEL_KEY, model);
-        oauthRetrofit.create(RedditAPI.class).updateMultiReddit(RedditUtils.getOAuthHeader(accessToken),
+        params.put(APIUtils.MULTIPATH_KEY, multipath);
+        params.put(APIUtils.MODEL_KEY, model);
+        oauthRetrofit.create(RedditAPI.class).updateMultiReddit(APIUtils.getOAuthHeader(accessToken),
                 params).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

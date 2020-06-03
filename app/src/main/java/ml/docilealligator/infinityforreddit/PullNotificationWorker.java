@@ -25,11 +25,12 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.Account.Account;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewMessageActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -204,7 +205,7 @@ public class PullNotificationWorker extends Worker {
         }
 
         Call<String> call = mOauthWithoutAuthenticatorRetrofit.create(RedditAPI.class)
-                .getMessages(RedditUtils.getOAuthHeader(account.getAccessToken()),
+                .getMessages(APIUtils.getOAuthHeader(account.getAccessToken()),
                         FetchMessages.WHERE_UNREAD, null);
         Response<String> response = call.execute();
 
@@ -230,15 +231,15 @@ public class PullNotificationWorker extends Worker {
         RedditAPI api = mRetrofit.create(RedditAPI.class);
 
         Map<String, String> params = new HashMap<>();
-        params.put(RedditUtils.GRANT_TYPE_KEY, RedditUtils.GRANT_TYPE_REFRESH_TOKEN);
-        params.put(RedditUtils.REFRESH_TOKEN_KEY, refreshToken);
+        params.put(APIUtils.GRANT_TYPE_KEY, APIUtils.GRANT_TYPE_REFRESH_TOKEN);
+        params.put(APIUtils.REFRESH_TOKEN_KEY, refreshToken);
 
-        Call<String> accessTokenCall = api.getAccessToken(RedditUtils.getHttpBasicAuthHeader(), params);
+        Call<String> accessTokenCall = api.getAccessToken(APIUtils.getHttpBasicAuthHeader(), params);
         try {
             Response response = accessTokenCall.execute();
             if (response.isSuccessful() && response.body() != null) {
                 JSONObject jsonObject = new JSONObject(response.body().toString());
-                String newAccessToken = jsonObject.getString(RedditUtils.ACCESS_TOKEN_KEY);
+                String newAccessToken = jsonObject.getString(APIUtils.ACCESS_TOKEN_KEY);
                 mRedditDataRoomDatabase.accountDao().changeAccessToken(account.getUsername(), newAccessToken);
                 return newAccessToken;
             }

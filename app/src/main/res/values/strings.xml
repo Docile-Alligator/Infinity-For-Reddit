@@ -93,7 +93,7 @@
     <string name="nsfw">NSFW</string>
     <string name="karma_info">Karma: %1$d</string>
     <string name="karma_info_user_detail">Karma:\n%1$d (%2$d + %3$d)</string>
-    <string name="cakeday_info">Cakeday:\n%1$s</string>
+    <string name="cakeday_info">Cake day:\n%1$s</string>
     <string name="since">Since:</string>
 
     <string name="profile">Profile</string>
@@ -733,5 +733,7 @@
 
     <string name="fetch_gfycat_video_failed">Fetch Gfycat video failed</string>
     <string name="fetching_video_info_please_wait">Fetching video info. Please wait.</string>
+
+    <string name="error_fetching_imgur_media">Cannot load images</string>
 
 </resources>

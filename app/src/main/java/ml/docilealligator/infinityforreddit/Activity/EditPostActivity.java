@@ -36,8 +36,8 @@ import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditAPI;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -153,11 +153,11 @@ public class EditPostActivity extends BaseActivity {
                 Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_SHORT).show();
 
                 Map<String, String> params = new HashMap<>();
-                params.put(RedditUtils.THING_ID_KEY, mFullName);
-                params.put(RedditUtils.TEXT_KEY, contentEditText.getText().toString());
+                params.put(APIUtils.THING_ID_KEY, mFullName);
+                params.put(APIUtils.TEXT_KEY, contentEditText.getText().toString());
 
                 mOauthRetrofit.create(RedditAPI.class)
-                        .editPostOrComment(RedditUtils.getOAuthHeader(mAccessToken), params)
+                        .editPostOrComment(APIUtils.getOAuthHeader(mAccessToken), params)
                         .enqueue(new Callback<String>() {
                             @Override
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

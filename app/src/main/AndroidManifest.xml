@@ -22,6 +22,11 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
         <activity
+            android:name=".Activity.ViewImgurMediaActivity"
+            android:configChanges="orientation|screenSize|layoutDirection"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
             android:name=".Activity.ReportActivity"
             android:label="@string/report_activity_label"
             android:parentActivityName=".Activity.MainActivity"

@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertMultiRedditAsyncTask;
-import ml.docilealligator.infinityforreddit.RedditAPI;
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,10 +25,10 @@ public class FavoriteMultiReddit {
                                            String accessToken, String accountName, boolean makeFavorite,
                                            MultiReddit multiReddit, FavoriteMultiRedditListener favoriteMultiRedditListener) {
         Map<String, String> params = new HashMap<>();
-        params.put(RedditUtils.MULTIPATH_KEY, multiReddit.getPath());
-        params.put(RedditUtils.MAKE_FAVORITE_KEY, String.valueOf(makeFavorite));
-        params.put(RedditUtils.API_TYPE_KEY, RedditUtils.API_TYPE_JSON);
-        oauthRetrofit.create(RedditAPI.class).favoriteMultiReddit(RedditUtils.getOAuthHeader(accessToken),
+        params.put(APIUtils.MULTIPATH_KEY, multiReddit.getPath());
+        params.put(APIUtils.MAKE_FAVORITE_KEY, String.valueOf(makeFavorite));
+        params.put(APIUtils.API_TYPE_KEY, APIUtils.API_TYPE_JSON);
+        oauthRetrofit.create(RedditAPI.class).favoriteMultiReddit(APIUtils.getOAuthHeader(accessToken),
                 params).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

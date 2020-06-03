@@ -7,7 +7,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -19,12 +20,12 @@ public class SendComment {
                                    Locale locale, Retrofit oauthRetrofit, String accessToken,
                                    SendCommentListener sendCommentListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
-        Map<String, String> headers = RedditUtils.getOAuthHeader(accessToken);
+        Map<String, String> headers = APIUtils.getOAuthHeader(accessToken);
         Map<String, String> params = new HashMap<>();
-        params.put(RedditUtils.API_TYPE_KEY, "json");
-        params.put(RedditUtils.RETURN_RTJSON_KEY, "true");
-        params.put(RedditUtils.TEXT_KEY, commentMarkdown);
-        params.put(RedditUtils.THING_ID_KEY, thingFullname);
+        params.put(APIUtils.API_TYPE_KEY, "json");
+        params.put(APIUtils.RETURN_RTJSON_KEY, "true");
+        params.put(APIUtils.TEXT_KEY, commentMarkdown);
+        params.put(APIUtils.THING_ID_KEY, thingFullname);
         api.sendComment(headers, params);
 
         Call<String> sendCommentCall = api.sendComment(headers, params);

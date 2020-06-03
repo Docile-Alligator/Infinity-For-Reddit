@@ -9,8 +9,9 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -20,7 +21,7 @@ public class FetchFlairs {
     public static void fetchFlairsInSubreddit(Retrofit oauthRetrofit, String accessToken, String subredditName, FetchFlairsInSubredditListener fetchFlairsInSubredditListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
-        Call<String> flairsCall = api.getFlairs(RedditUtils.getOAuthHeader(accessToken), subredditName);
+        Call<String> flairsCall = api.getFlairs(APIUtils.getOAuthHeader(accessToken), subredditName);
         flairsCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Locale;
 
 import ml.docilealligator.infinityforreddit.NetworkState;
-import ml.docilealligator.infinityforreddit.RedditAPI;
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.SortType;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -212,9 +212,9 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         Call<String> bestPost;
         if(sortType.getTime() != null) {
             bestPost = api.getBestPosts(sortType.getType().value, sortType.getTime().value, lastItem,
-                    RedditUtils.getOAuthHeader(accessToken));
+                    APIUtils.getOAuthHeader(accessToken));
         } else {
-            bestPost = api.getBestPosts(sortType.getType().value, lastItem, RedditUtils.getOAuthHeader(accessToken));
+            bestPost = api.getBestPosts(sortType.getType().value, lastItem, APIUtils.getOAuthHeader(accessToken));
         }
         bestPost.enqueue(new Callback<String>() {
             @Override
@@ -292,9 +292,9 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         Call<String> bestPost;
         if(sortType.getTime() != null) {
             bestPost = api.getBestPosts(sortType.getType().value, sortType.getTime().value, after,
-                    RedditUtils.getOAuthHeader(accessToken));
+                    APIUtils.getOAuthHeader(accessToken));
         } else {
-            bestPost = api.getBestPosts(sortType.getType().value, after, RedditUtils.getOAuthHeader(accessToken));
+            bestPost = api.getBestPosts(sortType.getType().value, after, APIUtils.getOAuthHeader(accessToken));
         }
 
         bestPost.enqueue(new Callback<String>() {
@@ -351,10 +351,10 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         } else {
             if (sortType.getTime() != null) {
                 getPost = api.getSubredditBestPostsOauth(subredditOrUserName, sortType.getType().value,
-                        sortType.getTime().value, lastItem, RedditUtils.getOAuthHeader(accessToken));
+                        sortType.getTime().value, lastItem, APIUtils.getOAuthHeader(accessToken));
             } else {
                 getPost = api.getSubredditBestPostsOauth(subredditOrUserName, sortType.getType().value,
-                        lastItem, RedditUtils.getOAuthHeader(accessToken));
+                        lastItem, APIUtils.getOAuthHeader(accessToken));
             }
         }
         getPost.enqueue(new Callback<String>() {
@@ -442,10 +442,10 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         } else {
             if (sortType.getTime() != null) {
                 getPost = api.getSubredditBestPostsOauth(subredditOrUserName, sortType.getType().value,
-                        sortType.getTime().value, after, RedditUtils.getOAuthHeader(accessToken));
+                        sortType.getTime().value, after, APIUtils.getOAuthHeader(accessToken));
             } else {
                 getPost = api.getSubredditBestPostsOauth(subredditOrUserName, sortType.getType().value,
-                        after, RedditUtils.getOAuthHeader(accessToken));
+                        after, APIUtils.getOAuthHeader(accessToken));
             }
         }
 
@@ -504,10 +504,10 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         } else {
             if (sortType.getTime() != null) {
                 getPost = api.getUserPostsOauth(subredditOrUserName, userWhere, lastItem, sortType.getType().value,
-                        sortType.getTime().value, RedditUtils.getOAuthHeader(accessToken));
+                        sortType.getTime().value, APIUtils.getOAuthHeader(accessToken));
             } else {
                 getPost = api.getUserPostsOauth(subredditOrUserName, userWhere, lastItem, sortType.getType().value,
-                        RedditUtils.getOAuthHeader(accessToken));
+                        APIUtils.getOAuthHeader(accessToken));
             }
         }
         getPost.enqueue(new Callback<String>() {
@@ -575,10 +575,10 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         } else {
             if (sortType.getTime() != null) {
                 getPost = api.getUserPostsOauth(subredditOrUserName, userWhere, after, sortType.getType().value,
-                        sortType.getTime().value, RedditUtils.getOAuthHeader(accessToken));
+                        sortType.getTime().value, APIUtils.getOAuthHeader(accessToken));
             } else {
                 getPost = api.getUserPostsOauth(subredditOrUserName, userWhere, after, sortType.getType().value,
-                        RedditUtils.getOAuthHeader(accessToken));
+                        APIUtils.getOAuthHeader(accessToken));
             }
         }
         getPost.enqueue(new Callback<String>() {
@@ -636,10 +636,10 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             } else {
                 if(sortType.getTime() != null) {
                     getPost = api.searchPostsOauth(query, lastItem, sortType.getType().value,
-                            sortType.getTime().value, RedditUtils.getOAuthHeader(accessToken));
+                            sortType.getTime().value, APIUtils.getOAuthHeader(accessToken));
                 } else {
                     getPost = api.searchPostsOauth(query, lastItem, sortType.getType().value,
-                            RedditUtils.getOAuthHeader(accessToken));
+                            APIUtils.getOAuthHeader(accessToken));
                 }
             }
         } else {
@@ -655,11 +655,11 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                 if (sortType.getTime() != null) {
                     getPost = api.searchPostsInSpecificSubredditOauth(subredditOrUserName, query,
                             sortType.getType().value, sortType.getTime().value, lastItem,
-                            RedditUtils.getOAuthHeader(accessToken));
+                            APIUtils.getOAuthHeader(accessToken));
                 } else {
                     getPost = api.searchPostsInSpecificSubredditOauth(subredditOrUserName, query,
                             sortType.getType().value, lastItem,
-                            RedditUtils.getOAuthHeader(accessToken));
+                            APIUtils.getOAuthHeader(accessToken));
                 }
             }
         }
@@ -729,9 +729,9 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             } else {
                 if (sortType.getTime() != null) {
                     getPost = api.searchPostsOauth(query, after, sortType.getType().value,
-                            sortType.getTime().value, RedditUtils.getOAuthHeader(accessToken));
+                            sortType.getTime().value, APIUtils.getOAuthHeader(accessToken));
                 } else {
-                    getPost = api.searchPostsOauth(query, after, sortType.getType().value, RedditUtils.getOAuthHeader(accessToken));
+                    getPost = api.searchPostsOauth(query, after, sortType.getType().value, APIUtils.getOAuthHeader(accessToken));
                 }
             }
         } else {
@@ -747,10 +747,10 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                 if (sortType.getTime() != null) {
                     getPost = api.searchPostsInSpecificSubredditOauth(subredditOrUserName, query,
                             sortType.getType().value, sortType.getTime().value, after,
-                            RedditUtils.getOAuthHeader(accessToken));
+                            APIUtils.getOAuthHeader(accessToken));
                 } else {
                     getPost = api.searchPostsInSpecificSubredditOauth(subredditOrUserName, query,
-                            sortType.getType().value, after, RedditUtils.getOAuthHeader(accessToken));
+                            sortType.getType().value, after, APIUtils.getOAuthHeader(accessToken));
                 }
             }
         }
@@ -808,10 +808,10 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         } else {
             if (sortType.getTime() != null) {
                 getPost = api.getMultiRedditPostsOauth(multiRedditPath, lastItem,
-                        sortType.getTime().value, RedditUtils.getOAuthHeader(accessToken));
+                        sortType.getTime().value, APIUtils.getOAuthHeader(accessToken));
             } else {
                 getPost = api.getMultiRedditPostsOauth(multiRedditPath, lastItem,
-                        RedditUtils.getOAuthHeader(accessToken));
+                        APIUtils.getOAuthHeader(accessToken));
             }
         }
 
@@ -880,10 +880,10 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         } else {
             if (sortType.getTime() != null) {
                 getPost = api.getMultiRedditPostsOauth(multiRedditPath, after,
-                        sortType.getTime().value, RedditUtils.getOAuthHeader(accessToken));
+                        sortType.getTime().value, APIUtils.getOAuthHeader(accessToken));
             } else {
                 getPost = api.getMultiRedditPostsOauth(multiRedditPath, after,
-                        RedditUtils.getOAuthHeader(accessToken));
+                        APIUtils.getOAuthHeader(accessToken));
             }
         }
         getPost.enqueue(new Callback<String>() {

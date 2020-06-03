@@ -21,12 +21,12 @@ public class JSONUtils {
     public static final String E_KEY = "e";
     public static final String T_KEY = "t";
     public static final String U_KEY = "u";
+    public static final String LINK_KEY = "link";
     public static final String LINK_AUTHOR_KEY = "link_author";
     public static final String LINK_FLAIR_RICHTEXT_KEY = "link_flair_richtext";
     public static final String SCORE_KEY = "score";
     public static final String LIKES_KEY = "likes";
     public static final String NSFW_KEY = "over_18";
-    public static final String GILDED_KEY = "gilded";
     public static final String PERMALINK_KEY = "permalink";
     public static final String CREATED_UTC_KEY = "created_utc";
     public static final String PREVIEW_KEY = "preview";
@@ -109,4 +109,5 @@ public class JSONUtils {
     public static final String GFY_ITEM_KEY = "gfyItem";
     public static final String MP4_URL_KEY = "mp4Url";
     public static final String WEBM_URL_KEY = "webmUrl";
+    public static final String TYPE_KEY = "type";
 }

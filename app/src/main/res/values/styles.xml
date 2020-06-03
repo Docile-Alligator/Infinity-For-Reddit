@@ -50,20 +50,25 @@
         <item name="tabBackground">?attr/selectableItemBackground</item>
         <item name="tabSelectedTextColor">@android:color/white</item>
     </style>
-    
+
     <style name="MaterialAlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="android:textSize">?attr/font_default</item>
         <item name="android:background">?attr/cardViewBackgroundColor</item>
-        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialogTitleTextStyle</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialogTitleTextStyle
+        </item>
         <item name="materialAlertDialogBodyTextStyle">@style/MaterialAlertDialogBodyTextStyle</item>
-        <item name="buttonBarPositiveButtonStyle">@style/MaterialAlertDialogPositiveButtonStyle</item>
-        <item name="buttonBarNegativeButtonStyle">@style/MaterialAlertDialogNegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/MaterialAlertDialogPositiveButtonStyle
+        </item>
+        <item name="buttonBarNegativeButtonStyle">@style/MaterialAlertDialogNegativeButtonStyle
+        </item>
     </style>
 
     <style name="CopyTextMaterialAlertDialogTheme">
         <item name="android:textSize">?attr/font_default</item>
-        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialogTitleTextStyle</item>
-        <item name="buttonBarNegativeButtonStyle">@style/MaterialAlertDialogNegativeButtonStyle</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialogTitleTextStyle
+        </item>
+        <item name="buttonBarNegativeButtonStyle">@style/MaterialAlertDialogNegativeButtonStyle
+        </item>
     </style>
 
     <style name="MaterialAlertDialogPositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
@@ -84,10 +89,13 @@
 
     <style name="PreferenceActivityTheme" parent="AppTheme.NoActionBar">
         <item name="android:textAppearanceListItem">@style/PreferenceTitleTextStyle</item>
-        <item name="android:textAppearanceListItemSecondary">@style/PreferenceSubtitleTextStyle</item>
+        <item name="android:textAppearanceListItemSecondary">@style/PreferenceSubtitleTextStyle
+        </item>
         <item name="android:textColorPrimary">?attr/primaryTextColor</item>
-        <item name="buttonBarPositiveButtonStyle">@style/MaterialAlertDialogPositiveButtonStyle</item>
-        <item name="buttonBarNegativeButtonStyle">@style/MaterialAlertDialogNegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/MaterialAlertDialogPositiveButtonStyle
+        </item>
+        <item name="buttonBarNegativeButtonStyle">@style/MaterialAlertDialogNegativeButtonStyle
+        </item>
         <item name="alertDialogTheme">@style/ListPreferenceStyle</item>
     </style>
 

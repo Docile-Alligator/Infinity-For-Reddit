@@ -10,9 +10,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.RedditAPI;
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,7 +27,7 @@ public class FetchMultiRedditInfo {
 
     public static void fetchMultiRedditInfo(Retrofit retrofit, String accessToken, String multipath,
                                             FetchMultiRedditInfoListener fetchMultiRedditInfoListener) {
-        retrofit.create(RedditAPI.class).getMultiRedditInfo(RedditUtils.getOAuthHeader(accessToken), multipath).enqueue(new Callback<String>() {
+        retrofit.create(RedditAPI.class).getMultiRedditInfo(APIUtils.getOAuthHeader(accessToken), multipath).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {

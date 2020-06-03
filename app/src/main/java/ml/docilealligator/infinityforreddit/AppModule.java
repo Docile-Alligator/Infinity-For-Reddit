@@ -24,7 +24,7 @@ import im.ene.toro.exoplayer.MediaSourceBuilder;
 import im.ene.toro.exoplayer.ToroExo;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Utils.CustomThemeSharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
@@ -44,7 +44,7 @@ class AppModule {
     @Singleton
     Retrofit provideOauthRetrofit(OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
-                .baseUrl(RedditUtils.OAUTH_API_BASE_URI)
+                .baseUrl(APIUtils.OAUTH_API_BASE_URI)
                 .client(okHttpClient)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
@@ -55,7 +55,7 @@ class AppModule {
     @Singleton
     Retrofit provideOauthWithoutAuthenticatorRetrofit() {
         return new Retrofit.Builder()
-                .baseUrl(RedditUtils.OAUTH_API_BASE_URI)
+                .baseUrl(APIUtils.OAUTH_API_BASE_URI)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
     }
@@ -65,7 +65,7 @@ class AppModule {
     @Singleton
     Retrofit provideRetrofit() {
         return new Retrofit.Builder()
-                .baseUrl(RedditUtils.API_BASE_URI)
+                .baseUrl(APIUtils.API_BASE_URI)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
     }
@@ -75,7 +75,7 @@ class AppModule {
     @Singleton
     Retrofit provideUploadMediaRetrofit() {
         return new Retrofit.Builder()
-                .baseUrl(RedditUtils.API_UPLOAD_MEDIA_URI)
+                .baseUrl(APIUtils.API_UPLOAD_MEDIA_URI)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
     }
@@ -85,7 +85,7 @@ class AppModule {
     @Singleton
     Retrofit provideUploadVideoRetrofit() {
         return new Retrofit.Builder()
-                .baseUrl(RedditUtils.API_UPLOAD_VIDEO_URI)
+                .baseUrl(APIUtils.API_UPLOAD_VIDEO_URI)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
     }
@@ -95,7 +95,17 @@ class AppModule {
     @Singleton
     Retrofit provideGfycatRetrofit() {
         return new Retrofit.Builder()
-                .baseUrl(RedditUtils.GFYCAT_API_BASE_URI)
+                .baseUrl(APIUtils.GFYCAT_API_BASE_URI)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+    }
+
+    @Provides
+    @Named("imgur")
+    @Singleton
+    Retrofit provideImgurRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(APIUtils.IMGUR_API_BASE_URI)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
     }

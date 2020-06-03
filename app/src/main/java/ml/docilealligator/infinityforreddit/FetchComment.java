@@ -6,7 +6,8 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,10 +27,10 @@ public class FetchComment {
             }
         } else {
             if (commentId == null) {
-                comments = api.getPostAndCommentsByIdOauth(article, sortType, RedditUtils.getOAuthHeader(accessToken));
+                comments = api.getPostAndCommentsByIdOauth(article, sortType, APIUtils.getOAuthHeader(accessToken));
             } else {
                 comments = api.getPostAndCommentsSingleThreadByIdOauth(article, commentId, sortType,
-                        RedditUtils.getOAuthHeader(accessToken));
+                        APIUtils.getOAuthHeader(accessToken));
             }
         }
 
@@ -90,7 +91,7 @@ public class FetchComment {
         if (accessToken == null) {
             moreComments = api.getInfo(stringBuilder.toString());
         } else {
-            moreComments = api.getInfoOauth(stringBuilder.toString(), RedditUtils.getOAuthHeader(accessToken));
+            moreComments = api.getInfoOauth(stringBuilder.toString(), APIUtils.getOAuthHeader(accessToken));
         }
 
         moreComments.enqueue(new Callback<String>() {

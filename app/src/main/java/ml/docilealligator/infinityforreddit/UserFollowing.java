@@ -7,10 +7,11 @@ import androidx.annotation.NonNull;
 import java.util.HashMap;
 import java.util.Map;
 
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserDao;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
 import ml.docilealligator.infinityforreddit.User.UserData;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -38,10 +39,10 @@ public class UserFollowing {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
         Map<String, String> params = new HashMap<>();
-        params.put(RedditUtils.ACTION_KEY, action);
-        params.put(RedditUtils.SR_NAME_KEY, "u_" + username);
+        params.put(APIUtils.ACTION_KEY, action);
+        params.put(APIUtils.SR_NAME_KEY, "u_" + username);
 
-        Call<String> subredditSubscriptionCall = api.subredditSubscription(RedditUtils.getOAuthHeader(accessToken), params);
+        Call<String> subredditSubscriptionCall = api.subredditSubscription(APIUtils.getOAuthHeader(accessToken), params);
         subredditSubscriptionCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {

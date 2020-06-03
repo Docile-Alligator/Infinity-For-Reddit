@@ -46,7 +46,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Service.SubmitPostService;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
@@ -444,7 +444,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
                 intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
                 intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
                 intent.putExtra(SubmitPostService.EXTRA_CONTENT, contentEditText.getText().toString());
-                intent.putExtra(SubmitPostService.EXTRA_KIND, RedditUtils.KIND_SELF);
+                intent.putExtra(SubmitPostService.EXTRA_KIND, APIUtils.KIND_SELF);
                 intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
                 intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
                 intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);

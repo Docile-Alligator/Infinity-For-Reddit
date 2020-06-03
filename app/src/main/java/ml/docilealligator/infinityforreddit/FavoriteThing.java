@@ -5,10 +5,11 @@ import androidx.annotation.NonNull;
 import java.util.HashMap;
 import java.util.Map;
 
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubscribedThingsAsyncTask;
 import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -19,9 +20,9 @@ public class FavoriteThing {
                                          String accessToken, SubscribedSubredditData subscribedSubredditData,
                                          FavoriteThingListener favoriteThingListener) {
         Map<String, String> params = new HashMap<>();
-        params.put(RedditUtils.SR_NAME_KEY, subscribedSubredditData.getName());
-        params.put(RedditUtils.MAKE_FAVORITE_KEY, "true");
-        oauthRetrofit.create(RedditAPI.class).favoriteThing(RedditUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<String>() {
+        params.put(APIUtils.SR_NAME_KEY, subscribedSubredditData.getName());
+        params.put(APIUtils.MAKE_FAVORITE_KEY, "true");
+        oauthRetrofit.create(RedditAPI.class).favoriteThing(APIUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
@@ -43,9 +44,9 @@ public class FavoriteThing {
                                            String accessToken, SubscribedSubredditData subscribedSubredditData,
                                            FavoriteThingListener favoriteThingListener) {
         Map<String, String> params = new HashMap<>();
-        params.put(RedditUtils.SR_NAME_KEY, subscribedSubredditData.getName());
-        params.put(RedditUtils.MAKE_FAVORITE_KEY, "false");
-        oauthRetrofit.create(RedditAPI.class).favoriteThing(RedditUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<String>() {
+        params.put(APIUtils.SR_NAME_KEY, subscribedSubredditData.getName());
+        params.put(APIUtils.MAKE_FAVORITE_KEY, "false");
+        oauthRetrofit.create(RedditAPI.class).favoriteThing(APIUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
@@ -67,9 +68,9 @@ public class FavoriteThing {
                                          String accessToken, SubscribedUserData subscribedUserData,
                                          FavoriteThingListener favoriteThingListener) {
         Map<String, String> params = new HashMap<>();
-        params.put(RedditUtils.SR_NAME_KEY, "u_" + subscribedUserData.getName());
-        params.put(RedditUtils.MAKE_FAVORITE_KEY, "true");
-        oauthRetrofit.create(RedditAPI.class).favoriteThing(RedditUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<String>() {
+        params.put(APIUtils.SR_NAME_KEY, "u_" + subscribedUserData.getName());
+        params.put(APIUtils.MAKE_FAVORITE_KEY, "true");
+        oauthRetrofit.create(RedditAPI.class).favoriteThing(APIUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
@@ -91,9 +92,9 @@ public class FavoriteThing {
                                            String accessToken, SubscribedUserData subscribedUserData,
                                            FavoriteThingListener favoriteThingListener) {
         Map<String, String> params = new HashMap<>();
-        params.put(RedditUtils.SR_NAME_KEY, "u_" + subscribedUserData.getName());
-        params.put(RedditUtils.MAKE_FAVORITE_KEY, "false");
-        oauthRetrofit.create(RedditAPI.class).favoriteThing(RedditUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<String>() {
+        params.put(APIUtils.SR_NAME_KEY, "u_" + subscribedUserData.getName());
+        params.put(APIUtils.MAKE_FAVORITE_KEY, "false");
+        oauthRetrofit.create(RedditAPI.class).favoriteThing(APIUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {

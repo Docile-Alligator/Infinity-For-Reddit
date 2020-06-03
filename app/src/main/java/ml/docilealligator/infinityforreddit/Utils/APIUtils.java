@@ -12,16 +12,18 @@ import okhttp3.RequestBody;
  * Created by alex on 2/23/18.
  */
 
-public class RedditUtils {
+public class APIUtils {
     public static final String OAUTH_URL = "https://www.reddit.com/api/v1/authorize.compact";
     public static final String OAUTH_API_BASE_URI = "https://oauth.reddit.com";
     public static final String API_BASE_URI = "https://www.reddit.com";
     public static final String API_UPLOAD_MEDIA_URI = "https://reddit-uploaded-media.s3-accelerate.amazonaws.com";
     public static final String API_UPLOAD_VIDEO_URI = "https://reddit-uploaded-video.s3-accelerate.amazonaws.com";
     public static final String GFYCAT_API_BASE_URI = "https://api.gfycat.com/v1/gfycats/";
+    public static final String IMGUR_API_BASE_URI = "https://api.imgur.com/3/";
 
     public static final String CLIENT_ID_KEY = "client_id";
     public static final String CLIENT_ID = "";
+    public static final String IMGUR_CLIENT_ID = "";
     public static final String RESPONSE_TYPE_KEY = "response_type";
     public static final String RESPONSE_TYPE = "code";
     public static final String STATE_KEY = "state";
@@ -89,16 +91,16 @@ public class RedditUtils {
 
     public static Map<String, String> getHttpBasicAuthHeader() {
         Map<String, String> params = new HashMap<>();
-        String credentials = String.format("%s:%s", RedditUtils.CLIENT_ID, "");
+        String credentials = String.format("%s:%s", APIUtils.CLIENT_ID, "");
         String auth = "Basic " + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
-        params.put(RedditUtils.AUTHORIZATION_KEY, auth);
+        params.put(APIUtils.AUTHORIZATION_KEY, auth);
         return params;
     }
 
     public static Map<String, String> getOAuthHeader(String accessToken) {
         Map<String, String> params = new HashMap<>();
-        params.put(RedditUtils.AUTHORIZATION_KEY, RedditUtils.AUTHORIZATION_BASE + accessToken);
-        params.put(RedditUtils.USER_AGENT_KEY, RedditUtils.USER_AGENT);
+        params.put(APIUtils.AUTHORIZATION_KEY, APIUtils.AUTHORIZATION_BASE + accessToken);
+        params.put(APIUtils.USER_AGENT_KEY, APIUtils.USER_AGENT);
         return params;
     }
 

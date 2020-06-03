@@ -4,8 +4,8 @@ import androidx.annotation.NonNull;
 
 import java.util.Locale;
 
-import ml.docilealligator.infinityforreddit.RedditAPI;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -17,7 +17,7 @@ public class FetchPost {
         if (accessToken == null) {
             postCall = retrofit.create(RedditAPI.class).getPost(id);
         } else {
-            postCall = retrofit.create(RedditAPI.class).getPostOauth(id, RedditUtils.getOAuthHeader(accessToken));
+            postCall = retrofit.create(RedditAPI.class).getPostOauth(id, APIUtils.getOAuthHeader(accessToken));
         }
         postCall.enqueue(new Callback<String>() {
             @Override

@@ -3,9 +3,9 @@ package ml.docilealligator.infinityforreddit.MultiReddit;
 import androidx.annotation.NonNull;
 
 import ml.docilealligator.infinityforreddit.AsyncTask.DeleteMultiredditInDatabaseAsyncTask;
-import ml.docilealligator.infinityforreddit.RedditAPI;
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -20,7 +20,7 @@ public class DeleteMultiReddit {
     public static void deleteMultiReddit(Retrofit oauthRetrofit, RedditDataRoomDatabase redditDataRoomDatabase,
                                          String accessToken, String accountName, String multipath,
                                          DeleteMultiRedditListener deleteMultiRedditListener) {
-        oauthRetrofit.create(RedditAPI.class).deleteMultiReddit(RedditUtils.getOAuthHeader(accessToken),
+        oauthRetrofit.create(RedditAPI.class).deleteMultiReddit(APIUtils.getOAuthHeader(accessToken),
                 multipath).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

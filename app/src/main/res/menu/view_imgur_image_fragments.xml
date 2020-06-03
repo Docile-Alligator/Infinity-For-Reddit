@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_download_view_imgur_image_fragments"
+        android:orderInCategory="1"
+        android:title="@string/action_download"
+        android:icon="@drawable/ic_file_download_toolbar_white_24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_share_view_imgur_image_fragments"
+        android:orderInCategory="2"
+        android:title="@string/action_share"
+        android:icon="@drawable/ic_share_toolbar_white_24dp"
+        app:showAsAction="ifRoom" />
+</menu>

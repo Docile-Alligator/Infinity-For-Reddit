@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.Nullable;
 
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 
 /**
  * Created by alex on 3/1/18.
@@ -90,7 +90,7 @@ public class Post implements Parcelable {
         this.title = title;
         this.previewUrl = previewUrl;
         this.thumbnailPreviewUrl = thumbnailPreviewUrl;
-        this.permalink = RedditUtils.API_BASE_URI + permalink;
+        this.permalink = APIUtils.API_BASE_URI + permalink;
         this.score = score;
         this.postType = postType;
         this.voteType = voteType;
@@ -128,7 +128,7 @@ public class Post implements Parcelable {
         this.previewUrl = previewUrl;
         this.thumbnailPreviewUrl = thumbnailPreviewUrl;
         this.url = url;
-        this.permalink = RedditUtils.API_BASE_URI + permalink;
+        this.permalink = APIUtils.API_BASE_URI + permalink;
         this.score = score;
         this.postType = postType;
         this.voteType = voteType;
@@ -163,7 +163,7 @@ public class Post implements Parcelable {
         this.postTime = postTime;
         this.postTimeMillis = postTimeMillis;
         this.title = title;
-        this.permalink = RedditUtils.API_BASE_URI + permalink;
+        this.permalink = APIUtils.API_BASE_URI + permalink;
         this.score = score;
         this.postType = postType;
         this.voteType = voteType;

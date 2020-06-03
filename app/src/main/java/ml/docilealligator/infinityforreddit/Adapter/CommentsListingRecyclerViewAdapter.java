@@ -43,7 +43,7 @@ import ml.docilealligator.infinityforreddit.Fragment.CommentMoreBottomSheetFragm
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveThing;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 import ml.docilealligator.infinityforreddit.VoteThing;
 import retrofit2.Retrofit;
@@ -256,14 +256,14 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     if (previousVoteType != CommentData.VOTE_TYPE_UPVOTE) {
                         //Not upvoted before
                         comment.setVoteType(CommentData.VOTE_TYPE_UPVOTE);
-                        newVoteType = RedditUtils.DIR_UPVOTE;
+                        newVoteType = APIUtils.DIR_UPVOTE;
                         ((CommentViewHolder) holder).upvoteButton
                                 .setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         ((CommentViewHolder) holder).scoreTextView.setTextColor(mUpvotedColor);
                     } else {
                         //Upvoted before
                         comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
-                        newVoteType = RedditUtils.DIR_UNVOTE;
+                        newVoteType = APIUtils.DIR_UNVOTE;
                         ((CommentViewHolder) holder).upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         ((CommentViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
                     }
@@ -274,7 +274,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     VoteThing.voteThing(mContext, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
-                            if (newVoteType.equals(RedditUtils.DIR_UPVOTE)) {
+                            if (newVoteType.equals(APIUtils.DIR_UPVOTE)) {
                                 comment.setVoteType(CommentData.VOTE_TYPE_UPVOTE);
                                 ((CommentViewHolder) holder).upvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                                 ((CommentViewHolder) holder).scoreTextView.setTextColor(mUpvotedColor);
@@ -309,13 +309,13 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     if (previousVoteType != CommentData.VOTE_TYPE_DOWNVOTE) {
                         //Not downvoted before
                         comment.setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
-                        newVoteType = RedditUtils.DIR_DOWNVOTE;
+                        newVoteType = APIUtils.DIR_DOWNVOTE;
                         ((CommentViewHolder) holder).downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         ((CommentViewHolder) holder).scoreTextView.setTextColor(mDownvotedColor);
                     } else {
                         //Downvoted before
                         comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
-                        newVoteType = RedditUtils.DIR_UNVOTE;
+                        newVoteType = APIUtils.DIR_UNVOTE;
                         ((CommentViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         ((CommentViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
                     }
@@ -326,7 +326,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     VoteThing.voteThing(mContext, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
-                            if (newVoteType.equals(RedditUtils.DIR_DOWNVOTE)) {
+                            if (newVoteType.equals(APIUtils.DIR_DOWNVOTE)) {
                                 comment.setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
                                 ((CommentViewHolder) holder).downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                                 ((CommentViewHolder) holder).scoreTextView.setTextColor(mDownvotedColor);

@@ -20,9 +20,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import ml.docilealligator.infinityforreddit.RedditAPI;
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -50,7 +50,7 @@ public class SubmitPost {
                     public void uploaded(String imageUrl) {
                         submitPost(oauthRetrofit, accessToken, locale,
                                 subredditName, title, imageUrl, flair, isSpoiler, isNSFW,
-                                RedditUtils.KIND_IMAGE, null, submitPostListener);
+                                APIUtils.KIND_IMAGE, null, submitPostListener);
                     }
 
                     @Override
@@ -70,10 +70,10 @@ public class SubmitPost {
         String fileType = mimeType.substring(mimeType.indexOf("/") + 1);
 
         Map<String, String> uploadImageParams = new HashMap<>();
-        uploadImageParams.put(RedditUtils.FILEPATH_KEY, "post_video." + fileType);
-        uploadImageParams.put(RedditUtils.MIMETYPE_KEY, mimeType);
+        uploadImageParams.put(APIUtils.FILEPATH_KEY, "post_video." + fileType);
+        uploadImageParams.put(APIUtils.MIMETYPE_KEY, mimeType);
 
-        Call<String> uploadImageCall = api.uploadImage(RedditUtils.getOAuthHeader(accessToken), uploadImageParams);
+        Call<String> uploadImageCall = api.uploadImage(APIUtils.getOAuthHeader(accessToken), uploadImageParams);
         uploadImageCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -106,11 +106,11 @@ public class SubmitPost {
                                                                 if (fileType.equals("gif")) {
                                                                     submitPost(oauthRetrofit, accessToken, locale,
                                                                             subredditName, title, url, flair, isSpoiler, isNSFW,
-                                                                            RedditUtils.KIND_VIDEOGIF, imageUrl, submitPostListener);
+                                                                            APIUtils.KIND_VIDEOGIF, imageUrl, submitPostListener);
                                                                 } else {
                                                                     submitPost(oauthRetrofit, accessToken, locale,
                                                                             subredditName, title, url, flair, isSpoiler, isNSFW,
-                                                                            RedditUtils.KIND_VIDEO, imageUrl, submitPostListener);
+                                                                            APIUtils.KIND_VIDEO, imageUrl, submitPostListener);
                                                                 }
                                                             }
 
@@ -162,36 +162,36 @@ public class SubmitPost {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
         Map<String, String> params = new HashMap<>();
-        params.put(RedditUtils.API_TYPE_KEY, RedditUtils.API_TYPE_JSON);
-        params.put(RedditUtils.SR_KEY, subredditName);
-        params.put(RedditUtils.TITLE_KEY, title);
-        params.put(RedditUtils.KIND_KEY, kind);
+        params.put(APIUtils.API_TYPE_KEY, APIUtils.API_TYPE_JSON);
+        params.put(APIUtils.SR_KEY, subredditName);
+        params.put(APIUtils.TITLE_KEY, title);
+        params.put(APIUtils.KIND_KEY, kind);
         switch (kind) {
-            case RedditUtils.KIND_SELF:
-                params.put(RedditUtils.TEXT_KEY, content);
+            case APIUtils.KIND_SELF:
+                params.put(APIUtils.TEXT_KEY, content);
                 break;
-            case RedditUtils.KIND_LINK:
-            case RedditUtils.KIND_IMAGE:
-                params.put(RedditUtils.URL_KEY, content);
+            case APIUtils.KIND_LINK:
+            case APIUtils.KIND_IMAGE:
+                params.put(APIUtils.URL_KEY, content);
                 break;
-            case RedditUtils.KIND_VIDEOGIF:
-                params.put(RedditUtils.KIND_KEY, RedditUtils.KIND_IMAGE);
-                params.put(RedditUtils.URL_KEY, content);
-                params.put(RedditUtils.VIDEO_POSTER_URL_KEY, posterUrl);
+            case APIUtils.KIND_VIDEOGIF:
+                params.put(APIUtils.KIND_KEY, APIUtils.KIND_IMAGE);
+                params.put(APIUtils.URL_KEY, content);
+                params.put(APIUtils.VIDEO_POSTER_URL_KEY, posterUrl);
                 break;
-            case RedditUtils.KIND_VIDEO:
-                params.put(RedditUtils.URL_KEY, content);
-                params.put(RedditUtils.VIDEO_POSTER_URL_KEY, posterUrl);
+            case APIUtils.KIND_VIDEO:
+                params.put(APIUtils.URL_KEY, content);
+                params.put(APIUtils.VIDEO_POSTER_URL_KEY, posterUrl);
                 break;
         }
 
         if (flair != null) {
-            params.put(RedditUtils.FLAIR_TEXT_KEY, flair);
+            params.put(APIUtils.FLAIR_TEXT_KEY, flair);
         }
-        params.put(RedditUtils.SPOILER_KEY, Boolean.toString(isSpoiler));
-        params.put(RedditUtils.NSFW_KEY, Boolean.toString(isNSFW));
+        params.put(APIUtils.SPOILER_KEY, Boolean.toString(isSpoiler));
+        params.put(APIUtils.NSFW_KEY, Boolean.toString(isNSFW));
 
-        Call<String> submitPostCall = api.submit(RedditUtils.getOAuthHeader(accessToken), params);
+        Call<String> submitPostCall = api.submit(APIUtils.getOAuthHeader(accessToken), params);
         submitPostCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
@@ -221,10 +221,10 @@ public class SubmitPost {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
         Map<String, String> uploadImageParams = new HashMap<>();
-        uploadImageParams.put(RedditUtils.FILEPATH_KEY, "post_image.jpg");
-        uploadImageParams.put(RedditUtils.MIMETYPE_KEY, "image/jpeg");
+        uploadImageParams.put(APIUtils.FILEPATH_KEY, "post_image.jpg");
+        uploadImageParams.put(APIUtils.MIMETYPE_KEY, "image/jpeg");
 
-        Call<String> uploadImageCall = api.uploadImage(RedditUtils.getOAuthHeader(accessToken), uploadImageParams);
+        Call<String> uploadImageCall = api.uploadImage(APIUtils.getOAuthHeader(accessToken), uploadImageParams);
         uploadImageCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -308,12 +308,12 @@ public class SubmitPost {
             return;
         }
 
-        if (!kind.equals(RedditUtils.KIND_IMAGE) && !kind.equals(RedditUtils.KIND_VIDEO) && !kind.equals(RedditUtils.KIND_VIDEOGIF)) {
+        if (!kind.equals(APIUtils.KIND_IMAGE) && !kind.equals(APIUtils.KIND_VIDEO) && !kind.equals(APIUtils.KIND_VIDEOGIF)) {
             String postId = responseObject.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.ID_KEY);
 
             RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
-            Call<String> getPostCall = api.getPostOauth(postId, RedditUtils.getOAuthHeader(accessToken));
+            Call<String> getPostCall = api.getPostOauth(postId, APIUtils.getOAuthHeader(accessToken));
             getPostCall.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
@@ -377,7 +377,7 @@ public class SubmitPost {
                 nameValuePairsMap = new HashMap<>();
                 for (int i = 0; i < nameValuePairs.length(); i++) {
                     nameValuePairsMap.put(nameValuePairs.getJSONObject(i).getString(JSONUtils.NAME_KEY),
-                            RedditUtils.getRequestBody(nameValuePairs.getJSONObject(i).getString(JSONUtils.VALUE_KEY)));
+                            APIUtils.getRequestBody(nameValuePairs.getJSONObject(i).getString(JSONUtils.VALUE_KEY)));
                 }
 
                 successful = true;

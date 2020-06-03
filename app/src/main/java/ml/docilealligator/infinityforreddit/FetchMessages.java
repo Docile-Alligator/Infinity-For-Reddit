@@ -14,8 +14,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
-import ml.docilealligator.infinityforreddit.Utils.RedditUtils;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,7 +32,7 @@ public class FetchMessages {
 
     static void fetchMessagesAsync(Retrofit oauthRetrofit, Locale locale, String accessToken, String where,
                                    String after, FetchMessagesListener fetchMessagesListener) {
-        oauthRetrofit.create(RedditAPI.class).getMessages(RedditUtils.getOAuthHeader(accessToken), where, after)
+        oauthRetrofit.create(RedditAPI.class).getMessages(APIUtils.getOAuthHeader(accessToken), where, after)
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
