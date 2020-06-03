@@ -295,9 +295,16 @@ public class ViewImgurMediaActivity extends AppCompatActivity {
                 images = new ArrayList<>();
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject image = jsonArray.getJSONObject(i);
-                    images.add(new ImgurMedia(image.getString(JSONUtils.ID_KEY),
-                            image.getString(JSONUtils.TITLE_KEY), image.getString(JSONUtils.DESCRIPTION_KEY),
-                            image.getString(JSONUtils.TYPE_KEY), image.getString(JSONUtils.LINK_KEY)));
+                    String type = image.getString(JSONUtils.TYPE_KEY);
+                    if (type.contains("gif")) {
+                        images.add(new ImgurMedia(image.getString(JSONUtils.ID_KEY),
+                                image.getString(JSONUtils.TITLE_KEY), image.getString(JSONUtils.DESCRIPTION_KEY),
+                                "video/mp4", image.getString(JSONUtils.MP4_KEY)));
+                    } else {
+                        images.add(new ImgurMedia(image.getString(JSONUtils.ID_KEY),
+                                image.getString(JSONUtils.TITLE_KEY), image.getString(JSONUtils.DESCRIPTION_KEY),
+                                type, image.getString(JSONUtils.LINK_KEY)));
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

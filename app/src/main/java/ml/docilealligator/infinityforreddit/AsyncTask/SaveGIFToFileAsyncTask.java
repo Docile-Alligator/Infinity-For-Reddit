@@ -13,14 +13,16 @@ import java.nio.ByteBuffer;
 public class SaveGIFToFileAsyncTask extends AsyncTask<Void, Void, Void> {
     private GifDrawable resource;
     private String cacheDirPath;
+    private String fileName;
     private SaveGIFToFileAsyncTaskListener saveImageToFileAsyncTaskListener;
     private boolean saveSuccess = true;
     private File imageFile;
 
-    public SaveGIFToFileAsyncTask(GifDrawable resource, String cacheDirPath,
+    public SaveGIFToFileAsyncTask(GifDrawable resource, String cacheDirPath, String fileName,
                                     SaveGIFToFileAsyncTaskListener saveImageToFileAsyncTaskListener) {
         this.resource = resource;
         this.cacheDirPath = cacheDirPath;
+        this.fileName = fileName;
         this.saveImageToFileAsyncTaskListener = saveImageToFileAsyncTaskListener;
     }
 
@@ -32,7 +34,7 @@ public class SaveGIFToFileAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
         try {
-            imageFile = new File(cacheDirPath, "shared.gif");
+            imageFile = new File(cacheDirPath, fileName);
             ByteBuffer byteBuffer = resource.getBuffer();
             OutputStream outputStream = new FileOutputStream(imageFile);
             byte[] bytes = new byte[byteBuffer.capacity()];

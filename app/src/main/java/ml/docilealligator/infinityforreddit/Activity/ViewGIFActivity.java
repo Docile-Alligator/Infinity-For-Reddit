@@ -401,7 +401,7 @@ public class ViewGIFActivity extends AppCompatActivity {
                     @Override
                     public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
                         if (getExternalCacheDir() != null) {
-                            new SaveGIFToFileAsyncTask(resource, getExternalCacheDir().getPath(),
+                            new SaveGIFToFileAsyncTask(resource, getExternalCacheDir().getPath(), mImageFileName,
                                     new SaveGIFToFileAsyncTask.SaveGIFToFileAsyncTaskListener() {
                                         @Override
                                         public void saveSuccess(File imageFile) {

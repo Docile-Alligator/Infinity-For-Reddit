@@ -11,14 +11,16 @@ import java.io.OutputStream;
 public class SaveImageToFileAsyncTask extends AsyncTask<Void, Void, Void> {
     private Bitmap resource;
     private String cacheDirPath;
+    private String fileName;
     private SaveImageToFileAsyncTaskListener saveImageToFileAsyncTaskListener;
     private boolean saveSuccess = true;
     private File imageFile;
 
-    public SaveImageToFileAsyncTask(Bitmap resource, String cacheDirPath,
+    public SaveImageToFileAsyncTask(Bitmap resource, String cacheDirPath, String fileName,
                                     SaveImageToFileAsyncTaskListener saveImageToFileAsyncTaskListener) {
         this.resource = resource;
         this.cacheDirPath = cacheDirPath;
+        this.fileName = fileName;
         this.saveImageToFileAsyncTaskListener = saveImageToFileAsyncTaskListener;
     }
 
@@ -30,11 +32,9 @@ public class SaveImageToFileAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
         try {
-            imageFile = new File(cacheDirPath, "shared.jpg");
+            imageFile = new File(cacheDirPath, fileName);
             OutputStream outputStream = new FileOutputStream(imageFile);
-
             resource.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-
             outputStream.flush();
             outputStream.close();
         } catch (IOException e) {

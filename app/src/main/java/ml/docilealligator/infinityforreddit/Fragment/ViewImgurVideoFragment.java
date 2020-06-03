@@ -1,12 +1,17 @@
 package ml.docilealligator.infinityforreddit.Fragment;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,8 +20,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -33,6 +41,8 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+
+import java.io.File;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -52,6 +62,7 @@ public class ViewImgurVideoFragment extends Fragment {
     public static final String EXTRA_IMGUR_VIDEO = "EIV";
     private static final String IS_MUTE_STATE = "IMS";
     private static final String POSITION_STATE = "PS";
+    private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
     @BindView(R.id.player_view_view_imgur_video_fragment)
     PlayerView videoPlayerView;
     @BindView(R.id.mute_exo_playback_control_view)
@@ -62,6 +73,7 @@ public class ViewImgurVideoFragment extends Fragment {
     private DataSource.Factory dataSourceFactory;
     private boolean wasPlaying = false;
     private boolean isMute = false;
+    private boolean isDownloading = false;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
@@ -139,11 +151,86 @@ public class ViewImgurVideoFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_download_view_imgur_image_fragments:
-                return true;
+        if (item.getItemId() == R.id.action_download_view_imgur_image_fragments) {
+            isDownloading = true;
+            if (Build.VERSION.SDK_INT >= 23) {
+                if (ContextCompat.checkSelfPermission(activity,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    // Permission is not granted
+                    // No explanation needed; request the permission
+                    ActivityCompat.requestPermissions(activity,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
+                } else {
+                    // Permission has already been granted
+                    download();
+                }
+            } else {
+                download();
+            }
+            return true;
         }
         return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE && grantResults.length > 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                Toast.makeText(activity, R.string.no_storage_permission, Toast.LENGTH_SHORT).show();
+            } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED && isDownloading) {
+                download();
+            }
+            isDownloading = false;
+        }
+    }
+
+    private void download() {
+        isDownloading = false;
+
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(imgurMedia.getLink()));
+        request.setTitle(imgurMedia.getFileName());
+
+        request.allowScanningByMediaScanner();
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+        //Android Q support
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, imgurMedia.getFileName());
+        } else {
+            String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+            File directory = new File(path + "/Infinity/");
+            boolean saveToInfinityFolder = true;
+            if (!directory.exists()) {
+                if (!directory.mkdir()) {
+                    saveToInfinityFolder = false;
+                }
+            } else {
+                if (directory.isFile()) {
+                    if (!(directory.delete() && directory.mkdir())) {
+                        saveToInfinityFolder = false;
+                    }
+                }
+            }
+
+            if (saveToInfinityFolder) {
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES + "/Infinity/", imgurMedia.getFileName());
+            } else {
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, imgurMedia.getFileName());
+            }
+        }
+
+        DownloadManager manager = (DownloadManager) activity.getSystemService(Context.DOWNLOAD_SERVICE);
+
+        if (manager == null) {
+            Toast.makeText(activity, R.string.download_failed, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        manager.enqueue(request);
+        Toast.makeText(activity, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 
     private void preparePlayer(Bundle savedInstanceState) {

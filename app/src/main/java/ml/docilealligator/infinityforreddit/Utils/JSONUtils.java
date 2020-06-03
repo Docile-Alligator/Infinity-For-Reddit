@@ -110,4 +110,5 @@ public class JSONUtils {
     public static final String MP4_URL_KEY = "mp4Url";
     public static final String WEBM_URL_KEY = "webmUrl";
     public static final String TYPE_KEY = "type";
+    public static final String MP4_KEY = "mp4";
 }

@@ -65,6 +65,14 @@ public class ImgurMedia implements Parcelable {
         return link;
     }
 
+    public String getFileName() {
+        if (type == TYPE_VIDEO) {
+            return "imgur-" + id + ".mp4";
+        }
+
+        return "imgur-" + id + ".jpg";
+    }
+
     @Override
     public int describeContents() {
         return 0;
