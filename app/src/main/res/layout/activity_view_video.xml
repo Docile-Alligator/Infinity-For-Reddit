@@ -15,4 +15,11 @@
         android:layout_height="match_parent"
         app:controller_layout_id="@layout/exo_playback_control_view"/>
 
+    <ProgressBar
+        android:id="@+id/progress_bar_view_video_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
 </RelativeLayout>

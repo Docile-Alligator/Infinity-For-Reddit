@@ -8,8 +8,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -61,6 +61,8 @@ public class ViewImgurMediaActivity extends AppCompatActivity {
     ProgressBar progressBar;
     @BindView(R.id.view_pager_view_imgur_media_activity)
     ViewPager viewPager;
+    @BindView(R.id.load_image_error_linear_layout_view_imgur_media_activity)
+    LinearLayout errorLinearLayout;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ArrayList<ImgurMedia> images;
     @Inject
@@ -109,48 +111,59 @@ public class ViewImgurMediaActivity extends AppCompatActivity {
         }
 
         if (images == null) {
-            switch (getIntent().getIntExtra(EXTRA_IMGUR_TYPE, IMGUR_TYPE_IMAGE)) {
-                case IMGUR_TYPE_GALLERY:
-                    imgurRetrofit.create(ImgurAPI.class).getGalleryImages(APIUtils.IMGUR_CLIENT_ID, imgurId)
-                            .enqueue(new Callback<String>() {
-                                @Override
-                                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                                    if (response.isSuccessful()) {
-                                        new ParseImgurImagesAsyncTask(response.body(), new ParseImgurImagesAsyncTask.ParseImgurImagesAsyncTaskListener() {
-                                            @Override
-                                            public void success(ArrayList<ImgurMedia> images) {
-                                                ViewImgurMediaActivity.this.images = images;
-                                                progressBar.setVisibility(View.GONE);
-                                                setupViewPager();
-                                            }
-
-                                            @Override
-                                            public void failed() {
-                                                progressBar.setVisibility(View.GONE);
-                                                Toast.makeText(ViewImgurMediaActivity.this, R.string.error_fetching_imgur_media, Toast.LENGTH_SHORT).show();
-                                            }
-                                        }).execute();
-                                    } else {
-                                        progressBar.setVisibility(View.GONE);
-                                        Toast.makeText(ViewImgurMediaActivity.this, R.string.error_fetching_imgur_media, Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                                    progressBar.setVisibility(View.GONE);
-                                    Toast.makeText(ViewImgurMediaActivity.this, R.string.error_fetching_imgur_media, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                    break;
-                case IMGUR_TYPE_ALBUM:
-                    break;
-                case IMGUR_TYPE_IMAGE:
-                    break;
-            }
+            fetchImgurMedia(imgurId);
         } else {
             progressBar.setVisibility(View.GONE);
             setupViewPager();
+        }
+
+        errorLinearLayout.setOnClickListener(view -> {
+            fetchImgurMedia(imgurId);
+        });
+    }
+
+    private void fetchImgurMedia(String imgurId) {
+        errorLinearLayout.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        switch (getIntent().getIntExtra(EXTRA_IMGUR_TYPE, IMGUR_TYPE_IMAGE)) {
+            case IMGUR_TYPE_GALLERY:
+                imgurRetrofit.create(ImgurAPI.class).getGalleryImages(APIUtils.IMGUR_CLIENT_ID, imgurId)
+                        .enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                if (response.isSuccessful()) {
+                                    new ParseImgurImagesAsyncTask(response.body(), new ParseImgurImagesAsyncTask.ParseImgurImagesAsyncTaskListener() {
+                                        @Override
+                                        public void success(ArrayList<ImgurMedia> images) {
+                                            ViewImgurMediaActivity.this.images = images;
+                                            progressBar.setVisibility(View.GONE);
+                                            errorLinearLayout.setVisibility(View.GONE);
+                                            setupViewPager();
+                                        }
+
+                                        @Override
+                                        public void failed() {
+                                            progressBar.setVisibility(View.GONE);
+                                            errorLinearLayout.setVisibility(View.VISIBLE);
+                                        }
+                                    }).execute();
+                                } else {
+                                    progressBar.setVisibility(View.GONE);
+                                    errorLinearLayout.setVisibility(View.VISIBLE);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                                progressBar.setVisibility(View.GONE);
+                                errorLinearLayout.setVisibility(View.VISIBLE);
+                            }
+                        });
+                break;
+            case IMGUR_TYPE_ALBUM:
+                break;
+            case IMGUR_TYPE_IMAGE:
+                break;
         }
     }
 

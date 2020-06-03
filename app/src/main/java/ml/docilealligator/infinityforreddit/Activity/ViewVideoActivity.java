@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -85,6 +86,8 @@ public class ViewVideoActivity extends AppCompatActivity {
     private static final String VIDEO_URI_STATE = "VUS";
     @BindView(R.id.relative_layout_view_video_activity)
     RelativeLayout relativeLayout;
+    @BindView(R.id.progress_bar_view_video_activity)
+    ProgressBar progressBar;
     @BindView(R.id.player_view_view_video_activity)
     PlayerView videoPlayerView;
     @BindView(R.id.mute_exo_playback_control_view)
@@ -342,6 +345,7 @@ public class ViewVideoActivity extends AppCompatActivity {
             }
 
             if (mVideoUri == null) {
+                progressBar.setVisibility(View.VISIBLE);
                 String gfycatId = intent.getStringExtra(EXTRA_GFYCAT_ID);
                 if (gfycatId != null && gfycatId.contains("-")) {
                     gfycatId = gfycatId.substring(0, gfycatId.indexOf('-'));
@@ -351,6 +355,7 @@ public class ViewVideoActivity extends AppCompatActivity {
                         new FetchGfycatVideoLinks.FetchGfycatVideoLinksListener() {
                             @Override
                             public void success(String webm, String mp4) {
+                                progressBar.setVisibility(View.GONE);
                                 mVideoUri = Uri.parse(webm);
                                 videoDownloadUrl = mp4;
                                 dataSourceFactory = new DefaultDataSourceFactory(ViewVideoActivity.this,
@@ -361,6 +366,7 @@ public class ViewVideoActivity extends AppCompatActivity {
 
                             @Override
                             public void failed() {
+                                progressBar.setVisibility(View.GONE);
                                 Toast.makeText(ViewVideoActivity.this, R.string.fetch_gfycat_video_failed, Toast.LENGTH_SHORT).show();
                             }
                         });
