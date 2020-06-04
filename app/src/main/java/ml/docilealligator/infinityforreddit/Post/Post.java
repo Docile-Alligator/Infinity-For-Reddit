@@ -324,6 +324,10 @@ public class Post implements Parcelable {
         return url;
     }
 
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public String getVideoUrl() {
         return videoUrl;
     }
@@ -370,6 +374,10 @@ public class Post implements Parcelable {
 
     public int getPostType() {
         return postType;
+    }
+
+    public void setPostType(int postType) {
+        this.postType = postType;
     }
 
     public int getVoteType() {

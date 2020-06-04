@@ -6,5 +6,5 @@ import retrofit2.http.Path;
 
 public interface GfycatAPI {
     @GET("{gfyid}")
-    Call<String> getSubredditData(@Path("gfyid") String gfyId);
+    Call<String> getGfycatData(@Path("gfyid") String gfyId);
 }

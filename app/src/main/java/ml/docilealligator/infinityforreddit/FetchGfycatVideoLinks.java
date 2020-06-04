@@ -22,7 +22,7 @@ public class FetchGfycatVideoLinks {
 
     public static void fetchGfycatVideoLinks(Retrofit gfycatRetrofit, String gfycatId,
                                              FetchGfycatVideoLinksListener fetchGfycatVideoLinksListener) {
-        gfycatRetrofit.create(GfycatAPI.class).getSubredditData(gfycatId).enqueue(new Callback<String>() {
+        gfycatRetrofit.create(GfycatAPI.class).getGfycatData(gfycatId).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {

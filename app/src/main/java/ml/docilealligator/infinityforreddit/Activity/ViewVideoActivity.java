@@ -78,6 +78,8 @@ public class ViewVideoActivity extends AppCompatActivity {
     public static final String EXTRA_PROGRESS_SECONDS = "EPS";
     public static final String EXTRA_VIDEO_TYPE = "EVT";
     public static final String EXTRA_GFYCAT_ID = "EGI";
+    public static final int VIDEO_TYPE_DIRECT = 3;
+    public static final int VIDEO_TYPE_REDGIFS = 2;
     public static final int VIDEO_TYPE_GFYCAT = 1;
     private static final int VIDEO_TYPE_NORMAL = 0;
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
@@ -113,6 +115,10 @@ public class ViewVideoActivity extends AppCompatActivity {
     @Inject
     @Named("gfycat")
     Retrofit gfycatRetrofit;
+
+    @Inject
+    @Named("redgifs")
+    Retrofit redgifsRetrofit;
 
     @Inject
     @Named("default")
@@ -335,7 +341,8 @@ public class ViewVideoActivity extends AppCompatActivity {
         TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
         player = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
         videoPlayerView.setPlayer(player);
-        if (getIntent().getIntExtra(EXTRA_VIDEO_TYPE, VIDEO_TYPE_NORMAL) == VIDEO_TYPE_GFYCAT) {
+        int videoType = getIntent().getIntExtra(EXTRA_VIDEO_TYPE, VIDEO_TYPE_NORMAL);
+        if (videoType == VIDEO_TYPE_GFYCAT || videoType == VIDEO_TYPE_REDGIFS) {
             if (savedInstanceState != null) {
                 String videoUrl = savedInstanceState.getString(VIDEO_URI_STATE);
                 if (videoUrl != null) {
@@ -350,8 +357,15 @@ public class ViewVideoActivity extends AppCompatActivity {
                 if (gfycatId != null && gfycatId.contains("-")) {
                     gfycatId = gfycatId.substring(0, gfycatId.indexOf('-'));
                 }
-                videoFileName = "Gfycat-" + gfycatId + ".mp4";
-                FetchGfycatVideoLinks.fetchGfycatVideoLinks(gfycatRetrofit, gfycatId,
+                Retrofit retrofit;
+                if (videoType == VIDEO_TYPE_GFYCAT) {
+                    retrofit = gfycatRetrofit;
+                    videoFileName = "Gfycat-" + gfycatId + ".mp4";
+                } else {
+                    retrofit = redgifsRetrofit;
+                    videoFileName = "Redgifs-" + gfycatId + ".mp4";
+                }
+                FetchGfycatVideoLinks.fetchGfycatVideoLinks(retrofit, gfycatId,
                         new FetchGfycatVideoLinks.FetchGfycatVideoLinksListener() {
                             @Override
                             public void success(String webm, String mp4) {
@@ -367,7 +381,11 @@ public class ViewVideoActivity extends AppCompatActivity {
                             @Override
                             public void failed() {
                                 progressBar.setVisibility(View.GONE);
-                                Toast.makeText(ViewVideoActivity.this, R.string.fetch_gfycat_video_failed, Toast.LENGTH_SHORT).show();
+                                if (videoType == VIDEO_TYPE_GFYCAT) {
+                                    Toast.makeText(ViewVideoActivity.this, R.string.fetch_gfycat_video_failed, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(ViewVideoActivity.this, R.string.fetch_redgifs_video_failed, Toast.LENGTH_SHORT).show();
+                                }
                             }
                         });
             } else {
@@ -376,6 +394,15 @@ public class ViewVideoActivity extends AppCompatActivity {
                 player.prepare(new DashMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
                 preparePlayer(savedInstanceState);
             }
+        } if (videoType == VIDEO_TYPE_REDGIFS) {
+
+        } else if (videoType == VIDEO_TYPE_DIRECT) {
+            videoDownloadUrl = mVideoUri.toString();
+            videoFileName = videoDownloadUrl.substring(videoDownloadUrl.lastIndexOf('/') + 1);
+            // Produces DataSource instances through which media data is loaded.
+            dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "Infinity"));
+            // Prepare the player with the source.
+            player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
         } else {
             videoDownloadUrl = intent.getStringExtra(EXTRA_VIDEO_DOWNLOAD_URL);
             videoFileName = intent.getStringExtra(EXTRA_SUBREDDIT) + "-" + intent.getStringExtra(EXTRA_ID) + ".mp4";

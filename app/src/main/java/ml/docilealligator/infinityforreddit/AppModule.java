@@ -101,6 +101,16 @@ class AppModule {
     }
 
     @Provides
+    @Named("redgifs")
+    @Singleton
+    Retrofit provideRedgifsRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(APIUtils.REDGIFS_API_BASE_URI)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+    }
+
+    @Provides
     @Named("imgur")
     @Singleton
     Retrofit provideImgurRetrofit() {

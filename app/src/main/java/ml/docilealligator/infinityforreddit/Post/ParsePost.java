@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.Post;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.Html;
 
@@ -277,6 +278,19 @@ public class ParsePost {
                         post.setPreviewWidth(previewWidth);
                         post.setPreviewHeight(previewHeight);
                         post.setVideoUrl(url);
+                    } else if (url.endsWith("mp4")) {
+                        //Video post
+                        int postType = Post.VIDEO_TYPE;
+
+                        post = new Post(id, fullName, subredditName, subredditNamePrefixed, author,
+                                authorFlair, authorFlairHTML, formattedPostTime, postTimeMillis, title,
+                                previewUrl, thumbnailPreviewUrl, url, permalink, score, postType,
+                                voteType, nComments, flair, awards, nAwards, hidden, spoiler, nsfw, stickied,
+                                archived, locked, saved, isCrosspost);
+                        post.setPreviewWidth(previewWidth);
+                        post.setPreviewHeight(previewHeight);
+                        post.setVideoUrl(url);
+                        post.setVideoDownloadUrl(url);
                     } else {
                         if (url.contains(permalink)) {
                             //Text post but with a preview
@@ -339,6 +353,19 @@ public class ParsePost {
                             archived, locked, saved, isCrosspost);
                     post.setPreviewWidth(previewWidth);
                     post.setPreviewHeight(previewHeight);
+                } else if (url.endsWith("mp4")) {
+                    //Video post
+                    int postType = Post.VIDEO_TYPE;
+
+                    post = new Post(id, fullName, subredditName, subredditNamePrefixed, author,
+                            authorFlair, authorFlairHTML, formattedPostTime, postTimeMillis, title,
+                            previewUrl, thumbnailPreviewUrl, url, permalink, score, postType,
+                            voteType, nComments, flair, awards, nAwards, hidden, spoiler, nsfw, stickied,
+                            archived, locked, saved, isCrosspost);
+                    post.setPreviewWidth(previewWidth);
+                    post.setPreviewHeight(previewHeight);
+                    post.setVideoUrl(url);
+                    post.setVideoDownloadUrl(url);
                 } else {
                     //CP No Preview Link post
                     int postType = Post.NO_PREVIEW_LINK_TYPE;
@@ -350,6 +377,17 @@ public class ParsePost {
                             locked, saved, isCrosspost);
                 }
             }
+        }
+
+        if (post.getPostType() == Post.VIDEO_TYPE) {
+            try {
+                Uri uri = Uri.parse(url);
+                String authority = uri.getAuthority();
+                if (authority != null && (authority.contains("gfycat.com") || authority.contains("redgifs.com"))) {
+                    post.setPostType(Post.LINK_TYPE);
+                    post.setUrl(url);
+                }
+            } catch (IllegalArgumentException ignore) { }
         }
 
         return post;

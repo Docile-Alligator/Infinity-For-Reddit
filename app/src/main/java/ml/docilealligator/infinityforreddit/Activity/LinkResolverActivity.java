@@ -39,6 +39,7 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String MULTIREDDIT_PATTERN_2 = "/[rR]/(\\w+\\+?)+/?";
     private static final String REDD_IT_POST_PATTERN = "/\\w+/?";
     private static final String GFYCAT_PATTERN = "/[\\w-]+$";
+    private static final String REDGIFS_PATTERN = "/watch/[\\w-]+$";
     private static final String IMGUR_GALLERY_PATTERN = "/gallery/\\w+/?";
     private static final String IMGUR_ALBUM_PATTERN = "/(album|a)/\\w+/?";
     private static final String IMGUR_IMAGE_PATTERN = "/\\w+/?";
@@ -76,119 +77,151 @@ public class LinkResolverActivity extends AppCompatActivity {
                     path = path.substring(0, path.length() - 1);
                 }
 
-                String messageFullname = getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME);
-                String newAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
+                if (path.endsWith("jpg") || path.endsWith("png")) {
+                    Intent intent = new Intent(this, ViewImageActivity.class);
+                    String url = uri.toString();
+                    String fileName = url.substring(url.lastIndexOf('/') + 1);
+                    intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, url);
+                    intent.putExtra(ViewImageActivity.FILE_NAME_KEY, fileName);
+                    intent.putExtra(ViewImageActivity.POST_TITLE_KEY, fileName);
+                    startActivity(intent);
+                } else if (path.endsWith("gif")) {
+                    Intent intent = new Intent(this, ViewGIFActivity.class);
+                    String url = uri.toString();
+                    String fileName = url.substring(url.lastIndexOf('/') + 1);
+                    intent.putExtra(ViewGIFActivity.GIF_URL_KEY, url);
+                    intent.putExtra(ViewGIFActivity.FILE_NAME_KEY, fileName);
+                    intent.putExtra(ViewGIFActivity.POST_TITLE_KEY, fileName);
+                    startActivity(intent);
+                } else if (path.endsWith("mp4")) {
+                    Intent intent = new Intent(this, ViewVideoActivity.class);
+                    intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_DIRECT);
+                    intent.setData(uri);
+                    startActivity(intent);
+                } else {
+                    String messageFullname = getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME);
+                    String newAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
 
-                String authority = uri.getAuthority();
-                List<String> segments = uri.getPathSegments();
+                    String authority = uri.getAuthority();
+                    List<String> segments = uri.getPathSegments();
 
-                if (authority != null) {
-                    if (authority.contains("reddit.com") || authority.contains("redd.it") || authority.contains("reddit.app")) {
-                        if (authority.equals("reddit.app.link") && path.isEmpty()) {
-                            String redirect = uri.getQueryParameter("$og_redirect");
-                            handleUri(Uri.parse(redirect));
-                        } else if (path.isEmpty()) {
-                            Intent intent = new Intent(this, MainActivity.class);
-                            startActivity(intent);
-                        } else if (path.matches(POST_PATTERN)) {
-                            int commentsIndex = segments.lastIndexOf("comments");
-                            if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
-                                Intent intent = new Intent(this, ViewPostDetailActivity.class);
-                                intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, segments.get(commentsIndex + 1));
-                                intent.putExtra(ViewPostDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
-                                intent.putExtra(ViewPostDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
-                                startActivity(intent);
-                            } else {
-                                deepLinkError(uri);
-                            }
-                        } else if (path.matches(COMMENT_PATTERN)) {
-                            int commentsIndex = segments.lastIndexOf("comments");
-                            if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
-                                Intent intent = new Intent(this, ViewPostDetailActivity.class);
-                                intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, segments.get(commentsIndex + 1));
-                                intent.putExtra(ViewPostDetailActivity.EXTRA_SINGLE_COMMENT_ID, segments.get(segments.size() - 1));
-                                intent.putExtra(ViewPostDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
-                                intent.putExtra(ViewPostDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
-                                startActivity(intent);
-                            } else {
-                                deepLinkError(uri);
-                            }
-                        } else if (path.matches(SUBREDDIT_PATTERN)) {
-                            String subredditName = path.substring(3);
-                            if (subredditName.equals("popular") || subredditName.equals("all")) {
+                    if (authority != null) {
+                        if (authority.contains("reddit.com") || authority.contains("redd.it") || authority.contains("reddit.app")) {
+                            if (authority.equals("reddit.app.link") && path.isEmpty()) {
+                                String redirect = uri.getQueryParameter("$og_redirect");
+                                handleUri(Uri.parse(redirect));
+                            } else if (path.isEmpty()) {
                                 Intent intent = new Intent(this, MainActivity.class);
-                                intent.putExtra(MainActivity.EXTRA_POST_TYPE, subredditName);
-                                intent.putExtra(MainActivity.EXTRA_MESSSAGE_FULLNAME, messageFullname);
-                                intent.putExtra(MainActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
                                 startActivity(intent);
-                            } else {
+                            } else if (path.matches(POST_PATTERN)) {
+                                int commentsIndex = segments.lastIndexOf("comments");
+                                if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
+                                    Intent intent = new Intent(this, ViewPostDetailActivity.class);
+                                    intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, segments.get(commentsIndex + 1));
+                                    intent.putExtra(ViewPostDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
+                                    intent.putExtra(ViewPostDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
+                                    startActivity(intent);
+                                } else {
+                                    deepLinkError(uri);
+                                }
+                            } else if (path.matches(COMMENT_PATTERN)) {
+                                int commentsIndex = segments.lastIndexOf("comments");
+                                if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
+                                    Intent intent = new Intent(this, ViewPostDetailActivity.class);
+                                    intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, segments.get(commentsIndex + 1));
+                                    intent.putExtra(ViewPostDetailActivity.EXTRA_SINGLE_COMMENT_ID, segments.get(segments.size() - 1));
+                                    intent.putExtra(ViewPostDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
+                                    intent.putExtra(ViewPostDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
+                                    startActivity(intent);
+                                } else {
+                                    deepLinkError(uri);
+                                }
+                            } else if (path.matches(SUBREDDIT_PATTERN)) {
+                                String subredditName = path.substring(3);
+                                if (subredditName.equals("popular") || subredditName.equals("all")) {
+                                    Intent intent = new Intent(this, MainActivity.class);
+                                    intent.putExtra(MainActivity.EXTRA_POST_TYPE, subredditName);
+                                    intent.putExtra(MainActivity.EXTRA_MESSSAGE_FULLNAME, messageFullname);
+                                    intent.putExtra(MainActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
+                                    startActivity(intent);
+                                } else {
+                                    Intent intent = new Intent(this, ViewSubredditDetailActivity.class);
+                                    intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, path.substring(3));
+                                    intent.putExtra(ViewSubredditDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
+                                    intent.putExtra(ViewSubredditDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
+                                    startActivity(intent);
+                                }
+                            } else if (path.matches(USER_PATTERN)) {
+                                Intent intent = new Intent(this, ViewUserDetailActivity.class);
+                                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, segments.get(1));
+                                intent.putExtra(ViewUserDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
+                                intent.putExtra(ViewUserDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
+                                startActivity(intent);
+                            } else if (path.matches(SIDEBAR_PATTERN)) {
+                                Intent intent = new Intent(this, ViewSidebarActivity.class);
+                                intent.putExtra(ViewSidebarActivity.EXTRA_SUBREDDIT_NAME, path.substring(3, path.length() - 14));
+                                startActivity(intent);
+                            } else if (path.matches(MULTIREDDIT_PATTERN)) {
+                                Intent intent = new Intent(this, ViewMultiRedditDetailActivity.class);
+                                intent.putExtra(ViewMultiRedditDetailActivity.EXTRA_MULTIREDDIT_PATH, path);
+                                startActivity(intent);
+                            } else if (path.matches(MULTIREDDIT_PATTERN_2)) {
+                                String subredditName = path.substring(3);
                                 Intent intent = new Intent(this, ViewSubredditDetailActivity.class);
-                                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, path.substring(3));
+                                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditName);
                                 intent.putExtra(ViewSubredditDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
                                 intent.putExtra(ViewSubredditDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
                                 startActivity(intent);
+                            } else if (authority.equals("redd.it") && path.matches(REDD_IT_POST_PATTERN)) {
+                                Intent intent = new Intent(this, ViewPostDetailActivity.class);
+                                intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, path.substring(1));
+                                startActivity(intent);
+                            } else {
+                                deepLinkError(uri);
                             }
-                        } else if (path.matches(USER_PATTERN)) {
-                            Intent intent = new Intent(this, ViewUserDetailActivity.class);
-                            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, segments.get(1));
-                            intent.putExtra(ViewUserDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
-                            intent.putExtra(ViewUserDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
-                            startActivity(intent);
-                        } else if (path.matches(SIDEBAR_PATTERN)) {
-                            Intent intent = new Intent(this, ViewSidebarActivity.class);
-                            intent.putExtra(ViewSidebarActivity.EXTRA_SUBREDDIT_NAME, path.substring(3, path.length() - 14));
-                            startActivity(intent);
-                        } else if (path.matches(MULTIREDDIT_PATTERN)) {
-                            Intent intent = new Intent(this, ViewMultiRedditDetailActivity.class);
-                            intent.putExtra(ViewMultiRedditDetailActivity.EXTRA_MULTIREDDIT_PATH, path);
-                            startActivity(intent);
-                        } else if (path.matches(MULTIREDDIT_PATTERN_2)) {
-                            String subredditName = path.substring(3);
-                            Intent intent = new Intent(this, ViewSubredditDetailActivity.class);
-                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditName);
-                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
-                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
-                            startActivity(intent);
-                        } else if (authority.equals("redd.it") && path.matches(REDD_IT_POST_PATTERN)) {
-                            Intent intent = new Intent(this, ViewPostDetailActivity.class);
-                            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, path.substring(1));
-                            startActivity(intent);
-                        } else {
-                            deepLinkError(uri);
-                        }
-                    } else if (authority.contains("gfycat.com")) {
-                        if (path.matches(GFYCAT_PATTERN)) {
-                            Intent intent = new Intent(this, ViewVideoActivity.class);
-                            intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, path.substring(1));
-                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
-                            startActivity(intent);
-                        } else {
-                            deepLinkError(uri);
-                        }
-                    } else if (authority.contains("imgur.com")) {
-                        if (path.matches(IMGUR_GALLERY_PATTERN)) {
-                            Intent intent = new Intent(this, ViewImgurMediaActivity.class);
-                            intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_TYPE, ViewImgurMediaActivity.IMGUR_TYPE_GALLERY);
-                            intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_ID, segments.get(1));
-                            startActivity(intent);
-                        } else if (path.matches(IMGUR_ALBUM_PATTERN)) {
-                            Intent intent = new Intent(this, ViewImgurMediaActivity.class);
-                            intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_TYPE, ViewImgurMediaActivity.IMGUR_TYPE_ALBUM);
-                            intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_ID, segments.get(1));
-                            startActivity(intent);
-                        } else if (path.matches(IMGUR_IMAGE_PATTERN)) {
-                            Intent intent = new Intent(this, ViewImgurMediaActivity.class);
-                            intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_TYPE, ViewImgurMediaActivity.IMGUR_TYPE_IMAGE);
-                            intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_ID, path.substring(1));
-                            startActivity(intent);
+                        } else if (authority.contains("gfycat.com")) {
+                            if (path.matches(GFYCAT_PATTERN)) {
+                                Intent intent = new Intent(this, ViewVideoActivity.class);
+                                intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, path.substring(1));
+                                intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
+                                startActivity(intent);
+                            } else {
+                                deepLinkError(uri);
+                            }
+                        } else if (authority.contains("redgifs.com")) {
+                            if (path.matches(REDGIFS_PATTERN)) {
+                                Intent intent = new Intent(this, ViewVideoActivity.class);
+                                intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, path.substring(7));
+                                intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_REDGIFS);
+                                startActivity(intent);
+                            } else {
+                                deepLinkError(uri);
+                            }
+                        } else if (authority.contains("imgur.com")) {
+                            if (path.matches(IMGUR_GALLERY_PATTERN)) {
+                                Intent intent = new Intent(this, ViewImgurMediaActivity.class);
+                                intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_TYPE, ViewImgurMediaActivity.IMGUR_TYPE_GALLERY);
+                                intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_ID, segments.get(1));
+                                startActivity(intent);
+                            } else if (path.matches(IMGUR_ALBUM_PATTERN)) {
+                                Intent intent = new Intent(this, ViewImgurMediaActivity.class);
+                                intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_TYPE, ViewImgurMediaActivity.IMGUR_TYPE_ALBUM);
+                                intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_ID, segments.get(1));
+                                startActivity(intent);
+                            } else if (path.matches(IMGUR_IMAGE_PATTERN)) {
+                                Intent intent = new Intent(this, ViewImgurMediaActivity.class);
+                                intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_TYPE, ViewImgurMediaActivity.IMGUR_TYPE_IMAGE);
+                                intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_ID, path.substring(1));
+                                startActivity(intent);
+                            } else {
+                                deepLinkError(uri);
+                            }
                         } else {
                             deepLinkError(uri);
                         }
                     } else {
                         deepLinkError(uri);
                     }
-                } else {
-                    deepLinkError(uri);
                 }
             }
 
