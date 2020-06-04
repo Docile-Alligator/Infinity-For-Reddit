@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ListPreference
+        app:defaultValue="0"
+        android:entries="@array/settings_video_autoplay"
+        app:entryValues="@array/settings_video_autoplay_values"
+        app:key="video_autoplay"
+        app:title="@string/settings_video_autoplay_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="autoplay_nsfw_videos"
+        app:title="@string/settings_autoplay_nsfw_videos_title" />
+
+</PreferenceScreen>

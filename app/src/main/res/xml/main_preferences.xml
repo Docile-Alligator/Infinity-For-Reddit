@@ -28,13 +28,9 @@
         app:key="open_link_in_app"
         app:title="@string/settings_open_link_in_app_title" />
 
-    <ListPreference
-        app:defaultValue="0"
-        android:entries="@array/settings_video_autoplay"
-        app:entryValues="@array/settings_video_autoplay_values"
-        app:key="video_autoplay"
+    <Preference
         app:title="@string/settings_video_autoplay_title"
-        app:useSimpleSummaryProvider="true" />
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.AutoplayPreferenceFragment" />
 
     <SwitchPreference
         app:defaultValue="false"

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -212,6 +213,13 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 Intent intent = new Intent(this, ViewImgurMediaActivity.class);
                                 intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_TYPE, ViewImgurMediaActivity.IMGUR_TYPE_IMAGE);
                                 intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_ID, path.substring(1));
+                                startActivity(intent);
+                            } else if (path.endsWith("gifv")) {
+                                String url = uri.toString();
+                                url = url.substring(0, url.length() - 5) + ".mp4";
+                                Intent intent = new Intent(this, ViewVideoActivity.class);
+                                intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_DIRECT);
+                                intent.setData(Uri.parse(url));
                                 startActivity(intent);
                             } else {
                                 deepLinkError(uri);

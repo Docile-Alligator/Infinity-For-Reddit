@@ -154,6 +154,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private boolean mShowCommentDivider;
     private boolean mShowAbsoluteNumberOfVotes;
     private boolean mAutoplay = false;
+    private boolean mAutoplayNsfwVideos;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
     private boolean isInitiallyLoadingFailed;
@@ -317,6 +318,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         } else if (autoplayString.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI)) {
             mAutoplay = Utils.isConnectedToWifi(activity);
         }
+        mAutoplayNsfwVideos = mSharedPreferences.getBoolean(SharedPreferencesUtils.AUTOPLAY_NSFW_VIDEOS, true);
 
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
@@ -382,12 +384,18 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             switch (mPost.getPostType()) {
                 case Post.VIDEO_TYPE:
                     if (mAutoplay) {
+                        if (!mAutoplayNsfwVideos && mPost.isNSFW()) {
+                            return VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW;
+                        }
                         return VIEW_TYPE_POST_DETAIL_VIDEO_AUTOPLAY;
                     } else {
                         return VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW;
                     }
                 case Post.GIF_TYPE:
                     if (mAutoplay) {
+                        if (!mAutoplayNsfwVideos && mPost.isNSFW()) {
+                            return VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW;
+                        }
                         return VIEW_TYPE_POST_DETAIL_IMAGE_AND_GIF_AUTOPLAY;
                     } else {
                         return VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW;

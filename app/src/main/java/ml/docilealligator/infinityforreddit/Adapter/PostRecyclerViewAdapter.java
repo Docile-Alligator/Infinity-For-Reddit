@@ -162,6 +162,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean mShowDividerInCompactLayout;
     private boolean mShowAbsoluteNumberOfVotes;
     private boolean mAutoplay = false;
+    private boolean mAutoplayNsfwVideos;
     private Drawable mCommentIcon;
     private NetworkState networkState;
     private ExoCreator mExoCreator;
@@ -194,6 +195,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             } else if (autoplayString.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI)) {
                 mAutoplay = Utils.isConnectedToWifi(activity);
             }
+            mAutoplayNsfwVideos = sharedPreferences.getBoolean(SharedPreferencesUtils.AUTOPLAY_NSFW_VIDEOS, true);
             mPostLayout = postLayout;
 
             mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
@@ -260,11 +262,17 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     switch (post.getPostType()) {
                         case Post.VIDEO_TYPE:
                             if (mAutoplay) {
+                                if (!mAutoplayNsfwVideos && post.isNSFW()) {
+                                    return VIEW_TYPE_POST_CARD_VIDEO_AND_GIF_PREVIEW_TYPE;
+                                }
                                 return VIEW_TYPE_POST_CARD_VIDEO_TYPE_AUTOPLAY;
                             }
                             return VIEW_TYPE_POST_CARD_VIDEO_AND_GIF_PREVIEW_TYPE;
                         case Post.GIF_TYPE:
                             if (mAutoplay) {
+                                if (!mAutoplayNsfwVideos && post.isNSFW()) {
+                                    return VIEW_TYPE_POST_CARD_VIDEO_AND_GIF_PREVIEW_TYPE;
+                                }
                                 return VIEW_TYPE_POST_CARD_IMAGE_AND_GIF_AUTOPLAY_TYPE;
                             }
                             return VIEW_TYPE_POST_CARD_VIDEO_AND_GIF_PREVIEW_TYPE;
@@ -1307,6 +1315,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
     public boolean isAutoplay() {
         return mAutoplay;
+    }
+
+    public void setAutoplayNsfwVideos(boolean autoplayNsfwVideos) {
+        mAutoplayNsfwVideos = autoplayNsfwVideos;
     }
 
     @Override
