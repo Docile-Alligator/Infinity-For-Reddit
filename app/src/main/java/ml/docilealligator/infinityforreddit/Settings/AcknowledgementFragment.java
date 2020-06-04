@@ -49,9 +49,6 @@ public class AcknowledgementFragment extends Fragment {
         acknowledgements.add(new Acknowledgement("Glide",
                 "A fast and efficient open source media management and image loading framework for Android",
                 Uri.parse("https://github.com/bumptech/glide")));
-        acknowledgements.add(new Acknowledgement("Swipe",
-                "Detects swipe events on Android with listener and RxJava Observable",
-                Uri.parse("https://github.com/pwittchen/swipe")));
         acknowledgements.add(new Acknowledgement("RxAndroid",
                 "Android specific bindings for RxJava 2",
                 Uri.parse("https://github.com/ReactiveX/RxAndroid")));
@@ -100,6 +97,21 @@ public class AcknowledgementFragment extends Fragment {
         acknowledgements.add(new Acknowledgement("FlowLayout",
                 "A FlowLayout for Android, which allows child views flow to next row when there is no enough space.",
                 Uri.parse("https://github.com/nex3z/FlowLayout")));
+        acknowledgements.add(new Acknowledgement("Gson",
+                "Gson is a Java library that can be used to convert Java Objects into their JSON representation.",
+                Uri.parse("https://github.com/google/gson")));
+        acknowledgements.add(new Acknowledgement("Hauler",
+                "Hauler is an Android library containing custom layout which enables to easily create swipe to dismiss Activity.",
+                Uri.parse("https://github.com/futuredapp/hauler")));
+        acknowledgements.add(new Acknowledgement("Slidr",
+                "Easily add slide to dismiss functionality to an Activity",
+                Uri.parse("https://github.com/r0adkll/Slidr")));
+        acknowledgements.add(new Acknowledgement("commonmark-java",
+                "Java library for parsing and rendering Markdown text according to the CommonMark specification (and some extensions).",
+                Uri.parse("https://github.com/atlassian/commonmark-java")));
+        acknowledgements.add(new Acknowledgement("AndroidFastScroll",
+                "Fast scroll for Android RecyclerView and more.",
+                Uri.parse("https://github.com/zhanghai/AndroidFastScroll")));
 
         AcknowledgementRecyclerViewAdapter adapter = new AcknowledgementRecyclerViewAdapter(activity, acknowledgements);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
