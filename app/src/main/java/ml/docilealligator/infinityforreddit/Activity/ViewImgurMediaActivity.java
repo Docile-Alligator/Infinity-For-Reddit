@@ -160,8 +160,73 @@ public class ViewImgurMediaActivity extends AppCompatActivity {
                         });
                 break;
             case IMGUR_TYPE_ALBUM:
+                imgurRetrofit.create(ImgurAPI.class).getAlbumImages(APIUtils.IMGUR_CLIENT_ID, imgurId)
+                        .enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                if (response.isSuccessful()) {
+                                    new ParseImgurImagesAsyncTask(response.body(), new ParseImgurImagesAsyncTask.ParseImgurImagesAsyncTaskListener() {
+                                        @Override
+                                        public void success(ArrayList<ImgurMedia> images) {
+                                            ViewImgurMediaActivity.this.images = images;
+                                            progressBar.setVisibility(View.GONE);
+                                            errorLinearLayout.setVisibility(View.GONE);
+                                            setupViewPager();
+                                        }
+
+                                        @Override
+                                        public void failed() {
+                                            progressBar.setVisibility(View.GONE);
+                                            errorLinearLayout.setVisibility(View.VISIBLE);
+                                        }
+                                    }).execute();
+                                } else {
+                                    progressBar.setVisibility(View.GONE);
+                                    errorLinearLayout.setVisibility(View.VISIBLE);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                                progressBar.setVisibility(View.GONE);
+                                errorLinearLayout.setVisibility(View.VISIBLE);
+                            }
+                        });
                 break;
             case IMGUR_TYPE_IMAGE:
+                imgurRetrofit.create(ImgurAPI.class).getImage(APIUtils.IMGUR_CLIENT_ID, imgurId)
+                        .enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                if (response.isSuccessful()) {
+                                    new ParseImgurImageAsyncTask(response.body(), new ParseImgurImageAsyncTask.ParseImgurImageAsyncTaskListener() {
+                                        @Override
+                                        public void success(ImgurMedia image) {
+                                            ViewImgurMediaActivity.this.images = new ArrayList<>();
+                                            ViewImgurMediaActivity.this.images.add(image);
+                                            progressBar.setVisibility(View.GONE);
+                                            errorLinearLayout.setVisibility(View.GONE);
+                                            setupViewPager();
+                                        }
+
+                                        @Override
+                                        public void failed() {
+                                            progressBar.setVisibility(View.GONE);
+                                            errorLinearLayout.setVisibility(View.VISIBLE);
+                                        }
+                                    }).execute();
+                                } else {
+                                    progressBar.setVisibility(View.GONE);
+                                    errorLinearLayout.setVisibility(View.VISIBLE);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                                progressBar.setVisibility(View.GONE);
+                                errorLinearLayout.setVisibility(View.VISIBLE);
+                            }
+                        });
                 break;
         }
     }
@@ -298,6 +363,56 @@ public class ViewImgurMediaActivity extends AppCompatActivity {
                 parseImgurImagesAsyncTaskListener.failed();
             } else {
                 parseImgurImagesAsyncTaskListener.success(images);
+            }
+        }
+    }
+
+    private static class ParseImgurImageAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private String response;
+        private ImgurMedia image;
+        private boolean parseFailed = false;
+        private ParseImgurImageAsyncTaskListener parseImgurImageAsyncTaskListener;
+
+        interface ParseImgurImageAsyncTaskListener {
+            void success(ImgurMedia image);
+            void failed();
+        }
+
+        ParseImgurImageAsyncTask(String response, ParseImgurImageAsyncTaskListener parseImgurImageAsyncTaskListener) {
+            this.response = response;
+            this.parseImgurImageAsyncTaskListener = parseImgurImageAsyncTaskListener;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                JSONObject image = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY);
+                String type = image.getString(JSONUtils.TYPE_KEY);
+                if (type.contains("gif")) {
+                    this.image = new ImgurMedia(image.getString(JSONUtils.ID_KEY),
+                            image.getString(JSONUtils.TITLE_KEY), image.getString(JSONUtils.DESCRIPTION_KEY),
+                            "video/mp4", image.getString(JSONUtils.MP4_KEY));
+                } else {
+                    this.image = new ImgurMedia(image.getString(JSONUtils.ID_KEY),
+                            image.getString(JSONUtils.TITLE_KEY), image.getString(JSONUtils.DESCRIPTION_KEY),
+                            type, image.getString(JSONUtils.LINK_KEY));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                parseFailed = true;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (parseFailed) {
+                parseImgurImageAsyncTaskListener.failed();
+            } else {
+                parseImgurImageAsyncTaskListener.success(image);
             }
         }
     }
