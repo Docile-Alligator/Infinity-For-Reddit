@@ -456,6 +456,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
 
                 if (flair != null && !flair.equals("")) {
+                    ((PostBaseViewHolder) holder).flairTextView.setVisibility(View.VISIBLE);
                     Utils.setHTMLWithImageToTextView(((PostBaseViewHolder) holder).flairTextView, flair);
                 }
 
