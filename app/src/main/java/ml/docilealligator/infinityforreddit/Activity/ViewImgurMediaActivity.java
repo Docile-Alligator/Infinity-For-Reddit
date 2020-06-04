@@ -19,6 +19,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.thefuntasty.hauler.HaulerView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,6 +58,8 @@ public class ViewImgurMediaActivity extends AppCompatActivity {
     public static final int IMGUR_TYPE_IMAGE = 2;
     private static final String IMGUR_IMAGES_STATE = "IIS";
 
+    @BindView(R.id.hauler_view_view_imgur_media_activity)
+    HaulerView haulerView;
     @BindView(R.id.progress_bar_view_imgur_media_activity)
     ProgressBar progressBar;
     @BindView(R.id.view_pager_view_imgur_media_activity)
@@ -108,6 +112,8 @@ public class ViewImgurMediaActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             images = savedInstanceState.getParcelableArrayList(IMGUR_IMAGES_STATE);
         }
+
+        haulerView.setOnDragDismissedListener(dragDirection -> finish());
 
         if (images == null) {
             fetchImgurMedia(imgurId);

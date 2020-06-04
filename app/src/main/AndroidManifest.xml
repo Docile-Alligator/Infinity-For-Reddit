@@ -25,7 +25,7 @@
             android:name=".Activity.ViewImgurMediaActivity"
             android:configChanges="orientation|screenSize|layoutDirection"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.ActionBar.Transparent" />
+            android:theme="@style/AppTheme.Draggable" />
         <activity
             android:name=".Activity.ReportActivity"
             android:label="@string/report_activity_label"
@@ -83,7 +83,7 @@
         <activity
             android:name=".Activity.ViewGIFActivity"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.ActionBar.Transparent" />
+            android:theme="@style/AppTheme.Draggable" />
         <activity
             android:name=".Activity.AccountSavedThingActivity"
             android:label="@string/account_saved_thing_activity_label"
@@ -289,12 +289,12 @@
         <activity
             android:name=".Activity.ViewImageActivity"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.ActionBar.Transparent" />
+            android:theme="@style/AppTheme.Draggable" />
         <activity
             android:name=".Activity.ViewVideoActivity"
             android:configChanges="orientation|screenSize|layoutDirection"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.ActionBar.Transparent" />
+            android:theme="@style/AppTheme.Draggable" />
         <activity
             android:name=".Activity.ViewPostDetailActivity"
             android:parentActivityName=".Activity.MainActivity"

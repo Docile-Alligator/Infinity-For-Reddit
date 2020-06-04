@@ -2122,7 +2122,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         mActivity.startActivity(intent);
                     } else if (post.getPostType() == Post.GIF_TYPE) {
                         Intent intent = new Intent(mActivity, ViewGIFActivity.class);
-                        intent.setData(Uri.parse(post.getVideoUrl()));
                         intent.putExtra(ViewGIFActivity.FILE_NAME_KEY, post.getSubredditName()
                                 + "-" + post.getId() + ".gif");
                         intent.putExtra(ViewGIFActivity.GIF_URL_KEY, post.getVideoUrl());
@@ -2220,12 +2219,21 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             imageView.setOnClickListener(view -> {
                 Post post = getItem(getAdapterPosition());
                 if (post != null) {
-                    Intent intent = new Intent(mActivity, ViewImageActivity.class);
-                    intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, post.getUrl());
-                    intent.putExtra(ViewImageActivity.FILE_NAME_KEY, post.getSubredditName()
-                            + "-" + post.getId() + ".jpg");
-                    intent.putExtra(ViewImageActivity.POST_TITLE_KEY, post.getTitle());
-                    mActivity.startActivity(intent);
+                    if (post.getPostType() == Post.IMAGE_TYPE) {
+                        Intent intent = new Intent(mActivity, ViewImageActivity.class);
+                        intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, post.getUrl());
+                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, post.getSubredditName()
+                                + "-" + post.getId() + ".jpg");
+                        intent.putExtra(ViewImageActivity.POST_TITLE_KEY, post.getTitle());
+                        mActivity.startActivity(intent);
+                    } else if (post.getPostType() == Post.GIF_TYPE) {
+                        Intent intent = new Intent(mActivity, ViewGIFActivity.class);
+                        intent.putExtra(ViewGIFActivity.FILE_NAME_KEY, post.getSubredditName()
+                                + "-" + post.getId() + ".gif");
+                        intent.putExtra(ViewGIFActivity.GIF_URL_KEY, post.getVideoUrl());
+                        intent.putExtra(ViewGIFActivity.POST_TITLE_KEY, post.getTitle());
+                        mActivity.startActivity(intent);
+                    }
                 }
             });
         }

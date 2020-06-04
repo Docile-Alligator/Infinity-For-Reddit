@@ -1,15 +1,11 @@
 package ml.docilealligator.infinityforreddit.Activity;
 
 import android.Manifest;
-import android.animation.Animator;
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -19,11 +15,9 @@ import android.os.Environment;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,8 +36,7 @@ import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.github.pwittchen.swipe.library.rx2.SimpleSwipeListener;
-import com.github.pwittchen.swipe.library.rx2.Swipe;
+import com.thefuntasty.hauler.HaulerView;
 
 import java.io.File;
 
@@ -68,8 +61,8 @@ public class ViewGIFActivity extends AppCompatActivity {
     public static final String FILE_NAME_KEY = "FNK";
     public static final String POST_TITLE_KEY = "PTK";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
-    @BindView(R.id.parent_relative_layout_view_gif_activity)
-    RelativeLayout mRelativeLayout;
+    @BindView(R.id.hauler_view_view_gif_activity)
+    HaulerView mHaulerView;
     @BindView(R.id.progress_bar_view_gif_activity)
     ProgressBar mProgressBar;
     @BindView(R.id.image_view_view_gif_activity)
@@ -81,14 +74,9 @@ public class ViewGIFActivity extends AppCompatActivity {
     SharedPreferences mSharedPreferences;
     private boolean isActionBarHidden = false;
     private boolean isDownloading = false;
-    private Menu mMenu;
-    private Swipe swipe;
     private RequestManager glide;
     private String mImageUrl;
     private String mImageFileName;
-    private float totalLengthY = 0.0f;
-    private float touchY = -1.0f;
-    private float zoom = 1.0f;
     private boolean isSwiping = false;
     private String postTitle;
 
@@ -117,6 +105,8 @@ public class ViewGIFActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(upArrow);
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
 
+        mHaulerView.setOnDragDismissedListener(dragDirection -> finish());
+
         glide = Glide.with(this);
 
         Intent intent = getIntent();
@@ -138,181 +128,7 @@ public class ViewGIFActivity extends AppCompatActivity {
             }
         });
 
-        float pxHeight = getResources().getDisplayMetrics().heightPixels;
-
-        int activityColorFrom = getResources().getColor(android.R.color.black);
-        int actionBarColorFrom = getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor);
-        int actionBarElementColorFrom = getResources().getColor(android.R.color.white);
-        int colorTo = getResources().getColor(android.R.color.transparent);
-
-        final ValueAnimator activityColorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), activityColorFrom, colorTo);
-        final ValueAnimator actionBarColorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), actionBarColorFrom, colorTo);
-        final ValueAnimator actionBarElementColorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), actionBarElementColorFrom, colorTo);
-
-        activityColorAnimation.setDuration(300); // milliseconds
-        actionBarColorAnimation.setDuration(300);
-        actionBarElementColorAnimation.setDuration(300);
-
-        activityColorAnimation.addUpdateListener(valueAnimator -> mRelativeLayout.setBackgroundColor((int) valueAnimator.getAnimatedValue()));
-
-        actionBarColorAnimation.addUpdateListener(valueAnimator -> actionBar.setBackgroundDrawable(new ColorDrawable((int) valueAnimator.getAnimatedValue())));
-
-        actionBarElementColorAnimation.addUpdateListener(valueAnimator -> {
-            upArrow.setColorFilter((int) valueAnimator.getAnimatedValue(), PorterDuff.Mode.SRC_IN);
-            if (mMenu != null) {
-                Drawable drawable = mMenu.getItem(0).getIcon();
-                //drawable.mutate();
-                drawable.setColorFilter((int) valueAnimator.getAnimatedValue(), PorterDuff.Mode.SRC_IN);
-            }
-        });
-
         loadImage();
-
-        swipe = new Swipe();
-        swipe.setListener(new SimpleSwipeListener() {
-            @Override
-            public void onSwipingUp(final MotionEvent event) {
-                isSwiping = true;
-                float nowY = event.getY();
-                float offset;
-                if (touchY == -1.0f) {
-                    offset = 0.0f;
-                } else {
-                    offset = nowY - touchY;
-                }
-                totalLengthY += offset;
-                touchY = nowY;
-                mImageView.animate()
-                        .y(totalLengthY)
-                        .setDuration(0)
-                        .start();
-                mLoadErrorLinearLayout.animate()
-                        .y(totalLengthY)
-                        .setDuration(0)
-                        .start();
-            }
-
-            @Override
-            public boolean onSwipedUp(final MotionEvent event) {
-                if (totalLengthY < -pxHeight / 8) {
-                    mImageView.animate()
-                            .y(-pxHeight)
-                            .setDuration(300)
-                            .setListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animator) {
-                                    activityColorAnimation.start();
-                                    actionBarColorAnimation.start();
-                                    actionBarElementColorAnimation.start();
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animator animator) {
-                                    finish();
-                                }
-
-                                @Override
-                                public void onAnimationCancel(Animator animator) {
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animator animator) {
-                                }
-                            })
-                            .start();
-                    mLoadErrorLinearLayout.animate()
-                            .y(-pxHeight)
-                            .setDuration(300)
-                            .start();
-                } else {
-                    isSwiping = false;
-                    mImageView.animate()
-                            .y(0)
-                            .setDuration(300)
-                            .start();
-                    mLoadErrorLinearLayout.animate()
-                            .y(0)
-                            .setDuration(300)
-                            .start();
-                }
-
-                totalLengthY = 0.0f;
-                touchY = -1.0f;
-                return false;
-            }
-
-            @Override
-            public void onSwipingDown(final MotionEvent event) {
-                isSwiping = true;
-                float nowY = event.getY();
-                float offset;
-                if (touchY == -1.0f) {
-                    offset = 0.0f;
-                } else {
-                    offset = nowY - touchY;
-                }
-                totalLengthY += offset;
-                touchY = nowY;
-                mImageView.animate()
-                        .y(totalLengthY)
-                        .setDuration(0)
-                        .start();
-                mLoadErrorLinearLayout.animate()
-                        .y(totalLengthY)
-                        .setDuration(0)
-                        .start();
-            }
-
-            @Override
-            public boolean onSwipedDown(final MotionEvent event) {
-                if (totalLengthY > pxHeight / 8) {
-                    mImageView.animate()
-                            .y(pxHeight)
-                            .setDuration(300)
-                            .setListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animator) {
-                                    activityColorAnimation.start();
-                                    actionBarColorAnimation.start();
-                                    actionBarElementColorAnimation.start();
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animator animator) {
-                                    finish();
-                                }
-
-                                @Override
-                                public void onAnimationCancel(Animator animator) {
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animator animator) {
-                                }
-                            })
-                            .start();
-                    mLoadErrorLinearLayout.animate()
-                            .y(pxHeight)
-                            .setDuration(300)
-                            .start();
-                } else {
-                    isSwiping = false;
-                    mImageView.animate()
-                            .y(0)
-                            .setDuration(300)
-                            .start();
-                    mLoadErrorLinearLayout.animate()
-                            .y(0)
-                            .setDuration(300)
-                            .start();
-                }
-
-                totalLengthY = 0.0f;
-                touchY = -1.0f;
-
-                return false;
-            }
-        });
 
         mImageView.setOnClickListener(view -> {
             if (isActionBarHidden) {
@@ -353,7 +169,6 @@ public class ViewGIFActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        mMenu = menu;
         getMenuInflater().inflate(R.menu.view_gif_activity, menu);
         return true;
     }
@@ -435,14 +250,6 @@ public class ViewGIFActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (zoom == 1.0) {
-            swipe.dispatchTouchEvent(ev);
-        }
-        return super.dispatchTouchEvent(ev);
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE && grantResults.length > 0) {
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
@@ -496,11 +303,5 @@ public class ViewGIFActivity extends AppCompatActivity {
 
         manager.enqueue(request);
         Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        overridePendingTransition(0, 0);
     }
 }

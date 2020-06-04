@@ -1,16 +1,12 @@
 package ml.docilealligator.infinityforreddit.Activity;
 
 import android.Manifest;
-import android.animation.Animator;
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
@@ -21,13 +17,11 @@ import android.os.Environment;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,8 +30,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.github.pwittchen.swipe.library.rx2.SimpleSwipeListener;
-import com.github.pwittchen.swipe.library.rx2.Swipe;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -55,6 +47,7 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.thefuntasty.hauler.HaulerView;
 
 import java.io.File;
 
@@ -86,8 +79,8 @@ public class ViewVideoActivity extends AppCompatActivity {
     private static final String IS_MUTE_STATE = "IMS";
     private static final String VIDEO_DOWNLOAD_URL_STATE = "VDUS";
     private static final String VIDEO_URI_STATE = "VUS";
-    @BindView(R.id.relative_layout_view_video_activity)
-    RelativeLayout relativeLayout;
+    @BindView(R.id.hauler_view_view_video_activity)
+    HaulerView haulerView;
     @BindView(R.id.progress_bar_view_video_activity)
     ProgressBar progressBar;
     @BindView(R.id.player_view_view_video_activity)
@@ -99,16 +92,11 @@ public class ViewVideoActivity extends AppCompatActivity {
     private SimpleExoPlayer player;
     private DataSource.Factory dataSourceFactory;
 
-    private Menu mMenu;
-    private Swipe swipe;
-
     private String videoDownloadUrl;
     private String videoFileName;
     private boolean wasPlaying;
     private boolean isDownloading = false;
     private boolean isMute = false;
-    private float totalLengthY = 0.0f;
-    private float touchY = -1.0f;
     private String postTitle;
     private long resumePosition = -1;
 
@@ -155,6 +143,8 @@ public class ViewVideoActivity extends AppCompatActivity {
             params.rightMargin = getResources().getDimensionPixelSize(resourceId);
         }
 
+        haulerView.setOnDragDismissedListener(dragDirection -> finish());
+
         Intent intent = getIntent();
         mVideoUri = intent.getData();
         postTitle = intent.getStringExtra(EXTRA_POST_TITLE);
@@ -167,156 +157,6 @@ public class ViewVideoActivity extends AppCompatActivity {
         } else {
             setTitle("");
         }
-
-        final float pxHeight = getResources().getDisplayMetrics().heightPixels;
-
-        int activityColorFrom = getResources().getColor(android.R.color.black);
-        int actionBarColorFrom = getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor);
-        int actionBarElementColorFrom = getResources().getColor(android.R.color.white);
-        int colorTo = getResources().getColor(android.R.color.transparent);
-
-        final ValueAnimator activityColorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), activityColorFrom, colorTo);
-        final ValueAnimator actionBarColorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), actionBarColorFrom, colorTo);
-        final ValueAnimator actionBarElementColorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), actionBarElementColorFrom, colorTo);
-
-        activityColorAnimation.setDuration(300); // milliseconds
-        actionBarColorAnimation.setDuration(300);
-        actionBarElementColorAnimation.setDuration(300);
-
-        activityColorAnimation.addUpdateListener(valueAnimator -> relativeLayout.setBackgroundColor((int) valueAnimator.getAnimatedValue()));
-
-        actionBarColorAnimation.addUpdateListener(valueAnimator -> actionBar.setBackgroundDrawable(new ColorDrawable((int) valueAnimator.getAnimatedValue())));
-
-        actionBarElementColorAnimation.addUpdateListener(valueAnimator -> {
-            upArrow.setColorFilter((int) valueAnimator.getAnimatedValue(), PorterDuff.Mode.SRC_IN);
-            if (mMenu != null) {
-                Drawable drawable = mMenu.getItem(0).getIcon();
-                drawable.setColorFilter((int) valueAnimator.getAnimatedValue(), PorterDuff.Mode.SRC_IN);
-            }
-        });
-
-        swipe = new Swipe();
-        swipe.setListener(new SimpleSwipeListener() {
-            @Override
-            public void onSwipingUp(final MotionEvent event) {
-                float nowY = event.getY();
-                float offset;
-                if (touchY == -1.0f) {
-                    offset = 0.0f;
-                } else {
-                    offset = nowY - touchY;
-                }
-                totalLengthY += offset;
-                touchY = nowY;
-                videoPlayerView.animate()
-                        .y(totalLengthY)
-                        .setDuration(0)
-                        .start();
-            }
-
-            @Override
-            public boolean onSwipedUp(final MotionEvent event) {
-                videoPlayerView.animate()
-                        .y(0)
-                        .setDuration(300)
-                        .start();
-
-                if (totalLengthY < -pxHeight / 8) {
-                    videoPlayerView.animate()
-                            .y(-pxHeight)
-                            .setDuration(300)
-                            .setListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animator) {
-                                    activityColorAnimation.start();
-                                    actionBarColorAnimation.start();
-                                    actionBarElementColorAnimation.start();
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animator animator) {
-                                    finish();
-                                }
-
-                                @Override
-                                public void onAnimationCancel(Animator animator) {
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animator animator) {
-                                }
-                            })
-                            .start();
-                } else {
-                    videoPlayerView.animate()
-                            .y(0)
-                            .setDuration(300)
-                            .start();
-                }
-
-                totalLengthY = 0.0f;
-                touchY = -1.0f;
-                return false;
-            }
-
-            @Override
-            public void onSwipingDown(final MotionEvent event) {
-                float nowY = event.getY();
-                float offset;
-                if (touchY == -1.0f) {
-                    offset = 0.0f;
-                } else {
-                    offset = nowY - touchY;
-                }
-                totalLengthY += offset;
-                touchY = nowY;
-                videoPlayerView.animate()
-                        .y(totalLengthY)
-                        .setDuration(0)
-                        .start();
-            }
-
-            @Override
-            public boolean onSwipedDown(final MotionEvent event) {
-                if (totalLengthY > pxHeight / 8) {
-                    videoPlayerView.animate()
-                            .y(pxHeight)
-                            .setDuration(300)
-                            .setListener(new Animator.AnimatorListener() {
-                                @Override
-                                public void onAnimationStart(Animator animator) {
-                                    activityColorAnimation.start();
-                                    actionBarColorAnimation.start();
-                                    actionBarElementColorAnimation.start();
-                                }
-
-                                @Override
-                                public void onAnimationEnd(Animator animator) {
-                                    finish();
-                                }
-
-                                @Override
-                                public void onAnimationCancel(Animator animator) {
-                                }
-
-                                @Override
-                                public void onAnimationRepeat(Animator animator) {
-                                }
-                            })
-                            .start();
-                } else {
-                    videoPlayerView.animate()
-                            .y(0)
-                            .setDuration(300)
-                            .start();
-                }
-
-                totalLengthY = 0.0f;
-                touchY = -1.0f;
-
-                return false;
-            }
-        });
 
         videoPlayerView.setControllerVisibilityListener(visibility -> {
             switch (visibility) {
@@ -394,8 +234,6 @@ public class ViewVideoActivity extends AppCompatActivity {
                 player.prepare(new DashMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
                 preparePlayer(savedInstanceState);
             }
-        } if (videoType == VIDEO_TYPE_REDGIFS) {
-
         } else if (videoType == VIDEO_TYPE_DIRECT) {
             videoDownloadUrl = mVideoUri.toString();
             videoFileName = videoDownloadUrl.substring(videoDownloadUrl.lastIndexOf('/') + 1);
@@ -474,14 +312,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_video, menu);
-        mMenu = menu;
         return true;
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        swipe.dispatchTouchEvent(ev);
-        return super.dispatchTouchEvent(ev);
     }
 
     @Override
@@ -597,12 +428,6 @@ public class ViewVideoActivity extends AppCompatActivity {
 
         manager.enqueue(request);
         Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        overridePendingTransition(0, 0);
     }
 
     @Override

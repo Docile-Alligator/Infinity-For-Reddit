@@ -63,7 +63,6 @@ public class ViewImgurImageFragment extends Fragment {
     private Activity activity;
     private RequestManager glide;
     private ImgurMedia imgurMedia;
-    private boolean isActionBarHidden = false;
     private boolean isDownloading = false;
 
     public ViewImgurImageFragment() {
