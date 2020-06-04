@@ -26,6 +26,8 @@
     <string name="edit_multi_reddit_activity_label">Edit Multireddit</string>
     <string name="selected_subeddits_activity_label">Selected Subreddits</string>
     <string name="report_activity_label">Report</string>
+    <string name="view_imgur_media_activity_image_label">Image %1$d/%2$d</string>
+    <string name="view_imgur_media_activity_video_label">Video %1$d/%2$d</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

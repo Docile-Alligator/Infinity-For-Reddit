@@ -5,8 +5,7 @@ import android.os.Parcelable;
 
 public class ImgurMedia implements Parcelable {
     public static final int TYPE_IMAGE = 0;
-    public static final int TYPE_GIF = 1;
-    public static final int TYPE_VIDEO = 2;
+    public static final int TYPE_VIDEO = 1;
     private String id;
     private String title;
     private String description;
@@ -19,8 +18,6 @@ public class ImgurMedia implements Parcelable {
         this.description = description;
         if (type.contains("mp4")) {
             this.type = TYPE_VIDEO;
-        } else if (type.contains("gif")) {
-            this.type = TYPE_GIF;
         } else {
             this.type = TYPE_IMAGE;
         }

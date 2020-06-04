@@ -33,7 +33,6 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.API.ImgurAPI;
 import ml.docilealligator.infinityforreddit.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.FontStyle;
-import ml.docilealligator.infinityforreddit.Fragment.ViewImgurGifFragment;
 import ml.docilealligator.infinityforreddit.Fragment.ViewImgurImageFragment;
 import ml.docilealligator.infinityforreddit.Fragment.ViewImgurVideoFragment;
 import ml.docilealligator.infinityforreddit.ImgurMedia;
@@ -178,17 +177,7 @@ public class ViewImgurMediaActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                switch (images.get(position).getType()) {
-                    case ImgurMedia.TYPE_GIF:
-                        setTitle("GIF " + (position + 1) + "/" + images.size());
-                        break;
-                    case ImgurMedia.TYPE_VIDEO:
-                        setTitle("Video "+ (position + 1) + "/" + images.size());
-                        break;
-                    default:
-                        setTitle("Image " + (position + 1) + "/" + images.size());
-
-                }
+                setToolbarTitle(position);
             }
 
             @Override
@@ -200,16 +189,10 @@ public class ViewImgurMediaActivity extends AppCompatActivity {
     }
 
     private void setToolbarTitle(int position) {
-        switch (images.get(position).getType()) {
-            case ImgurMedia.TYPE_GIF:
-                setTitle("GIF " + (position + 1) + "/" + images.size());
-                break;
-            case ImgurMedia.TYPE_VIDEO:
-                setTitle("Video "+ (position + 1) + "/" + images.size());
-                break;
-            default:
-                setTitle("Image " + (position + 1) + "/" + images.size());
-
+        if (images.get(position).getType() == ImgurMedia.TYPE_VIDEO) {
+            setTitle(getString(R.string.view_imgur_media_activity_video_label, position + 1, images.size()));
+        } else {
+            setTitle(getString(R.string.view_imgur_media_activity_image_label, position + 1, images.size()));
         }
     }
 
@@ -248,12 +231,6 @@ public class ViewImgurMediaActivity extends AppCompatActivity {
                 ViewImgurVideoFragment fragment = new ViewImgurVideoFragment();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(ViewImgurVideoFragment.EXTRA_IMGUR_VIDEO, imgurMedia);
-                fragment.setArguments(bundle);
-                return fragment;
-            } else if (imgurMedia.getType() == ImgurMedia.TYPE_GIF) {
-                ViewImgurGifFragment fragment = new ViewImgurGifFragment();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable(ViewImgurGifFragment.EXTRA_IMGUR_GIF, imgurMedia);
                 fragment.setArguments(bundle);
                 return fragment;
             } else {
