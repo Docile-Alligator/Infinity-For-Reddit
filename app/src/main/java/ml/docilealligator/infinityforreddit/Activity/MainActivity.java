@@ -92,6 +92,7 @@ import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.Subscrib
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
 import ml.docilealligator.infinityforreddit.Utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
@@ -601,6 +602,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         sectionsPagerAdapter.pauseLazyMode();
                     }
                 }
+                sectionsPagerAdapter.displaySortTypeInToolbar();
             }
 
             @Override
@@ -931,6 +933,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         }
     }
 
+    @Override
+    public void displaySortType() {
+        if (sectionsPagerAdapter != null) {
+            sectionsPagerAdapter.displaySortTypeInToolbar();
+        }
+    }
+
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
         private PostFragment tab1;
         private PostFragment tab2;
@@ -1092,6 +1101,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         tab3 = (PostFragment) fragment;
                 }
             }
+            displaySortTypeInToolbar();
             return fragment;
         }
 
@@ -1271,6 +1281,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         tab3.changeSortType(sortType);
                 }
             }
+            displaySortTypeInToolbar();
         }
 
         public void refresh() {
@@ -1359,6 +1370,28 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 tab2.goBackToTop();
             } else {
                 tab3.goBackToTop();
+            }
+        }
+        void displaySortTypeInToolbar() {
+            switch (viewPager.getCurrentItem()) {
+                case 0:
+                    if (tab1 != null) {
+                        SortType sortType = tab1.getSortType();
+                        Utils.displaySortTypeInToolbar(sortType, toolbar);
+                    }
+                    break;
+                case 1:
+                    if (tab2 != null) {
+                        SortType sortType = tab2.getSortType();
+                        Utils.displaySortTypeInToolbar(sortType, toolbar);
+                    }
+                    break;
+                case 2:
+                    if (tab3 != null) {
+                        SortType sortType = tab3.getSortType();
+                        Utils.displaySortTypeInToolbar(sortType, toolbar);
+                    }
+                    break;
             }
         }
     }

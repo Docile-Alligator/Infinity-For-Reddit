@@ -50,6 +50,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 
 public class SearchResultActivity extends BaseActivity implements SortTypeSelectionCallback,
         PostLayoutBottomSheetFragment.PostLayoutSelectionCallback, ActivityToolbarInterface {
@@ -200,6 +201,20 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(2);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                sectionsPagerAdapter.displaySortTypeInToolbar();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+        });
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -304,6 +319,13 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         }
     }
 
+    @Override
+    public void displaySortType() {
+        if (sectionsPagerAdapter != null) {
+            sectionsPagerAdapter.displaySortTypeInToolbar();
+        }
+    }
+
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         private PostFragment postFragment;
@@ -384,6 +406,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     userListingFragment = (UserListingFragment) fragment;
                     break;
             }
+            displaySortTypeInToolbar();
             return fragment;
         }
 
@@ -398,6 +421,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             }
 
             postFragment.changeSortType(sortType);
+            displaySortTypeInToolbar();
         }
 
         void changeSortType(SortType sortType, int fragmentPosition) {
@@ -410,6 +434,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SEARCH_USER, sortType.getType().name()).apply();
                     userListingFragment.changeSortType(sortType);
             }
+            displaySortTypeInToolbar();
         }
 
         public void refresh() {
@@ -446,6 +471,29 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 subredditListingFragment.goBackToTop();
             } else {
                 userListingFragment.goBackToTop();
+            }
+        }
+
+        void displaySortTypeInToolbar() {
+            switch (viewPager.getCurrentItem()) {
+                case 0:
+                    if (postFragment != null) {
+                        SortType sortType = postFragment.getSortType();
+                        Utils.displaySortTypeInToolbar(sortType, toolbar);
+                    }
+                    break;
+                case 1:
+                    if (subredditListingFragment != null) {
+                        SortType sortType = subredditListingFragment.getSortType();
+                        Utils.displaySortTypeInToolbar(sortType, toolbar);
+                    }
+                    break;
+                case 2:
+                    if (userListingFragment != null) {
+                        SortType sortType = userListingFragment.getSortType();
+                        Utils.displaySortTypeInToolbar(sortType, toolbar);
+                    }
+                    break;
             }
         }
     }

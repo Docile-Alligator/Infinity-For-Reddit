@@ -78,6 +78,7 @@ import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditViewModel;
 import ml.docilealligator.infinityforreddit.SubredditSubscription;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
@@ -642,6 +643,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                         sectionsPagerAdapter.pauseLazyMode();
                     }
                 }
+
+                sectionsPagerAdapter.displaySortTypeInToolbar();
             }
 
             @Override
@@ -853,6 +856,13 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         }
     }
 
+    @Override
+    public void displaySortType() {
+        if (sectionsPagerAdapter != null) {
+            sectionsPagerAdapter.displaySortTypeInToolbar();
+        }
+    }
+
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
         private PostFragment postFragment;
         private SidebarFragment sidebarFragment;
@@ -904,6 +914,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             switch (position) {
                 case 0:
                     postFragment = (PostFragment) fragment;
+                    displaySortTypeInToolbar();
                     break;
                 case 1:
                     sidebarFragment = (SidebarFragment) fragment;
@@ -960,6 +971,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 }
 
                 postFragment.changeSortType(sortType);
+                displaySortTypeInToolbar();
             }
         }
 
@@ -984,6 +996,15 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             } else {
                 if (sidebarFragment != null) {
                     sidebarFragment.goBackToTop();
+                }
+            }
+        }
+
+        void displaySortTypeInToolbar() {
+            if (viewPager.getCurrentItem() == 0) {
+                if (postFragment != null) {
+                    SortType sortType = postFragment.getSortType();
+                    Utils.displaySortTypeInToolbar(sortType, toolbar);
                 }
             }
         }

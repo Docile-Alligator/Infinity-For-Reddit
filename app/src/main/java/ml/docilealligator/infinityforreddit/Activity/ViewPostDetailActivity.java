@@ -55,6 +55,7 @@ import butterknife.ButterKnife;
 import im.ene.toro.exoplayer.ExoCreator;
 import im.ene.toro.media.PlaybackInfo;
 import im.ene.toro.media.VolumeInfo;
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Adapter.CommentAndPostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
@@ -81,7 +82,6 @@ import ml.docilealligator.infinityforreddit.Post.ParsePost;
 import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.ReadMessage;
-import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.SortType;
@@ -181,6 +181,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     private int orientation;
     private int postListPosition = -1;
     private String mSingleCommentId;
+    private String sortType;
     private boolean showToast = false;
     private boolean isSortingComments = false;
     private boolean mVolumeKeysNavigateComments;
@@ -344,6 +345,9 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         };
 
         mSingleCommentId = getIntent().getStringExtra(EXTRA_SINGLE_COMMENT_ID);
+        sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value);
+        mToolbar.setTitle(new SortType(SortType.Type.valueOf(sortType)).getType().fullName);
+        sortType = sortType.toLowerCase();
         if (savedInstanceState == null) {
             if (mSingleCommentId != null) {
                 isSingleCommentThreadMode = true;
@@ -568,9 +572,6 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         mFetchPostInfoLinearLayout.setVisibility(View.GONE);
         mSwipeRefreshLayout.setRefreshing(true);
         mGlide.clear(mFetchPostInfoImageView);
-
-        String sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value).toLowerCase();
-
 
         Call<String> postAndComments;
         if (mAccessToken == null) {
@@ -847,8 +848,6 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     }
 
     private void fetchComments(boolean changeRefreshState) {
-        String sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT,
-                SortType.Type.BEST.value).toLowerCase();
         fetchComments(changeRefreshState, true, sortType);
     }
 
@@ -1618,6 +1617,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         }
         fetchComments(false, false, sortType.getType().value);
         mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.getType().name()).apply();
+
+        mToolbar.setTitle(sortType.getType().fullName);
     }
 
     public void lockSwipeRightToGoBack() {

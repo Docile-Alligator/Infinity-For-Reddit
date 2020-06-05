@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,6 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
 
 
@@ -97,6 +97,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     private Activity mActivity;
     private LinearLayoutManager mLinearLayoutManager;
     private CommentsListingRecyclerViewAdapter mAdapter;
+    private SortType sortType;
     private boolean mShowElapsedTime;
     private boolean mShowCommentDivider;
     private boolean mShowAbsoluteNumberOfVotes;
@@ -173,10 +174,9 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
                 () -> mCommentViewModel.retryLoadingMore());
 
         String username = getArguments().getString(EXTRA_USERNAME);
-        String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_USER_COMMENT, SortType.Type.NEW.value);
-        SortType sortType;
-        if(sort.equals(SortType.Type.CONTROVERSIAL.value) || sort.equals(SortType.Type.TOP.value)) {
-            String sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_USER_COMMENT, SortType.Time.ALL.value);
+        String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_USER_COMMENT, SortType.Type.NEW.name());
+        if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
+            String sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_USER_COMMENT, SortType.Time.ALL.name());
             sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()), SortType.Time.valueOf(sortTime.toUpperCase()));
         } else {
             sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
@@ -230,6 +230,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
     public void changeSortType(SortType sortType) {
         mCommentViewModel.changeSortType(sortType);
+        this.sortType = sortType;
     }
 
     @Override
@@ -272,5 +273,9 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         if (mLinearLayoutManager != null) {
             mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
         }
+    }
+
+    public SortType getSortType() {
+        return sortType;
     }
 }

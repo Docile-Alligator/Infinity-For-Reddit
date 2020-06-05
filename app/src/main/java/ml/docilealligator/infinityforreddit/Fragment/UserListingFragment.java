@@ -86,6 +86,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
     private String mQuery;
     private UserListingRecyclerViewAdapter mAdapter;
     private Activity mActivity;
+    private SortType sortType;
 
     public UserListingFragment() {
         // Required empty public constructor
@@ -123,7 +124,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
         String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SEARCH_USER, SortType.Type.RELEVANCE.value);
-        SortType sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
+        sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
 
         mAdapter = new UserListingRecyclerViewAdapter(getActivity(), mOauthRetrofit, mRetrofit,
                 customThemeWrapper, accessToken, accountName, mRedditDataRoomDatabase.subscribedUserDao(),
@@ -186,6 +187,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
 
     public void changeSortType(SortType sortType) {
         mUserListingViewModel.changeSortType(sortType);
+        this.sortType = sortType;
     }
 
     @Override
@@ -206,5 +208,9 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         if (mLinearLayoutManager != null) {
             mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
         }
+    }
+
+    public SortType getSortType() {
+        return sortType;
     }
 }

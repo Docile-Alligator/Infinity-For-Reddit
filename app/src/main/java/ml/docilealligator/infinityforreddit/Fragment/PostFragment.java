@@ -49,11 +49,11 @@ import butterknife.ButterKnife;
 import im.ene.toro.exoplayer.ExoCreator;
 import im.ene.toro.media.PlaybackInfo;
 import im.ene.toro.media.VolumeInfo;
-import im.ene.toro.widget.Container;
 import ml.docilealligator.infinityforreddit.Activity.BaseActivity;
 import ml.docilealligator.infinityforreddit.Activity.FilteredThingActivity;
 import ml.docilealligator.infinityforreddit.Activity.MainActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Adapter.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.CustomView.CustomToroContainer;
@@ -151,6 +151,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private CountDownTimer resumeLazyModeCountDownTimer;
     private float lazyModeInterval;
     private int postLayout;
+    private SortType sortType;
 
     public PostFragment() {
         // Required empty public constructor
@@ -348,7 +349,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SEARCH_POST, SortType.Type.RELEVANCE.name());
             String sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_SEARCH_POST, SortType.Time.ALL.name());
-            SortType sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
+            sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
@@ -383,7 +384,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             String subredditName = getArguments().getString(EXTRA_NAME);
             String sort;
             String sortTime = null;
-            SortType sortType;
 
             boolean displaySubredditName = subredditName != null && (subredditName.equals("popular") || subredditName.equals("all"));
             if(displaySubredditName) {
@@ -445,7 +445,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             String multiRedditPath = getArguments().getString(EXTRA_NAME);
             String sort;
             String sortTime = null;
-            SortType sortType;
 
             sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiRedditPath,
                     SortType.Type.HOT.name());
@@ -499,7 +498,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
 
             String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_USER_POST_BASE + username, SortType.Type.NEW.name());
-            SortType sortType;
             if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
                 String sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_USER_POST_BASE + username, SortType.Time.ALL.name());
                 sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
@@ -538,7 +536,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
         } else {
             String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_BEST_POST, SortType.Type.BEST.name());
-            SortType sortType;
             if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
                 String sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_BEST_POST, SortType.Time.ALL.name());
                 sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
@@ -567,6 +564,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(mOauthRetrofit, accessToken,
                     getResources().getConfiguration().locale, postType, sortType, filter, nsfw)).get(PostViewModel.class);
+        }
+
+        if (activity instanceof ActivityToolbarInterface) {
+            ((ActivityToolbarInterface) activity).displaySortType();
         }
 
         mPostRecyclerView.setAdapter(mAdapter);
@@ -621,6 +622,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (isInLazyMode) {
             stopLazyMode();
         }
+        this.sortType = sortType;
         mPostViewModel.changeSortType(sortType);
     }
 
@@ -935,6 +937,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 lazyModeRunnable.resetOldPosition();
             }
         }
+    }
+
+    public SortType getSortType() {
+        return sortType;
     }
 
     @Override

@@ -44,6 +44,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
 
 public class ViewMultiRedditDetailActivity extends BaseActivity implements SortTypeSelectionCallback,
@@ -306,6 +307,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         }
 
         ((PostFragment) mFragment).changeSortType(sortType);
+        displaySortType();
     }
 
     @Override
@@ -344,6 +346,14 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     public void onLongPress() {
         if (mFragment != null) {
             ((PostFragment) mFragment).goBackToTop();
+        }
+    }
+
+    @Override
+    public void displaySortType() {
+        if (mFragment != null) {
+            SortType sortType = ((PostFragment) mFragment).getSortType();
+            Utils.displaySortTypeInToolbar(sortType, toolbar);
         }
     }
 }

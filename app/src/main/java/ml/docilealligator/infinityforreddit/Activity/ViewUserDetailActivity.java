@@ -78,6 +78,7 @@ import ml.docilealligator.infinityforreddit.User.UserData;
 import ml.docilealligator.infinityforreddit.User.UserViewModel;
 import ml.docilealligator.infinityforreddit.UserFollowing;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
@@ -510,6 +511,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                         sectionsPagerAdapter.pauseLazyMode();
                     }
                 }
+                sectionsPagerAdapter.displaySortTypeInToolbar();
             }
 
             @Override
@@ -720,6 +722,13 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         }
     }
 
+    @Override
+    public void displaySortType() {
+        if (sectionsPagerAdapter != null) {
+            sectionsPagerAdapter.displaySortTypeInToolbar();
+        }
+    }
+
     private static class InsertUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
 
         private UserDao userDao;
@@ -807,6 +816,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 case 1:
                     commentsListingFragment = (CommentsListingFragment) fragment;
             }
+            displaySortTypeInToolbar();
             return fragment;
         }
 
@@ -871,6 +881,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                     commentsListingFragment.changeSortType(sortType);
                 }
             }
+            displaySortTypeInToolbar();
         }
 
         public void changeNSFW(boolean nsfw) {
@@ -895,6 +906,23 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 if (commentsListingFragment != null) {
                     commentsListingFragment.goBackToTop();
                 }
+            }
+        }
+
+        void displaySortTypeInToolbar() {
+            switch (viewPager.getCurrentItem()) {
+                case 0:
+                    if (postFragment != null) {
+                        SortType sortType = postFragment.getSortType();
+                        Utils.displaySortTypeInToolbar(sortType, toolbar);
+                    }
+                    break;
+                case 1:
+                    if (commentsListingFragment != null) {
+                        SortType sortType = commentsListingFragment.getSortType();
+                        Utils.displaySortTypeInToolbar(sortType, toolbar);
+                    }
+                    break;
             }
         }
     }

@@ -23,40 +23,44 @@ public class SortType {
     }
 
     public enum Type {
-        BEST("best"),
-        HOT("hot"),
-        NEW("new"),
-        RANDOM("random"),
-        RISING("rising"),
-        TOP("top"),
-        CONTROVERSIAL("controversial"),
-        RELEVANCE("relevance"),
-        COMMENTS("comments"),
-        ACTIVITY("activity"),
-        CONFIDENCE("confidence"),
-        OLD("old"),
-        QA("qa"),
-        LIVE("live");
+        BEST("best", "Best"),
+        HOT("hot", "Hot"),
+        NEW("new", "New"),
+        RANDOM("random", "Random"),
+        RISING("rising", "Rising"),
+        TOP("top", "Top"),
+        CONTROVERSIAL("controversial", "Controversial"),
+        RELEVANCE("relevance", "Relevance"),
+        COMMENTS("comments", "Comments"),
+        ACTIVITY("activity", "Activity"),
+        CONFIDENCE("confidence", "Confidence"),
+        OLD("old", "Old"),
+        QA("qa", "QA"),
+        LIVE("live", "Live");
 
         public final String value;
+        public final String fullName;
 
-        Type(String value) {
+        Type(String value, String fullName) {
             this.value = value;
+            this.fullName = fullName;
         }
     }
 
     public enum Time {
-        HOUR("hour"),
-        DAY("day"),
-        WEEK("week"),
-        MONTH("month"),
-        YEAR("year"),
-        ALL("all");
+        HOUR("hour", "Hour"),
+        DAY("day", "Day"),
+        WEEK("week", "Week"),
+        MONTH("month", "Month"),
+        YEAR("year", "Year"),
+        ALL("all", "All Time");
 
         public final String value;
+        public final String fullName;
 
-        Time(String value) {
+        Time(String value, String fullName) {
             this.value = value;
+            this.fullName = fullName;
         }
     }
 }

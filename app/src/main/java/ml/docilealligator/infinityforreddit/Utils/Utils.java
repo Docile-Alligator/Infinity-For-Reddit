@@ -8,9 +8,12 @@ import android.text.Html;
 import android.text.Spannable;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.Toolbar;
+
 import java.util.Locale;
 
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.SortType;
 
 public class Utils {
     private static final long SECOND_MILLIS = 1000;
@@ -103,5 +106,15 @@ public class Utils {
         }
 
         return false;
+    }
+
+    public static void displaySortTypeInToolbar(SortType sortType, Toolbar toolbar) {
+        if (sortType != null) {
+            if (sortType.getTime() != null) {
+                toolbar.setSubtitle(sortType.getType().fullName + " " + sortType.getTime().fullName);
+            } else {
+                toolbar.setSubtitle(sortType.getType().fullName);
+            }
+        }
     }
 }

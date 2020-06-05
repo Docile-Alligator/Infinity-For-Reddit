@@ -89,6 +89,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
     private LinearLayoutManager mLinearLayoutManager;
     private SubredditListingRecyclerViewAdapter mAdapter;
     private Activity mActivity;
+    private SortType sortType;
 
     public SubredditListingFragment() {
         // Required empty public constructor
@@ -128,7 +129,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
 
         String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SEARCH_SUBREDDIT, SortType.Type.RELEVANCE.value);
-        SortType sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
+        sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
 
         mAdapter = new SubredditListingRecyclerViewAdapter(mActivity, mOauthRetrofit, mRetrofit,
                 customThemeWrapper, accessToken, accountName, mRedditDataRoomDatabase,
@@ -206,6 +207,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
     public void changeSortType(SortType sortType) {
         mSubredditListingViewModel.changeSortType(sortType);
+        this.sortType = sortType;
     }
 
     @Override
@@ -226,5 +228,9 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         if (mLinearLayoutManager != null) {
             mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
         }
+    }
+
+    public SortType getSortType() {
+        return sortType;
     }
 }
