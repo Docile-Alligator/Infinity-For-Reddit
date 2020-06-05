@@ -60,20 +60,25 @@ public class CopyTextBottomSheetFragment extends RoundedBottomSheetDialogFragmen
             dismiss();
         });
 
-        copyMarkdownTextView.setOnClickListener(view -> {
-            showCopyDialog(markdownText);
-            dismiss();
-        });
-
         copyAllRawTextTextView.setOnClickListener(view -> {
             copyText(rawText);
             dismiss();
         });
 
-        copyAllMarkdownTextView.setOnClickListener(view -> {
-            copyText(markdownText);
-            dismiss();
-        });
+        if (markdownText != null) {
+            copyMarkdownTextView.setOnClickListener(view -> {
+                showCopyDialog(markdownText);
+                dismiss();
+            });
+
+            copyAllMarkdownTextView.setOnClickListener(view -> {
+                copyText(markdownText);
+                dismiss();
+            });
+        } else {
+            copyMarkdownTextView.setVisibility(View.GONE);
+            copyAllMarkdownTextView.setVisibility(View.GONE);
+        }
 
         return rootView;
     }

@@ -1,11 +1,13 @@
 package ml.docilealligator.infinityforreddit.Utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
 import android.text.Html;
 import android.text.Spannable;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
@@ -115,6 +117,13 @@ public class Utils {
             } else {
                 toolbar.setSubtitle(sortType.getType().fullName);
             }
+        }
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (inputMethodManager != null && activity.getCurrentFocus() != null) {
+            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
         }
     }
 }

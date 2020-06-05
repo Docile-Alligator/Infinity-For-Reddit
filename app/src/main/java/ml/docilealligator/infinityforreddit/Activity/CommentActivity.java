@@ -51,16 +51,20 @@ import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask
 import ml.docilealligator.infinityforreddit.CommentData;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.Fragment.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SendComment;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
 
 public class CommentActivity extends BaseActivity {
 
     public static final String EXTRA_COMMENT_PARENT_TEXT_KEY = "ECPTK";
+    public static final String EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY = "ECPTMK";
     public static final String EXTRA_COMMENT_PARENT_BODY_KEY = "ECPBK";
+    public static final String EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY = "ECPBMK";
     public static final String EXTRA_PARENT_FULLNAME_KEY = "EPFK";
     public static final String EXTRA_PARENT_DEPTH_KEY = "EPDK";
     public static final String EXTRA_PARENT_POSITION_KEY = "EPPK";
@@ -133,6 +137,9 @@ public class CommentActivity extends BaseActivity {
         }
 
         Intent intent = getIntent();
+        String parentTextMarkdown = intent.getStringExtra(EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY);
+        String parentText = intent.getStringExtra(EXTRA_COMMENT_PARENT_TEXT_KEY);
+        CopyTextBottomSheetFragment copyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
         Markwon markwon = Markwon.builder(this)
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
@@ -157,9 +164,25 @@ public class CommentActivity extends BaseActivity {
                         )
                 )
                 .build();
-        markwon.setMarkdown(commentParentMarkwonView, intent.getStringExtra(EXTRA_COMMENT_PARENT_TEXT_KEY));
+        if (parentTextMarkdown != null) {
+            commentParentMarkwonView.setOnLongClickListener(view -> {
+                Utils.hideKeyboard(CommentActivity.this);
+                Bundle bundle = new Bundle();
+                if (parentText == null) {
+                    bundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, parentTextMarkdown);
+                } else {
+                    bundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, parentText);
+                    bundle.putString(CopyTextBottomSheetFragment.EXTRA_MARKDOWN, parentTextMarkdown);
+                }
+                copyTextBottomSheetFragment.setArguments(bundle);
+                copyTextBottomSheetFragment.show(getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
+                return true;
+            });
+            markwon.setMarkdown(commentParentMarkwonView, parentTextMarkdown);
+        }
+        String parentBodyMarkdown = intent.getStringExtra(EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY);
         String parentBody = intent.getStringExtra(EXTRA_COMMENT_PARENT_BODY_KEY);
-        if (parentBody != null && !parentBody.equals("")) {
+        if (parentBodyMarkdown != null && !parentBodyMarkdown.equals("")) {
             contentMarkdownRecyclerView.setVisibility(View.VISIBLE);
             contentMarkdownRecyclerView.setNestedScrollingEnabled(false);
             Markwon postBodyMarkwon = Markwon.builder(this)
@@ -167,6 +190,15 @@ public class CommentActivity extends BaseActivity {
                         @Override
                         public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
                             textView.setTextColor(markdownColor);
+                            textView.setOnLongClickListener(view -> {
+                                Utils.hideKeyboard(CommentActivity.this);
+                                Bundle bundle = new Bundle();
+                                bundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, parentBody);
+                                bundle.putString(CopyTextBottomSheetFragment.EXTRA_MARKDOWN, parentBodyMarkdown);
+                                copyTextBottomSheetFragment.setArguments(bundle);
+                                copyTextBottomSheetFragment.show(getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
+                                return true;
+                            });
                         }
 
                         @Override
@@ -200,7 +232,7 @@ public class CommentActivity extends BaseActivity {
                     .build();
             contentMarkdownRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             contentMarkdownRecyclerView.setAdapter(markwonAdapter);
-            markwonAdapter.setMarkdown(postBodyMarkwon, parentBody);
+            markwonAdapter.setMarkdown(postBodyMarkwon, parentBodyMarkdown);
             markwonAdapter.notifyDataSetChanged();
         }
         parentFullname = intent.getStringExtra(EXTRA_PARENT_FULLNAME_KEY);

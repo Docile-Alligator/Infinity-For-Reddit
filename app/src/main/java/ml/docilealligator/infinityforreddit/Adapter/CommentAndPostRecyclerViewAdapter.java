@@ -1832,8 +1832,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
                 Intent intent = new Intent(mActivity, CommentActivity.class);
                 intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, mPost.getFullName());
-                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, mPost.getTitle());
-                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_KEY, mPost.getSelfText());
+                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY, mPost.getTitle());
+                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY, mPost.getSelfText());
+                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_KEY, mPost.getSelfTextPlain());
                 intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, false);
                 intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, 0);
                 mActivity.startActivityForResult(intent, WRITE_COMMENT_REQUEST_CODE);
@@ -2751,7 +2752,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
                 Intent intent = new Intent(mActivity, CommentActivity.class);
                 intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, comment.getDepth() + 1);
-                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, comment.getCommentMarkdown());
+                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY, comment.getCommentMarkdown());
+                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, comment.getCommentRawText());
                 intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, comment.getFullName());
                 intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, true);
 
