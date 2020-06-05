@@ -25,6 +25,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
@@ -45,7 +46,7 @@ import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
 public class FilteredThingActivity extends BaseActivity implements SortTypeSelectionCallback,
-        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {
+        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback, ActivityToolbarInterface {
 
     public static final String EXTRA_NAME = "ESN";
     public static final String EXTRA_QUERY = "EQ";
@@ -123,6 +124,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setToolbarGoToTop(toolbar);
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
@@ -428,5 +430,12 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
     @Subscribe
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
         finish();
+    }
+
+    @Override
+    public void onLongPress() {
+        if (mFragment != null) {
+            ((PostFragment) mFragment).goBackToTop();
+        }
     }
 }

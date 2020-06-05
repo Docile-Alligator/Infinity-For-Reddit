@@ -35,6 +35,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Adapter.MessageRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
@@ -48,7 +49,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import retrofit2.Retrofit;
 
-public class ViewMessageActivity extends BaseActivity {
+public class ViewMessageActivity extends BaseActivity implements ActivityToolbarInterface {
 
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
 
@@ -90,6 +91,7 @@ public class ViewMessageActivity extends BaseActivity {
     private String mNewAccountName;
     private MessageRecyclerViewAdapter mAdapter;
     private RequestManager mGlide;
+    private LinearLayoutManager mLinearLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +129,7 @@ public class ViewMessageActivity extends BaseActivity {
 
         mToolbar.setTitle(R.string.inbox);
         setSupportActionBar(mToolbar);
+        setToolbarGoToTop(mToolbar);
 
         if (savedInstanceState != null) {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
@@ -199,10 +202,10 @@ public class ViewMessageActivity extends BaseActivity {
     private void bindView() {
         mAdapter = new MessageRecyclerViewAdapter(this, mOauthRetrofit, mCustomThemeWrapper,
                 mAccessToken, () -> mMessageViewModel.retryLoadingMore());
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(layoutManager);
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, layoutManager.getOrientation());
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, mLinearLayoutManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
 
         MessageViewModel.Factory factory = new MessageViewModel.Factory(mOauthRetrofit,
@@ -295,5 +298,12 @@ public class ViewMessageActivity extends BaseActivity {
 
     private void onRefresh() {
         mMessageViewModel.refresh();
+    }
+
+    @Override
+    public void onLongPress() {
+        if (mLinearLayoutManager != null) {
+            mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
+        }
     }
 }

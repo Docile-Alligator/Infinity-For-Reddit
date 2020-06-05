@@ -28,6 +28,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubscribedThingsAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
@@ -42,7 +43,7 @@ import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.Subscrib
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
 import retrofit2.Retrofit;
 
-public class SubredditSelectionActivity extends BaseActivity {
+public class SubredditSelectionActivity extends BaseActivity implements ActivityToolbarInterface {
 
     static final String EXTRA_EXTRA_CLEAR_SELECTION = "EECS";
     static final String EXTRA_RETURN_SUBREDDIT_NAME = "ERSN";
@@ -273,5 +274,12 @@ public class SubredditSelectionActivity extends BaseActivity {
     @Subscribe
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
         finish();
+    }
+
+    @Override
+    public void onLongPress() {
+        if (mFragment != null) {
+            ((SubscribedSubredditsListingFragment) mFragment).goBackToTop();
+        }
     }
 }

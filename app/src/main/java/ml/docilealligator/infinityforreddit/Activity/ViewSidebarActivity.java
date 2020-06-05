@@ -43,6 +43,7 @@ import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubredditDataAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FetchSubredditData;
@@ -53,7 +54,7 @@ import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditViewModel;
 import retrofit2.Retrofit;
 
-public class ViewSidebarActivity extends BaseActivity {
+public class ViewSidebarActivity extends BaseActivity implements ActivityToolbarInterface {
 
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     @BindView(R.id.coordinator_layout_view_sidebar_activity)
@@ -77,6 +78,7 @@ public class ViewSidebarActivity extends BaseActivity {
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     public SubredditViewModel mSubredditViewModel;
+    private LinearLayoutManager mLinearLayoutManager;
     private String subredditName;
     private int markdownColor;
 
@@ -123,6 +125,7 @@ public class ViewSidebarActivity extends BaseActivity {
         toolbar.setTitle("r/" + subredditName);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setToolbarGoToTop(toolbar);
 
         Markwon markwon = Markwon.builder(this)
                 .usePlugin(new AbstractMarkwonPlugin() {
@@ -161,7 +164,8 @@ public class ViewSidebarActivity extends BaseActivity {
                         .textLayoutIsRoot(R.layout.view_table_entry_cell)))
                 .build();
 
-        markdownRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        markdownRecyclerView.setLayoutManager(mLinearLayoutManager);
         markdownRecyclerView.setAdapter(markwonAdapter);
 
         mSubredditViewModel = new ViewModelProvider(this,
@@ -236,5 +240,12 @@ public class ViewSidebarActivity extends BaseActivity {
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         swipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         markdownColor = mCustomThemeWrapper.getSecondaryTextColor();
+    }
+
+    @Override
+    public void onLongPress() {
+        if (mLinearLayoutManager != null) {
+            mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
+        }
     }
 }

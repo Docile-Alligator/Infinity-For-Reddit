@@ -30,6 +30,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
@@ -51,7 +52,7 @@ import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
 public class SearchResultActivity extends BaseActivity implements SortTypeSelectionCallback,
-        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {
+        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback, ActivityToolbarInterface {
     static final String EXTRA_QUERY = "QK";
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
 
@@ -121,6 +122,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setToolbarGoToTop(toolbar);
 
         if (savedInstanceState == null) {
             getCurrentAccountAndInitializeViewPager();
@@ -295,6 +297,13 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
     }
 
+    @Override
+    public void onLongPress() {
+        if (sectionsPagerAdapter != null) {
+            sectionsPagerAdapter.goBackToTop();
+        }
+    }
+
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         private PostFragment postFragment;
@@ -417,7 +426,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             }
         }
 
-        public void changeNSFW(boolean nsfw) {
+        void changeNSFW(boolean nsfw) {
             if (postFragment != null) {
                 postFragment.changeNSFW(nsfw);
             }
@@ -427,6 +436,16 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             if (postFragment != null) {
                 mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, postLayout).apply();
                 ((FragmentCommunicator) postFragment).changePostLayout(postLayout);
+            }
+        }
+
+        void goBackToTop() {
+            if (viewPager.getCurrentItem() == 0) {
+                postFragment.goBackToTop();
+            } else if (viewPager.getCurrentItem() == 1) {
+                subredditListingFragment.goBackToTop();
+            } else {
+                userListingFragment.goBackToTop();
             }
         }
     }

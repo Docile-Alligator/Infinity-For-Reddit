@@ -50,6 +50,7 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.AsyncTask.CheckIsSubscribedToSubredditAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
@@ -81,7 +82,8 @@ import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
 public class ViewSubredditDetailActivity extends BaseActivity implements SortTypeSelectionCallback,
-        PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {
+        PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback,
+        ActivityToolbarInterface {
 
     public static final String EXTRA_SUBREDDIT_NAME_KEY = "ESN";
     public static final String EXTRA_MESSAGE_FULLNAME = "ENF";
@@ -327,6 +329,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         toolbar.setTitle(title);
         adjustToolbar(toolbar);
         setSupportActionBar(toolbar);
+        setToolbarGoToTop(toolbar);
 
         glide = Glide.with(this);
         Locale locale = getResources().getConfiguration().locale;
@@ -843,6 +846,13 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
     }
 
+    @Override
+    public void onLongPress() {
+        if (sectionsPagerAdapter != null) {
+            sectionsPagerAdapter.goBackToTop();
+        }
+    }
+
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
         private PostFragment postFragment;
         private SidebarFragment sidebarFragment;
@@ -963,6 +973,18 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             if (postFragment != null) {
                 mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, postLayout).apply();
                 ((FragmentCommunicator) postFragment).changePostLayout(postLayout);
+            }
+        }
+
+        void goBackToTop() {
+            if (viewPager.getCurrentItem() == 0) {
+                if (postFragment != null) {
+                    postFragment.goBackToTop();
+                }
+            } else {
+                if (sidebarFragment != null) {
+                    sidebarFragment.goBackToTop();
+                }
             }
         }
     }

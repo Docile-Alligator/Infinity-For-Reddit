@@ -221,4 +221,10 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent());
         mFetchSubredditListingInfoTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
     }
+
+    public void goBackToTop() {
+        if (mLinearLayoutManager != null) {
+            mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
+        }
+    }
 }

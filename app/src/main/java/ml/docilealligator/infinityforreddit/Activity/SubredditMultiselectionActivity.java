@@ -34,6 +34,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Adapter.SubredditMultiselectionRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
@@ -43,7 +44,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditViewModel;
 import retrofit2.Retrofit;
 
-public class SubredditMultiselectionActivity extends BaseActivity {
+public class SubredditMultiselectionActivity extends BaseActivity implements ActivityToolbarInterface {
 
     static final String EXTRA_RETURN_SELECTED_SUBREDDITS = "ERSS";
 
@@ -82,6 +83,7 @@ public class SubredditMultiselectionActivity extends BaseActivity {
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
+    private LinearLayoutManager mLinearLayoutManager;
     private SubredditMultiselectionRecyclerViewAdapter mAdapter;
     private RequestManager mGlide;
     @Override
@@ -149,7 +151,8 @@ public class SubredditMultiselectionActivity extends BaseActivity {
     }
 
     private void bindView() {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mAdapter = new SubredditMultiselectionRecyclerViewAdapter(this, mCustomThemeWrapper);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -239,5 +242,12 @@ public class SubredditMultiselectionActivity extends BaseActivity {
         mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(mAppBarLayout, mToolbar);
         mErrorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+    }
+
+    @Override
+    public void onLongPress() {
+        if (mLinearLayoutManager != null) {
+            mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
+        }
     }
 }

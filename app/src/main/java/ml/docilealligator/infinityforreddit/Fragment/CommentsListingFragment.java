@@ -95,6 +95,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     private String mAccessToken;
     private RequestManager mGlide;
     private Activity mActivity;
+    private LinearLayoutManager mLinearLayoutManager;
     private CommentsListingRecyclerViewAdapter mAdapter;
     private boolean mShowElapsedTime;
     private boolean mShowCommentDivider;
@@ -162,7 +163,8 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     }
 
     private void bindView(Resources resources) {
-        mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
+        mLinearLayoutManager = new LinearLayoutManager(mActivity);
+        mCommentRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         boolean voteButtonsOnTheRight = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
         mAdapter = new CommentsListingRecyclerViewAdapter(mActivity, mOauthRetrofit, customThemeWrapper,
@@ -263,6 +265,12 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
             mFetchCommentInfoLinearLayout.setVisibility(View.VISIBLE);
             mFetchCommentInfoTextView.setText(stringResId);
             mGlide.load(R.drawable.error_image).into(mFetchCommentInfoImageView);
+        }
+    }
+
+    public void goBackToTop() {
+        if (mLinearLayoutManager != null) {
+            mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
         }
     }
 }

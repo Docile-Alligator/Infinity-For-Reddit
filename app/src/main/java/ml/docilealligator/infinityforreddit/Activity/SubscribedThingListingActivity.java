@@ -30,6 +30,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubscribedThingsAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
@@ -46,7 +47,7 @@ import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.Subscrib
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
 import retrofit2.Retrofit;
 
-public class SubscribedThingListingActivity extends BaseActivity {
+public class SubscribedThingListingActivity extends BaseActivity implements ActivityToolbarInterface {
 
     private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
@@ -108,6 +109,7 @@ public class SubscribedThingListingActivity extends BaseActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setToolbarGoToTop(toolbar);
 
         if (savedInstanceState != null) {
             mInsertSuccess = savedInstanceState.getBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE);
@@ -225,6 +227,13 @@ public class SubscribedThingListingActivity extends BaseActivity {
         finish();
     }
 
+    @Override
+    public void onLongPress() {
+        if (sectionsPagerAdapter != null) {
+            sectionsPagerAdapter.goBackToTop();
+        }
+    }
+
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         private SubscribedSubredditsListingFragment subscribedSubredditsListingFragment;
@@ -287,12 +296,20 @@ public class SubscribedThingListingActivity extends BaseActivity {
             return fragment;
         }
 
-        public void stopRefreshProgressbar() {
+        void stopRefreshProgressbar() {
             if (subscribedSubredditsListingFragment != null) {
                 ((FragmentCommunicator) subscribedSubredditsListingFragment).stopRefreshProgressbar();
             }
             if (followedUsersListingFragment != null) {
                 ((FragmentCommunicator) followedUsersListingFragment).stopRefreshProgressbar();
+            }
+        }
+
+        void goBackToTop() {
+            if (viewPager.getCurrentItem() == 0) {
+                subscribedSubredditsListingFragment.goBackToTop();
+            } else {
+                followedUsersListingFragment.goBackToTop();
             }
         }
     }

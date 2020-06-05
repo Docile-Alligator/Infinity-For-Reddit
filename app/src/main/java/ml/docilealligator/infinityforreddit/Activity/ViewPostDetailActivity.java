@@ -55,6 +55,7 @@ import butterknife.ButterKnife;
 import im.ene.toro.exoplayer.ExoCreator;
 import im.ene.toro.media.PlaybackInfo;
 import im.ene.toro.media.VolumeInfo;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Adapter.CommentAndPostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
@@ -98,7 +99,7 @@ import static ml.docilealligator.infinityforreddit.Activity.CommentActivity.RETU
 import static ml.docilealligator.infinityforreddit.Activity.CommentActivity.WRITE_COMMENT_REQUEST_CODE;
 
 public class ViewPostDetailActivity extends BaseActivity implements FlairBottomSheetFragment.FlairSelectionCallback,
-        SortTypeSelectionCallback {
+        SortTypeSelectionCallback, ActivityToolbarInterface {
 
     public static final String EXTRA_POST_DATA = "EPD";
     public static final String EXTRA_POST_LIST_POSITION = "EPLI";
@@ -242,6 +243,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
+        setToolbarGoToTop(mToolbar);
 
         mVolumeKeysNavigateComments = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOLUME_KEYS_NAVIGATE_COMMENTS, false);
         mLockFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
@@ -1627,6 +1629,13 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     public void unlockSwipeRightToGoBack() {
         if (mSlidrInterface != null) {
             mSlidrInterface.unlock();
+        }
+    }
+
+    @Override
+    public void onLongPress() {
+        if (mLinearLayoutManager != null) {
+            mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
         }
     }
 }

@@ -201,4 +201,10 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent());
         mFetchUserListingInfoTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
     }
+
+    public void goBackToTop() {
+        if (mLinearLayoutManager != null) {
+            mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
+        }
+    }
 }

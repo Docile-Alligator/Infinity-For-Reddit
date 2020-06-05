@@ -25,6 +25,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
@@ -40,7 +41,8 @@ import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
-public class AccountPostsActivity extends BaseActivity implements SortTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {
+public class AccountPostsActivity extends BaseActivity implements SortTypeSelectionCallback,
+        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback, ActivityToolbarInterface {
 
     static final String EXTRA_USER_WHERE = "EUW";
 
@@ -118,6 +120,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setToolbarGoToTop(toolbar);
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
@@ -286,6 +289,13 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
         if (mFragment != null) {
             mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + mAccountName, postLayout).apply();
             ((FragmentCommunicator) mFragment).changePostLayout(postLayout);
+        }
+    }
+
+    @Override
+    public void onLongPress() {
+        if (mFragment != null) {
+            ((PostFragment) mFragment).goBackToTop();
         }
     }
 }

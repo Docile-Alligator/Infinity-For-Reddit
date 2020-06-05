@@ -74,6 +74,7 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
     SubscribedUserViewModel mSubscribedUserViewModel;
     private Activity mActivity;
     private RequestManager mGlide;
+    private LinearLayoutManager mLinearLayoutManager;
 
     public FollowedUsersListingFragment() {
         // Required empty public constructor
@@ -104,7 +105,8 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
 
         mGlide = Glide.with(this);
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
+        mLinearLayoutManager = new LinearLayoutManager(mActivity);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
         FollowedUsersRecyclerViewAdapter adapter = new FollowedUsersRecyclerViewAdapter(mActivity,
                 mOauthRetrofit, mRedditDataRoomDatabase, customThemeWrapper,
                 getArguments().getString(EXTRA_ACCESS_TOKEN));
@@ -163,5 +165,11 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
             mSwipeRefreshLayout.setEnabled(false);
         }
         mErrorTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
+    }
+
+    public void goBackToTop() {
+        if (mLinearLayoutManager != null) {
+            mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
+        }
     }
 }

@@ -24,6 +24,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
@@ -32,7 +33,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
-public class SearchSubredditsResultActivity extends BaseActivity {
+public class SearchSubredditsResultActivity extends BaseActivity implements ActivityToolbarInterface {
 
     static final String EXTRA_QUERY = "EQ";
     static final String EXTRA_RETURN_SUBREDDIT_NAME = "ERSN";
@@ -90,6 +91,7 @@ public class SearchSubredditsResultActivity extends BaseActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setToolbarGoToTop(toolbar);
 
         String query = getIntent().getExtras().getString(EXTRA_QUERY);
 
@@ -179,5 +181,12 @@ public class SearchSubredditsResultActivity extends BaseActivity {
     @Subscribe
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
         finish();
+    }
+
+    @Override
+    public void onLongPress() {
+        if (mFragment != null) {
+            ((SubredditListingFragment) mFragment).goBackToTop();
+        }
     }
 }

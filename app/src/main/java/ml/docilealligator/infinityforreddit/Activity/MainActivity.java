@@ -58,6 +58,7 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Account.AccountViewModel;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Adapter.NavigationDrawerRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubscribedThingsAsyncTask;
@@ -97,7 +98,8 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public class MainActivity extends BaseActivity implements SortTypeSelectionCallback,
-        PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {
+        PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback,
+        ActivityToolbarInterface {
 
     static final String EXTRA_POST_TYPE = "EPT";
     static final String EXTRA_MESSSAGE_FULLNAME = "ENF";
@@ -247,6 +249,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
 
         setSupportActionBar(toolbar);
+        setToolbarGoToTop(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -921,6 +924,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         mLockBottomAppBar = changeLockBottomAppBarEvent.lockBottomAppBar;
     }
 
+    @Override
+    public void onLongPress() {
+        if (sectionsPagerAdapter != null) {
+            sectionsPagerAdapter.goBackToTop();
+        }
+    }
+
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
         private PostFragment tab1;
         private PostFragment tab2;
@@ -1339,6 +1349,16 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                             tab3.changePostLayout(postLayout);
                         }
                 }
+            }
+        }
+
+        void goBackToTop() {
+            if (viewPager.getCurrentItem() == 0) {
+                tab1.goBackToTop();
+            } else if (viewPager.getCurrentItem() == 1) {
+                tab2.goBackToTop();
+            } else {
+                tab3.goBackToTop();
             }
         }
     }

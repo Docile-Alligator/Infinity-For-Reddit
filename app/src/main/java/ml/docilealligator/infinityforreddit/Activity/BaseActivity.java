@@ -25,6 +25,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
@@ -181,6 +182,18 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public boolean isImmersiveInterface() {
         return immersiveInterface;
+    }
+
+    protected void setToolbarGoToTop(Toolbar toolbar) {
+        toolbar.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                if (BaseActivity.this instanceof ActivityToolbarInterface) {
+                    ((ActivityToolbarInterface) BaseActivity.this).onLongPress();
+                }
+                return true;
+            }
+        });
     }
 
     protected void adjustToolbar(Toolbar toolbar) {

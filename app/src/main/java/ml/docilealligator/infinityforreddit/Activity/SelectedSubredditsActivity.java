@@ -24,12 +24,13 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Adapter.SelectedSubredditsRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 
-public class SelectedSubredditsActivity extends BaseActivity {
+public class SelectedSubredditsActivity extends BaseActivity implements ActivityToolbarInterface {
 
     public static final String EXTRA_SELECTED_SUBREDDITS = "ESS";
     public static final String EXTRA_RETURN_SELECTED_SUBREDDITS = "ERSS";
@@ -51,6 +52,7 @@ public class SelectedSubredditsActivity extends BaseActivity {
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    private LinearLayoutManager linearLayoutManager;
     private SelectedSubredditsRecyclerViewAdapter adapter;
     private ArrayList<String> subreddits;
 
@@ -65,6 +67,7 @@ public class SelectedSubredditsActivity extends BaseActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setToolbarGoToTop(toolbar);
 
         if (savedInstanceState != null) {
             subreddits = savedInstanceState.getStringArrayList(SELECTED_SUBREDDITS_STATE);
@@ -73,7 +76,8 @@ public class SelectedSubredditsActivity extends BaseActivity {
         }
 
         adapter = new SelectedSubredditsRecyclerViewAdapter(mCustomThemeWrapper, subreddits);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -153,5 +157,12 @@ public class SelectedSubredditsActivity extends BaseActivity {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         applyFABTheme(fab);
+    }
+
+    @Override
+    public void onLongPress() {
+        if (linearLayoutManager != null) {
+            linearLayoutManager.scrollToPositionWithOffset(0, 0);
+        }
     }
 }

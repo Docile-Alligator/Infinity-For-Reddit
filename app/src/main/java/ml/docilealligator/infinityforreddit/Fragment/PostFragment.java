@@ -923,6 +923,20 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
     }
 
+    public void goBackToTop() {
+        if (mLinearLayoutManager != null) {
+            mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
+            if (isInLazyMode) {
+                lazyModeRunnable.resetOldPosition();
+            }
+        } else if (mStaggeredGridLayoutManager != null) {
+            mStaggeredGridLayoutManager.scrollToPositionWithOffset(0, 0);
+            if (isInLazyMode) {
+                lazyModeRunnable.resetOldPosition();
+            }
+        }
+    }
+
     @Override
     public void onPause() {
         super.onPause();

@@ -63,6 +63,7 @@ public class SidebarFragment extends Fragment {
     private Activity activity;
     private String subredditName;
     public SubredditViewModel mSubredditViewModel;
+    private LinearLayoutManager linearLayoutManager;
     private int markdownColor;
     @Inject
     @Named("no_oauth")
@@ -133,7 +134,8 @@ public class SidebarFragment extends Fragment {
                         .textLayoutIsRoot(R.layout.view_table_entry_cell)))
                 .build();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        linearLayoutManager = new LinearLayoutManager(activity);
+        recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(markwonAdapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -187,5 +189,11 @@ public class SidebarFragment extends Fragment {
                 Toast.makeText(activity, R.string.cannot_fetch_sidebar, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void goBackToTop() {
+        if (linearLayoutManager != null) {
+            linearLayoutManager.scrollToPositionWithOffset(0, 0);
+        }
     }
 }

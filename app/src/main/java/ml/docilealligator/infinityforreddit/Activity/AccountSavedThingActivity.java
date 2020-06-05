@@ -30,6 +30,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
@@ -43,7 +44,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import retrofit2.Retrofit;
 
-public class AccountSavedThingActivity extends BaseActivity {
+public class AccountSavedThingActivity extends BaseActivity implements ActivityToolbarInterface {
 
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
@@ -109,6 +110,7 @@ public class AccountSavedThingActivity extends BaseActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setToolbarGoToTop(toolbar);
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
@@ -275,6 +277,13 @@ public class AccountSavedThingActivity extends BaseActivity {
         sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
     }
 
+    @Override
+    public void onLongPress() {
+        if (sectionsPagerAdapter != null) {
+            sectionsPagerAdapter.goBackToTop();
+        }
+    }
+
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
         private PostFragment postFragment;
         private CommentsListingFragment commentsListingFragment;
@@ -381,6 +390,14 @@ public class AccountSavedThingActivity extends BaseActivity {
         public void changeNSFW(boolean nsfw) {
             if (postFragment != null) {
                 postFragment.changeNSFW(nsfw);
+            }
+        }
+
+        public void goBackToTop() {
+            if (viewPager.getCurrentItem() == 0) {
+                postFragment.goBackToTop();
+            } else {
+                commentsListingFragment.goBackToTop();
             }
         }
     }

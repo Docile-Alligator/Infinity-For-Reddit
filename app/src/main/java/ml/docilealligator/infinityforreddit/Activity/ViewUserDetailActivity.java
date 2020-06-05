@@ -49,6 +49,7 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.AsyncTask.CheckIsFollowingUserAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
@@ -81,7 +82,7 @@ import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
 public class ViewUserDetailActivity extends BaseActivity implements SortTypeSelectionCallback,
-        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {
+        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback, ActivityToolbarInterface {
 
     public static final String EXTRA_USER_NAME_KEY = "EUNK";
     public static final String EXTRA_MESSAGE_FULLNAME = "ENF";
@@ -220,6 +221,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         toolbar.setTitle(title);
 
         setSupportActionBar(toolbar);
+        setToolbarGoToTop(toolbar);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -711,6 +713,13 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
     }
 
+    @Override
+    public void onLongPress() {
+        if (sectionsPagerAdapter != null) {
+            sectionsPagerAdapter.goBackToTop();
+        }
+    }
+
     private static class InsertUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
 
         private UserDao userDao;
@@ -874,6 +883,18 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             if (postFragment != null) {
                 mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, postLayout).apply();
                 ((FragmentCommunicator) postFragment).changePostLayout(postLayout);
+            }
+        }
+
+        void goBackToTop() {
+            if (viewPager.getCurrentItem() == 0) {
+                if (postFragment != null) {
+                    postFragment.goBackToTop();
+                }
+            } else {
+                if (commentsListingFragment != null) {
+                    commentsListingFragment.goBackToTop();
+                }
             }
         }
     }

@@ -26,6 +26,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.RefreshMultiRedditsEvent;
@@ -46,7 +47,7 @@ import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 public class ViewMultiRedditDetailActivity extends BaseActivity implements SortTypeSelectionCallback,
-        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {
+        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback, ActivityToolbarInterface {
 
     public static final String EXTRA_MULTIREDDIT_DATA = "EMD";
     public static final String EXTRA_MULTIREDDIT_PATH = "EMP";
@@ -136,6 +137,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setToolbarGoToTop(toolbar);
 
         if (savedInstanceState != null) {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
@@ -336,5 +338,12 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+    }
+
+    @Override
+    public void onLongPress() {
+        if (mFragment != null) {
+            ((PostFragment) mFragment).goBackToTop();
+        }
     }
 }

@@ -78,6 +78,7 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
     public SubscribedSubredditViewModel mSubscribedSubredditViewModel;
     private Activity mActivity;
     private RequestManager mGlide;
+    private LinearLayoutManager mLinearLayoutManager;
 
     public SubscribedSubredditsListingFragment() {
         // Required empty public constructor
@@ -110,7 +111,8 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
 
         mGlide = Glide.with(this);
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
+        mLinearLayoutManager = new LinearLayoutManager(mActivity);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         SubscribedSubredditsRecyclerViewAdapter adapter;
         if (getArguments().getBoolean(EXTRA_IS_SUBREDDIT_SELECTION)) {
@@ -178,6 +180,12 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
             mErrorTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
         } else {
             mSwipeRefreshLayout.setEnabled(false);
+        }
+    }
+
+    public void goBackToTop() {
+        if (mLinearLayoutManager != null) {
+            mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
         }
     }
 }
