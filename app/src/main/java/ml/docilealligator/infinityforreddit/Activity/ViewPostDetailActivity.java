@@ -345,7 +345,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         };
 
         mSingleCommentId = getIntent().getStringExtra(EXTRA_SINGLE_COMMENT_ID);
-        sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value);
+        sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value.toUpperCase());
         mToolbar.setTitle(new SortType(SortType.Type.valueOf(sortType)).getType().fullName);
         sortType = sortType.toLowerCase();
         if (savedInstanceState == null) {

@@ -1375,15 +1375,29 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         void displaySortTypeInToolbar() {
             switch (viewPager.getCurrentItem()) {
                 case 0:
-                    if (tab1 != null) {
-                        SortType sortType = tab1.getSortType();
-                        Utils.displaySortTypeInToolbar(sortType, toolbar);
+                    if (mAccessToken != null) {
+                        if (tab1 != null) {
+                            SortType sortType = tab1.getSortType();
+                            Utils.displaySortTypeInToolbar(sortType, toolbar);
+                        }
+                    } else {
+                        if (tab2 != null) {
+                            SortType sortType = tab2.getSortType();
+                            Utils.displaySortTypeInToolbar(sortType, toolbar);
+                        }
                     }
                     break;
                 case 1:
-                    if (tab2 != null) {
-                        SortType sortType = tab2.getSortType();
-                        Utils.displaySortTypeInToolbar(sortType, toolbar);
+                    if (mAccessToken != null) {
+                        if (tab2 != null) {
+                            SortType sortType = tab2.getSortType();
+                            Utils.displaySortTypeInToolbar(sortType, toolbar);
+                        }
+                    } else {
+                        if (tab3 != null) {
+                            SortType sortType = tab3.getSortType();
+                            Utils.displaySortTypeInToolbar(sortType, toolbar);
+                        }
                     }
                     break;
                 case 2:
