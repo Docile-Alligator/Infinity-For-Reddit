@@ -111,7 +111,7 @@ public class Utils {
     public static void displaySortTypeInToolbar(SortType sortType, Toolbar toolbar) {
         if (sortType != null) {
             if (sortType.getTime() != null) {
-                toolbar.setSubtitle(sortType.getType().fullName + " " + sortType.getTime().fullName);
+                toolbar.setSubtitle(sortType.getType().fullName + ": " + sortType.getTime().fullName);
             } else {
                 toolbar.setSubtitle(sortType.getType().fullName);
             }
