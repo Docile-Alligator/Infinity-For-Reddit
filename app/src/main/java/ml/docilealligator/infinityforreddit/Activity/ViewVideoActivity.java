@@ -59,6 +59,7 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.FetchGfycatVideoLinks;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.Service.DownloadRedditVideoService;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
@@ -94,11 +95,14 @@ public class ViewVideoActivity extends AppCompatActivity {
 
     private String videoDownloadUrl;
     private String videoFileName;
+    private String subredditName;
+    private String id;
     private boolean wasPlaying;
     private boolean isDownloading = false;
     private boolean isMute = false;
     private String postTitle;
     private long resumePosition = -1;
+    private int videoType;
 
     @Inject
     @Named("gfycat")
@@ -181,7 +185,7 @@ public class ViewVideoActivity extends AppCompatActivity {
         TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
         player = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
         videoPlayerView.setPlayer(player);
-        int videoType = getIntent().getIntExtra(EXTRA_VIDEO_TYPE, VIDEO_TYPE_NORMAL);
+        videoType = getIntent().getIntExtra(EXTRA_VIDEO_TYPE, VIDEO_TYPE_NORMAL);
         if (videoType == VIDEO_TYPE_GFYCAT || videoType == VIDEO_TYPE_REDGIFS) {
             if (savedInstanceState != null) {
                 String videoUrl = savedInstanceState.getString(VIDEO_URI_STATE);
@@ -243,7 +247,9 @@ public class ViewVideoActivity extends AppCompatActivity {
             player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
         } else {
             videoDownloadUrl = intent.getStringExtra(EXTRA_VIDEO_DOWNLOAD_URL);
-            videoFileName = intent.getStringExtra(EXTRA_SUBREDDIT) + "-" + intent.getStringExtra(EXTRA_ID) + ".mp4";
+            subredditName = intent.getStringExtra(EXTRA_SUBREDDIT);
+            id = intent.getStringExtra(EXTRA_ID);
+            videoFileName = subredditName + "-" + id + ".mp4";
             // Produces DataSource instances through which media data is loaded.
             dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "Infinity"));
             // Prepare the player with the source.
@@ -387,46 +393,59 @@ public class ViewVideoActivity extends AppCompatActivity {
     private void download() {
         isDownloading = false;
 
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(videoDownloadUrl));
-        request.setTitle(videoFileName);
+        if (videoType != VIDEO_TYPE_NORMAL) {
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(videoDownloadUrl));
+            request.setTitle(videoFileName);
 
-        request.allowScanningByMediaScanner();
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            request.allowScanningByMediaScanner();
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
-        //Android Q support
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, videoFileName);
-        } else {
-            String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-            File directory = new File(path + "/Infinity/");
-            boolean saveToInfinityFolder = true;
-            if (!directory.exists()) {
-                if (!directory.mkdir()) {
-                    saveToInfinityFolder = false;
-                }
+            //Android Q support
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, videoFileName);
             } else {
-                if (directory.isFile()) {
-                    if (!(directory.delete() && directory.mkdir())) {
+                String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+                File directory = new File(path + "/Infinity/");
+                boolean saveToInfinityFolder = true;
+                if (!directory.exists()) {
+                    if (!directory.mkdir()) {
                         saveToInfinityFolder = false;
                     }
+                } else {
+                    if (directory.isFile()) {
+                        if (!(directory.delete() && directory.mkdir())) {
+                            saveToInfinityFolder = false;
+                        }
+                    }
+                }
+
+                if (saveToInfinityFolder) {
+                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES + "/Infinity/", videoFileName);
+                } else {
+                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, videoFileName);
                 }
             }
 
-            if (saveToInfinityFolder) {
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES + "/Infinity/", videoFileName);
+            DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+
+            if (manager == null) {
+                Toast.makeText(this, R.string.download_failed, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            manager.enqueue(request);
+        } else {
+            Intent intent = new Intent(this, DownloadRedditVideoService.class);
+            intent.putExtra(DownloadRedditVideoService.EXTRA_VIDEO_URL, videoDownloadUrl);
+            intent.putExtra(DownloadRedditVideoService.EXTRA_POST_ID, id);
+            intent.putExtra(DownloadRedditVideoService.EXTRA_SUBREDDIT, subredditName);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent);
             } else {
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, videoFileName);
+                startService(intent);
             }
         }
-
-        DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-
-        if (manager == null) {
-            Toast.makeText(this, R.string.download_failed, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        manager.enqueue(request);
         Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 

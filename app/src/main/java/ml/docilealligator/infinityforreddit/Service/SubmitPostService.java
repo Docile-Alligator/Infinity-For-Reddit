@@ -4,7 +4,6 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -110,22 +109,22 @@ public class SubmitPostService extends Service {
         if (postType == EXTRA_POST_TEXT_OR_LINK) {
             content = intent.getStringExtra(EXTRA_CONTENT);
             kind = intent.getStringExtra(EXTRA_KIND);
-            startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID, createNotification(this, R.string.posting));
+            startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID, createNotification(R.string.posting));
             submitTextOrLinkPost();
         } else if (postType == EXTRA_POST_TYPE_IMAGE) {
             mediaUri = intent.getData();
-            startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID, createNotification(this, R.string.posting_image));
+            startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID, createNotification(R.string.posting_image));
             submitImagePost();
         } else {
             mediaUri = intent.getData();
-            startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID, createNotification(this, R.string.posting_video));
+            startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID, createNotification(R.string.posting_video));
             submitVideoPost();
         }
 
         return START_NOT_STICKY;
     }
 
-    private Notification createNotification(Context context, int stringResId) {
+    private Notification createNotification(int stringResId) {
         return new NotificationCompat.Builder(this, NotificationUtils.CHANNEL_SUBMIT_POST)
                 .setContentTitle(getString(stringResId))
                 .setContentText(getString(R.string.please_wait))

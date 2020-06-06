@@ -21,6 +21,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
+        <service
+            android:name=".Service.DownloadRedditVideoService"
+            android:enabled="true"
+            android:exported="false"></service>
+
         <activity
             android:name=".Activity.ViewImgurMediaActivity"
             android:configChanges="orientation|screenSize|layoutDirection"
@@ -265,7 +270,7 @@
             android:label="@string/comment_activity_label"
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".Activity.SearchResultActivity"
             android:label="@string/search_activity_label"

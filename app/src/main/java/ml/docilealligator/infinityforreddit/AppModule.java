@@ -91,6 +91,16 @@ class AppModule {
     }
 
     @Provides
+    @Named("download_reddit_video")
+    @Singleton
+    Retrofit provideDownloadRedditVideoRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl("http://localhost/")
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+    }
+
+    @Provides
     @Named("gfycat")
     @Singleton
     Retrofit provideGfycatRetrofit() {

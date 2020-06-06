@@ -67,7 +67,7 @@ class AccessTokenAuthenticator implements Authenticator {
 
         Call<String> accessTokenCall = api.getAccessToken(APIUtils.getHttpBasicAuthHeader(), params);
         try {
-            retrofit2.Response response = accessTokenCall.execute();
+            retrofit2.Response<String> response = accessTokenCall.execute();
             if (response.isSuccessful() && response.body() != null) {
                 JSONObject jsonObject = new JSONObject((String) response.body());
                 String newAccessToken = jsonObject.getString(APIUtils.ACCESS_TOKEN_KEY);

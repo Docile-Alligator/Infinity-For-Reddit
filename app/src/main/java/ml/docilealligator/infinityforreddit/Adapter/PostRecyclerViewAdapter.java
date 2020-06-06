@@ -879,7 +879,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             intent.setData(videoUri);
                             intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
                             intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, subredditName);
-                            intent.putExtra(ViewVideoActivity.EXTRA_ID, fullName);
+                            intent.putExtra(ViewVideoActivity.EXTRA_ID, id);
                             mActivity.startActivity(intent);
                         });
 
@@ -2130,7 +2130,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         intent.setData(Uri.parse(post.getVideoUrl()));
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
                         intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, post.getSubredditName());
-                        intent.putExtra(ViewVideoActivity.EXTRA_ID, post.getFullName());
+                        intent.putExtra(ViewVideoActivity.EXTRA_ID, post.getId());
                         intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, post.getTitle());
                         mActivity.startActivity(intent);
                     } else if (post.getPostType() == Post.GIF_TYPE) {
