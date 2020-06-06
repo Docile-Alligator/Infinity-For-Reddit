@@ -740,6 +740,9 @@
 
     <string name="error_fetching_imgur_media">Cannot load images</string>
 
-    <string name="downloading_reddit_video">Downloading video.</string>
+    <string name="downloading_reddit_video">Downloading Video %1$s</string>
+    <string name="downloading_reddit_video_audio_track">Downloading Audio Track For %1$s</string>
+    <string name="downloading_reddit_video_muxing">Muxing Video</string>
+    <string name="downloading_reddit_video_finished">%1$s Downloaded</string>
 
 </resources>

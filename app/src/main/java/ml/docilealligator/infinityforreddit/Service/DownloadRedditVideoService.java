@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaCodec;
 import android.media.MediaExtractor;
@@ -87,15 +88,18 @@ public class DownloadRedditVideoService extends Service {
             manager.createNotificationChannel(serviceChannel);
         }
 
-        startForeground(NotificationUtils.DOWNLOAD_REDDIT_VIDEO_NOTIFICATION_ID, createNotification(R.string.downloading_reddit_video));
+        String fileNameWithoutExtension = intent.getStringExtra(EXTRA_SUBREDDIT)
+                + "-" + intent.getStringExtra(EXTRA_POST_ID);
+
+        startForeground(NotificationUtils.DOWNLOAD_REDDIT_VIDEO_NOTIFICATION_ID,
+                createNotification(R.string.downloading_reddit_video, fileNameWithoutExtension + ".mp4"));
 
         ml.docilealligator.infinityforreddit.API.DownloadRedditVideo downloadRedditVideo = retrofit.create(ml.docilealligator.infinityforreddit.API.DownloadRedditVideo.class);
         downloadRedditVideo.downloadFile(videoUrl).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> videoResponse) {
                 if (videoResponse.isSuccessful() && videoResponse.body() != null) {
-                    String fileNameWithoutExtension = intent.getStringExtra(EXTRA_SUBREDDIT)
-                            + "-" + intent.getStringExtra(EXTRA_POST_ID);
+                    updateNotification(R.string.downloading_reddit_video_audio_track, fileNameWithoutExtension + ".mp3");
 
                     downloadRedditVideo.downloadFile(audioUrl).enqueue(new Callback<ResponseBody>() {
                         @Override
@@ -104,6 +108,8 @@ public class DownloadRedditVideoService extends Service {
                             if (directory != null) {
                                 String directoryPath = directory.getAbsolutePath() + "/";
                                 if (audioResponse.isSuccessful() && audioResponse.body() != null) {
+                                    updateNotification(R.string.downloading_reddit_video_muxing, null);
+
                                     String videoFilePath = writeResponseBodyToDisk(videoResponse.body(),  directoryPath + fileNameWithoutExtension+ "-cache.mp4");
                                     if (videoFilePath != null) {
                                         String audioFilePath = writeResponseBodyToDisk(audioResponse.body(), directoryPath + fileNameWithoutExtension + "-cache.mp3");
@@ -117,6 +123,8 @@ public class DownloadRedditVideoService extends Service {
                                                         new File(videoFilePath).delete();
                                                         new File(audioFilePath).delete();
                                                         new File(outputFilePath).delete();
+
+                                                        updateNotification(R.string.downloading_reddit_video_finished, fileNameWithoutExtension + ".mp4");
 
                                                         EventBus.getDefault().post(new DownloadRedditVideoEvent(true));
 
@@ -160,6 +168,8 @@ public class DownloadRedditVideoService extends Service {
                                             @Override
                                             public void successful() {
                                                 new File(videoFilePath).delete();
+
+                                                updateNotification(R.string.downloading_reddit_video_finished, null);
 
                                                 EventBus.getDefault().post(new DownloadRedditVideoEvent(true));
 
@@ -213,13 +223,25 @@ public class DownloadRedditVideoService extends Service {
         return START_NOT_STICKY;
     }
 
-    private Notification createNotification(int stringResId) {
-        return new NotificationCompat.Builder(this, NotificationUtils.CHANNEL_ID_DOWNLOAD_REDDIT_VIDEO)
-                .setContentTitle(getString(stringResId))
-                .setContentText(getString(R.string.please_wait))
+    private Notification createNotification(int stringResId, String fileName) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NotificationUtils.CHANNEL_ID_DOWNLOAD_REDDIT_VIDEO);
+        if (fileName != null) {
+            builder.setContentTitle(getString(stringResId, fileName));
+        } else {
+            builder.setContentTitle(getString(stringResId));
+        }
+        return builder.setContentText(getString(R.string.please_wait))
                 .setSmallIcon(R.drawable.ic_notification)
                 .setColor(mCustomThemeWrapper.getColorPrimaryLightTheme())
                 .build();
+    }
+
+    private void updateNotification(int stringResId, String fileName) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            notificationManager.notify(NotificationUtils.DOWNLOAD_REDDIT_VIDEO_NOTIFICATION_ID,
+                    createNotification(stringResId, fileName));
+        }
     }
 
     private String writeResponseBodyToDisk(ResponseBody body, String filePath) {
@@ -248,7 +270,6 @@ public class DownloadRedditVideoService extends Service {
                     outputStream.write(fileReader, 0, read);
 
                     fileSizeDownloaded += read;
-
                     Log.i("asdfsadf", "file download: " + fileSizeDownloaded + " of " + fileSize);
                 }
 
@@ -349,8 +370,7 @@ public class DownloadRedditVideoService extends Service {
     }
 
     private void stopService() {
-        stopForeground(true);
-        stopSelf();
+        stopForeground(false);
     }
 
     private static class CopyFileAsyncTask extends AsyncTask<Void, Void, Void> {
