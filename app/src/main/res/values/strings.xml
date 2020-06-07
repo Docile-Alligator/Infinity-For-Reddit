@@ -740,10 +740,18 @@
 
     <string name="error_fetching_imgur_media">Cannot load images</string>
 
-    <string name="downloading_reddit_video">Downloading Video %1$s</string>
-    <string name="downloading_reddit_video_audio_track">Downloading Audio Track For %1$s</string>
-    <string name="downloading_reddit_video_muxing">Muxing Video</string>
-    <string name="downloading_reddit_video_finished">%1$s Downloaded</string>
-    <string name="downloading_reddit_video_failed">Failed To Download Video</string>
+    <string name="downloading_reddit_video">Downloading Video Track</string>
+    <string name="downloading_reddit_video_audio_track">Downloading Audio Track</string>
+    <string name="downloading_reddit_video_save_video">Saving Video Track</string>
+    <string name="downloading_reddit_video_save_audio">Saving Audio Track</string>
+    <string name="downloading_reddit_video_muxing">Muxing Video and Audio</string>
+    <string name="downloading_reddit_video_save_file_to_public_dir">Saving Video</string>
+    <string name="downloading_reddit_video_finished">Downloaded</string>
+    <string name="downloading_reddit_video_failed_cannot_get_cache_directory">Download failed: cannot access cache directory </string>
+    <string name="downloading_reddit_video_failed_cannot_download_video">Download failed: cannot download video</string>
+    <string name="downloading_reddit_video_failed_cannot_save_video">Download failed: cannot save video to cache directory</string>
+    <string name="downloading_reddit_video_failed_cannot_save_audio">Download failed: cannot save audio to cache directory</string>
+    <string name="downloading_reddit_video_failed_cannot_mux">Download failed: cannot mux video and audio</string>
+    <string name="downloading_reddit_video_failed_cannot_save_mux_video">Download failed: cannot save the video to public directory</string>
 
 </resources>
