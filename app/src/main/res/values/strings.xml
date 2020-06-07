@@ -744,5 +744,6 @@
     <string name="downloading_reddit_video_audio_track">Downloading Audio Track For %1$s</string>
     <string name="downloading_reddit_video_muxing">Muxing Video</string>
     <string name="downloading_reddit_video_finished">%1$s Downloaded</string>
+    <string name="downloading_reddit_video_failed">Failed To Download Video</string>
 
 </resources>
