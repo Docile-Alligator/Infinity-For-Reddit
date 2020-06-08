@@ -175,6 +175,7 @@
 
     <string name="subreddits">Subreddits</string>
     <string name="users">Users</string>
+    <string name="multi_reddits">MultiReddits</string>
 
     <string name="bottom_sheet_post_type">Post</string>
     <string name="bottom_sheet_post_text">Text</string>

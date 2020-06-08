@@ -177,10 +177,10 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
             mSwipeRefreshLayout.setOnRefreshListener(() -> ((SubscribedThingListingActivity) mActivity).loadSubscriptions(true));
             mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCircularProgressBarBackground());
             mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent());
-            mErrorTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
         } else {
             mSwipeRefreshLayout.setEnabled(false);
         }
+        mErrorTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
     }
 
     public void goBackToTop() {

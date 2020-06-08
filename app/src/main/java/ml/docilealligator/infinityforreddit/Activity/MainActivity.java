@@ -437,7 +437,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 });
 
                 multiRedditBottomAppBar.setOnClickListener(view -> {
-                    Intent intent = new Intent(MainActivity.this, MultiRedditListingActivity.class);
+                    Intent intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
+                    intent.putExtra(SubscribedThingListingActivity.EXTRA_SHOW_MULTIREDDITS, true);
                     startActivity(intent);
                 });
 

@@ -58,6 +58,7 @@ import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubredditDataAsyncTa
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
+import ml.docilealligator.infinityforreddit.Event.GoBackToMainPageEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
@@ -137,8 +138,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     LinearLayout linearLayoutBottomAppBar;
     @BindView(R.id.subscriptions_bottom_app_bar_view_subreddit_detail_activity)
     ImageView subscriptionsBottomAppBar;
-    @BindView(R.id.multi_reddit_bottom_app_bar_view_subreddit_detail_activity)
-    ImageView multiRedditBottomAppBar;
+    @BindView(R.id.go_back_to_main_page_bottom_app_bar_view_subreddit_detail_activity)
+    ImageView goBackToMainPageBottomAppBar;
     @BindView(R.id.message_bottom_app_bar_view_subreddit_detail_activity)
     ImageView messageBottomAppBar;
     @BindView(R.id.profile_bottom_app_bar_view_subreddit_detail_activity)
@@ -436,7 +437,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         bottomNavigationView.setBackgroundTint(ColorStateList.valueOf(mCustomThemeWrapper.getBottomAppBarBackgroundColor()));
         int bottomAppBarIconColor = mCustomThemeWrapper.getBottomAppBarIconColor();
         subscriptionsBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        multiRedditBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        goBackToMainPageBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         messageBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         profileBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         applyTabLayoutTheme(tabLayout);
@@ -523,10 +524,14 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     startActivity(intent);
                 });
 
-                multiRedditBottomAppBar.setOnClickListener(view -> {
-                    Intent intent = new Intent(ViewSubredditDetailActivity.this, MultiRedditListingActivity.class);
+                subscriptionsBottomAppBar.setOnLongClickListener(view -> {
+                    Intent intent = new Intent(ViewSubredditDetailActivity.this, SubscribedThingListingActivity.class);
+                    intent.putExtra(SubscribedThingListingActivity.EXTRA_SHOW_MULTIREDDITS, true);
                     startActivity(intent);
+                    return true;
                 });
+
+                goBackToMainPageBottomAppBar.setOnClickListener(view -> EventBus.getDefault().post(new GoBackToMainPageEvent()));
 
                 messageBottomAppBar.setOnClickListener(view -> {
                     Intent intent = new Intent(this, ViewMessageActivity.class);
@@ -847,6 +852,11 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     @Subscribe
     public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
         sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
+    }
+
+    @Subscribe
+    public void goBackToMainPageEvent(GoBackToMainPageEvent event) {
+        finish();
     }
 
     @Override

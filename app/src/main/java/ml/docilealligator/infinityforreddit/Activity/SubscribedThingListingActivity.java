@@ -32,14 +32,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.AsyncTask.InsertMultiRedditAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubscribedThingsAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.Event.GoBackToMainPageEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchSubscribedThing;
 import ml.docilealligator.infinityforreddit.Fragment.FollowedUsersListingFragment;
+import ml.docilealligator.infinityforreddit.Fragment.MultiRedditListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SubscribedSubredditsListingFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.MultiReddit.FetchMyMultiReddits;
+import ml.docilealligator.infinityforreddit.MultiReddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
@@ -49,7 +54,9 @@ import retrofit2.Retrofit;
 
 public class SubscribedThingListingActivity extends BaseActivity implements ActivityToolbarInterface {
 
+    public static final String EXTRA_SHOW_MULTIREDDITS = "ESM";
     private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";
+    private static final String INSERT_MULTIREDDIT_STATE = "IMS";
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
@@ -78,6 +85,8 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     private String mAccessToken;
     private String mAccountName;
     private boolean mInsertSuccess = false;
+    private boolean mInsertMultiredditSuccess = false;
+    private boolean showMultiReddits = false;
     private SectionsPagerAdapter sectionsPagerAdapter;
 
     @Override
@@ -113,6 +122,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
 
         if (savedInstanceState != null) {
             mInsertSuccess = savedInstanceState.getBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE);
+            mInsertMultiredditSuccess = savedInstanceState.getBoolean(INSERT_MULTIREDDIT_STATE);
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
@@ -122,6 +132,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                 initializeViewPagerAndLoadSubscriptions();
             }
         } else {
+            showMultiReddits = getIntent().getBooleanExtra(EXTRA_SHOW_MULTIREDDITS, false);
             getCurrentAccountAndInitializeViewPager();
         }
     }
@@ -158,8 +169,12 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     private void initializeViewPagerAndLoadSubscriptions() {
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(sectionsPagerAdapter);
-        viewPager.setOffscreenPageLimit(2);
+        viewPager.setOffscreenPageLimit(3);
         tabLayout.setupWithViewPager(viewPager);
+
+        if (showMultiReddits) {
+            viewPager.setCurrentItem(2);
+        }
 
         loadSubscriptions(false);
     }
@@ -178,6 +193,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE, mInsertSuccess);
+        outState.putBoolean(INSERT_MULTIREDDIT_STATE, mInsertMultiredditSuccess);
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
         outState.putString(ACCOUNT_NAME_STATE, mAccountName);
@@ -220,10 +236,38 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                         }
                     });
         }
+
+        if (!(!forceLoad && mInsertMultiredditSuccess)) {
+            loadMultiReddits();
+        }
+    }
+
+    private void loadMultiReddits() {
+        FetchMyMultiReddits.fetchMyMultiReddits(mOauthRetrofit, mAccessToken, new FetchMyMultiReddits.FetchMyMultiRedditsListener() {
+            @Override
+            public void success(ArrayList<MultiReddit> multiReddits) {
+                new InsertMultiRedditAsyncTask(mRedditDataRoomDatabase, multiReddits, mAccountName, () -> {
+                    mInsertMultiredditSuccess = true;
+                    sectionsPagerAdapter.stopMultiRedditRefreshProgressbar();
+                }).execute();
+            }
+
+            @Override
+            public void failed() {
+                mInsertMultiredditSuccess = false;
+                sectionsPagerAdapter.stopMultiRedditRefreshProgressbar();
+                Toast.makeText(SubscribedThingListingActivity.this, R.string.error_loading_multi_reddit_list, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Subscribe
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
+        finish();
+    }
+
+    @Subscribe
+    public void goBackToMainPageEvent(GoBackToMainPageEvent event) {
         finish();
     }
 
@@ -238,6 +282,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
 
         private SubscribedSubredditsListingFragment subscribedSubredditsListingFragment;
         private FollowedUsersListingFragment followedUsersListingFragment;
+        private MultiRedditListingFragment multiRedditListingFragment;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
@@ -255,11 +300,19 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                     fragment.setArguments(bundle);
                     return fragment;
                 }
-                default: {
+                case 1: {
                     FollowedUsersListingFragment fragment = new FollowedUsersListingFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString(FollowedUsersListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                     bundle.putString(FollowedUsersListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                    fragment.setArguments(bundle);
+                    return fragment;
+                }
+                default: {
+                    MultiRedditListingFragment fragment = new MultiRedditListingFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(MultiRedditListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                    bundle.putString(MultiRedditListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                     fragment.setArguments(bundle);
                     return fragment;
                 }
@@ -268,7 +321,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override
@@ -278,6 +331,8 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                     return getString(R.string.subreddits);
                 case 1:
                     return getString(R.string.users);
+                case 2:
+                    return getString(R.string.multi_reddits);
             }
 
             return null;
@@ -291,6 +346,8 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                 subscribedSubredditsListingFragment = (SubscribedSubredditsListingFragment) fragment;
             } else if (position == 1) {
                 followedUsersListingFragment = (FollowedUsersListingFragment) fragment;
+            } else {
+                multiRedditListingFragment = (MultiRedditListingFragment) fragment;
             }
 
             return fragment;
@@ -305,11 +362,19 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
             }
         }
 
+        void stopMultiRedditRefreshProgressbar() {
+            if (multiRedditListingFragment != null) {
+                ((FragmentCommunicator) multiRedditListingFragment).stopRefreshProgressbar();
+            }
+        }
+
         void goBackToTop() {
             if (viewPager.getCurrentItem() == 0) {
                 subscribedSubredditsListingFragment.goBackToTop();
-            } else {
+            } else if (viewPager.getCurrentItem() == 1) {
                 followedUsersListingFragment.goBackToTop();
+            } else {
+                multiRedditListingFragment.goBackToTop();
             }
         }
     }
