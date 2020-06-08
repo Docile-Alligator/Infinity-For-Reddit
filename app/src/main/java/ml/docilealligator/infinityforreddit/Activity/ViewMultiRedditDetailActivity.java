@@ -31,9 +31,9 @@ import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.RefreshMultiRedditsEvent;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
-import ml.docilealligator.infinityforreddit.Fragment.PostLayoutBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.Fragment.SortTimeBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.Fragment.SortTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostLayoutBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.SortTimeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MultiReddit.DeleteMultiReddit;

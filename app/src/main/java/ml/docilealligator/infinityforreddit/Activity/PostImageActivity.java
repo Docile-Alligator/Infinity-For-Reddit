@@ -51,7 +51,7 @@ import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SubmitImagePostEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Flair;
-import ml.docilealligator.infinityforreddit.Fragment.FlairBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;

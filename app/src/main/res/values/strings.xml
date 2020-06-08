@@ -754,5 +754,7 @@
     <string name="downloading_reddit_video_failed_cannot_save_audio">Download failed: cannot save audio to cache directory</string>
     <string name="downloading_reddit_video_failed_cannot_mux">Download failed: cannot mux video and audio</string>
     <string name="downloading_reddit_video_failed_cannot_save_mux_video">Download failed: cannot save the video to public directory</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

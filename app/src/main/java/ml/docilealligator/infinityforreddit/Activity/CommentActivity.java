@@ -51,7 +51,7 @@ import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask
 import ml.docilealligator.infinityforreddit.CommentData;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.Fragment.CopyTextBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;

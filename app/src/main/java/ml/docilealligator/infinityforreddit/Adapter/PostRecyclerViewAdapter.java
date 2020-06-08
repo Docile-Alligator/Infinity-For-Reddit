@@ -75,7 +75,7 @@ import ml.docilealligator.infinityforreddit.AsyncTask.LoadUserDataAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToDetailActivity;
-import ml.docilealligator.infinityforreddit.Fragment.ShareLinkBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.ShareLinkBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.Post.PostDataSource;

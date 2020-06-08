@@ -25,7 +25,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.zhanghai.android.fastscroll.PopupTextProvider;
 import ml.docilealligator.infinityforreddit.Activity.ViewMultiRedditDetailActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.Fragment.MultiRedditOptionsBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.MultiRedditOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.MultiReddit.FavoriteMultiReddit;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.R;

@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.Fragment;
+package ml.docilealligator.infinityforreddit.BottomSheetFragment;
 
 
 import android.app.Activity;

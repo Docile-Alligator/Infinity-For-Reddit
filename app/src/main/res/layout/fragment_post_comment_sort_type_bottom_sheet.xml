@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:overScrollMode="never"
-    tools:context=".Fragment.PostCommentSortTypeBottomSheetFragment">
+    tools:context=".BottomSheetFragment.PostCommentSortTypeBottomSheetFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

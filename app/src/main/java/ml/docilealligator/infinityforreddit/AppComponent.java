@@ -43,7 +43,7 @@ import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewVideoActivity;
 import ml.docilealligator.infinityforreddit.Fragment.CommentsListingFragment;
-import ml.docilealligator.infinityforreddit.Fragment.FlairBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.FollowedUsersListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.MultiRedditListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;

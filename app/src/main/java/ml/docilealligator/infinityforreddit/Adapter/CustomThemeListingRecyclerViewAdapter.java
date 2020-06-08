@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Activity.CustomThemeListingActivity;
 import ml.docilealligator.infinityforreddit.Activity.CustomizeThemeActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomTheme;
-import ml.docilealligator.infinityforreddit.Fragment.CustomThemeOptionsBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.CustomThemeOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.R;
 
 public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
