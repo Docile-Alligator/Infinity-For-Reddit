@@ -13,6 +13,7 @@ import android.media.MediaCodec;
 import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.media.MediaMuxer;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -225,12 +226,17 @@ public class DownloadRedditVideoService extends Service {
             }
             EventBus.getDefault().post(new DownloadRedditVideoEvent(false));
         } else {
-            Intent intent = new Intent();
-            intent.setAction(android.content.Intent.ACTION_VIEW);
-            intent.setDataAndType(destinationFileUri, "video/*");
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-            updateNotification(R.string.downloading_reddit_video_finished, fileName, pendingIntent);
-            EventBus.getDefault().post(new DownloadRedditVideoEvent(true));
+            MediaScannerConnection.scanFile(
+                    this, new String[]{destinationFileUri.toString()}, null,
+                    (path, uri) -> {
+                        Intent intent = new Intent();
+                        intent.setAction(android.content.Intent.ACTION_VIEW);
+                        intent.setDataAndType(destinationFileUri, "video/*");
+                        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                        updateNotification(R.string.downloading_reddit_video_finished, fileName, pendingIntent);
+                        EventBus.getDefault().post(new DownloadRedditVideoEvent(true));
+                    }
+            );
         }
         stopForeground(false);
     }
