@@ -23,6 +23,7 @@ public class JSONUtils {
     public static final String U_KEY = "u";
     public static final String LINK_KEY = "link";
     public static final String LINK_AUTHOR_KEY = "link_author";
+    public static final String LINK_FLAIR_TEXT_KEY = "link_flair_text";
     public static final String LINK_FLAIR_RICHTEXT_KEY = "link_flair_richtext";
     public static final String SCORE_KEY = "score";
     public static final String LIKES_KEY = "likes";

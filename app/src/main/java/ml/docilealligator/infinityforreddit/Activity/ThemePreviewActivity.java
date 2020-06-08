@@ -337,6 +337,7 @@ public class ThemePreviewActivity extends AppCompatActivity {
     protected void applyAppBarLayoutAndToolbarTheme(AppBarLayout appBarLayout, Toolbar toolbar) {
         appBarLayout.setBackgroundColor(customTheme.colorPrimary);
         toolbar.setTitleTextColor(customTheme.toolbarPrimaryTextAndIconColor);
+        toolbar.setSubtitleTextColor(customTheme.toolbarSecondaryTextColor);
         if (toolbar.getNavigationIcon() != null) {
             toolbar.getNavigationIcon().setColorFilter(customTheme.toolbarPrimaryTextAndIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         }

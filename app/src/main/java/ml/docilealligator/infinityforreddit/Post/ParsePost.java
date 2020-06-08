@@ -64,6 +64,7 @@ public class ParsePost {
         boolean locked = data.getBoolean(JSONUtils.LOCKEC_KEY);
         boolean saved = data.getBoolean(JSONUtils.SAVED_KEY);
         StringBuilder postFlairHTMLBuilder = new StringBuilder();
+        String flair = "";
         if (data.has(JSONUtils.LINK_FLAIR_RICHTEXT_KEY)) {
             JSONArray flairArray = data.getJSONArray(JSONUtils.LINK_FLAIR_RICHTEXT_KEY);
             for (int i = 0; i < flairArray.length(); i++) {
@@ -75,8 +76,13 @@ public class ParsePost {
                     postFlairHTMLBuilder.append("<img src=\"").append(Html.escapeHtml(flairObject.getString(JSONUtils.U_KEY))).append("\">");
                 }
             }
+            flair = postFlairHTMLBuilder.toString();
         }
-        String flair = postFlairHTMLBuilder.toString();
+
+        if (flair.equals("") && data.has(JSONUtils.LINK_FLAIR_TEXT_KEY) && !data.isNull(JSONUtils.LINK_FLAIR_TEXT_KEY)) {
+            flair = data.getString(JSONUtils.LINK_FLAIR_TEXT_KEY);
+        }
+        
         StringBuilder awardingsBuilder = new StringBuilder();
         JSONArray awardingsArray = data.getJSONArray(JSONUtils.ALL_AWARDINGS_KEY);
         int nAwards = 0;

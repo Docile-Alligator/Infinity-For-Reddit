@@ -185,14 +185,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void setToolbarGoToTop(Toolbar toolbar) {
-        toolbar.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                if (BaseActivity.this instanceof ActivityToolbarInterface) {
-                    ((ActivityToolbarInterface) BaseActivity.this).onLongPress();
-                }
-                return true;
+        toolbar.setOnLongClickListener(view -> {
+            if (BaseActivity.this instanceof ActivityToolbarInterface) {
+                ((ActivityToolbarInterface) BaseActivity.this).onLongPress();
             }
+            return true;
         });
     }
 
@@ -247,6 +244,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void applyAppBarLayoutAndToolbarTheme(AppBarLayout appBarLayout, Toolbar toolbar) {
         appBarLayout.setBackgroundColor(customThemeWrapper.getColorPrimary());
         toolbar.setTitleTextColor(customThemeWrapper.getToolbarPrimaryTextAndIconColor());
+        toolbar.setSubtitleTextColor(customThemeWrapper.getToolbarSecondaryTextColor());
         if (toolbar.getNavigationIcon() != null) {
             toolbar.getNavigationIcon().setColorFilter(customThemeWrapper.getToolbarPrimaryTextAndIconColor(), android.graphics.PorterDuff.Mode.SRC_IN);
         }
