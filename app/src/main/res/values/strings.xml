@@ -67,6 +67,7 @@
     <string name="something_went_wrong">Something went wrong. Try again later.</string>
     <string name="access_denied">Access denied</string>
     <string name="parse_user_info_error">Error occurred when parsing the user info</string>
+    <string name="no_system_webview_error">Error opening System\'s WebView</string>
 
     <string name="error_loading_image_tap_to_retry">Error loading the image. Tap to retry.</string>
     <string name="error_loading_gif_tap_to_retry">Error loading the gif. Tap to retry.</string>
