@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
@@ -31,12 +30,6 @@ public class CustomizeMainPageTabsFragment extends PreferenceFragmentCompat {
     @Inject
     CustomThemeWrapper customThemeWrapper;
     private SettingsActivity activity;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {

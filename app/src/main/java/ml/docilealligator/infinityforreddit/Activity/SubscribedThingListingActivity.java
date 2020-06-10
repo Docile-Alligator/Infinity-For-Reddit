@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -36,6 +37,7 @@ import ml.docilealligator.infinityforreddit.AsyncTask.InsertMultiRedditAsyncTask
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubscribedThingsAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.GoBackToMainPageEvent;
+import ml.docilealligator.infinityforreddit.Event.RefreshMultiRedditsEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchSubscribedThing;
 import ml.docilealligator.infinityforreddit.Fragment.FollowedUsersListingFragment;
@@ -43,6 +45,7 @@ import ml.docilealligator.infinityforreddit.Fragment.MultiRedditListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SubscribedSubredditsListingFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.MultiReddit.DeleteMultiReddit;
 import ml.docilealligator.infinityforreddit.MultiReddit.FetchMyMultiReddits;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.R;
@@ -261,6 +264,30 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         });
     }
 
+    public void deleteMultiReddit(MultiReddit multiReddit) {
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                .setTitle(R.string.delete)
+                .setMessage(R.string.delete_multi_reddit_dialog_message)
+                .setPositiveButton(R.string.delete, (dialogInterface, i)
+                        -> DeleteMultiReddit.deleteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase,
+                        mAccessToken, mAccountName, multiReddit.getPath(), new DeleteMultiReddit.DeleteMultiRedditListener() {
+                            @Override
+                            public void success() {
+                                Toast.makeText(SubscribedThingListingActivity.this,
+                                        R.string.delete_multi_reddit_success, Toast.LENGTH_SHORT).show();
+                                loadMultiReddits();
+                            }
+
+                            @Override
+                            public void failed() {
+                                Toast.makeText(SubscribedThingListingActivity.this,
+                                        R.string.delete_multi_reddit_failed, Toast.LENGTH_SHORT).show();
+                            }
+                        }))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
     @Subscribe
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
         finish();
@@ -269,6 +296,11 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     @Subscribe
     public void goBackToMainPageEvent(GoBackToMainPageEvent event) {
         finish();
+    }
+
+    @Subscribe
+    public void onRefreshMultiRedditsEvent(RefreshMultiRedditsEvent event) {
+        loadMultiReddits();
     }
 
     @Override

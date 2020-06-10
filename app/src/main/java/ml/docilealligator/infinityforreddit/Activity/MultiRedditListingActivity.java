@@ -27,8 +27,6 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.greenrobot.eventbus.Subscribe;
-
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -41,7 +39,6 @@ import ml.docilealligator.infinityforreddit.Adapter.MultiRedditListingRecyclerVi
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertMultiRedditAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.Event.RefreshMultiRedditsEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MultiReddit.DeleteMultiReddit;
 import ml.docilealligator.infinityforreddit.MultiReddit.FetchMyMultiReddits;
@@ -292,8 +289,8 @@ public class MultiRedditListingActivity extends BaseActivity {
                 .show();
     }
 
-    @Subscribe
+    /*@Subscribe
     public void onRefreshMultiRedditsEvent(RefreshMultiRedditsEvent event) {
         loadMultiReddits();
-    }
+    }*/
 }

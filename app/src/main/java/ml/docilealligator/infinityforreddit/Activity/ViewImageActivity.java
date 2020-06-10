@@ -49,11 +49,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AsyncTask.SaveImageToFileAsyncTask;
 import ml.docilealligator.infinityforreddit.BuildConfig;
+import ml.docilealligator.infinityforreddit.Font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.Font.ContentFontStyle;
+import ml.docilealligator.infinityforreddit.Font.FontFamily;
 import ml.docilealligator.infinityforreddit.Font.FontStyle;
+import ml.docilealligator.infinityforreddit.Font.TitleFontFamily;
+import ml.docilealligator.infinityforreddit.Font.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.Font.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
 public class ViewImageActivity extends AppCompatActivity {
@@ -96,6 +99,15 @@ public class ViewImageActivity extends AppCompatActivity {
 
         getTheme().applyStyle(ContentFontStyle.valueOf(mSharedPreferences
                 .getString(SharedPreferencesUtils.CONTENT_FONT_SIZE_KEY, ContentFontStyle.Normal.name())).getResId(), true);
+
+        getTheme().applyStyle(FontFamily.valueOf(mSharedPreferences
+                .getString(SharedPreferencesUtils.FONT_FAMILY_KEY, FontFamily.Default.name())).getResId(), true);
+
+        getTheme().applyStyle(TitleFontFamily.valueOf(mSharedPreferences
+                .getString(SharedPreferencesUtils.TITLE_FONT_FAMILY_KEY, TitleFontFamily.Default.name())).getResId(), true);
+
+        getTheme().applyStyle(ContentFontFamily.valueOf(mSharedPreferences
+                .getString(SharedPreferencesUtils.CONTENT_FONT_FAMILY_KEY, ContentFontFamily.Default.name())).getResId(), true);
 
         setContentView(R.layout.activity_view_image);
 

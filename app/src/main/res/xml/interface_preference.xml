@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Preference
-        app:title="@string/settings_font_size_title"
+        app:title="@string/settings_font_title"
         app:icon="@drawable/ic_font_size_24dp"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.FontSizePreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.FontPreferenceFragment" />
 
     <SwitchPreference
         app:defaultValue="true"

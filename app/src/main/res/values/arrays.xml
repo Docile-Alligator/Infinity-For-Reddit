@@ -122,6 +122,18 @@
         <item>XLarge</item>
         <item>XXLarge</item>
     </string-array>
+
+    <string-array name="settings_font_family">
+        <item>Default</item>
+        <item>Balsamiq Sans</item>
+        <item>Noto Sans</item>
+    </string-array>
+
+    <string-array name="settings_font_family_values">
+        <item>Default</item>
+        <item>BalsamiqSans</item>
+        <item>NotoSans</item>
+    </string-array>
     
     <string-array name="settings_tab_post_type">
         <item>Home</item>

@@ -348,6 +348,13 @@
     <string name="settings_lock_bottom_app_bar_title">Lock Bottom Navigation Bar</string>
     <string name="settings_swipe_up_to_hide_jump_to_next_top_level_comment_button_title">Swipe Up to Hide Jump to Next Top-level Comment Button</string>
     <string name="settings_lazy_mode_interval_title">Lazy Mode Interval</string>
+    <string name="settings_font_title">Font</string>
+    <string name="settings_font_summary">Font</string>
+    <string name="settings_title_font_summary">Title</string>
+    <string name="settings_content_font_summary">Content</string>
+    <string name="settings_font_family_title">Font Family</string>
+    <string name="settings_title_font_family_title">Title Font Family</string>
+    <string name="settings_content_font_family_title">Content Font Family</string>
     <string name="settings_font_size_title">Font Size</string>
     <string name="settings_title_font_size_title">Title Font Size</string>
     <string name="settings_content_font_size_title">Content Font Size</string>
@@ -711,7 +718,7 @@
     <string name="post_content_preview">This gravity joke is getting a bit old, but I fall for it every time.</string>
     <string name="post_type_preview">POST</string>
     <string name="flair_preview">Flair</string>
-    <string name="gilded_preview">x4</string>
+    <string name="awards_preview">4 Awards</string>
     <string name="author_flair_preview">Author Flair</string>
     <string name="comment_content_preview">I got my girlfriend a “Get better soon” card.\nShe\'s not ill or anything, but she could definitely get better.</string>
 

@@ -14,15 +14,40 @@ import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
-public class FontSizePreferenceFragment extends PreferenceFragmentCompat {
+public class FontPreferenceFragment extends PreferenceFragmentCompat {
     private Activity activity;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.font_size_preferences, rootKey);
+        setPreferencesFromResource(R.xml.font_preferences, rootKey);
+        ListPreference fontFamilyPreference = findPreference(SharedPreferencesUtils.FONT_FAMILY_KEY);
+        ListPreference titleFontFamilyPreference = findPreference(SharedPreferencesUtils.TITLE_FONT_FAMILY_KEY);
+        ListPreference contentFontFamilyPreference = findPreference(SharedPreferencesUtils.CONTENT_FONT_FAMILY_KEY);
         ListPreference fontSizePreference = findPreference(SharedPreferencesUtils.FONT_SIZE_KEY);
         ListPreference titleFontSizePreference = findPreference(SharedPreferencesUtils.TITLE_FONT_SIZE_KEY);
         ListPreference contentFontSizePreference = findPreference(SharedPreferencesUtils.CONTENT_FONT_SIZE_KEY);
+
+        if (fontFamilyPreference != null) {
+            fontFamilyPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                EventBus.getDefault().post(new RecreateActivityEvent());
+                activity.recreate();
+                return true;
+            });
+        }
+
+        if (titleFontFamilyPreference != null) {
+            titleFontFamilyPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                EventBus.getDefault().post(new RecreateActivityEvent());
+                return true;
+            });
+        }
+
+        if (contentFontFamilyPreference != null) {
+            contentFontFamilyPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                EventBus.getDefault().post(new RecreateActivityEvent());
+                return true;
+            });
+        }
 
         if (fontSizePreference != null) {
             fontSizePreference.setOnPreferenceChangeListener((preference, newValue) -> {

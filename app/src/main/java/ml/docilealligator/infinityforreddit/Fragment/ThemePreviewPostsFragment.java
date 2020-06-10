@@ -15,7 +15,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -59,6 +58,8 @@ public class ThemePreviewPostsFragment extends Fragment {
     CustomTextView nsfwTextView;
     @BindView(R.id.flair_custom_text_view_theme_preview_posts_fragment)
     CustomTextView flairTextView;
+    @BindView(R.id.awards_text_view_theme_preview_posts_fragment)
+    CustomTextView awardsTextView;
     @BindView(R.id.archived_image_view_theme_preview_posts_fragment)
     ImageView archivedImageView;
     @BindView(R.id.locked_image_view_theme_preview_posts_fragment)
@@ -120,6 +121,9 @@ public class ThemePreviewPostsFragment extends Fragment {
         flairTextView.setBackgroundColor(customTheme.flairBackgroundColor);
         flairTextView.setBorderColor(customTheme.flairBackgroundColor);
         flairTextView.setTextColor(customTheme.flairTextColor);
+        awardsTextView.setBackgroundColor(customTheme.awardsBackgroundColor);
+        awardsTextView.setBorderColor(customTheme.awardsBackgroundColor);
+        awardsTextView.setTextColor(customTheme.awardsTextColor);
         archivedImageView.setColorFilter(customTheme.archivedTint, PorterDuff.Mode.SRC_IN);
         lockedImageView.setColorFilter(customTheme.lockedIconTint, PorterDuff.Mode.SRC_IN);
         crosspostImageView.setColorFilter(customTheme.crosspostIconTint, PorterDuff.Mode.SRC_IN);

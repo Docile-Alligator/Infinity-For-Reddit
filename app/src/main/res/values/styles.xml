@@ -39,13 +39,14 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:fontFamily">?attr/font_family</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.DayNight.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.DayNight.ActionBar">
+        <item name="android:fontFamily">?attr/font_family</item>
+    </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.DayNight" />
-
-    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="CustomTabLayout" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@android:color/white</item>
@@ -105,10 +106,12 @@
     <style name="PreferenceTitleTextStyle">
         <item name="android:textSize">?attr/font_16</item>
         <item name="android:textColor">?attr/primaryTextColor</item>
+        <item name="android:fontFamily">?attr/font_family</item>
     </style>
 
     <style name="PreferenceSubtitleTextStyle">
         <item name="android:textSize">?attr/font_default</item>
+        <item name="android:fontFamily">?attr/font_family</item>
     </style>
 
     <style name="ListPreferenceStyle" parent="ThemeOverlay.AppCompat.Dialog.Alert">

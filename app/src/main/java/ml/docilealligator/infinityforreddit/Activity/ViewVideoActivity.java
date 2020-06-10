@@ -57,6 +57,9 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.FetchGfycatVideoLinks;
+import ml.docilealligator.infinityforreddit.Font.ContentFontFamily;
+import ml.docilealligator.infinityforreddit.Font.FontFamily;
+import ml.docilealligator.infinityforreddit.Font.TitleFontFamily;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Service.DownloadRedditVideoService;
@@ -119,11 +122,21 @@ public class ViewVideoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getTheme().applyStyle(R.style.Theme_Normal, true);
-
-        setContentView(R.layout.activity_view_video);
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        getTheme().applyStyle(R.style.Theme_Normal, true);
+
+        getTheme().applyStyle(FontFamily.valueOf(mSharedPreferences
+                .getString(SharedPreferencesUtils.FONT_FAMILY_KEY, FontFamily.Default.name())).getResId(), true);
+
+        getTheme().applyStyle(TitleFontFamily.valueOf(mSharedPreferences
+                .getString(SharedPreferencesUtils.TITLE_FONT_FAMILY_KEY, TitleFontFamily.Default.name())).getResId(), true);
+
+        getTheme().applyStyle(ContentFontFamily.valueOf(mSharedPreferences
+                .getString(SharedPreferencesUtils.CONTENT_FONT_FAMILY_KEY, ContentFontFamily.Default.name())).getResId(), true);
+
+        setContentView(R.layout.activity_view_video);
 
         ButterKnife.bind(this);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);

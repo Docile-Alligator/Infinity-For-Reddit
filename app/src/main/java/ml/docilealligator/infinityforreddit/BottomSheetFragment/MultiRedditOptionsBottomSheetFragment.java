@@ -16,7 +16,7 @@ import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Activity.EditMultiRedditActivity;
-import ml.docilealligator.infinityforreddit.Activity.MultiRedditListingActivity;
+import ml.docilealligator.infinityforreddit.Activity.SubscribedThingListingActivity;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.R;
 
@@ -31,7 +31,7 @@ public class MultiRedditOptionsBottomSheetFragment extends RoundedBottomSheetDia
     TextView editMultiRedditTextView;
     @BindView(R.id.delete_multi_reddit_text_view_multi_reddit_options_bottom_sheet_fragment)
     TextView deleteMultiRedditTextView;
-    private MultiRedditListingActivity multiRedditListingActivity;
+    private SubscribedThingListingActivity subscribedThingListingActivity;
 
     public MultiRedditOptionsBottomSheetFragment() {
         // Required empty public constructor
@@ -48,14 +48,14 @@ public class MultiRedditOptionsBottomSheetFragment extends RoundedBottomSheetDia
         MultiReddit multiReddit = getArguments().getParcelable(EXTRA_MULTI_REDDIT);
 
         editMultiRedditTextView.setOnClickListener(view -> {
-            Intent editIntent = new Intent(multiRedditListingActivity, EditMultiRedditActivity.class);
+            Intent editIntent = new Intent(subscribedThingListingActivity, EditMultiRedditActivity.class);
             editIntent.putExtra(EditMultiRedditActivity.EXTRA_MULTI_REDDIT, multiReddit);
             startActivity(editIntent);
             dismiss();
         });
 
         deleteMultiRedditTextView.setOnClickListener(view -> {
-            multiRedditListingActivity.deleteMultiReddit(multiReddit);
+            subscribedThingListingActivity.deleteMultiReddit(multiReddit);
             dismiss();
         });
 
@@ -65,6 +65,6 @@ public class MultiRedditOptionsBottomSheetFragment extends RoundedBottomSheetDia
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        multiRedditListingActivity = (MultiRedditListingActivity) context;
+        subscribedThingListingActivity = (SubscribedThingListingActivity) context;
     }
 }
