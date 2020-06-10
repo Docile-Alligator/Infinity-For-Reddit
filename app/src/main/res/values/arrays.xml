@@ -127,12 +127,20 @@
         <item>Default</item>
         <item>Balsamiq Sans</item>
         <item>Noto Sans</item>
+        <item>Roboto Condensed</item>
+        <item>Harmonia Sans</item>
+        <item>Selawk</item>
+        <item>Inter</item>
     </string-array>
 
     <string-array name="settings_font_family_values">
         <item>Default</item>
         <item>BalsamiqSans</item>
         <item>NotoSans</item>
+        <item>RobotoCondensed</item>
+        <item>HarmoniaSans</item>
+        <item>Selawk</item>
+        <item>Inter</item>
     </string-array>
     
     <string-array name="settings_tab_post_type">

@@ -246,6 +246,22 @@
         <item name="font_family">@font/noto_sans</item>
     </style>
 
+    <style name="FontFamily.RobotoCondensed">
+        <item name="font_family">@font/roboto_condensed</item>
+    </style>
+
+    <style name="FontFamily.HarmoniaSans">
+        <item name="font_family">@font/harmonia_sans</item>
+    </style>
+
+    <style name="FontFamily.Selawk">
+        <item name="font_family">@font/selawk</item>
+    </style>
+
+    <style name="FontFamily.Inter">
+        <item name="font_family">@font/inter</item>
+    </style>
+
     <style name="TitleFontFamily" />
 
     <style name="TitleFontFamily.Default">
@@ -260,6 +276,22 @@
         <item name="title_font_family">@font/noto_sans</item>
     </style>
 
+    <style name="TitleFontFamily.RobotoCondensed">
+        <item name="title_font_family">@font/roboto_condensed</item>
+    </style>
+
+    <style name="TitleFontFamily.HarmoniaSans">
+        <item name="title_font_family">@font/harmonia_sans</item>
+    </style>
+
+    <style name="TitleFontFamily.Selawk">
+        <item name="title_font_family">@font/selawk</item>
+    </style>
+
+    <style name="TitleFontFamily.Inter">
+        <item name="title_font_family">@font/inter</item>
+    </style>
+
     <style name="ContentFontFamily" />
 
     <style name="ContentFontFamily.Default">
@@ -272,6 +304,22 @@
 
     <style name="ContentFontFamily.NotoSans">
         <item name="content_font_family">@font/noto_sans</item>
+    </style>
+
+    <style name="ContentFontFamily.RobotoCondensed">
+        <item name="content_font_family">@font/roboto_condensed</item>
+    </style>
+
+    <style name="ContentFontFamily.HarmoniaSans">
+        <item name="content_font_family">@font/harmonia_sans</item>
+    </style>
+
+    <style name="ContentFontFamily.Selawk">
+        <item name="content_font_family">@font/selawk</item>
+    </style>
+
+    <style name="ContentFontFamily.Inter">
+        <item name="content_font_family">@font/inter</item>
     </style>
 
     <style name="Theme" />
