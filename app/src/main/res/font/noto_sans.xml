@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:app="http://schemas.android.com/apk/res-auto">
+    <font
+        app:fontStyle="normal"
+        app:fontWeight="400"
+        app:font="@font/noto_sans_regular" />
+
+    <font
+        app:fontStyle="normal"
+        app:fontWeight="700"
+        app:font="@font/noto_sans_bold" />
+
+    <font
+        app:fontStyle="italic"
+        app:fontWeight="400"
+        app:font="@font/noto_sans_italic" />
+
+    <font
+        app:fontStyle="italic"
+        app:fontWeight="700"
+        app:font="@font/noto_sans_bold_italic" />
+</font-family>

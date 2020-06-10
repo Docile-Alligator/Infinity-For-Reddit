@@ -4,4 +4,5 @@
     android:layout_height="wrap_content"
     android:padding="16dp"
     android:text="@string/label_post"
-    android:textSize="?attr/font_default" />
+    android:textSize="?attr/font_default"
+    android:fontFamily="?attr/font_family" />

@@ -11,6 +11,7 @@
         android:background="#00000000"
         android:textColor="?attr/primaryTextColor"
         android:textSize="?attr/font_default"
+        android:fontFamily="?attr/font_family"
         android:hint="@string/flair"
         android:maxLength="64" />
 
@@ -21,6 +22,7 @@
         android:layout_marginEnd="24dp"
         android:text="@string/only_allow_64_chars"
         android:textColor="?attr/colorAccent"
-        android:textSize="?attr/font_default" />
+        android:textSize="?attr/font_default"
+        android:fontFamily="?attr/font_family" />
 
 </LinearLayout>

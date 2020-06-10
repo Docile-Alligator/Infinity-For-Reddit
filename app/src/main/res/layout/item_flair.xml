@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:textColor="?attr/primaryTextColor"
-        android:textSize="?attr/font_default" />
+        android:textSize="?attr/font_default"
+        android:fontFamily="?attr/font_family" />
 
     <ImageView
         android:id="@+id/edit_flair_image_view_item_flair"

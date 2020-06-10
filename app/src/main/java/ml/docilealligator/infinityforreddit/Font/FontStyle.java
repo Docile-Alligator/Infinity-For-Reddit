@@ -1,4 +1,6 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Font;
+
+import ml.docilealligator.infinityforreddit.R;
 
 public enum FontStyle {
     Small(R.style.FontStyle_Small, "Small"),

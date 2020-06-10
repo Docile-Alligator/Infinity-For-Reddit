@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="?attr/primaryTextColor"
-        android:textSize="?attr/font_16" />
+        android:textSize="?attr/font_16"
+        android:fontFamily="?attr/font_family" />
 
     <TextView
         android:id="@+id/description_text_view_item_theme_name"
@@ -21,6 +22,7 @@
         android:layout_marginTop="4dp"
         android:text="@string/theme_name_description"
         android:textColor="?attr/secondaryTextColor"
-        android:textSize="?attr/font_default" />
+        android:textSize="?attr/font_default"
+        android:fontFamily="?attr/font_family" />
 
 </LinearLayout>

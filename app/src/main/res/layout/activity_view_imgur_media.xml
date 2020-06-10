@@ -42,7 +42,8 @@
                     android:gravity="center"
                     android:textColor="@android:color/white"
                     android:text="@string/error_loading_image_tap_to_retry"
-                    android:textSize="?attr/font_default" />
+                    android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family" />
 
             </LinearLayout>
 

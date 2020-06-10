@@ -24,7 +24,8 @@
             android:paddingBottom="16dp"
             android:text="@string/sort_best"
             android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/font_default" />
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
 
         <TextView
             android:id="@+id/confidence_type_text_view_post_comment_sort_type_bottom_sheet_fragment"
@@ -39,7 +40,8 @@
             android:paddingBottom="16dp"
             android:text="@string/sort_confidence"
             android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/font_default" />
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
 
         <TextView
             android:id="@+id/top_type_text_view_post_comment_sort_type_bottom_sheet_fragment"
@@ -54,7 +56,8 @@
             android:paddingBottom="16dp"
             android:text="@string/sort_top"
             android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/font_default" />
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
 
         <TextView
             android:id="@+id/new_type_text_view_post_comment_sort_type_bottom_sheet_fragment"
@@ -69,7 +72,8 @@
             android:paddingBottom="16dp"
             android:text="@string/sort_new"
             android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/font_default" />
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
 
         <TextView
             android:id="@+id/controversial_type_text_view_post_comment_sort_type_bottom_sheet_fragment"
@@ -84,7 +88,8 @@
             android:paddingBottom="16dp"
             android:text="@string/sort_controversial"
             android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/font_default" />
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
 
         <TextView
             android:id="@+id/old_type_text_view_post_comment_sort_type_bottom_sheet_fragment"
@@ -99,7 +104,8 @@
             android:paddingBottom="16dp"
             android:text="@string/sort_old"
             android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/font_default" />
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
 
         <TextView
             android:id="@+id/random_type_text_view_post_comment_sort_type_bottom_sheet_fragment"
@@ -114,7 +120,8 @@
             android:paddingBottom="16dp"
             android:text="@string/sort_random"
             android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/font_default" />
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
 
         <TextView
             android:id="@+id/qa_type_text_view_post_comment_sort_type_bottom_sheet_fragment"
@@ -129,7 +136,8 @@
             android:paddingBottom="16dp"
             android:text="@string/sort_qa"
             android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/font_default" />
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
 
         <TextView
             android:id="@+id/live_type_text_view_post_comment_sort_type_bottom_sheet_fragment"
@@ -144,7 +152,8 @@
             android:paddingBottom="16dp"
             android:text="@string/sort_live"
             android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/font_default" />
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
 
     </LinearLayout>
 

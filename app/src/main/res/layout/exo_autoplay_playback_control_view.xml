@@ -15,7 +15,8 @@
         android:includeFontPadding="false"
         android:textColor="#FFFFFF"
         android:textSize="12sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:fontFamily="?attr/font_family" />
 
     <TextView
         android:id="@+id/slash"
@@ -26,7 +27,8 @@
         android:text="/"
         android:textColor="#FFFFFF"
         android:textSize="12sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:fontFamily="?attr/font_family" />
 
     <TextView android:id="@id/exo_duration"
         android:layout_width="wrap_content"
@@ -36,7 +38,8 @@
         android:includeFontPadding="false"
         android:textColor="#FFFFFF"
         android:textSize="12sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:fontFamily="?attr/font_family" />
 
     <ImageView android:id="@id/exo_play"
         android:layout_width="wrap_content"

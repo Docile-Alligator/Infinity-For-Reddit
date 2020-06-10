@@ -39,7 +39,8 @@
             android:layout_marginTop="16dp"
             android:gravity="center"
             android:text="@string/no_users"
-            android:textSize="?attr/font_default" />
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
 
     </LinearLayout>
 

@@ -18,7 +18,8 @@
             android:paddingBottom="16dp"
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
-            android:textColor="?attr/primaryTextColor" />
+            android:textColor="?attr/primaryTextColor"
+            android:fontFamily="?attr/font_family" />
 
         <TextView
             android:id="@+id/edit_theme_text_view_custom_theme_options_bottom_sheet_fragment"
@@ -32,6 +33,7 @@
             android:text="@string/edit_theme"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family"
             android:drawableStart="@drawable/ic_edit_24dp"
             android:drawablePadding="48dp"
             android:clickable="true"
@@ -50,6 +52,7 @@
             android:text="@string/change_theme_name"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family"
             android:drawableStart="@drawable/ic_edit_24dp"
             android:drawablePadding="48dp"
             android:clickable="true"
@@ -68,6 +71,7 @@
             android:text="@string/share_theme"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family"
             android:drawableStart="@drawable/ic_share_24dp"
             android:drawablePadding="48dp"
             android:clickable="true"
@@ -86,6 +90,7 @@
             android:text="@string/delete_theme"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family"
             android:drawableStart="@drawable/ic_delete_24dp"
             android:drawablePadding="48dp"
             android:clickable="true"

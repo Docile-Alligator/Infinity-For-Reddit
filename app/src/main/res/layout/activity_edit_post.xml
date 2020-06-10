@@ -48,7 +48,8 @@
                 android:gravity="top"
                 android:padding="16dp"
                 android:textSize="?attr/title_font_18"
-                android:textColor="?attr/primaryTextColor" />
+                android:textColor="?attr/primaryTextColor"
+                android:fontFamily="?attr/title_font_family" />
 
             <View
                 android:id="@+id/divider_edit_post_activity"
@@ -65,7 +66,8 @@
                 android:inputType="textCapSentences|textMultiLine"
                 android:textSize="?attr/content_font_18"
                 android:background="#00000000"
-                android:textColor="?attr/primaryTextColor" />
+                android:textColor="?attr/primaryTextColor"
+                android:fontFamily="?attr/content_font_family" />
 
         </LinearLayout>
 

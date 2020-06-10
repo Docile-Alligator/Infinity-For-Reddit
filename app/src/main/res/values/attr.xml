@@ -27,6 +27,18 @@
         <attr name="content_font_20" format="dimension"/>
     </declare-styleable>
 
+    <declare-styleable name="FontFamily">
+        <attr name="font_family" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="TitleFontFamily">
+        <attr name="title_font_family" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="ContentFontFamily">
+        <attr name="content_font_family" format="reference"/>
+    </declare-styleable>
+
     <declare-styleable name="Theme">
         <attr name="colorPrimary" format="color"/>
         <attr name="colorPrimaryDark" format="color"/>

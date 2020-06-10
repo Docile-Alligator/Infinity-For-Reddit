@@ -33,6 +33,7 @@
         android:padding="16dp"
         android:textColor="?attr/primaryTextColor"
         android:textSize="?attr/content_font_18"
+        android:fontFamily="?attr/content_font_family"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

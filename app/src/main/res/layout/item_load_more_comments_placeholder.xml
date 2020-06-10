@@ -22,7 +22,8 @@
             android:padding="8dp"
             android:text="@string/comment_load_more_comments"
             android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/font_default" />
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
 
     </LinearLayout>
 

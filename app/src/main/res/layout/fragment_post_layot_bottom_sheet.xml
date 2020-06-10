@@ -25,7 +25,8 @@
             android:paddingBottom="16dp"
             android:text="@string/post_layout_card"
             android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/font_default" />
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
 
         <TextView
             android:id="@+id/compact_layout_text_view_post_layout_bottom_sheet_fragment"
@@ -40,7 +41,8 @@
             android:paddingBottom="16dp"
             android:text="@string/post_layout_compact"
             android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/font_default" />
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
 
     </LinearLayout>
 

@@ -69,7 +69,9 @@
             android:layout_marginTop="16dp"
             android:gravity="center"
             android:text="@string/no_subreddits"
-            android:textSize="?attr/font_default" />
+            android:textSize="?attr/font_default"
+            android:textColor="?attr/primaryTextColor"
+            android:fontFamily="?attr/font_family" />
 
     </LinearLayout>
 

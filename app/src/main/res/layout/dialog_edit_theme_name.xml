@@ -7,4 +7,5 @@
     android:background="#00000000"
     android:hint="@string/theme_name_hint"
     android:textColor="?attr/primaryTextColor"
-    android:textSize="?attr/font_default" />
+    android:textSize="?attr/font_default"
+    android:fontFamily="?attr/font_family" />

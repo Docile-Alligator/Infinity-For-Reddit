@@ -13,7 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
-        android:layout_marginEnd="16dp" />
+        android:layout_marginEnd="16dp"
+        android:textSize="?attr/font_default"
+        android:fontFamily="?attr/font_family" />
 
     <ImageView
         android:id="@+id/delete_image_view_item_selected_subreddit"

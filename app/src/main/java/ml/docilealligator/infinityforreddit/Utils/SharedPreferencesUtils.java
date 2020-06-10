@@ -29,6 +29,9 @@ public class SharedPreferencesUtils {
     public static final String FONT_SIZE_KEY = "font_size";
     public static final String TITLE_FONT_SIZE_KEY = "title_font_size";
     public static final String CONTENT_FONT_SIZE_KEY = "content_font_size";
+    public static final String FONT_FAMILY_KEY = "font_family";
+    public static final String TITLE_FONT_FAMILY_KEY = "title_font_family";
+    public static final String CONTENT_FONT_FAMILY_KEY = "content_font_family";
     public static final String AMOLED_DARK_KEY = "amoled_dark";
     public static final String IMMERSIVE_INTERFACE_KEY = "immersive_interface";
     public static final String IMMERSIVE_INTERFACE_IGNORE_NAV_BAR_KEY = "immersive_interface_ignore_nav_bar";

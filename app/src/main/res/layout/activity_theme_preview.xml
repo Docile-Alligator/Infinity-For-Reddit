@@ -52,14 +52,16 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="16dp"
                             android:text="@string/subreddit_preview"
-                            android:textSize="?attr/font_18"/>
+                            android:textSize="?attr/font_18"
+                            android:fontFamily="?attr/font_family" />
 
                         <TextView
                             android:id="@+id/user_name_text_view_theme_preview_activity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/username_preview"
-                            android:textSize="?attr/font_18"/>
+                            android:textSize="?attr/font_18"
+                            android:fontFamily="?attr/font_family"/>
 
                     </LinearLayout>
 
@@ -85,7 +87,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/primary_text_preview"
-                        android:textSize="?attr/font_default" />
+                        android:textSize="?attr/font_default"
+                        android:fontFamily="?attr/font_family" />
 
                     <TextView
                         android:id="@+id/secondary_text_text_view_theme_preview_activity"
@@ -94,7 +97,8 @@
                         android:layout_weight="1"
                         android:gravity="end"
                         android:text="@string/secondary_text_preview"
-                        android:textSize="?attr/font_default" />
+                        android:textSize="?attr/font_default"
+                        android:fontFamily="?attr/font_family" />
 
                 </LinearLayout>
 
@@ -164,7 +168,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@android:color/transparent"/>
+                android:background="@android:color/transparent" />
 
             <ImageView
                 android:id="@+id/message_bottom_app_bar_theme_preview_activity"

@@ -49,11 +49,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AsyncTask.SaveImageToFileAsyncTask;
 import ml.docilealligator.infinityforreddit.BuildConfig;
-import ml.docilealligator.infinityforreddit.ContentFontStyle;
-import ml.docilealligator.infinityforreddit.FontStyle;
+import ml.docilealligator.infinityforreddit.Font.ContentFontStyle;
+import ml.docilealligator.infinityforreddit.Font.FontStyle;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.TitleFontStyle;
+import ml.docilealligator.infinityforreddit.Font.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
 public class ViewImageActivity extends AppCompatActivity {

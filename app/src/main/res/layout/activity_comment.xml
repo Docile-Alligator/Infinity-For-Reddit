@@ -37,7 +37,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:textSize="?attr/title_font_16" />
+                android:textSize="?attr/title_font_16"
+                android:fontFamily="?attr/content_font_family" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/content_markdown_view_comment_activity"
@@ -66,7 +67,8 @@
                 android:paddingEnd="16dp"
                 android:paddingBottom="16dp"
                 android:textColor="?attr/primaryTextColor"
-                android:textSize="?attr/content_font_18" />
+                android:textSize="?attr/content_font_18"
+                android:fontFamily="?attr/content_font_family" />
 
         </LinearLayout>
 

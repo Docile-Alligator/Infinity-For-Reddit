@@ -52,6 +52,8 @@
         android:gravity="center"
         android:visibility="gone"
         android:textSize="?attr/font_default"
+        android:textColor="?attr/primaryTextColor"
+        android:fontFamily="?attr/font_family"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

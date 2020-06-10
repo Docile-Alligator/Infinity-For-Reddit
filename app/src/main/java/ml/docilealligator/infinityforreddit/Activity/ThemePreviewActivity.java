@@ -41,15 +41,15 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
-import ml.docilealligator.infinityforreddit.ContentFontStyle;
+import ml.docilealligator.infinityforreddit.Font.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeSettingsItem;
-import ml.docilealligator.infinityforreddit.FontStyle;
+import ml.docilealligator.infinityforreddit.Font.FontStyle;
 import ml.docilealligator.infinityforreddit.Fragment.ThemePreviewCommentsFragment;
 import ml.docilealligator.infinityforreddit.Fragment.ThemePreviewPostsFragment;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.TitleFontStyle;
+import ml.docilealligator.infinityforreddit.Font.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;

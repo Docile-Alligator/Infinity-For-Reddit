@@ -6,4 +6,5 @@
     android:textAppearance="?android:attr/textAppearanceMedium"
     android:textColor="#000"
     android:textSize="16sp"
+    android:fontFamily="?attr/font_family"
     tools:text="Table content" />

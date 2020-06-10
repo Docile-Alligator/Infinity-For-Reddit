@@ -37,6 +37,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="8dp"
                 android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family"
                 app:layout_constraintBottom_toTopOf="@id/user_text_view_item_post_text_type"
                 app:layout_constraintStart_toEndOf="@id/icon_gif_image_view_item_post_text_type"
                 app:layout_constraintEnd_toStartOf="@id/stickied_post_image_view_item_post_text_type"
@@ -49,6 +50,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="8dp"
                 android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family"
                 android:maxLines="2"
                 android:ellipsize="end"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -74,6 +76,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/guideline2"
@@ -94,7 +97,8 @@
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textSize="?attr/title_font_18" />
+            android:textSize="?attr/title_font_18"
+            android:fontFamily="?attr/title_font_family" />
 
         <TextView
             android:id="@+id/content_text_view_item_post_text_type"
@@ -106,6 +110,7 @@
             android:maxLines="4"
             android:visibility="gone"
             android:textSize="?attr/content_font_default"
+            android:fontFamily="?attr/content_font_family"
             android:ellipsize="end" />
 
         <com.nex3z.flowlayout.FlowLayout
@@ -123,6 +128,7 @@
                 android:padding="4dp"
                 android:text="@string/text"
                 android:textSize="?attr/font_12"
+                android:fontFamily="?attr/font_family"
                 app:lib_setRadius="3dp"
                 app:lib_setRoundedView="true"
                 app:lib_setShape="rectangle" />
@@ -134,6 +140,7 @@
                 android:layout_gravity="center"
                 android:text="@string/spoiler"
                 android:textSize="?attr/font_12"
+                android:fontFamily="?attr/font_family"
                 android:padding="4dp"
                 android:visibility="gone"
                 app:lib_setRadius="3dp"
@@ -147,6 +154,7 @@
                 android:padding="4dp"
                 android:text="@string/nsfw"
                 android:textSize="?attr/font_12"
+                android:fontFamily="?attr/font_family"
                 android:visibility="gone"
                 app:lib_setRadius="3dp"
                 app:lib_setRoundedView="true"
@@ -158,6 +166,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textSize="?attr/font_12"
+                android:fontFamily="?attr/font_family"
                 android:padding="4dp"
                 android:visibility="gone"
                 app:lib_setRadius="3dp"
@@ -170,6 +179,7 @@
                 android:layout_height="wrap_content"
                 android:padding="4dp"
                 android:textSize="?attr/font_12"
+                android:fontFamily="?attr/font_family"
                 android:visibility="gone"
                 app:lib_setRadius="3dp"
                 app:lib_setRoundedView="true"
@@ -222,6 +232,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textSize="?attr/font_12"
+                android:fontFamily="?attr/font_family"
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -247,6 +258,7 @@
                 android:padding="12dp"
                 android:gravity="center_vertical"
                 android:textSize="?attr/font_12"
+                android:fontFamily="?attr/font_family"
                 android:textStyle="bold"
                 android:drawableStart="@drawable/ic_comment_grey_24dp"
                 android:drawablePadding="12dp"

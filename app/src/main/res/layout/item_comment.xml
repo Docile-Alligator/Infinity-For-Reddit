@@ -48,6 +48,7 @@
                     android:ellipsize="end"
                     android:maxLines="2"
                     android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family"
                     app:layout_constraintBottom_toTopOf="@id/author_flair_text_view_item_post_comment"
                     app:layout_constraintEnd_toStartOf="@+id/barrier"
                     app:layout_constraintStart_toEndOf="@id/author_type_image_view_item_comment"
@@ -61,6 +62,7 @@
                     android:ellipsize="end"
                     android:maxLines="2"
                     android:textSize="?attr/font_12"
+                    android:fontFamily="?attr/font_family"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/barrier"
@@ -74,6 +76,7 @@
                     android:layout_marginEnd="8dp"
                     android:gravity="end"
                     android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/comment_time_text_view_item_post_comment"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -84,6 +87,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="end"
                     android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -104,7 +108,9 @@
                 android:layout_marginTop="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
 
             <TextView
                 android:id="@+id/comment_markdown_view_item_post_comment"
@@ -115,7 +121,8 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
                 android:textColor="?attr/primaryTextColor"
-                android:textSize="?attr/content_font_default" />
+                android:textSize="?attr/content_font_default"
+                android:fontFamily="?attr/content_font_family" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/bottom_constraint_layout_item_post_comment"
@@ -146,6 +153,7 @@
                     android:gravity="center"
                     android:textSize="?attr/font_12"
                     android:textStyle="bold"
+                    android:fontFamily="?attr/font_family"
                     app:layout_constraintStart_toEndOf="@+id/up_vote_button_item_post_comment"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>

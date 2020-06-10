@@ -12,7 +12,8 @@
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_toStartOf="@id/retry_button_item_comment_footer_error"
-        android:textSize="?attr/font_18" />
+        android:textSize="?attr/font_18"
+        android:fontFamily="?attr/font_family" />
 
     <Button
         android:id="@+id/retry_button_item_comment_footer_error"
@@ -21,6 +22,7 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:text="@string/retry"
-        android:textSize="?attr/font_default" />
+        android:textSize="?attr/font_default"
+        android:fontFamily="?attr/font_family" />
 
 </RelativeLayout>

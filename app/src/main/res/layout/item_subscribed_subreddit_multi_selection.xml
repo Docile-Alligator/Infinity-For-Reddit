@@ -25,8 +25,8 @@
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="32dp"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="?attr/font_default" />
+        android:textSize="?attr/font_default"
+        android:fontFamily="?attr/font_family" />
 
     <CheckBox
         android:id="@+id/checkbox_item_subscribed_subreddit_multiselection"

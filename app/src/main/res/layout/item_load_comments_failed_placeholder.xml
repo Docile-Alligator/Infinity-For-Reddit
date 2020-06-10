@@ -18,6 +18,7 @@
         android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:text="@string/load_comments_failed"
-        android:textSize="?attr/font_default" />
+        android:textSize="?attr/font_default"
+        android:fontFamily="?attr/font_family" />
 
 </LinearLayout>

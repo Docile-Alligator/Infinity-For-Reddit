@@ -12,6 +12,7 @@
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
         android:text="@string/color_picker"
+        android:fontFamily="?attr/font_family"
         style="@style/MaterialAlertDialogTitleTextStyle" />
 
     <View
@@ -28,7 +29,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="#"
-            android:textColor="?attr/primaryTextColor"/>
+            android:textColor="?attr/primaryTextColor"
+            android:fontFamily="?attr/font_family" />
 
         <EditText
             android:id="@+id/color_edit_text_color_picker"
@@ -37,7 +39,8 @@
             android:gravity="center"
             android:maxLength="8"
             android:inputType="textCapCharacters|textNoSuggestions"
-            android:textColor="?attr/primaryTextColor" />
+            android:textColor="?attr/primaryTextColor"
+            android:fontFamily="?attr/font_family" />
 
     </LinearLayout>
 
@@ -53,7 +56,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="A"
-            android:textColor="?attr/primaryTextColor" />
+            android:textColor="?attr/primaryTextColor"
+            android:fontFamily="?attr/font_family" />
 
         <SeekBar
             android:id="@+id/a_seek_bar_color_picker"
@@ -75,7 +79,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="R"
-            android:textColor="?attr/primaryTextColor" />
+            android:textColor="?attr/primaryTextColor"
+            android:fontFamily="?attr/font_family" />
 
         <SeekBar
             android:id="@+id/r_seek_bar_color_picker"
@@ -97,7 +102,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="G"
-            android:textColor="?attr/primaryTextColor" />
+            android:textColor="?attr/primaryTextColor"
+            android:fontFamily="?attr/font_family" />
 
         <SeekBar
             android:id="@+id/g_seek_bar_color_picker"
@@ -119,7 +125,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="B"
-            android:textColor="?attr/primaryTextColor" />
+            android:textColor="?attr/primaryTextColor"
+            android:fontFamily="?attr/font_family" />
 
         <SeekBar
             android:id="@+id/b_seek_bar_color_picker"
@@ -142,6 +149,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cancel"
+            android:fontFamily="?attr/font_family"
             style="@style/MaterialAlertDialogNegativeButtonStyle" />
 
         <Button
@@ -149,6 +157,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ok"
+            android:fontFamily="?attr/font_family"
             style="@style/MaterialAlertDialogPositiveButtonStyle" />
 
     </LinearLayout>

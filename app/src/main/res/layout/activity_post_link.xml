@@ -57,7 +57,8 @@
                     android:layout_toStartOf="@id/rules_button_post_link_activity"
                     android:layout_toEndOf="@id/subreddit_icon_gif_image_view_post_link_activity"
                     android:text="@string/choose_a_subreddit"
-                    android:textSize="?attr/font_default" />
+                    android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family" />
 
                 <Button
                     android:id="@+id/rules_button_post_link_activity"
@@ -67,7 +68,8 @@
                     android:layout_centerVertical="true"
                     android:text="@string/rules"
                     android:textColor="@android:color/white"
-                    android:textSize="?attr/font_default" />
+                    android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family" />
 
             </RelativeLayout>
 
@@ -89,6 +91,7 @@
                     android:text="@string/flair"
                     android:textColor="?attr/primaryTextColor"
                     android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family"
                     android:visibility="gone"
                     app:lib_setRadius="3dp"
                     app:lib_setRoundedView="true"
@@ -103,6 +106,7 @@
                     android:text="@string/spoiler"
                     android:textColor="?attr/primaryTextColor"
                     android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family"
                     app:lib_setRadius="3dp"
                     app:lib_setRoundedView="true"
                     app:lib_setShape="rectangle" />
@@ -116,6 +120,7 @@
                     android:text="@string/nsfw"
                     android:textColor="?attr/primaryTextColor"
                     android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family"
                     app:lib_setRadius="3dp"
                     app:lib_setRoundedView="true"
                     app:lib_setShape="rectangle" />
@@ -137,7 +142,8 @@
                 android:inputType="textCapSentences|textMultiLine"
                 android:padding="16dp"
                 android:textColor="?attr/primaryTextColor"
-                android:textSize="?attr/title_font_18" />
+                android:textSize="?attr/title_font_18"
+                android:fontFamily="?attr/title_font_family" />
 
             <View
                 android:id="@+id/divider_3_post_link_activity"
@@ -154,7 +160,8 @@
                 android:inputType="textMultiLine"
                 android:padding="16dp"
                 android:textColor="?attr/primaryTextColor"
-                android:textSize="?attr/content_font_18" />
+                android:textSize="?attr/content_font_18"
+                android:fontFamily="?attr/content_font_family" />
 
         </LinearLayout>
 

@@ -27,11 +27,14 @@ import com.google.android.material.tabs.TabLayout;
 
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
-import ml.docilealligator.infinityforreddit.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.FontStyle;
+import ml.docilealligator.infinityforreddit.Font.ContentFontFamily;
+import ml.docilealligator.infinityforreddit.Font.ContentFontStyle;
+import ml.docilealligator.infinityforreddit.Font.FontFamily;
+import ml.docilealligator.infinityforreddit.Font.FontStyle;
+import ml.docilealligator.infinityforreddit.Font.TitleFontFamily;
+import ml.docilealligator.infinityforreddit.Font.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.Utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
@@ -112,6 +115,15 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         getTheme().applyStyle(ContentFontStyle.valueOf(mSharedPreferences
                 .getString(SharedPreferencesUtils.CONTENT_FONT_SIZE_KEY, ContentFontStyle.Normal.name())).getResId(), true);
+
+        getTheme().applyStyle(FontFamily.valueOf(mSharedPreferences
+                .getString(SharedPreferencesUtils.FONT_FAMILY_KEY, FontFamily.Default.name())).getResId(), true);
+
+        getTheme().applyStyle(TitleFontFamily.valueOf(mSharedPreferences
+                .getString(SharedPreferencesUtils.TITLE_FONT_FAMILY_KEY, TitleFontFamily.Default.name())).getResId(), true);
+
+        getTheme().applyStyle(ContentFontFamily.valueOf(mSharedPreferences
+                .getString(SharedPreferencesUtils.CONTENT_FONT_FAMILY_KEY, ContentFontFamily.Default.name())).getResId(), true);
 
         Window window = getWindow();
         View decorView = window.getDecorView();
