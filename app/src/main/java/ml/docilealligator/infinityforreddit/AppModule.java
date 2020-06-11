@@ -131,6 +131,16 @@ class AppModule {
     }
 
     @Provides
+    @Named("pushshift")
+    @Singleton
+    Retrofit providePushshiftRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(APIUtils.PUSHSHIFT_API_BASE_URI)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+    }
+
+    @Provides
     @Singleton
     OkHttpClient provideOkHttpClient(@Named("no_oauth") Retrofit retrofit, RedditDataRoomDatabase accountRoomDatabase) {
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();

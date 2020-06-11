@@ -276,6 +276,10 @@
     <string name="are_you_sure">Are you sure?</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="see_removed_comment">See Removed Comment</string>
+    <string name="see_removed_post">See Removed Post</string>
+    <string name="fetching_removed_comment">Fetching removed comment</string>
+    <string name="show_removed_comment_failed">Could not find the removed comment</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="edit_success">Edit successful</string>

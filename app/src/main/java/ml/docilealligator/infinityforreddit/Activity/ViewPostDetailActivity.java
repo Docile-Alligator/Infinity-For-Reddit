@@ -60,6 +60,8 @@ import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Adapter.CommentAndPostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.FlairBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostCommentSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.CommentData;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.CustomView.CustomToroContainer;
@@ -71,9 +73,8 @@ import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToDetailActivit
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchComment;
+import ml.docilealligator.infinityforreddit.FetchRemovedComment;
 import ml.docilealligator.infinityforreddit.Flair;
-import ml.docilealligator.infinityforreddit.BottomSheetFragment.FlairBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostCommentSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.ParseComment;
 import ml.docilealligator.infinityforreddit.Post.FetchPost;
@@ -160,6 +161,9 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
+    @Inject
+    @Named("pushshift")
+    Retrofit pushshiftRetrofit;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -1144,6 +1148,24 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 .show();
     }
 
+    public void showRemovedComment(CommentData comment, int position) {
+        Toast.makeText(ViewPostDetailActivity.this, R.string.fetching_removed_comment, Toast.LENGTH_SHORT).show();
+        FetchRemovedComment.fetchRemovedComment(
+                pushshiftRetrofit,
+                comment,
+                new FetchRemovedComment.FetchRemovedCommentListener() {
+                    @Override
+                    public void fetchSuccess(CommentData comment) {
+                        mAdapter.editComment(comment.getAuthor(), comment.getCommentMarkdown(), position);
+                    }
+
+                    @Override
+                    public void fetchFailed() {
+                        Toast.makeText(ViewPostDetailActivity.this, R.string.show_removed_comment_failed, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
     public void changeToSingleThreadMode() {
         isSingleCommentThreadMode = false;
         mSingleCommentId = null;
@@ -1537,7 +1559,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             }
         } else if (requestCode == EDIT_COMMENT_REQUEST_CODE) {
             if (data != null && resultCode == RESULT_OK) {
-                mAdapter.editComment(data.getStringExtra(EditCommentActivity.EXTRA_EDITED_COMMENT_CONTENT),
+                mAdapter.editComment(null,
+                        data.getStringExtra(EditCommentActivity.EXTRA_EDITED_COMMENT_CONTENT),
                         data.getExtras().getInt(EditCommentActivity.EXTRA_EDITED_COMMENT_POSITION));
             }
         }

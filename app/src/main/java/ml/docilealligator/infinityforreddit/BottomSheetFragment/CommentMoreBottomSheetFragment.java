@@ -47,7 +47,10 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
     TextView copyTextView;
     @BindView(R.id.report_view_comment_more_bottom_sheet_fragment)
     TextView reportTextView;
+    @BindView(R.id.see_removed_view_comment_more_bottom_sheet_fragment)
+    TextView seeRemovedTextView;
     private AppCompatActivity activity;
+
     public CommentMoreBottomSheetFragment() {
         // Required empty public constructor
     }
@@ -130,6 +133,17 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
 
             dismiss();
         });
+
+        if (commentData.getCommentRawText().equals("[removed]")) {
+            seeRemovedTextView.setVisibility(View.VISIBLE);
+
+            seeRemovedTextView.setOnClickListener(view -> {
+                dismiss();
+                if (activity instanceof ViewPostDetailActivity) {
+                    ((ViewPostDetailActivity) activity).showRemovedComment(commentData, bundle.getInt(EXTRA_POSITION));
+                }
+            });
+        }
 
         return rootView;
     }
