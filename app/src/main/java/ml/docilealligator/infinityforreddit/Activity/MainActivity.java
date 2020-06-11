@@ -1366,9 +1366,17 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
         void goBackToTop() {
             if (viewPager.getCurrentItem() == 0) {
-                tab1.goBackToTop();
+                if (mAccessToken != null && tab1 != null) {
+                    tab1.goBackToTop();
+                } else if (tab2 != null) {
+                    tab2.goBackToTop();
+                }
             } else if (viewPager.getCurrentItem() == 1) {
-                tab2.goBackToTop();
+                if (mAccessToken != null && tab2 != null) {
+                    tab2.goBackToTop();
+                } else if (tab3 != null) {
+                    tab3.goBackToTop();
+                }
             } else {
                 tab3.goBackToTop();
             }
