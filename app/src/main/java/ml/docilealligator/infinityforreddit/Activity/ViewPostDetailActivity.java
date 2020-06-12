@@ -565,6 +565,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             }
 
             mMenu.findItem(R.id.action_view_crosspost_parent_view_post_detail_activity).setVisible(mPost.getCrosspostParentId() != null);
+
+            if (mPost.getSelfText().equals("[deleted]")) {
+                mMenu.findItem(R.id.action_see_removed_view_post_detail_activity).setVisible(true);
+            }
         }
     }
 
@@ -1220,6 +1224,25 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         return true;
     }
 
+    public void showRemovedPost() {
+        Toast.makeText(ViewPostDetailActivity.this, R.string.fetching_removed_post, Toast.LENGTH_SHORT).show();
+        FetchRemovedPost.fetchRemovedPost(
+                pushshiftRetrofit,
+                mPost,
+                new FetchRemovedPost.FetchRemovedPostListener() {
+                    @Override
+                    public void fetchSuccess(Post post) {
+                        mPost = post;
+                        mAdapter.updatePost(post);
+                    }
+
+                    @Override
+                    public void fetchFailed() {
+                        Toast.makeText(ViewPostDetailActivity.this, R.string.show_removed_post_failed, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -1408,6 +1431,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 intent.putExtra(ReportActivity.EXTRA_SUBREDDIT_NAME, mPost.getSubredditName());
                 intent.putExtra(ReportActivity.EXTRA_THING_FULLNAME, mPost.getFullName());
                 startActivity(intent);
+                return true;
+            case R.id.action_see_removed_view_post_detail_activity:
+                showRemovedPost();
+                return true;
             case android.R.id.home:
                 onBackPressed();
                 return true;

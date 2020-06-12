@@ -1387,6 +1387,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     public void editComment(String commentAuthor, String commentContentMarkdown, int position) {
         if (commentAuthor != null)
             mVisibleComments.get(position).setAuthor(commentAuthor);
+
         mVisibleComments.get(position).setCommentMarkdown(commentContentMarkdown);
         if (mIsSingleCommentThreadMode) {
             notifyItemChanged(position + 2);

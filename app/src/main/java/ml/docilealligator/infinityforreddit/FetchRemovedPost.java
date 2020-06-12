@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ml.docilealligator.infinityforreddit.API.PushshiftAPI;
+import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Call;
@@ -15,15 +16,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class FetchRemovedComment {
+public class FetchRemovedPost {
 
-    public static void fetchRemovedComment(Retrofit retrofit, CommentData comment, FetchRemovedCommentListener listener) {
-        retrofit.create(PushshiftAPI.class).getRemovedComment(comment.getId())
+    public static void fetchRemovedPost(Retrofit retrofit, Post post, FetchRemovedPostListener listener) {
+        retrofit.create(PushshiftAPI.class).getRemovedPost(post.getId())
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                         if (response.isSuccessful()) {
-                            new ParseCommentAsyncTask(response.body(), comment, listener).execute();
+                            new ParsePostAsyncTask(response.body(), post, listener).execute();
                         } else {
                             listener.fetchFailed();
                         }
@@ -37,47 +38,50 @@ public class FetchRemovedComment {
                 });
     }
 
-    private static CommentData parseRemovedComment(JSONObject comment, CommentData commentData) throws JSONException {
-        String id = comment.getString(JSONUtils.ID_KEY);
-        if (id.equals(commentData.getId())) {
-            String author = comment.getString(JSONUtils.AUTHOR_KEY);
-            String commentMarkdown = "";
-            if (!comment.isNull(JSONUtils.BODY_KEY)) {
-                commentMarkdown = Utils.modifyMarkdown(comment.getString(JSONUtils.BODY_KEY).trim());
+    private static Post parseRemovedPost(JSONObject postJson, Post post) throws JSONException {
+        String id = postJson.getString(JSONUtils.ID_KEY);
+        if (id.equals(post.getId())) {
+            String author = postJson.getString(JSONUtils.AUTHOR_KEY);
+            String title = postJson.getString(JSONUtils.TITLE_KEY);
+            String postContent = "";
+            if (!postJson.isNull(JSONUtils.SELFTEXT_KEY)) {
+                postContent = Utils.modifyMarkdown(postJson.getString(JSONUtils.SELFTEXT_KEY).trim());
             }
 
-            commentData.setAuthor(author);
-            commentData.setCommentMarkdown(commentMarkdown);
-            commentData.setCommentRawText(commentMarkdown);
-            return commentData;
+            post.setAuthor(author);
+            post.setTitle(title);
+            post.setSelfText(postContent);
+            post.setSelfTextPlain("");
+            post.setSelfTextPlainTrimmed("");
+            return post;
         } else {
             return null;
         }
     }
 
-    public interface FetchRemovedCommentListener {
-        void fetchSuccess(CommentData comment);
+    public interface FetchRemovedPostListener {
+        void fetchSuccess(Post post);
 
         void fetchFailed();
     }
 
-    private static class ParseCommentAsyncTask extends AsyncTask<Void, Void, Void> {
+    private static class ParsePostAsyncTask extends AsyncTask<Void, Void, Void> {
 
         private String responseBody;
-        private FetchRemovedCommentListener listener;
-        CommentData comment;
+        private FetchRemovedPostListener listener;
+        Post post;
 
-        public ParseCommentAsyncTask(String responseBody, CommentData comment, FetchRemovedCommentListener listener) {
+        public ParsePostAsyncTask(String responseBody, Post post, FetchRemovedPostListener listener) {
             this.responseBody = responseBody;
-            this.comment = comment;
+            this.post = post;
             this.listener = listener;
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                JSONObject commentJSON = new JSONObject(responseBody).getJSONArray(JSONUtils.DATA_KEY).getJSONObject(0);
-                comment = parseRemovedComment(commentJSON, comment);
+                JSONObject postJson = new JSONObject(responseBody).getJSONArray(JSONUtils.DATA_KEY).getJSONObject(0);
+                post = parseRemovedPost(postJson, post);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -87,8 +91,8 @@ public class FetchRemovedComment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            if (comment != null)
-                listener.fetchSuccess(comment);
+            if (post != null)
+                listener.fetchSuccess(post);
             else
                 listener.fetchFailed();
         }

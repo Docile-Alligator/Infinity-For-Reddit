@@ -252,6 +252,11 @@ public class Post implements Parcelable {
         return author;
     }
 
+    public void setAuthor(String author) {
+        this.author = author;
+        this.authorNamePrefixed = "u/" + author;
+    }
+
     public String getAuthorNamePrefixed() {
         return authorNamePrefixed;
     }
