@@ -2,12 +2,11 @@ package ml.docilealligator.infinityforreddit.MultiReddit;
 
 import androidx.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import ml.docilealligator.infinityforreddit.AsyncTask.InsertMultiRedditAsyncTask;
 import ml.docilealligator.infinityforreddit.API.RedditAPI;
+import ml.docilealligator.infinityforreddit.AsyncTask.InsertMultiRedditAsyncTask;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
@@ -22,7 +21,7 @@ public class FavoriteMultiReddit {
     }
 
     public static void favoriteMultiReddit(Retrofit oauthRetrofit, RedditDataRoomDatabase redditDataRoomDatabase,
-                                           String accessToken, String accountName, boolean makeFavorite,
+                                           String accessToken, boolean makeFavorite,
                                            MultiReddit multiReddit, FavoriteMultiRedditListener favoriteMultiRedditListener) {
         Map<String, String> params = new HashMap<>();
         params.put(APIUtils.MULTIPATH_KEY, multiReddit.getPath());
@@ -33,10 +32,8 @@ public class FavoriteMultiReddit {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    multiReddit.setFavorite(true);
-                    ArrayList<MultiReddit> singleMultiRedditList = new ArrayList<>();
-                    singleMultiRedditList.add(multiReddit);
-                    new InsertMultiRedditAsyncTask(redditDataRoomDatabase, singleMultiRedditList, accountName,
+                    multiReddit.setFavorite(makeFavorite);
+                    new InsertMultiRedditAsyncTask(redditDataRoomDatabase, multiReddit,
                             favoriteMultiRedditListener::success).execute();
                 } else {
                     favoriteMultiRedditListener.failed();

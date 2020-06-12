@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.AsyncTask;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,6 +13,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 public class InsertMultiRedditAsyncTask extends AsyncTask<Void, Void, Void> {
     private MultiRedditDao multiRedditDao;
     private ArrayList<MultiReddit> multiReddits;
+    private MultiReddit multiReddit;
     private String accountName;
     private InsertMultiRedditAsyncTaskListener insertMultiRedditAsyncTaskListener;
 
@@ -26,15 +26,27 @@ public class InsertMultiRedditAsyncTask extends AsyncTask<Void, Void, Void> {
         this.insertMultiRedditAsyncTaskListener = insertMultiRedditAsyncTaskListener;
     }
 
+    public InsertMultiRedditAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase,
+                                      MultiReddit multiReddit,
+                                      InsertMultiRedditAsyncTaskListener insertMultiRedditAsyncTaskListener) {
+        multiRedditDao = redditDataRoomDatabase.multiRedditDao();
+        this.multiReddit = multiReddit;
+        this.insertMultiRedditAsyncTaskListener = insertMultiRedditAsyncTaskListener;
+    }
+
     @Override
     protected Void doInBackground(Void... voids) {
+        if (multiReddit != null) {
+            multiRedditDao.insert(multiReddit);
+            return null;
+        }
+
         List<MultiReddit> existingMultiReddits = multiRedditDao.getAllMultiRedditsList(accountName);
         Collections.sort(multiReddits, (multiReddit, t1) -> multiReddit.getName().compareToIgnoreCase(t1.getName()));
         List<String> deletedMultiredditNames = new ArrayList<>();
         compareTwoMultiRedditList(multiReddits, existingMultiReddits, deletedMultiredditNames);
 
         for (String deleted : deletedMultiredditNames) {
-            Log.i("asdfasdfs", "s " + deleted + accountName);
             multiRedditDao.deleteMultiReddit(deleted, accountName);
         }
 

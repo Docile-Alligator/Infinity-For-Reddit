@@ -9,7 +9,9 @@ public enum FontFamily {
     RobotoCondensed(R.style.FontFamily_RobotoCondensed, "RobotoCondensed"),
     HarmoniaSans(R.style.FontFamily_HarmoniaSans, "HarmoniaSans"),
     Selawk(R.style.FontFamily_Selawk, "Selawk"),
-    Inter(R.style.FontFamily_Inter, "Inter");
+    Inter(R.style.FontFamily_Inter, "Inter"),
+    Manrope(R.style.FontFamily_Manrope, "Manrope"),
+    Rubik(R.style.FontFamily_Rubik, "Rubik");
 
     private int resId;
     private String title;

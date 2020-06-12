@@ -262,6 +262,14 @@
         <item name="font_family">@font/inter</item>
     </style>
 
+    <style name="FontFamily.Manrope">
+        <item name="font_family">@font/manrope</item>
+    </style>
+
+    <style name="FontFamily.Rubik">
+        <item name="font_family">@font/rubik</item>
+    </style>
+
     <style name="TitleFontFamily" />
 
     <style name="TitleFontFamily.Default">
@@ -292,6 +300,14 @@
         <item name="title_font_family">@font/inter</item>
     </style>
 
+    <style name="TitleFontFamily.Manrope">
+        <item name="title_font_family">@font/manrope</item>
+    </style>
+
+    <style name="TitleFontFamily.Rubik">
+        <item name="title_font_family">@font/rubik</item>
+    </style>
+
     <style name="ContentFontFamily" />
 
     <style name="ContentFontFamily.Default">
@@ -320,6 +336,14 @@
 
     <style name="ContentFontFamily.Inter">
         <item name="content_font_family">@font/inter</item>
+    </style>
+
+    <style name="ContentFontFamily.Manrope">
+        <item name="content_font_family">@font/manrope</item>
+    </style>
+
+    <style name="ContentFontFamily.Rubik">
+        <item name="content_font_family">@font/rubik</item>
     </style>
 
     <style name="Theme" />

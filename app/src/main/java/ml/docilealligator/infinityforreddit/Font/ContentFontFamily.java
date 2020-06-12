@@ -9,7 +9,9 @@ public enum ContentFontFamily {
     RobotoCondensed(R.style.ContentFontFamily_RobotoCondensed, "RobotoCondensed"),
     HarmoniaSans(R.style.ContentFontFamily_HarmoniaSans, "HarmoniaSans"),
     Selawk(R.style.ContentFontFamily_Selawk, "Selawk"),
-    Inter(R.style.ContentFontFamily_Inter, "Inter");
+    Inter(R.style.ContentFontFamily_Inter, "Inter"),
+    Manrope(R.style.ContentFontFamily_Manrope, "Manrope"),
+    Rubik(R.style.ContentFontFamily_Rubik, "Rubik");
 
     private int resId;
     private String title;

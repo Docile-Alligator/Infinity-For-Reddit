@@ -49,7 +49,6 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
 
     public static final String EXTRA_ACCOUNT_NAME = "EAN";
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
-    private static final String INSERT_MULTI_REDDIT_STATE = "ISSS";
 
     @BindView(R.id.swipe_refresh_layout_multi_reddit_listing_fragment)
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -78,7 +77,6 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
     private AppCompatActivity mActivity;
     private RequestManager mGlide;
     private LinearLayoutManager mLinearLayoutManager;
-    private boolean mInsertSuccess = false;
 
     public MultiRedditListingFragment() {
         // Required empty public constructor

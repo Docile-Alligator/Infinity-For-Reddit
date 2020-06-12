@@ -131,6 +131,8 @@
         <item>Harmonia Sans</item>
         <item>Selawk</item>
         <item>Inter</item>
+        <item>Manrope</item>
+        <item>Rubik</item>
     </string-array>
 
     <string-array name="settings_font_family_values">
@@ -141,6 +143,8 @@
         <item>HarmoniaSans</item>
         <item>Selawk</item>
         <item>Inter</item>
+        <item>Manrope</item>
+        <item>Rubik</item>
     </string-array>
     
     <string-array name="settings_tab_post_type">

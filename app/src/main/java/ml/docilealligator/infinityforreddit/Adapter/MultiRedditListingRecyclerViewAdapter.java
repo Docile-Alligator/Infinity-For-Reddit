@@ -125,7 +125,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                     ((MultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
                     multiReddit.setFavorite(false);
                     FavoriteMultiReddit.favoriteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase,
-                            mAccessToken, mAccountName, false, multiReddit,
+                            mAccessToken, false, multiReddit,
                             new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                 @Override
                                 public void success() {
@@ -151,7 +151,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                     ((MultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
                     multiReddit.setFavorite(true);
                     FavoriteMultiReddit.favoriteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase,
-                            mAccessToken, mAccountName, true, multiReddit,
+                            mAccessToken, true, multiReddit,
                             new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                 @Override
                                 public void success() {
@@ -213,7 +213,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                     ((FavoriteMultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
                     multiReddit.setFavorite(false);
                     FavoriteMultiReddit.favoriteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase,
-                            mAccessToken, mAccountName, false, multiReddit,
+                            mAccessToken, false, multiReddit,
                             new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                 @Override
                                 public void success() {
@@ -239,7 +239,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                     ((FavoriteMultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
                     multiReddit.setFavorite(true);
                     FavoriteMultiReddit.favoriteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase,
-                            mAccessToken, mAccountName, true, multiReddit,
+                            mAccessToken, true, multiReddit,
                             new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                 @Override
                                 public void success() {
