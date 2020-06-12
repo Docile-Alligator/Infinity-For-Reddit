@@ -74,6 +74,7 @@ import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchComment;
 import ml.docilealligator.infinityforreddit.FetchRemovedComment;
+import ml.docilealligator.infinityforreddit.FetchRemovedPost;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.ParseComment;
@@ -453,63 +454,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         if (mPost == null) {
             fetchPostAndCommentsById(getIntent().getStringExtra(EXTRA_POST_ID));
         } else {
-            if (mMenu != null) {
-                MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
-                MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
-
-                mMenu.findItem(R.id.action_comment_view_post_detail_activity).setVisible(true);
-                mMenu.findItem(R.id.action_sort_view_post_detail_activity).setVisible(true);
-
-                if (mAccessToken != null) {
-                    if (mPost.isSaved()) {
-                        saveItem.setVisible(true);
-                        saveItem.setIcon(mSavedIcon);
-                    } else {
-                        saveItem.setVisible(true);
-                        saveItem.setIcon(mUnsavedIcon);
-                    }
-
-                    if (mPost.isHidden()) {
-                        hideItem.setVisible(true);
-                        hideItem.setTitle(R.string.action_unhide_post);
-                    } else {
-                        hideItem.setVisible(true);
-                        hideItem.setTitle(R.string.action_hide_post);
-                    }
-
-                    mMenu.findItem(R.id.action_report_view_post_detail_activity).setVisible(true);
-                } else {
-                    saveItem.setVisible(false);
-                    hideItem.setVisible(false);
-                }
-
-                if (mPost.getAuthor().equals(mAccountName)) {
-                    if (mPost.getPostType() == Post.TEXT_TYPE) {
-                        mMenu.findItem(R.id.action_edit_view_post_detail_activity).setVisible(true);
-                    }
-                    mMenu.findItem(R.id.action_delete_view_post_detail_activity).setVisible(true);
-
-                    MenuItem nsfwItem = mMenu.findItem(R.id.action_nsfw_view_post_detail_activity);
-                    nsfwItem.setVisible(true);
-                    if (mPost.isNSFW()) {
-                        nsfwItem.setTitle(R.string.action_unmark_nsfw);
-                    } else {
-                        nsfwItem.setTitle(R.string.action_mark_nsfw);
-                    }
-
-                    MenuItem spoilerItem = mMenu.findItem(R.id.action_spoiler_view_post_detail_activity);
-                    spoilerItem.setVisible(true);
-                    if (mPost.isSpoiler()) {
-                        spoilerItem.setTitle(R.string.action_unmark_spoiler);
-                    } else {
-                        spoilerItem.setTitle(R.string.action_mark_spoiler);
-                    }
-
-                    mMenu.findItem(R.id.action_edit_flair_view_post_detail_activity).setVisible(true);
-                }
-
-                mMenu.findItem(R.id.action_view_crosspost_parent_view_post_detail_activity).setVisible(mPost.getCrosspostParentId() != null);
-            }
+            setupMenu();
 
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this,
                     mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mGlide,
@@ -563,6 +508,66 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         fab.setOnClickListener(view -> scrollToNextParentComment());
     }
 
+    private void setupMenu() {
+        if (mMenu != null) {
+            MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
+            MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
+
+            mMenu.findItem(R.id.action_comment_view_post_detail_activity).setVisible(true);
+            mMenu.findItem(R.id.action_sort_view_post_detail_activity).setVisible(true);
+
+            if (mAccessToken != null) {
+                if (mPost.isSaved()) {
+                    saveItem.setVisible(true);
+                    saveItem.setIcon(mSavedIcon);
+                } else {
+                    saveItem.setVisible(true);
+                    saveItem.setIcon(mUnsavedIcon);
+                }
+
+                if (mPost.isHidden()) {
+                    hideItem.setVisible(true);
+                    hideItem.setTitle(R.string.action_unhide_post);
+                } else {
+                    hideItem.setVisible(true);
+                    hideItem.setTitle(R.string.action_hide_post);
+                }
+
+                mMenu.findItem(R.id.action_report_view_post_detail_activity).setVisible(true);
+            } else {
+                saveItem.setVisible(false);
+                hideItem.setVisible(false);
+            }
+
+            if (mPost.getAuthor().equals(mAccountName)) {
+                if (mPost.getPostType() == Post.TEXT_TYPE) {
+                    mMenu.findItem(R.id.action_edit_view_post_detail_activity).setVisible(true);
+                }
+                mMenu.findItem(R.id.action_delete_view_post_detail_activity).setVisible(true);
+
+                MenuItem nsfwItem = mMenu.findItem(R.id.action_nsfw_view_post_detail_activity);
+                nsfwItem.setVisible(true);
+                if (mPost.isNSFW()) {
+                    nsfwItem.setTitle(R.string.action_unmark_nsfw);
+                } else {
+                    nsfwItem.setTitle(R.string.action_mark_nsfw);
+                }
+
+                MenuItem spoilerItem = mMenu.findItem(R.id.action_spoiler_view_post_detail_activity);
+                spoilerItem.setVisible(true);
+                if (mPost.isSpoiler()) {
+                    spoilerItem.setTitle(R.string.action_unmark_spoiler);
+                } else {
+                    spoilerItem.setTitle(R.string.action_mark_spoiler);
+                }
+
+                mMenu.findItem(R.id.action_edit_flair_view_post_detail_activity).setVisible(true);
+            }
+
+            mMenu.findItem(R.id.action_view_crosspost_parent_view_post_detail_activity).setVisible(mPost.getCrosspostParentId() != null);
+        }
+    }
+
     private Drawable getMenuItemIcon(int drawableId) {
         Drawable icon = getDrawable(drawableId);
         if (icon != null) {
@@ -606,45 +611,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                         public void onParsePostSuccess(Post post) {
                             mPost = post;
 
-                            if (mMenu != null) {
-                                MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
-                                MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
-
-                                mMenu.findItem(R.id.action_comment_view_post_detail_activity).setVisible(true);
-                                mMenu.findItem(R.id.action_sort_view_post_detail_activity).setVisible(true);
-
-                                if (mAccessToken != null) {
-                                    if (post.isSaved()) {
-                                        saveItem.setVisible(true);
-                                        saveItem.setIcon(mSavedIcon);
-                                    } else {
-                                        saveItem.setVisible(true);
-                                        saveItem.setIcon(mUnsavedIcon);
-                                    }
-
-                                    if (post.isHidden()) {
-                                        hideItem.setVisible(true);
-                                        hideItem.setTitle(R.string.action_unhide_post);
-                                    } else {
-                                        hideItem.setVisible(true);
-                                        hideItem.setTitle(R.string.action_hide_post);
-                                    }
-
-                                    mMenu.findItem(R.id.action_report_view_post_detail_activity).setVisible(true);
-                                } else {
-                                    saveItem.setVisible(false);
-                                    hideItem.setVisible(false);
-                                }
-
-                                if (mPost.getAuthor().equals(mAccountName)) {
-                                    if (mPost.getPostType() == Post.TEXT_TYPE) {
-                                        mMenu.findItem(R.id.action_edit_view_post_detail_activity).setVisible(true);
-                                    }
-                                    mMenu.findItem(R.id.action_delete_view_post_detail_activity).setVisible(true);
-                                }
-
-                                mMenu.findItem(R.id.action_view_crosspost_parent_view_post_detail_activity).setVisible(mPost.getCrosspostParentId() != null);
-                            }
+                            setupMenu();
 
                             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this,
                                     mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mGlide,
@@ -914,38 +881,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                 mAdapter.updatePost(mPost);
                                 EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                 isRefreshing = false;
-                                if (mMenu != null) {
-                                    MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
-                                    MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
-
-                                    mMenu.findItem(R.id.action_comment_view_post_detail_activity).setVisible(true);
-                                    mMenu.findItem(R.id.action_sort_view_post_detail_activity).setVisible(true);
-
-                                    if (mAccessToken != null) {
-                                        if (post.isSaved()) {
-                                            saveItem.setVisible(true);
-                                            saveItem.setIcon(mSavedIcon);
-                                        } else {
-                                            saveItem.setVisible(true);
-                                            saveItem.setIcon(mUnsavedIcon);
-                                        }
-
-                                        if (post.isHidden()) {
-                                            hideItem.setVisible(true);
-                                            hideItem.setTitle(R.string.action_unhide_post);
-                                        } else {
-                                            hideItem.setVisible(true);
-                                            hideItem.setTitle(R.string.action_hide_post);
-                                        }
-
-                                        mMenu.findItem(R.id.action_report_view_post_detail_activity).setVisible(true);
-                                    } else {
-                                        saveItem.setVisible(false);
-                                        hideItem.setVisible(false);
-                                    }
-
-                                    mMenu.findItem(R.id.action_view_crosspost_parent_view_post_detail_activity).setVisible(mPost.getCrosspostParentId() != null);
-                                }
+                                setupMenu();
                                 mSwipeRefreshLayout.setRefreshing(false);
                             }
 
@@ -1279,61 +1215,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         applyMenuItemTheme(menu);
         mMenu = menu;
         if (mPost != null) {
-            MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_activity);
-            MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_activity);
-
-            mMenu.findItem(R.id.action_comment_view_post_detail_activity).setVisible(true);
-            mMenu.findItem(R.id.action_sort_view_post_detail_activity).setVisible(true);
-
-            if (mAccessToken != null) {
-                if (mPost.isSaved()) {
-                    saveItem.setVisible(true);
-                    saveItem.setIcon(mSavedIcon);
-                } else {
-                    saveItem.setVisible(true);
-                    saveItem.setIcon(mUnsavedIcon);
-                }
-
-                if (mPost.isHidden()) {
-                    hideItem.setVisible(true);
-                    hideItem.setTitle(R.string.action_unhide_post);
-                } else {
-                    hideItem.setVisible(true);
-                    hideItem.setTitle(R.string.action_hide_post);
-                }
-
-                mMenu.findItem(R.id.action_report_view_post_detail_activity).setVisible(true);
-            } else {
-                saveItem.setVisible(false);
-                hideItem.setVisible(false);
-            }
-
-            if (mPost.getAuthor().equals(mAccountName)) {
-                if (mPost.getPostType() == Post.TEXT_TYPE) {
-                    menu.findItem(R.id.action_edit_view_post_detail_activity).setVisible(true);
-                }
-                menu.findItem(R.id.action_delete_view_post_detail_activity).setVisible(true);
-
-                MenuItem nsfwItem = menu.findItem(R.id.action_nsfw_view_post_detail_activity);
-                nsfwItem.setVisible(true);
-                if (mPost.isNSFW()) {
-                    nsfwItem.setTitle(R.string.action_unmark_nsfw);
-                } else {
-                    nsfwItem.setTitle(R.string.action_mark_nsfw);
-                }
-
-                MenuItem spoilerItem = menu.findItem(R.id.action_spoiler_view_post_detail_activity);
-                spoilerItem.setVisible(true);
-                if (mPost.isSpoiler()) {
-                    spoilerItem.setTitle(R.string.action_unmark_spoiler);
-                } else {
-                    spoilerItem.setTitle(R.string.action_mark_spoiler);
-                }
-
-                menu.findItem(R.id.action_edit_flair_view_post_detail_activity).setVisible(true);
-            }
-
-            menu.findItem(R.id.action_view_crosspost_parent_view_post_detail_activity).setVisible(mPost.getCrosspostParentId() != null);
+            setupMenu();
         }
         return true;
     }
@@ -1472,12 +1354,12 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 }
                 return true;
             case R.id.action_edit_view_post_detail_activity:
-                Intent editPostItent = new Intent(this, EditPostActivity.class);
-                editPostItent.putExtra(EditPostActivity.EXTRA_ACCESS_TOKEN, mAccessToken);
-                editPostItent.putExtra(EditPostActivity.EXTRA_FULLNAME, mPost.getFullName());
-                editPostItent.putExtra(EditPostActivity.EXTRA_TITLE, mPost.getTitle());
-                editPostItent.putExtra(EditPostActivity.EXTRA_CONTENT, mPost.getSelfText());
-                startActivityForResult(editPostItent, EDIT_POST_REQUEST_CODE);
+                Intent editPostIntent = new Intent(this, EditPostActivity.class);
+                editPostIntent.putExtra(EditPostActivity.EXTRA_ACCESS_TOKEN, mAccessToken);
+                editPostIntent.putExtra(EditPostActivity.EXTRA_FULLNAME, mPost.getFullName());
+                editPostIntent.putExtra(EditPostActivity.EXTRA_TITLE, mPost.getTitle());
+                editPostIntent.putExtra(EditPostActivity.EXTRA_CONTENT, mPost.getSelfText());
+                startActivityForResult(editPostIntent, EDIT_POST_REQUEST_CODE);
                 return true;
             case R.id.action_delete_view_post_detail_activity:
                 new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
