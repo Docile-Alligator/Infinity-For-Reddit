@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.InflateException;
 import android.view.MenuItem;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
@@ -70,7 +72,14 @@ public class LoginActivity extends BaseActivity {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        try {
+            setContentView(R.layout.activity_login);
+        } catch (InflateException ie) {
+            Log.e("LoginActivity", "Failed to inflate LoginActivity: " + ie.getMessage());
+            Toast.makeText(LoginActivity.this, R.string.no_system_webview_error, Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
 
         ButterKnife.bind(this);
 
