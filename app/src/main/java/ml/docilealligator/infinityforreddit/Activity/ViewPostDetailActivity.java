@@ -566,7 +566,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
             mMenu.findItem(R.id.action_view_crosspost_parent_view_post_detail_activity).setVisible(mPost.getCrosspostParentId() != null);
 
-            if ("[deleted]".equals(mPost.getAuthor()) || "[deleted]".equals(mPost.getSelfText())) {
+            if ("[deleted]".equals(mPost.getAuthor()) ||
+                    "[deleted]".equals(mPost.getSelfText()) ||
+                    "[removed]".equals(mPost.getSelfText())
+            ) {
                 mMenu.findItem(R.id.action_see_removed_view_post_detail_activity).setVisible(true);
             }
         }

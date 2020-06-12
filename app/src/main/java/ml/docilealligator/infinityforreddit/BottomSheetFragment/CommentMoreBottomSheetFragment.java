@@ -134,7 +134,10 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
             dismiss();
         });
 
-        if ("[removed]".equals(commentData.getCommentRawText())) {
+        if ("[deleted]".equals(commentData.getAuthor()) ||
+                "[deleted]".equals(commentData.getCommentRawText()) ||
+                "[removed]".equals(commentData.getCommentRawText())
+        ) {
             seeRemovedTextView.setVisibility(View.VISIBLE);
 
             seeRemovedTextView.setOnClickListener(view -> {

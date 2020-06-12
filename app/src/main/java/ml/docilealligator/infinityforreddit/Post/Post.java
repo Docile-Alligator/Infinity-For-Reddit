@@ -325,6 +325,10 @@ public class Post implements Parcelable {
         return thumbnailPreviewUrl;
     }
 
+    public void setThumbnailPreviewUrl(String thumbnailPreviewUrl) {
+        this.thumbnailPreviewUrl = thumbnailPreviewUrl;
+    }
+
     public String getUrl() {
         return url;
     }

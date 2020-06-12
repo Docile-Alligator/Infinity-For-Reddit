@@ -1,6 +1,8 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.text.Html;
 
 import androidx.annotation.NonNull;
 
@@ -43,16 +45,46 @@ public class FetchRemovedPost {
         if (id.equals(post.getId())) {
             String author = postJson.getString(JSONUtils.AUTHOR_KEY);
             String title = postJson.getString(JSONUtils.TITLE_KEY);
-            String postContent = "";
-            if (!postJson.isNull(JSONUtils.SELFTEXT_KEY)) {
-                postContent = Utils.modifyMarkdown(postJson.getString(JSONUtils.SELFTEXT_KEY).trim());
-            }
+            String postContent = Utils.modifyMarkdown(postJson.getString(JSONUtils.SELFTEXT_KEY).trim());
 
             post.setAuthor(author);
             post.setTitle(title);
             post.setSelfText(postContent);
             post.setSelfTextPlain("");
             post.setSelfTextPlainTrimmed("");
+
+            String url = postJson.optString(JSONUtils.URL_KEY);
+
+            if (url.endsWith("gif") || url.endsWith("mp4")) {
+                post.setVideoUrl(url);
+                post.setVideoDownloadUrl(url);
+            } else if (post.getPostType() == Post.VIDEO_TYPE || post.getPostType() == Post.GIF_TYPE) {
+                JSONObject redditVideoObject = postJson.getJSONObject("secure_media").getJSONObject(JSONUtils.REDDIT_VIDEO_KEY);
+                String videoUrl = Html.fromHtml(redditVideoObject.getString(JSONUtils.HLS_URL_KEY)).toString();
+                String videoDownloadUrl = redditVideoObject.getString(JSONUtils.FALLBACK_URL_KEY);
+
+                post.setVideoUrl(videoUrl);
+                post.setVideoDownloadUrl(videoDownloadUrl);
+            } else if (post.getPostType() == Post.LINK_TYPE) {
+                post.setUrl(url);
+            }
+
+            if (post.getPostType() == Post.VIDEO_TYPE) {
+                try {
+                    Uri uri = Uri.parse(url);
+                    String authority = uri.getAuthority();
+                    if (authority != null && (authority.contains("gfycat.com") || authority.contains("redgifs.com"))) {
+                        post.setPostType(Post.LINK_TYPE);
+                        post.setUrl(url);
+                    }
+                } catch (IllegalArgumentException ignore) {
+                }
+            }
+
+            if (!postJson.isNull("thumbnail")) {
+                post.setThumbnailPreviewUrl(postJson.getString("thumbnail"));
+            }
+
             return post;
         } else {
             return null;
@@ -84,6 +116,7 @@ public class FetchRemovedPost {
                 post = parseRemovedPost(postJson, post);
             } catch (JSONException e) {
                 e.printStackTrace();
+                post = null;
             }
             return null;
         }

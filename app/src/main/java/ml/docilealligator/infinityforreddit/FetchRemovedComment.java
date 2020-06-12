@@ -80,6 +80,7 @@ public class FetchRemovedComment {
                 comment = parseRemovedComment(commentJSON, comment);
             } catch (JSONException e) {
                 e.printStackTrace();
+                comment = null;
             }
             return null;
         }
