@@ -69,6 +69,7 @@ import ml.docilealligator.infinityforreddit.Event.ChangeVoteButtonsPositionEvent
 import ml.docilealligator.infinityforreddit.Event.ChangeWifiStatusEvent;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.Event.ShowDividerInCompactLayoutPreferenceEvent;
+import ml.docilealligator.infinityforreddit.Event.ShowThumbnailOnTheRightInCompactLayoutEvent;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
@@ -902,6 +903,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 mAdapter.setAutoplay(changeWifiStatusEvent.isConnectedToWifi);
                 refreshAdapter();
             }
+        }
+    }
+
+    @Subscribe
+    public void onShowThumbnailOnTheRightInCompactLayoutEvent(ShowThumbnailOnTheRightInCompactLayoutEvent showThumbnailOnTheRightInCompactLayoutEvent) {
+        if (mAdapter != null) {
+            mAdapter.setShowThumbnailOnTheRightInCompactLayout(showThumbnailOnTheRightInCompactLayoutEvent.showThumbnailOnTheRightInCompactLayout);
+            refreshAdapter();
         }
     }
 

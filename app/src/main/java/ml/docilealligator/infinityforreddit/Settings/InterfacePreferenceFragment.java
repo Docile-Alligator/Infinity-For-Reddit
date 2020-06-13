@@ -1,10 +1,8 @@
 package ml.docilealligator.infinityforreddit.Settings;
 
 
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.fragment.app.Fragment;
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
@@ -17,55 +15,23 @@ import ml.docilealligator.infinityforreddit.Event.ChangeShowElapsedTimeEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVoteButtonsPositionEvent;
 import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.Event.ShowDividerInCompactLayoutPreferenceEvent;
+import ml.docilealligator.infinityforreddit.Event.ShowThumbnailOnTheRightInCompactLayoutEvent;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class InterfacePreferenceFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.interface_preference, rootKey);
 
-        SwitchPreference immersiveInterfaceSwitch = findPreference(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY);
-        SwitchPreference immersiveInterfaceIgnoreNavBarSwitch = findPreference(SharedPreferencesUtils.IMMERSIVE_INTERFACE_IGNORE_NAV_BAR_KEY);
         SwitchPreference bottomAppBarSwitch = findPreference(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY);
         SwitchPreference voteButtonsOnTheRightSwitch = findPreference(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY);
         SwitchPreference showElapsedTimeSwitch = findPreference(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY);
         ListPreference defaultPostLayoutSwitch = findPreference(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY);
         SwitchPreference showDividerInCompactLayout = findPreference(SharedPreferencesUtils.SHOW_DIVIDER_IN_COMPACT_LAYOUT);
+        SwitchPreference showThumbnailOnTheRightInCompactLayout = findPreference(SharedPreferencesUtils.SHOW_THUMBNAIL_ON_THE_RIGHT_IN_COMPACT_LAYOUT);
         SwitchPreference showAbsoluteNumberOfVotes = findPreference(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES);
-
-        if (immersiveInterfaceSwitch != null && immersiveInterfaceIgnoreNavBarSwitch != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                immersiveInterfaceSwitch.setVisible(true);
-                immersiveInterfaceSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
-                    if ((Boolean) newValue) {
-                        immersiveInterfaceIgnoreNavBarSwitch.setVisible(true);
-                    } else {
-                        immersiveInterfaceIgnoreNavBarSwitch.setVisible(false);
-                    }
-                    EventBus.getDefault().post(new RecreateActivityEvent());
-                    return true;
-                });
-
-                if (immersiveInterfaceSwitch.isChecked()) {
-                    immersiveInterfaceIgnoreNavBarSwitch.setVisible(true);
-                } else {
-                    immersiveInterfaceIgnoreNavBarSwitch.setVisible(false);
-                }
-
-                immersiveInterfaceIgnoreNavBarSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
-                    EventBus.getDefault().post(new RecreateActivityEvent());
-                    return true;
-                });
-            } else {
-                immersiveInterfaceSwitch.setVisible(false);
-                immersiveInterfaceIgnoreNavBarSwitch.setVisible(false);
-            }
-        }
 
         if (bottomAppBarSwitch != null) {
             bottomAppBarSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -98,6 +64,13 @@ public class InterfacePreferenceFragment extends PreferenceFragmentCompat {
         if (showDividerInCompactLayout != null) {
             showDividerInCompactLayout.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new ShowDividerInCompactLayoutPreferenceEvent((Boolean) newValue));
+                return true;
+            });
+        }
+
+        if (showThumbnailOnTheRightInCompactLayout != null) {
+            showThumbnailOnTheRightInCompactLayout.setOnPreferenceChangeListener((preference, newValue) -> {
+                EventBus.getDefault().post(new ShowThumbnailOnTheRightInCompactLayoutEvent((Boolean) newValue));
                 return true;
             });
         }

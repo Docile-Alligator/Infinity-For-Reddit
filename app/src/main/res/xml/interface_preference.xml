@@ -7,18 +7,9 @@
         app:icon="@drawable/ic_font_size_24dp"
         app:fragment="ml.docilealligator.infinityforreddit.Settings.FontPreferenceFragment" />
 
-    <SwitchPreference
-        app:defaultValue="true"
-        app:key="immersive_interface"
+    <Preference
         app:title="@string/settings_immersive_interface_title"
-        app:isPreferenceVisible="false" />
-
-    <SwitchPreference
-        app:defaultValue="false"
-        app:key="immersive_interface_ignore_nav_bar"
-        app:title="@string/settings_immersive_interface_ignore_nav_bar_title"
-        app:summary="@string/settings_immersive_interface_ignore_nav_bar_summary"
-        app:isPreferenceVisible="false" />
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.ImmersiveInterfacePreferenceFragment" />
 
     <Preference
         app:title="@string/settings_customize_tabs_in_main_page_title"
@@ -53,6 +44,11 @@
         app:defaultValue="true"
         app:key="show_divider_in_compact_layout"
         app:title="@string/settings_show_divider_in_compact_layout" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="show_thumbnail_on_the_right_in_compact_layout"
+        app:title="@string/settings_show_thumbnail_on_the_right_in_compact_layout" />
 
     <SwitchPreference
         app:defaultValue="false"

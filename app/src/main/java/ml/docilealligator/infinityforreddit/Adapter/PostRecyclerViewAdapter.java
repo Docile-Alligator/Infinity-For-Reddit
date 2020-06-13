@@ -22,6 +22,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.Barrier;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -72,10 +73,10 @@ import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewVideoActivity;
 import ml.docilealligator.infinityforreddit.AsyncTask.LoadSubredditIconAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.LoadUserDataAsyncTask;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.ShareLinkBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToDetailActivity;
-import ml.docilealligator.infinityforreddit.BottomSheetFragment.ShareLinkBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.Post.PostDataSource;
@@ -153,6 +154,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private int mVoteAndReplyUnavailableVoteButtonColor;
     private int mButtonTextColor;
     private int mPostIconAndInfoColor;
+    private int mDividerColor;
     private float mScale;
     private boolean mDisplaySubredditName;
     private boolean mVoteButtonsOnTheRight;
@@ -163,6 +165,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean mShowAbsoluteNumberOfVotes;
     private boolean mAutoplay = false;
     private boolean mAutoplayNsfwVideos;
+    private boolean mShowThumbnailOnTheRightInCompactLayout;
     private Drawable mCommentIcon;
     private NetworkState networkState;
     private ExoCreator mExoCreator;
@@ -196,6 +199,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 mAutoplay = Utils.isConnectedToWifi(activity);
             }
             mAutoplayNsfwVideos = sharedPreferences.getBoolean(SharedPreferencesUtils.AUTOPLAY_NSFW_VIDEOS, true);
+            mShowThumbnailOnTheRightInCompactLayout = sharedPreferences.getBoolean(
+                    SharedPreferencesUtils.SHOW_THUMBNAIL_ON_THE_RIGHT_IN_COMPACT_LAYOUT, false);
             mPostLayout = postLayout;
 
             mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
@@ -227,6 +232,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mVoteAndReplyUnavailableVoteButtonColor = customThemeWrapper.getVoteAndReplyUnavailableButtonColor();
             mButtonTextColor = customThemeWrapper.getButtonTextColor();
             mPostIconAndInfoColor = customThemeWrapper.getPostIconAndInfoColor();
+            mDividerColor = customThemeWrapper.getDividerColor();
 
             mCommentIcon = activity.getDrawable(R.drawable.ic_comment_grey_24dp);
             if (mCommentIcon != null) {
@@ -1320,6 +1326,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
     public void setAutoplayNsfwVideos(boolean autoplayNsfwVideos) {
         mAutoplayNsfwVideos = autoplayNsfwVideos;
+    }
+
+    public void setShowThumbnailOnTheRightInCompactLayout(boolean showThumbnailOnTheRightInCompactLayout) {
+        mShowThumbnailOnTheRightInCompactLayout = showThumbnailOnTheRightInCompactLayout;
     }
 
     @Override
@@ -2536,6 +2546,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         ImageView stickiedPostImageView;
         @BindView(R.id.post_time_text_view_item_post_compact)
         TextView postTimeTextView;
+        @BindView(R.id.title_and_image_constraint_layout)
+        ConstraintLayout titleAndImageConstraintLayout;
         @BindView(R.id.title_text_view_item_post_compact)
         TextView titleTextView;
         @BindView(R.id.type_text_view_item_post_compact)
@@ -2566,6 +2578,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         ImageView playButtonImageView;
         @BindView(R.id.image_view_no_preview_link_item_post_compact)
         ImageView noPreviewLinkImageView;
+        @BindView(R.id.barrier2)
+        Barrier imageBarrier;
         @BindView(R.id.bottom_constraint_layout_item_post_compact)
         ConstraintLayout bottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_compact)
@@ -2609,6 +2623,38 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 constraintSet.applyTo(bottomConstraintLayout);
             }
 
+            if (mShowThumbnailOnTheRightInCompactLayout) {
+                ConstraintSet constraintSet = new ConstraintSet();
+                constraintSet.clone(titleAndImageConstraintLayout);
+                constraintSet.clear(titleTextView.getId(), ConstraintSet.START);
+                constraintSet.clear(titleTextView.getId(), ConstraintSet.END);
+                constraintSet.clear(R.id.flow_layout_item_post_compact, ConstraintSet.START);
+                constraintSet.clear(R.id.flow_layout_item_post_compact, ConstraintSet.END);
+                constraintSet.clear(linkTextView.getId(), ConstraintSet.START);
+                constraintSet.clear(linkTextView.getId(), ConstraintSet.END);
+                constraintSet.clear(relativeLayout.getId(), ConstraintSet.START);
+                constraintSet.clear(relativeLayout.getId(), ConstraintSet.END);
+                constraintSet.clear(noPreviewLinkImageView.getId(), ConstraintSet.START);
+                constraintSet.clear(noPreviewLinkImageView.getId(), ConstraintSet.END);
+                int barrierId = 1234;
+                constraintSet.createBarrier(barrierId, Barrier.END, R.id.image_view_wrapper_item_post_compact,
+                        R.id.image_view_no_preview_link_item_post_compact);
+                constraintSet.connect(titleTextView.getId(), ConstraintSet.START, barrierId, ConstraintSet.END);
+                constraintSet.connect(titleTextView.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+                constraintSet.connect(R.id.flow_layout_item_post_compact, ConstraintSet.START, barrierId, ConstraintSet.END);
+                constraintSet.connect(R.id.flow_layout_item_post_compact, ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+                constraintSet.connect(R.id.flow_layout_item_post_compact, ConstraintSet.BOTTOM, linkTextView.getId(), ConstraintSet.TOP);
+                constraintSet.connect(linkTextView.getId(), ConstraintSet.START, barrierId, ConstraintSet.END);
+                constraintSet.connect(linkTextView.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+                constraintSet.connect(relativeLayout.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+                constraintSet.connect(relativeLayout.getId(), ConstraintSet.END, barrierId, ConstraintSet.START);
+                constraintSet.connect(noPreviewLinkImageView.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+                constraintSet.connect(noPreviewLinkImageView.getId(), ConstraintSet.END, barrierId, ConstraintSet.START);
+                constraintSet.applyTo(titleAndImageConstraintLayout);
+
+                ((ConstraintLayout.LayoutParams) relativeLayout.getLayoutParams()).leftMargin = (int) Utils.convertDpToPixel(16, mActivity);
+            }
+
             itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
             postTimeTextView.setTextColor(mSecondaryTextColor);
             titleTextView.setTextColor(mPostTitleColor);
@@ -2641,6 +2687,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             commentsCountTextView.setCompoundDrawablesWithIntrinsicBounds(mCommentIcon, null, null, null);
             saveButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             shareButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            divider.setBackgroundColor(mDividerColor);
         }
     }
 

@@ -7,6 +7,7 @@ import android.net.Network;
 import android.net.NetworkInfo;
 import android.text.Html;
 import android.text.Spannable;
+import android.util.DisplayMetrics;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
@@ -125,5 +126,9 @@ public class Utils {
         if (inputMethodManager != null && activity.getCurrentFocus() != null) {
             inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
         }
+    }
+
+    public static float convertDpToPixel(float dp, Context context){
+        return dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 }

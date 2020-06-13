@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="immersive_interface"
+        app:title="@string/settings_immersive_interface_title"
+        app:isPreferenceVisible="false" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="immersive_interface_ignore_nav_bar"
+        app:title="@string/settings_immersive_interface_ignore_nav_bar_title"
+        app:summary="@string/settings_immersive_interface_ignore_nav_bar_summary"
+        app:isPreferenceVisible="false" />
+
+</PreferenceScreen>
