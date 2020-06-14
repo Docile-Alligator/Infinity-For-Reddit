@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 
 class ParseSubredditData {
     static void parseSubredditData(String response, ParseSubredditDataListener parseSubredditDataListener) {
@@ -24,7 +25,7 @@ class ParseSubredditData {
         String id = subredditDataJsonObject.getString(JSONUtils.NAME_KEY);
         String subredditFullName = subredditDataJsonObject.getString(JSONUtils.DISPLAY_NAME_KEY);
         String description = subredditDataJsonObject.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY).trim();
-        String sidebarDescription = subredditDataJsonObject.getString(JSONUtils.DESCRIPTION_KEY).trim();
+        String sidebarDescription = Utils.modifyMarkdown(subredditDataJsonObject.getString(JSONUtils.DESCRIPTION_KEY).trim());
         long createdUTC = subredditDataJsonObject.getLong(JSONUtils.CREATED_UTC_KEY) * 1000;
 
         String bannerImageUrl;

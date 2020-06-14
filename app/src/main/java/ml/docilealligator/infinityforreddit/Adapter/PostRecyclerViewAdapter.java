@@ -898,8 +898,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         ((PostCompactViewHolder) holder).linkTextView.setVisibility(View.VISIBLE);
                         String noPreviewLinkDomain = Uri.parse(noPreviewLinkUrl).getHost();
                         ((PostCompactViewHolder) holder).linkTextView.setText(noPreviewLinkDomain);
-                        ((PostCompactViewHolder) holder).noPreviewLinkImageView.setVisibility(View.VISIBLE);
-                        ((PostCompactViewHolder) holder).noPreviewLinkImageView.setOnClickListener(view -> {
+                        ((PostCompactViewHolder) holder).noPreviewLinkImageFrameLayout.setVisibility(View.VISIBLE);
+                        ((PostCompactViewHolder) holder).noPreviewLinkImageFrameLayout.setOnClickListener(view -> {
                             Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                             Uri uri = Uri.parse(post.getUrl());
                             if (uri.getScheme() == null && uri.getHost() == null) {
@@ -1385,7 +1385,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             ((PostCompactViewHolder) holder).progressBar.setVisibility(View.GONE);
             ((PostCompactViewHolder) holder).imageView.setVisibility(View.GONE);
             ((PostCompactViewHolder) holder).playButtonImageView.setVisibility(View.GONE);
-            ((PostCompactViewHolder) holder).noPreviewLinkImageView.setVisibility(View.GONE);
+            ((PostCompactViewHolder) holder).noPreviewLinkImageFrameLayout.setVisibility(View.GONE);
             ((PostCompactViewHolder) holder).upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             ((PostCompactViewHolder) holder).scoreTextView.setTextColor(mPostIconAndInfoColor);
             ((PostCompactViewHolder) holder).downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
@@ -2576,6 +2576,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         ImageView imageView;
         @BindView(R.id.play_button_image_view_item_post_compact)
         ImageView playButtonImageView;
+        @BindView(R.id.frame_layout_image_view_no_preview_link_item_post_compact)
+        FrameLayout noPreviewLinkImageFrameLayout;
         @BindView(R.id.image_view_no_preview_link_item_post_compact)
         ImageView noPreviewLinkImageView;
         @BindView(R.id.barrier2)
@@ -2634,11 +2636,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 constraintSet.clear(linkTextView.getId(), ConstraintSet.END);
                 constraintSet.clear(relativeLayout.getId(), ConstraintSet.START);
                 constraintSet.clear(relativeLayout.getId(), ConstraintSet.END);
-                constraintSet.clear(noPreviewLinkImageView.getId(), ConstraintSet.START);
-                constraintSet.clear(noPreviewLinkImageView.getId(), ConstraintSet.END);
+                constraintSet.clear(noPreviewLinkImageFrameLayout.getId(), ConstraintSet.START);
+                constraintSet.clear(noPreviewLinkImageFrameLayout.getId(), ConstraintSet.END);
                 int barrierId = 1234;
                 constraintSet.createBarrier(barrierId, Barrier.END, R.id.image_view_wrapper_item_post_compact,
-                        R.id.image_view_no_preview_link_item_post_compact);
+                        R.id.frame_layout_image_view_no_preview_link_item_post_compact);
                 constraintSet.connect(titleTextView.getId(), ConstraintSet.START, barrierId, ConstraintSet.END);
                 constraintSet.connect(titleTextView.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
                 constraintSet.connect(R.id.flow_layout_item_post_compact, ConstraintSet.START, barrierId, ConstraintSet.END);
@@ -2648,11 +2650,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 constraintSet.connect(linkTextView.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
                 constraintSet.connect(relativeLayout.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
                 constraintSet.connect(relativeLayout.getId(), ConstraintSet.END, barrierId, ConstraintSet.START);
-                constraintSet.connect(noPreviewLinkImageView.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
-                constraintSet.connect(noPreviewLinkImageView.getId(), ConstraintSet.END, barrierId, ConstraintSet.START);
+                constraintSet.connect(noPreviewLinkImageFrameLayout.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+                constraintSet.connect(noPreviewLinkImageFrameLayout.getId(), ConstraintSet.END, barrierId, ConstraintSet.START);
                 constraintSet.applyTo(titleAndImageConstraintLayout);
 
-                ((ConstraintLayout.LayoutParams) relativeLayout.getLayoutParams()).leftMargin = (int) Utils.convertDpToPixel(16, mActivity);
+                int leftMargin = (int) Utils.convertDpToPixel(16, mActivity);
+                ((ConstraintLayout.LayoutParams) relativeLayout.getLayoutParams()).leftMargin = leftMargin;
+                ((ConstraintLayout.LayoutParams) noPreviewLinkImageFrameLayout.getLayoutParams()).leftMargin = leftMargin;
             }
 
             itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
@@ -2688,6 +2692,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             saveButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             shareButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             divider.setBackgroundColor(mDividerColor);
+
+            imageView.setClipToOutline(true);
+            noPreviewLinkImageFrameLayout.setClipToOutline(true);
+
         }
     }
 
