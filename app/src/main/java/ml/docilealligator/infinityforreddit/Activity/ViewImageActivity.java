@@ -2,21 +2,26 @@ package ml.docilealligator.infinityforreddit.Activity;
 
 import android.Manifest;
 import android.app.DownloadManager;
+import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -41,6 +46,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.thefuntasty.hauler.HaulerView;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -48,6 +54,7 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AsyncTask.SaveImageToFileAsyncTask;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.SetAsWallpaperBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.Font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.Font.ContentFontStyle;
@@ -57,9 +64,10 @@ import ml.docilealligator.infinityforreddit.Font.TitleFontFamily;
 import ml.docilealligator.infinityforreddit.Font.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
-public class ViewImageActivity extends AppCompatActivity {
+public class ViewImageActivity extends AppCompatActivity implements SetAsWallpaperCallback {
 
     public static final String IMAGE_URL_KEY = "IUK";
     public static final String FILE_NAME_KEY = "FNK";
@@ -224,7 +232,7 @@ public class ViewImageActivity extends AppCompatActivity {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         if (getExternalCacheDir() != null) {
-                            Toast.makeText(ViewImageActivity.this, R.string.save_image_before_sharing, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ViewImageActivity.this, R.string.save_image_first, Toast.LENGTH_SHORT).show();
                             new SaveImageToFileAsyncTask(resource, getExternalCacheDir().getPath(), mImageFileName,
                                     new SaveImageToFileAsyncTask.SaveImageToFileAsyncTaskListener() {
                                         @Override
@@ -256,6 +264,15 @@ public class ViewImageActivity extends AppCompatActivity {
 
                     }
                 });
+                return true;
+
+            case R.id.action_set_wallpaper_view_image_activity:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    SetAsWallpaperBottomSheetFragment setAsWallpaperBottomSheetFragment = new SetAsWallpaperBottomSheetFragment();
+                    setAsWallpaperBottomSheetFragment.show(getSupportFragmentManager(), setAsWallpaperBottomSheetFragment.getTag());
+                } else {
+                    setAsWallpaper(2);
+                }
                 return true;
         }
 
@@ -316,5 +333,85 @@ public class ViewImageActivity extends AppCompatActivity {
 
         manager.enqueue(request);
         Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
+    }
+
+    private void setAsWallpaper(int setTo) {
+        Toast.makeText(ViewImageActivity.this, R.string.save_image_first, Toast.LENGTH_SHORT).show();
+        glide.asBitmap().load(mImageUrl).into(new CustomTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                WallpaperManager manager = WallpaperManager.getInstance(ViewImageActivity.this);
+
+                DisplayMetrics metrics = new DisplayMetrics();
+                WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+
+                Rect rect = null;
+
+                if (windowManager != null) {
+                    windowManager.getDefaultDisplay().getMetrics(metrics);
+                    int height = metrics.heightPixels;
+                    int width = metrics.widthPixels;
+
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                        resource = ThumbnailUtils.extractThumbnail(resource, width, height);
+                    }
+
+                    float imageAR = (float) resource.getWidth() / (float) resource.getHeight();
+                    float screenAR = (float) width / (float) height;
+
+                    if (imageAR > screenAR) {
+                        int desiredWidth = (int) (resource.getHeight() * screenAR);
+                        rect = new Rect((resource.getWidth() - desiredWidth) / 2, 0, resource.getWidth(), resource.getHeight());
+                    } else {
+                        int desiredHeight = (int) (resource.getWidth() / screenAR);
+                        rect = new Rect(0, (resource.getHeight() - desiredHeight) / 2, resource.getWidth(), (resource.getHeight() + desiredHeight) / 2);
+                    }
+                }
+                try {
+                    switch (setTo) {
+                        case 0:
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                manager.setBitmap(resource, rect, true, WallpaperManager.FLAG_SYSTEM);
+                            }
+                            break;
+                        case 1:
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                manager.setBitmap(resource, rect, true, WallpaperManager.FLAG_LOCK);
+                            }
+                            break;
+                        case 2:
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                manager.setBitmap(resource, rect, true, WallpaperManager.FLAG_SYSTEM | WallpaperManager.FLAG_LOCK);
+                            } else {
+                                manager.setBitmap(resource);
+                            }
+                            break;
+                    }
+                    Toast.makeText(ViewImageActivity.this, R.string.wallpaper_set, Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    Toast.makeText(ViewImageActivity.this, R.string.error_set_wallpaper, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onLoadCleared(@Nullable Drawable placeholder) {
+
+            }
+        });
+    }
+
+    @Override
+    public void setToHomeScreen(int viewPagerPosition) {
+        setAsWallpaper(0);
+    }
+
+    @Override
+    public void setToLockScreen(int viewPagerPosition) {
+        setAsWallpaper(1);
+    }
+
+    @Override
+    public void setToBoth(int viewPagerPosition) {
+        setAsWallpaper(2);
     }
 }

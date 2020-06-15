@@ -218,7 +218,7 @@ public class ViewGIFActivity extends AppCompatActivity {
 
                 return true;
             case R.id.action_share_view_gif_activity:
-                Toast.makeText(ViewGIFActivity.this, R.string.save_gif_before_sharing, Toast.LENGTH_SHORT).show();
+                Toast.makeText(ViewGIFActivity.this, R.string.save_gif_first, Toast.LENGTH_SHORT).show();
                 glide.asGif().load(mImageUrl).listener(new RequestListener<GifDrawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {

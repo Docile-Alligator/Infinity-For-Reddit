@@ -61,6 +61,7 @@
     <string name="action_share">Share</string>
     <string name="action_preview">Preview</string>
     <string name="action_report">Report</string>
+    <string name="action_set_wallpaper">Set as Wallpaper</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -518,8 +519,8 @@
     <string name="cannot_save_image">Cannot save the image</string>
     <string name="cannot_save_gif">Cannot save the gif</string>
     <string name="cannot_get_storage">Cannot access the app storage</string>
-    <string name="save_image_before_sharing">Saving the image. Please wait.</string>
-    <string name="save_gif_before_sharing">Saving the gif. Please wait.</string>
+    <string name="save_image_first">Saving the image. Please wait.</string>
+    <string name="save_gif_first">Saving the gif. Please wait.</string>
 
     <string name="theme_name_description">Tap to change the name of this theme.</string>
     <string name="theme_item_is_light_theme">Set as Light Theme</string>
@@ -763,7 +764,12 @@
     <string name="downloading_reddit_video_failed_cannot_save_audio">Download failed: cannot save audio to cache directory</string>
     <string name="downloading_reddit_video_failed_cannot_mux">Download failed: cannot mux video and audio</string>
     <string name="downloading_reddit_video_failed_cannot_save_mux_video">Download failed: cannot save the video to public directory</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="wallpaper_set">Wallpaper set</string>
+    <string name="error_set_wallpaper">Cannot set wallpaper</string>
+
+    <string name="set_to_home_screen">Set to Home Screen</string>
+    <string name="set_to_lock_screen">Set to Lock Screen</string>
+    <string name="set_to_both">Set to Both</string>
 
 </resources>

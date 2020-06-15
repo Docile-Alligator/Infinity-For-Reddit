@@ -14,4 +14,10 @@
         android:title="@string/action_share"
         android:icon="@drawable/ic_share_toolbar_white_24dp"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_set_wallpaper_view_image_activity"
+        android:orderInCategory="3"
+        android:title="@string/action_set_wallpaper"
+        app:showAsAction="never" />
 </menu>

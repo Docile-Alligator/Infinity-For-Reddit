@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.Fragment;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
@@ -43,7 +42,9 @@ import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.Activity.ViewImgurMediaActivity;
 import ml.docilealligator.infinityforreddit.AsyncTask.SaveImageToFileAsyncTask;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.SetAsWallpaperBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.ImgurMedia;
 import ml.docilealligator.infinityforreddit.R;
@@ -60,7 +61,7 @@ public class ViewImgurImageFragment extends Fragment {
     @BindView(R.id.load_image_error_linear_layout_view_imgur_image_fragment)
     LinearLayout errorLinearLayout;
 
-    private Activity activity;
+    private ViewImgurMediaActivity activity;
     private RequestManager glide;
     private ImgurMedia imgurMedia;
     private boolean isDownloading = false;
@@ -143,7 +144,7 @@ public class ViewImgurImageFragment extends Fragment {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         if (activity.getExternalCacheDir() != null) {
-                            Toast.makeText(activity, R.string.save_image_before_sharing, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, R.string.save_image_first, Toast.LENGTH_SHORT).show();
                             new SaveImageToFileAsyncTask(resource, activity.getExternalCacheDir().getPath(),
                                     imgurMedia.getFileName(),
                                     new SaveImageToFileAsyncTask.SaveImageToFileAsyncTaskListener() {
@@ -176,6 +177,17 @@ public class ViewImgurImageFragment extends Fragment {
 
                     }
                 });
+                return true;
+            case R.id.action_set_wallpaper_view_imgur_image_fragments:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    SetAsWallpaperBottomSheetFragment setAsWallpaperBottomSheetFragment = new SetAsWallpaperBottomSheetFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(SetAsWallpaperBottomSheetFragment.EXTRA_VIEW_PAGER_POSITION, activity.getCurrentPagePosition());
+                    setAsWallpaperBottomSheetFragment.setArguments(bundle);
+                    setAsWallpaperBottomSheetFragment.show(activity.getSupportFragmentManager(), setAsWallpaperBottomSheetFragment.getTag());
+                } else {
+                    activity.setAsWallpaper(imgurMedia.getLink(), 2);
+                }
                 return true;
         }
 
@@ -241,6 +253,6 @@ public class ViewImgurImageFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (Activity) context;
+        activity = (ViewImgurMediaActivity) context;
     }
 }
