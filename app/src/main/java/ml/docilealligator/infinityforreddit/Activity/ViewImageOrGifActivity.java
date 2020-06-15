@@ -142,7 +142,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
             mImageUrl = intent.getStringExtra(IMAGE_URL_KEY);
         }
         mImageFileName = intent.getStringExtra(FILE_NAME_KEY);
-        postTitle = intent.getStringExtra(POST_TITLE_KEY);
+        String postTitle = intent.getStringExtra(POST_TITLE_KEY);
 
         if (postTitle != null) {
             setTitle(Html.fromHtml(String.format("<small>%s</small>", postTitle)));
