@@ -38,7 +38,6 @@ import ml.docilealligator.infinityforreddit.Activity.ViewImgurMediaActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewMessageActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewMultiRedditDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewPostDetailActivity;
-import ml.docilealligator.infinityforreddit.Activity.ViewSidebarActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewVideoActivity;
@@ -141,8 +140,6 @@ public interface AppComponent {
     void inject(MultiRedditListingActivity multiRedditListingActivity);
 
     void inject(ViewMultiRedditDetailActivity viewMultiRedditDetailActivity);
-
-    void inject(ViewSidebarActivity viewSidebarActivity);
 
     void inject(ViewVideoActivity viewVideoActivity);
 

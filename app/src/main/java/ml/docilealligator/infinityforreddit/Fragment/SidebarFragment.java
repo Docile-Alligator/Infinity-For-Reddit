@@ -50,9 +50,6 @@ import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
 import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditViewModel;
 import retrofit2.Retrofit;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class SidebarFragment extends Fragment {
 
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
@@ -152,7 +149,7 @@ public class SidebarFragment extends Fragment {
         mSubredditViewModel = new ViewModelProvider(this,
                 new SubredditViewModel.Factory(activity.getApplication(), mRedditDataRoomDatabase, subredditName))
                 .get(SubredditViewModel.class);
-        mSubredditViewModel.getSubredditLiveData().observe(this, subredditData -> {
+        mSubredditViewModel.getSubredditLiveData().observe(getViewLifecycleOwner(), subredditData -> {
             if (subredditData != null) {
                 if (subredditData.getSidebarDescription() != null && !subredditData.getSidebarDescription().equals("")) {
                     markwonAdapter.setMarkdown(markwon, subredditData.getSidebarDescription());
