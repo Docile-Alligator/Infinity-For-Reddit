@@ -348,9 +348,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 } else {
                     glide.load(subredditData.getBannerUrl()).into(bannerImageView);
                     bannerImageView.setOnClickListener(view -> {
-                        Intent intent = new Intent(ViewSubredditDetailActivity.this, ViewImageActivity.class);
-                        intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, subredditData.getBannerUrl());
-                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, subredditName + "-banner.jpg");
+                        Intent intent = new Intent(ViewSubredditDetailActivity.this, ViewImageOrGifActivity.class);
+                        intent.putExtra(ViewImageOrGifActivity.IMAGE_URL_KEY, subredditData.getBannerUrl());
+                        intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, subredditName + "-banner.jpg");
                         startActivity(intent);
                     });
                 }
@@ -369,9 +369,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0))))
                             .into(iconGifImageView);
                     iconGifImageView.setOnClickListener(view -> {
-                        Intent intent = new Intent(ViewSubredditDetailActivity.this, ViewImageActivity.class);
-                        intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, subredditData.getIconUrl());
-                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, subredditName + "-icon.jpg");
+                        Intent intent = new Intent(ViewSubredditDetailActivity.this, ViewImageOrGifActivity.class);
+                        intent.putExtra(ViewImageOrGifActivity.IMAGE_URL_KEY, subredditData.getIconUrl());
+                        intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, subredditName + "-icon.jpg");
                         startActivity(intent);
                     });
                 }

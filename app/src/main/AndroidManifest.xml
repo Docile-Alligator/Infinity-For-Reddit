@@ -88,10 +88,6 @@
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activity.ViewGIFActivity"
-            android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.Draggable" />
-        <activity
             android:name=".Activity.AccountSavedThingActivity"
             android:label="@string/account_saved_thing_activity_label"
             android:parentActivityName=".Activity.MainActivity"
@@ -294,7 +290,7 @@
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activity.ViewImageActivity"
+            android:name=".Activity.ViewImageOrGifActivity"
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/AppTheme.Draggable" />
         <activity
