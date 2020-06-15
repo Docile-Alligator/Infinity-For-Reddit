@@ -279,7 +279,7 @@ public class CommentData implements Parcelable {
         if (children == null || children.size() == 0) {
             setChildren(moreChildren);
         } else {
-            if (children.get(children.size() - 1).isPlaceHolder) {
+            if (children.size() > 1 && children.get(children.size() - 1).isPlaceHolder) {
                 children.addAll(children.size() - 2, moreChildren);
             } else {
                 children.addAll(moreChildren);

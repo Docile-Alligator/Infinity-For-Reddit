@@ -89,7 +89,6 @@ public class ViewImageActivity extends AppCompatActivity implements SetAsWallpap
     private String mImageUrl;
     private String mImageFileName;
     private RequestManager glide;
-    private String postTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +130,7 @@ public class ViewImageActivity extends AppCompatActivity implements SetAsWallpap
         Intent intent = getIntent();
         mImageUrl = intent.getStringExtra(IMAGE_URL_KEY);
         mImageFileName = intent.getStringExtra(FILE_NAME_KEY);
-        postTitle = intent.getStringExtra(POST_TITLE_KEY);
+        String postTitle = intent.getStringExtra(POST_TITLE_KEY);
 
         if (postTitle != null) {
             setTitle(Html.fromHtml(String.format("<small>%s</small>", postTitle)));
@@ -185,7 +184,7 @@ public class ViewImageActivity extends AppCompatActivity implements SetAsWallpap
                 mProgressBar.setVisibility(View.GONE);
                 return false;
             }
-        }).into(mImageView);
+        }).override(Target.SIZE_ORIGINAL).into(mImageView);
     }
 
     @Override

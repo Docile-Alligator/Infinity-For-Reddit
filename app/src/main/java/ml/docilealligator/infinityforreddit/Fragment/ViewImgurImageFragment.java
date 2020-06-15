@@ -100,7 +100,7 @@ public class ViewImgurImageFragment extends Fragment {
                 progressBar.setVisibility(View.GONE);
                 return false;
             }
-        }).into(imageView);
+        }).override(Target.SIZE_ORIGINAL).into(imageView);
     }
 
     @Override

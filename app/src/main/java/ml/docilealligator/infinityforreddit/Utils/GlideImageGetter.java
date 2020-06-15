@@ -56,7 +56,7 @@ public class GlideImageGetter implements Html.ImageGetter {
         BitmapDrawablePlaceholder drawable = new BitmapDrawablePlaceholder(textSize);
 
         Context context = container.get().getContext();
-        if (!(context instanceof Activity && ((Activity) context).isFinishing())) {
+        if (!(context instanceof Activity && ((Activity) context).isDestroyed())) {
             container.get().post(() -> Glide.with(context)
                     .asBitmap()
                     .load(source)
@@ -118,7 +118,9 @@ public class GlideImageGetter implements Html.ImageGetter {
 
         @Override
         public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
-            setDrawable(new BitmapDrawable(container.get().getResources(), bitmap));
+            if (container != null) {
+                setDrawable(new BitmapDrawable(container.get().getResources(), bitmap));
+            }
         }
 
         @Override

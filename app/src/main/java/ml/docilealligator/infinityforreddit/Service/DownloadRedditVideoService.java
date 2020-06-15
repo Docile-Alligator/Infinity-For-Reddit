@@ -397,7 +397,7 @@ public class DownloadRedditVideoService extends Service {
                 int audioTrack = muxer.addTrack(audioFormat);
                 boolean sawEOS = false;
                 int offset = 100;
-                int sampleSize = 256 * 1024;
+                int sampleSize = 2048 * 1024;
                 ByteBuffer videoBuf = ByteBuffer.allocate(sampleSize);
                 ByteBuffer audioBuf = ByteBuffer.allocate(sampleSize);
                 MediaCodec.BufferInfo videoBufferInfo = new MediaCodec.BufferInfo();
@@ -411,7 +411,6 @@ public class DownloadRedditVideoService extends Service {
                 while (!sawEOS) {
                     videoBufferInfo.offset = offset;
                     videoBufferInfo.size = videoExtractor.readSampleData(videoBuf, offset);
-
 
                     if (videoBufferInfo.size < 0 || audioBufferInfo.size < 0) {
                         sawEOS = true;
@@ -441,8 +440,10 @@ public class DownloadRedditVideoService extends Service {
                     }
                 }
 
-                muxer.stop();
-                muxer.release();
+                try {
+                    muxer.stop();
+                    muxer.release();
+                } catch (IllegalStateException ignore) {}
             } catch (IOException e) {
                 e.printStackTrace();
                 return false;

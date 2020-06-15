@@ -28,6 +28,8 @@
                 android:id="@+id/image_view_view_image_activity"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
                 app:gest_fillViewport="true" />
 
             <LinearLayout

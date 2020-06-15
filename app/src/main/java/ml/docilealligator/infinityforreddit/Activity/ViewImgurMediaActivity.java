@@ -287,10 +287,12 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
     }
 
     private void setToolbarTitle(int position) {
-        if (images.get(position).getType() == ImgurMedia.TYPE_VIDEO) {
-            setTitle(getString(R.string.view_imgur_media_activity_video_label, position + 1, images.size()));
-        } else {
-            setTitle(getString(R.string.view_imgur_media_activity_image_label, position + 1, images.size()));
+        if (images != null && position >= 0 && position < images.size()) {
+            if (images.get(position).getType() == ImgurMedia.TYPE_VIDEO) {
+                setTitle(getString(R.string.view_imgur_media_activity_video_label, position + 1, images.size()));
+            } else {
+                setTitle(getString(R.string.view_imgur_media_activity_image_label, position + 1, images.size()));
+            }
         }
     }
 
@@ -382,17 +384,23 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
 
     @Override
     public void setToHomeScreen(int viewPagerPosition) {
-        setAsWallpaper(images.get(viewPagerPosition).getLink(), 0);
+        if (images != null && viewPagerPosition >= 0 && viewPagerPosition < images.size()) {
+            setAsWallpaper(images.get(viewPagerPosition).getLink(), 0);
+        }
     }
 
     @Override
     public void setToLockScreen(int viewPagerPosition) {
-        setAsWallpaper(images.get(viewPagerPosition).getLink(), 1);
+        if (images != null && viewPagerPosition >= 0 && viewPagerPosition < images.size()) {
+            setAsWallpaper(images.get(viewPagerPosition).getLink(), 1);
+        }
     }
 
     @Override
     public void setToBoth(int viewPagerPosition) {
-        setAsWallpaper(images.get(viewPagerPosition).getLink(), 2);
+        if (images != null && viewPagerPosition >= 0 && viewPagerPosition < images.size()) {
+            setAsWallpaper(images.get(viewPagerPosition).getLink(), 2);
+        }
     }
 
     public int getCurrentPagePosition() {

@@ -1117,7 +1117,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private void loadImage(PostDetailBaseViewHolder holder) {
         if (holder instanceof PostDetailImageAndGifAutoplayViewHolder) {
             String url = mAutoplay && mPost.getPostType() == Post.GIF_TYPE ? mPost.getUrl() : mPost.getPreviewUrl();
-            RequestBuilder imageRequestBuilder = mGlide.load(url)
+            RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(url)
                     .listener(new RequestListener<Drawable>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -1140,12 +1140,12 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if ((mPost.isNSFW() && mNeedBlurNsfw) || (mPost.isSpoiler() && mNeedBlurSpoiler)) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
-                        .into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
+                        .override(Target.SIZE_ORIGINAL).into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
             } else {
-                imageRequestBuilder.into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
+                imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
             }
         } else if (holder instanceof PostDetailVideoAndGifPreviewHolder) {
-            RequestBuilder imageRequestBuilder = mGlide.load(mPost.getPreviewUrl())
+            RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(mPost.getPreviewUrl())
                     .listener(new RequestListener<Drawable>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -1168,12 +1168,12 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if ((mPost.isNSFW() && mNeedBlurNsfw) || (mPost.isSpoiler() && mNeedBlurSpoiler)) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
-                        .into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
+                        .override(Target.SIZE_ORIGINAL).into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
             } else {
-                imageRequestBuilder.into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
+                imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
             }
         } else if(holder instanceof PostDetailLinkViewHolder) {
-            RequestBuilder imageRequestBuilder = mGlide.load(mPost.getPreviewUrl())
+            RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(mPost.getPreviewUrl())
                     .listener(new RequestListener<Drawable>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -1196,9 +1196,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if ((mPost.isNSFW() && mNeedBlurNsfw) || (mPost.isSpoiler() && mNeedBlurSpoiler)) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
-                        .into(((PostDetailLinkViewHolder) holder).mImageView);
+                        .override(Target.SIZE_ORIGINAL).into(((PostDetailLinkViewHolder) holder).mImageView);
             } else {
-                imageRequestBuilder.into(((PostDetailLinkViewHolder) holder).mImageView);
+                imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostDetailLinkViewHolder) holder).mImageView);
             }
         }
     }

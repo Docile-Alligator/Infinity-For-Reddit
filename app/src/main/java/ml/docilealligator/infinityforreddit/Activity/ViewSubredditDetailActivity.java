@@ -701,23 +701,25 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 fetchSubredditData();
                 return true;
             case R.id.action_lazy_mode_view_subreddit_detail_activity:
-                MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity);
-                if (isInLazyMode) {
-                    isInLazyMode = false;
-                    sectionsPagerAdapter.stopLazyMode();
-                    lazyModeItem.setTitle(R.string.action_start_lazy_mode);
-                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
-                            AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
-                    collapsingToolbarLayout.setLayoutParams(params);
-                } else {
-                    isInLazyMode = true;
-                    if (sectionsPagerAdapter.startLazyMode()) {
-                        lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-                        appBarLayout.setExpanded(false);
-                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                if (sectionsPagerAdapter != null) {
+                    MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity);
+                    if (isInLazyMode) {
+                        isInLazyMode = false;
+                        sectionsPagerAdapter.stopLazyMode();
+                        lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
+                                AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
                         collapsingToolbarLayout.setLayoutParams(params);
                     } else {
-                        isInLazyMode = false;
+                        isInLazyMode = true;
+                        if (sectionsPagerAdapter.startLazyMode()) {
+                            lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+                            appBarLayout.setExpanded(false);
+                            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                            collapsingToolbarLayout.setLayoutParams(params);
+                        } else {
+                            isInLazyMode = false;
+                        }
                     }
                 }
                 return true;
@@ -777,7 +779,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     @Override
     public void sortTypeSelected(SortType sortType) {
-        sectionsPagerAdapter.changeSortType(sortType);
+        if (sectionsPagerAdapter != null) {
+            sectionsPagerAdapter.changeSortType(sortType);
+        }
     }
 
     @Override
