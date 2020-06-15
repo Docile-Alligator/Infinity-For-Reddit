@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.Fragment;
 
 import android.Manifest;
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,6 +45,8 @@ import ml.docilealligator.infinityforreddit.AsyncTask.SaveImageToFileAsyncTask;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.SetAsWallpaperBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.ImgurMedia;
+import ml.docilealligator.infinityforreddit.MediaDownloader;
+import ml.docilealligator.infinityforreddit.MediaDownloaderImpl;
 import ml.docilealligator.infinityforreddit.R;
 
 public class ViewImgurImageFragment extends Fragment {
@@ -63,6 +63,7 @@ public class ViewImgurImageFragment extends Fragment {
 
     private ViewImgurMediaActivity activity;
     private RequestManager glide;
+    private MediaDownloader mediaDownloader;
     private ImgurMedia imgurMedia;
     private boolean isDownloading = false;
 
@@ -81,6 +82,7 @@ public class ViewImgurImageFragment extends Fragment {
 
         imgurMedia = getArguments().getParcelable(EXTRA_IMGUR_IMAGES);
         glide = Glide.with(activity);
+        mediaDownloader = new MediaDownloaderImpl();
         loadImage();
 
         return rootView;
@@ -131,10 +133,10 @@ public class ViewImgurImageFragment extends Fragment {
                                 PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
                     } else {
                         // Permission has already been granted
-                        download();
+                        mediaDownloader.download(imgurMedia.getLink(), imgurMedia.getFileName(), getContext());
                     }
                 } else {
-                    download();
+                    mediaDownloader.download(imgurMedia.getLink(), imgurMedia.getFileName(), getContext());
                 }
 
                 return true;
@@ -151,7 +153,7 @@ public class ViewImgurImageFragment extends Fragment {
                                         @Override
                                         public void saveSuccess(File imageFile) {
                                             Uri uri = FileProvider.getUriForFile(activity,
-                                                    BuildConfig.APPLICATION_ID + ".provider",imageFile);
+                                                    BuildConfig.APPLICATION_ID + ".provider", imageFile);
                                             Intent shareIntent = new Intent();
                                             shareIntent.setAction(Intent.ACTION_SEND);
                                             shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
@@ -200,54 +202,10 @@ public class ViewImgurImageFragment extends Fragment {
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 Toast.makeText(activity, R.string.no_storage_permission, Toast.LENGTH_SHORT).show();
             } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED && isDownloading) {
-                download();
+                mediaDownloader.download(imgurMedia.getLink(), imgurMedia.getFileName(), getContext());
             }
             isDownloading = false;
         }
-    }
-
-    private void download() {
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(imgurMedia.getLink()));
-        request.setTitle(imgurMedia.getFileName());
-
-        request.allowScanningByMediaScanner();
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-
-        //Android Q support
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, imgurMedia.getFileName());
-        } else {
-            String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-            File directory = new File(path + "/Infinity/");
-            boolean saveToInfinityFolder = true;
-            if (!directory.exists()) {
-                if (!directory.mkdir()) {
-                    saveToInfinityFolder = false;
-                }
-            } else {
-                if (directory.isFile()) {
-                    if (!(directory.delete() && directory.mkdir())) {
-                        saveToInfinityFolder = false;
-                    }
-                }
-            }
-
-            if (saveToInfinityFolder) {
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES + "/Infinity/", imgurMedia.getFileName());
-            } else {
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, imgurMedia.getFileName());
-            }
-        }
-
-        DownloadManager manager = (DownloadManager) activity.getSystemService(Context.DOWNLOAD_SERVICE);
-
-        if (manager == null) {
-            Toast.makeText(activity, R.string.download_failed, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        manager.enqueue(request);
-        Toast.makeText(activity, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 
     @Override

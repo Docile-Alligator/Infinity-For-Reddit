@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.Activity;
 
 import android.Manifest;
-import android.app.DownloadManager;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +14,6 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -65,6 +63,8 @@ import ml.docilealligator.infinityforreddit.Font.FontStyle;
 import ml.docilealligator.infinityforreddit.Font.TitleFontFamily;
 import ml.docilealligator.infinityforreddit.Font.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.MediaDownloader;
+import ml.docilealligator.infinityforreddit.MediaDownloaderImpl;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
@@ -90,6 +90,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    private MediaDownloader mediaDownloader;
     private boolean isActionBarHidden = false;
     private boolean isDownloading = false;
     private RequestManager glide;
@@ -133,6 +134,8 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
 
         mHaulerView.setOnDragDismissedListener(dragDirection -> finish());
+
+        mediaDownloader = new MediaDownloaderImpl();
 
         glide = Glide.with(this);
 
@@ -231,10 +234,10 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
                                 PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
                     } else {
                         // Permission has already been granted
-                        download(mImageUrl, mImageFileName);
+                        mediaDownloader.download(mImageUrl, mImageFileName, this);
                     }
                 } else {
-                    download(mImageUrl, mImageFileName);
+                    mediaDownloader.download(mImageUrl, mImageFileName, this);
                 }
 
                 return true;
@@ -345,54 +348,10 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 Toast.makeText(this, R.string.no_storage_permission, Toast.LENGTH_SHORT).show();
             } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED && isDownloading) {
-                download(mImageUrl, mImageFileName);
+                mediaDownloader.download(mImageUrl, mImageFileName, this);
             }
             isDownloading = false;
         }
-    }
-
-    void download(String mImageUrl, String mImageFileName) {
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(mImageUrl));
-        request.setTitle(mImageFileName);
-
-        request.allowScanningByMediaScanner();
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-
-        //Android Q support
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, mImageFileName);
-        } else {
-            String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-            File directory = new File(path + "/Infinity/");
-            boolean saveToInfinityFolder = true;
-            if (!directory.exists()) {
-                if (!directory.mkdir()) {
-                    saveToInfinityFolder = false;
-                }
-            } else {
-                if (directory.isFile()) {
-                    if (!(directory.delete() && directory.mkdir())) {
-                        saveToInfinityFolder = false;
-                    }
-                }
-            }
-
-            if (saveToInfinityFolder) {
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES + "/Infinity/", mImageFileName);
-            } else {
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, mImageFileName);
-            }
-        }
-
-        DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-
-        if (manager == null) {
-            Toast.makeText(this, R.string.download_failed, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        manager.enqueue(request);
-        Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 
     private void setAsWallpaper(int setTo) {
