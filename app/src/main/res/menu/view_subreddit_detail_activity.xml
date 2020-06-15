@@ -35,12 +35,6 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_view_side_bar_view_subreddit_detail_activity"
-        android:orderInCategory="6"
-        android:title="@string/action_view_side_bar"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/action_share_view_subreddit_detail_activity"
         android:orderInCategory="7"
         android:title="@string/action_share"
