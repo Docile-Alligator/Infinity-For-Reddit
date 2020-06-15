@@ -43,6 +43,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
+import com.thefuntasty.hauler.DragDirection;
 import com.thefuntasty.hauler.HaulerView;
 
 import java.io.File;
@@ -139,7 +140,11 @@ public class ViewImageActivity extends AppCompatActivity implements SetAsWallpap
             setTitle("");
         }
 
-        mHaulerView.setOnDragDismissedListener(dragDirection -> finish());
+        mHaulerView.setOnDragDismissedListener(dragDirection -> {
+            int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
+            finish();
+            overridePendingTransition(0, slide);
+        });
 
         mLoadErrorLinearLayout.setOnClickListener(view -> {
             mProgressBar.setVisibility(View.VISIBLE);
@@ -238,7 +243,7 @@ public class ViewImageActivity extends AppCompatActivity implements SetAsWallpap
                                         @Override
                                         public void saveSuccess(File imageFile) {
                                             Uri uri = FileProvider.getUriForFile(ViewImageActivity.this,
-                                                    BuildConfig.APPLICATION_ID + ".provider",imageFile);
+                                                    BuildConfig.APPLICATION_ID + ".provider", imageFile);
                                             Intent shareIntent = new Intent();
                                             shareIntent.setAction(Intent.ACTION_SEND);
                                             shareIntent.putExtra(Intent.EXTRA_STREAM, uri);

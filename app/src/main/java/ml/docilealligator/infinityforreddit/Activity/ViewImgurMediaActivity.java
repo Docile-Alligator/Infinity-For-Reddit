@@ -32,6 +32,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.thefuntasty.hauler.DragDirection;
 import com.thefuntasty.hauler.HaulerView;
 
 import org.json.JSONArray;
@@ -140,7 +141,11 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
             images = savedInstanceState.getParcelableArrayList(IMGUR_IMAGES_STATE);
         }
 
-        haulerView.setOnDragDismissedListener(dragDirection -> finish());
+        haulerView.setOnDragDismissedListener(dragDirection -> {
+            int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
+            finish();
+            overridePendingTransition(0, slide);
+        });
 
         if (images == null) {
             fetchImgurMedia(imgurId);
@@ -439,6 +444,7 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
 
         interface ParseImgurImagesAsyncTaskListener {
             void success(ArrayList<ImgurMedia> images);
+
             void failed();
         }
 
@@ -493,6 +499,7 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
 
         interface ParseImgurImageAsyncTaskListener {
             void success(ImgurMedia image);
+
             void failed();
         }
 
