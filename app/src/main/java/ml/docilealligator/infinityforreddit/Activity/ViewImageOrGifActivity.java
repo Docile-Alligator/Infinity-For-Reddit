@@ -1,25 +1,19 @@
 package ml.docilealligator.infinityforreddit.Activity;
 
 import android.Manifest;
-import android.app.WallpaperManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -45,7 +39,6 @@ import com.bumptech.glide.request.transition.Transition;
 import com.thefuntasty.hauler.HaulerView;
 
 import java.io.File;
-import java.io.IOException;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -68,6 +61,7 @@ import ml.docilealligator.infinityforreddit.MediaDownloaderImpl;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.WallpaperSetter;
 import pl.droidsonroids.gif.GifImageView;
 
 public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWallpaperCallback {
@@ -91,6 +85,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     @Named("default")
     SharedPreferences mSharedPreferences;
     private MediaDownloader mediaDownloader;
+    private WallpaperSetter wallpaperSetter;
     private boolean isActionBarHidden = false;
     private boolean isDownloading = false;
     private RequestManager glide;
@@ -136,6 +131,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         mHaulerView.setOnDragDismissedListener(dragDirection -> finish());
 
         mediaDownloader = new MediaDownloaderImpl();
+        wallpaperSetter = new WallpaperSetter();
 
         glide = Glide.with(this);
 
@@ -253,7 +249,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
                         SetAsWallpaperBottomSheetFragment setAsWallpaperBottomSheetFragment = new SetAsWallpaperBottomSheetFragment();
                         setAsWallpaperBottomSheetFragment.show(getSupportFragmentManager(), setAsWallpaperBottomSheetFragment.getTag());
                     } else {
-                        setAsWallpaper(2);
+                        wallpaperSetter.set(mImageUrl, WallpaperSetter.BOTH_SCREENS, this);
                     }
                 }
                 return true;
@@ -354,83 +350,18 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         }
     }
 
-    private void setAsWallpaper(int setTo) {
-        Toast.makeText(ViewImageOrGifActivity.this, R.string.save_image_first, Toast.LENGTH_SHORT).show();
-        glide.asBitmap().load(mImageUrl).into(new CustomTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                WallpaperManager manager = WallpaperManager.getInstance(ViewImageOrGifActivity.this);
-
-                DisplayMetrics metrics = new DisplayMetrics();
-                WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-
-                Rect rect = null;
-
-                if (windowManager != null) {
-                    windowManager.getDefaultDisplay().getMetrics(metrics);
-                    int height = metrics.heightPixels;
-                    int width = metrics.widthPixels;
-
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                        resource = ThumbnailUtils.extractThumbnail(resource, width, height);
-                    }
-
-                    float imageAR = (float) resource.getWidth() / (float) resource.getHeight();
-                    float screenAR = (float) width / (float) height;
-
-                    if (imageAR > screenAR) {
-                        int desiredWidth = (int) (resource.getHeight() * screenAR);
-                        rect = new Rect((resource.getWidth() - desiredWidth) / 2, 0, resource.getWidth(), resource.getHeight());
-                    } else {
-                        int desiredHeight = (int) (resource.getWidth() / screenAR);
-                        rect = new Rect(0, (resource.getHeight() - desiredHeight) / 2, resource.getWidth(), (resource.getHeight() + desiredHeight) / 2);
-                    }
-                }
-                try {
-                    switch (setTo) {
-                        case 0:
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                manager.setBitmap(resource, rect, true, WallpaperManager.FLAG_SYSTEM);
-                            }
-                            break;
-                        case 1:
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                manager.setBitmap(resource, rect, true, WallpaperManager.FLAG_LOCK);
-                            }
-                            break;
-                        case 2:
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                manager.setBitmap(resource, rect, true, WallpaperManager.FLAG_SYSTEM | WallpaperManager.FLAG_LOCK);
-                            } else {
-                                manager.setBitmap(resource);
-                            }
-                            break;
-                    }
-                    Toast.makeText(ViewImageOrGifActivity.this, R.string.wallpaper_set, Toast.LENGTH_SHORT).show();
-                } catch (IOException e) {
-                    Toast.makeText(ViewImageOrGifActivity.this, R.string.error_set_wallpaper, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onLoadCleared(@Nullable Drawable placeholder) {
-
-            }
-        });
-    }
-
     @Override
     public void setToHomeScreen(int viewPagerPosition) {
-        setAsWallpaper(0);
+        wallpaperSetter.set(mImageUrl, WallpaperSetter.HOME_SCREEN, this);
     }
 
     @Override
     public void setToLockScreen(int viewPagerPosition) {
-        setAsWallpaper(1);
+        wallpaperSetter.set(mImageUrl, WallpaperSetter.LOCK_SCREEN, this);
     }
 
     @Override
     public void setToBoth(int viewPagerPosition) {
-        setAsWallpaper(2);
+        wallpaperSetter.set(mImageUrl, WallpaperSetter.BOTH_SCREENS, this);
     }
 }

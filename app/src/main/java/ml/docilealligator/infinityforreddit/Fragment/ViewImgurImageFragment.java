@@ -48,6 +48,7 @@ import ml.docilealligator.infinityforreddit.ImgurMedia;
 import ml.docilealligator.infinityforreddit.MediaDownloader;
 import ml.docilealligator.infinityforreddit.MediaDownloaderImpl;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 
 public class ViewImgurImageFragment extends Fragment {
 
@@ -188,7 +189,7 @@ public class ViewImgurImageFragment extends Fragment {
                     setAsWallpaperBottomSheetFragment.setArguments(bundle);
                     setAsWallpaperBottomSheetFragment.show(activity.getSupportFragmentManager(), setAsWallpaperBottomSheetFragment.getTag());
                 } else {
-                    activity.setAsWallpaper(imgurMedia.getLink(), 2);
+                    ((SetAsWallpaperCallback) activity).setToBoth(activity.getCurrentPagePosition());
                 }
                 return true;
         }
