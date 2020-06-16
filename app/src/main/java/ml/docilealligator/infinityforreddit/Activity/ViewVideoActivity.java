@@ -167,6 +167,8 @@ public class ViewVideoActivity extends AppCompatActivity {
 
         mediaDownloader = new MediaDownloaderImpl();
 
+        mediaDownloader = new MediaDownloaderImpl();
+
         Intent intent = getIntent();
         mVideoUri = intent.getData();
         postTitle = intent.getStringExtra(EXTRA_POST_TITLE);
