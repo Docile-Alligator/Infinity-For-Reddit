@@ -90,6 +90,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     public static final String EXTRA_SUBREDDIT_NAME_KEY = "ESN";
     public static final String EXTRA_MESSAGE_FULLNAME = "ENF";
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
+    public static final String EXTRA_VIEW_SIDEBAR = "EVSB";
 
     private static final String FETCH_SUBREDDIT_INFO_STATE = "FSIS";
     private static final String CURRENT_ONLINE_SUBSCRIBERS_STATE = "COSS";
@@ -627,6 +628,12 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
 
+
+        boolean viewSidebar = getIntent().getBooleanExtra(EXTRA_VIEW_SIDEBAR, false);
+        if (viewSidebar) {
+            viewPager.setCurrentItem(1, false);
+        }
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -725,11 +732,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 return true;
             case R.id.action_change_post_layout_view_subreddit_detail_activity:
                 postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
-                return true;
-            case R.id.action_view_side_bar_view_subreddit_detail_activity:
-                Intent sidebarIntent = new Intent(this, ViewSidebarActivity.class);
-                sidebarIntent.putExtra(ViewSidebarActivity.EXTRA_SUBREDDIT_NAME, subredditName);
-                startActivity(sidebarIntent);
                 return true;
             case R.id.action_share_view_subreddit_detail_activity:
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
