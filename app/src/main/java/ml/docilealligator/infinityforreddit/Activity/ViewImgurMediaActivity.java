@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.thefuntasty.hauler.DragDirection;
 import com.thefuntasty.hauler.HaulerView;
 
 import org.json.JSONArray;
@@ -130,7 +131,11 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
             images = savedInstanceState.getParcelableArrayList(IMGUR_IMAGES_STATE);
         }
 
-        haulerView.setOnDragDismissedListener(dragDirection -> finish());
+        haulerView.setOnDragDismissedListener(dragDirection -> {
+            int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
+            finish();
+            overridePendingTransition(0, slide);
+        });
 
         if (images == null) {
             fetchImgurMedia(imgurId);

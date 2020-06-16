@@ -44,6 +44,7 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.thefuntasty.hauler.DragDirection;
 import com.thefuntasty.hauler.HaulerView;
 
 import javax.inject.Inject;
@@ -158,7 +159,13 @@ public class ViewVideoActivity extends AppCompatActivity {
             params.rightMargin = getResources().getDimensionPixelSize(resourceId);
         }
 
-        haulerView.setOnDragDismissedListener(dragDirection -> finish());
+        haulerView.setOnDragDismissedListener(dragDirection -> {
+            int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
+            finish();
+            overridePendingTransition(0, slide);
+        });
+
+        mediaDownloader = new MediaDownloaderImpl();
 
         mediaDownloader = new MediaDownloaderImpl();
 

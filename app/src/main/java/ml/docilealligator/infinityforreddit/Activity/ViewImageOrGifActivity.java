@@ -36,6 +36,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
+import com.thefuntasty.hauler.DragDirection;
 import com.thefuntasty.hauler.HaulerView;
 
 import java.io.File;
@@ -149,6 +150,12 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         } else {
             setTitle("");
         }
+
+        mHaulerView.setOnDragDismissedListener(dragDirection -> {
+            int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
+            finish();
+            overridePendingTransition(0, slide);
+        });
 
         mLoadErrorLinearLayout.setOnClickListener(view -> {
             mProgressBar.setVisibility(View.VISIBLE);

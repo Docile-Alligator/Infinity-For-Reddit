@@ -159,8 +159,9 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 intent.putExtra(ViewUserDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
                                 startActivity(intent);
                             } else if (path.matches(SIDEBAR_PATTERN)) {
-                                Intent intent = new Intent(this, ViewSidebarActivity.class);
-                                intent.putExtra(ViewSidebarActivity.EXTRA_SUBREDDIT_NAME, path.substring(3, path.length() - 14));
+                                Intent intent = new Intent(this, ViewSubredditDetailActivity.class);
+                                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, path.substring(3, path.length() - 14));
+                                intent.putExtra(ViewSubredditDetailActivity.EXTRA_VIEW_SIDEBAR, true);
                                 startActivity(intent);
                             } else if (path.matches(MULTIREDDIT_PATTERN)) {
                                 Intent intent = new Intent(this, ViewMultiRedditDetailActivity.class);

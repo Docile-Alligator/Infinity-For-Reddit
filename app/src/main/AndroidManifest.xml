@@ -75,10 +75,6 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".Activity.ViewSidebarActivity"
-            android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".Activity.ViewMultiRedditDetailActivity"
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
