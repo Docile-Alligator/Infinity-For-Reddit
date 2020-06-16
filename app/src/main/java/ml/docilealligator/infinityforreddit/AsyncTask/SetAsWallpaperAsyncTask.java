@@ -11,27 +11,24 @@ import android.view.WindowManager;
 
 import java.io.IOException;
 
+import ml.docilealligator.infinityforreddit.WallpaperSetter;
+
 public class SetAsWallpaperAsyncTask extends AsyncTask<Void, Void, Void> {
 
     private Bitmap bitmap;
     private int setTo;
     private WallpaperManager manager;
     private WindowManager windowManager;
-    private SetAsWallpaperAsyncTaskListener setAsWallpaperAsyncTaskListener;
+    private WallpaperSetter.SetWallpaperListener setWallpaperListener;
     private boolean success = true;
 
     public SetAsWallpaperAsyncTask(Bitmap bitmap, int setTo, WallpaperManager manager, WindowManager windowManager,
-                                   SetAsWallpaperAsyncTaskListener setAsWallpaperAsyncTaskListener) {
+                                   WallpaperSetter.SetWallpaperListener setWallpaperListener) {
         this.bitmap = bitmap;
         this.setTo = setTo;
         this.manager = manager;
         this.windowManager = windowManager;
-        this.setAsWallpaperAsyncTaskListener = setAsWallpaperAsyncTaskListener;
-    }
-
-    public interface SetAsWallpaperAsyncTaskListener {
-        void success();
-        void failed();
+        this.setWallpaperListener = setWallpaperListener;
     }
 
     @Override
@@ -61,17 +58,17 @@ public class SetAsWallpaperAsyncTask extends AsyncTask<Void, Void, Void> {
         }
         try {
             switch (setTo) {
-                case 0:
+                case WallpaperSetter.HOME_SCREEN:
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         manager.setBitmap(bitmap, rect, true, WallpaperManager.FLAG_SYSTEM);
                     }
                     break;
-                case 1:
+                case WallpaperSetter.LOCK_SCREEN:
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         manager.setBitmap(bitmap, rect, true, WallpaperManager.FLAG_LOCK);
                     }
                     break;
-                case 2:
+                case WallpaperSetter.BOTH_SCREENS:
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         manager.setBitmap(bitmap, rect, true, WallpaperManager.FLAG_SYSTEM | WallpaperManager.FLAG_LOCK);
                     } else {
@@ -90,9 +87,9 @@ public class SetAsWallpaperAsyncTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         if (success) {
-            setAsWallpaperAsyncTaskListener.success();
+            setWallpaperListener.success();
         } else {
-            setAsWallpaperAsyncTaskListener.failed();
+            setWallpaperListener.failed();
         }
     }
 }

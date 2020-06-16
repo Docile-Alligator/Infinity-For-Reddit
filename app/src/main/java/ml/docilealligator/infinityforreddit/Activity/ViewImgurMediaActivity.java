@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -313,21 +314,54 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
     @Override
     public void setToHomeScreen(int viewPagerPosition) {
         if (images != null && viewPagerPosition >= 0 && viewPagerPosition < images.size()) {
-            wallpaperSetter.set(images.get(viewPagerPosition).getLink(), WallpaperSetter.HOME_SCREEN, this);
+            WallpaperSetter.set(images.get(viewPagerPosition).getLink(), WallpaperSetter.HOME_SCREEN, this,
+                    new WallpaperSetter.SetWallpaperListener() {
+                        @Override
+                        public void success() {
+                            Toast.makeText(ViewImgurMediaActivity.this, R.string.wallpaper_set, Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void failed() {
+                            Toast.makeText(ViewImgurMediaActivity.this, R.string.error_set_wallpaper, Toast.LENGTH_SHORT).show();
+                        }
+                    });
         }
     }
 
     @Override
     public void setToLockScreen(int viewPagerPosition) {
         if (images != null && viewPagerPosition >= 0 && viewPagerPosition < images.size()) {
-            wallpaperSetter.set(images.get(viewPagerPosition).getLink(), WallpaperSetter.LOCK_SCREEN, this);
+            WallpaperSetter.set(images.get(viewPagerPosition).getLink(), WallpaperSetter.LOCK_SCREEN, this,
+                    new WallpaperSetter.SetWallpaperListener() {
+                        @Override
+                        public void success() {
+                            Toast.makeText(ViewImgurMediaActivity.this, R.string.wallpaper_set, Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void failed() {
+                            Toast.makeText(ViewImgurMediaActivity.this, R.string.error_set_wallpaper, Toast.LENGTH_SHORT).show();
+                        }
+                    });
         }
     }
 
     @Override
     public void setToBoth(int viewPagerPosition) {
         if (images != null && viewPagerPosition >= 0 && viewPagerPosition < images.size()) {
-            wallpaperSetter.set(images.get(viewPagerPosition).getLink(), WallpaperSetter.BOTH_SCREENS, this);
+            WallpaperSetter.set(images.get(viewPagerPosition).getLink(), WallpaperSetter.BOTH_SCREENS, this,
+                    new WallpaperSetter.SetWallpaperListener() {
+                        @Override
+                        public void success() {
+                            Toast.makeText(ViewImgurMediaActivity.this, R.string.wallpaper_set, Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void failed() {
+                            Toast.makeText(ViewImgurMediaActivity.this, R.string.error_set_wallpaper, Toast.LENGTH_SHORT).show();
+                        }
+                    });
         }
     }
 

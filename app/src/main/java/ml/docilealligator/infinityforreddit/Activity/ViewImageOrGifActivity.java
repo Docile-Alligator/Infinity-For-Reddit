@@ -86,7 +86,6 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     @Named("default")
     SharedPreferences mSharedPreferences;
     private MediaDownloader mediaDownloader;
-    private WallpaperSetter wallpaperSetter;
     private boolean isActionBarHidden = false;
     private boolean isDownloading = false;
     private RequestManager glide;
@@ -132,7 +131,6 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         mHaulerView.setOnDragDismissedListener(dragDirection -> finish());
 
         mediaDownloader = new MediaDownloaderImpl();
-        wallpaperSetter = new WallpaperSetter();
 
         glide = Glide.with(this);
 
@@ -256,7 +254,18 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
                         SetAsWallpaperBottomSheetFragment setAsWallpaperBottomSheetFragment = new SetAsWallpaperBottomSheetFragment();
                         setAsWallpaperBottomSheetFragment.show(getSupportFragmentManager(), setAsWallpaperBottomSheetFragment.getTag());
                     } else {
-                        wallpaperSetter.set(mImageUrl, WallpaperSetter.BOTH_SCREENS, this);
+                        WallpaperSetter.set(mImageUrl, WallpaperSetter.BOTH_SCREENS, this,
+                                new WallpaperSetter.SetWallpaperListener() {
+                                    @Override
+                                    public void success() {
+                                        Toast.makeText(ViewImageOrGifActivity.this, R.string.wallpaper_set, Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void failed() {
+                                        Toast.makeText(ViewImageOrGifActivity.this, R.string.error_set_wallpaper, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                     }
                 }
                 return true;
@@ -359,16 +368,49 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
     @Override
     public void setToHomeScreen(int viewPagerPosition) {
-        wallpaperSetter.set(mImageUrl, WallpaperSetter.HOME_SCREEN, this);
+        WallpaperSetter.set(mImageUrl, WallpaperSetter.HOME_SCREEN, this,
+                new WallpaperSetter.SetWallpaperListener() {
+                    @Override
+                    public void success() {
+                        Toast.makeText(ViewImageOrGifActivity.this, R.string.wallpaper_set, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void failed() {
+                        Toast.makeText(ViewImageOrGifActivity.this, R.string.error_set_wallpaper, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override
     public void setToLockScreen(int viewPagerPosition) {
-        wallpaperSetter.set(mImageUrl, WallpaperSetter.LOCK_SCREEN, this);
+        WallpaperSetter.set(mImageUrl, WallpaperSetter.LOCK_SCREEN, this,
+                new WallpaperSetter.SetWallpaperListener() {
+                    @Override
+                    public void success() {
+                        Toast.makeText(ViewImageOrGifActivity.this, R.string.wallpaper_set, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void failed() {
+                        Toast.makeText(ViewImageOrGifActivity.this, R.string.error_set_wallpaper, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override
     public void setToBoth(int viewPagerPosition) {
-        wallpaperSetter.set(mImageUrl, WallpaperSetter.BOTH_SCREENS, this);
+        WallpaperSetter.set(mImageUrl, WallpaperSetter.BOTH_SCREENS, this,
+                new WallpaperSetter.SetWallpaperListener() {
+                    @Override
+                    public void success() {
+                        Toast.makeText(ViewImageOrGifActivity.this, R.string.wallpaper_set, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void failed() {
+                        Toast.makeText(ViewImageOrGifActivity.this, R.string.error_set_wallpaper, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
