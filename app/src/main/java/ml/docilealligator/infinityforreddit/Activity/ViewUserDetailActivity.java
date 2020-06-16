@@ -295,9 +295,9 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 } else {
                     glide.load(userData.getBanner()).into(bannerImageView);
                     bannerImageView.setOnClickListener(view -> {
-                        Intent intent = new Intent(this, ViewImageActivity.class);
-                        intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, userData.getBanner());
-                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, username + "-banner.jpg");
+                        Intent intent = new Intent(this, ViewImageOrGifActivity.class);
+                        intent.putExtra(ViewImageOrGifActivity.IMAGE_URL_KEY, userData.getBanner());
+                        intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, username + "-banner.jpg");
                         startActivity(intent);
                     });
                 }
@@ -315,9 +315,9 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                             .into(iconGifImageView);
 
                     iconGifImageView.setOnClickListener(view -> {
-                        Intent intent = new Intent(this, ViewImageActivity.class);
-                        intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, userData.getIconUrl());
-                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, username + "-icon.jpg");
+                        Intent intent = new Intent(this, ViewImageOrGifActivity.class);
+                        intent.putExtra(ViewImageOrGifActivity.IMAGE_URL_KEY, userData.getIconUrl());
+                        intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, username + "-icon.jpg");
                         startActivity(intent);
                     });
                 }

@@ -32,8 +32,7 @@ import ml.docilealligator.infinityforreddit.Activity.SubredditMultiselectionActi
 import ml.docilealligator.infinityforreddit.Activity.SubredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubscribedThingListingActivity;
 import ml.docilealligator.infinityforreddit.Activity.ThemePreviewActivity;
-import ml.docilealligator.infinityforreddit.Activity.ViewGIFActivity;
-import ml.docilealligator.infinityforreddit.Activity.ViewImageActivity;
+import ml.docilealligator.infinityforreddit.Activity.ViewImageOrGifActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewImgurMediaActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewMessageActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewMultiRedditDetailActivity;
@@ -133,9 +132,7 @@ public interface AppComponent {
 
     void inject(AccountSavedThingActivity accountSavedThingActivity);
 
-    void inject(ViewImageActivity viewImageActivity);
-
-    void inject(ViewGIFActivity viewGIFActivity);
+    void inject(ViewImageOrGifActivity viewGIFActivity);
 
     void inject(MultiRedditListingActivity multiRedditListingActivity);
 

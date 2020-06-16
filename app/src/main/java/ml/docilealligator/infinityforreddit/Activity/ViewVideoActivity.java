@@ -1,8 +1,6 @@
 package ml.docilealligator.infinityforreddit.Activity;
 
 import android.Manifest;
-import android.app.DownloadManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -13,7 +11,6 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,8 +47,6 @@ import com.google.android.exoplayer2.util.Util;
 import com.thefuntasty.hauler.DragDirection;
 import com.thefuntasty.hauler.HaulerView;
 
-import java.io.File;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -62,6 +57,8 @@ import ml.docilealligator.infinityforreddit.Font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.Font.FontFamily;
 import ml.docilealligator.infinityforreddit.Font.TitleFontFamily;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.MediaDownloader;
+import ml.docilealligator.infinityforreddit.MediaDownloaderImpl;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Service.DownloadRedditVideoService;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
@@ -96,6 +93,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     private Uri mVideoUri;
     private SimpleExoPlayer player;
     private DataSource.Factory dataSourceFactory;
+    private MediaDownloader mediaDownloader;
 
     private String videoDownloadUrl;
     private String videoFileName;
@@ -166,6 +164,8 @@ public class ViewVideoActivity extends AppCompatActivity {
             finish();
             overridePendingTransition(0, slide);
         });
+
+        mediaDownloader = new MediaDownloaderImpl();
 
         Intent intent = getIntent();
         mVideoUri = intent.getData();
@@ -412,46 +412,7 @@ public class ViewVideoActivity extends AppCompatActivity {
         isDownloading = false;
 
         if (videoType != VIDEO_TYPE_NORMAL) {
-            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(videoDownloadUrl));
-            request.setTitle(videoFileName);
-
-            request.allowScanningByMediaScanner();
-            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-
-            //Android Q support
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, videoFileName);
-            } else {
-                String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-                File directory = new File(path + "/Infinity/");
-                boolean saveToInfinityFolder = true;
-                if (!directory.exists()) {
-                    if (!directory.mkdir()) {
-                        saveToInfinityFolder = false;
-                    }
-                } else {
-                    if (directory.isFile()) {
-                        if (!(directory.delete() && directory.mkdir())) {
-                            saveToInfinityFolder = false;
-                        }
-                    }
-                }
-
-                if (saveToInfinityFolder) {
-                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES + "/Infinity/", videoFileName);
-                } else {
-                    request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, videoFileName);
-                }
-            }
-
-            DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-
-            if (manager == null) {
-                Toast.makeText(this, R.string.download_failed, Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            manager.enqueue(request);
+            mediaDownloader.download(videoDownloadUrl, videoFileName, this);
         } else {
             Intent intent = new Intent(this, DownloadRedditVideoService.class);
             intent.putExtra(DownloadRedditVideoService.EXTRA_VIDEO_URL, videoDownloadUrl);
@@ -463,8 +424,8 @@ public class ViewVideoActivity extends AppCompatActivity {
             } else {
                 startService(intent);
             }
+            Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 
     @Override

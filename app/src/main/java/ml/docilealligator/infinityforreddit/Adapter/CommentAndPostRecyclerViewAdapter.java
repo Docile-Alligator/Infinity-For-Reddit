@@ -81,8 +81,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Activity.CommentActivity;
 import ml.docilealligator.infinityforreddit.Activity.FilteredThingActivity;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
-import ml.docilealligator.infinityforreddit.Activity.ViewGIFActivity;
-import ml.docilealligator.infinityforreddit.Activity.ViewImageActivity;
+import ml.docilealligator.infinityforreddit.Activity.ViewImageOrGifActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
@@ -307,7 +306,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mShowElapsedTime = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
         mExpandChildren = !mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_TOP_LEVEL_COMMENTS_FIRST, false);
         mCommentToolbarHidden = mSharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDDEN, false);
-        mCommentToolbarHideOnClick= mSharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDE_ON_CLICK, true);
+        mCommentToolbarHideOnClick = mSharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDE_ON_CLICK, true);
         mSwapTapAndLong = mSharedPreferences.getBoolean(SharedPreferencesUtils.SWAP_TAP_AND_LONG_COMMENTS, false);
         mShowCommentDivider = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER, false);
         mShowAbsoluteNumberOfVotes = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
@@ -934,7 +933,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setOnClickListener(view -> {
                 int commentPosition = mIsSingleCommentThreadMode ? holder.getAdapterPosition() - 2 : holder.getAdapterPosition() - 1;
                 int parentPosition = getParentPosition(commentPosition);
-                if(parentPosition >= 0) {
+                if (parentPosition >= 0) {
                     CommentData parentComment = mVisibleComments.get(parentPosition);
 
                     mVisibleComments.get(commentPosition).setLoadingMoreChildren(true);
@@ -1172,7 +1171,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             } else {
                 imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
             }
-        } else if(holder instanceof PostDetailLinkViewHolder) {
+        } else if (holder instanceof PostDetailLinkViewHolder) {
             RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(mPost.getPreviewUrl())
                     .listener(new RequestListener<Drawable>() {
                         @Override
@@ -2255,11 +2254,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, mPost.getTitle());
                     mActivity.startActivity(intent);
                 } else if (mPost.getPostType() == Post.GIF_TYPE) {
-                    Intent intent = new Intent(mActivity, ViewGIFActivity.class);
-                    intent.putExtra(ViewGIFActivity.FILE_NAME_KEY, mPost.getSubredditName()
+                    Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
+                    intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, mPost.getSubredditName()
                             + "-" + mPost.getId() + ".gif");
-                    intent.putExtra(ViewGIFActivity.GIF_URL_KEY, mPost.getVideoUrl());
-                    intent.putExtra(ViewImageActivity.POST_TITLE_KEY, mPost.getTitle());
+                    intent.putExtra(ViewImageOrGifActivity.GIF_URL_KEY, mPost.getVideoUrl());
+                    intent.putExtra(ViewImageOrGifActivity.POST_TITLE_KEY, mPost.getTitle());
                     mActivity.startActivity(intent);
                 }
             });
@@ -2350,18 +2349,18 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             mImageView.setOnClickListener(view -> {
                 if (mPost.getPostType() == Post.IMAGE_TYPE) {
-                    Intent intent = new Intent(mActivity, ViewImageActivity.class);
-                    intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, mPost.getUrl());
-                    intent.putExtra(ViewImageActivity.FILE_NAME_KEY, mPost.getSubredditNamePrefixed().substring(2)
+                    Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
+                    intent.putExtra(ViewImageOrGifActivity.IMAGE_URL_KEY, mPost.getUrl());
+                    intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, mPost.getSubredditNamePrefixed().substring(2)
                             + "-" + mPost.getId().substring(3) + ".jpg");
-                    intent.putExtra(ViewImageActivity.POST_TITLE_KEY, mPost.getTitle());
+                    intent.putExtra(ViewImageOrGifActivity.POST_TITLE_KEY, mPost.getTitle());
                     mActivity.startActivity(intent);
                 } else if (mPost.getPostType() == Post.GIF_TYPE) {
-                    Intent intent = new Intent(mActivity, ViewGIFActivity.class);
-                    intent.putExtra(ViewGIFActivity.FILE_NAME_KEY, mPost.getSubredditName()
+                    Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
+                    intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, mPost.getSubredditName()
                             + "-" + mPost.getId() + ".gif");
-                    intent.putExtra(ViewGIFActivity.GIF_URL_KEY, mPost.getVideoUrl());
-                    intent.putExtra(ViewImageActivity.POST_TITLE_KEY, mPost.getTitle());
+                    intent.putExtra(ViewImageOrGifActivity.GIF_URL_KEY, mPost.getVideoUrl());
+                    intent.putExtra(ViewImageOrGifActivity.POST_TITLE_KEY, mPost.getTitle());
                     mActivity.startActivity(intent);
                 }
             });
@@ -2934,7 +2933,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             expandButton.setOnClickListener(view -> {
                 if (expandButton.getVisibility() == View.VISIBLE) {
                     int commentPosition = mIsSingleCommentThreadMode ? getAdapterPosition() - 2 : getAdapterPosition() - 1;
-                    if(commentPosition >= 0 && commentPosition < mVisibleComments.size()) {
+                    if (commentPosition >= 0 && commentPosition < mVisibleComments.size()) {
                         CommentData comment = getCurrentComment();
                         if (mVisibleComments.get(commentPosition).isExpanded()) {
                             collapseChildren(commentPosition);
