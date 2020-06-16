@@ -1,17 +1,15 @@
 package ml.docilealligator.infinityforreddit.Activity;
 
 import android.Manifest;
-import android.app.DownloadManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,14 +26,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import com.alexvasilkov.gestures.views.GestureFrameLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.thefuntasty.hauler.DragDirection;
 import com.thefuntasty.hauler.HaulerView;
 
@@ -47,6 +47,8 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AsyncTask.SaveGIFToFileAsyncTask;
+import ml.docilealligator.infinityforreddit.AsyncTask.SaveImageToFileAsyncTask;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.SetAsWallpaperBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.Font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.Font.ContentFontStyle;
@@ -55,38 +57,47 @@ import ml.docilealligator.infinityforreddit.Font.FontStyle;
 import ml.docilealligator.infinityforreddit.Font.TitleFontFamily;
 import ml.docilealligator.infinityforreddit.Font.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.MediaDownloader;
+import ml.docilealligator.infinityforreddit.MediaDownloaderImpl;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.WallpaperSetter;
 import pl.droidsonroids.gif.GifImageView;
 
-public class ViewGIFActivity extends AppCompatActivity {
+public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWallpaperCallback {
 
+    public static final String IMAGE_URL_KEY = "IUK";
     public static final String GIF_URL_KEY = "GUK";
     public static final String FILE_NAME_KEY = "FNK";
     public static final String POST_TITLE_KEY = "PTK";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
-    @BindView(R.id.hauler_view_view_gif_activity)
+    @BindView(R.id.hauler_view_view_image_or_gif_activity)
     HaulerView mHaulerView;
-    @BindView(R.id.progress_bar_view_gif_activity)
+    @BindView(R.id.progress_bar_view_image_or_gif_activity)
     ProgressBar mProgressBar;
-    @BindView(R.id.image_view_view_gif_activity)
+    @BindView(R.id.image_view_view_image_or_gif_activity)
     GifImageView mImageView;
-    @BindView(R.id.load_image_error_linear_layout_view_gif_activity)
+    @BindView(R.id.gesture_layout_view_image_or_gif_activity)
+    GestureFrameLayout gestureLayout;
+    @BindView(R.id.load_image_error_linear_layout_view_image_or_gif_activity)
     LinearLayout mLoadErrorLinearLayout;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    private MediaDownloader mediaDownloader;
+    private WallpaperSetter wallpaperSetter;
     private boolean isActionBarHidden = false;
     private boolean isDownloading = false;
     private RequestManager glide;
     private String mImageUrl;
     private String mImageFileName;
-    private boolean isSwiping = false;
-    private String postTitle;
+    private boolean isGif = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
         getTheme().applyStyle(R.style.Theme_Normal, true);
@@ -109,7 +120,7 @@ public class ViewGIFActivity extends AppCompatActivity {
         getTheme().applyStyle(ContentFontFamily.valueOf(mSharedPreferences
                 .getString(SharedPreferencesUtils.CONTENT_FONT_FAMILY_KEY, ContentFontFamily.Default.name())).getResId(), true);
 
-        setContentView(R.layout.activity_view_gif);
+        setContentView(R.layout.activity_view_image_or_gif);
 
         ButterKnife.bind(this);
 
@@ -118,18 +129,21 @@ public class ViewGIFActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(upArrow);
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
 
-        mHaulerView.setOnDragDismissedListener(dragDirection -> {
-            int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
-            finish();
-            overridePendingTransition(0, slide);
-        });
+        mHaulerView.setOnDragDismissedListener(dragDirection -> finish());
+
+        mediaDownloader = new MediaDownloaderImpl();
+        wallpaperSetter = new WallpaperSetter();
 
         glide = Glide.with(this);
 
         Intent intent = getIntent();
         mImageUrl = intent.getStringExtra(GIF_URL_KEY);
+        if (mImageUrl == null) {
+            isGif = false;
+            mImageUrl = intent.getStringExtra(IMAGE_URL_KEY);
+        }
         mImageFileName = intent.getStringExtra(FILE_NAME_KEY);
-        postTitle = intent.getStringExtra(POST_TITLE_KEY);
+        String postTitle = intent.getStringExtra(POST_TITLE_KEY);
 
         if (postTitle != null) {
             setTitle(Html.fromHtml(String.format("<small>%s</small>", postTitle)));
@@ -137,15 +151,21 @@ public class ViewGIFActivity extends AppCompatActivity {
             setTitle("");
         }
 
+        mHaulerView.setOnDragDismissedListener(dragDirection -> {
+            int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
+            finish();
+            overridePendingTransition(0, slide);
+        });
+
         mLoadErrorLinearLayout.setOnClickListener(view -> {
-            if (!isSwiping) {
-                mProgressBar.setVisibility(View.VISIBLE);
-                mLoadErrorLinearLayout.setVisibility(View.GONE);
-                loadImage();
-            }
+            mProgressBar.setVisibility(View.VISIBLE);
+            mLoadErrorLinearLayout.setVisibility(View.GONE);
+            loadImage();
         });
 
         loadImage();
+
+        gestureLayout.getController().getSettings().setMaxZoom(10f).setDoubleTapZoom(2f).setPanEnabled(true);
 
         mImageView.setOnClickListener(view -> {
             if (isActionBarHidden) {
@@ -181,12 +201,14 @@ public class ViewGIFActivity extends AppCompatActivity {
                 mProgressBar.setVisibility(View.GONE);
                 return false;
             }
-        }).apply(new RequestOptions().fitCenter()).into(mImageView);
+        }).override(Target.SIZE_ORIGINAL).into(mImageView);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.view_gif_activity, menu);
+        getMenuInflater().inflate(R.menu.view_image_or_gif_activity, menu);
+        if (!isGif)
+            menu.findItem(R.id.action_set_wallpaper_view_image_or_gif_activity).setVisible(true);
         return true;
     }
 
@@ -196,7 +218,7 @@ public class ViewGIFActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.action_download_view_gif_activity:
+            case R.id.action_download_view_image_or_gif_activity:
                 if (isDownloading) {
                     return false;
                 }
@@ -215,55 +237,112 @@ public class ViewGIFActivity extends AppCompatActivity {
                                 PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
                     } else {
                         // Permission has already been granted
-                        download();
+                        mediaDownloader.download(mImageUrl, mImageFileName, this);
                     }
                 } else {
-                    download();
+                    mediaDownloader.download(mImageUrl, mImageFileName, this);
                 }
 
                 return true;
-            case R.id.action_share_view_gif_activity:
-                Toast.makeText(ViewGIFActivity.this, R.string.save_gif_first, Toast.LENGTH_SHORT).show();
-                glide.asGif().load(mImageUrl).listener(new RequestListener<GifDrawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
-                        return false;
+            case R.id.action_share_view_image_or_gif_activity:
+                if (isGif)
+                    shareGif();
+                else
+                    shareImage();
+                return true;
+            case R.id.action_set_wallpaper_view_image_or_gif_activity:
+                if (!isGif) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        SetAsWallpaperBottomSheetFragment setAsWallpaperBottomSheetFragment = new SetAsWallpaperBottomSheetFragment();
+                        setAsWallpaperBottomSheetFragment.show(getSupportFragmentManager(), setAsWallpaperBottomSheetFragment.getTag());
+                    } else {
+                        wallpaperSetter.set(mImageUrl, WallpaperSetter.BOTH_SCREENS, this);
                     }
-
-                    @Override
-                    public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
-                        if (getExternalCacheDir() != null) {
-                            new SaveGIFToFileAsyncTask(resource, getExternalCacheDir().getPath(), mImageFileName,
-                                    new SaveGIFToFileAsyncTask.SaveGIFToFileAsyncTaskListener() {
-                                        @Override
-                                        public void saveSuccess(File imageFile) {
-                                            Uri uri = FileProvider.getUriForFile(ViewGIFActivity.this,
-                                                    BuildConfig.APPLICATION_ID + ".provider", imageFile);
-                                            Intent shareIntent = new Intent();
-                                            shareIntent.setAction(Intent.ACTION_SEND);
-                                            shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                                            shareIntent.setType("image/*");
-                                            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                            startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
-                                        }
-
-                                        @Override
-                                        public void saveFailed() {
-                                            Toast.makeText(ViewGIFActivity.this,
-                                                    R.string.cannot_save_gif, Toast.LENGTH_SHORT).show();
-                                        }
-                                    }).execute();
-                        } else {
-                            Toast.makeText(ViewGIFActivity.this,
-                                    R.string.cannot_get_storage, Toast.LENGTH_SHORT).show();
-                        }
-                        return false;
-                    }
-                }).submit();
+                }
                 return true;
         }
 
         return false;
+    }
+
+    private void shareImage() {
+        glide.asBitmap().load(mImageUrl).into(new CustomTarget<Bitmap>() {
+
+            @Override
+            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                if (getExternalCacheDir() != null) {
+                    Toast.makeText(ViewImageOrGifActivity.this, R.string.save_image_first, Toast.LENGTH_SHORT).show();
+                    new SaveImageToFileAsyncTask(resource, getExternalCacheDir().getPath(), mImageFileName,
+                            new SaveImageToFileAsyncTask.SaveImageToFileAsyncTaskListener() {
+                                @Override
+                                public void saveSuccess(File imageFile) {
+                                    Uri uri = FileProvider.getUriForFile(ViewImageOrGifActivity.this,
+                                            BuildConfig.APPLICATION_ID + ".provider", imageFile);
+                                    Intent shareIntent = new Intent();
+                                    shareIntent.setAction(Intent.ACTION_SEND);
+                                    shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                                    shareIntent.setType("image/*");
+                                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                    startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
+                                }
+
+                                @Override
+                                public void saveFailed() {
+                                    Toast.makeText(ViewImageOrGifActivity.this,
+                                            R.string.cannot_save_image, Toast.LENGTH_SHORT).show();
+                                }
+                            }).execute();
+                } else {
+                    Toast.makeText(ViewImageOrGifActivity.this,
+                            R.string.cannot_get_storage, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onLoadCleared(@Nullable Drawable placeholder) {
+
+            }
+        });
+    }
+
+    private void shareGif() {
+        Toast.makeText(ViewImageOrGifActivity.this, R.string.save_gif_first, Toast.LENGTH_SHORT).show();
+        glide.asGif().load(mImageUrl).listener(new RequestListener<GifDrawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
+                if (getExternalCacheDir() != null) {
+                    new SaveGIFToFileAsyncTask(resource, getExternalCacheDir().getPath(), mImageFileName,
+                            new SaveGIFToFileAsyncTask.SaveGIFToFileAsyncTaskListener() {
+                                @Override
+                                public void saveSuccess(File imageFile) {
+                                    Uri uri = FileProvider.getUriForFile(ViewImageOrGifActivity.this,
+                                            BuildConfig.APPLICATION_ID + ".provider", imageFile);
+                                    Intent shareIntent = new Intent();
+                                    shareIntent.setAction(Intent.ACTION_SEND);
+                                    shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                                    shareIntent.setType("image/*");
+                                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                    startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
+                                }
+
+                                @Override
+                                public void saveFailed() {
+                                    Toast.makeText(ViewImageOrGifActivity.this,
+                                            R.string.cannot_save_gif, Toast.LENGTH_SHORT).show();
+                                }
+                            }).execute();
+                } else {
+                    Toast.makeText(ViewImageOrGifActivity.this,
+                            R.string.cannot_get_storage, Toast.LENGTH_SHORT).show();
+                }
+                return false;
+            }
+        }).submit();
     }
 
     @Override
@@ -272,53 +351,24 @@ public class ViewGIFActivity extends AppCompatActivity {
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 Toast.makeText(this, R.string.no_storage_permission, Toast.LENGTH_SHORT).show();
             } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED && isDownloading) {
-                download();
+                mediaDownloader.download(mImageUrl, mImageFileName, this);
             }
             isDownloading = false;
         }
     }
 
-    private void download() {
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(mImageUrl));
-        request.setTitle(mImageFileName);
+    @Override
+    public void setToHomeScreen(int viewPagerPosition) {
+        wallpaperSetter.set(mImageUrl, WallpaperSetter.HOME_SCREEN, this);
+    }
 
-        request.allowScanningByMediaScanner();
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+    @Override
+    public void setToLockScreen(int viewPagerPosition) {
+        wallpaperSetter.set(mImageUrl, WallpaperSetter.LOCK_SCREEN, this);
+    }
 
-        //Android Q support
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, mImageFileName);
-        } else {
-            String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
-            File directory = new File(path + "/Infinity/");
-            boolean saveToInfinityFolder = true;
-            if (!directory.exists()) {
-                if (!directory.mkdir()) {
-                    saveToInfinityFolder = false;
-                }
-            } else {
-                if (directory.isFile()) {
-                    if (!(directory.delete() && directory.mkdir())) {
-                        saveToInfinityFolder = false;
-                    }
-                }
-            }
-
-            if (saveToInfinityFolder) {
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES + "/Infinity/", mImageFileName);
-            } else {
-                request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, mImageFileName);
-            }
-        }
-
-        DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
-
-        if (manager == null) {
-            Toast.makeText(this, R.string.download_failed, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        manager.enqueue(request);
-        Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
+    @Override
+    public void setToBoth(int viewPagerPosition) {
+        wallpaperSetter.set(mImageUrl, WallpaperSetter.BOTH_SCREENS, this);
     }
 }

@@ -65,8 +65,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Activity.FilteredThingActivity;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
-import ml.docilealligator.infinityforreddit.Activity.ViewGIFActivity;
-import ml.docilealligator.infinityforreddit.Activity.ViewImageActivity;
+import ml.docilealligator.infinityforreddit.Activity.ViewImageOrGifActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
@@ -836,9 +835,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                         final String imageUrl = post.getUrl();
                         ((PostCompactViewHolder) holder).imageView.setOnClickListener(view -> {
-                            Intent intent = new Intent(mActivity, ViewImageActivity.class);
-                            intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, imageUrl);
-                            intent.putExtra(ViewImageActivity.FILE_NAME_KEY, subredditName
+                            Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
+                            intent.putExtra(ViewImageOrGifActivity.IMAGE_URL_KEY, imageUrl);
+                            intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, subredditName
                                     + "-" + id + ".jpg");
                             mActivity.startActivity(intent);
                         });
@@ -866,11 +865,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                         final Uri gifVideoUri = Uri.parse(post.getVideoUrl());
                         ((PostCompactViewHolder) holder).imageView.setOnClickListener(view -> {
-                            Intent intent = new Intent(mActivity, ViewGIFActivity.class);
+                            Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
                             intent.setData(gifVideoUri);
-                            intent.putExtra(ViewGIFActivity.FILE_NAME_KEY, subredditName
+                            intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, subredditName
                                     + "-" + id + ".gif");
-                            intent.putExtra(ViewGIFActivity.GIF_URL_KEY, post.getVideoUrl());
+                            intent.putExtra(ViewImageOrGifActivity.GIF_URL_KEY, post.getVideoUrl());
                             mActivity.startActivity(intent);
                         });
 
@@ -1209,18 +1208,18 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             String previewUrl = post.getThumbnailPreviewUrl().equals("") ? post.getPreviewUrl() : post.getThumbnailPreviewUrl();
             RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(previewUrl)
                     .error(R.drawable.ic_error_outline_black_24dp).listener(new RequestListener<Drawable>() {
-                @Override
-                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                    ((PostCompactViewHolder) holder).progressBar.setVisibility(View.GONE);
-                    return false;
-                }
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            ((PostCompactViewHolder) holder).progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
 
-                @Override
-                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                    ((PostCompactViewHolder) holder).progressBar.setVisibility(View.GONE);
-                    return false;
-                }
-            });
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            ((PostCompactViewHolder) holder).progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+                    });
             if ((post.isNSFW() && mNeedBlurNSFW) || post.isSpoiler() && mNeedBlurSpoiler) {
                 imageRequestBuilder
                         .transform(new BlurTransformation(50, 2))
@@ -1310,7 +1309,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
     public void removeFooter() {
         if (hasExtraRow()) {
-            notifyItemRemoved(getItemCount() -  1);
+            notifyItemRemoved(getItemCount() - 1);
         }
 
         networkState = null;
@@ -2144,11 +2143,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, post.getTitle());
                         mActivity.startActivity(intent);
                     } else if (post.getPostType() == Post.GIF_TYPE) {
-                        Intent intent = new Intent(mActivity, ViewGIFActivity.class);
-                        intent.putExtra(ViewGIFActivity.FILE_NAME_KEY, post.getSubredditName()
+                        Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
+                        intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, post.getSubredditName()
                                 + "-" + post.getId() + ".gif");
-                        intent.putExtra(ViewGIFActivity.GIF_URL_KEY, post.getVideoUrl());
-                        intent.putExtra(ViewGIFActivity.POST_TITLE_KEY, post.getTitle());
+                        intent.putExtra(ViewImageOrGifActivity.GIF_URL_KEY, post.getVideoUrl());
+                        intent.putExtra(ViewImageOrGifActivity.POST_TITLE_KEY, post.getTitle());
                         mActivity.startActivity(intent);
                     }
                 }
@@ -2243,18 +2242,18 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 Post post = getItem(getAdapterPosition());
                 if (post != null) {
                     if (post.getPostType() == Post.IMAGE_TYPE) {
-                        Intent intent = new Intent(mActivity, ViewImageActivity.class);
-                        intent.putExtra(ViewImageActivity.IMAGE_URL_KEY, post.getUrl());
-                        intent.putExtra(ViewImageActivity.FILE_NAME_KEY, post.getSubredditName()
+                        Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
+                        intent.putExtra(ViewImageOrGifActivity.IMAGE_URL_KEY, post.getUrl());
+                        intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, post.getSubredditName()
                                 + "-" + post.getId() + ".jpg");
-                        intent.putExtra(ViewImageActivity.POST_TITLE_KEY, post.getTitle());
+                        intent.putExtra(ViewImageOrGifActivity.POST_TITLE_KEY, post.getTitle());
                         mActivity.startActivity(intent);
                     } else if (post.getPostType() == Post.GIF_TYPE) {
-                        Intent intent = new Intent(mActivity, ViewGIFActivity.class);
-                        intent.putExtra(ViewGIFActivity.FILE_NAME_KEY, post.getSubredditName()
+                        Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
+                        intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, post.getSubredditName()
                                 + "-" + post.getId() + ".gif");
-                        intent.putExtra(ViewGIFActivity.GIF_URL_KEY, post.getVideoUrl());
-                        intent.putExtra(ViewGIFActivity.POST_TITLE_KEY, post.getTitle());
+                        intent.putExtra(ViewImageOrGifActivity.GIF_URL_KEY, post.getVideoUrl());
+                        intent.putExtra(ViewImageOrGifActivity.POST_TITLE_KEY, post.getTitle());
                         mActivity.startActivity(intent);
                     }
                 }
@@ -2507,7 +2506,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         @BindView(R.id.share_button_item_post_text_type)
         ImageView shareButton;
 
-        PostTextTypeViewHolder                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        (View itemView) {
+        PostTextTypeViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             setBaseView(cardView,
