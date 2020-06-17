@@ -10,7 +10,6 @@ public enum ContentFontFamily {
     HarmoniaSans(R.style.ContentFontFamily_HarmoniaSans, "HarmoniaSans"),
     Inter(R.style.ContentFontFamily_Inter, "Inter"),
     Manrope(R.style.ContentFontFamily_Manrope, "Manrope"),
-    Caveat(R.style.ContentFontFamily_Caveat, "Caveat"),
     BadScript(R.style.ContentFontFamily_BadScript, "BadScript"),
     Sriracha(R.style.ContentFontFamily_Sriracha, "Sriracha");
 

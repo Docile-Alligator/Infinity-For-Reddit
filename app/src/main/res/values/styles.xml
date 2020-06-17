@@ -262,10 +262,6 @@
         <item name="font_family">@font/manrope</item>
     </style>
 
-    <style name="FontFamily.Caveat">
-        <item name="font_family">@font/caveat</item>
-    </style>
-
     <style name="FontFamily.BadScript">
         <item name="font_family">@font/bad_script_regular</item>
     </style>
@@ -304,10 +300,6 @@
         <item name="title_font_family">@font/manrope</item>
     </style>
 
-    <style name="TitleFontFamily.Caveat">
-        <item name="title_font_family">@font/caveat</item>
-    </style>
-
     <style name="TitleFontFamily.BadScript">
         <item name="title_font_family">@font/bad_script_regular</item>
     </style>
@@ -344,10 +336,6 @@
 
     <style name="ContentFontFamily.Manrope">
         <item name="content_font_family">@font/manrope</item>
-    </style>
-
-    <style name="ContentFontFamily.Caveat">
-        <item name="content_font_family">@font/caveat</item>
     </style>
 
     <style name="ContentFontFamily.BadScript">

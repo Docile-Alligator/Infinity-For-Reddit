@@ -10,7 +10,6 @@ public enum TitleFontFamily {
     HarmoniaSans(R.style.TitleFontFamily_HarmoniaSans, "HarmoniaSans"),
     Inter(R.style.TitleFontFamily_Inter, "Inter"),
     Manrope(R.style.TitleFontFamily_Manrope, "Manrope"),
-    Caveat(R.style.TitleFontFamily_Caveat, "Caveat"),
     BadScript(R.style.TitleFontFamily_BadScript, "BadScript"),
     Sriracha(R.style.TitleFontFamily_Sriracha, "Sriracha");
 

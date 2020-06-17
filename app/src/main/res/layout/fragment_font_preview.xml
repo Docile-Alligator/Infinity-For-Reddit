@@ -96,18 +96,6 @@
         android:paddingBottom="16dp"
         android:paddingStart="72dp"
         android:paddingEnd="16dp"
-        android:text="Caveat"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:fontFamily="@font/caveat" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="72dp"
-        android:paddingEnd="16dp"
         android:text="Bad Script"
         android:textColor="?attr/primaryTextColor"
         android:textSize="?attr/font_default"
