@@ -32,6 +32,7 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
 
@@ -41,15 +42,15 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
-import ml.docilealligator.infinityforreddit.Font.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeSettingsItem;
+import ml.docilealligator.infinityforreddit.Font.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.Font.FontStyle;
+import ml.docilealligator.infinityforreddit.Font.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.Fragment.ThemePreviewCommentsFragment;
 import ml.docilealligator.infinityforreddit.Fragment.ThemePreviewPostsFragment;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.Font.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
@@ -133,7 +134,7 @@ public class ThemePreviewActivity extends AppCompatActivity {
                 break;
             case 1:
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
+                if (mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
                     getTheme().applyStyle(R.style.Theme_Normal_AmoledDark, true);
                 } else {
                     getTheme().applyStyle(R.style.Theme_Normal_NormalDark, true);
@@ -145,10 +146,10 @@ public class ThemePreviewActivity extends AppCompatActivity {
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
                 }
-                if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO) {
+                if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO) {
                     getTheme().applyStyle(R.style.Theme_Normal, true);
                 } else {
-                    if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
+                    if (mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
                         getTheme().applyStyle(R.style.Theme_Normal_AmoledDark, true);
                     } else {
                         getTheme().applyStyle(R.style.Theme_Normal_NormalDark, true);
@@ -215,7 +216,12 @@ public class ThemePreviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_theme_preview);
 
         ButterKnife.bind(this);
+
         applyCustomTheme();
+
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL, true)) {
+            Slidr.attach(this);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (immersiveInterface) {
@@ -354,10 +360,9 @@ public class ThemePreviewActivity extends AppCompatActivity {
             params.topMargin = statusBarHeight;
             toolbar.setLayoutParams(params);
             TypedValue tv = new TypedValue();
-            if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
-            {
-                ((ViewGroup.MarginLayoutParams)linearLayout.getLayoutParams()).setMargins(0,
-                        TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics()) + statusBarHeight, 0, 0);
+            if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+                ((ViewGroup.MarginLayoutParams) linearLayout.getLayoutParams()).setMargins(0,
+                        TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics()) + statusBarHeight, 0, 0);
             }
         }
     }

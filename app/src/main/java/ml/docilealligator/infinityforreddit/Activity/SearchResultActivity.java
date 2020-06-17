@@ -21,6 +21,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -93,6 +95,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
     private SearchUserAndSubredditSortTypeBottomSheetFragment searchUserAndSubredditSortTypeBottomSheetFragment;
     private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
+    private SlidrInterface mSlidrInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +110,10 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         EventBus.getDefault().register(this);
 
         applyCustomTheme();
+
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL, true)) {
+            mSlidrInterface = Slidr.attach(this);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -201,18 +208,15 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(2);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 sectionsPagerAdapter.displaySortTypeInToolbar();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
+                if (position == 0) {
+                    unlockSwipeRightToGoBack();
+                } else {
+                    lockSwipeRightToGoBack();
+                }
             }
         });
         tabLayout.setupWithViewPager(viewPager);
@@ -495,6 +499,18 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     }
                     break;
             }
+        }
+    }
+
+    private void lockSwipeRightToGoBack() {
+        if (mSlidrInterface != null) {
+            mSlidrInterface.lock();
+        }
+    }
+
+    private void unlockSwipeRightToGoBack() {
+        if (mSlidrInterface != null) {
+            mSlidrInterface.unlock();
         }
     }
 }

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
 
@@ -29,6 +30,7 @@ import ml.docilealligator.infinityforreddit.Adapter.SelectedSubredditsRecyclerVi
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
 public class SelectedSubredditsActivity extends BaseActivity implements ActivityToolbarInterface {
 
@@ -63,7 +65,12 @@ public class SelectedSubredditsActivity extends BaseActivity implements Activity
         setContentView(R.layout.activity_selected_subreddits);
 
         ButterKnife.bind(this);
+
         applyCustomTheme();
+
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL, true)) {
+            Slidr.attach(this);
+        }
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

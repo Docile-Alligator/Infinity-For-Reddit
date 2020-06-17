@@ -259,20 +259,10 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
     private void setupViewPager() {
         setToolbarTitle(0);
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 setToolbarTitle(position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
             }
         });
         viewPager.setAdapter(sectionsPagerAdapter);

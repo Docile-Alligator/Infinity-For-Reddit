@@ -38,12 +38,12 @@ import ml.docilealligator.infinityforreddit.AsyncTask.ChangeThemeNameAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.DeleteThemeAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCustomThemeAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertCustomThemeAsyncTask;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.CreateThemeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.CustomThemeOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeViewModel;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
-import ml.docilealligator.infinityforreddit.BottomSheetFragment.CreateThemeBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.BottomSheetFragment.CustomThemeOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
@@ -260,7 +260,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
                     !clipboard.getPrimaryClipDescription().hasMimeType(MIMETYPE_TEXT_PLAIN)) {
                 // since the clipboard has data but it is not plain text
                 Snackbar.make(coordinatorLayout, R.string.no_data_in_clipboard, Snackbar.LENGTH_SHORT).show();
-            } else if (clipboard.getPrimaryClip() != null){
+            } else if (clipboard.getPrimaryClip() != null) {
                 ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
                 String json = item.getText().toString();
                 try {

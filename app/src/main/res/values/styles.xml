@@ -27,9 +27,17 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
-    <style name="AppTheme.NoActionBarWithTransparentBackground" parent="AppTheme.NoActionBar">
+    <style name="AppTheme.Slidable" parent="AppTheme.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.SlidableWithTranslucentWindow" parent="AppTheme.Slidable">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+    <style name="AppTheme.SlidableWithTransparentStatusBar" parent="AppTheme.Slidable">
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="AppTheme.Draggable" parent="AppTheme">
