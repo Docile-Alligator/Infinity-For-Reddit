@@ -37,6 +37,8 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -56,17 +58,17 @@ import ml.docilealligator.infinityforreddit.AsyncTask.CheckIsSubscribedToSubredd
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubredditDataAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostLayoutBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.SortTimeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.GoBackToMainPageEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
-import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostLayoutBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SidebarFragment;
-import ml.docilealligator.infinityforreddit.BottomSheetFragment.SortTimeBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.BottomSheetFragment.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.Post.PostDataSource;
@@ -196,6 +198,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private int collapsedTabIndicatorColor;
     private int unsubscribedColor;
     private int subscribedColor;
+    private SlidrInterface mSlidrInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,6 +214,10 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         EventBus.getDefault().register(this);
 
         applyCustomTheme();
+
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL, true)) {
+            mSlidrInterface = Slidr.attach(this);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -624,6 +631,16 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 }).execute();
 
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    unlockSwipeRightToGoBack();
+                } else {
+                    lockSwipeRightToGoBack();
+                }
+            }
+        });
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
@@ -634,12 +651,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             viewPager.setCurrentItem(1, false);
         }
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 if (mAccessToken != null) {
@@ -657,11 +669,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 }
 
                 sectionsPagerAdapter.displaySortTypeInToolbar();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
             }
         });
     }
@@ -982,7 +989,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         public void changeSortType(SortType sortType) {
             if (postFragment != null) {
                 mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST_BASE + subredditName, sortType.getType().name()).apply();
-                if(sortType.getTime() != null) {
+                if (sortType.getTime() != null) {
                     mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST_BASE + subredditName, sortType.getTime().name()).apply();
                 }
 
@@ -1023,6 +1030,18 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     Utils.displaySortTypeInToolbar(sortType, toolbar);
                 }
             }
+        }
+    }
+
+    private void lockSwipeRightToGoBack() {
+        if (mSlidrInterface != null) {
+            mSlidrInterface.lock();
+        }
+    }
+
+    private void unlockSwipeRightToGoBack() {
+        if (mSlidrInterface != null) {
+            mSlidrInterface.unlock();
         }
     }
 }

@@ -20,6 +20,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
+import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
 
@@ -35,6 +36,7 @@ import ml.docilealligator.infinityforreddit.MultiReddit.CreateMultiReddit;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiRedditJSONModel;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 public class CreateMultiRedditActivity extends BaseActivity {
@@ -90,6 +92,10 @@ public class CreateMultiRedditActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         applyCustomTheme();
+
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL, true)) {
+            Slidr.attach(this);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
             addOnOffsetChangedListener(appBarLayout);

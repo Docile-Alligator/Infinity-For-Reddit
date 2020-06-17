@@ -583,11 +583,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         viewPager.setOffscreenPageLimit(3);
         tabLayout.setupWithViewPager(viewPager);
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 if (mAccessToken != null) {
@@ -604,10 +600,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     }
                 }
                 sectionsPagerAdapter.displaySortTypeInToolbar();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
             }
         });
 

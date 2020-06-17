@@ -20,6 +20,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.ferfalk.simplesearchview.SimpleSearchView;
 import com.google.android.material.appbar.AppBarLayout;
+import com.r0adkll.slidr.Slidr;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -33,6 +34,7 @@ import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
 public class SearchActivity extends BaseActivity {
 
@@ -85,6 +87,10 @@ public class SearchActivity extends BaseActivity {
         EventBus.getDefault().register(this);
 
         applyCustomTheme();
+
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL, true)) {
+            Slidr.attach(this);
+        }
 
         setSupportActionBar(toolbar);
 

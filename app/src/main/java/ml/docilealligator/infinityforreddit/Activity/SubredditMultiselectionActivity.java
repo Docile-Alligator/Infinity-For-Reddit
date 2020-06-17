@@ -26,6 +26,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.android.material.appbar.AppBarLayout;
+import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
 
@@ -42,6 +43,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditViewModel;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 public class SubredditMultiselectionActivity extends BaseActivity implements ActivityToolbarInterface {
@@ -86,6 +88,7 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
     private LinearLayoutManager mLinearLayoutManager;
     private SubredditMultiselectionRecyclerViewAdapter mAdapter;
     private RequestManager mGlide;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
@@ -95,6 +98,10 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
         ButterKnife.bind(this);
 
         applyCustomTheme();
+
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL, true)) {
+            Slidr.attach(this);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();

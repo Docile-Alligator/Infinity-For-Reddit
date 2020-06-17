@@ -36,6 +36,8 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -171,6 +173,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     private boolean showToast = false;
     private String mMessageFullname;
     private String mNewAccountName;
+    private SlidrInterface mSlidrInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,6 +189,10 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         EventBus.getDefault().register(this);
 
         applyCustomTheme();
+
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL, true)) {
+            mSlidrInterface = Slidr.attach(this);
+        }
 
         username = getIntent().getStringExtra(EXTRA_USER_NAME_KEY);
 
@@ -496,12 +503,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 if (isInLazyMode) {
@@ -511,12 +513,12 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                         sectionsPagerAdapter.pauseLazyMode();
                     }
                 }
+                if (position == 0) {
+                    unlockSwipeRightToGoBack();
+                } else {
+                    lockSwipeRightToGoBack();
+                }
                 sectionsPagerAdapter.displaySortTypeInToolbar();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
             }
         });
 
@@ -924,6 +926,18 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                     }
                     break;
             }
+        }
+    }
+
+    private void lockSwipeRightToGoBack() {
+        if (mSlidrInterface != null) {
+            mSlidrInterface.lock();
+        }
+    }
+
+    private void unlockSwipeRightToGoBack() {
+        if (mSlidrInterface != null) {
+            mSlidrInterface.unlock();
         }
     }
 }
