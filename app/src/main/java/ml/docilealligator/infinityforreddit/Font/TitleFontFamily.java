@@ -8,10 +8,11 @@ public enum TitleFontFamily {
     NotoSans(R.style.TitleFontFamily_NotoSans, "NotoSans"),
     RobotoCondensed(R.style.TitleFontFamily_RobotoCondensed, "RobotoCondensed"),
     HarmoniaSans(R.style.TitleFontFamily_HarmoniaSans, "HarmoniaSans"),
-    Selawk(R.style.TitleFontFamily_Selawk, "Selawk"),
     Inter(R.style.TitleFontFamily_Inter, "Inter"),
     Manrope(R.style.TitleFontFamily_Manrope, "Manrope"),
-    Rubik(R.style.TitleFontFamily_Rubik, "Rubik");
+    Caveat(R.style.TitleFontFamily_Caveat, "Caveat"),
+    BadScript(R.style.TitleFontFamily_BadScript, "BadScript"),
+    Sriracha(R.style.TitleFontFamily_Sriracha, "Sriracha");
 
     private int resId;
     private String title;

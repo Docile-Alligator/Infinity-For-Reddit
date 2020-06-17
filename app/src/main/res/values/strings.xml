@@ -352,6 +352,7 @@
     <string name="settings_swipe_up_to_hide_jump_to_next_top_level_comment_button_title">Swipe Up to Hide Jump to Next Top-level Comment Button</string>
     <string name="settings_lazy_mode_interval_title">Lazy Mode Interval</string>
     <string name="settings_font_title">Font</string>
+    <string name="settings_preview_font_title">Font Preview</string>
     <string name="settings_font_summary">Font</string>
     <string name="settings_title_font_summary">Title</string>
     <string name="settings_content_font_summary">Content</string>
@@ -771,5 +772,9 @@
     <string name="set_to_home_screen">Set to Home Screen</string>
     <string name="set_to_lock_screen">Set to Lock Screen</string>
     <string name="set_to_both">Set to Both</string>
+
+    <string name="default_font_font_preview">Default</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

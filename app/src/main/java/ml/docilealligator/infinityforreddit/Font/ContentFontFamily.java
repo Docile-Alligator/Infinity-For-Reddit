@@ -8,10 +8,11 @@ public enum ContentFontFamily {
     NotoSans(R.style.ContentFontFamily_NotoSans, "NotoSans"),
     RobotoCondensed(R.style.ContentFontFamily_RobotoCondensed, "RobotoCondensed"),
     HarmoniaSans(R.style.ContentFontFamily_HarmoniaSans, "HarmoniaSans"),
-    Selawk(R.style.ContentFontFamily_Selawk, "Selawk"),
     Inter(R.style.ContentFontFamily_Inter, "Inter"),
     Manrope(R.style.ContentFontFamily_Manrope, "Manrope"),
-    Rubik(R.style.ContentFontFamily_Rubik, "Rubik");
+    Caveat(R.style.ContentFontFamily_Caveat, "Caveat"),
+    BadScript(R.style.ContentFontFamily_BadScript, "BadScript"),
+    Sriracha(R.style.ContentFontFamily_Sriracha, "Sriracha");
 
     private int resId;
     private String title;

@@ -2,6 +2,10 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <Preference
+        app:title="@string/settings_preview_font_title"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.FontPreviewFragment" />
+
     <PreferenceCategory
         app:title="@string/settings_font_summary" />
 

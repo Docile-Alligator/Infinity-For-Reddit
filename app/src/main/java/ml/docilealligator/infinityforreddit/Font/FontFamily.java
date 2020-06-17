@@ -8,10 +8,11 @@ public enum FontFamily {
     NotoSans(R.style.FontFamily_NotoSans, "NotoSans"),
     RobotoCondensed(R.style.FontFamily_RobotoCondensed, "RobotoCondensed"),
     HarmoniaSans(R.style.FontFamily_HarmoniaSans, "HarmoniaSans"),
-    Selawk(R.style.FontFamily_Selawk, "Selawk"),
     Inter(R.style.FontFamily_Inter, "Inter"),
     Manrope(R.style.FontFamily_Manrope, "Manrope"),
-    Rubik(R.style.FontFamily_Rubik, "Rubik");
+    Caveat(R.style.FontFamily_Caveat, "Caveat"),
+    BadScript(R.style.FontFamily_BadScript, "BadScript"),
+    Sriracha(R.style.FontFamily_Sriracha, "Sriracha");
 
     private int resId;
     private String title;

@@ -23,10 +23,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
+
         <service
             android:name=".Service.DownloadRedditVideoService"
             android:enabled="true"
-            android:exported="false"></service>
+            android:exported="false" />
 
         <activity
             android:name=".Activity.ViewImgurMediaActivity"

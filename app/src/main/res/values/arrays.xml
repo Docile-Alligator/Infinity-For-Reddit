@@ -129,10 +129,11 @@
         <item>Noto Sans</item>
         <item>Roboto Condensed</item>
         <item>Harmonia Sans</item>
-        <item>Selawk</item>
         <item>Inter</item>
         <item>Manrope</item>
-        <item>Rubik</item>
+        <item>Caveat</item>
+        <item>Bad Script</item>
+        <item>Sriracha</item>
     </string-array>
 
     <string-array name="settings_font_family_values">
@@ -141,10 +142,11 @@
         <item>NotoSans</item>
         <item>RobotoCondensed</item>
         <item>HarmoniaSans</item>
-        <item>Selawk</item>
         <item>Inter</item>
         <item>Manrope</item>
-        <item>Rubik</item>
+        <item>Caveat</item>
+        <item>BadScript</item>
+        <item>Sriracha</item>
     </string-array>
     
     <string-array name="settings_tab_post_type">

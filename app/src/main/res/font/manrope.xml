@@ -9,9 +9,4 @@
         app:fontStyle="normal"
         app:fontWeight="700"
         app:font="@font/manrope_bold" />
-
-    <font
-        app:fontStyle="normal"
-        app:fontWeight="300"
-        app:font="@font/manrope_light" />
 </font-family>

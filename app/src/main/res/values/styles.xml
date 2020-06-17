@@ -254,10 +254,6 @@
         <item name="font_family">@font/harmonia_sans</item>
     </style>
 
-    <style name="FontFamily.Selawk">
-        <item name="font_family">@font/selawk</item>
-    </style>
-
     <style name="FontFamily.Inter">
         <item name="font_family">@font/inter</item>
     </style>
@@ -266,8 +262,16 @@
         <item name="font_family">@font/manrope</item>
     </style>
 
-    <style name="FontFamily.Rubik">
-        <item name="font_family">@font/rubik</item>
+    <style name="FontFamily.Caveat">
+        <item name="font_family">@font/caveat</item>
+    </style>
+
+    <style name="FontFamily.BadScript">
+        <item name="font_family">@font/bad_script_regular</item>
+    </style>
+
+    <style name="FontFamily.Sriracha">
+        <item name="font_family">@font/sriracha_regular</item>
     </style>
 
     <style name="TitleFontFamily" />
@@ -292,10 +296,6 @@
         <item name="title_font_family">@font/harmonia_sans</item>
     </style>
 
-    <style name="TitleFontFamily.Selawk">
-        <item name="title_font_family">@font/selawk</item>
-    </style>
-
     <style name="TitleFontFamily.Inter">
         <item name="title_font_family">@font/inter</item>
     </style>
@@ -304,8 +304,16 @@
         <item name="title_font_family">@font/manrope</item>
     </style>
 
-    <style name="TitleFontFamily.Rubik">
-        <item name="title_font_family">@font/rubik</item>
+    <style name="TitleFontFamily.Caveat">
+        <item name="title_font_family">@font/caveat</item>
+    </style>
+
+    <style name="TitleFontFamily.BadScript">
+        <item name="title_font_family">@font/bad_script_regular</item>
+    </style>
+
+    <style name="TitleFontFamily.Sriracha">
+        <item name="title_font_family">@font/sriracha_regular</item>
     </style>
 
     <style name="ContentFontFamily" />
@@ -330,10 +338,6 @@
         <item name="content_font_family">@font/harmonia_sans</item>
     </style>
 
-    <style name="ContentFontFamily.Selawk">
-        <item name="content_font_family">@font/selawk</item>
-    </style>
-
     <style name="ContentFontFamily.Inter">
         <item name="content_font_family">@font/inter</item>
     </style>
@@ -342,8 +346,16 @@
         <item name="content_font_family">@font/manrope</item>
     </style>
 
-    <style name="ContentFontFamily.Rubik">
-        <item name="content_font_family">@font/rubik</item>
+    <style name="ContentFontFamily.Caveat">
+        <item name="content_font_family">@font/caveat</item>
+    </style>
+
+    <style name="ContentFontFamily.BadScript">
+        <item name="content_font_family">@font/bad_script_regular</item>
+    </style>
+
+    <style name="ContentFontFamily.Sriracha">
+        <item name="content_font_family">@font/sriracha_regular</item>
     </style>
 
     <style name="Theme" />

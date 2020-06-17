@@ -11,16 +11,6 @@
         app:font="@font/roboto_condensed_bold" />
 
     <font
-        app:fontStyle="normal"
-        app:fontWeight="300"
-        app:font="@font/roboto_condensed_light" />
-
-    <font
-        app:fontStyle="italic"
-        app:fontWeight="300"
-        app:font="@font/roboto_condensed_light_italic" />
-
-    <font
         app:fontStyle="italic"
         app:fontWeight="400"
         app:font="@font/roboto_condensed_italic" />
