@@ -3,9 +3,12 @@ package ml.docilealligator.infinityforreddit.Activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -70,6 +73,19 @@ public class SelectedSubredditsActivity extends BaseActivity implements Activity
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL, true)) {
             Slidr.attach(this);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Window window = getWindow();
+
+            if (isChangeStatusBarIconColor()) {
+                addOnOffsetChangedListener(appBarLayout);
+            }
+
+            if (isImmersiveInterface()) {
+                window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+                adjustToolbar(toolbar);
+            }
         }
 
         setSupportActionBar(toolbar);
