@@ -21,6 +21,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
 import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -86,6 +87,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    private SlidrInterface mSlidrInterface;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
@@ -109,7 +111,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         applyCustomTheme();
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL, true)) {
-            Slidr.attach(this);
+            mSlidrInterface = Slidr.attach(this);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -179,6 +181,16 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(3);
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    unlockSwipeRightToGoBack();
+                } else {
+                    lockSwipeRightToGoBack();
+                }
+            }
+        });
         tabLayout.setupWithViewPager(viewPager);
 
         if (showMultiReddits) {
@@ -313,6 +325,18 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     public void onLongPress() {
         if (sectionsPagerAdapter != null) {
             sectionsPagerAdapter.goBackToTop();
+        }
+    }
+
+    private void lockSwipeRightToGoBack() {
+        if (mSlidrInterface != null) {
+            mSlidrInterface.lock();
+        }
+    }
+
+    private void unlockSwipeRightToGoBack() {
+        if (mSlidrInterface != null) {
+            mSlidrInterface.unlock();
         }
     }
 

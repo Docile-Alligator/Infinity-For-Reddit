@@ -22,6 +22,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -76,6 +77,7 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private SectionsPagerAdapter sectionsPagerAdapter;
+    private SlidrInterface mSlidrInterface;
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
     private boolean mNullAccessToken = false;
@@ -98,7 +100,7 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
         applyCustomTheme();
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL, true)) {
-            Slidr.attach(this);
+            mSlidrInterface = Slidr.attach(this);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -179,12 +181,7 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 if (isInLazyMode) {
@@ -194,11 +191,12 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
                         sectionsPagerAdapter.pauseLazyMode();
                     }
                 }
-            }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
+                if (position == 0) {
+                    unlockSwipeRightToGoBack();
+                } else {
+                    lockSwipeRightToGoBack();
+                }
             }
         });
     }
@@ -287,6 +285,18 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     public void onLongPress() {
         if (sectionsPagerAdapter != null) {
             sectionsPagerAdapter.goBackToTop();
+        }
+    }
+
+    private void lockSwipeRightToGoBack() {
+        if (mSlidrInterface != null) {
+            mSlidrInterface.lock();
+        }
+    }
+
+    private void unlockSwipeRightToGoBack() {
+        if (mSlidrInterface != null) {
+            mSlidrInterface.unlock();
         }
     }
 
