@@ -89,6 +89,8 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
+        getTheme().applyStyle(R.style.Theme_Normal, true);
+
         getTheme().applyStyle(FontStyle.valueOf(sharedPreferences
                 .getString(SharedPreferencesUtils.FONT_SIZE_KEY, FontStyle.Normal.name())).getResId(), true);
 
