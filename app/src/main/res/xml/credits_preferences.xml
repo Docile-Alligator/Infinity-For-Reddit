@@ -33,6 +33,11 @@
         android:summary="@string/settings_credits_thumbtack_icon_summary" />
 
     <Preference
+        android:key="best_rocket_icon"
+        app:title="@string/settings_credits_best_rocket_icon_title"
+        android:summary="@string/settings_credits_best_rocket_icon_summary" />
+
+    <Preference
         android:key="material_icons"
         app:title="@string/settings_credits_material_icons_title"/>
 
