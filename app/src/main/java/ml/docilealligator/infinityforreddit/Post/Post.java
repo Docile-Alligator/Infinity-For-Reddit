@@ -533,4 +533,9 @@ public class Post implements Parcelable {
         }
         return ((Post) obj).id.equals(id);
     }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }
