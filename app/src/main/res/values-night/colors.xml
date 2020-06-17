@@ -8,4 +8,5 @@
     <color name="backgroundColor">#121212</color>
     <color name="playButtonBackgroundColor">#FFFFFF</color>
     <color name="roundedBottomSheetPrimaryBackground">#242424</color>
+    <color name="primaryTextColor">#FFFFFF</color>
 </resources>
