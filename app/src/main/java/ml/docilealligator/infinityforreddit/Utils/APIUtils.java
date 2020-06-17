@@ -21,6 +21,7 @@ public class APIUtils {
     public static final String GFYCAT_API_BASE_URI = "https://api.gfycat.com/v1/gfycats/";
     public static final String REDGIFS_API_BASE_URI = "https://api.redgifs.com/v1/gfycats/";
     public static final String IMGUR_API_BASE_URI = "https://api.imgur.com/3/";
+    public static final String PUSHSHIFT_API_BASE_URI = "https://api.pushshift.io/";
 
     public static final String CLIENT_ID_KEY = "client_id";
     public static final String CLIENT_ID = "";

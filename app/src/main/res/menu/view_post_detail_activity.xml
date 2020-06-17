@@ -80,5 +80,12 @@
         android:orderInCategory="12"
         android:title="@string/action_report"
         app:showAsAction="never"
+        android:visible="false"/>
+
+    <item
+        android:id="@+id/action_see_removed_view_post_detail_activity"
+        android:orderInCategory="13"
+        android:title="@string/action_see_removed"
+        app:showAsAction="never"
         android:visible="false" />
 </menu>
