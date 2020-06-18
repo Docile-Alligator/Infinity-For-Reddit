@@ -9,6 +9,11 @@ android {
         versionCode 35
         versionName "3.2.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [ eventBusIndex : 'ml.docilealligator.inifinityforreddit.EventBusIndex' ]
+            }
+        }
     }
     buildTypes {
         release {
@@ -67,7 +72,10 @@ dependencies {
     implementation 'io.noties.markwon:recycler-table:4.3.1'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
     implementation 'com.github.Ferfalk:SimpleSearchView:0.1.4'
-    implementation 'org.greenrobot:eventbus:3.2.0'
+
+    def eventbusVersion = '3.2.0'
+    implementation "org.greenrobot:eventbus:$eventbusVersion"
+    annotationProcessor "org.greenrobot:eventbus-annotation-processor:$eventbusVersion"
     implementation 'com.libRG:customtextview:2.4'
     implementation 'com.github.Deishelon:RoundedBottomSheet:1.0.1'
     implementation 'com.github.livefront:bridge:v1.2.1'
