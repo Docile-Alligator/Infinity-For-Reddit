@@ -402,6 +402,8 @@
     <string name="settings_subreddit_summary">r/Infinity_For_Reddit</string>
     <string name="settings_share_title">Share</string>
     <string name="settings_share_summary">Share this app to other people if you enjoy it</string>
+    <string name="settings_version_title">Infinity For Reddit</string>
+    <string name="settings_version_summary">Version %s</string>
     <string name="settings_category_customization_title">Customization</string>
     <string name="settings_customize_light_theme_title">Light Theme</string>
     <string name="settings_customize_dark_theme_title">Dark Theme</string>
@@ -425,6 +427,7 @@
     <string name="settings_tab_subreddit_name">Subreddit Name (Without r/ prefix)</string>
     <string name="settings_tab_multi_reddit_name">MultiReddit Name (/user/yourusername/m/yourmultiredditname)</string>
     <string name="settings_tab_username">Username (Without u/ prefix)</string>
+    <string name="no_developer_easter_egg">There\'s no developer options here</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
