@@ -32,6 +32,7 @@ public class CreditsPreferenceFragment extends PreferenceFragmentCompat {
         Preference gildedIconPreference = findPreference(SharedPreferencesUtils.GILDED_ICON_KEY);
         Preference crosspostIconPreference = findPreference(SharedPreferencesUtils.CROSSPOST_ICON_KEY);
         Preference thumbtackIconPreference = findPreference(SharedPreferencesUtils.THUMBTACK_ICON_KEY);
+        Preference bestRocketIconPreference = findPreference(SharedPreferencesUtils.BEST_ROCKET_ICON_KEY);
         Preference materialIconsPreference = findPreference(SharedPreferencesUtils.MATERIAL_ICONS_KEY);
 
         if (iconForegroundPreference != null) {
@@ -83,6 +84,15 @@ public class CreditsPreferenceFragment extends PreferenceFragmentCompat {
             thumbtackIconPreference.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(activity, LinkResolverActivity.class);
                 intent.setData(Uri.parse("https://www.flaticon.com/free-icon/tack-save-button_61845#term=thumbtack&page=1&position=3"));
+                startActivity(intent);
+                return true;
+            });
+        }
+
+        if (bestRocketIconPreference != null) {
+            bestRocketIconPreference.setOnPreferenceClickListener(preference -> {
+                Intent intent = new Intent(activity, LinkResolverActivity.class);
+                intent.setData(Uri.parse("https://www.flaticon.com/free-icon/spring-swing-rocket_2929322?term=space%20ship&page=1&position=18"));
                 startActivity(intent);
                 return true;
             });

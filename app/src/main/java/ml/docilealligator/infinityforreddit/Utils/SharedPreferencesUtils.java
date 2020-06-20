@@ -18,6 +18,7 @@ public class SharedPreferencesUtils {
     public static final String GILDED_ICON_KEY = "gilded_icon";
     public static final String CROSSPOST_ICON_KEY = "crosspost_icon";
     public static final String THUMBTACK_ICON_KEY = "thumbtack_icon";
+    public static final String BEST_ROCKET_ICON_KEY = "best_rocket_icon";
     public static final String MATERIAL_ICONS_KEY = "material_icons";
     public static final String OPEN_SOURCE_KEY = "open_source";
     public static final String RATE_KEY = "rate";
