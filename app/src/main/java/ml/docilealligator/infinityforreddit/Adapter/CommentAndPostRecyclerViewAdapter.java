@@ -1142,9 +1142,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if ((mPost.isNSFW() && mNeedBlurNsfw) || (mPost.isSpoiler() && mNeedBlurSpoiler)) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
-                        .format(DecodeFormat.PREFER_ARGB_8888).into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
+                        .into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
             } else {
-                imageRequestBuilder.format(DecodeFormat.PREFER_ARGB_8888).into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
+                imageRequestBuilder.apply(RequestOptions.noTransformation()).into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
             }
         } else if (holder instanceof PostDetailVideoAndGifPreviewHolder) {
             RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(mPost.getPreviewUrl())
@@ -1170,9 +1170,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if ((mPost.isNSFW() && mNeedBlurNsfw) || (mPost.isSpoiler() && mNeedBlurSpoiler)) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
-                        .format(DecodeFormat.PREFER_ARGB_8888).into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
+                        .into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
             } else {
-                imageRequestBuilder.format(DecodeFormat.PREFER_ARGB_8888).into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
+                imageRequestBuilder.apply(RequestOptions.noTransformation()).into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
             }
         } else if (holder instanceof PostDetailLinkViewHolder) {
             RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(mPost.getPreviewUrl())
@@ -1198,9 +1198,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if ((mPost.isNSFW() && mNeedBlurNsfw) || (mPost.isSpoiler() && mNeedBlurSpoiler)) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
-                        .format(DecodeFormat.PREFER_ARGB_8888).into(((PostDetailLinkViewHolder) holder).mImageView);
+                        .into(((PostDetailLinkViewHolder) holder).mImageView);
             } else {
-                imageRequestBuilder.format(DecodeFormat.PREFER_ARGB_8888).into(((PostDetailLinkViewHolder) holder).mImageView);
+                imageRequestBuilder.apply(RequestOptions.noTransformation()).into(((PostDetailLinkViewHolder) holder).mImageView);
             }
         }
     }

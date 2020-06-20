@@ -1147,9 +1147,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             if ((post.isNSFW() && mNeedBlurNSFW) || post.isSpoiler() && mNeedBlurSpoiler) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
-                        .format(DecodeFormat.PREFER_ARGB_8888).into(((PostImageAndGifAutoplayViewHolder) holder).imageView);
+                        .into(((PostImageAndGifAutoplayViewHolder) holder).imageView);
             } else {
-                imageRequestBuilder.format(DecodeFormat.PREFER_ARGB_8888).into(((PostImageAndGifAutoplayViewHolder) holder).imageView);
+                imageRequestBuilder.apply(RequestOptions.noTransformation()).into(((PostImageAndGifAutoplayViewHolder) holder).imageView);
             }
         } else if (holder instanceof PostVideoAndGifPreviewViewHolder) {
             RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(post.getPreviewUrl()).listener(new RequestListener<Drawable>() {
@@ -1175,9 +1175,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             if ((post.isNSFW() && mNeedBlurNSFW) || post.isSpoiler() && mNeedBlurSpoiler) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
-                        .format(DecodeFormat.PREFER_ARGB_8888).into(((PostVideoAndGifPreviewViewHolder) holder).imageView);
+                        .into(((PostVideoAndGifPreviewViewHolder) holder).imageView);
             } else {
-                imageRequestBuilder.format(DecodeFormat.PREFER_ARGB_8888).into(((PostVideoAndGifPreviewViewHolder) holder).imageView);
+                imageRequestBuilder.apply(RequestOptions.noTransformation()).into(((PostVideoAndGifPreviewViewHolder) holder).imageView);
             }
         } else if (holder instanceof PostLinkTypeViewHolder) {
             RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(post.getPreviewUrl()).listener(new RequestListener<Drawable>() {
@@ -1203,9 +1203,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             if ((post.isNSFW() && mNeedBlurNSFW) || post.isSpoiler() && mNeedBlurSpoiler) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
-                        .format(DecodeFormat.PREFER_ARGB_8888).into(((PostLinkTypeViewHolder) holder).imageView);
+                        .into(((PostLinkTypeViewHolder) holder).imageView);
             } else {
-                imageRequestBuilder.format(DecodeFormat.PREFER_ARGB_8888).into(((PostLinkTypeViewHolder) holder).imageView);
+                imageRequestBuilder.apply(RequestOptions.noTransformation()).into(((PostLinkTypeViewHolder) holder).imageView);
             }
         } else if (holder instanceof PostCompactViewHolder) {
             String previewUrl = post.getThumbnailPreviewUrl().equals("") ? post.getPreviewUrl() : post.getThumbnailPreviewUrl();
