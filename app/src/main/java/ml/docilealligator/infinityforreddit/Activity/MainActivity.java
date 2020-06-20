@@ -64,6 +64,10 @@ import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubscribedThingsAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchToAnonymousAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostLayoutBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.SortTimeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.ChangeConfirmToExitEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeLockBottomAppBarEvent;
@@ -73,10 +77,6 @@ import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchMyInfo;
 import ml.docilealligator.infinityforreddit.FetchSubscribedThing;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
-import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostLayoutBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostTypeBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.BottomSheetFragment.SortTimeBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.BottomSheetFragment.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.ParseAndSaveAccountInfo;
 import ml.docilealligator.infinityforreddit.Post.PostDataSource;
@@ -321,7 +321,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private void getCurrentAccountAndBindView() {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
             boolean enableNotification = mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_NOTIFICATION_KEY, true);
-            String notificationInterval = mSharedPreferences.getString(SharedPreferencesUtils.NOTIFICATION_INTERVAL_KEY, "1");
+            long notificationInterval = Long.parseLong(mSharedPreferences.getString(SharedPreferencesUtils.NOTIFICATION_INTERVAL_KEY, "1"));
+            TimeUnit timeUnit = notificationInterval == 15 || notificationInterval == 30 ? TimeUnit.MINUTES : TimeUnit.HOURS;
 
             WorkManager workManager = WorkManager.getInstance(this);
 
@@ -349,7 +350,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
                             PeriodicWorkRequest pullNotificationRequest =
                                     new PeriodicWorkRequest.Builder(PullNotificationWorker.class,
-                                            Long.parseLong(notificationInterval), TimeUnit.HOURS)
+                                            notificationInterval, timeUnit)
                                             .setConstraints(constraints)
                                             .build();
 
@@ -375,7 +376,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
                         PeriodicWorkRequest pullNotificationRequest =
                                 new PeriodicWorkRequest.Builder(PullNotificationWorker.class,
-                                        Long.parseLong(notificationInterval), TimeUnit.HOURS)
+                                        notificationInterval, timeUnit)
                                         .setConstraints(constraints)
                                         .build();
 
@@ -405,7 +406,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
                     PeriodicWorkRequest pullNotificationRequest =
                             new PeriodicWorkRequest.Builder(PullNotificationWorker.class,
-                                    Long.parseLong(notificationInterval), TimeUnit.HOURS)
+                                    notificationInterval, timeUnit)
                                     .setConstraints(constraints)
                                     .build();
 
