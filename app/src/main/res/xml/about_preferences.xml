@@ -45,4 +45,9 @@
         app:title="@string/settings_share_title"
         app:summary="@string/settings_share_summary" />
 
+    <Preference
+        android:key="version"
+        app:title="@string/settings_version_title"
+        app:summary="@string/settings_version_summary" />
+
 </PreferenceScreen>

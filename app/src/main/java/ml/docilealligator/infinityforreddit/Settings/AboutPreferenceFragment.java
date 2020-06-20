@@ -13,6 +13,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
@@ -34,6 +35,7 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
         Preference redditAccountPreference = findPreference(SharedPreferencesUtils.REDDIT_ACCOUNT_KEY);
         Preference subredditPreference = findPreference(SharedPreferencesUtils.SUBREDDIT_KEY);
         Preference sharePreference = findPreference(SharedPreferencesUtils.SHARE_KEY);
+        Preference versionPreference = findPreference(SharedPreferencesUtils.VERSION_KEY);
 
         if (openSourcePreference != null) {
             openSourcePreference.setOnPreferenceClickListener(preference -> {
@@ -110,6 +112,24 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
                     Toast.makeText(activity, R.string.no_app, Toast.LENGTH_SHORT).show();
                 }
                 return true;
+            });
+        }
+
+        if (versionPreference != null) {
+            versionPreference.setSummary(getString(R.string.settings_version_summary, BuildConfig.VERSION_NAME));
+
+            versionPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                int clickedTimes = 0;
+
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    clickedTimes++;
+                    if (clickedTimes > 6) {
+                        Toast.makeText(activity, R.string.no_developer_easter_egg, Toast.LENGTH_SHORT).show();
+                        clickedTimes = 0;
+                    }
+                    return true;
+                }
             });
         }
     }
