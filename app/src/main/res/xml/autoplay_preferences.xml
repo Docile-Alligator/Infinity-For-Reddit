@@ -12,6 +12,12 @@
 
     <SwitchPreference
         app:defaultValue="true"
+        app:key="mute_autoplaying_videos"
+        app:icon="@drawable/ic_mute_preferences_24dp"
+        app:title="@string/settings_mute_autoplaying_videos_title" />
+
+    <SwitchPreference
+        app:defaultValue="true"
         app:key="autoplay_nsfw_videos"
         app:title="@string/settings_autoplay_nsfw_videos_title" />
 

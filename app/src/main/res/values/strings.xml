@@ -330,6 +330,7 @@
     <string name="settings_gestures_and_buttons_title">Gestures &amp; Buttons</string>
     <string name="settings_open_link_in_app_title">Open Link In App</string>
     <string name="settings_video_autoplay_title">Video Autoplay</string>
+    <string name="settings_mute_autoplaying_videos_title">Mute Autoplaying Videos</string>
     <string name="settings_autoplay_nsfw_videos_title">Autoplay NSFW Videos</string>
     <string name="settings_immersive_interface_title">Immersive Interface</string>
     <string name="settings_immersive_interface_ignore_nav_bar_title">Ignore Navigation Bar in Immersive Interface</string>
@@ -786,7 +787,5 @@
     <string name="set_to_both">Set to Both</string>
 
     <string name="default_font_font_preview">Default</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

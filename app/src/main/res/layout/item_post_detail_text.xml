@@ -108,7 +108,7 @@
         android:id="@+id/content_markdown_view_item_post_detail_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:visibility="gone" />

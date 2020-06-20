@@ -154,6 +154,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private boolean mShowAbsoluteNumberOfVotes;
     private boolean mAutoplay = false;
     private boolean mAutoplayNsfwVideos;
+    private boolean mMuteAutoplayingVideos;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
     private boolean isInitiallyLoadingFailed;
@@ -318,6 +319,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             mAutoplay = Utils.isConnectedToWifi(activity);
         }
         mAutoplayNsfwVideos = mSharedPreferences.getBoolean(SharedPreferencesUtils.AUTOPLAY_NSFW_VIDEOS, true);
+        mMuteAutoplayingVideos = mSharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_AUTOPLAYING_VIDEOS, true);
 
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
@@ -2018,7 +2020,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         @Nullable
         ExoPlayerViewHelper helper;
         private Uri mediaUri;
-        private float volume = 0f;
+        private float volume;
 
         public PostDetailVideoAutoplayViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -2046,6 +2048,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     mShareButton);
 
             aspectRatioFrameLayout.setOnClickListener(null);
+
+            volume = mMuteAutoplayingVideos ? 0f : 1f;
 
             muteButton.setOnClickListener(view -> {
                 if (helper != null) {

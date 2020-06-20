@@ -59,6 +59,7 @@ import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.CustomView.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.Event.ChangeAutoplayNsfwVideosEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeDefaultPostLayoutEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeMuteAutoplayingVideosEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangePostLayoutEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeShowAbsoluteNumberOfVotesEvent;
@@ -891,7 +892,15 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void onChangeAutoplayNsfwVideosEvent(ChangeAutoplayNsfwVideosEvent changeAutoplayNsfwVideosEvent) {
         if (mAdapter != null) {
             mAdapter.setAutoplayNsfwVideos(changeAutoplayNsfwVideosEvent.autoplayNsfwVideos);
-            refresh();
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeMuteAutoplayingVideosEvent(ChangeMuteAutoplayingVideosEvent changeMuteAutoplayingVideosEvent) {
+        if (mAdapter != null) {
+            mAdapter.setMuteAutoplayingVideos(changeMuteAutoplayingVideosEvent.muteAutoplayingVideos);
+            refreshAdapter();
         }
     }
 

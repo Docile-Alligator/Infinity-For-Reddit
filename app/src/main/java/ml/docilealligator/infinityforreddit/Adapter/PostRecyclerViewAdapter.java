@@ -164,6 +164,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean mShowAbsoluteNumberOfVotes;
     private boolean mAutoplay = false;
     private boolean mAutoplayNsfwVideos;
+    private boolean mMuteAutoplayingVideos;
     private boolean mShowThumbnailOnTheRightInCompactLayout;
     private Drawable mCommentIcon;
     private NetworkState networkState;
@@ -198,6 +199,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 mAutoplay = Utils.isConnectedToWifi(activity);
             }
             mAutoplayNsfwVideos = sharedPreferences.getBoolean(SharedPreferencesUtils.AUTOPLAY_NSFW_VIDEOS, true);
+            mMuteAutoplayingVideos = sharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_AUTOPLAYING_VIDEOS, true);
             mShowThumbnailOnTheRightInCompactLayout = sharedPreferences.getBoolean(
                     SharedPreferencesUtils.SHOW_THUMBNAIL_ON_THE_RIGHT_IN_COMPACT_LAYOUT, false);
             mPostLayout = postLayout;
@@ -1327,6 +1329,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         mAutoplayNsfwVideos = autoplayNsfwVideos;
     }
 
+    public void setMuteAutoplayingVideos(boolean muteAutoplayingVideos) {
+        mMuteAutoplayingVideos = muteAutoplayingVideos;
+    }
+
     public void setShowThumbnailOnTheRightInCompactLayout(boolean showThumbnailOnTheRightInCompactLayout) {
         mShowThumbnailOnTheRightInCompactLayout = showThumbnailOnTheRightInCompactLayout;
     }
@@ -1895,7 +1901,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         @Nullable
         ExoPlayerViewHelper helper;
         private Uri mediaUri;
-        private float volume = 0f;
+        private float volume;
 
         PostVideoAutoplayViewHolder(View itemView) {
             super(itemView);
@@ -1924,6 +1930,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     shareButton);
 
             aspectRatioFrameLayout.setOnClickListener(null);
+
+            volume = mMuteAutoplayingVideos ? 0f : 1f;
 
             muteButton.setOnClickListener(view -> {
                 if (helper != null) {

@@ -24,14 +24,14 @@ public class APIUtils {
     public static final String PUSHSHIFT_API_BASE_URI = "https://api.pushshift.io/";
 
     public static final String CLIENT_ID_KEY = "client_id";
-    public static final String CLIENT_ID = "";
-    public static final String IMGUR_CLIENT_ID = "";
+    public static final String CLIENT_ID = "NOe2iKrPPzwscA";
+    public static final String IMGUR_CLIENT_ID = "Client-ID cc671794e0ab397";
     public static final String RESPONSE_TYPE_KEY = "response_type";
     public static final String RESPONSE_TYPE = "code";
     public static final String STATE_KEY = "state";
-    public static final String STATE = "";
+    public static final String STATE = "23ro8xlxvzp4asqd";
     public static final String REDIRECT_URI_KEY = "redirect_uri";
-    public static final String REDIRECT_URI = "";
+    public static final String REDIRECT_URI = "infinity://localhost";
     public static final String DURATION_KEY = "duration";
     public static final String DURATION = "permanent";
     public static final String SCOPE_KEY = "scope";
@@ -41,7 +41,7 @@ public class APIUtils {
     public static final String AUTHORIZATION_KEY = "Authorization";
     public static final String AUTHORIZATION_BASE = "bearer ";
     public static final String USER_AGENT_KEY = "User-Agent";
-    public static final String USER_AGENT = "";
+    public static final String USER_AGENT = "android:ml.docilealligator.infinityforreddit:v3.2.0 (by /u/Hostilenemy)";
 
     public static final String GRANT_TYPE_KEY = "grant_type";
     public static final String GRANT_TYPE_REFRESH_TOKEN = "refresh_token";

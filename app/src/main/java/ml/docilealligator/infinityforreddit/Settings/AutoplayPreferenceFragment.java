@@ -9,6 +9,7 @@ import androidx.preference.SwitchPreference;
 import org.greenrobot.eventbus.EventBus;
 
 import ml.docilealligator.infinityforreddit.Event.ChangeAutoplayNsfwVideosEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeMuteAutoplayingVideosEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVideoAutoplayEvent;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
@@ -20,6 +21,7 @@ public class AutoplayPreferenceFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.autoplay_preferences, rootKey);
 
         ListPreference videoAutoplayListPreference = findPreference(SharedPreferencesUtils.VIDEO_AUTOPLAY);
+        SwitchPreference muteAutoplayingVideosSwitchPreference = findPreference(SharedPreferencesUtils.MUTE_AUTOPLAYING_VIDEOS);
         SwitchPreference autoplayNsfwVideosSwitchPreference = findPreference(SharedPreferencesUtils.AUTOPLAY_NSFW_VIDEOS);
 
         if (videoAutoplayListPreference != null && autoplayNsfwVideosSwitchPreference != null) {
@@ -30,6 +32,13 @@ public class AutoplayPreferenceFragment extends PreferenceFragmentCompat {
 
             autoplayNsfwVideosSwitchPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new ChangeAutoplayNsfwVideosEvent((Boolean) newValue));
+                return true;
+            });
+        }
+
+        if (muteAutoplayingVideosSwitchPreference != null) {
+            muteAutoplayingVideosSwitchPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                EventBus.getDefault().post(new ChangeMuteAutoplayingVideosEvent((Boolean) newValue));
                 return true;
             });
         }
