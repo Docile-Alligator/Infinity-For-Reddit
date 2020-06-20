@@ -42,7 +42,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private static final int VIEW_TYPE_DIVIDER = 3;
     private static final int VIEW_TYPE_SUBSCRIBED_SUBREDDIT = 4;
     private static final int VIEW_TYPE_ACCOUNT = 5;
-    private static final int CURRENT_MENU_ITEMS = 16;
+    private static final int CURRENT_MENU_ITEMS = 17;
 
     private Context context;
     private Resources resources;
@@ -90,9 +90,9 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                     return VIEW_TYPE_SUBSCRIBED_SUBREDDIT;
                 } else if (position == 0) {
                     return VIEW_TYPE_NAV_HEADER;
-                } else if (position == 1 || position == 6) {
+                } else if (position == 1 || position == 6 || position == 12) {
                     return VIEW_TYPE_MENU_GROUP_TITLE;
-                } else if (position == 12) {
+                } else if (position == 16) {
                     return VIEW_TYPE_DIVIDER;
                 } else {
                     return VIEW_TYPE_MENU_ITEM;
@@ -214,6 +214,8 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                 ((MenuGroupTitleViewHolder) holder).titleTextView.setText(R.string.label_account);
             } else if (position == 6) {
                 ((MenuGroupTitleViewHolder) holder).titleTextView.setText(R.string.label_post);
+            } else if (position == 12) {
+                ((MenuGroupTitleViewHolder) holder).titleTextView.setText(R.string.label_preferences);
             }
         } else if (holder instanceof MenuItemViewHolder) {
             int stringId = 0;
@@ -401,7 +403,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                 if (subscribedSubreddits != null) {
                     return CURRENT_MENU_ITEMS + subscribedSubreddits.size();
                 }
-                return CURRENT_MENU_ITEMS;
+                return CURRENT_MENU_ITEMS - 1;
             } else {
                 return 4;
             }
@@ -448,7 +450,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         this.isNSFWEnabled = isNSFWEnabled;
         if (isInMainPage) {
             if (isLoggedIn) {
-                notifyItemChanged(CURRENT_MENU_ITEMS - 2);
+                notifyItemChanged(CURRENT_MENU_ITEMS - 3);
             } else {
                 notifyItemChanged(2);
             }
