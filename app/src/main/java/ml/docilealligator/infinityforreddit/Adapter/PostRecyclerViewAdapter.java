@@ -34,6 +34,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
@@ -1146,9 +1147,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             if ((post.isNSFW() && mNeedBlurNSFW) || post.isSpoiler() && mNeedBlurSpoiler) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
-                        .override(Target.SIZE_ORIGINAL).into(((PostImageAndGifAutoplayViewHolder) holder).imageView);
+                        .format(DecodeFormat.PREFER_ARGB_8888).into(((PostImageAndGifAutoplayViewHolder) holder).imageView);
             } else {
-                imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostImageAndGifAutoplayViewHolder) holder).imageView);
+                imageRequestBuilder.format(DecodeFormat.PREFER_ARGB_8888).into(((PostImageAndGifAutoplayViewHolder) holder).imageView);
             }
         } else if (holder instanceof PostVideoAndGifPreviewViewHolder) {
             RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(post.getPreviewUrl()).listener(new RequestListener<Drawable>() {
@@ -1174,9 +1175,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             if ((post.isNSFW() && mNeedBlurNSFW) || post.isSpoiler() && mNeedBlurSpoiler) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
-                        .override(Target.SIZE_ORIGINAL).into(((PostVideoAndGifPreviewViewHolder) holder).imageView);
+                        .format(DecodeFormat.PREFER_ARGB_8888).into(((PostVideoAndGifPreviewViewHolder) holder).imageView);
             } else {
-                imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostVideoAndGifPreviewViewHolder) holder).imageView);
+                imageRequestBuilder.format(DecodeFormat.PREFER_ARGB_8888).into(((PostVideoAndGifPreviewViewHolder) holder).imageView);
             }
         } else if (holder instanceof PostLinkTypeViewHolder) {
             RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(post.getPreviewUrl()).listener(new RequestListener<Drawable>() {
@@ -1202,9 +1203,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             if ((post.isNSFW() && mNeedBlurNSFW) || post.isSpoiler() && mNeedBlurSpoiler) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
-                        .override(Target.SIZE_ORIGINAL).into(((PostLinkTypeViewHolder) holder).imageView);
+                        .format(DecodeFormat.PREFER_ARGB_8888).into(((PostLinkTypeViewHolder) holder).imageView);
             } else {
-                imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostLinkTypeViewHolder) holder).imageView);
+                imageRequestBuilder.format(DecodeFormat.PREFER_ARGB_8888).into(((PostLinkTypeViewHolder) holder).imageView);
             }
         } else if (holder instanceof PostCompactViewHolder) {
             String previewUrl = post.getThumbnailPreviewUrl().equals("") ? post.getPreviewUrl() : post.getThumbnailPreviewUrl();
@@ -1224,10 +1225,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     });
             if ((post.isNSFW() && mNeedBlurNSFW) || post.isSpoiler() && mNeedBlurSpoiler) {
                 imageRequestBuilder
-                        .transform(new BlurTransformation(50, 2))
-                        .override(Target.SIZE_ORIGINAL).into(((PostCompactViewHolder) holder).imageView);
+                        .transform(new BlurTransformation(50, 2)).into(((PostCompactViewHolder) holder).imageView);
             } else {
-                imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostCompactViewHolder) holder).imageView);
+                imageRequestBuilder.into(((PostCompactViewHolder) holder).imageView);
             }
         }
     }
