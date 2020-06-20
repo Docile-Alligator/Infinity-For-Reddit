@@ -14,27 +14,27 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class FetchGfycatVideoLinks {
-    public interface FetchGfycatVideoLinksListener {
+public class FetchGfycatOrRedgifsVideoLinks {
+    public interface FetchGfycatOrRedgifsVideoLinksListener {
         void success(String webm, String mp4);
-        void failed();
+        void failed(int errorCode);
     }
 
-    public static void fetchGfycatVideoLinks(Retrofit gfycatRetrofit, String gfycatId,
-                                             FetchGfycatVideoLinksListener fetchGfycatVideoLinksListener) {
+    public static void fetchGfycatOrRedgifsVideoLinks(Retrofit gfycatRetrofit, String gfycatId,
+                                                      FetchGfycatOrRedgifsVideoLinksListener fetchGfycatOrRedgifsVideoLinksListener) {
         gfycatRetrofit.create(GfycatAPI.class).getGfycatData(gfycatId).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    new ParseGfycatVideoLinksAsyncTask(response.body(), fetchGfycatVideoLinksListener).execute();
+                    new ParseGfycatVideoLinksAsyncTask(response.body(), fetchGfycatOrRedgifsVideoLinksListener).execute();
                 } else {
-                    fetchGfycatVideoLinksListener.failed();
+                    fetchGfycatOrRedgifsVideoLinksListener.failed(response.code());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                fetchGfycatVideoLinksListener.failed();
+                fetchGfycatOrRedgifsVideoLinksListener.failed(-1);
             }
         });
     }
@@ -45,11 +45,11 @@ public class FetchGfycatVideoLinks {
         private String webm;
         private String mp4;
         private boolean parseFailed = false;
-        private FetchGfycatVideoLinksListener fetchGfycatVideoLinksListener;
+        private FetchGfycatOrRedgifsVideoLinksListener fetchGfycatOrRedgifsVideoLinksListener;
 
-        ParseGfycatVideoLinksAsyncTask(String response, FetchGfycatVideoLinksListener fetchGfycatVideoLinksListener) {
+        ParseGfycatVideoLinksAsyncTask(String response, FetchGfycatOrRedgifsVideoLinksListener fetchGfycatOrRedgifsVideoLinksListener) {
             this.response = response;
-            this.fetchGfycatVideoLinksListener = fetchGfycatVideoLinksListener;
+            this.fetchGfycatOrRedgifsVideoLinksListener = fetchGfycatOrRedgifsVideoLinksListener;
         }
 
         @Override
@@ -70,9 +70,9 @@ public class FetchGfycatVideoLinks {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             if (parseFailed) {
-                fetchGfycatVideoLinksListener.failed();
+                fetchGfycatOrRedgifsVideoLinksListener.failed(-1);
             } else {
-                fetchGfycatVideoLinksListener.success(webm, mp4);
+                fetchGfycatOrRedgifsVideoLinksListener.success(webm, mp4);
             }
         }
     }

@@ -2,6 +2,20 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="mute_video"
+        app:icon="@drawable/ic_mute_preferences_24dp"
+        app:title="@string/settings_mute_video_title" />
+
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="automatically_try_redgifs"
+        app:title="@string/settings_automatically_try_redgifs_title" />
+
+    <PreferenceCategory
+        app:title="@string/settings_video_autoplay_title" />
+
     <ListPreference
         app:defaultValue="0"
         android:entries="@array/settings_video_autoplay"

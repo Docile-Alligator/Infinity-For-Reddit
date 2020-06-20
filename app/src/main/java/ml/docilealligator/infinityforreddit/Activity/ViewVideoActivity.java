@@ -24,6 +24,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -44,6 +45,7 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.material.snackbar.Snackbar;
 import com.thefuntasty.hauler.DragDirection;
 import com.thefuntasty.hauler.HaulerView;
 
@@ -52,7 +54,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.FetchGfycatVideoLinks;
+import ml.docilealligator.infinityforreddit.FetchGfycatOrRedgifsVideoLinks;
 import ml.docilealligator.infinityforreddit.Font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.Font.FontFamily;
 import ml.docilealligator.infinityforreddit.Font.TitleFontFamily;
@@ -83,6 +85,8 @@ public class ViewVideoActivity extends AppCompatActivity {
     private static final String VIDEO_URI_STATE = "VUS";
     @BindView(R.id.hauler_view_view_video_activity)
     HaulerView haulerView;
+    @BindView(R.id.coordinator_layout_view_video_activity)
+    CoordinatorLayout coordinatorLayout;
     @BindView(R.id.progress_bar_view_video_activity)
     ProgressBar progressBar;
     @BindView(R.id.player_view_view_video_activity)
@@ -214,42 +218,17 @@ public class ViewVideoActivity extends AppCompatActivity {
             }
 
             if (mVideoUri == null) {
-                progressBar.setVisibility(View.VISIBLE);
                 String gfycatId = intent.getStringExtra(EXTRA_GFYCAT_ID);
                 if (gfycatId != null && gfycatId.contains("-")) {
                     gfycatId = gfycatId.substring(0, gfycatId.indexOf('-'));
                 }
-                Retrofit retrofit;
                 if (videoType == VIDEO_TYPE_GFYCAT) {
-                    retrofit = gfycatRetrofit;
                     videoFileName = "Gfycat-" + gfycatId + ".mp4";
+                    loadGfycatOrRedgifsVideo(gfycatRetrofit, gfycatId, savedInstanceState, true);
                 } else {
-                    retrofit = redgifsRetrofit;
                     videoFileName = "Redgifs-" + gfycatId + ".mp4";
+                    loadGfycatOrRedgifsVideo(redgifsRetrofit, gfycatId, savedInstanceState, false);
                 }
-                FetchGfycatVideoLinks.fetchGfycatVideoLinks(retrofit, gfycatId,
-                        new FetchGfycatVideoLinks.FetchGfycatVideoLinksListener() {
-                            @Override
-                            public void success(String webm, String mp4) {
-                                progressBar.setVisibility(View.GONE);
-                                mVideoUri = Uri.parse(webm);
-                                videoDownloadUrl = mp4;
-                                dataSourceFactory = new DefaultDataSourceFactory(ViewVideoActivity.this,
-                                        Util.getUserAgent(ViewVideoActivity.this, "Infinity"));
-                                player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
-                                preparePlayer(savedInstanceState);
-                            }
-
-                            @Override
-                            public void failed() {
-                                progressBar.setVisibility(View.GONE);
-                                if (videoType == VIDEO_TYPE_GFYCAT) {
-                                    Toast.makeText(ViewVideoActivity.this, R.string.fetch_gfycat_video_failed, Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(ViewVideoActivity.this, R.string.fetch_redgifs_video_failed, Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
             } else {
                 dataSourceFactory = new DefaultDataSourceFactory(ViewVideoActivity.this,
                         Util.getUserAgent(ViewVideoActivity.this, "Infinity"));
@@ -331,6 +310,42 @@ public class ViewVideoActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void loadGfycatOrRedgifsVideo(Retrofit retrofit, String gfycatId, Bundle savedInstanceState, boolean needErrorHandling) {
+        progressBar.setVisibility(View.VISIBLE);
+        FetchGfycatOrRedgifsVideoLinks.fetchGfycatOrRedgifsVideoLinks(retrofit, gfycatId,
+                new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
+                    @Override
+                    public void success(String webm, String mp4) {
+                        progressBar.setVisibility(View.GONE);
+                        mVideoUri = Uri.parse(webm);
+                        videoDownloadUrl = mp4;
+                        dataSourceFactory = new DefaultDataSourceFactory(ViewVideoActivity.this,
+                                Util.getUserAgent(ViewVideoActivity.this, "Infinity"));
+                        player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
+                        preparePlayer(savedInstanceState);
+                    }
+
+                    @Override
+                    public void failed(int errorCode) {
+                        progressBar.setVisibility(View.GONE);
+                        if (videoType == VIDEO_TYPE_GFYCAT) {
+                            if (errorCode == 404 && needErrorHandling) {
+                                if (mSharedPreferences.getBoolean(SharedPreferencesUtils.AUTOMATICALLY_TRY_REDGIFS, true)) {
+                                    loadGfycatOrRedgifsVideo(redgifsRetrofit, gfycatId, savedInstanceState, false);
+                                } else {
+                                    Snackbar.make(coordinatorLayout, R.string.load_video_in_redgifs, Snackbar.LENGTH_INDEFINITE).setAction(R.string.yes,
+                                            view -> loadGfycatOrRedgifsVideo(redgifsRetrofit, gfycatId, savedInstanceState, false)).show();
+                                }
+                            } else {
+                                Toast.makeText(ViewVideoActivity.this, R.string.fetch_gfycat_video_failed, Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(ViewVideoActivity.this, R.string.fetch_redgifs_video_failed, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     @Override

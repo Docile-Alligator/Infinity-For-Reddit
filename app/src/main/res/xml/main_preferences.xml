@@ -29,14 +29,9 @@
         app:title="@string/settings_open_link_in_app_title" />
 
     <Preference
-        app:title="@string/settings_video_autoplay_title"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.AutoplayPreferenceFragment" />
-
-    <SwitchPreference
-        app:defaultValue="false"
-        app:key="mute_video"
-        app:icon="@drawable/ic_mute_preferences_24dp"
-        app:title="@string/settings_mute_video_title" />
+        app:title="@string/settigns_video_title"
+        android:icon="@drawable/ic_outline_video_24dp"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.VideoPreferenceFragment" />
 
     <SwitchPreference
         app:defaultValue="false"

@@ -88,6 +88,7 @@ public class SharedPreferencesUtils {
     public static final String VIDEO_AUTOPLAY_VALUE_NEVER = "0";
     public static final String MUTE_AUTOPLAYING_VIDEOS = "mute_autoplaying_videos";
     public static final String AUTOPLAY_NSFW_VIDEOS = "autoplay_nsfw_videos";
+    public static final String AUTOMATICALLY_TRY_REDGIFS = "automatically_try_redgifs";
     public static final String LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON = "lock_jump_to_next_top_level_comment_button";
     public static final String SWAP_TAP_AND_LONG_COMMENTS = "swap_tap_and_long_in_comments";
     public static final String SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON = "swipe_up_to_hide_jump_to_next_top_level_comments_button";

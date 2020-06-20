@@ -329,6 +329,7 @@
     <string name="settings_interface_title">Interface</string>
     <string name="settings_gestures_and_buttons_title">Gestures &amp; Buttons</string>
     <string name="settings_open_link_in_app_title">Open Link In App</string>
+    <string name="settigns_video_title">Video</string>
     <string name="settings_video_autoplay_title">Video Autoplay</string>
     <string name="settings_mute_autoplaying_videos_title">Mute Autoplaying Videos</string>
     <string name="settings_autoplay_nsfw_videos_title">Autoplay NSFW Videos</string>
@@ -343,6 +344,7 @@
     <string name="settings_volume_keys_navigate_comments_title">Use Volume Keys to Navigate Comments in Posts</string>
     <string name="settings_volume_keys_navigate_posts_title">Use Volume Keys to Navigate Posts</string>
     <string name="settings_mute_video_title">Mute Video</string>
+    <string name="settings_automatically_try_redgifs_title">Automatically Try Accessing Redgifs if Videos on Gfycat are Removed.</string>
     <string name="settings_confirm_to_exit">Confirm to Exit</string>
     <string name="settings_show_top_level_comments_first_title">Show Top-level Comments First</string>
     <string name="settings_show_comment_divider_title">Show Comment Divider</string>
@@ -394,7 +396,7 @@
     <string name="settings_credits_material_icons_title">Material Icons</string>
     <string name="settings_open_source_title">Open Source</string>
     <string name="settings_open_source_summary">Star it on Github if you like this app</string>
-    <string name="settings_rate_title">Rate in Google Play</string>
+    <string name="settings_rate_title">Rate on Google Play</string>
     <string name="settings_rate_summary">Give me a 5-star rating and I will be really happy</string>
     <string name="settings_f_droid_title">F-Droid</string>
     <string name="settings_f_droid_summary">It\'s available in IzzyOnDroid, an F-Droid Repository</string>
@@ -787,5 +789,7 @@
     <string name="set_to_both">Set to Both</string>
 
     <string name="default_font_font_preview">Default</string>
+
+    <string name="load_video_in_redgifs">Try loading the video on Redgifs</string>
 
 </resources>
