@@ -40,26 +40,29 @@ public class FetchRemovedPost {
                 });
     }
 
-    private static Post parseRemovedPost(JSONObject postJson, Post post) throws JSONException {
-        String id = postJson.getString(JSONUtils.ID_KEY);
-        if (id.equals(post.getId())) {
-            String author = postJson.getString(JSONUtils.AUTHOR_KEY);
-            String title = postJson.getString(JSONUtils.TITLE_KEY);
-            String postContent = Utils.modifyMarkdown(postJson.getString(JSONUtils.SELFTEXT_KEY).trim());
+    private static Post parseRemovedPost(JSONObject result, Post post) throws JSONException {
+        String id = result.getString(JSONUtils.ID_KEY);
+        String author = result.getString(JSONUtils.AUTHOR_KEY);
+        String title = result.getString(JSONUtils.TITLE_KEY);
+        String body = Utils.modifyMarkdown(result.getString(JSONUtils.SELFTEXT_KEY).trim());
 
+        if ( id.equals(post.getId()) &&
+           (!author.equals(post.getAuthor()) ||
+           foundSelfText(post.getSelfText(), body))
+        ) {
             post.setAuthor(author);
             post.setTitle(title);
-            post.setSelfText(postContent);
+            post.setSelfText(body);
             post.setSelfTextPlain("");
             post.setSelfTextPlainTrimmed("");
 
-            String url = postJson.optString(JSONUtils.URL_KEY);
+            String url = result.optString(JSONUtils.URL_KEY);
 
             if (url.endsWith("gif") || url.endsWith("mp4")) {
                 post.setVideoUrl(url);
                 post.setVideoDownloadUrl(url);
             } else if (post.getPostType() == Post.VIDEO_TYPE || post.getPostType() == Post.GIF_TYPE) {
-                JSONObject redditVideoObject = postJson.getJSONObject("secure_media").getJSONObject(JSONUtils.REDDIT_VIDEO_KEY);
+                JSONObject redditVideoObject = result.getJSONObject("secure_media").getJSONObject(JSONUtils.REDDIT_VIDEO_KEY);
                 String videoUrl = Html.fromHtml(redditVideoObject.getString(JSONUtils.HLS_URL_KEY)).toString();
                 String videoDownloadUrl = redditVideoObject.getString(JSONUtils.FALLBACK_URL_KEY);
 
@@ -81,14 +84,19 @@ public class FetchRemovedPost {
                 }
             }
 
-            if (!postJson.isNull("thumbnail")) {
-                post.setThumbnailPreviewUrl(postJson.getString("thumbnail"));
+            if (!result.isNull("thumbnail")) {
+                post.setThumbnailPreviewUrl(result.getString("thumbnail"));
             }
 
             return post;
         } else {
             return null;
         }
+    }
+
+    private static boolean foundSelfText(String oldText, String newText) {
+        return !(newText.equals("[deleted]") || newText.equals("[removed]")) &&
+                !newText.equals(oldText);
     }
 
     public interface FetchRemovedPostListener {
