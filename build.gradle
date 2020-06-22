@@ -18,9 +18,6 @@ allprojects {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
-        maven { url "https://dl.bintray.com/sysdata/maven" }
-        maven { url "https://dl.bintray.com/rilixtech/maven/" }
-        maven { url "http://repo.pageturner-reader.org" }
         mavenCentral()
     }
 }
