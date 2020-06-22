@@ -37,19 +37,19 @@ public class FetchRemovedComment {
                 });
     }
 
-    private static CommentData parseRemovedComment(JSONObject comment, CommentData commentData) throws JSONException {
-        String id = comment.getString(JSONUtils.ID_KEY);
-        if (id.equals(commentData.getId())) {
-            String author = comment.getString(JSONUtils.AUTHOR_KEY);
-            String commentMarkdown = "";
-            if (!comment.isNull(JSONUtils.BODY_KEY)) {
-                commentMarkdown = Utils.modifyMarkdown(comment.getString(JSONUtils.BODY_KEY).trim());
-            }
+    private static CommentData parseRemovedComment(JSONObject result, CommentData comment) throws JSONException {
+        String id = result.getString(JSONUtils.ID_KEY);
+        String author = result.getString(JSONUtils.AUTHOR_KEY);
+        String body = Utils.modifyMarkdown(result.optString(JSONUtils.BODY_KEY).trim());
 
-            commentData.setAuthor(author);
-            commentData.setCommentMarkdown(commentMarkdown);
-            commentData.setCommentRawText(commentMarkdown);
-            return commentData;
+        if ( id.equals(comment.getId()) &&
+           (!author.equals(comment.getAuthor()) ||
+            !body.equals(comment.getCommentRawText()))
+        ) {
+            comment.setAuthor(author);
+            comment.setCommentMarkdown(body);
+            comment.setCommentRawText(body);
+            return comment;
         } else {
             return null;
         }
