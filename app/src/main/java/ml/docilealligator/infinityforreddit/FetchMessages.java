@@ -29,15 +29,19 @@ public class FetchMessages {
     public static final String WHERE_UNREAD = "unread";
     public static final String WHERE_SENT = "sent";
     public static final String WHERE_COMMENTS = "comments";
+    public static final String WHERE_MESSAGES = "messages";
+    public static final int MESSAGE_TYPE_NOTIFICATION = 0;
+    public static final int MESSAGE_TYPE_PRIVATE_MESSAGE = 1;
 
-    static void fetchMessagesAsync(Retrofit oauthRetrofit, Locale locale, String accessToken, String where,
-                                   String after, FetchMessagesListener fetchMessagesListener) {
+    static void fetchInbox(Retrofit oauthRetrofit, Locale locale, String accessToken, String where,
+                           String after, int messageType, FetchMessagesListener fetchMessagesListener) {
         oauthRetrofit.create(RedditAPI.class).getMessages(APIUtils.getOAuthHeader(accessToken), where, after)
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                         if (response.isSuccessful()) {
-                            new ParseMessageAsnycTask(response.body(), locale, fetchMessagesListener::fetchSuccess).execute();
+                            new ParseMessageAsnycTask(response.body(), locale, messageType,
+                                    fetchMessagesListener::fetchSuccess).execute();
                         } else {
                             fetchMessagesListener.fetchFailed();
                         }
@@ -50,8 +54,7 @@ public class FetchMessages {
                 });
     }
 
-    @Nullable
-    static ArrayList<Message> parseMessage(String response, Locale locale) {
+    static ArrayList<Message> parseMessage(String response, Locale locale, int messageType) {
         JSONArray messageArray;
         try {
             messageArray = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
@@ -65,6 +68,10 @@ public class FetchMessages {
             try {
                 JSONObject messageJSON = messageArray.getJSONObject(i);
                 String kind = messageJSON.getString(JSONUtils.KIND_KEY);
+                if ((messageType == MESSAGE_TYPE_NOTIFICATION && kind.equals("t4")) ||
+                        (messageType == MESSAGE_TYPE_PRIVATE_MESSAGE && !kind.equals("t4"))) {
+                    continue;
+                }
 
                 JSONObject rawMessageJSON = messageJSON.getJSONObject(JSONUtils.DATA_KEY);
                 String subredditName = rawMessageJSON.getString(JSONUtils.SUBREDDIT_KEY);
@@ -111,17 +118,20 @@ public class FetchMessages {
         private Locale locale;
         private ArrayList<Message> messages;
         private String after;
+        private int messageType;
         private ParseMessageAsyncTaskListener parseMessageAsyncTaskListener;
-        ParseMessageAsnycTask(String response, Locale locale, ParseMessageAsyncTaskListener parseMessageAsnycTaskListener) {
+        ParseMessageAsnycTask(String response, Locale locale, int messageType,
+                              ParseMessageAsyncTaskListener parseMessageAsnycTaskListener) {
             this.response = response;
             this.locale = locale;
+            this.messageType = messageType;
             messages = new ArrayList<>();
             this.parseMessageAsyncTaskListener = parseMessageAsnycTaskListener;
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            messages = parseMessage(response, locale);
+            messages = parseMessage(response, locale, messageType);
             try {
                 after = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
             } catch (JSONException e) {

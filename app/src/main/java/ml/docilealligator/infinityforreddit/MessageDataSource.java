@@ -15,6 +15,7 @@ class MessageDataSource extends PageKeyedDataSource<String, Message> {
     private Locale locale;
     private String accessToken;
     private String where;
+    private int messageType;
 
     private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
     private MutableLiveData<NetworkState> initialLoadStateLiveData;
@@ -28,6 +29,11 @@ class MessageDataSource extends PageKeyedDataSource<String, Message> {
         this.locale = locale;
         this.accessToken = accessToken;
         this.where = where;
+        if (where.equals(FetchMessages.WHERE_MESSAGES)) {
+            messageType = FetchMessages.MESSAGE_TYPE_PRIVATE_MESSAGE;
+        } else {
+            messageType = FetchMessages.MESSAGE_TYPE_NOTIFICATION;
+        }
         paginationNetworkStateLiveData = new MutableLiveData<>();
         initialLoadStateLiveData = new MutableLiveData<>();
         hasPostLiveData = new MutableLiveData<>();
@@ -53,7 +59,8 @@ class MessageDataSource extends PageKeyedDataSource<String, Message> {
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull LoadInitialCallback<String, Message> callback) {
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
-        FetchMessages.fetchMessagesAsync(oauthRetrofit, locale, accessToken, where, null, new FetchMessages.FetchMessagesListener() {
+        FetchMessages.fetchInbox(oauthRetrofit, locale, accessToken, where, null, messageType,
+                new FetchMessages.FetchMessagesListener() {
             @Override
             public void fetchSuccess(ArrayList<Message> messages, @Nullable String after) {
                 if (messages.size() == 0) {
@@ -89,7 +96,8 @@ class MessageDataSource extends PageKeyedDataSource<String, Message> {
 
         paginationNetworkStateLiveData.postValue(NetworkState.LOADING);
 
-        FetchMessages.fetchMessagesAsync(oauthRetrofit, locale, accessToken, where, params.key, new FetchMessages.FetchMessagesListener() {
+        FetchMessages.fetchInbox(oauthRetrofit, locale, accessToken, where, params.key, messageType,
+                new FetchMessages.FetchMessagesListener() {
             @Override
             public void fetchSuccess(ArrayList<Message> messages, @Nullable String after) {
                 if (after == null || after.equals("") || after.equals("null")) {

@@ -74,7 +74,8 @@ public class PullNotificationWorker extends Worker {
 
                 if (response != null && response.isSuccessful()) {
                     String responseBody = response.body();
-                    ArrayList<Message> messages = FetchMessages.parseMessage(responseBody, context.getResources().getConfiguration().locale);
+                    ArrayList<Message> messages = FetchMessages.parseMessage(responseBody,
+                            context.getResources().getConfiguration().locale, FetchMessages.MESSAGE_TYPE_NOTIFICATION);
 
                     if (messages != null && !messages.isEmpty()) {
                         NotificationManagerCompat notificationManager = NotificationUtils.getNotificationManager(context);
