@@ -1,0 +1,35 @@
+<p>Infinity is a beautiful, feature-rich app that offers a smooth Reddit browsing experience. It is completely free and ad-less; you can browse Reddit without interruptions or distractions. Built by a passionate university student, Infinity is open source. Please check out, support or contribute to the project at https://github.com/Docile-Alligator/Infinity-For-Reddit!</p>
+
+<p>A subreddit for this app is available: https://www.reddit.com/r/Infinity_For_Reddit/</p>
+
+<p><b>Highlighted features:</b></p>
+
+<p><b>Lazy mode</b></p>
+<p>Automatic scrolling of posts enables you to enjoy amazing content without moving your thumb.</p>
+
+<p><b>Multi-account support</b></p>
+<p>Switch to different accounts instantaneously.</p>
+
+<p><b>Night theme</b></p>
+<p>Beautifully designed night theme</p>
+
+<p><b>Highlighted feature</b></p>
+
+<p>Lazy mode: Automatic scrolling of posts enables you to enjoy amazing posts without moving your thumb.</p>
+
+<p><b>Features:</b></p>
+<ul>
+<li>Browsing posts</li>
+<li>View comments</li>
+<li>Expand and collapse comments section</li>
+<li>Vote posts and comments</li>
+<li>Save posts</li>
+<li>Write comments</li>
+<li>Edit comments and delete comments</li>
+<li>Submit posts (text, link, image and video)</li>
+<li>Edit posts (mark and unmark NSFW and spoiler and edit flair) and delete posts</li>
+<li>See all the subscribed subreddits and followed users</li>
+<li>View the messages</li>
+<li>Get notifications of unread messages</li>
+<li>And much more!</li>
+</ul>

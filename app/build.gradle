@@ -82,7 +82,9 @@ dependencies {
 
     def toroVersion = '3.7.0.2010003'
     implementation "im.ene.toro3:toro:$toroVersion"
-    implementation "im.ene.toro3:toro-ext-exoplayer:$toroVersion"
+    implementation("im.ene.toro3:toro-ext-exoplayer:$toroVersion") {
+        exclude module: 'extension-ima'
+    }
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test:runner:1.2.0'
