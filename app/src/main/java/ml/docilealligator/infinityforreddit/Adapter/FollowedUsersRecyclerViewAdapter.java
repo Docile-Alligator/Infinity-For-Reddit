@@ -294,7 +294,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     @Override
     public String getPopupText(int position) {
         switch (getItemViewType(position)) {
-            case VIEW_TYPE_USER_DIVIDER:
+            case VIEW_TYPE_USER:
                 int offset = (mFavoriteSubscribedUserData != null && mFavoriteSubscribedUserData.size() > 0) ?
                         mFavoriteSubscribedUserData.size() + 2 : 0;
                 return mSubscribedUserData.get(position - offset).getName().substring(0, 1).toUpperCase();

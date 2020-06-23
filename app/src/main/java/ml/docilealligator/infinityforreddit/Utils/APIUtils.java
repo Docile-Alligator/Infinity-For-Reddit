@@ -83,6 +83,7 @@ public class APIUtils {
 
     public static final String LINK_KEY = "link";
     public static final String FLAIR_TEMPLATE_ID_KEY = "flair_template_id";
+    public static final String FLAIR_ID_KEY = "flair_id";
 
     public static final String MAKE_FAVORITE_KEY = "make_favorite";
 

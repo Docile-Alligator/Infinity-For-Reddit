@@ -34,11 +34,12 @@ import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SubmitImagePostEvent;
 import ml.docilealligator.infinityforreddit.Event.SubmitTextOrLinkPostEvent;
 import ml.docilealligator.infinityforreddit.Event.SubmitVideoPostEvent;
+import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NotificationUtils;
 import ml.docilealligator.infinityforreddit.Post.Post;
-import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Post.SubmitPost;
+import ml.docilealligator.infinityforreddit.R;
 import retrofit2.Retrofit;
 
 public class SubmitPostService extends Service {
@@ -68,7 +69,7 @@ public class SubmitPostService extends Service {
     private String mAccessToken;
     private String subredditName;
     private String title;
-    private String flair;
+    private Flair flair;
     private boolean isSpoiler;
     private boolean isNSFW;
     private String content;
@@ -90,7 +91,7 @@ public class SubmitPostService extends Service {
         mAccessToken = intent.getStringExtra(EXTRA_ACCESS_TOKEN);
         subredditName = intent.getStringExtra(EXTRA_SUBREDDIT_NAME);
         title = intent.getStringExtra(EXTRA_TITLE);
-        flair = intent.getStringExtra(EXTRA_FLAIR);
+        flair = intent.getParcelableExtra(EXTRA_FLAIR);
         isSpoiler = intent.getBooleanExtra(EXTRA_IS_SPOILER, false);
         isNSFW = intent.getBooleanExtra(EXTRA_IS_NSFW, false);
         int postType = intent.getIntExtra(EXTRA_POST_TYPE, EXTRA_POST_TEXT_OR_LINK);

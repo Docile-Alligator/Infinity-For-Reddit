@@ -547,7 +547,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
         } else {
             mMemu.findItem(R.id.action_send_post_link_activity).setEnabled(true);
             mMemu.findItem(R.id.action_send_post_link_activity).getIcon().setAlpha(255);
-            if (submitTextOrLinkPostEvent.errorMessage == null) {
+            if (submitTextOrLinkPostEvent.errorMessage == null || submitTextOrLinkPostEvent.errorMessage.equals("")) {
                 Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
             } else {
                 Snackbar.make(coordinatorLayout, submitTextOrLinkPostEvent.errorMessage.substring(0, 1).toUpperCase()

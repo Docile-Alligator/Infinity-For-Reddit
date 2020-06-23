@@ -21,6 +21,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import ml.docilealligator.infinityforreddit.API.RedditAPI;
+import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import okhttp3.MediaType;
@@ -34,7 +35,7 @@ import retrofit2.Retrofit;
 public class SubmitPost {
     public static void submitTextOrLinkPost(Retrofit oauthRetrofit, String accessToken,
                                             Locale locale, String subredditName, String title, String content,
-                                            String flair, boolean isSpoiler, boolean isNSFW, String kind,
+                                            Flair flair, boolean isSpoiler, boolean isNSFW, String kind,
                                             SubmitPostListener submitPostListener) {
         submitPost(oauthRetrofit, accessToken, locale, subredditName, title, content,
                 flair, isSpoiler, isNSFW, kind, null, submitPostListener);
@@ -42,7 +43,7 @@ public class SubmitPost {
 
     public static void submitImagePost(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
                                        String accessToken, Locale locale,
-                                       String subredditName, String title, Bitmap image, String flair,
+                                       String subredditName, String title, Bitmap image, Flair flair,
                                        boolean isSpoiler, boolean isNSFW, SubmitPostListener submitPostListener) {
         uploadImage(oauthRetrofit, uploadMediaRetrofit, accessToken, image,
                 new UploadImageListener() {
@@ -63,7 +64,7 @@ public class SubmitPost {
     public static void submitVideoPost(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
                                        Retrofit uploadVideoRetrofit, String accessToken,
                                        Locale locale, String subredditName, String title, byte[] buffer, String mimeType,
-                                       Bitmap posterBitmap, String flair, boolean isSpoiler, boolean isNSFW,
+                                       Bitmap posterBitmap, Flair flair, boolean isSpoiler, boolean isNSFW,
                                        SubmitPostListener submitPostListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
@@ -157,7 +158,7 @@ public class SubmitPost {
 
     private static void submitPost(Retrofit oauthRetrofit, String accessToken,
                                    Locale locale, String subredditName, String title, String content,
-                                   String flair, boolean isSpoiler, boolean isNSFW, String kind,
+                                   Flair flair, boolean isSpoiler, boolean isNSFW, String kind,
                                    @Nullable String posterUrl, SubmitPostListener submitPostListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
@@ -186,7 +187,8 @@ public class SubmitPost {
         }
 
         if (flair != null) {
-            params.put(APIUtils.FLAIR_TEXT_KEY, flair);
+            params.put(APIUtils.FLAIR_TEXT_KEY, flair.getText());
+            params.put(APIUtils.FLAIR_ID_KEY, flair.getId());
         }
         params.put(APIUtils.SPOILER_KEY, Boolean.toString(isSpoiler));
         params.put(APIUtils.NSFW_KEY, Boolean.toString(isNSFW));
