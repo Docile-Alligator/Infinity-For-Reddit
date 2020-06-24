@@ -81,7 +81,6 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
     @Inject
     @Named("default")
     SharedPreferences sharedPreferences;
-    private WallpaperSetter wallpaperSetter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,8 +116,6 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
         Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setHomeAsUpIndicator(upArrow);
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
-
-        wallpaperSetter = new WallpaperSetter();
 
         setTitle(" ");
 
