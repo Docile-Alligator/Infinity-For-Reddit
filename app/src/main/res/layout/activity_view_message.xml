@@ -31,52 +31,24 @@
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_refresh_layout_view_message_activity"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_view_message_activity"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"/>
-
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <LinearLayout
-            android:id="@+id/fetch_messages_info_linear_layout_view_message_activity"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout_view_message_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:layout_gravity="bottom"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:tabGravity="fill"
+            app:tabIndicatorHeight="3dp"
+            app:tabMode="fixed"
+            app:tabRippleColor="?attr/colorControlHighlight"
+            app:tabUnboundedRipple="false" />
 
-            <ImageView
-                android:id="@+id/fetch_messages_info_image_view_view_message_activity"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-            <TextView
-                android:id="@+id/fetch_messages_info_text_view_view_message_activity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:textSize="?attr/font_default"
-                android:fontFamily="?attr/font_family" />
-
-        </LinearLayout>
-
-    </RelativeLayout>
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_pager_view_message_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

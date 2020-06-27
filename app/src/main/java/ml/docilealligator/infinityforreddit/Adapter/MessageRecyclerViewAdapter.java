@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.paging.PagedListAdapter;
@@ -29,6 +30,7 @@ import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.FetchMessages;
 import ml.docilealligator.infinityforreddit.Message;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
@@ -54,6 +56,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
     private Retrofit mOauthRetrofit;
     private Markwon mMarkwon;
     private String mAccessToken;
+    private int mMessageType;
     private NetworkState networkState;
     private RetryLoadingMoreCallback mRetryLoadingMoreCallback;
     private int mColorAccent;
@@ -67,7 +70,8 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
 
     public MessageRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
                                       CustomThemeWrapper customThemeWrapper,
-                                      String accessToken, RetryLoadingMoreCallback retryLoadingMoreCallback) {
+                                      String accessToken, String where,
+                                      RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         mContext = context;
         mOauthRetrofit = oauthRetrofit;
@@ -98,6 +102,8 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 )
                 .build();
         mAccessToken = accessToken;
+        mMessageType = where.equals(FetchMessages.WHERE_MESSAGES) ?
+                FetchMessages.MESSAGE_TYPE_PRIVATE_MESSAGE : FetchMessages.MESSAGE_TYPE_NOTIFICATION;
 
         mColorAccent = customThemeWrapper.getColorAccent();
         mMessageBackgroundColor = customThemeWrapper.getCardViewBackgroundColor();
@@ -132,7 +138,6 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 }
 
                 if (message.wasComment()) {
-                    ((DataViewHolder) holder).authorTextView.setTextColor(mUsernameColor);
                     ((DataViewHolder) holder).titleTextView.setText(message.getTitle());
                 } else {
                     ((DataViewHolder) holder).titleTextView.setVisibility(View.GONE);
@@ -149,6 +154,8 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                         Intent intent = new Intent(mContext, LinkResolverActivity.class);
                         intent.setData(uri);
                         mContext.startActivity(intent);
+                    } else if (mMessageType == FetchMessages.MESSAGE_TYPE_PRIVATE_MESSAGE) {
+                        Toast.makeText(mContext, "To be implemented", Toast.LENGTH_SHORT).show();
                     }
 
                     if (message.isNew()) {
@@ -171,11 +178,9 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 });
 
                 ((DataViewHolder) holder).authorTextView.setOnClickListener(view -> {
-                    if (message.wasComment()) {
-                        Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
-                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, message.getAuthor());
-                        mContext.startActivity(intent);
-                    }
+                    Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
+                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, message.getAuthor());
+                    mContext.startActivity(intent);
                 });
 
                 ((DataViewHolder) holder).contentCustomMarkwonView.setOnClickListener(view -> ((DataViewHolder) holder).itemView.performClick());
@@ -211,7 +216,6 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
         if (holder instanceof DataViewHolder) {
             ((DataViewHolder) holder).itemView.setBackgroundColor(mMessageBackgroundColor);
             ((DataViewHolder) holder).titleTextView.setVisibility(View.VISIBLE);
-            ((DataViewHolder) holder).authorTextView.setTextColor(mPrimaryTextColor);
         }
     }
 

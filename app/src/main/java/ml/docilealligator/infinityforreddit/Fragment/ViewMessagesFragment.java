@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.Fragment;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,22 +10,27 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.Activity.BaseActivity;
 import ml.docilealligator.infinityforreddit.Adapter.MessageRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.FetchMessages;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
+import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MessageViewModel;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
@@ -33,6 +39,8 @@ import retrofit2.Retrofit;
 
 public class ViewMessagesFragment extends Fragment implements FragmentCommunicator {
 
+    public static final String EXTRA_ACCESS_TOKEN = "EAT";
+    public static final String EXTRA_MESSAGE_WHERE = "EMT";
     @BindView(R.id.swipe_refresh_layout_view_messages_fragment)
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view_view_messages_fragment)
@@ -58,6 +66,7 @@ public class ViewMessagesFragment extends Fragment implements FragmentCommunicat
     private MessageRecyclerViewAdapter mAdapter;
     private RequestManager mGlide;
     private LinearLayoutManager mLinearLayoutManager;
+    private BaseActivity mActivity;
 
     public ViewMessagesFragment() {
         // Required empty public constructor
@@ -68,8 +77,34 @@ public class ViewMessagesFragment extends Fragment implements FragmentCommunicat
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_view_messages, container, false);
 
+        ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
+
+        ButterKnife.bind(this, rootView);
+
+        applyTheme();
+
+        Bundle arguments = getArguments();
+        if (arguments == null) {
+            return rootView;
+        }
+        mAccessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
+        mGlide = Glide.with(this);
+
+        if (mActivity.isImmersiveInterface()) {
+            mRecyclerView.setPadding(0, 0, 0, mActivity.getNavBarHeight());
+        }
+
+        String where = arguments.getString(EXTRA_MESSAGE_WHERE);
+        mAdapter = new MessageRecyclerViewAdapter(mActivity, mOauthRetrofit, mCustomThemeWrapper,
+                mAccessToken, where, () -> mMessageViewModel.retryLoadingMore());
+        mLinearLayoutManager = new LinearLayoutManager(mActivity);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mActivity, mLinearLayoutManager.getOrientation());
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
+
         MessageViewModel.Factory factory = new MessageViewModel.Factory(mOauthRetrofit,
-                getResources().getConfiguration().locale, mAccessToken, FetchMessages.WHERE_INBOX);
+                getResources().getConfiguration().locale, mAccessToken, where);
         mMessageViewModel = new ViewModelProvider(this, factory).get(MessageViewModel.class);
         mMessageViewModel.getMessages().observe(getViewLifecycleOwner(), messages -> mAdapter.submitList(messages));
 
@@ -78,9 +113,7 @@ public class ViewMessagesFragment extends Fragment implements FragmentCommunicat
             if (hasMessage) {
                 mFetchMessageInfoLinearLayout.setVisibility(View.GONE);
             } else {
-                mFetchMessageInfoLinearLayout.setOnClickListener(view -> {
-                    //Do nothing
-                });
+                mFetchMessageInfoLinearLayout.setOnClickListener(null);
                 showErrorView(R.string.no_messages);
             }
         });
@@ -119,10 +152,25 @@ public class ViewMessagesFragment extends Fragment implements FragmentCommunicat
 
     @Override
     public void applyTheme() {
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
+        mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
+        mFetchMessageInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+    }
 
+    public void goBackToTop() {
+        if (mLinearLayoutManager != null) {
+            mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
+        }
     }
 
     private void onRefresh() {
         mMessageViewModel.refresh();
+        mAdapter.setNetworkState(null);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mActivity = (BaseActivity) context;
     }
 }

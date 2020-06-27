@@ -5,27 +5,23 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.tabs.TabLayout;
 import com.r0adkll.slidr.Slidr;
 
 import org.greenrobot.eventbus.EventBus;
@@ -37,15 +33,13 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
-import ml.docilealligator.infinityforreddit.Adapter.MessageRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchMessages;
+import ml.docilealligator.infinityforreddit.Fragment.ViewMessagesFragment;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.MessageViewModel;
-import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
@@ -67,17 +61,10 @@ public class ViewMessageActivity extends BaseActivity implements ActivityToolbar
     AppBarLayout mAppBarLayout;
     @BindView(R.id.toolbar_view_message_activity)
     Toolbar mToolbar;
-    @BindView(R.id.swipe_refresh_layout_view_message_activity)
-    SwipeRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.recycler_view_view_message_activity)
-    RecyclerView mRecyclerView;
-    @BindView(R.id.fetch_messages_info_linear_layout_view_message_activity)
-    LinearLayout mFetchMessageInfoLinearLayout;
-    @BindView(R.id.fetch_messages_info_image_view_view_message_activity)
-    ImageView mFetchMessageInfoImageView;
-    @BindView(R.id.fetch_messages_info_text_view_view_message_activity)
-    TextView mFetchMessageInfoTextView;
-    MessageViewModel mMessageViewModel;
+    @BindView(R.id.tab_layout_view_message_activity)
+    TabLayout tabLayout;
+    @BindView(R.id.view_pager_view_message_activity)
+    ViewPager viewPager;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -88,12 +75,10 @@ public class ViewMessageActivity extends BaseActivity implements ActivityToolbar
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    private SectionsPagerAdapter sectionsPagerAdapter;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mNewAccountName;
-    private MessageRecyclerViewAdapter mAdapter;
-    private RequestManager mGlide;
-    private LinearLayoutManager mLinearLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,8 +98,6 @@ public class ViewMessageActivity extends BaseActivity implements ActivityToolbar
             Slidr.attach(this);
         }
 
-        mGlide = Glide.with(this);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
 
@@ -125,11 +108,6 @@ public class ViewMessageActivity extends BaseActivity implements ActivityToolbar
             if (isImmersiveInterface()) {
                 window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 adjustToolbar(mToolbar);
-
-                int navBarHeight = getNavBarHeight();
-                if (navBarHeight > 0) {
-                    mRecyclerView.setPadding(0, 0, 0, navBarHeight);
-                }
             }
         }
 
@@ -167,9 +145,7 @@ public class ViewMessageActivity extends BaseActivity implements ActivityToolbar
     protected void applyCustomTheme() {
         mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(mAppBarLayout, mToolbar);
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
-        mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
-        mFetchMessageInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+        applyTabLayoutTheme(tabLayout);
     }
 
     private void getCurrentAccountAndFetchMessage() {
@@ -206,59 +182,10 @@ public class ViewMessageActivity extends BaseActivity implements ActivityToolbar
     }
 
     private void bindView() {
-        mAdapter = new MessageRecyclerViewAdapter(this, mOauthRetrofit, mCustomThemeWrapper,
-                mAccessToken, () -> mMessageViewModel.retryLoadingMore());
-        mLinearLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, mLinearLayoutManager.getOrientation());
-        mRecyclerView.addItemDecoration(dividerItemDecoration);
-
-        MessageViewModel.Factory factory = new MessageViewModel.Factory(mOauthRetrofit,
-                getResources().getConfiguration().locale, mAccessToken, FetchMessages.WHERE_INBOX);
-        mMessageViewModel = new ViewModelProvider(this, factory).get(MessageViewModel.class);
-        mMessageViewModel.getMessages().observe(this, messages -> mAdapter.submitList(messages));
-
-        mMessageViewModel.hasMessage().observe(this, hasMessage -> {
-            mSwipeRefreshLayout.setRefreshing(false);
-            if (hasMessage) {
-                mFetchMessageInfoLinearLayout.setVisibility(View.GONE);
-            } else {
-                mFetchMessageInfoLinearLayout.setOnClickListener(view -> {
-                    //Do nothing
-                });
-                showErrorView(R.string.no_messages);
-            }
-        });
-
-        mMessageViewModel.getInitialLoadingState().observe(this, networkState -> {
-            if (networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            } else if (networkState.getStatus().equals(NetworkState.Status.FAILED)) {
-                mSwipeRefreshLayout.setRefreshing(false);
-                mFetchMessageInfoLinearLayout.setOnClickListener(view -> {
-                    mFetchMessageInfoLinearLayout.setVisibility(View.GONE);
-                    mMessageViewModel.refresh();
-                    mAdapter.setNetworkState(null);
-                });
-                showErrorView(R.string.load_messages_failed);
-            } else {
-                mSwipeRefreshLayout.setRefreshing(true);
-            }
-        });
-
-        mMessageViewModel.getPaginationNetworkState().observe(this, networkState -> {
-            mAdapter.setNetworkState(networkState);
-        });
-
-        mSwipeRefreshLayout.setOnRefreshListener(this::onRefresh);
-    }
-
-    private void showErrorView(int stringResId) {
-        mSwipeRefreshLayout.setRefreshing(false);
-        mFetchMessageInfoLinearLayout.setVisibility(View.VISIBLE);
-        mFetchMessageInfoTextView.setText(stringResId);
-        mGlide.load(R.drawable.error_image).into(mFetchMessageInfoImageView);
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setOffscreenPageLimit(2);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
@@ -271,8 +198,9 @@ public class ViewMessageActivity extends BaseActivity implements ActivityToolbar
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_refresh_view_message_activity) {
-            mMessageViewModel.refresh();
-            mAdapter.setNetworkState(null);
+            if (sectionsPagerAdapter != null) {
+                sectionsPagerAdapter.refresh();
+            }
             return true;
         } else if (item.getItemId() == android.R.id.home) {
             finish();
@@ -302,14 +230,89 @@ public class ViewMessageActivity extends BaseActivity implements ActivityToolbar
         }
     }
 
-    private void onRefresh() {
-        mMessageViewModel.refresh();
-    }
-
     @Override
     public void onLongPress() {
-        if (mLinearLayoutManager != null) {
-            mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
+        if (sectionsPagerAdapter != null) {
+            sectionsPagerAdapter.goBackToTop();
+        }
+    }
+
+    private class SectionsPagerAdapter extends FragmentPagerAdapter {
+        private ViewMessagesFragment tab1;
+        private ViewMessagesFragment tab2;
+
+        public SectionsPagerAdapter(@NonNull FragmentManager fm) {
+            super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        }
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                ViewMessagesFragment fragment = new ViewMessagesFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(ViewMessagesFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                bundle.putString(ViewMessagesFragment.EXTRA_MESSAGE_WHERE, FetchMessages.WHERE_INBOX);
+                fragment.setArguments(bundle);
+                return fragment;
+            } else {
+                ViewMessagesFragment fragment = new ViewMessagesFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(ViewMessagesFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                bundle.putString(ViewMessagesFragment.EXTRA_MESSAGE_WHERE, FetchMessages.WHERE_MESSAGES);
+                fragment.setArguments(bundle);
+                return fragment;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            if (position == 0) {
+                return getString(R.string.notifications);
+            }
+
+            return getString(R.string.messages);
+        }
+
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
+            Fragment fragment = (Fragment) super.instantiateItem(container, position);
+            if (position == 0) {
+                tab1 = (ViewMessagesFragment) fragment;
+            } else if (position == 1) {
+                tab2 = (ViewMessagesFragment) fragment;
+            }
+
+            return fragment;
+        }
+
+        void refresh() {
+            if (viewPager.getCurrentItem() == 0) {
+                if (tab1 != null) {
+                    tab1.refresh();
+                }
+            } else if (viewPager.getCurrentItem() == 1 && tab2 != null) {
+                tab2.refresh();
+            }
+        }
+
+        void goBackToTop() {
+            if (viewPager.getCurrentItem() == 0) {
+                if (tab1 != null) {
+                    tab1.goBackToTop();
+                }
+            } else if (viewPager.getCurrentItem() == 1) {
+                if (tab2 != null) {
+                    tab2.goBackToTop();
+                }
+            }
         }
     }
 }

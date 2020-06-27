@@ -50,6 +50,7 @@ import ml.docilealligator.infinityforreddit.Fragment.SubredditListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SubscribedSubredditsListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.UserListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.ViewImgurVideoFragment;
+import ml.docilealligator.infinityforreddit.Fragment.ViewMessagesFragment;
 import ml.docilealligator.infinityforreddit.Service.DownloadRedditVideoService;
 import ml.docilealligator.infinityforreddit.Service.SubmitPostService;
 import ml.docilealligator.infinityforreddit.Settings.AdvancedPreferenceFragment;
@@ -173,4 +174,6 @@ public interface AppComponent {
     void inject(DownloadRedditVideoService downloadRedditVideoService);
 
     void inject(MultiRedditListingFragment multiRedditListingFragment);
+
+    void inject(ViewMessagesFragment viewMessagesFragment);
 }

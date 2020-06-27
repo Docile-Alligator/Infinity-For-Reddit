@@ -1054,9 +1054,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (mAccessToken == null) {
                 switch (position) {
                     case 0:
-                        return "Popular";
+                        return getString(R.string.popular);
                     case 1:
-                        return "All";
+                        return getString(R.string.all);
                 }
             } else {
                 switch (position) {

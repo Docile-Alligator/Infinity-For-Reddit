@@ -760,6 +760,8 @@
 
     <string name="home">Home</string>
     <string name="popular">Popular</string>
+    <string name="notifications">Notifications</string>
+    <string name="messages">Messages</string>
 
     <string name="fetch_gfycat_video_failed">Fetch Gfycat video failed</string>
     <string name="fetch_redgifs_video_failed">Fetch Redgifs video failed</string>
