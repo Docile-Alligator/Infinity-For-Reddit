@@ -15,8 +15,8 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import ml.docilealligator.infinityforreddit.API.RedditAPI;
-import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.Utils.APIUtils;
+import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,15 +54,7 @@ public class FetchMessages {
                 });
     }
 
-    static ArrayList<Message> parseMessage(String response, Locale locale, int messageType) {
-        JSONArray messageArray;
-        try {
-            messageArray = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
-
+    static ArrayList<Message> parseMessage(JSONArray messageArray, Locale locale, int messageType) {
         ArrayList<Message> messages = new ArrayList<>();
         for (int i = 0; i < messageArray.length(); i++) {
             try {
@@ -96,9 +88,20 @@ public class FetchMessages {
                 String formattedTime = new SimpleDateFormat("MMM d, yyyy, HH:mm",
                         locale).format(submitTimeCalendar.getTime());
 
-                messages.add(new Message(kind, subredditName, subredditNamePrefixed, id, fullname, subject,
+                ArrayList<Message> replies = null;
+                if (!rawMessageJSON.isNull(JSONUtils.REPLIES_KEY) && rawMessageJSON.get(JSONUtils.REPLIES_KEY) instanceof JSONObject) {
+                    JSONArray repliesArray = rawMessageJSON.getJSONObject(JSONUtils.REPLIES_KEY).getJSONObject(JSONUtils.DATA_KEY)
+                            .getJSONArray(JSONUtils.CHILDREN_KEY);
+                    replies = parseMessage(repliesArray, locale, messageType);
+                }
+
+                Message message = new Message(kind, subredditName, subredditNamePrefixed, id, fullname, subject,
                         author, parentFullname, title, body, context, distinguished, formattedTime,
-                        wasComment, isNew, score, nComments, timeUTC));
+                        wasComment, isNew, score, nComments, timeUTC);
+                if (replies != null) {
+                    message.setReplies(replies);
+                }
+                messages.add(message);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -131,8 +134,9 @@ public class FetchMessages {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            messages = parseMessage(response, locale, messageType);
             try {
+                JSONArray messageArray = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+                messages = parseMessage(messageArray, locale, messageType);
                 after = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
             } catch (JSONException e) {
                 e.printStackTrace();

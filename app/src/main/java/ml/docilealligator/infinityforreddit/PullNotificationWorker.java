@@ -12,6 +12,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,6 +32,7 @@ import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewMessageActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Utils.APIUtils;
+import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -65,6 +67,13 @@ public class PullNotificationWorker extends Worker {
         try {
             List<Account> accounts = mRedditDataRoomDatabase.accountDao().getAllAccounts();
             int color = mCustomThemeWrapper.getColorPrimaryLightTheme();
+            NotificationManagerCompat testManager = NotificationUtils.getNotificationManager(context);
+            NotificationCompat.Builder test = NotificationUtils.buildNotification(testManager,
+                    context, "Test", "Test body", "Test summary",
+                    NotificationUtils.CHANNEL_ID_NEW_MESSAGES,
+                    NotificationUtils.CHANNEL_NEW_MESSAGES,
+                    NotificationUtils.getAccountGroupName("Test"), color);
+            testManager.notify(9765, test.build());
             for (int accountIndex = 0; accountIndex < accounts.size(); accountIndex++) {
                 Account account = accounts.get(accountIndex);
 
@@ -72,12 +81,13 @@ public class PullNotificationWorker extends Worker {
 
                 Response<String> response = fetchMessages(account, 1);
 
-                if (response != null && response.isSuccessful()) {
+                if (response != null && response.isSuccessful() && response.body() != null) {
                     String responseBody = response.body();
-                    ArrayList<Message> messages = FetchMessages.parseMessage(responseBody,
+                    JSONArray messageArray = new JSONObject(responseBody).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+                    ArrayList<Message> messages = FetchMessages.parseMessage(messageArray,
                             context.getResources().getConfiguration().locale, FetchMessages.MESSAGE_TYPE_NOTIFICATION);
 
-                    if (messages != null && !messages.isEmpty()) {
+                    if (!messages.isEmpty()) {
                         NotificationManagerCompat notificationManager = NotificationUtils.getNotificationManager(context);
 
                         NotificationCompat.Builder summaryBuilder = NotificationUtils.buildSummaryNotification(context,

@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
+import java.util.ArrayList;
+
 public class Message {
     static final String TYPE_COMMENT = "t1";
     static final String TYPE_ACCOUNT = "t2";
@@ -26,6 +28,7 @@ public class Message {
     private int score;
     private int nComments;
     private long timeUTC;
+    private ArrayList<Message> replies;
 
     Message(String kind, String subredditName, String subredditNamePrefixed, String id, String fullname,
             String subject, String author, String parentFullName, String title, String body, String context,
@@ -126,5 +129,13 @@ public class Message {
 
     public long getTimeUTC() {
         return timeUTC;
+    }
+
+    public ArrayList<Message> getReplies() {
+        return replies;
+    }
+
+    public void setReplies(ArrayList<Message> replies) {
+        this.replies = replies;
     }
 }
