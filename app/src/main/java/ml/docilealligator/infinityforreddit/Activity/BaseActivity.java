@@ -58,7 +58,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         customThemeWrapper = getCustomThemeWrapper();
 
-        SharedPreferences mSharedPreferences = getSharedPreferences();
+        SharedPreferences mSharedPreferences = getDefaultSharedPreferences();
         boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
         int systemThemeType = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
         immersiveInterface = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
@@ -174,7 +174,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected abstract SharedPreferences getSharedPreferences();
+    protected abstract SharedPreferences getDefaultSharedPreferences();
 
     protected abstract CustomThemeWrapper getCustomThemeWrapper();
 
@@ -229,7 +229,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public int getNavBarHeight() {
-        if (getSharedPreferences().getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_IGNORE_NAV_BAR_KEY, false)) {
+        if (getDefaultSharedPreferences().getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_IGNORE_NAV_BAR_KEY, false)) {
             return 0;
         }
 

@@ -135,7 +135,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
     }
 
     @Override
-    protected SharedPreferences getSharedPreferences() {
+    protected SharedPreferences getDefaultSharedPreferences() {
         return sharedPreferences;
     }
 

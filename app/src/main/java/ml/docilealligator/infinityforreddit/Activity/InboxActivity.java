@@ -39,14 +39,14 @@ import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchMessages;
-import ml.docilealligator.infinityforreddit.Fragment.ViewMessagesFragment;
+import ml.docilealligator.infinityforreddit.Fragment.InboxFragment;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
-public class ViewMessageActivity extends BaseActivity implements ActivityToolbarInterface {
+public class InboxActivity extends BaseActivity implements ActivityToolbarInterface {
 
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
 
@@ -54,17 +54,17 @@ public class ViewMessageActivity extends BaseActivity implements ActivityToolbar
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
 
-    @BindView(R.id.coordinator_layout_view_message_activity)
+    @BindView(R.id.coordinator_layout_inbox_activity)
     CoordinatorLayout mCoordinatorLayout;
-    @BindView(R.id.collapsing_toolbar_layout_view_message_activity)
+    @BindView(R.id.collapsing_toolbar_layout_inbox_activity)
     CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.appbar_layout_view_message_activity)
+    @BindView(R.id.appbar_layout_inbox_activity)
     AppBarLayout mAppBarLayout;
-    @BindView(R.id.toolbar_view_message_activity)
+    @BindView(R.id.toolbar_inbox_activity)
     Toolbar mToolbar;
-    @BindView(R.id.tab_layout_view_message_activity)
+    @BindView(R.id.tab_layout_inbox_activity)
     TabLayout tabLayout;
-    @BindView(R.id.view_pager_view_message_activity)
+    @BindView(R.id.view_pager_inbox_activity)
     ViewPager viewPager;
     @Inject
     @Named("oauth")
@@ -88,7 +88,7 @@ public class ViewMessageActivity extends BaseActivity implements ActivityToolbar
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_view_message);
+        setContentView(R.layout.activity_inbox);
 
         ButterKnife.bind(this);
 
@@ -134,7 +134,7 @@ public class ViewMessageActivity extends BaseActivity implements ActivityToolbar
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 
@@ -202,14 +202,14 @@ public class ViewMessageActivity extends BaseActivity implements ActivityToolbar
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.view_message_activity, menu);
+        getMenuInflater().inflate(R.menu.inbox_activity, menu);
         applyMenuItemTheme(menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_refresh_view_message_activity) {
+        if (item.getItemId() == R.id.action_refresh_inbox_activity) {
             if (sectionsPagerAdapter != null) {
                 sectionsPagerAdapter.refresh();
             }
@@ -262,8 +262,8 @@ public class ViewMessageActivity extends BaseActivity implements ActivityToolbar
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
-        private ViewMessagesFragment tab1;
-        private ViewMessagesFragment tab2;
+        private InboxFragment tab1;
+        private InboxFragment tab2;
 
         public SectionsPagerAdapter(@NonNull FragmentManager fm) {
             super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
@@ -273,17 +273,17 @@ public class ViewMessageActivity extends BaseActivity implements ActivityToolbar
         @Override
         public Fragment getItem(int position) {
             if (position == 0) {
-                ViewMessagesFragment fragment = new ViewMessagesFragment();
+                InboxFragment fragment = new InboxFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(ViewMessagesFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
-                bundle.putString(ViewMessagesFragment.EXTRA_MESSAGE_WHERE, FetchMessages.WHERE_INBOX);
+                bundle.putString(InboxFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                bundle.putString(InboxFragment.EXTRA_MESSAGE_WHERE, FetchMessages.WHERE_INBOX);
                 fragment.setArguments(bundle);
                 return fragment;
             } else {
-                ViewMessagesFragment fragment = new ViewMessagesFragment();
+                InboxFragment fragment = new InboxFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(ViewMessagesFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
-                bundle.putString(ViewMessagesFragment.EXTRA_MESSAGE_WHERE, FetchMessages.WHERE_MESSAGES);
+                bundle.putString(InboxFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                bundle.putString(InboxFragment.EXTRA_MESSAGE_WHERE, FetchMessages.WHERE_MESSAGES);
                 fragment.setArguments(bundle);
                 return fragment;
             }
@@ -309,9 +309,9 @@ public class ViewMessageActivity extends BaseActivity implements ActivityToolbar
         public Object instantiateItem(@NonNull ViewGroup container, int position) {
             Fragment fragment = (Fragment) super.instantiateItem(container, position);
             if (position == 0) {
-                tab1 = (ViewMessagesFragment) fragment;
+                tab1 = (InboxFragment) fragment;
             } else if (position == 1) {
-                tab2 = (ViewMessagesFragment) fragment;
+                tab2 = (InboxFragment) fragment;
             }
 
             return fragment;

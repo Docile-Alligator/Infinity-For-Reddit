@@ -117,7 +117,7 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

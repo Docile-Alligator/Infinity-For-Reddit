@@ -147,7 +147,7 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

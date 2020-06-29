@@ -430,7 +430,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

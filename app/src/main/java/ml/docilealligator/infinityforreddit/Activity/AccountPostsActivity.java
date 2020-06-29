@@ -156,7 +156,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

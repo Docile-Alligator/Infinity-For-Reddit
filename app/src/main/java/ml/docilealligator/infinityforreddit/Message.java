@@ -1,8 +1,11 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
-public class Message {
+public class Message implements Parcelable {
     static final String TYPE_COMMENT = "t1";
     static final String TYPE_ACCOUNT = "t2";
     static final String TYPE_LINK = "t3";
@@ -54,6 +57,40 @@ public class Message {
         this.timeUTC = timeUTC;
     }
 
+
+    protected Message(Parcel in) {
+        kind = in.readString();
+        subredditName = in.readString();
+        subredditNamePrefixed = in.readString();
+        id = in.readString();
+        fullname = in.readString();
+        subject = in.readString();
+        author = in.readString();
+        parentFullName = in.readString();
+        title = in.readString();
+        body = in.readString();
+        context = in.readString();
+        distinguished = in.readString();
+        formattedTime = in.readString();
+        wasComment = in.readByte() != 0;
+        isNew = in.readByte() != 0;
+        score = in.readInt();
+        nComments = in.readInt();
+        timeUTC = in.readLong();
+        replies = in.createTypedArrayList(Message.CREATOR);
+    }
+
+    public static final Creator<Message> CREATOR = new Creator<Message>() {
+        @Override
+        public Message createFromParcel(Parcel in) {
+            return new Message(in);
+        }
+
+        @Override
+        public Message[] newArray(int size) {
+            return new Message[size];
+        }
+    };
 
     public String getKind() {
         return kind;
@@ -137,5 +174,33 @@ public class Message {
 
     public void setReplies(ArrayList<Message> replies) {
         this.replies = replies;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(kind);
+        parcel.writeString(subredditName);
+        parcel.writeString(subredditNamePrefixed);
+        parcel.writeString(id);
+        parcel.writeString(fullname);
+        parcel.writeString(subject);
+        parcel.writeString(author);
+        parcel.writeString(parentFullName);
+        parcel.writeString(title);
+        parcel.writeString(body);
+        parcel.writeString(context);
+        parcel.writeString(distinguished);
+        parcel.writeString(formattedTime);
+        parcel.writeByte((byte) (wasComment ? 1 : 0));
+        parcel.writeByte((byte) (isNew ? 1 : 0));
+        parcel.writeInt(score);
+        parcel.writeInt(nComments);
+        parcel.writeLong(timeUTC);
+        parcel.writeTypedList(replies);
     }
 }

@@ -310,7 +310,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

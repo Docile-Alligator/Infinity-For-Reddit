@@ -136,7 +136,7 @@ public class RulesActivity extends BaseActivity {
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

@@ -252,7 +252,7 @@ public class MultiRedditListingActivity extends BaseActivity {
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

@@ -229,7 +229,7 @@ public class CustomizeThemeActivity extends BaseActivity {
     }
 
     @Override
-    protected SharedPreferences getSharedPreferences() {
+    protected SharedPreferences getDefaultSharedPreferences() {
         return sharedPreferences;
     }
 

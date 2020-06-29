@@ -24,6 +24,10 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
 
+        <activity android:name=".Activity.ViewPrivateMessagesActivity"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppTheme.Slidable" />
+
         <service
             android:name=".Service.DownloadRedditVideoService"
             android:enabled="true"
@@ -118,7 +122,7 @@
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/PreferenceActivityTheme" />
         <activity
-            android:name=".Activity.ViewMessageActivity"
+            android:name=".Activity.InboxActivity"
             android:label="@string/view_message_activity_label"
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/AppTheme.Slidable" />

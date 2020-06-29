@@ -37,19 +37,19 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import retrofit2.Retrofit;
 
-public class ViewMessagesFragment extends Fragment implements FragmentCommunicator {
+public class InboxFragment extends Fragment implements FragmentCommunicator {
 
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
     public static final String EXTRA_MESSAGE_WHERE = "EMT";
-    @BindView(R.id.swipe_refresh_layout_view_messages_fragment)
+    @BindView(R.id.swipe_refresh_layout_inbox_fragment)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.recycler_view_view_messages_fragment)
+    @BindView(R.id.recycler_view_inbox_fragment)
     RecyclerView mRecyclerView;
-    @BindView(R.id.fetch_messages_info_linear_layout_view_messages_fragment)
+    @BindView(R.id.fetch_messages_info_linear_layout_inbox_fragment)
     LinearLayout mFetchMessageInfoLinearLayout;
-    @BindView(R.id.fetch_messages_info_image_view_view_messages_fragment)
+    @BindView(R.id.fetch_messages_info_image_view_inbox_fragment)
     ImageView mFetchMessageInfoImageView;
-    @BindView(R.id.fetch_messages_info_text_view_view_messages_fragment)
+    @BindView(R.id.fetch_messages_info_text_view_inbox_fragment)
     TextView mFetchMessageInfoTextView;
     MessageViewModel mMessageViewModel;
     @Inject
@@ -68,14 +68,14 @@ public class ViewMessagesFragment extends Fragment implements FragmentCommunicat
     private LinearLayoutManager mLinearLayoutManager;
     private BaseActivity mActivity;
 
-    public ViewMessagesFragment() {
+    public InboxFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_view_messages, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_inbox, container, false);
 
         ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 

@@ -259,7 +259,7 @@ public class CommentActivity extends BaseActivity {
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

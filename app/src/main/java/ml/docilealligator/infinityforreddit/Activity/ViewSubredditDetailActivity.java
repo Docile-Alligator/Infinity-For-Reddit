@@ -413,7 +413,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 
@@ -542,7 +542,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 goBackToMainPageBottomAppBar.setOnClickListener(view -> EventBus.getDefault().post(new GoBackToMainPageEvent()));
 
                 messageBottomAppBar.setOnClickListener(view -> {
-                    Intent intent = new Intent(this, ViewMessageActivity.class);
+                    Intent intent = new Intent(this, InboxActivity.class);
                     startActivity(intent);
                 });
 

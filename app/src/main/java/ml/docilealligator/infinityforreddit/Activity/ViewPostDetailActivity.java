@@ -377,7 +377,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

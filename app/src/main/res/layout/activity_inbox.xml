@@ -4,25 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinator_layout_view_message_activity"
-    tools:context=".Activity.ViewMessageActivity">
+    android:id="@+id/coordinator_layout_inbox_activity"
+    tools:context=".Activity.InboxActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar_layout_view_message_activity"
+        android:id="@+id/appbar_layout_inbox_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar_layout_view_message_activity"
+            android:id="@+id/collapsing_toolbar_layout_inbox_activity"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|enterAlways"
             app:titleEnabled="false"
-            app:toolbarId="@+id/toolbar_view_message_activity">
+            app:toolbarId="@+id/toolbar_inbox_activity">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar_view_message_activity"
+                android:id="@+id/toolbar_inbox_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="?attr/actionBarSize"
@@ -32,7 +32,7 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_layout_view_message_activity"
+            android:id="@+id/tab_layout_inbox_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -46,7 +46,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager_view_message_activity"
+        android:id="@+id/view_pager_inbox_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />

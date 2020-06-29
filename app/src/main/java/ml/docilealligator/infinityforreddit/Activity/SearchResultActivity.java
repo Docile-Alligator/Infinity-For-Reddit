@@ -176,7 +176,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

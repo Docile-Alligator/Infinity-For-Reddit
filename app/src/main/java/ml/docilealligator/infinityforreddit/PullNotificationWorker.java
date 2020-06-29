@@ -28,8 +28,8 @@ import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.Account.Account;
+import ml.docilealligator.infinityforreddit.Activity.InboxActivity;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
-import ml.docilealligator.infinityforreddit.Activity.ViewMessageActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
@@ -149,8 +149,8 @@ public class PullNotificationWorker extends Worker {
                                 PendingIntent pendingIntent = PendingIntent.getActivity(context, accountIndex * 6, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 builder.setContentIntent(pendingIntent);
                             } else if (kind.equals(Message.TYPE_ACCOUNT)) {
-                                Intent intent = new Intent(context, ViewMessageActivity.class);
-                                intent.putExtra(ViewMessageActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
+                                Intent intent = new Intent(context, InboxActivity.class);
+                                intent.putExtra(InboxActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
                                 PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, accountIndex * 6 + 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 builder.setContentIntent(summaryPendingIntent);
                             } else if (kind.equals(Message.TYPE_LINK)) {
@@ -162,18 +162,18 @@ public class PullNotificationWorker extends Worker {
                                 PendingIntent pendingIntent = PendingIntent.getActivity(context, accountIndex * 6 + 2, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 builder.setContentIntent(pendingIntent);
                             } else if (kind.equals(Message.TYPE_MESSAGE)) {
-                                Intent intent = new Intent(context, ViewMessageActivity.class);
-                                intent.putExtra(ViewMessageActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
+                                Intent intent = new Intent(context, InboxActivity.class);
+                                intent.putExtra(InboxActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
                                 PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, accountIndex * 6 + 3, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 builder.setContentIntent(summaryPendingIntent);
                             } else if (kind.equals(Message.TYPE_SUBREDDIT)) {
-                                Intent intent = new Intent(context, ViewMessageActivity.class);
-                                intent.putExtra(ViewMessageActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
+                                Intent intent = new Intent(context, InboxActivity.class);
+                                intent.putExtra(InboxActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
                                 PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, accountIndex * 6 + 4, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 builder.setContentIntent(summaryPendingIntent);
                             } else {
-                                Intent intent = new Intent(context, ViewMessageActivity.class);
-                                intent.putExtra(ViewMessageActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
+                                Intent intent = new Intent(context, InboxActivity.class);
+                                intent.putExtra(InboxActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
                                 PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, accountIndex * 6 + 5, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 builder.setContentIntent(summaryPendingIntent);
                             }
@@ -186,8 +186,8 @@ public class PullNotificationWorker extends Worker {
 
                             summaryBuilder.setStyle(inboxStyle);
 
-                            Intent summaryIntent = new Intent(context, ViewMessageActivity.class);
-                            summaryIntent.putExtra(ViewMessageActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
+                            Intent summaryIntent = new Intent(context, InboxActivity.class);
+                            summaryIntent.putExtra(InboxActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
                             PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, accountIndex * 6 + 6, summaryIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                             summaryBuilder.setContentIntent(summaryPendingIntent);
 

@@ -235,7 +235,7 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

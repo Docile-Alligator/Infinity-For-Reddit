@@ -3,15 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragment.ViewMessagesFragment">
+    tools:context=".Fragment.InboxFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout_view_messages_fragment"
+        android:id="@+id/swipe_refresh_layout_inbox_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_view_messages_fragment"
+            android:id="@+id/recycler_view_inbox_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false" />
@@ -19,7 +19,7 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <LinearLayout
-        android:id="@+id/fetch_messages_info_linear_layout_view_messages_fragment"
+        android:id="@+id/fetch_messages_info_linear_layout_inbox_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -28,12 +28,12 @@
         android:visibility="gone">
 
         <ImageView
-            android:id="@+id/fetch_messages_info_image_view_view_messages_fragment"
+            android:id="@+id/fetch_messages_info_image_view_inbox_fragment"
             android:layout_width="150dp"
             android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/fetch_messages_info_text_view_view_messages_fragment"
+            android:id="@+id/fetch_messages_info_text_view_inbox_fragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

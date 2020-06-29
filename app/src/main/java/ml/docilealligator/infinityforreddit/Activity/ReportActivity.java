@@ -202,7 +202,7 @@ public class ReportActivity extends BaseActivity {
     }
 
     @Override
-    protected SharedPreferences getSharedPreferences() {
+    protected SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

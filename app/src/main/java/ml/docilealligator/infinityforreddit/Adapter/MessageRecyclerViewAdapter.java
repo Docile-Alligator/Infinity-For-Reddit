@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.paging.PagedListAdapter;
@@ -28,6 +27,7 @@ import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.Activity.ViewPrivateMessagesActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FetchMessages;
@@ -155,7 +155,10 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                         intent.setData(uri);
                         mContext.startActivity(intent);
                     } else if (mMessageType == FetchMessages.MESSAGE_TYPE_PRIVATE_MESSAGE) {
-                        Toast.makeText(mContext, "To be implemented", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(mContext, ViewPrivateMessagesActivity.class);
+                        intent.putExtra(ViewPrivateMessagesActivity.EXTRA_SENDER_USERNAME, message.getAuthor());
+                        intent.putExtra(ViewPrivateMessagesActivity.EXTRA_PRIVATE_MESSAGES, message.getReplies());
+                        mContext.startActivity(intent);
                     }
 
                     if (message.isNew()) {

@@ -91,7 +91,7 @@ public class SettingsActivity extends BaseActivity implements
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

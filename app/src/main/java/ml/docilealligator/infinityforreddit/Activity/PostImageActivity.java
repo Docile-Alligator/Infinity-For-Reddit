@@ -371,7 +371,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

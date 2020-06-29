@@ -138,7 +138,7 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

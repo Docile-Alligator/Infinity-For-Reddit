@@ -332,7 +332,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

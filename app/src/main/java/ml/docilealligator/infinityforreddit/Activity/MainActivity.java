@@ -292,7 +292,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 
@@ -444,7 +444,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 });
 
                 messageBottomAppBar.setOnClickListener(view -> {
-                    Intent intent = new Intent(this, ViewMessageActivity.class);
+                    Intent intent = new Intent(this, InboxActivity.class);
                     startActivity(intent);
                 });
 
@@ -483,7 +483,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         intent = new Intent(MainActivity.this, MultiRedditListingActivity.class);
                         break;
                     case R.string.inbox:
-                        intent = new Intent(MainActivity.this, ViewMessageActivity.class);
+                        intent = new Intent(MainActivity.this, InboxActivity.class);
                         break;
                     case R.string.upvoted:
                         intent = new Intent(MainActivity.this, AccountPostsActivity.class);

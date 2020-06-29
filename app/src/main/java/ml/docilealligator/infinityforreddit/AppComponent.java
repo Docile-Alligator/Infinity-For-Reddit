@@ -34,15 +34,17 @@ import ml.docilealligator.infinityforreddit.Activity.SubscribedThingListingActiv
 import ml.docilealligator.infinityforreddit.Activity.ThemePreviewActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewImageOrGifActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewImgurMediaActivity;
-import ml.docilealligator.infinityforreddit.Activity.ViewMessageActivity;
+import ml.docilealligator.infinityforreddit.Activity.InboxActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewMultiRedditDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewPostDetailActivity;
+import ml.docilealligator.infinityforreddit.Activity.ViewPrivateMessagesActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewVideoActivity;
 import ml.docilealligator.infinityforreddit.Fragment.CommentsListingFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Fragment.FollowedUsersListingFragment;
+import ml.docilealligator.infinityforreddit.Fragment.InboxFragment;
 import ml.docilealligator.infinityforreddit.Fragment.MultiRedditListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SidebarFragment;
@@ -50,7 +52,6 @@ import ml.docilealligator.infinityforreddit.Fragment.SubredditListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SubscribedSubredditsListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.UserListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.ViewImgurVideoFragment;
-import ml.docilealligator.infinityforreddit.Fragment.ViewMessagesFragment;
 import ml.docilealligator.infinityforreddit.Service.DownloadRedditVideoService;
 import ml.docilealligator.infinityforreddit.Service.SubmitPostService;
 import ml.docilealligator.infinityforreddit.Settings.AdvancedPreferenceFragment;
@@ -119,7 +120,7 @@ public interface AppComponent {
 
     void inject(PullNotificationWorker pullNotificationWorker);
 
-    void inject(ViewMessageActivity viewMessageActivity);
+    void inject(InboxActivity inboxActivity);
 
     void inject(NotificationPreferenceFragment notificationPreferenceFragment);
 
@@ -175,5 +176,7 @@ public interface AppComponent {
 
     void inject(MultiRedditListingFragment multiRedditListingFragment);
 
-    void inject(ViewMessagesFragment viewMessagesFragment);
+    void inject(InboxFragment inboxFragment);
+
+    void inject(ViewPrivateMessagesActivity viewPrivateMessagesActivity);
 }

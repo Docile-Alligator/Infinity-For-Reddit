@@ -376,7 +376,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

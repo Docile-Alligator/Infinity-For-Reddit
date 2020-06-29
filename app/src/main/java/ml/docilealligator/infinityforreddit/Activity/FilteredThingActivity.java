@@ -174,7 +174,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

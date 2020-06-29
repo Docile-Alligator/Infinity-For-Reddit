@@ -149,7 +149,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     }
 
     @Override
-    public SharedPreferences getSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 
