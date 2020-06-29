@@ -102,8 +102,13 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 )
                 .build();
         mAccessToken = accessToken;
-        mMessageType = where.equals(FetchMessages.WHERE_MESSAGES) ?
-                FetchMessages.MESSAGE_TYPE_PRIVATE_MESSAGE : FetchMessages.MESSAGE_TYPE_NOTIFICATION;
+        if (where.equals(FetchMessages.WHERE_MESSAGES)) {
+            mMessageType = FetchMessages.MESSAGE_TYPE_PRIVATE_MESSAGE;
+        } else if (where.equals(FetchMessages.WHERE_MESSAGES_DETAIL)) {
+            mMessageType = FetchMessages.MESSAGE_TYPE_PRIVATE_MESSAGE_DETAIL;
+        } else {
+            mMessageType = FetchMessages.MESSAGE_TYPE_NOTIFICATION;
+        }
 
         mColorAccent = customThemeWrapper.getColorAccent();
         mMessageBackgroundColor = customThemeWrapper.getCardViewBackgroundColor();
@@ -149,15 +154,15 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 mMarkwon.setMarkdown(((DataViewHolder) holder).contentCustomMarkwonView, message.getBody());
 
                 ((DataViewHolder) holder).itemView.setOnClickListener(view -> {
-                    if (message.getContext() != null && !message.getContext().equals("")) {
+                    if (mMessageType == FetchMessages.MESSAGE_TYPE_NOTIFICATION
+                            && message.getContext() != null && !message.getContext().equals("")) {
                         Uri uri = LinkResolverActivity.getRedditUriByPath(message.getContext());
                         Intent intent = new Intent(mContext, LinkResolverActivity.class);
                         intent.setData(uri);
                         mContext.startActivity(intent);
                     } else if (mMessageType == FetchMessages.MESSAGE_TYPE_PRIVATE_MESSAGE) {
                         Intent intent = new Intent(mContext, ViewPrivateMessagesActivity.class);
-                        intent.putExtra(ViewPrivateMessagesActivity.EXTRA_SENDER_USERNAME, message.getAuthor());
-                        intent.putExtra(ViewPrivateMessagesActivity.EXTRA_PRIVATE_MESSAGES, message.getReplies());
+                        intent.putExtra(ViewPrivateMessagesActivity.EXTRA_PRIVATE_MESSAGE, message);
                         mContext.startActivity(intent);
                     }
 

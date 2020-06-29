@@ -176,6 +176,13 @@ public class Message implements Parcelable {
         this.replies = replies;
     }
 
+    public void addReply(Message reply) {
+        if (replies == null) {
+            replies = new ArrayList<>();
+        }
+        replies.add(reply);
+    }
+
     @Override
     public int describeContents() {
         return 0;

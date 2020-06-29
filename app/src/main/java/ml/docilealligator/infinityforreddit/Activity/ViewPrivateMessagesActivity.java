@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,14 +19,13 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.r0adkll.slidr.Slidr;
 
-import java.util.ArrayList;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
+import ml.docilealligator.infinityforreddit.Adapter.PrivateMessagesDetailRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -36,8 +37,7 @@ import retrofit2.Retrofit;
 
 public class ViewPrivateMessagesActivity extends BaseActivity implements ActivityToolbarInterface {
 
-    public static final String EXTRA_PRIVATE_MESSAGES = "EPM";
-    public static final String EXTRA_SENDER_USERNAME = "ESU";
+    public static final String EXTRA_PRIVATE_MESSAGE = "EPM";
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
     @BindView(R.id.coordinator_layout_view_private_messages_activity)
@@ -63,7 +63,8 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private LinearLayoutManager mLinearLayoutManager;
-    private ArrayList<Message> privateMessages;
+    private PrivateMessagesDetailRecyclerViewAdapter mAdapter;
+    private Message privateMessage;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
 
@@ -96,6 +97,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
 
                 int navBarHeight = getNavBarHeight();
                 if (navBarHeight > 0) {
+                    mRecyclerView.setPadding(0, 0, 0, navBarHeight);
                     CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mFab.getLayoutParams();
                     params.bottomMargin = navBarHeight;
                     mFab.setLayoutParams(params);
@@ -104,9 +106,11 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
         }
 
         Intent intent = getIntent();
-        privateMessages = intent.getParcelableArrayListExtra(EXTRA_PRIVATE_MESSAGES);
+        privateMessage = intent.getParcelableExtra(EXTRA_PRIVATE_MESSAGE);
 
-        mToolbar.setTitle(intent.getStringExtra(EXTRA_SENDER_USERNAME));
+        if (privateMessage != null) {
+            mToolbar.setTitle(privateMessage.getTitle());
+        }
         setSupportActionBar(mToolbar);
         setToolbarGoToTop(mToolbar);
 
@@ -136,7 +140,22 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     }
 
     private void bindView() {
+        mAdapter = new PrivateMessagesDetailRecyclerViewAdapter(this, privateMessage, mCustomThemeWrapper);
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mLinearLayoutManager.setReverseLayout(true);
+        mLinearLayoutManager.setStackFromEnd(true);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+
+        return false;
     }
 
     @Override
