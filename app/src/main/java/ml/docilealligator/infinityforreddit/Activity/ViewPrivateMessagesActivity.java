@@ -13,10 +13,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.AutoTransition;
+import androidx.transition.TransitionManager;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.r0adkll.slidr.Slidr;
 
 import javax.inject.Inject;
@@ -27,6 +28,7 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Adapter.PrivateMessagesDetailRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.AsyncTask.LoadUserDataAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.Message;
@@ -40,6 +42,8 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     public static final String EXTRA_PRIVATE_MESSAGE = "EPM";
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
+    private static final String ACCOUNT_NAME_STATE = "ANS";
+    private static final String USER_AVATAR_STATE = "UAS";
     @BindView(R.id.coordinator_layout_view_private_messages_activity)
     CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.collapsing_toolbar_layout_view_private_messages_activity)
@@ -50,8 +54,6 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     Toolbar mToolbar;
     @BindView(R.id.recycler_view_view_private_messages)
     RecyclerView mRecyclerView;
-    @BindView(R.id.fab_view_private_messages_activity)
-    FloatingActionButton mFab;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -67,6 +69,8 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     private Message privateMessage;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
+    private String mAccountName;
+    private String mUserAvatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,9 +102,6 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
                 int navBarHeight = getNavBarHeight();
                 if (navBarHeight > 0) {
                     mRecyclerView.setPadding(0, 0, 0, navBarHeight);
-                    CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mFab.getLayoutParams();
-                    params.bottomMargin = navBarHeight;
-                    mFab.setLayoutParams(params);
                 }
             }
         }
@@ -109,7 +110,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
         privateMessage = intent.getParcelableExtra(EXTRA_PRIVATE_MESSAGE);
 
         if (privateMessage != null) {
-            mToolbar.setTitle(privateMessage.getTitle());
+            mToolbar.setTitle(privateMessage.getSubject());
         }
         setSupportActionBar(mToolbar);
         setToolbarGoToTop(mToolbar);
@@ -117,6 +118,8 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
         if (savedInstanceState != null) {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
+            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
+            mUserAvatar = savedInstanceState.getString(USER_AVATAR_STATE);
 
             if (!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndBindView();
@@ -134,18 +137,32 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
+                mAccountName = account.getUsername();
             }
             bindView();
         }).execute();
     }
 
     private void bindView() {
-        mAdapter = new PrivateMessagesDetailRecyclerViewAdapter(this, privateMessage, mCustomThemeWrapper);
+        mAdapter = new PrivateMessagesDetailRecyclerViewAdapter(this, privateMessage, mAccountName, mCustomThemeWrapper);
         mLinearLayoutManager = new LinearLayoutManager(this);
-        mLinearLayoutManager.setReverseLayout(true);
-        mLinearLayoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    public void fetchUserAvatar(String username, ProvideUserAvatarCallback provideUserAvatarCallback) {
+        if (mUserAvatar == null) {
+            new LoadUserDataAsyncTask(mRedditDataRoomDatabase.userDao(), username, mOauthRetrofit, iconImageUrl -> {
+                mUserAvatar = iconImageUrl;
+                provideUserAvatarCallback.fetchAvatarSuccess(iconImageUrl);
+            }).execute();
+        } else {
+            provideUserAvatarCallback.fetchAvatarSuccess(mUserAvatar);
+        }
+    }
+
+    public void delayTransition() {
+        TransitionManager.beginDelayedTransition(mRecyclerView, new AutoTransition());
     }
 
     @Override
@@ -156,6 +173,15 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
         }
 
         return false;
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
+        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
+        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
+        outState.putString(USER_AVATAR_STATE, mUserAvatar);
     }
 
     @Override
@@ -172,7 +198,6 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     protected void applyCustomTheme() {
         mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(mAppBarLayout, mToolbar);
-        applyFABTheme(mFab);
     }
 
     @Override
@@ -180,5 +205,9 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
         if (mLinearLayoutManager != null) {
             mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
         }
+    }
+
+    public interface ProvideUserAvatarCallback {
+        void fetchAvatarSuccess(String userAvatarUrl);
     }
 }

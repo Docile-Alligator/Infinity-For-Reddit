@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:animateLayoutChanges="true">
+
+    <TextView
+        android:id="@+id/message_text_view_item_private_message_sent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textSize="?attr/content_font_16"
+        app:layout_constraintBottom_toTopOf="@id/time_text_view_item_private_message_sent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_max="wrap"
+        app:layout_constraintWidth_percent="0.7"
+        app:layout_constraintHorizontal_bias="1" />
+
+    <TextView
+        android:id="@+id/time_text_view_item_private_message_sent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="?attr/font_default"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/message_text_view_item_private_message_sent"
+        app:layout_constraintWidth_max="wrap"
+        app:layout_constraintWidth_percent="0.7"
+        app:layout_constraintHorizontal_bias="1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

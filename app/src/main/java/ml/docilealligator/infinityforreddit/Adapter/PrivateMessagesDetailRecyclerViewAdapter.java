@@ -1,17 +1,23 @@
 package ml.docilealligator.infinityforreddit.Adapter;
 
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.RequestOptions;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,38 +27,46 @@ import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.Activity.ViewPrivateMessagesActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Message;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 
 public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final int VIEW_TYPE_MESSAGE_SENT = 0;
+    private static final int VIEW_TYPE_MESSAGE_RECEIVED = 1;
     private Message mMessage;
-    private Context mContext;
+    private ViewPrivateMessagesActivity mViewPrivateMessagesActivity;
+    private RequestManager mGlide;
+    private String mAccountName;
     private Markwon mMarkwon;
     private int mMessageBackgroundColor;
-    private int mUsernameColor;
-    private int mPrimaryTextColor;
     private int mSecondaryTextColor;
     private int mUnreadMessageBackgroundColor;
 
-    public PrivateMessagesDetailRecyclerViewAdapter(Context context, Message message, CustomThemeWrapper customThemeWrapper) {
+    public PrivateMessagesDetailRecyclerViewAdapter(ViewPrivateMessagesActivity viewPrivateMessagesActivity, Message message, String accountName,
+                                                    CustomThemeWrapper customThemeWrapper) {
         mMessage = message;
-        mContext = context;
-        mMarkwon = Markwon.builder(mContext)
+        mViewPrivateMessagesActivity = viewPrivateMessagesActivity;
+        mGlide = Glide.with(viewPrivateMessagesActivity);
+        mAccountName = accountName;
+        mMarkwon = Markwon.builder(viewPrivateMessagesActivity)
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                         builder.linkResolver((view, link) -> {
-                            Intent intent = new Intent(mContext, LinkResolverActivity.class);
+                            Intent intent = new Intent(viewPrivateMessagesActivity, LinkResolverActivity.class);
                             Uri uri = Uri.parse(link);
                             if (uri.getScheme() == null && uri.getHost() == null) {
                                 intent.setData(LinkResolverActivity.getRedditUriByPath(link));
                             } else {
                                 intent.setData(uri);
                             }
-                            mContext.startActivity(intent);
+                            viewPrivateMessagesActivity.startActivity(intent);
                         });
                     }
                 })
@@ -66,46 +80,91 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
                 )
                 .build();
         mMessageBackgroundColor = customThemeWrapper.getCardViewBackgroundColor();
-        mUsernameColor = customThemeWrapper.getUsername();
-        mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
         mUnreadMessageBackgroundColor = customThemeWrapper.getUnreadMessageBackgroundColor();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return mMessage.getAuthor().equals(mAccountName) ? VIEW_TYPE_MESSAGE_SENT : VIEW_TYPE_MESSAGE_RECEIVED;
+        } else {
+            return mMessage.getReplies().get(position - 1).getAuthor().equals(mAccountName) ? VIEW_TYPE_MESSAGE_SENT : VIEW_TYPE_MESSAGE_RECEIVED;
+        }
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new DataViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message, parent, false));
+        if (viewType == VIEW_TYPE_MESSAGE_SENT) {
+            return new SentMessageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_private_message_sent, parent, false));
+        } else {
+            return new ReceivedMessageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_private_message_received, parent, false));
+        }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof DataViewHolder) {
-            Message message;
-            if (holder.getAdapterPosition() == 0) {
-                message = mMessage;
-            } else {
-                message = mMessage.getReplies().get(holder.getAdapterPosition() - 1);
-            }
-
-            if (message != null) {
+        Message message;
+        if (holder.getAdapterPosition() == 0) {
+            message = mMessage;
+        } else {
+            message = mMessage.getReplies().get(holder.getAdapterPosition() - 1);
+        }
+        if (message != null) {
+            if (holder instanceof MessageViewHolder) {
                 if (message.isNew()) {
-                    ((DataViewHolder) holder).itemView.setBackgroundColor(
+                    ((MessageViewHolder) holder).itemView.setBackgroundColor(
                             mUnreadMessageBackgroundColor);
                 }
+                mMarkwon.setMarkdown(((MessageViewHolder) holder).messageTextView, message.getBody());
 
-                ((DataViewHolder) holder).authorTextView.setText(message.getAuthor());
-                String subject = message.getSubject().substring(0, 1).toUpperCase() + message.getSubject().substring(1);
-                ((DataViewHolder) holder).subjectTextView.setText(subject);
-                mMarkwon.setMarkdown(((DataViewHolder) holder).contentCustomMarkwonView, message.getBody());
+                ((MessageViewHolder) holder).messageTextView.setOnClickListener(view -> ((MessageViewHolder) holder).itemView.performClick());
 
-                ((DataViewHolder) holder).authorTextView.setOnClickListener(view -> {
-                    Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, message.getAuthor());
-                    mContext.startActivity(intent);
+                ((MessageViewHolder) holder).messageTextView.setOnClickListener(view -> {
+                    Log.i("asfasdf", "asdf " + ((MessageViewHolder) holder).timeTextView.getHeight());
+                    if (((MessageViewHolder) holder).timeTextView.getVisibility() != View.VISIBLE) {
+                        ((MessageViewHolder) holder).timeTextView.setVisibility(View.VISIBLE);
+                        mViewPrivateMessagesActivity.delayTransition();
+                    } else {
+                        ((MessageViewHolder) holder).timeTextView.setVisibility(View.GONE);
+                        mViewPrivateMessagesActivity.delayTransition();
+                    }
+                    /*if (((MessageViewHolder) holder).timeTextView.getHeight() == 0) {
+                        ((MessageViewHolder) holder).timeTextView.getLayoutParams().height = ConstraintLayout.LayoutParams.WRAP_CONTENT;
+                        mViewPrivateMessagesActivity.delayTransition();
+                    } else {
+                        mViewPrivateMessagesActivity.delayTransition();
+                        ((MessageViewHolder) holder).timeTextView.getLayoutParams().height = 0;
+                    }*/
                 });
 
-                ((DataViewHolder) holder).contentCustomMarkwonView.setOnClickListener(view -> ((DataViewHolder) holder).itemView.performClick());
+                ((MessageViewHolder) holder).timeTextView.setText(Utils.getElapsedTime(mViewPrivateMessagesActivity, message.getTimeUTC()));
+            }
+
+            if (holder instanceof SentMessageViewHolder) {
+                ((SentMessageViewHolder) holder).messageTextView.setBackgroundResource(R.drawable.private_message_ballon_sent);
+            } else if (holder instanceof ReceivedMessageViewHolder) {
+                mViewPrivateMessagesActivity.fetchUserAvatar(message.getAuthor(), userAvatarUrl -> {
+                    if (userAvatarUrl == null || userAvatarUrl.equals("")) {
+                        mGlide.load(R.drawable.subreddit_default_icon)
+                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                .into(((ReceivedMessageViewHolder) holder).userAvatarImageView);
+                    } else {
+                        mGlide.load(userAvatarUrl)
+                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                                .into(((ReceivedMessageViewHolder) holder).userAvatarImageView);
+                    }
+                });
+
+                ((ReceivedMessageViewHolder) holder).userAvatarImageView.setOnClickListener(view -> {
+                    Intent intent = new Intent(mViewPrivateMessagesActivity, ViewUserDetailActivity.class);
+                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, message.getAuthor());
+                    mViewPrivateMessagesActivity.startActivity(intent);
+                });
+                ((ReceivedMessageViewHolder) holder).messageTextView.setBackgroundResource(R.drawable.private_message_ballon_received);
             }
         }
     }
@@ -138,27 +197,62 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
         notifyItemInserted(currentSize);
     }
 
-    class DataViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.author_text_view_item_message)
-        TextView authorTextView;
-        @BindView(R.id.subject_text_view_item_message)
-        TextView subjectTextView;
-        @BindView(R.id.title_text_view_item_message)
-        TextView titleTextView;
-        @BindView(R.id.content_custom_markwon_view_item_message)
-        TextView contentCustomMarkwonView;
+    @Override
+    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+        super.onViewRecycled(holder);
+        if (holder instanceof MessageViewHolder) {
+            ((MessageViewHolder) holder).messageTextView.setBackground(null);
+            //((MessageViewHolder) holder).timeTextView.getLayoutParams().height = 0;
+            ((MessageViewHolder) holder).timeTextView.setVisibility(View.GONE);
+        }
+        if (holder instanceof ReceivedMessageViewHolder) {
+            mGlide.clear(((ReceivedMessageViewHolder) holder).userAvatarImageView);
+        }
+    }
 
-        DataViewHolder(View itemView) {
+    class MessageViewHolder extends RecyclerView.ViewHolder {
+        TextView messageTextView;
+        TextView timeTextView;
+
+        public MessageViewHolder(@NonNull View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+        }
 
-            titleTextView.setVisibility(View.GONE);
+        void setBaseView(TextView messageTextView, TextView timeTextView) {
+            this.messageTextView = messageTextView;
+            this.timeTextView = timeTextView;
 
             itemView.setBackgroundColor(mMessageBackgroundColor);
-            authorTextView.setTextColor(mUsernameColor);
-            subjectTextView.setTextColor(mPrimaryTextColor);
-            titleTextView.setTextColor(mPrimaryTextColor);
-            contentCustomMarkwonView.setTextColor(mSecondaryTextColor);
+            messageTextView.setTextColor(Color.WHITE);
+            timeTextView.setTextColor(mSecondaryTextColor);
+        }
+    }
+
+    class SentMessageViewHolder extends MessageViewHolder {
+        @BindView(R.id.message_text_view_item_private_message_sent)
+        TextView messageTextView;
+        @BindView(R.id.time_text_view_item_private_message_sent)
+        TextView timeTextView;
+
+        SentMessageViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            setBaseView(messageTextView, timeTextView);
+        }
+    }
+
+    class ReceivedMessageViewHolder extends MessageViewHolder {
+        @BindView(R.id.avatar_image_view_item_private_message_received)
+        ImageView userAvatarImageView;
+        @BindView(R.id.message_text_view_item_private_message_received)
+        TextView messageTextView;
+        @BindView(R.id.time_text_view_item_private_message_received)
+        TextView timeTextView;
+
+        ReceivedMessageViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            setBaseView(messageTextView, timeTextView);
         }
     }
 }

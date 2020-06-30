@@ -40,12 +40,4 @@
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_view_private_messages_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_add_day_night_24dp" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
