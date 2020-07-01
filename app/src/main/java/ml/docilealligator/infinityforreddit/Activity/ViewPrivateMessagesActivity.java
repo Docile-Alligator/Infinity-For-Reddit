@@ -23,6 +23,8 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
 import com.r0adkll.slidr.Slidr;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -35,9 +37,11 @@ import ml.docilealligator.infinityforreddit.Adapter.PrivateMessagesDetailRecycle
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.LoadUserDataAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.Event.RepliedToPrivateMessageEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.Message;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.ReadMessage;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.ReplyMessage;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
@@ -46,6 +50,7 @@ import retrofit2.Retrofit;
 public class ViewPrivateMessagesActivity extends BaseActivity implements ActivityToolbarInterface {
 
     public static final String EXTRA_PRIVATE_MESSAGE = "EPM";
+    public static final String EXTRA_MESSAGE_POSITION = "EMP";
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
@@ -66,6 +71,8 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     EditText mEditText;
     @BindView(R.id.send_image_view_view_private_messages_activity)
     ImageView mSendImageView;
+    @BindView(R.id.edit_text_wrapper_linear_layout_view_private_messages_activity)
+    LinearLayout mEditTextLinearLayout;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -163,9 +170,9 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
                     Message replyTo;
                     ArrayList<Message> replies = privateMessage.getReplies();
                     if (replies != null && !replies.isEmpty()) {
-                        replyTo = privateMessage;
-                    } else {
                         replyTo = replies.get(replies.size() - 1);
+                    } else {
+                        replyTo = privateMessage;
                     }
                     if (replyTo != null) {
                         ReplyMessage.replyMessage(mEditText.getText().toString(), replyTo.getFullname(),
@@ -178,6 +185,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
                                         }
                                         goToBottom();
                                         mEditText.setText("");
+                                        EventBus.getDefault().post(new RepliedToPrivateMessageEvent(message, getIntent().getIntExtra(EXTRA_MESSAGE_POSITION, -1)));
                                     }
 
                                     @Override
@@ -189,6 +197,28 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
                                         }
                                     }
                                 });
+                        StringBuilder fullnames = new StringBuilder();
+                        if (privateMessage.isNew()) {
+                            fullnames.append(privateMessage.getFullname()).append(",");
+                        }
+                        if (replies != null && !replies.isEmpty()) {
+                            for (Message m : replies) {
+                                if (m.isNew()) {
+                                    fullnames.append(m).append(",");
+                                }
+                            }
+                        }
+                        if (fullnames.length() > 0) {
+                            fullnames.deleteCharAt(fullnames.length() - 1);
+                            ReadMessage.readMessage(mOauthRetrofit, mAccessToken, fullnames.toString(),
+                                    new ReadMessage.ReadMessageListener() {
+                                        @Override
+                                        public void readSuccess() {}
+
+                                        @Override
+                                        public void readFailed() {}
+                                    });
+                        }
                     } else {
                         Snackbar.make(mCoordinatorLayout, R.string.error_getting_message, Snackbar.LENGTH_LONG).show();
                     }
@@ -259,6 +289,9 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
         mLinearLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(mAppBarLayout, mToolbar);
         mDivider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
+        mEditText.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+        mEditText.setHintTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+        mEditTextLinearLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         mSendImageView.setColorFilter(Color.parseColor("#4185F4"), android.graphics.PorterDuff.Mode.SRC_IN);
     }
 

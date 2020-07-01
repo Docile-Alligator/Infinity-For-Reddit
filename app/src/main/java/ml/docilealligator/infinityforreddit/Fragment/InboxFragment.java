@@ -21,6 +21,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -29,6 +32,8 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Activity.BaseActivity;
 import ml.docilealligator.infinityforreddit.Adapter.MessageRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.Event.RepliedToPrivateMessageEvent;
+import ml.docilealligator.infinityforreddit.FetchMessages;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MessageViewModel;
@@ -63,6 +68,7 @@ public class InboxFragment extends Fragment implements FragmentCommunicator {
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private String mAccessToken;
+    private String mWhere;
     private MessageRecyclerViewAdapter mAdapter;
     private RequestManager mGlide;
     private LinearLayoutManager mLinearLayoutManager;
@@ -81,6 +87,8 @@ public class InboxFragment extends Fragment implements FragmentCommunicator {
 
         ButterKnife.bind(this, rootView);
 
+        EventBus.getDefault().register(this);
+
         applyTheme();
 
         Bundle arguments = getArguments();
@@ -94,9 +102,9 @@ public class InboxFragment extends Fragment implements FragmentCommunicator {
             mRecyclerView.setPadding(0, 0, 0, mActivity.getNavBarHeight());
         }
 
-        String where = arguments.getString(EXTRA_MESSAGE_WHERE);
+        mWhere = arguments.getString(EXTRA_MESSAGE_WHERE);
         mAdapter = new MessageRecyclerViewAdapter(mActivity, mOauthRetrofit, mCustomThemeWrapper,
-                mAccessToken, where, () -> mMessageViewModel.retryLoadingMore());
+                mAccessToken, mWhere, () -> mMessageViewModel.retryLoadingMore());
         mLinearLayoutManager = new LinearLayoutManager(mActivity);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -104,7 +112,7 @@ public class InboxFragment extends Fragment implements FragmentCommunicator {
         mRecyclerView.addItemDecoration(dividerItemDecoration);
 
         MessageViewModel.Factory factory = new MessageViewModel.Factory(mOauthRetrofit,
-                getResources().getConfiguration().locale, mAccessToken, where);
+                getResources().getConfiguration().locale, mAccessToken, mWhere);
         mMessageViewModel = new ViewModelProvider(this, factory).get(MessageViewModel.class);
         mMessageViewModel.getMessages().observe(getViewLifecycleOwner(), messages -> mAdapter.submitList(messages));
 
@@ -169,8 +177,21 @@ public class InboxFragment extends Fragment implements FragmentCommunicator {
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mActivity = (BaseActivity) context;
+    }
+
+    @Subscribe
+    public void onRepliedToPrivateMessageEvent(RepliedToPrivateMessageEvent repliedToPrivateMessageEvent) {
+        if (mAdapter != null && mWhere.equals(FetchMessages.WHERE_MESSAGES)) {
+            mAdapter.updateMessageReply(repliedToPrivateMessageEvent.newReply, repliedToPrivateMessageEvent.messagePosition);
+        }
     }
 }

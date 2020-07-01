@@ -18,6 +18,8 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;
@@ -137,6 +139,13 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
         if (holder instanceof DataViewHolder) {
             Message message = getItem(holder.getAdapterPosition());
             if (message != null) {
+                ArrayList<Message> replies = message.getReplies();
+                Message displayedMessage;
+                if (replies != null && !replies.isEmpty() && replies.get(replies.size() - 1) != null) {
+                    displayedMessage = replies.get(replies.size() - 1);
+                } else {
+                    displayedMessage = message;
+                }
                 if (message.isNew()) {
                     ((DataViewHolder) holder).itemView.setBackgroundColor(
                             mUnreadMessageBackgroundColor);
@@ -148,10 +157,10 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                     ((DataViewHolder) holder).titleTextView.setVisibility(View.GONE);
                 }
 
-                ((DataViewHolder) holder).authorTextView.setText(message.getAuthor());
-                String subject = message.getSubject().substring(0, 1).toUpperCase() + message.getSubject().substring(1);
+                ((DataViewHolder) holder).authorTextView.setText(displayedMessage.getAuthor());
+                String subject = displayedMessage.getSubject().substring(0, 1).toUpperCase() + displayedMessage.getSubject().substring(1);
                 ((DataViewHolder) holder).subjectTextView.setText(subject);
-                mMarkwon.setMarkdown(((DataViewHolder) holder).contentCustomMarkwonView, message.getBody());
+                mMarkwon.setMarkdown(((DataViewHolder) holder).contentCustomMarkwonView, displayedMessage.getBody());
 
                 ((DataViewHolder) holder).itemView.setOnClickListener(view -> {
                     if (mMessageType == FetchMessages.MESSAGE_TYPE_NOTIFICATION
@@ -163,10 +172,11 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                     } else if (mMessageType == FetchMessages.MESSAGE_TYPE_PRIVATE_MESSAGE) {
                         Intent intent = new Intent(mContext, ViewPrivateMessagesActivity.class);
                         intent.putExtra(ViewPrivateMessagesActivity.EXTRA_PRIVATE_MESSAGE, message);
+                        intent.putExtra(ViewPrivateMessagesActivity.EXTRA_MESSAGE_POSITION, holder.getAdapterPosition());
                         mContext.startActivity(intent);
                     }
 
-                    if (message.isNew()) {
+                    if (displayedMessage.isNew()) {
                         ((DataViewHolder) holder).itemView.setBackgroundColor(mMessageBackgroundColor);
                         message.setNew(false);
 
@@ -244,6 +254,16 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
             }
         } else if (newExtraRow && !previousState.equals(newNetworkState)) {
             notifyItemChanged(getItemCount() - 1);
+        }
+    }
+
+    public void updateMessageReply(Message newReply, int position) {
+        if (position >= 0 && position < super.getItemCount()) {
+            Message message = getItem(position);
+            if (message != null) {
+                message.addReply(newReply);
+                notifyItemChanged(position);
+            }
         }
     }
 

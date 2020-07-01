@@ -112,10 +112,6 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
         }
         if (message != null) {
             if (holder instanceof MessageViewHolder) {
-                if (message.isNew()) {
-                    ((MessageViewHolder) holder).itemView.setBackgroundColor(
-                            mUnreadMessageBackgroundColor);
-                }
                 mMarkwon.setMarkdown(((MessageViewHolder) holder).messageTextView, message.getBody());
 
                 ((MessageViewHolder) holder).messageTextView.setOnClickListener(view -> ((MessageViewHolder) holder).itemView.performClick());
@@ -212,7 +208,6 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
             this.messageTextView = messageTextView;
             this.timeTextView = timeTextView;
 
-            itemView.setBackgroundColor(mMessageBackgroundColor);
             messageTextView.setTextColor(Color.WHITE);
             timeTextView.setTextColor(mSecondaryTextColor);
         }

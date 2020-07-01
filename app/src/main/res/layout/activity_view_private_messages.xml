@@ -40,6 +40,7 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <LinearLayout
+        android:id="@+id/edit_text_wrapper_linear_layout_view_private_messages_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
