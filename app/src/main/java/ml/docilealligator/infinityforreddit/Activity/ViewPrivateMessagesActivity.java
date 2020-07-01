@@ -2,11 +2,14 @@ package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -19,6 +22,8 @@ import androidx.transition.TransitionManager;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.r0adkll.slidr.Slidr;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -44,6 +49,8 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String USER_AVATAR_STATE = "UAS";
+    @BindView(R.id.linear_layout_view_private_messages_activity)
+    LinearLayout mLinearLayout;
     @BindView(R.id.coordinator_layout_view_private_messages_activity)
     CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.collapsing_toolbar_layout_view_private_messages_activity)
@@ -54,9 +61,18 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     Toolbar mToolbar;
     @BindView(R.id.recycler_view_view_private_messages)
     RecyclerView mRecyclerView;
+    @BindView(R.id.edit_text_divider_view_private_messages_activity)
+    View mDivider;
+    @BindView(R.id.edit_text_view_private_messages_activity)
+    EditText mEditText;
+    @BindView(R.id.send_image_view_view_private_messages_activity)
+    ImageView mSendImageView;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
+    @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -71,10 +87,14 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     private String mAccessToken;
     private String mAccountName;
     private String mUserAvatar;
+    private ArrayList<ProvideUserAvatarCallback> provideUserAvatarCallbacks;
+    private LoadUserDataAsyncTask loadUserDataAsyncTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        setImmersiveModeNotApplicable();
 
         super.onCreate(savedInstanceState);
 
@@ -88,22 +108,8 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
             Slidr.attach(this);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Window window = getWindow();
-
-            if (isChangeStatusBarIconColor()) {
-                addOnOffsetChangedListener(mAppBarLayout);
-            }
-
-            if (isImmersiveInterface()) {
-                window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-                adjustToolbar(mToolbar);
-
-                int navBarHeight = getNavBarHeight();
-                if (navBarHeight > 0) {
-                    mRecyclerView.setPadding(0, 0, 0, navBarHeight);
-                }
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
+            addOnOffsetChangedListener(mAppBarLayout);
         }
 
         Intent intent = getIntent();
@@ -114,6 +120,8 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
         }
         setSupportActionBar(mToolbar);
         setToolbarGoToTop(mToolbar);
+
+        provideUserAvatarCallbacks = new ArrayList<>();
 
         if (savedInstanceState != null) {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
@@ -152,10 +160,17 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
 
     public void fetchUserAvatar(String username, ProvideUserAvatarCallback provideUserAvatarCallback) {
         if (mUserAvatar == null) {
-            new LoadUserDataAsyncTask(mRedditDataRoomDatabase.userDao(), username, mOauthRetrofit, iconImageUrl -> {
-                mUserAvatar = iconImageUrl;
-                provideUserAvatarCallback.fetchAvatarSuccess(iconImageUrl);
-            }).execute();
+            provideUserAvatarCallbacks.add(provideUserAvatarCallback);
+            if (loadUserDataAsyncTask == null) {
+                loadUserDataAsyncTask = new LoadUserDataAsyncTask(mRedditDataRoomDatabase.userDao(), username, mRetrofit, iconImageUrl -> {
+                    mUserAvatar = iconImageUrl;
+                    for (ProvideUserAvatarCallback provideUserAvatarCallbackInArrayList : provideUserAvatarCallbacks) {
+                        provideUserAvatarCallbackInArrayList.fetchAvatarSuccess(iconImageUrl);
+                    }
+                    provideUserAvatarCallbacks.clear();
+                });
+                loadUserDataAsyncTask.execute();
+            }
         } else {
             provideUserAvatarCallback.fetchAvatarSuccess(mUserAvatar);
         }
@@ -196,8 +211,10 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
 
     @Override
     protected void applyCustomTheme() {
-        mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        mLinearLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(mAppBarLayout, mToolbar);
+        mDivider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
+        mSendImageView.setColorFilter(Color.parseColor("#4185F4"), android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
     @Override

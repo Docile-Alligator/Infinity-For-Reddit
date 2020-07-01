@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -122,7 +121,6 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
                 ((MessageViewHolder) holder).messageTextView.setOnClickListener(view -> ((MessageViewHolder) holder).itemView.performClick());
 
                 ((MessageViewHolder) holder).messageTextView.setOnClickListener(view -> {
-                    Log.i("asfasdf", "asdf " + ((MessageViewHolder) holder).timeTextView.getHeight());
                     if (((MessageViewHolder) holder).timeTextView.getVisibility() != View.VISIBLE) {
                         ((MessageViewHolder) holder).timeTextView.setVisibility(View.VISIBLE);
                         mViewPrivateMessagesActivity.delayTransition();
@@ -130,13 +128,6 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
                         ((MessageViewHolder) holder).timeTextView.setVisibility(View.GONE);
                         mViewPrivateMessagesActivity.delayTransition();
                     }
-                    /*if (((MessageViewHolder) holder).timeTextView.getHeight() == 0) {
-                        ((MessageViewHolder) holder).timeTextView.getLayoutParams().height = ConstraintLayout.LayoutParams.WRAP_CONTENT;
-                        mViewPrivateMessagesActivity.delayTransition();
-                    } else {
-                        mViewPrivateMessagesActivity.delayTransition();
-                        ((MessageViewHolder) holder).timeTextView.getLayoutParams().height = 0;
-                    }*/
                 });
 
                 ((MessageViewHolder) holder).timeTextView.setText(Utils.getElapsedTime(mViewPrivateMessagesActivity, message.getTimeUTC()));
@@ -202,7 +193,6 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
         super.onViewRecycled(holder);
         if (holder instanceof MessageViewHolder) {
             ((MessageViewHolder) holder).messageTextView.setBackground(null);
-            //((MessageViewHolder) holder).timeTextView.getLayoutParams().height = 0;
             ((MessageViewHolder) holder).timeTextView.setVisibility(View.GONE);
         }
         if (holder instanceof ReceivedMessageViewHolder) {
