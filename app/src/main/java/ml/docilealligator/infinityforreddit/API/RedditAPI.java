@@ -173,7 +173,7 @@ public interface RedditAPI {
 
     @FormUrlEncoded
     @POST("api/comment")
-    Call<String> sendComment(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+    Call<String> sendCommentOrReplyToMessage(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
     @POST("api/del")

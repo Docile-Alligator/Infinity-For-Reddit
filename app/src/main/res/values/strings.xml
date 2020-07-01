@@ -152,6 +152,9 @@
     <string name="send_comment_failed">Could not send this comment</string>
     <string name="parse_sent_comment_failed">The comment is sent but unable to get the sent comment</string>
 
+    <string name="reply_message_failed">Could not reply to this message</string>
+    <string name="error_getting_message">Error getting this message</string>
+
     <string name="select_a_subreddit">Please select a subreddit first</string>
     <string name="title_required">The post need a good title</string>
     <string name="link_required">Hey where is the link?</string>

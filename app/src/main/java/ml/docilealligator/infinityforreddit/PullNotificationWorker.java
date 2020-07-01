@@ -84,7 +84,7 @@ public class PullNotificationWorker extends Worker {
                 if (response != null && response.isSuccessful() && response.body() != null) {
                     String responseBody = response.body();
                     JSONArray messageArray = new JSONObject(responseBody).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-                    ArrayList<Message> messages = FetchMessages.parseMessage(messageArray,
+                    ArrayList<Message> messages = ParseMessage.parseMessages(messageArray,
                             context.getResources().getConfiguration().locale, FetchMessages.MESSAGE_TYPE_NOTIFICATION);
 
                     if (!messages.isEmpty()) {

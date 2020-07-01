@@ -26,9 +26,9 @@ public class SendComment {
         params.put(APIUtils.RETURN_RTJSON_KEY, "true");
         params.put(APIUtils.TEXT_KEY, commentMarkdown);
         params.put(APIUtils.THING_ID_KEY, thingFullname);
-        api.sendComment(headers, params);
+        api.sendCommentOrReplyToMessage(headers, params);
 
-        Call<String> sendCommentCall = api.sendComment(headers, params);
+        Call<String> sendCommentCall = api.sendCommentOrReplyToMessage(headers, params);
         sendCommentCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

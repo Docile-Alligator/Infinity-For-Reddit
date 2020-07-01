@@ -20,7 +20,7 @@ import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
 import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.snackbar.Snackbar;
 import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
@@ -39,6 +39,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.Message;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.ReplyMessage;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
@@ -53,8 +54,6 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     LinearLayout mLinearLayout;
     @BindView(R.id.coordinator_layout_view_private_messages_activity)
     CoordinatorLayout mCoordinatorLayout;
-    @BindView(R.id.collapsing_toolbar_layout_view_private_messages_activity)
-    CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.appbar_layout_view_private_messages_activity)
     AppBarLayout mAppBarLayout;
     @BindView(R.id.toolbar_view_private_messages_activity)
@@ -156,6 +155,46 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+        goToBottom();
+        mSendImageView.setOnClickListener(view -> {
+            if (!mEditText.getText().toString().equals("")) {
+                //Send Message
+                if (privateMessage != null) {
+                    Message replyTo;
+                    ArrayList<Message> replies = privateMessage.getReplies();
+                    if (replies != null && !replies.isEmpty()) {
+                        replyTo = privateMessage;
+                    } else {
+                        replyTo = replies.get(replies.size() - 1);
+                    }
+                    if (replyTo != null) {
+                        ReplyMessage.replyMessage(mEditText.getText().toString(), replyTo.getFullname(),
+                                getResources().getConfiguration().locale, mOauthRetrofit, mAccessToken,
+                                new ReplyMessage.ReplyMessageListener() {
+                                    @Override
+                                    public void replyMessageSuccess(Message message) {
+                                        if (mAdapter != null) {
+                                            mAdapter.addReply(message);
+                                        }
+                                        goToBottom();
+                                        mEditText.setText("");
+                                    }
+
+                                    @Override
+                                    public void replyMessageFailed(String errorMessage) {
+                                        if (errorMessage != null && !errorMessage.equals("")) {
+                                            Snackbar.make(mCoordinatorLayout, errorMessage, Snackbar.LENGTH_LONG).show();
+                                        } else {
+                                            Snackbar.make(mCoordinatorLayout, R.string.reply_message_failed, Snackbar.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
+                    } else {
+                        Snackbar.make(mCoordinatorLayout, R.string.error_getting_message, Snackbar.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
     }
 
     public void fetchUserAvatar(String username, ProvideUserAvatarCallback provideUserAvatarCallback) {
@@ -178,6 +217,12 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
 
     public void delayTransition() {
         TransitionManager.beginDelayedTransition(mRecyclerView, new AutoTransition());
+    }
+
+    private void goToBottom() {
+        if (mLinearLayoutManager != null && mAdapter != null) {
+            mLinearLayoutManager.scrollToPositionWithOffset(mAdapter.getItemCount() - 1, 0);
+        }
     }
 
     @Override
