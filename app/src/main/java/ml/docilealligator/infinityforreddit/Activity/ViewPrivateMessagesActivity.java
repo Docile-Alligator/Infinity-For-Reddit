@@ -93,8 +93,8 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     private String mAccessToken;
     private String mAccountName;
     private String mUserAvatar;
-    private ArrayList<ProvideUserAvatarCallback> provideUserAvatarCallbacks;
-    private LoadUserDataAsyncTask loadUserDataAsyncTask;
+    private ArrayList<ProvideUserAvatarCallback> mProvideUserAvatarCallbacks;
+    private LoadUserDataAsyncTask mLoadUserDataAsyncTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +127,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
         setSupportActionBar(mToolbar);
         setToolbarGoToTop(mToolbar);
 
-        provideUserAvatarCallbacks = new ArrayList<>();
+        mProvideUserAvatarCallbacks = new ArrayList<>();
 
         if (savedInstanceState != null) {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
@@ -160,6 +160,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     private void bindView() {
         mAdapter = new PrivateMessagesDetailRecyclerViewAdapter(this, privateMessage, mAccountName, mCustomThemeWrapper);
         mLinearLayoutManager = new LinearLayoutManager(this);
+        mLinearLayoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         goToBottom();
@@ -229,16 +230,16 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
 
     public void fetchUserAvatar(String username, ProvideUserAvatarCallback provideUserAvatarCallback) {
         if (mUserAvatar == null) {
-            provideUserAvatarCallbacks.add(provideUserAvatarCallback);
-            if (loadUserDataAsyncTask == null) {
-                loadUserDataAsyncTask = new LoadUserDataAsyncTask(mRedditDataRoomDatabase.userDao(), username, mRetrofit, iconImageUrl -> {
+            mProvideUserAvatarCallbacks.add(provideUserAvatarCallback);
+            if (mLoadUserDataAsyncTask == null) {
+                mLoadUserDataAsyncTask = new LoadUserDataAsyncTask(mRedditDataRoomDatabase.userDao(), username, mRetrofit, iconImageUrl -> {
                     mUserAvatar = iconImageUrl;
-                    for (ProvideUserAvatarCallback provideUserAvatarCallbackInArrayList : provideUserAvatarCallbacks) {
+                    for (ProvideUserAvatarCallback provideUserAvatarCallbackInArrayList : mProvideUserAvatarCallbacks) {
                         provideUserAvatarCallbackInArrayList.fetchAvatarSuccess(iconImageUrl);
                     }
-                    provideUserAvatarCallbacks.clear();
+                    mProvideUserAvatarCallbacks.clear();
                 });
-                loadUserDataAsyncTask.execute();
+                mLoadUserDataAsyncTask.execute();
             }
         } else {
             provideUserAvatarCallback.fetchAvatarSuccess(mUserAvatar);

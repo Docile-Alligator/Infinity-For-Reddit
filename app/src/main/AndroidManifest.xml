@@ -24,16 +24,15 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
 
-        <activity android:name=".Activity.ViewPrivateMessagesActivity"
-            android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.Slidable"
-            android:windowSoftInputMode="adjustResize" />
-
         <service
             android:name=".Service.DownloadRedditVideoService"
             android:enabled="true"
             android:exported="false" />
 
+        <activity android:name=".Activity.ViewPrivateMessagesActivity"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppTheme.Slidable"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".Activity.ViewImgurMediaActivity"
             android:configChanges="orientation|screenSize|layoutDirection"
