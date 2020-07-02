@@ -34,6 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
@@ -47,7 +48,8 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
-public class AccountSavedThingActivity extends BaseActivity implements ActivityToolbarInterface {
+public class AccountSavedThingActivity extends BaseActivity implements ActivityToolbarInterface,
+        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {
 
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
@@ -75,6 +77,9 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("post_layout")
+    SharedPreferences mPostLayoutSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private SlidrInterface mSlidrInterface;
@@ -84,6 +89,7 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     private String mAccessToken;
     private String mAccountName;
     private boolean isInLazyMode = false;
+    private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +127,8 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
         setToolbarGoToTop(toolbar);
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
+
+        postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
 
         if (savedInstanceState != null) {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
@@ -252,6 +260,9 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
                     }
                 }
                 return true;
+            case R.id.action_change_post_layout_account_saved_thing_activity:
+                postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+                return true;
         }
         return false;
     }
@@ -297,6 +308,14 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     private void unlockSwipeRightToGoBack() {
         if (mSlidrInterface != null) {
             mSlidrInterface.unlock();
+        }
+    }
+
+    @Override
+    public void postLayoutSelected(int postLayout) {
+        if (sectionsPagerAdapter != null) {
+            mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + mAccountName, postLayout).apply();
+            sectionsPagerAdapter.changePostLayout(postLayout);
         }
     }
 
@@ -408,6 +427,13 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
                 postFragment.changeNSFW(nsfw);
             }
         }
+
+        public void changePostLayout(int postLayout) {
+            if (postFragment != null) {
+                ((FragmentCommunicator) postFragment).changePostLayout(postLayout);
+            }
+        }
+
 
         public void goBackToTop() {
             if (viewPager.getCurrentItem() == 0) {
