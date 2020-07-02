@@ -21,9 +21,9 @@ public class FetchMessages {
     public static final String WHERE_COMMENTS = "comments";
     public static final String WHERE_MESSAGES = "messages";
     public static final String WHERE_MESSAGES_DETAIL = "messages_detail";
-    public static final int MESSAGE_TYPE_NOTIFICATION = 0;
+    public static final int MESSAGE_TYPE_INBOX = 0;
     public static final int MESSAGE_TYPE_PRIVATE_MESSAGE = 1;
-    public static final int MESSAGE_TYPE_PRIVATE_MESSAGE_DETAIL = 2;
+    public static final int MESSAGE_TYPE_NOTIFICATION = 2;
 
     static void fetchInbox(Retrofit oauthRetrofit, Locale locale, String accessToken, String where,
                            String after, int messageType, FetchMessagesListener fetchMessagesListener) {

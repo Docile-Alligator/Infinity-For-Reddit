@@ -102,7 +102,7 @@ public class InboxFragment extends Fragment implements FragmentCommunicator {
             mRecyclerView.setPadding(0, 0, 0, mActivity.getNavBarHeight());
         }
 
-        mWhere = arguments.getString(EXTRA_MESSAGE_WHERE);
+        mWhere = arguments.getString(EXTRA_MESSAGE_WHERE, FetchMessages.WHERE_INBOX);
         mAdapter = new MessageRecyclerViewAdapter(mActivity, mOauthRetrofit, mCustomThemeWrapper,
                 mAccessToken, mWhere, () -> mMessageViewModel.retryLoadingMore());
         mLinearLayoutManager = new LinearLayoutManager(mActivity);

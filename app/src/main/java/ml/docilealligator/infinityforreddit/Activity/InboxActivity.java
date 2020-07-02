@@ -49,6 +49,7 @@ import retrofit2.Retrofit;
 public class InboxActivity extends BaseActivity implements ActivityToolbarInterface {
 
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
+    public static final String EXTRA_VIEW_MESSAGE = "EVM";
 
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
@@ -123,13 +124,13 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
             mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
 
             if (!mNullAccessToken && mAccessToken == null) {
-                getCurrentAccountAndFetchMessage();
+                getCurrentAccountAndFetchMessage(savedInstanceState);
             } else {
-                bindView();
+                bindView(savedInstanceState);
             }
         } else {
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
-            getCurrentAccountAndFetchMessage();
+            getCurrentAccountAndFetchMessage(savedInstanceState);
         }
     }
 
@@ -150,7 +151,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         applyTabLayoutTheme(tabLayout);
     }
 
-    private void getCurrentAccountAndFetchMessage() {
+    private void getCurrentAccountAndFetchMessage(Bundle savedInstanceState) {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
             if (mNewAccountName != null) {
                 if (account == null || !account.getUsername().equals(mNewAccountName)) {
@@ -165,11 +166,11 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
                             mAccessToken = newAccount.getAccessToken();
                         }
 
-                        bindView();
+                        bindView(savedInstanceState);
                     }).execute();
                 } else {
                     mAccessToken = account.getAccessToken();
-                    bindView();
+                    bindView(savedInstanceState);
                 }
             } else {
                 if (account == null) {
@@ -178,12 +179,12 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
                     mAccessToken = account.getAccessToken();
                 }
 
-                bindView();
+                bindView(savedInstanceState);
             }
         }).execute();
     }
 
-    private void bindView() {
+    private void bindView(Bundle savedInstanceState) {
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -198,6 +199,9 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(2);
         tabLayout.setupWithViewPager(viewPager);
+        if (savedInstanceState == null && getIntent().getBooleanExtra(EXTRA_VIEW_MESSAGE, false)) {
+            viewPager.setCurrentItem(1);
+        }
     }
 
     @Override

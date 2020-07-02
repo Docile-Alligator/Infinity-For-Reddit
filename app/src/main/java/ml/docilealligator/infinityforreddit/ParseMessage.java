@@ -44,7 +44,7 @@ public class ParseMessage {
     @Nullable
     private static Message parseSingleMessage(JSONObject messageJSON, Locale locale, int messageType) throws JSONException {
         String kind = messageJSON.getString(JSONUtils.KIND_KEY);
-        if ((messageType == FetchMessages.MESSAGE_TYPE_NOTIFICATION && kind.equals("t4")) ||
+        if ((messageType == FetchMessages.MESSAGE_TYPE_INBOX && kind.equals("t4")) ||
                 (messageType == FetchMessages.MESSAGE_TYPE_PRIVATE_MESSAGE && !kind.equals("t4"))) {
             return null;
         }

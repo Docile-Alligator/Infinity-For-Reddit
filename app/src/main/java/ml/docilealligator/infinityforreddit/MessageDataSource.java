@@ -32,7 +32,7 @@ class MessageDataSource extends PageKeyedDataSource<String, Message> {
         if (where.equals(FetchMessages.WHERE_MESSAGES)) {
             messageType = FetchMessages.MESSAGE_TYPE_PRIVATE_MESSAGE;
         } else {
-            messageType = FetchMessages.MESSAGE_TYPE_NOTIFICATION;
+            messageType = FetchMessages.MESSAGE_TYPE_INBOX;
         }
         paginationNetworkStateLiveData = new MutableLiveData<>();
         initialLoadStateLiveData = new MutableLiveData<>();

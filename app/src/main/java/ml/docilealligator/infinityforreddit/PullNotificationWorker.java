@@ -98,7 +98,7 @@ public class PullNotificationWorker extends Worker {
 
                         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
-                        int messageSize = Math.min(messages.size(), 5);
+                        int messageSize = Math.min(messages.size(), 20);
                         long lastNotificationTime = mSharedPreferences.getLong(SharedPreferencesUtils.PULL_NOTIFICATION_TIME, -1L);
                         boolean hasValidMessage = false;
 
@@ -164,6 +164,7 @@ public class PullNotificationWorker extends Worker {
                             } else if (kind.equals(Message.TYPE_MESSAGE)) {
                                 Intent intent = new Intent(context, InboxActivity.class);
                                 intent.putExtra(InboxActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
+                                intent.putExtra(InboxActivity.EXTRA_VIEW_MESSAGE, true);
                                 PendingIntent summaryPendingIntent = PendingIntent.getActivity(context, accountIndex * 6 + 3, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 builder.setContentIntent(summaryPendingIntent);
                             } else if (kind.equals(Message.TYPE_SUBREDDIT)) {

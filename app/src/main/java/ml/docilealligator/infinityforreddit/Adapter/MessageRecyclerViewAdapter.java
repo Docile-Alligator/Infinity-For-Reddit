@@ -106,10 +106,8 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
         mAccessToken = accessToken;
         if (where.equals(FetchMessages.WHERE_MESSAGES)) {
             mMessageType = FetchMessages.MESSAGE_TYPE_PRIVATE_MESSAGE;
-        } else if (where.equals(FetchMessages.WHERE_MESSAGES_DETAIL)) {
-            mMessageType = FetchMessages.MESSAGE_TYPE_PRIVATE_MESSAGE_DETAIL;
         } else {
-            mMessageType = FetchMessages.MESSAGE_TYPE_NOTIFICATION;
+            mMessageType = FetchMessages.MESSAGE_TYPE_INBOX;
         }
 
         mColorAccent = customThemeWrapper.getColorAccent();
@@ -163,7 +161,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 mMarkwon.setMarkdown(((DataViewHolder) holder).contentCustomMarkwonView, displayedMessage.getBody());
 
                 ((DataViewHolder) holder).itemView.setOnClickListener(view -> {
-                    if (mMessageType == FetchMessages.MESSAGE_TYPE_NOTIFICATION
+                    if (mMessageType == FetchMessages.MESSAGE_TYPE_INBOX
                             && message.getContext() != null && !message.getContext().equals("")) {
                         Uri uri = LinkResolverActivity.getRedditUriByPath(message.getContext());
                         Intent intent = new Intent(mContext, LinkResolverActivity.class);
