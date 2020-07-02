@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +26,8 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;
@@ -37,13 +40,14 @@ import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.CommentMoreBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.CommentData;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.BottomSheetFragment.CommentMoreBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.Utils.APIUtils;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 import ml.docilealligator.infinityforreddit.VoteThing;
 import retrofit2.Retrofit;
@@ -65,6 +69,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     };
     private Context mContext;
     private Retrofit mOauthRetrofit;
+    private Locale mLocale;
     private Markwon mMarkwon;
     private String mAccessToken;
     private String mAccountName;
@@ -83,17 +88,16 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     private int mCommentIconAndInfoColor;
     private boolean mVoteButtonsOnTheRight;
     private boolean mShowElapsedTime;
+    private String mTimeFormatPattern;
     private boolean mShowCommentDivider;
     private boolean mShowAbsoluteNumberOfVotes;
     private NetworkState networkState;
     private RetryLoadingMoreCallback mRetryLoadingMoreCallback;
 
     public CommentsListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
-                                              CustomThemeWrapper customThemeWrapper, String accessToken,
-                                              String accountName, boolean voteButtonsOnTheRight,
-                                              boolean showElapsedTime, boolean showCommentDivider,
-                                              boolean showAbsoluteNumberOfVotes,
-                                              RetryLoadingMoreCallback retryLoadingMoreCallback) {
+                                              CustomThemeWrapper customThemeWrapper, Locale locale,
+                                              SharedPreferences sharedPreferences, String accessToken,
+                                              String accountName, RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         mContext = context;
         mOauthRetrofit = oauthRetrofit;
@@ -122,12 +126,14 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         )
                 )
                 .build();
+        mLocale = locale;
         mAccessToken = accessToken;
         mAccountName = accountName;
-        mVoteButtonsOnTheRight = voteButtonsOnTheRight;
-        mShowElapsedTime = showElapsedTime;
-        mShowCommentDivider = showCommentDivider;
-        mShowAbsoluteNumberOfVotes = showAbsoluteNumberOfVotes;
+        mShowElapsedTime = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
+        mShowCommentDivider = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER, false);
+        mShowAbsoluteNumberOfVotes = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
+        mVoteButtonsOnTheRight = sharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
+        mTimeFormatPattern = sharedPreferences.getString(SharedPreferencesUtils.TIME_FORMAT_KEY, SharedPreferencesUtils.TIME_FORMAT_DEFAULT_VALUE);
         mRetryLoadingMoreCallback = retryLoadingMoreCallback;
         mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
@@ -191,7 +197,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     ((CommentViewHolder) holder).commentTimeTextView.setText(
                             Utils.getElapsedTime(mContext, comment.getCommentTimeMillis()));
                 } else {
-                    ((CommentViewHolder) holder).commentTimeTextView.setText(comment.getCommentTime());
+                    ((CommentViewHolder) holder).commentTimeTextView.setText(Utils.getFormattedTime(mLocale, comment.getCommentTimeMillis(), mTimeFormatPattern));
                 }
 
                 if (comment.getAwards() != null && !comment.getAwards().equals("")) {

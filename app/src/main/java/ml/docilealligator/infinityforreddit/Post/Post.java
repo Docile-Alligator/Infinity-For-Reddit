@@ -40,7 +40,6 @@ public class Post implements Parcelable {
     private String authorIconUrl;
     private String authorFlair;
     private String authorFlairHTML;
-    private String postTime;
     private String title;
     private String selfText;
     private String selfTextPlain;
@@ -72,7 +71,7 @@ public class Post implements Parcelable {
     private String crosspostParentId;
 
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed,
-                String author, String authorFlair, String authorFlairHTML, String postTime,
+                String author, String authorFlair, String authorFlairHTML,
                 long postTimeMillis, String title, String previewUrl, String thumbnailPreviewUrl,
                 String permalink, int score, int postType, int voteType, int nComments, String flair,
                 String awards, int nAwards, boolean hidden, boolean spoiler, boolean nsfw, boolean stickied,
@@ -85,7 +84,6 @@ public class Post implements Parcelable {
         this.authorNamePrefixed = "u/" + author;
         this.authorFlair = authorFlair;
         this.authorFlairHTML = authorFlairHTML;
-        this.postTime = postTime;
         this.postTimeMillis = postTimeMillis;
         this.title = title;
         this.previewUrl = previewUrl;
@@ -109,7 +107,7 @@ public class Post implements Parcelable {
     }
 
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed,
-                String author, String authorFlair, String authorFlairHTML, String postTime,
+                String author, String authorFlair, String authorFlairHTML,
                 long postTimeMillis, String title, String previewUrl, String thumbnailPreviewUrl,
                 String url, String permalink, int score, int postType, int voteType, int nComments,
                 String flair, String awards, int nAwards, boolean hidden, boolean spoiler, boolean nsfw,
@@ -122,7 +120,6 @@ public class Post implements Parcelable {
         this.authorNamePrefixed = "u/" + author;
         this.authorFlair = authorFlair;
         this.authorFlairHTML = authorFlairHTML;
-        this.postTime = postTime;
         this.postTimeMillis = postTimeMillis;
         this.title = title;
         this.previewUrl = previewUrl;
@@ -147,7 +144,7 @@ public class Post implements Parcelable {
     }
 
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed,
-                String author, String authorFlair, String authorFlairHTML, String postTime,
+                String author, String authorFlair, String authorFlairHTML,
                 long postTimeMillis, String title, String permalink, int score, int postType,
                 int voteType, int nComments, String flair, String awards, int nAwards, boolean hidden,
                 boolean spoiler, boolean nsfw, boolean stickied, boolean archived, boolean locked,
@@ -160,7 +157,6 @@ public class Post implements Parcelable {
         this.authorNamePrefixed = "u/" + author;
         this.authorFlair = authorFlair;
         this.authorFlairHTML = authorFlairHTML;
-        this.postTime = postTime;
         this.postTimeMillis = postTimeMillis;
         this.title = title;
         this.permalink = APIUtils.API_BASE_URI + permalink;
@@ -192,7 +188,6 @@ public class Post implements Parcelable {
         authorFlair = in.readString();
         authorFlairHTML = in.readString();
         authorIconUrl = in.readString();
-        postTime = in.readString();
         postTimeMillis = in.readLong();
         title = in.readString();
         selfText = in.readString();
@@ -275,10 +270,6 @@ public class Post implements Parcelable {
 
     public void setAuthorIconUrl(String authorIconUrl) {
         this.authorIconUrl = authorIconUrl;
-    }
-
-    public String getPostTime() {
-        return postTime;
     }
 
     public long getPostTimeMillis() {
@@ -494,7 +485,6 @@ public class Post implements Parcelable {
         parcel.writeString(authorFlair);
         parcel.writeString(authorFlairHTML);
         parcel.writeString(authorIconUrl);
-        parcel.writeString(postTime);
         parcel.writeLong(postTimeMillis);
         parcel.writeString(title);
         parcel.writeString(selfText);

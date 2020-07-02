@@ -36,7 +36,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
@@ -147,6 +146,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private boolean mNeedBlurSpoiler;
     private boolean mVoteButtonsOnTheRight;
     private boolean mShowElapsedTime;
+    private String mTimeFormatPattern;
     private boolean mExpandChildren;
     private boolean mCommentToolbarHidden;
     private boolean mCommentToolbarHideOnClick;
@@ -215,7 +215,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                              RedditDataRoomDatabase redditDataRoomDatabase, RequestManager glide,
                                              String accessToken, String accountName, Post post, Locale locale,
                                              String singleCommentId, boolean isSingleCommentThreadMode,
-                                             SharedPreferences mSharedPreferences, ExoCreator exoCreator,
+                                             SharedPreferences sharedPreferences, ExoCreator exoCreator,
                                              CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
         mActivity = activity;
         mRetrofit = retrofit;
@@ -302,25 +302,26 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mSingleCommentId = singleCommentId;
         mIsSingleCommentThreadMode = isSingleCommentThreadMode;
 
-        mNeedBlurNsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_NSFW_KEY, true);
-        mNeedBlurSpoiler = mSharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_SPOILER_KEY, false);
-        mVoteButtonsOnTheRight = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
-        mShowElapsedTime = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
-        mExpandChildren = !mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_TOP_LEVEL_COMMENTS_FIRST, false);
-        mCommentToolbarHidden = mSharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDDEN, false);
-        mCommentToolbarHideOnClick = mSharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDE_ON_CLICK, true);
-        mSwapTapAndLong = mSharedPreferences.getBoolean(SharedPreferencesUtils.SWAP_TAP_AND_LONG_COMMENTS, false);
-        mShowCommentDivider = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER, false);
-        mShowAbsoluteNumberOfVotes = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
+        mNeedBlurNsfw = sharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_NSFW_KEY, true);
+        mNeedBlurSpoiler = sharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_SPOILER_KEY, false);
+        mVoteButtonsOnTheRight = sharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
+        mShowElapsedTime = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
+        mTimeFormatPattern = sharedPreferences.getString(SharedPreferencesUtils.TIME_FORMAT_KEY, SharedPreferencesUtils.TIME_FORMAT_DEFAULT_VALUE);
+        mExpandChildren = !sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_TOP_LEVEL_COMMENTS_FIRST, false);
+        mCommentToolbarHidden = sharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDDEN, false);
+        mCommentToolbarHideOnClick = sharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDE_ON_CLICK, true);
+        mSwapTapAndLong = sharedPreferences.getBoolean(SharedPreferencesUtils.SWAP_TAP_AND_LONG_COMMENTS, false);
+        mShowCommentDivider = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER, false);
+        mShowAbsoluteNumberOfVotes = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
 
-        String autoplayString = mSharedPreferences.getString(SharedPreferencesUtils.VIDEO_AUTOPLAY, SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_NEVER);
+        String autoplayString = sharedPreferences.getString(SharedPreferencesUtils.VIDEO_AUTOPLAY, SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_NEVER);
         if (autoplayString.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ALWAYS_ON)) {
             mAutoplay = true;
         } else if (autoplayString.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI)) {
             mAutoplay = Utils.isConnectedToWifi(activity);
         }
-        mAutoplayNsfwVideos = mSharedPreferences.getBoolean(SharedPreferencesUtils.AUTOPLAY_NSFW_VIDEOS, true);
-        mMuteAutoplayingVideos = mSharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_AUTOPLAYING_VIDEOS, true);
+        mAutoplayNsfwVideos = sharedPreferences.getBoolean(SharedPreferencesUtils.AUTOPLAY_NSFW_VIDEOS, true);
+        mMuteAutoplayingVideos = sharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_AUTOPLAYING_VIDEOS, true);
 
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
@@ -610,7 +611,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 ((PostDetailBaseViewHolder) holder).mPostTimeTextView.setText(
                         Utils.getElapsedTime(mActivity, mPost.getPostTimeMillis()));
             } else {
-                ((PostDetailBaseViewHolder) holder).mPostTimeTextView.setText(mPost.getPostTime());
+                ((PostDetailBaseViewHolder) holder).mPostTimeTextView.setText(Utils.getFormattedTime(mLocale, mPost.getPostTimeMillis(), mTimeFormatPattern));
             }
 
             if (mPost.isArchived()) {
@@ -771,7 +772,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 ((CommentViewHolder) holder).commentTimeTextView.setText(
                         Utils.getElapsedTime(mActivity, comment.getCommentTimeMillis()));
             } else {
-                ((CommentViewHolder) holder).commentTimeTextView.setText(comment.getCommentTime());
+                ((CommentViewHolder) holder).commentTimeTextView.setText(Utils.getFormattedTime(mLocale, comment.getCommentTimeMillis(), mTimeFormatPattern));
             }
 
             if (mCommentToolbarHidden) {

@@ -34,7 +34,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
@@ -51,6 +50,7 @@ import com.libRG.CustomTextView;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -121,6 +121,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private String mAccessToken;
     private RequestManager mGlide;
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
+    private Locale mLocale;
     private UserDao mUserDao;
     private boolean canStartActivity = true;
     private int mPostType;
@@ -161,6 +162,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean mNeedBlurNSFW;
     private boolean mNeedBlurSpoiler;
     private boolean mShowElapsedTime;
+    private String mTimeFormatPattern;
     private boolean mShowDividerInCompactLayout;
     private boolean mShowAbsoluteNumberOfVotes;
     private boolean mAutoplay = false;
@@ -175,7 +177,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
     public PostRecyclerViewAdapter(AppCompatActivity activity, Retrofit oauthRetrofit, Retrofit retrofit,
                                    RedditDataRoomDatabase redditDataRoomDatabase,
-                                   CustomThemeWrapper customThemeWrapper, String accessToken,
+                                   CustomThemeWrapper customThemeWrapper, Locale locale, String accessToken,
                                    int postType, int postLayout, boolean displaySubredditName,
                                    SharedPreferences sharedPreferences, ExoCreator exoCreator,
                                    Callback callback) {
@@ -191,6 +193,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mNeedBlurSpoiler = sharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_SPOILER_KEY, false);
             mVoteButtonsOnTheRight = sharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
             mShowElapsedTime = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
+            mTimeFormatPattern = sharedPreferences.getString(SharedPreferencesUtils.TIME_FORMAT_KEY, SharedPreferencesUtils.TIME_FORMAT_DEFAULT_VALUE);
             mShowDividerInCompactLayout = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_DIVIDER_IN_COMPACT_LAYOUT, true);
             mShowAbsoluteNumberOfVotes = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
             String autoplayString = sharedPreferences.getString(SharedPreferencesUtils.VIDEO_AUTOPLAY, SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_NEVER);
@@ -243,6 +246,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mScale = activity.getResources().getDisplayMetrics().density;
             mGlide = Glide.with(mActivity);
             mRedditDataRoomDatabase = redditDataRoomDatabase;
+            mLocale = locale;
             mUserDao = redditDataRoomDatabase.userDao();
             mExoCreator = exoCreator;
             mCallback = callback;
@@ -445,7 +449,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     ((PostBaseViewHolder) holder).postTimeTextView.setText(
                             Utils.getElapsedTime(mActivity, post.getPostTimeMillis()));
                 } else {
-                    ((PostBaseViewHolder) holder).postTimeTextView.setText(post.getPostTime());
+                    ((PostBaseViewHolder) holder).postTimeTextView.setText(Utils.getFormattedTime(mLocale, post.getPostTimeMillis(), mTimeFormatPattern));
                 }
 
                 ((PostBaseViewHolder) holder).titleTextView.setText(post.getTitle());
@@ -577,7 +581,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 final String subredditNamePrefixed = post.getSubredditNamePrefixed();
                 String subredditName = subredditNamePrefixed.substring(2);
                 String authorPrefixed = "u/" + post.getAuthor();
-                final String postTime = post.getPostTime();
                 final String title = post.getTitle();
                 int voteType = post.getVoteType();
                 boolean nsfw = post.isNSFW();
@@ -741,7 +744,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     ((PostCompactViewHolder) holder).postTimeTextView.setText(
                             Utils.getElapsedTime(mActivity, post.getPostTimeMillis()));
                 } else {
-                    ((PostCompactViewHolder) holder).postTimeTextView.setText(postTime);
+                    ((PostCompactViewHolder) holder).postTimeTextView.setText(Utils.getFormattedTime(mLocale, post.getPostTimeMillis(), mTimeFormatPattern));
                 }
 
                 if (mShowDividerInCompactLayout) {
@@ -1279,6 +1282,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
     public void setShowElapsedTime(boolean showElapsedTime) {
         mShowElapsedTime = showElapsedTime;
+    }
+
+    public void setTimeFormat(String timeFormat) {
+        mTimeFormatPattern = timeFormat;
     }
 
     public void setShowDividerInCompactLayout(boolean showDividerInCompactLayout) {

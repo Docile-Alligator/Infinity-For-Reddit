@@ -9,9 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Locale;
 
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
@@ -171,11 +169,6 @@ public class ParseComment {
         boolean scoreHidden = singleCommentData.getBoolean(JSONUtils.SCORE_HIDDEN_KEY);
         boolean saved = singleCommentData.getBoolean(JSONUtils.SAVED_KEY);
 
-        Calendar submitTimeCalendar = Calendar.getInstance();
-        submitTimeCalendar.setTimeInMillis(submitTime);
-        String formattedSubmitTime = new SimpleDateFormat("MMM d, yyyy, HH:mm",
-                locale).format(submitTimeCalendar.getTime());
-
         if (singleCommentData.has(JSONUtils.DEPTH_KEY)) {
             depth = singleCommentData.getInt(JSONUtils.DEPTH_KEY);
         }
@@ -184,7 +177,7 @@ public class ParseComment {
         boolean hasReply = !(singleCommentData.get(JSONUtils.REPLIES_KEY) instanceof String);
 
         return new CommentData(id, fullName, author, authorFlair, authorFlairHTMLBuilder.toString(),
-                linkAuthor, formattedSubmitTime, submitTime, commentMarkdown, commentRawText,
+                linkAuthor, submitTime, commentMarkdown, commentRawText,
                 linkId, subredditName, parentId, score, voteType, isSubmitter, distinguished,
                 permalink, awardingsBuilder.toString(),depth, collapsed, hasReply, scoreHidden, saved);
     }

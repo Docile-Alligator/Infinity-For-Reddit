@@ -41,6 +41,8 @@ import com.bumptech.glide.RequestManager;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.Locale;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -65,6 +67,7 @@ import ml.docilealligator.infinityforreddit.Event.ChangePostLayoutEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeShowAbsoluteNumberOfVotesEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeShowElapsedTimeEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeTimeFormatEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVideoAutoplayEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVoteButtonsPositionEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeWifiStatusEvent;
@@ -344,6 +347,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         boolean nsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_KEY, false);
         int defaultPostLayout = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY, "0"));
+        Locale locale = getResources().getConfiguration().locale;
 
         if (postType == PostDataSource.TYPE_SEARCH) {
             String subredditName = getArguments().getString(EXTRA_NAME);
@@ -355,7 +359,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    customThemeWrapper, accessToken, postType, postLayout, true,
+                    customThemeWrapper, locale, accessToken, postType, postLayout, true,
                     mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
@@ -417,7 +421,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    customThemeWrapper, accessToken, postType, postLayout, displaySubredditName,
+                    customThemeWrapper, locale, accessToken, postType, postLayout, displaySubredditName,
                     mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
@@ -464,7 +468,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    customThemeWrapper, accessToken, postType, postLayout, true,
+                    customThemeWrapper, locale, accessToken, postType, postLayout, true,
                     mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
@@ -509,7 +513,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    customThemeWrapper, accessToken, postType, postLayout, true,
+                    customThemeWrapper, locale, accessToken, postType, postLayout, true,
                     mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
@@ -547,7 +551,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    customThemeWrapper, accessToken, postType, postLayout, true,
+                    customThemeWrapper, locale, accessToken, postType, postLayout, true,
                     mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
@@ -579,9 +583,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             return new PlaybackInfo(INDEX_UNSET, TIME_UNSET, volumeInfo);
         });
 
-        mPostViewModel.getPosts().observe(this, posts -> mAdapter.submitList(posts));
+        mPostViewModel.getPosts().observe(getViewLifecycleOwner(), posts -> mAdapter.submitList(posts));
 
-        mPostViewModel.hasPost().observe(this, hasPost -> {
+        mPostViewModel.hasPost().observe(getViewLifecycleOwner(), hasPost -> {
             this.hasPost = hasPost;
             mSwipeRefreshLayout.setRefreshing(false);
             if (hasPost) {
@@ -597,7 +601,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
         });
 
-        mPostViewModel.getInitialLoadingState().observe(this, networkState -> {
+        mPostViewModel.getInitialLoadingState().observe(getViewLifecycleOwner(), networkState -> {
             if (networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
                 mSwipeRefreshLayout.setRefreshing(false);
             } else if (networkState.getStatus().equals(NetworkState.Status.FAILED)) {
@@ -609,7 +613,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
         });
 
-        mPostViewModel.getPaginationNetworkState().observe(this, networkState -> mAdapter.setNetworkState(networkState));
+        mPostViewModel.getPaginationNetworkState().observe(getViewLifecycleOwner(), networkState -> mAdapter.setNetworkState(networkState));
 
         return rootView;
     }
@@ -788,9 +792,17 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     }
 
     @Subscribe
-    public void onChangeShowElapsedTime(ChangeShowElapsedTimeEvent event) {
+    public void onChangeShowElapsedTimeEvent(ChangeShowElapsedTimeEvent event) {
         if (mAdapter != null) {
             mAdapter.setShowElapsedTime(event.showElapsedTime);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeTimeFormatEvent(ChangeTimeFormatEvent changeTimeFormatEvent) {
+        if (mAdapter != null) {
+            mAdapter.setTimeFormat(changeTimeFormatEvent.timeFormat);
             refreshAdapter();
         }
     }

@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
 
 import ml.docilealligator.infinityforreddit.R;
@@ -44,6 +46,12 @@ public class Utils {
         } while (i >= 0 && Character.isWhitespace(source.charAt(i)));
 
         return source.subSequence(0, i+1);
+    }
+
+    public static String getFormattedTime(Locale locale, long time, String pattern) {
+        Calendar postTimeCalendar = Calendar.getInstance();
+        postTimeCalendar.setTimeInMillis(time);
+        return new SimpleDateFormat(pattern, locale).format(postTimeCalendar.getTime());
     }
 
     public static String getElapsedTime(Context context,  long time) {

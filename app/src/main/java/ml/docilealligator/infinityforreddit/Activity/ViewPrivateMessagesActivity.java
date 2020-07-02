@@ -158,7 +158,8 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     }
 
     private void bindView() {
-        mAdapter = new PrivateMessagesDetailRecyclerViewAdapter(this, privateMessage, mAccountName, mCustomThemeWrapper);
+        mAdapter = new PrivateMessagesDetailRecyclerViewAdapter(this, mSharedPreferences,
+                getResources().getConfiguration().locale, privateMessage, mAccountName, mCustomThemeWrapper);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);

@@ -27,10 +27,9 @@
         app:key="vote_buttons_on_the_right"
         app:title="@string/settings_vote_buttons_on_the_right_title" />
 
-    <SwitchPreference
-        app:defaultValue="false"
-        app:key="show_elapsed_time"
-        app:title="@string/settings_show_elapsed_time" />
+    <Preference
+        app:title="@string/settings_time_format_title"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.TimeFormatPreferenceFragment" />
 
     <ListPreference
         app:defaultValue="0"

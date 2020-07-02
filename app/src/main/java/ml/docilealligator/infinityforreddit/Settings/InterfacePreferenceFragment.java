@@ -11,7 +11,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import ml.docilealligator.infinityforreddit.Event.ChangeDefaultPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeShowAbsoluteNumberOfVotesEvent;
-import ml.docilealligator.infinityforreddit.Event.ChangeShowElapsedTimeEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVoteButtonsPositionEvent;
 import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.Event.ShowDividerInCompactLayoutPreferenceEvent;
@@ -27,7 +26,6 @@ public class InterfacePreferenceFragment extends PreferenceFragmentCompat {
 
         SwitchPreference bottomAppBarSwitch = findPreference(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY);
         SwitchPreference voteButtonsOnTheRightSwitch = findPreference(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY);
-        SwitchPreference showElapsedTimeSwitch = findPreference(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY);
         ListPreference defaultPostLayoutSwitch = findPreference(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY);
         SwitchPreference showDividerInCompactLayout = findPreference(SharedPreferencesUtils.SHOW_DIVIDER_IN_COMPACT_LAYOUT);
         SwitchPreference showThumbnailOnTheRightInCompactLayout = findPreference(SharedPreferencesUtils.SHOW_THUMBNAIL_ON_THE_RIGHT_IN_COMPACT_LAYOUT);
@@ -43,13 +41,6 @@ public class InterfacePreferenceFragment extends PreferenceFragmentCompat {
         if (voteButtonsOnTheRightSwitch != null) {
             voteButtonsOnTheRightSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new ChangeVoteButtonsPositionEvent((Boolean) newValue));
-                return true;
-            });
-        }
-
-        if (showElapsedTimeSwitch != null) {
-            showElapsedTimeSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
-                EventBus.getDefault().post(new ChangeShowElapsedTimeEvent((Boolean) newValue));
                 return true;
             });
         }

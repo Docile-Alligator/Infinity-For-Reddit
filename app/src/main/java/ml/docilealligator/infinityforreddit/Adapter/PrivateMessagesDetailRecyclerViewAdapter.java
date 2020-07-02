@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.Adapter;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.text.style.SuperscriptSpan;
@@ -18,6 +19,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.util.Locale;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;
@@ -33,6 +36,7 @@ import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Message;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 
 public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -41,17 +45,23 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
     private Message mMessage;
     private ViewPrivateMessagesActivity mViewPrivateMessagesActivity;
     private RequestManager mGlide;
+    private Locale mLocale;
     private String mAccountName;
     private Markwon mMarkwon;
+    private boolean mShowElapsedTime;
+    private String mTimeFormatPattern;
     private int mMessageBackgroundColor;
     private int mSecondaryTextColor;
     private int mUnreadMessageBackgroundColor;
 
-    public PrivateMessagesDetailRecyclerViewAdapter(ViewPrivateMessagesActivity viewPrivateMessagesActivity, Message message, String accountName,
+    public PrivateMessagesDetailRecyclerViewAdapter(ViewPrivateMessagesActivity viewPrivateMessagesActivity,
+                                                    SharedPreferences sharedPreferences, Locale locale,
+                                                    Message message, String accountName,
                                                     CustomThemeWrapper customThemeWrapper) {
         mMessage = message;
         mViewPrivateMessagesActivity = viewPrivateMessagesActivity;
         mGlide = Glide.with(viewPrivateMessagesActivity);
+        mLocale = locale;
         mAccountName = accountName;
         mMarkwon = Markwon.builder(viewPrivateMessagesActivity)
                 .usePlugin(new AbstractMarkwonPlugin() {
@@ -78,6 +88,8 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
                         )
                 )
                 .build();
+        mShowElapsedTime = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
+        mTimeFormatPattern = sharedPreferences.getString(SharedPreferencesUtils.TIME_FORMAT_KEY, SharedPreferencesUtils.TIME_FORMAT_DEFAULT_VALUE);
         mMessageBackgroundColor = customThemeWrapper.getCardViewBackgroundColor();
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
         mUnreadMessageBackgroundColor = customThemeWrapper.getUnreadMessageBackgroundColor();
@@ -115,6 +127,11 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
                 mMarkwon.setMarkdown(((MessageViewHolder) holder).messageTextView, message.getBody());
 
                 ((MessageViewHolder) holder).messageTextView.setOnClickListener(view -> ((MessageViewHolder) holder).itemView.performClick());
+                if (mShowElapsedTime) {
+                    ((MessageViewHolder) holder).timeTextView.setText(Utils.getElapsedTime(mViewPrivateMessagesActivity, message.getTimeUTC()));
+                } else {
+                    ((MessageViewHolder) holder).timeTextView.setText(Utils.getFormattedTime(mLocale, message.getTimeUTC(), mTimeFormatPattern));
+                }
 
                 ((MessageViewHolder) holder).messageTextView.setOnClickListener(view -> {
                     if (((MessageViewHolder) holder).timeTextView.getVisibility() != View.VISIBLE) {
@@ -125,8 +142,6 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
                         mViewPrivateMessagesActivity.delayTransition();
                     }
                 });
-
-                ((MessageViewHolder) holder).timeTextView.setText(Utils.getElapsedTime(mViewPrivateMessagesActivity, message.getTimeUTC()));
             }
 
             if (holder instanceof SentMessageViewHolder) {

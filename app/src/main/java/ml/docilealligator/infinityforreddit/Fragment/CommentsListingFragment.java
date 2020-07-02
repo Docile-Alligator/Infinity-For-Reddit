@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,9 +97,6 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     private LinearLayoutManager mLinearLayoutManager;
     private CommentsListingRecyclerViewAdapter mAdapter;
     private SortType sortType;
-    private boolean mShowElapsedTime;
-    private boolean mShowCommentDivider;
-    private boolean mShowAbsoluteNumberOfVotes;
 
     public CommentsListingFragment() {
         // Required empty public constructor
@@ -131,10 +127,6 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
                 mCommentRecyclerView.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
             }
         }
-
-        mShowElapsedTime = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
-        mShowCommentDivider = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER, false);
-        mShowAbsoluteNumberOfVotes = mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
 
         if (savedInstanceState == null) {
             getCurrentAccountAndBindView(resources);
@@ -167,10 +159,9 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         mLinearLayoutManager = new LinearLayoutManager(mActivity);
         mCommentRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        boolean voteButtonsOnTheRight = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
         mAdapter = new CommentsListingRecyclerViewAdapter(mActivity, mOauthRetrofit, customThemeWrapper,
+                getResources().getConfiguration().locale, mSharedPreferences,
                 getArguments().getString(EXTRA_ACCESS_TOKEN), getArguments().getString(EXTRA_ACCOUNT_NAME),
-                voteButtonsOnTheRight, mShowElapsedTime, mShowCommentDivider, mShowAbsoluteNumberOfVotes,
                 () -> mCommentViewModel.retryLoadingMore());
 
         String username = getArguments().getString(EXTRA_USERNAME);
@@ -197,9 +188,9 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         }
 
         mCommentViewModel = new ViewModelProvider(this, factory).get(CommentViewModel.class);
-        mCommentViewModel.getComments().observe(this, comments -> mAdapter.submitList(comments));
+        mCommentViewModel.getComments().observe(getViewLifecycleOwner(), comments -> mAdapter.submitList(comments));
 
-        mCommentViewModel.hasComment().observe(this, hasComment -> {
+        mCommentViewModel.hasComment().observe(getViewLifecycleOwner(), hasComment -> {
             mSwipeRefreshLayout.setRefreshing(false);
             if (hasComment) {
                 mFetchCommentInfoLinearLayout.setVisibility(View.GONE);
@@ -211,7 +202,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
             }
         });
 
-        mCommentViewModel.getInitialLoadingState().observe(this, networkState -> {
+        mCommentViewModel.getInitialLoadingState().observe(getViewLifecycleOwner(), networkState -> {
             if (networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
                 mSwipeRefreshLayout.setRefreshing(false);
             } else if (networkState.getStatus().equals(NetworkState.Status.FAILED)) {
@@ -223,7 +214,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
             }
         });
 
-        mCommentViewModel.getPaginationNetworkState().observe(this, networkState -> mAdapter.setNetworkState(networkState));
+        mCommentViewModel.getPaginationNetworkState().observe(getViewLifecycleOwner(), networkState -> mAdapter.setNetworkState(networkState));
 
         mSwipeRefreshLayout.setOnRefreshListener(() -> mCommentViewModel.refresh());
     }

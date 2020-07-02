@@ -168,4 +168,54 @@
         <item>4</item>
         <item>5</item>
     </string-array>
+
+    <string-array name="settings_time_format">
+        <item>Jan 2, 2020, 01:00</item>
+        <item>Jan 2, 2020, 01:00 PM</item>
+        <item>2 Jan, 2020, 01:00</item>
+        <item>2 Jan, 2020, 01:00 PM</item>
+        <item>1/2/2020 01:00 (Month first)</item>
+        <item>1/2/2020 01:00 PM (Month first)</item>
+        <item>2/1/2020 01:00 (Day first)</item>
+        <item>2/1/2020 01:00 PM (Day first)</item>
+        <item>2020/1/2 01:00 (Month first)</item>
+        <item>2020/1/2 01:00 PM (Month first)</item>
+        <item>1-2-2020 01:00 (Month first)</item>
+        <item>1-2-2020 01:00 PM (Month first)</item>
+        <item>2-1-2020 01:00 (Day first)</item>
+        <item>2-1-2020 01:00 PM (Day first)</item>
+        <item>2020-1-2 01:00 (Month first)</item>
+        <item>2020-1-2 01:00 PM (Month first)</item>
+        <item>1.2.2020 01:00 (Month first)</item>
+        <item>1.2.2020 01:00 PM (Month first)</item>
+        <item>2.1.2020 01:00 (Day first)</item>
+        <item>2.1.2020 01:00 PM (Day first)</item>
+        <item>2020.1.2 01:00 (Month first)</item>
+        <item>2020.1.2 01:00 PM (Month first)</item>
+    </string-array>
+
+    <string-array name="settings_time_format_values">
+        <item>MMM d, yyyy, HH:mm</item>
+        <item>MMM d, yyyy, hh:mm a</item>
+        <item>d MMM yyyy, HH:mm</item>
+        <item>d MMM yyyy, hh:mm a</item>
+        <item>M/d/yyyy HH:mm</item>
+        <item>M/d/yyyy hh:mm a</item>
+        <item>d/M/yyyy HH:mm</item>
+        <item>d/M/yyyy hh:mm a</item>
+        <item>yyyy/M/d HH:mm</item>
+        <item>yyyy/M/d hh:mm a</item>
+        <item>M-d-yyyy HH:mm</item>
+        <item>M-d-yyyy hh:mm a</item>
+        <item>d-M-yyyy HH:mm</item>
+        <item>d-M-yyyy hh:mm a</item>
+        <item>yyyy-M-d HH:mm</item>
+        <item>yyyy-M-d hh:mm a</item>
+        <item>M.d.yyyy HH:mm</item>
+        <item>M.d.yyyy hh:mm a</item>
+        <item>d.M.yyyy HH:mm</item>
+        <item>d.M.yyyy hh:mm a</item>
+        <item>yyyy.M.d HH:mm</item>
+        <item>yyyy.M.d hh:mm a</item>
+    </string-array>
 </resources>
