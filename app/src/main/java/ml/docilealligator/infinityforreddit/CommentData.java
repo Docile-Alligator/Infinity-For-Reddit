@@ -46,6 +46,7 @@ public class CommentData implements Parcelable {
     private boolean scoreHidden;
     private boolean saved;
     private boolean isExpanded;
+    private boolean hasExpandedBefore;
     private ArrayList<CommentData> children;
     private ArrayList<String> moreChildrenFullnames;
     private int moreChildrenStartingIndex;
@@ -84,6 +85,7 @@ public class CommentData implements Parcelable {
         this.scoreHidden = scoreHidden;
         this.saved = saved;
         this.isExpanded = false;
+        this.hasExpandedBefore = false;
         moreChildrenStartingIndex = 0;
         isPlaceHolder = false;
     }
@@ -120,6 +122,7 @@ public class CommentData implements Parcelable {
         hasReply = in.readByte() != 0;
         scoreHidden = in.readByte() != 0;
         isExpanded = in.readByte() != 0;
+        hasExpandedBefore = in.readByte() != 0;
         children = in.readArrayList(CommentData.class.getClassLoader());
         moreChildrenFullnames = in.readArrayList(CommentData.class.getClassLoader());
         moreChildrenStartingIndex = in.readInt();
@@ -250,6 +253,13 @@ public class CommentData implements Parcelable {
 
     public void setExpanded(boolean isExpanded) {
         this.isExpanded = isExpanded;
+        if (isExpanded && !hasExpandedBefore) {
+            hasExpandedBefore = true;
+        }
+    }
+
+    public boolean hasExpandedBefore() {
+        return hasExpandedBefore;
     }
 
     public int getVoteType() {
@@ -365,6 +375,7 @@ public class CommentData implements Parcelable {
         parcel.writeByte((byte) (hasReply ? 1 : 0));
         parcel.writeByte((byte) (scoreHidden ? 1 : 0));
         parcel.writeByte((byte) (isExpanded ? 1 : 0));
+        parcel.writeByte((byte) (hasExpandedBefore ? 1 : 0));
         parcel.writeList(children);
         parcel.writeList(moreChildrenFullnames);
         parcel.writeInt(moreChildrenStartingIndex);

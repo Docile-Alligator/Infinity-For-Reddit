@@ -352,6 +352,7 @@
     <string name="settings_show_top_level_comments_first_title">Show Top-level Comments First</string>
     <string name="settings_show_comment_divider_title">Show Comment Divider</string>
     <string name="settings_comment_toolbar_hide_on_click">Click to Show/Hide Comment Toolbar</string>
+    <string name="settings_fully_collapse_comment_title">Fully Collapse Comment</string>
     <string name="settings_comment_toolbar_hidden">Comment Toolbar Hidden by Default</string>
     <string name="settings_show_absolute_number_of_votes_title">Show Absolute Number of Votes</string>
     <string name="settings_show_elapsed_time">Show Elapsed Time in Posts and Comments</string>

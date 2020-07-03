@@ -70,6 +70,11 @@
         app:title="@string/settings_comment_toolbar_hide_on_click" />
 
     <SwitchPreference
+        app:defaultValue="false"
+        app:key="fully_collapse_comment"
+        android:title="@string/settings_fully_collapse_comment_title" />
+
+    <SwitchPreference
         app:defaultValue="true"
         app:key="show_absolute_number_of_votes"
         app:title="@string/settings_show_absolute_number_of_votes_title" />

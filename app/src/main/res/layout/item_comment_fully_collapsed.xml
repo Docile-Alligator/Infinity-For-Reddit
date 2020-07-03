@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/vertical_block_item_comment_fully_collapsed"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/user_name_text_view_item_comment_fully_collapsed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="8dp"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
+
+        <TextView
+            android:id="@+id/score_text_view_item_comment_fully_collapsed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
+
+        <TextView
+            android:id="@+id/more_count_text_view_item_comment_fully_collapsed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="16dp"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider_item_load_comment_fully_collapsed"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:visibility="gone" />
+
+</LinearLayout>
