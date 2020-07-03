@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Comment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,8 +35,8 @@ public class SendComment {
                 if (response.isSuccessful()) {
                     ParseComment.parseSentComment(response.body(), parentDepth, locale, new ParseComment.ParseSentCommentListener() {
                         @Override
-                        public void onParseSentCommentSuccess(CommentData commentData) {
-                            sendCommentListener.sendCommentSuccess(commentData);
+                        public void onParseSentCommentSuccess(Comment comment) {
+                            sendCommentListener.sendCommentSuccess(comment);
                         }
 
                         @Override
@@ -57,7 +57,7 @@ public class SendComment {
     }
 
     public interface SendCommentListener {
-        void sendCommentSuccess(CommentData commentData);
+        void sendCommentSuccess(Comment comment);
 
         void sendCommentFailed(String errorMessage);
     }

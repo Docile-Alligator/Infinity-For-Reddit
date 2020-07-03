@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Message;
 
 import android.os.AsyncTask;
 
@@ -44,8 +44,8 @@ public class ParseMessage {
     @Nullable
     private static Message parseSingleMessage(JSONObject messageJSON, Locale locale, int messageType) throws JSONException {
         String kind = messageJSON.getString(JSONUtils.KIND_KEY);
-        if ((messageType == FetchMessages.MESSAGE_TYPE_INBOX && kind.equals("t4")) ||
-                (messageType == FetchMessages.MESSAGE_TYPE_PRIVATE_MESSAGE && !kind.equals("t4"))) {
+        if ((messageType == FetchMessage.MESSAGE_TYPE_INBOX && kind.equals("t4")) ||
+                (messageType == FetchMessage.MESSAGE_TYPE_PRIVATE_MESSAGE && !kind.equals("t4"))) {
             return null;
         }
 
@@ -145,7 +145,7 @@ public class ParseMessage {
             try {
                 JSONObject messageJSON = new JSONObject(response).getJSONObject(JSONUtils.JSON_KEY)
                         .getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.THINGS_KEY).getJSONObject(0);
-                message = parseSingleMessage(messageJSON, locale, FetchMessages.MESSAGE_TYPE_PRIVATE_MESSAGE);
+                message = parseSingleMessage(messageJSON, locale, FetchMessage.MESSAGE_TYPE_PRIVATE_MESSAGE);
             } catch (JSONException e) {
                 e.printStackTrace();
                 errorMessage = parseRepliedMessageErrorMessage(response);

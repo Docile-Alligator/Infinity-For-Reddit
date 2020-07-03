@@ -32,11 +32,11 @@ import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewPrivateMessagesActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.FetchMessages;
-import ml.docilealligator.infinityforreddit.Message;
+import ml.docilealligator.infinityforreddit.Message.FetchMessage;
+import ml.docilealligator.infinityforreddit.Message.Message;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.ReadMessage;
+import ml.docilealligator.infinityforreddit.Message.ReadMessage;
 import retrofit2.Retrofit;
 
 public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, RecyclerView.ViewHolder> {
@@ -104,10 +104,10 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 )
                 .build();
         mAccessToken = accessToken;
-        if (where.equals(FetchMessages.WHERE_MESSAGES)) {
-            mMessageType = FetchMessages.MESSAGE_TYPE_PRIVATE_MESSAGE;
+        if (where.equals(FetchMessage.WHERE_MESSAGES)) {
+            mMessageType = FetchMessage.MESSAGE_TYPE_PRIVATE_MESSAGE;
         } else {
-            mMessageType = FetchMessages.MESSAGE_TYPE_INBOX;
+            mMessageType = FetchMessage.MESSAGE_TYPE_INBOX;
         }
 
         mColorAccent = customThemeWrapper.getColorAccent();
@@ -161,13 +161,13 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 mMarkwon.setMarkdown(((DataViewHolder) holder).contentCustomMarkwonView, displayedMessage.getBody());
 
                 ((DataViewHolder) holder).itemView.setOnClickListener(view -> {
-                    if (mMessageType == FetchMessages.MESSAGE_TYPE_INBOX
+                    if (mMessageType == FetchMessage.MESSAGE_TYPE_INBOX
                             && message.getContext() != null && !message.getContext().equals("")) {
                         Uri uri = LinkResolverActivity.getRedditUriByPath(message.getContext());
                         Intent intent = new Intent(mContext, LinkResolverActivity.class);
                         intent.setData(uri);
                         mContext.startActivity(intent);
-                    } else if (mMessageType == FetchMessages.MESSAGE_TYPE_PRIVATE_MESSAGE) {
+                    } else if (mMessageType == FetchMessage.MESSAGE_TYPE_PRIVATE_MESSAGE) {
                         Intent intent = new Intent(mContext, ViewPrivateMessagesActivity.class);
                         intent.putExtra(ViewPrivateMessagesActivity.EXTRA_PRIVATE_MESSAGE, message);
                         intent.putExtra(ViewPrivateMessagesActivity.EXTRA_MESSAGE_POSITION, holder.getAdapterPosition());

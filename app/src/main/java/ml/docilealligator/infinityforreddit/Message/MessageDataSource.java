@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Message;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,6 +8,7 @@ import androidx.paging.PageKeyedDataSource;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import ml.docilealligator.infinityforreddit.NetworkState;
 import retrofit2.Retrofit;
 
 class MessageDataSource extends PageKeyedDataSource<String, Message> {
@@ -29,10 +30,10 @@ class MessageDataSource extends PageKeyedDataSource<String, Message> {
         this.locale = locale;
         this.accessToken = accessToken;
         this.where = where;
-        if (where.equals(FetchMessages.WHERE_MESSAGES)) {
-            messageType = FetchMessages.MESSAGE_TYPE_PRIVATE_MESSAGE;
+        if (where.equals(FetchMessage.WHERE_MESSAGES)) {
+            messageType = FetchMessage.MESSAGE_TYPE_PRIVATE_MESSAGE;
         } else {
-            messageType = FetchMessages.MESSAGE_TYPE_INBOX;
+            messageType = FetchMessage.MESSAGE_TYPE_INBOX;
         }
         paginationNetworkStateLiveData = new MutableLiveData<>();
         initialLoadStateLiveData = new MutableLiveData<>();
@@ -59,8 +60,8 @@ class MessageDataSource extends PageKeyedDataSource<String, Message> {
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull LoadInitialCallback<String, Message> callback) {
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
-        FetchMessages.fetchInbox(oauthRetrofit, locale, accessToken, where, null, messageType,
-                new FetchMessages.FetchMessagesListener() {
+        FetchMessage.fetchInbox(oauthRetrofit, locale, accessToken, where, null, messageType,
+                new FetchMessage.FetchMessagesListener() {
             @Override
             public void fetchSuccess(ArrayList<Message> messages, @Nullable String after) {
                 if (messages.size() == 0) {
@@ -96,8 +97,8 @@ class MessageDataSource extends PageKeyedDataSource<String, Message> {
 
         paginationNetworkStateLiveData.postValue(NetworkState.LOADING);
 
-        FetchMessages.fetchInbox(oauthRetrofit, locale, accessToken, where, params.key, messageType,
-                new FetchMessages.FetchMessagesListener() {
+        FetchMessage.fetchInbox(oauthRetrofit, locale, accessToken, where, params.key, messageType,
+                new FetchMessage.FetchMessagesListener() {
             @Override
             public void fetchSuccess(ArrayList<Message> messages, @Nullable String after) {
                 if (after == null || after.equals("") || after.equals("null")) {

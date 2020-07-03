@@ -79,6 +79,14 @@ public class CustomThemeSharedPreferencesUtils {
     public static final String COMMENT_VERTICAL_BAR_COLOR_7 = "commentVerticalBarColor7";
     public static final String FAB_ICON_COLOR = "fabIconColor";
     public static final String CHIP_TEXT_COLOR = "chipTextColor";
+    public static final String LINK_COLOR = "linkColor";
+    public static final String RECEIVED_MESSAGE_TEXT_COLOR = "receivedMessageTextColor";
+    public static final String SENT_MESSAGE_TEXT_COLOR = "sentMessageTextColor";
+    public static final String RECEIVED_MESSAGE_BACKROUND_COLOR = "receivedMessageBackgroundColor";
+    public static final String SENT_MESSAGE_BACKGROUND_COLOR = "sentMessageBackgroundColor";
+    public static final String SEND_MESSAGE_ICON_COLOR = "sentMessageIconColor";
+    public static final String FULLY_COLLAPSED_COMMENT_BACKGROUND_COLOR = "fullyCollapsedCommentBackgroundColor";
+    public static final String AWARDED_COMMENT_BACKGROUND_COLOR = "awardedCommentBackgroundColor";
 
     public static void insertThemeToSharedPreferences(CustomTheme customTheme, SharedPreferences themeSharedPreferences) {
         SharedPreferences.Editor editor = themeSharedPreferences.edit();

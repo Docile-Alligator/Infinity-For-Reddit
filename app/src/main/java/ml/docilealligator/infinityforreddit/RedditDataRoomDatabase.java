@@ -26,7 +26,7 @@ import ml.docilealligator.infinityforreddit.User.UserDao;
 import ml.docilealligator.infinityforreddit.User.UserData;
 
 @Database(entities = {Account.class, SubredditData.class, SubscribedSubredditData.class, UserData.class,
-        SubscribedUserData.class, MultiReddit.class, CustomTheme.class}, version = 8)
+        SubscribedUserData.class, MultiReddit.class, CustomTheme.class}, version = 9)
 public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static RedditDataRoomDatabase INSTANCE;
 
@@ -37,7 +37,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             RedditDataRoomDatabase.class, "reddit_data")
                             .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
-                                    MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
+                                    MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9)
                             .build();
                 }
             }
@@ -184,6 +184,29 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
 
             database.execSQL("ALTER TABLE custom_themes"
                     + " ADD COLUMN bottom_app_bar_icon_color INTEGER DEFAULT " + Color.parseColor("#000000") + " NOT NULL");
+        }
+    };
+
+    private static final Migration MIGRATION_8_9 = new Migration(8, 9) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE custom_themes"
+                    + " ADD COLUMN link_color INTEGER DEFAULT " + Color.parseColor("#FF4081") + " NOT NULL");
+            database.execSQL("ALTER TABLE custom_themes"
+                    + " ADD COLUMN received_message_text_color INTEGER DEFAULT " + Color.parseColor("#FFFFFF") + " NOT NULL");
+            database.execSQL("ALTER TABLE custom_themes"
+                    + " ADD COLUMN sent_message_text_color INTEGER DEFAULT " + Color.parseColor("#FFFFFF") + " NOT NULL");
+            database.execSQL("ALTER TABLE custom_themes"
+                    + " ADD COLUMN received_message_background_color INTEGER DEFAULT " + Color.parseColor("#4185F4") + " NOT NULL");
+            database.execSQL("ALTER TABLE custom_themes"
+                    + " ADD COLUMN sent_message_background_color INTEGER DEFAULT " + Color.parseColor("#31BF7D") + " NOT NULL");
+            database.execSQL("ALTER TABLE custom_themes"
+                    + " ADD COLUMN send_message_icon_color INTEGER DEFAULT " + Color.parseColor("#4185F4") + " NOT NULL");
+            database.execSQL("ALTER TABLE custom_themes"
+                    + " ADD COLUMN fully_collapsed_comment_background_color INTEGER DEFAULT " + Color.parseColor("#4185F4") + " NOT NULL");
+            database.execSQL("ALTER TABLE custom_themes"
+                    + " ADD COLUMN awarded_comment_background_color INTEGER DEFAULT " + Color.parseColor("#EEAB02") + " NOT NULL");
+
         }
     };
 }

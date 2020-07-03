@@ -25,7 +25,7 @@ import ml.docilealligator.infinityforreddit.Activity.EditCommentActivity;
 import ml.docilealligator.infinityforreddit.Activity.ReportActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
-import ml.docilealligator.infinityforreddit.CommentData;
+import ml.docilealligator.infinityforreddit.Comment.Comment;
 import ml.docilealligator.infinityforreddit.R;
 
 
@@ -67,8 +67,8 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
         }
 
         Bundle bundle = getArguments();
-        CommentData commentData = bundle.getParcelable(EXTRA_COMMENT);
-        if (commentData == null) {
+        Comment comment = bundle.getParcelable(EXTRA_COMMENT);
+        if (comment == null) {
             dismiss();
             return rootView;
         }
@@ -81,8 +81,8 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
             editTextView.setOnClickListener(view -> {
                 Intent intent = new Intent(activity, EditCommentActivity.class);
                 intent.putExtra(EditCommentActivity.EXTRA_ACCESS_TOKEN, accessToken);
-                intent.putExtra(EditCommentActivity.EXTRA_FULLNAME, commentData.getFullName());
-                intent.putExtra(EditCommentActivity.EXTRA_CONTENT, commentData.getCommentMarkdown());
+                intent.putExtra(EditCommentActivity.EXTRA_FULLNAME, comment.getFullName());
+                intent.putExtra(EditCommentActivity.EXTRA_CONTENT, comment.getCommentMarkdown());
                 intent.putExtra(EditCommentActivity.EXTRA_POSITION, bundle.getInt(EXTRA_POSITION));
                 if (activity instanceof ViewPostDetailActivity) {
                     activity.startActivityForResult(intent, ViewPostDetailActivity.EDIT_COMMENT_REQUEST_CODE);
@@ -96,9 +96,9 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
             deleteTextView.setOnClickListener(view -> {
                 dismiss();
                 if (activity instanceof ViewPostDetailActivity) {
-                    ((ViewPostDetailActivity) activity).deleteComment(commentData.getFullName(), bundle.getInt(EXTRA_POSITION));
+                    ((ViewPostDetailActivity) activity).deleteComment(comment.getFullName(), bundle.getInt(EXTRA_POSITION));
                 } else if (activity instanceof ViewUserDetailActivity) {
-                    ((ViewUserDetailActivity) activity).deleteComment(commentData.getFullName());
+                    ((ViewUserDetailActivity) activity).deleteComment(comment.getFullName());
                 }
             });
         }
@@ -108,7 +108,7 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
             try {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, commentData.getPermalink());
+                intent.putExtra(Intent.EXTRA_TEXT, comment.getPermalink());
                 activity.startActivity(Intent.createChooser(intent, getString(R.string.share)));
             } catch (ActivityNotFoundException e) {
                 Toast.makeText(activity, R.string.no_activity_found_for_share, Toast.LENGTH_SHORT).show();
@@ -119,31 +119,31 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
             dismiss();
             CopyTextBottomSheetFragment copyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
             Bundle copyBundle = new Bundle();
-            copyBundle.putString(CopyTextBottomSheetFragment.EXTRA_MARKDOWN, commentData.getCommentMarkdown());
-            copyBundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, commentData.getCommentRawText());
+            copyBundle.putString(CopyTextBottomSheetFragment.EXTRA_MARKDOWN, comment.getCommentMarkdown());
+            copyBundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, comment.getCommentRawText());
             copyTextBottomSheetFragment.setArguments(copyBundle);
             copyTextBottomSheetFragment.show(activity.getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
         });
 
         reportTextView.setOnClickListener(view -> {
             Intent intent = new Intent(activity, ReportActivity.class);
-            intent.putExtra(ReportActivity.EXTRA_SUBREDDIT_NAME, commentData.getSubredditName());
-            intent.putExtra(ReportActivity.EXTRA_THING_FULLNAME, commentData.getFullName());
+            intent.putExtra(ReportActivity.EXTRA_SUBREDDIT_NAME, comment.getSubredditName());
+            intent.putExtra(ReportActivity.EXTRA_THING_FULLNAME, comment.getFullName());
             activity.startActivity(intent);
 
             dismiss();
         });
 
-        if ("[deleted]".equals(commentData.getAuthor()) ||
-                "[deleted]".equals(commentData.getCommentRawText()) ||
-                "[removed]".equals(commentData.getCommentRawText())
+        if ("[deleted]".equals(comment.getAuthor()) ||
+                "[deleted]".equals(comment.getCommentRawText()) ||
+                "[removed]".equals(comment.getCommentRawText())
         ) {
             seeRemovedTextView.setVisibility(View.VISIBLE);
 
             seeRemovedTextView.setOnClickListener(view -> {
                 dismiss();
                 if (activity instanceof ViewPostDetailActivity) {
-                    ((ViewPostDetailActivity) activity).showRemovedComment(commentData, bundle.getInt(EXTRA_POSITION));
+                    ((ViewPostDetailActivity) activity).showRemovedComment(comment, bundle.getInt(EXTRA_POSITION));
                 }
             });
         }

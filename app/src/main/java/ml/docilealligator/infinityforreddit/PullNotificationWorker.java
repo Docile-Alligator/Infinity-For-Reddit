@@ -31,6 +31,9 @@ import ml.docilealligator.infinityforreddit.Account.Account;
 import ml.docilealligator.infinityforreddit.Activity.InboxActivity;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.Message.FetchMessage;
+import ml.docilealligator.infinityforreddit.Message.Message;
+import ml.docilealligator.infinityforreddit.Message.ParseMessage;
 import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
@@ -85,7 +88,7 @@ public class PullNotificationWorker extends Worker {
                     String responseBody = response.body();
                     JSONArray messageArray = new JSONObject(responseBody).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
                     ArrayList<Message> messages = ParseMessage.parseMessages(messageArray,
-                            context.getResources().getConfiguration().locale, FetchMessages.MESSAGE_TYPE_NOTIFICATION);
+                            context.getResources().getConfiguration().locale, FetchMessage.MESSAGE_TYPE_NOTIFICATION);
 
                     if (!messages.isEmpty()) {
                         NotificationManagerCompat notificationManager = NotificationUtils.getNotificationManager(context);
@@ -218,7 +221,7 @@ public class PullNotificationWorker extends Worker {
 
         Call<String> call = mOauthWithoutAuthenticatorRetrofit.create(RedditAPI.class)
                 .getMessages(APIUtils.getOAuthHeader(account.getAccessToken()),
-                        FetchMessages.WHERE_UNREAD, null);
+                        FetchMessage.WHERE_UNREAD, null);
         Response<String> response = call.execute();
 
         if (response.isSuccessful()) {

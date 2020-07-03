@@ -1,6 +1,6 @@
 package ml.docilealligator.infinityforreddit.Event;
 
-import ml.docilealligator.infinityforreddit.Message;
+import ml.docilealligator.infinityforreddit.Message.Message;
 
 public class RepliedToPrivateMessageEvent {
     public Message newReply;

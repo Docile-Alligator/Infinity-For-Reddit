@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Comment;
 
 import android.os.AsyncTask;
 
@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import ml.docilealligator.infinityforreddit.API.RedditAPI;
+import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.Post.PostDataSource;
+import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
@@ -23,7 +25,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class CommentDataSource extends PageKeyedDataSource<String, CommentData> {
+public class CommentDataSource extends PageKeyedDataSource<String, Comment> {
 
     private Retrofit retrofit;
     private Locale locale;
@@ -38,7 +40,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
     private MutableLiveData<Boolean> hasPostLiveData;
 
     private LoadParams<String> params;
-    private LoadCallback<String, CommentData> callback;
+    private LoadCallback<String, Comment> callback;
 
     CommentDataSource(Retrofit retrofit, Locale locale, @Nullable String accessToken, String username, SortType sortType,
                       boolean areSavedComments) {
@@ -70,7 +72,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
     }
 
     @Override
-    public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull LoadInitialCallback<String, CommentData> callback) {
+    public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull LoadInitialCallback<String, Comment> callback) {
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
         RedditAPI api = retrofit.create(RedditAPI.class);
@@ -108,7 +110,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
                 if (response.isSuccessful()) {
                     new ParseCommentAsyncTask(response.body(), locale, new ParseCommentAsyncTask.ParseCommentAsyncTaskListener() {
                         @Override
-                        public void parseSuccessful(ArrayList<CommentData> comments, String after) {
+                        public void parseSuccessful(ArrayList<Comment> comments, String after) {
                             if (comments.size() == 0) {
                                 hasPostLiveData.postValue(false);
                             } else {
@@ -141,12 +143,12 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
     }
 
     @Override
-    public void loadBefore(@NonNull LoadParams<String> params, @NonNull LoadCallback<String, CommentData> callback) {
+    public void loadBefore(@NonNull LoadParams<String> params, @NonNull LoadCallback<String, Comment> callback) {
 
     }
 
     @Override
-    public void loadAfter(@NonNull LoadParams<String> params, @NonNull LoadCallback<String, CommentData> callback) {
+    public void loadAfter(@NonNull LoadParams<String> params, @NonNull LoadCallback<String, Comment> callback) {
         this.params = params;
         this.callback = callback;
 
@@ -186,7 +188,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
                 if (response.isSuccessful()) {
                     new ParseCommentAsyncTask(response.body(), locale, new ParseCommentAsyncTask.ParseCommentAsyncTaskListener() {
                         @Override
-                        public void parseSuccessful(ArrayList<CommentData> comments, String after) {
+                        public void parseSuccessful(ArrayList<Comment> comments, String after) {
                             if (after == null || after.equals("") || after.equals("null")) {
                                 callback.onResult(comments, null);
                             } else {
@@ -212,7 +214,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
         });
     }
 
-    private static class ParseCommentAsyncTask extends AsyncTask<Void, ArrayList<CommentData>, ArrayList<CommentData>> {
+    private static class ParseCommentAsyncTask extends AsyncTask<Void, ArrayList<Comment>, ArrayList<Comment>> {
         private String after;
         private Locale locale;
         private JSONArray commentsJSONArray;
@@ -234,12 +236,12 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
         }
 
         @Override
-        protected ArrayList<CommentData> doInBackground(Void... voids) {
+        protected ArrayList<Comment> doInBackground(Void... voids) {
             if (parseFailed) {
                 return null;
             }
 
-            ArrayList<CommentData> comments = new ArrayList<>();
+            ArrayList<Comment> comments = new ArrayList<>();
             for (int i = 0; i < commentsJSONArray.length(); i++) {
                 try {
                     JSONObject commentJSON = commentsJSONArray.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
@@ -251,7 +253,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
         }
 
         @Override
-        protected void onPostExecute(ArrayList<CommentData> commentData) {
+        protected void onPostExecute(ArrayList<Comment> commentData) {
             super.onPostExecute(commentData);
             if (commentData != null) {
                 parseCommentAsyncTaskListener.parseSuccessful(commentData, after);
@@ -261,7 +263,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, CommentData> 
         }
 
         interface ParseCommentAsyncTaskListener {
-            void parseSuccessful(ArrayList<CommentData> comments, String after);
+            void parseSuccessful(ArrayList<Comment> comments, String after);
 
             void parseFailed();
         }

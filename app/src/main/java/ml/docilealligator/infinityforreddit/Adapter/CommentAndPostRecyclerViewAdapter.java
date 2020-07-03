@@ -69,6 +69,7 @@ import im.ene.toro.widget.Container;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.recycler.MarkwonAdapter;
@@ -91,11 +92,11 @@ import ml.docilealligator.infinityforreddit.AsyncTask.LoadUserDataAsyncTask;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.CommentMoreBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.ShareLinkBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.CommentData;
+import ml.docilealligator.infinityforreddit.Comment.Comment;
+import ml.docilealligator.infinityforreddit.Comment.FetchComment;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.CustomView.MarkwonLinearLayoutManager;
-import ml.docilealligator.infinityforreddit.FetchComment;
 import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.Post.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
@@ -138,7 +139,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private String mAccessToken;
     private String mAccountName;
     private Post mPost;
-    private ArrayList<CommentData> mVisibleComments;
+    private ArrayList<Comment> mVisibleComments;
     private String mSubredditNamePrefixed;
     private Locale mLocale;
     private String mSingleCommentId;
@@ -205,6 +206,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private int mButtonTextColor;
     private int mPostIconAndInfoColor;
     private int mCommentIconAndInfoColor;
+    private int mFullyCollapsedCommentBackgroundColor;
+    private int mAwardedCommentBackgroundColor;
 
     private Drawable mCommentIcon;
     private float mScale;
@@ -226,6 +229,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mGlide = glide;
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
         int markdownColor = customThemeWrapper.getPostContentColor();
+        int linkColor = customThemeWrapper.getLinkColor();
         mPostDetailMarkwon = Markwon.builder(mActivity)
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
@@ -254,6 +258,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             mActivity.startActivity(intent);
                         }).urlProcessor(new UrlProcessorRelativeToAbsolute("https://www.reddit.com"));
                     }
+
+                    @Override
+                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                        builder.linkColor(linkColor);
+                    }
                 })
                 .usePlugin(StrikethroughPlugin.create())
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
@@ -279,6 +288,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             }
                             mActivity.startActivity(intent);
                         }).urlProcessor(new UrlProcessorRelativeToAbsolute("https://www.reddit.com"));
+                    }
+
+                    @Override
+                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                        builder.linkColor(linkColor);
                     }
                 })
                 .usePlugin(StrikethroughPlugin.create())
@@ -373,6 +387,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mButtonTextColor = customThemeWrapper.getButtonTextColor();
         mPostIconAndInfoColor = customThemeWrapper.getPostIconAndInfoColor();
         mCommentIconAndInfoColor = customThemeWrapper.getCommentIconAndInfoColor();
+        mFullyCollapsedCommentBackgroundColor = customThemeWrapper.getFullyCollapsedCommentBackgroundColor();
+        mAwardedCommentBackgroundColor = customThemeWrapper.getAwardedCommentBackgroundColor();
 
         mCommentIcon = activity.getDrawable(R.drawable.ic_comment_grey_24dp);
         if (mCommentIcon != null) {
@@ -443,7 +459,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 }
             }
 
-            CommentData comment = mVisibleComments.get(position - 2);
+            Comment comment = mVisibleComments.get(position - 2);
             if (!comment.isPlaceHolder()) {
                 if (mFullyCollapseComment && comment.hasReply() && !comment.isExpanded() && comment.hasExpandedBefore()) {
                     return VIEW_TYPE_COMMENT_FULLY_COLLAPSED;
@@ -461,7 +477,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 }
             }
 
-            CommentData comment = mVisibleComments.get(position - 1);
+            Comment comment = mVisibleComments.get(position - 1);
             if (!comment.isPlaceHolder()) {
                 if (mFullyCollapseComment && comment.hasReply() && !comment.isExpanded() && comment.hasExpandedBefore()) {
                     return VIEW_TYPE_COMMENT_FULLY_COLLAPSED;
@@ -743,7 +759,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 }
             }
         } else if (holder instanceof CommentViewHolder) {
-            CommentData comment;
+            Comment comment;
             if (mIsSingleCommentThreadMode) {
                 comment = mVisibleComments.get(holder.getAdapterPosition() - 2);
             } else {
@@ -752,6 +768,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if (mIsSingleCommentThreadMode && comment.getId().equals(mSingleCommentId)) {
                 ((CommentViewHolder) holder).itemView.setBackgroundColor(mSingleCommentThreadBackgroundColor);
+            } else if (comment.getAwards() != null && !comment.getAwards().equals("")) {
+                ((CommentViewHolder) holder).itemView.setBackgroundColor(mAwardedCommentBackgroundColor);
             }
 
             String authorPrefixed = "u/" + comment.getAuthor();
@@ -859,12 +877,12 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             }
 
             switch (comment.getVoteType()) {
-                case CommentData.VOTE_TYPE_UPVOTE:
+                case Comment.VOTE_TYPE_UPVOTE:
                     ((CommentViewHolder) holder).upvoteButton
                             .setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                     ((CommentViewHolder) holder).scoreTextView.setTextColor(mUpvotedColor);
                     break;
-                case CommentData.VOTE_TYPE_DOWNVOTE:
+                case Comment.VOTE_TYPE_DOWNVOTE:
                     ((CommentViewHolder) holder).downvoteButton
                             .setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                     ((CommentViewHolder) holder).scoreTextView.setTextColor(mDownvotedColor);
@@ -895,7 +913,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
             }
         } else if (holder instanceof CommentFullyCollapsedViewHolder) {
-            CommentData comment;
+            Comment comment;
             if (mIsSingleCommentThreadMode) {
                 comment = mVisibleComments.get(holder.getAdapterPosition() - 2);
             } else {
@@ -904,10 +922,10 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             String authorWithPrefix = "u/" + comment.getAuthor();
             ((CommentFullyCollapsedViewHolder) holder).usernameTextView.setText(authorWithPrefix);
-            if (comment.getMoreChildrenFullnames() != null) {
-                ((CommentFullyCollapsedViewHolder) holder).nMoreRepliesTextView.setText(Integer.toString(1 + comment.getMoreChildrenFullnames().size()));
+            if (mShowElapsedTime) {
+                ((CommentFullyCollapsedViewHolder) holder).commentTimeTextView.setText(Utils.getElapsedTime(mActivity, comment.getCommentTimeMillis()));
             } else {
-                ((CommentFullyCollapsedViewHolder) holder).nMoreRepliesTextView.setText(Integer.toString(1));
+                ((CommentFullyCollapsedViewHolder) holder).commentTimeTextView.setText(Utils.getFormattedTime(mLocale, comment.getCommentTimeMillis(), mTimeFormatPattern));
             }
             ((CommentFullyCollapsedViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore()));
 
@@ -948,7 +966,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 ((CommentFullyCollapsedViewHolder) holder).verticalBlock.setLayoutParams(params);
             }
         } else if (holder instanceof LoadMoreChildCommentsViewHolder) {
-            CommentData placeholder;
+            Comment placeholder;
             placeholder = mIsSingleCommentThreadMode ? mVisibleComments.get(holder.getAdapterPosition() - 2)
                     : mVisibleComments.get(holder.getAdapterPosition() - 1);
 
@@ -1002,7 +1020,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 int commentPosition = mIsSingleCommentThreadMode ? holder.getAdapterPosition() - 2 : holder.getAdapterPosition() - 1;
                 int parentPosition = getParentPosition(commentPosition);
                 if (parentPosition >= 0) {
-                    CommentData parentComment = mVisibleComments.get(parentPosition);
+                    Comment parentComment = mVisibleComments.get(parentPosition);
 
                     mVisibleComments.get(commentPosition).setLoadingMoreChildren(true);
                     mVisibleComments.get(commentPosition).setLoadMoreChildrenFailed(false);
@@ -1014,7 +1032,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             mExpandChildren, mLocale,
                             new FetchComment.FetchMoreCommentListener() {
                                 @Override
-                                public void onFetchMoreCommentSuccess(ArrayList<CommentData> expandedComments,
+                                public void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments,
                                                                       int childrenStartingIndex) {
                                     if (mVisibleComments.size() > parentPosition
                                             && parentComment.getFullName().equals(mVisibleComments.get(parentPosition).getFullName())) {
@@ -1287,7 +1305,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         return -1;
     }
 
-    private void expandChildren(ArrayList<CommentData> comments, ArrayList<CommentData> newList, int position) {
+    private void expandChildren(ArrayList<Comment> comments, ArrayList<Comment> newList, int position) {
         if (comments != null && comments.size() > 0) {
             newList.addAll(position, comments);
             for (int i = 0; i < comments.size(); i++) {
@@ -1327,7 +1345,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         }
     }
 
-    public void addComments(@NonNull ArrayList<CommentData> comments, boolean hasMoreComments) {
+    public void addComments(@NonNull ArrayList<Comment> comments, boolean hasMoreComments) {
         if (mVisibleComments.size() == 0) {
             isInitiallyLoading = false;
             isInitiallyLoadingFailed = false;
@@ -1364,7 +1382,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mHasMoreComments = hasMoreComments;
     }
 
-    public void addComment(CommentData comment) {
+    public void addComment(Comment comment) {
         if (mVisibleComments.size() == 0 || isInitiallyLoadingFailed) {
             notifyItemRemoved(1);
         }
@@ -1378,7 +1396,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         }
     }
 
-    public void addChildComment(CommentData comment, String parentFullname, int parentPosition) {
+    public void addChildComment(Comment comment, String parentFullname, int parentPosition) {
         if (!parentFullname.equals(mVisibleComments.get(parentPosition).getFullName())) {
             for (int i = 0; i < mVisibleComments.size(); i++) {
                 if (parentFullname.equals(mVisibleComments.get(i).getFullName())) {
@@ -1391,7 +1409,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mVisibleComments.get(parentPosition).addChild(comment);
         mVisibleComments.get(parentPosition).setHasReply(true);
         if (!mVisibleComments.get(parentPosition).isExpanded()) {
-            ArrayList<CommentData> newList = new ArrayList<>();
+            ArrayList<Comment> newList = new ArrayList<>();
             expandChildren(mVisibleComments.get(parentPosition).getChildren(), newList, 0);
             mVisibleComments.get(parentPosition).setExpanded(true);
             mVisibleComments.addAll(parentPosition + 1, newList);
@@ -1417,7 +1435,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mIsSingleCommentThreadMode = isSingleCommentThreadMode;
     }
 
-    public ArrayList<CommentData> getVisibleComments() {
+    public ArrayList<Comment> getVisibleComments() {
         return mVisibleComments;
     }
 
@@ -2799,7 +2817,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             authorFlairTextView.setOnClickListener(view -> authorTextView.performClick());
 
             moreButton.setOnClickListener(view -> {
-                CommentData comment = getCurrentComment(this);
+                Comment comment = getCurrentComment(this);
                 Bundle bundle = new Bundle();
                 if (!mPost.isArchived() && !mPost.isLocked() && comment.getAuthor().equals(mAccountName)) {
                     bundle.putString(CommentMoreBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
@@ -2831,7 +2849,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     return;
                 }
 
-                CommentData comment = getCurrentComment(this);
+                Comment comment = getCurrentComment(this);
 
                 Intent intent = new Intent(mActivity, CommentActivity.class);
                 intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, comment.getDepth() + 1);
@@ -2856,21 +2874,21 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     return;
                 }
 
-                CommentData comment = getCurrentComment(this);
+                Comment comment = getCurrentComment(this);
                 int previousVoteType = comment.getVoteType();
                 String newVoteType;
 
                 downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
-                if (previousVoteType != CommentData.VOTE_TYPE_UPVOTE) {
+                if (previousVoteType != Comment.VOTE_TYPE_UPVOTE) {
                     //Not upvoted before
-                    comment.setVoteType(CommentData.VOTE_TYPE_UPVOTE);
+                    comment.setVoteType(Comment.VOTE_TYPE_UPVOTE);
                     newVoteType = APIUtils.DIR_UPVOTE;
                     upvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                     scoreTextView.setTextColor(mUpvotedColor);
                 } else {
                     //Upvoted before
-                    comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
+                    comment.setVoteType(Comment.VOTE_TYPE_NO_VOTE);
                     newVoteType = APIUtils.DIR_UNVOTE;
                     upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                     scoreTextView.setTextColor(mCommentIconAndInfoColor);
@@ -2885,11 +2903,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     @Override
                     public void onVoteThingSuccess(int position) {
                         if (newVoteType.equals(APIUtils.DIR_UPVOTE)) {
-                            comment.setVoteType(CommentData.VOTE_TYPE_UPVOTE);
+                            comment.setVoteType(Comment.VOTE_TYPE_UPVOTE);
                             upvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                             scoreTextView.setTextColor(mUpvotedColor);
                         } else {
-                            comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
+                            comment.setVoteType(Comment.VOTE_TYPE_NO_VOTE);
                             upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                             scoreTextView.setTextColor(mCommentIconAndInfoColor);
                         }
@@ -2918,21 +2936,21 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     return;
                 }
 
-                CommentData comment = getCurrentComment(this);
+                Comment comment = getCurrentComment(this);
                 int previousVoteType = comment.getVoteType();
                 String newVoteType;
 
                 upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
-                if (previousVoteType != CommentData.VOTE_TYPE_DOWNVOTE) {
+                if (previousVoteType != Comment.VOTE_TYPE_DOWNVOTE) {
                     //Not downvoted before
-                    comment.setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
+                    comment.setVoteType(Comment.VOTE_TYPE_DOWNVOTE);
                     newVoteType = APIUtils.DIR_DOWNVOTE;
                     downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                     scoreTextView.setTextColor(mDownvotedColor);
                 } else {
                     //Downvoted before
-                    comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
+                    comment.setVoteType(Comment.VOTE_TYPE_NO_VOTE);
                     newVoteType = APIUtils.DIR_UNVOTE;
                     downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                     scoreTextView.setTextColor(mCommentIconAndInfoColor);
@@ -2947,11 +2965,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     @Override
                     public void onVoteThingSuccess(int position1) {
                         if (newVoteType.equals(APIUtils.DIR_DOWNVOTE)) {
-                            comment.setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
+                            comment.setVoteType(Comment.VOTE_TYPE_DOWNVOTE);
                             downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                             scoreTextView.setTextColor(mDownvotedColor);
                         } else {
-                            comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
+                            comment.setVoteType(Comment.VOTE_TYPE_NO_VOTE);
                             downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                             scoreTextView.setTextColor(mCommentIconAndInfoColor);
                         }
@@ -2970,7 +2988,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             });
 
             saveButton.setOnClickListener(view -> {
-                CommentData comment = getCurrentComment(this);
+                Comment comment = getCurrentComment(this);
                 if (comment.isSaved()) {
                     comment.setSaved(false);
                     SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
@@ -3018,13 +3036,13 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 if (expandButton.getVisibility() == View.VISIBLE) {
                     int commentPosition = mIsSingleCommentThreadMode ? getAdapterPosition() - 2 : getAdapterPosition() - 1;
                     if (commentPosition >= 0 && commentPosition < mVisibleComments.size()) {
-                        CommentData comment = getCurrentComment(this);
+                        Comment comment = getCurrentComment(this);
                         if (mVisibleComments.get(commentPosition).isExpanded()) {
                             collapseChildren(commentPosition);
                             expandButton.setImageResource(R.drawable.ic_expand_more_grey_24dp);
                         } else {
                             comment.setExpanded(true);
-                            ArrayList<CommentData> newList = new ArrayList<>();
+                            ArrayList<Comment> newList = new ArrayList<>();
                             expandChildren(mVisibleComments.get(commentPosition).getChildren(), newList, 0);
                             mVisibleComments.get(commentPosition).setExpanded(true);
                             mVisibleComments.addAll(commentPosition + 1, newList);
@@ -3082,8 +3100,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         }
     }
 
-    private CommentData getCurrentComment(RecyclerView.ViewHolder holder) {
-        CommentData comment;
+    private Comment getCurrentComment(RecyclerView.ViewHolder holder) {
+        Comment comment;
         if (mIsSingleCommentThreadMode) {
             comment = mVisibleComments.get(holder.getAdapterPosition() - 2);
         } else {
@@ -3100,14 +3118,19 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         TextView usernameTextView;
         @BindView(R.id.score_text_view_item_comment_fully_collapsed)
         TextView scoreTextView;
-        @BindView(R.id.more_count_text_view_item_comment_fully_collapsed)
-        TextView nMoreRepliesTextView;
+        @BindView(R.id.time_text_view_item_comment_fully_collapsed)
+        TextView commentTimeTextView;
         @BindView(R.id.divider_item_load_comment_fully_collapsed)
         View commentDivider;
 
         public CommentFullyCollapsedViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            itemView.setBackgroundColor(mFullyCollapsedCommentBackgroundColor);
+            usernameTextView.setTextColor(mUsernameColor);
+            scoreTextView.setTextColor(mCommentIconAndInfoColor);
+            commentTimeTextView.setTextColor(mSecondaryTextColor);
 
             if (mShowCommentDivider) {
                 commentDivider.setBackgroundColor(mDividerColor);
@@ -3117,9 +3140,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             itemView.setOnClickListener(view -> {
                 int commentPosition = mIsSingleCommentThreadMode ? getAdapterPosition() - 2 : getAdapterPosition() - 1;
                 if (commentPosition >= 0 && commentPosition < mVisibleComments.size()) {
-                    CommentData comment = getCurrentComment(this);
+                    Comment comment = getCurrentComment(this);
                     comment.setExpanded(true);
-                    ArrayList<CommentData> newList = new ArrayList<>();
+                    ArrayList<Comment> newList = new ArrayList<>();
                     expandChildren(mVisibleComments.get(commentPosition).getChildren(), newList, 0);
                     mVisibleComments.get(commentPosition).setExpanded(true);
                     mVisibleComments.addAll(commentPosition + 1, newList);

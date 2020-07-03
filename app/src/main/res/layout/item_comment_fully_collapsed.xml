@@ -34,7 +34,7 @@
             android:fontFamily="?attr/font_family" />
 
         <TextView
-            android:id="@+id/more_count_text_view_item_comment_fully_collapsed"
+            android:id="@+id/time_text_view_item_comment_fully_collapsed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"

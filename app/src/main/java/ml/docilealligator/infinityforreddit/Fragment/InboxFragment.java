@@ -33,10 +33,10 @@ import ml.docilealligator.infinityforreddit.Activity.BaseActivity;
 import ml.docilealligator.infinityforreddit.Adapter.MessageRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.RepliedToPrivateMessageEvent;
-import ml.docilealligator.infinityforreddit.FetchMessages;
+import ml.docilealligator.infinityforreddit.Message.FetchMessage;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.MessageViewModel;
+import ml.docilealligator.infinityforreddit.Message.MessageViewModel;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
@@ -102,7 +102,7 @@ public class InboxFragment extends Fragment implements FragmentCommunicator {
             mRecyclerView.setPadding(0, 0, 0, mActivity.getNavBarHeight());
         }
 
-        mWhere = arguments.getString(EXTRA_MESSAGE_WHERE, FetchMessages.WHERE_INBOX);
+        mWhere = arguments.getString(EXTRA_MESSAGE_WHERE, FetchMessage.WHERE_INBOX);
         mAdapter = new MessageRecyclerViewAdapter(mActivity, mOauthRetrofit, mCustomThemeWrapper,
                 mAccessToken, mWhere, () -> mMessageViewModel.retryLoadingMore());
         mLinearLayoutManager = new LinearLayoutManager(mActivity);
@@ -190,7 +190,7 @@ public class InboxFragment extends Fragment implements FragmentCommunicator {
 
     @Subscribe
     public void onRepliedToPrivateMessageEvent(RepliedToPrivateMessageEvent repliedToPrivateMessageEvent) {
-        if (mAdapter != null && mWhere.equals(FetchMessages.WHERE_MESSAGES)) {
+        if (mAdapter != null && mWhere.equals(FetchMessage.WHERE_MESSAGES)) {
             mAdapter.updateMessageReply(repliedToPrivateMessageEvent.newReply, repliedToPrivateMessageEvent.messagePosition);
         }
     }

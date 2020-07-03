@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Comment;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,19 +7,19 @@ import java.util.ArrayList;
 
 import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 
-public class CommentData implements Parcelable {
+public class Comment implements Parcelable {
     public static final int VOTE_TYPE_NO_VOTE = 0;
     public static final int VOTE_TYPE_UPVOTE = 1;
     public static final int VOTE_TYPE_DOWNVOTE = -1;
-    public static final Creator<CommentData> CREATOR = new Creator<CommentData>() {
+    public static final Creator<Comment> CREATOR = new Creator<Comment>() {
         @Override
-        public CommentData createFromParcel(Parcel in) {
-            return new CommentData(in);
+        public Comment createFromParcel(Parcel in) {
+            return new Comment(in);
         }
 
         @Override
-        public CommentData[] newArray(int size) {
-            return new CommentData[size];
+        public Comment[] newArray(int size) {
+            return new Comment[size];
         }
     };
     private String id;
@@ -47,20 +47,20 @@ public class CommentData implements Parcelable {
     private boolean saved;
     private boolean isExpanded;
     private boolean hasExpandedBefore;
-    private ArrayList<CommentData> children;
+    private ArrayList<Comment> children;
     private ArrayList<String> moreChildrenFullnames;
     private int moreChildrenStartingIndex;
     private boolean isPlaceHolder;
     private boolean isLoadingMoreChildren;
     private boolean loadMoreChildrenFailed;
 
-    public CommentData(String id, String fullName, String author, String authorFlair,
-                       String authorFlairHTML, String linkAuthor,
-                       long commentTimeMillis, String commentMarkdown, String commentRawText,
-                       String linkId, String subredditName, String parentId, int score,
-                       int voteType, boolean isSubmitter, String distinguished, String permalink,
-                       String awards, int depth, boolean collapsed, boolean hasReply,
-                       boolean scoreHidden, boolean saved) {
+    public Comment(String id, String fullName, String author, String authorFlair,
+                   String authorFlairHTML, String linkAuthor,
+                   long commentTimeMillis, String commentMarkdown, String commentRawText,
+                   String linkId, String subredditName, String parentId, int score,
+                   int voteType, boolean isSubmitter, String distinguished, String permalink,
+                   String awards, int depth, boolean collapsed, boolean hasReply,
+                   boolean scoreHidden, boolean saved) {
         this.id = id;
         this.fullName = fullName;
         this.author = author;
@@ -90,7 +90,7 @@ public class CommentData implements Parcelable {
         isPlaceHolder = false;
     }
 
-    public CommentData(String parentFullName, int depth) {
+    public Comment(String parentFullName, int depth) {
         this.fullName = parentFullName;
         this.depth = depth;
         isPlaceHolder = true;
@@ -98,7 +98,7 @@ public class CommentData implements Parcelable {
         loadMoreChildrenFailed = false;
     }
 
-    protected CommentData(Parcel in) {
+    protected Comment(Parcel in) {
         id = in.readString();
         fullName = in.readString();
         author = in.readString();
@@ -123,8 +123,8 @@ public class CommentData implements Parcelable {
         scoreHidden = in.readByte() != 0;
         isExpanded = in.readByte() != 0;
         hasExpandedBefore = in.readByte() != 0;
-        children = in.readArrayList(CommentData.class.getClassLoader());
-        moreChildrenFullnames = in.readArrayList(CommentData.class.getClassLoader());
+        children = in.readArrayList(Comment.class.getClassLoader());
+        moreChildrenFullnames = in.readArrayList(Comment.class.getClassLoader());
         moreChildrenStartingIndex = in.readInt();
         isPlaceHolder = in.readByte() != 0;
         isLoadingMoreChildren = in.readByte() != 0;
@@ -270,15 +270,15 @@ public class CommentData implements Parcelable {
         this.voteType = voteType;
     }
 
-    public ArrayList<CommentData> getChildren() {
+    public ArrayList<Comment> getChildren() {
         return children;
     }
 
-    public void setChildren(ArrayList<CommentData> children) {
+    public void setChildren(ArrayList<Comment> children) {
         this.children = children;
     }
 
-    public void addChildren(ArrayList<CommentData> moreChildren) {
+    public void addChildren(ArrayList<Comment> moreChildren) {
         if (children == null || children.size() == 0) {
             setChildren(moreChildren);
         } else {
@@ -290,11 +290,11 @@ public class CommentData implements Parcelable {
         }
     }
 
-    public void addChild(CommentData comment) {
+    public void addChild(Comment comment) {
         addChild(comment, 0);
     }
 
-    public void addChild(CommentData comment, int position) {
+    public void addChild(Comment comment, int position) {
         if (children == null) {
             children = new ArrayList<>();
         }

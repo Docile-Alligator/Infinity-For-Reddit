@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Message;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,11 +6,11 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 public class Message implements Parcelable {
-    static final String TYPE_COMMENT = "t1";
-    static final String TYPE_ACCOUNT = "t2";
-    static final String TYPE_LINK = "t3";
-    static final String TYPE_MESSAGE = "t4";
-    static final String TYPE_SUBREDDIT = "t5";
+    public static final String TYPE_COMMENT = "t1";
+    public static final String TYPE_ACCOUNT = "t2";
+    public static final String TYPE_LINK = "t3";
+    public static final String TYPE_MESSAGE = "t4";
+    public static final String TYPE_SUBREDDIT = "t5";
     static final String TYPE_AWARD = "t6";
 
     private String kind;

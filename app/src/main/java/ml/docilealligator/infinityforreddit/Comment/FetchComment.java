@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Comment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,7 +41,7 @@ public class FetchComment {
                     ParseComment.parseComment(response.body(), new ArrayList<>(),
                             locale, expandChildren, new ParseComment.ParseCommentListener() {
                                 @Override
-                                public void onParseCommentSuccess(ArrayList<CommentData> expandedComments,
+                                public void onParseCommentSuccess(ArrayList<Comment> expandedComments,
                                                                   String parentId, ArrayList<String> moreChildrenFullnames) {
                                     fetchCommentListener.onFetchCommentSuccess(expandedComments, parentId,
                                             moreChildrenFullnames);
@@ -101,7 +101,7 @@ public class FetchComment {
                     ParseComment.parseMoreComment(response.body(), new ArrayList<>(), locale,
                             depth, expandChildren, new ParseComment.ParseCommentListener() {
                                 @Override
-                                public void onParseCommentSuccess(ArrayList<CommentData> expandedComments,
+                                public void onParseCommentSuccess(ArrayList<Comment> expandedComments,
                                                                   String parentId, ArrayList<String> moreChildrenFullnames) {
                                     fetchMoreCommentListener.onFetchMoreCommentSuccess(expandedComments,
                                             startingIndex + 100);
@@ -125,13 +125,13 @@ public class FetchComment {
     }
 
     public interface FetchCommentListener {
-        void onFetchCommentSuccess(ArrayList<CommentData> expandedComments, String parentId, ArrayList<String> children);
+        void onFetchCommentSuccess(ArrayList<Comment> expandedComments, String parentId, ArrayList<String> children);
 
         void onFetchCommentFailed();
     }
 
     public interface FetchMoreCommentListener {
-        void onFetchMoreCommentSuccess(ArrayList<CommentData> expandedComments, int childrenStartingIndex);
+        void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments, int childrenStartingIndex);
 
         void onFetchMoreCommentFailed();
     }

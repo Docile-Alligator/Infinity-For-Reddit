@@ -49,14 +49,14 @@ import io.noties.markwon.recycler.table.TableEntryPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
-import ml.docilealligator.infinityforreddit.CommentData;
+import ml.docilealligator.infinityforreddit.Comment.Comment;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.SendComment;
+import ml.docilealligator.infinityforreddit.Comment.SendComment;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
@@ -330,13 +330,13 @@ public class CommentActivity extends BaseActivity {
                             mAccessToken,
                             new SendComment.SendCommentListener() {
                                 @Override
-                                public void sendCommentSuccess(CommentData commentData) {
+                                public void sendCommentSuccess(Comment comment) {
                                     isSubmitting = false;
                                     item.setEnabled(true);
                                     item.getIcon().setAlpha(255);
                                     Toast.makeText(CommentActivity.this, R.string.send_comment_success, Toast.LENGTH_SHORT).show();
                                     Intent returnIntent = new Intent();
-                                    returnIntent.putExtra(RETURN_EXTRA_COMMENT_DATA_KEY, commentData);
+                                    returnIntent.putExtra(RETURN_EXTRA_COMMENT_DATA_KEY, comment);
                                     returnIntent.putExtra(EXTRA_PARENT_FULLNAME_KEY, parentFullname);
                                     if (isReplying) {
                                         returnIntent.putExtra(EXTRA_PARENT_POSITION_KEY, parentPosition);

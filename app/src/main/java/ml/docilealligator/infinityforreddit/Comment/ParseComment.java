@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Comment;
 
 import android.os.AsyncTask;
 import android.text.Html;
@@ -15,12 +15,12 @@ import java.util.Locale;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 
-import static ml.docilealligator.infinityforreddit.CommentData.VOTE_TYPE_DOWNVOTE;
-import static ml.docilealligator.infinityforreddit.CommentData.VOTE_TYPE_NO_VOTE;
-import static ml.docilealligator.infinityforreddit.CommentData.VOTE_TYPE_UPVOTE;
+import static ml.docilealligator.infinityforreddit.Comment.Comment.VOTE_TYPE_DOWNVOTE;
+import static ml.docilealligator.infinityforreddit.Comment.Comment.VOTE_TYPE_NO_VOTE;
+import static ml.docilealligator.infinityforreddit.Comment.Comment.VOTE_TYPE_UPVOTE;
 
 public class ParseComment {
-    public static void parseComment(String response, ArrayList<CommentData> commentData, Locale locale,
+    public static void parseComment(String response, ArrayList<Comment> commentData, Locale locale,
                                     boolean expandChildren, ParseCommentListener parseCommentListener) {
         try {
             JSONArray childrenArray = new JSONArray(response);
@@ -35,7 +35,7 @@ public class ParseComment {
         }
     }
 
-    static void parseMoreComment(String response, ArrayList<CommentData> commentData, Locale locale,
+    static void parseMoreComment(String response, ArrayList<Comment> commentData, Locale locale,
                                  int depth, boolean expandChildren, ParseCommentListener parseCommentListener) {
         try {
             JSONArray childrenArray = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
@@ -51,7 +51,7 @@ public class ParseComment {
         new ParseSentCommentAsyncTask(response, depth, locale, parseSentCommentListener).execute();
     }
 
-    private static void parseCommentRecursion(JSONArray comments, ArrayList<CommentData> newCommentData,
+    private static void parseCommentRecursion(JSONArray comments, ArrayList<Comment> newCommentData,
                                               ArrayList<String> moreChildrenFullnames, int depth, Locale locale) throws JSONException {
         int actualCommentLength;
 
@@ -76,12 +76,12 @@ public class ParseComment {
 
         for (int i = 0; i < actualCommentLength; i++) {
             JSONObject data = comments.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
-            CommentData singleComment = parseSingleComment(data, depth, locale);
+            Comment singleComment = parseSingleComment(data, depth, locale);
 
             if (data.get(JSONUtils.REPLIES_KEY) instanceof JSONObject) {
                 JSONArray childrenArray = data.getJSONObject(JSONUtils.REPLIES_KEY)
                         .getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-                ArrayList<CommentData> children = new ArrayList<>();
+                ArrayList<Comment> children = new ArrayList<>();
                 ArrayList<String> nextMoreChildrenFullnames = new ArrayList<>();
                 parseCommentRecursion(childrenArray, children, nextMoreChildrenFullnames, singleComment.getDepth(),
                         locale);
@@ -93,9 +93,9 @@ public class ParseComment {
         }
     }
 
-    private static void expandChildren(ArrayList<CommentData> comments, ArrayList<CommentData> visibleComments,
+    private static void expandChildren(ArrayList<Comment> comments, ArrayList<Comment> visibleComments,
                                        boolean setExpanded) {
-        for (CommentData c : comments) {
+        for (Comment c : comments) {
             visibleComments.add(c);
             if (c.hasReply()) {
                 if (setExpanded) {
@@ -105,14 +105,14 @@ public class ParseComment {
             }
             if (c.hasMoreChildrenFullnames() && c.getMoreChildrenFullnames().size() > c.getMoreChildrenStartingIndex()) {
                 //Add a load more placeholder
-                CommentData placeholder = new CommentData(c.getFullName(), c.getDepth() + 1);
+                Comment placeholder = new Comment(c.getFullName(), c.getDepth() + 1);
                 visibleComments.add(placeholder);
                 c.addChild(placeholder, c.getChildren().size());
             }
         }
     }
 
-    static CommentData parseSingleComment(JSONObject singleCommentData, int depth, Locale locale) throws JSONException {
+    static Comment parseSingleComment(JSONObject singleCommentData, int depth, Locale locale) throws JSONException {
         String id = singleCommentData.getString(JSONUtils.ID_KEY);
         String fullName = singleCommentData.getString(JSONUtils.NAME_KEY);
         String author = singleCommentData.getString(JSONUtils.AUTHOR_KEY);
@@ -176,7 +176,7 @@ public class ParseComment {
         boolean collapsed = singleCommentData.getBoolean(JSONUtils.COLLAPSED_KEY);
         boolean hasReply = !(singleCommentData.get(JSONUtils.REPLIES_KEY) instanceof String);
 
-        return new CommentData(id, fullName, author, authorFlair, authorFlairHTMLBuilder.toString(),
+        return new Comment(id, fullName, author, authorFlair, authorFlairHTMLBuilder.toString(),
                 linkAuthor, submitTime, commentMarkdown, commentRawText,
                 linkId, subredditName, parentId, score, voteType, isSubmitter, distinguished,
                 permalink, awardingsBuilder.toString(),depth, collapsed, hasReply, scoreHidden, saved);
@@ -212,23 +212,23 @@ public class ParseComment {
     }
 
     public interface ParseCommentListener {
-        void onParseCommentSuccess(ArrayList<CommentData> expandedComments, String parentId,
+        void onParseCommentSuccess(ArrayList<Comment> expandedComments, String parentId,
                                    ArrayList<String> moreChildrenFullnames);
 
         void onParseCommentFailed();
     }
 
     interface ParseSentCommentListener {
-        void onParseSentCommentSuccess(CommentData commentData);
+        void onParseSentCommentSuccess(Comment comment);
 
         void onParseSentCommentFailed(@Nullable String errorMessage);
     }
 
     private static class ParseCommentAsyncTask extends AsyncTask<Void, Void, Void> {
         private JSONArray commentsJSONArray;
-        private ArrayList<CommentData> comments;
-        private ArrayList<CommentData> newComments;
-        private ArrayList<CommentData> expandedNewComments;
+        private ArrayList<Comment> comments;
+        private ArrayList<Comment> newComments;
+        private ArrayList<Comment> expandedNewComments;
         private ArrayList<String> moreChildrenFullnames;
         private Locale locale;
         private String parentId;
@@ -237,7 +237,7 @@ public class ParseComment {
         private ParseCommentListener parseCommentListener;
         private boolean parseFailed;
 
-        ParseCommentAsyncTask(JSONArray commentsJSONArray, ArrayList<CommentData> comments, Locale locale,
+        ParseCommentAsyncTask(JSONArray commentsJSONArray, ArrayList<Comment> comments, Locale locale,
                               @Nullable String parentId, int depth, boolean expandChildren,
                               ParseCommentListener parseCommentListener) {
             this.commentsJSONArray = commentsJSONArray;
@@ -286,7 +286,7 @@ public class ParseComment {
         private ParseSentCommentListener parseSentCommentListener;
         private boolean parseFailed;
         private String errorMessage;
-        private CommentData commentData;
+        private Comment comment;
 
         ParseSentCommentAsyncTask(String response, int depth, Locale locale, ParseSentCommentListener parseSentCommentListener) {
             this.response = response;
@@ -300,7 +300,7 @@ public class ParseComment {
         protected Void doInBackground(Void... voids) {
             try {
                 JSONObject sentCommentData = new JSONObject(response);
-                commentData = parseSingleComment(sentCommentData, depth, locale);
+                comment = parseSingleComment(sentCommentData, depth, locale);
             } catch (JSONException e) {
                 e.printStackTrace();
                 errorMessage = parseSentCommentErrorMessage(response);
@@ -315,7 +315,7 @@ public class ParseComment {
             if (parseFailed) {
                 parseSentCommentListener.onParseSentCommentFailed(errorMessage);
             } else {
-                parseSentCommentListener.onParseSentCommentSuccess(commentData);
+                parseSentCommentListener.onParseSentCommentSuccess(comment);
             }
         }
     }

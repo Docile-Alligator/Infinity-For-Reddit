@@ -82,7 +82,7 @@ import ml.docilealligator.infinityforreddit.ParseAndSaveAccountInfo;
 import ml.docilealligator.infinityforreddit.Post.PostDataSource;
 import ml.docilealligator.infinityforreddit.PullNotificationWorker;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.ReadMessage;
+import ml.docilealligator.infinityforreddit.Message.ReadMessage;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;

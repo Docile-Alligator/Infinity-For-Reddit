@@ -38,7 +38,7 @@ import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.FetchMessages;
+import ml.docilealligator.infinityforreddit.Message.FetchMessage;
 import ml.docilealligator.infinityforreddit.Fragment.InboxFragment;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
@@ -280,14 +280,14 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
                 InboxFragment fragment = new InboxFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(InboxFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
-                bundle.putString(InboxFragment.EXTRA_MESSAGE_WHERE, FetchMessages.WHERE_INBOX);
+                bundle.putString(InboxFragment.EXTRA_MESSAGE_WHERE, FetchMessage.WHERE_INBOX);
                 fragment.setArguments(bundle);
                 return fragment;
             } else {
                 InboxFragment fragment = new InboxFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(InboxFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
-                bundle.putString(InboxFragment.EXTRA_MESSAGE_WHERE, FetchMessages.WHERE_MESSAGES);
+                bundle.putString(InboxFragment.EXTRA_MESSAGE_WHERE, FetchMessage.WHERE_MESSAGES);
                 fragment.setArguments(bundle);
                 return fragment;
             }

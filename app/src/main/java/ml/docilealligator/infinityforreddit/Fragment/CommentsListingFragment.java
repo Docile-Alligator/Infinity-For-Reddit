@@ -33,7 +33,7 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Activity.BaseActivity;
 import ml.docilealligator.infinityforreddit.Adapter.CommentsListingRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
-import ml.docilealligator.infinityforreddit.CommentViewModel;
+import ml.docilealligator.infinityforreddit.Comment.CommentViewModel;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;

@@ -62,7 +62,7 @@ import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostCommentSortTypeBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.CommentData;
+import ml.docilealligator.infinityforreddit.Comment.Comment;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.CustomView.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.DeleteThing;
@@ -72,18 +72,18 @@ import ml.docilealligator.infinityforreddit.Event.ChangeWifiStatusEvent;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToDetailActivity;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.FetchComment;
+import ml.docilealligator.infinityforreddit.Comment.FetchComment;
 import ml.docilealligator.infinityforreddit.FetchRemovedComment;
 import ml.docilealligator.infinityforreddit.FetchRemovedPost;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.ParseComment;
+import ml.docilealligator.infinityforreddit.Comment.ParseComment;
 import ml.docilealligator.infinityforreddit.Post.FetchPost;
 import ml.docilealligator.infinityforreddit.Post.HidePost;
 import ml.docilealligator.infinityforreddit.Post.ParsePost;
 import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.ReadMessage;
+import ml.docilealligator.infinityforreddit.Message.ReadMessage;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.SortType;
@@ -126,7 +126,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     @State
     boolean isSingleCommentThreadMode = false;
     @State
-    ArrayList<CommentData> comments;
+    ArrayList<Comment> comments;
     @State
     ArrayList<String> children;
     @State
@@ -648,7 +648,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                             ParseComment.parseComment(response.body(), new ArrayList<>(), mLocale,
                                     mExpandChildren, new ParseComment.ParseCommentListener() {
                                         @Override
-                                        public void onParseCommentSuccess(ArrayList<CommentData> expandedComments, String parentId, ArrayList<String> moreChildrenFullnames) {
+                                        public void onParseCommentSuccess(ArrayList<Comment> expandedComments, String parentId, ArrayList<String> moreChildrenFullnames) {
                                             ViewPostDetailActivity.this.children = moreChildrenFullnames;
 
                                             hasMoreChildren = children.size() != 0;
@@ -738,7 +738,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         FetchComment.fetchComments(retrofit, mAccessToken, mPost.getId(), commentId, sortType, mExpandChildren,
                 mLocale, new FetchComment.FetchCommentListener() {
                     @Override
-                    public void onFetchCommentSuccess(ArrayList<CommentData> expandedComments,
+                    public void onFetchCommentSuccess(ArrayList<Comment> expandedComments,
                                                       String parentId, ArrayList<String> children) {
                         if (checkSortState && isSortingComments) {
                             if (changeRefreshState) {
@@ -840,7 +840,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         FetchComment.fetchMoreComment(retrofit, mAccessToken, children, mChildrenStartingIndex,
                 0, mExpandChildren, mLocale, new FetchComment.FetchMoreCommentListener() {
                     @Override
-                    public void onFetchMoreCommentSuccess(ArrayList<CommentData> expandedComments, int childrenStartingIndex) {
+                    public void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments, int childrenStartingIndex) {
                         hasMoreChildren = childrenStartingIndex < children.size();
                         mAdapter.addComments(expandedComments, hasMoreChildren);
                         mChildrenStartingIndex = childrenStartingIndex;
@@ -1091,14 +1091,14 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 .show();
     }
 
-    public void showRemovedComment(CommentData comment, int position) {
+    public void showRemovedComment(Comment comment, int position) {
         Toast.makeText(ViewPostDetailActivity.this, R.string.fetching_removed_comment, Toast.LENGTH_SHORT).show();
         FetchRemovedComment.fetchRemovedComment(
                 pushshiftRetrofit,
                 comment,
                 new FetchRemovedComment.FetchRemovedCommentListener() {
                     @Override
-                    public void fetchSuccess(CommentData comment) {
+                    public void fetchSuccess(Comment comment) {
                         mAdapter.editComment(comment.getAuthor(), comment.getCommentMarkdown(), position);
                     }
 
@@ -1451,7 +1451,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         if (requestCode == WRITE_COMMENT_REQUEST_CODE) {
             if (data != null && resultCode == RESULT_OK) {
                 if (data.hasExtra(RETURN_EXTRA_COMMENT_DATA_KEY)) {
-                    CommentData comment = data.getParcelableExtra(RETURN_EXTRA_COMMENT_DATA_KEY);
+                    Comment comment = data.getParcelableExtra(RETURN_EXTRA_COMMENT_DATA_KEY);
                     if (comment != null && comment.getDepth() == 0) {
                         mAdapter.addComment(comment);
                     } else {

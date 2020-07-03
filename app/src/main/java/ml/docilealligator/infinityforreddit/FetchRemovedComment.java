@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ml.docilealligator.infinityforreddit.API.PushshiftAPI;
+import ml.docilealligator.infinityforreddit.Comment.Comment;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Call;
@@ -17,7 +18,7 @@ import retrofit2.Retrofit;
 
 public class FetchRemovedComment {
 
-    public static void fetchRemovedComment(Retrofit retrofit, CommentData comment, FetchRemovedCommentListener listener) {
+    public static void fetchRemovedComment(Retrofit retrofit, Comment comment, FetchRemovedCommentListener listener) {
         retrofit.create(PushshiftAPI.class).getRemovedComment(comment.getId())
                 .enqueue(new Callback<String>() {
                     @Override
@@ -37,7 +38,7 @@ public class FetchRemovedComment {
                 });
     }
 
-    private static CommentData parseRemovedComment(JSONObject result, CommentData comment) throws JSONException {
+    private static Comment parseRemovedComment(JSONObject result, Comment comment) throws JSONException {
         String id = result.getString(JSONUtils.ID_KEY);
         String author = result.getString(JSONUtils.AUTHOR_KEY);
         String body = Utils.modifyMarkdown(result.optString(JSONUtils.BODY_KEY).trim());
@@ -56,7 +57,7 @@ public class FetchRemovedComment {
     }
 
     public interface FetchRemovedCommentListener {
-        void fetchSuccess(CommentData comment);
+        void fetchSuccess(Comment comment);
 
         void fetchFailed();
     }
@@ -65,9 +66,9 @@ public class FetchRemovedComment {
 
         private String responseBody;
         private FetchRemovedCommentListener listener;
-        CommentData comment;
+        Comment comment;
 
-        public ParseCommentAsyncTask(String responseBody, CommentData comment, FetchRemovedCommentListener listener) {
+        public ParseCommentAsyncTask(String responseBody, Comment comment, FetchRemovedCommentListener listener) {
             this.responseBody = responseBody;
             this.comment = comment;
             this.listener = listener;

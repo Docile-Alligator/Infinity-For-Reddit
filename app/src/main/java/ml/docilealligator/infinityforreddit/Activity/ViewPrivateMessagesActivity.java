@@ -39,11 +39,11 @@ import ml.docilealligator.infinityforreddit.AsyncTask.LoadUserDataAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.RepliedToPrivateMessageEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.Message;
+import ml.docilealligator.infinityforreddit.Message.Message;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.ReadMessage;
+import ml.docilealligator.infinityforreddit.Message.ReadMessage;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.ReplyMessage;
+import ml.docilealligator.infinityforreddit.Message.ReplyMessage;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 

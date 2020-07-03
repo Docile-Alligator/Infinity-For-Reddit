@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Comment;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -11,6 +11,8 @@ import androidx.paging.PagedList;
 
 import java.util.Locale;
 
+import ml.docilealligator.infinityforreddit.NetworkState;
+import ml.docilealligator.infinityforreddit.SortType;
 import retrofit2.Retrofit;
 
 public class CommentViewModel extends ViewModel {
@@ -18,7 +20,7 @@ public class CommentViewModel extends ViewModel {
     private LiveData<NetworkState> paginationNetworkState;
     private LiveData<NetworkState> initialLoadingState;
     private LiveData<Boolean> hasCommentLiveData;
-    private LiveData<PagedList<CommentData>> comments;
+    private LiveData<PagedList<Comment>> comments;
     private MutableLiveData<SortType> sortTypeLiveData;
 
     public CommentViewModel(Retrofit retrofit, Locale locale, String accessToken, String username, SortType sortType,
@@ -48,7 +50,7 @@ public class CommentViewModel extends ViewModel {
         });
     }
 
-    public LiveData<PagedList<CommentData>> getComments() {
+    public LiveData<PagedList<Comment>> getComments() {
         return comments;
     }
 

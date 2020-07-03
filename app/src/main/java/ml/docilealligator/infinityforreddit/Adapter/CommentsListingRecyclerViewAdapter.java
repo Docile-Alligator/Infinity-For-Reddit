@@ -33,6 +33,7 @@ import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
@@ -41,7 +42,7 @@ import ml.docilealligator.infinityforreddit.Activity.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.CommentMoreBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.CommentData;
+import ml.docilealligator.infinityforreddit.Comment.Comment;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
@@ -52,19 +53,19 @@ import ml.docilealligator.infinityforreddit.Utils.Utils;
 import ml.docilealligator.infinityforreddit.VoteThing;
 import retrofit2.Retrofit;
 
-public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<CommentData, RecyclerView.ViewHolder> {
+public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment, RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_DATA = 0;
     private static final int VIEW_TYPE_ERROR = 1;
     private static final int VIEW_TYPE_LOADING = 2;
-    private static final DiffUtil.ItemCallback<CommentData> DIFF_CALLBACK = new DiffUtil.ItemCallback<CommentData>() {
+    private static final DiffUtil.ItemCallback<Comment> DIFF_CALLBACK = new DiffUtil.ItemCallback<Comment>() {
         @Override
-        public boolean areItemsTheSame(@NonNull CommentData commentData, @NonNull CommentData t1) {
-            return commentData.getId().equals(t1.getId());
+        public boolean areItemsTheSame(@NonNull Comment comment, @NonNull Comment t1) {
+            return comment.getId().equals(t1.getId());
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull CommentData commentData, @NonNull CommentData t1) {
-            return commentData.getCommentMarkdown().equals(t1.getCommentMarkdown());
+        public boolean areContentsTheSame(@NonNull Comment comment, @NonNull Comment t1) {
+            return comment.getCommentMarkdown().equals(t1.getCommentMarkdown());
         }
     };
     private Context mContext;
@@ -104,6 +105,11 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         mMarkwon = Markwon.builder(mContext)
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
+                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                        builder.linkColor(customThemeWrapper.getLinkColor());
+                    }
+
+                    @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                         builder.linkResolver((view, link) -> {
                             Intent intent = new Intent(mContext, LinkResolverActivity.class);
@@ -115,6 +121,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                             }
                             mContext.startActivity(intent);
                         });
+
                     }
                 })
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
@@ -165,7 +172,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof CommentViewHolder) {
-            CommentData comment = getItem(holder.getAdapterPosition());
+            Comment comment = getItem(holder.getAdapterPosition());
             if (comment != null) {
                 if (comment.getSubredditName().substring(2).equals(comment.getLinkAuthor())) {
                     ((CommentViewHolder) holder).authorTextView.setText("u/" + comment.getLinkAuthor());
@@ -210,12 +217,12 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         comment.getScore() + comment.getVoteType()));
 
                 switch (comment.getVoteType()) {
-                    case CommentData.VOTE_TYPE_UPVOTE:
+                    case Comment.VOTE_TYPE_UPVOTE:
                         ((CommentViewHolder) holder).upvoteButton
                                 .setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         ((CommentViewHolder) holder).scoreTextView.setTextColor(mUpvotedColor);
                         break;
-                    case CommentData.VOTE_TYPE_DOWNVOTE:
+                    case Comment.VOTE_TYPE_DOWNVOTE:
                         ((CommentViewHolder) holder).downvoteButton
                                 .setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         ((CommentViewHolder) holder).scoreTextView.setTextColor(mDownvotedColor);
@@ -259,16 +266,16 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
                     ((CommentViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
-                    if (previousVoteType != CommentData.VOTE_TYPE_UPVOTE) {
+                    if (previousVoteType != Comment.VOTE_TYPE_UPVOTE) {
                         //Not upvoted before
-                        comment.setVoteType(CommentData.VOTE_TYPE_UPVOTE);
+                        comment.setVoteType(Comment.VOTE_TYPE_UPVOTE);
                         newVoteType = APIUtils.DIR_UPVOTE;
                         ((CommentViewHolder) holder).upvoteButton
                                 .setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         ((CommentViewHolder) holder).scoreTextView.setTextColor(mUpvotedColor);
                     } else {
                         //Upvoted before
-                        comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
+                        comment.setVoteType(Comment.VOTE_TYPE_NO_VOTE);
                         newVoteType = APIUtils.DIR_UNVOTE;
                         ((CommentViewHolder) holder).upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         ((CommentViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
@@ -281,11 +288,11 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         @Override
                         public void onVoteThingSuccess(int position) {
                             if (newVoteType.equals(APIUtils.DIR_UPVOTE)) {
-                                comment.setVoteType(CommentData.VOTE_TYPE_UPVOTE);
+                                comment.setVoteType(Comment.VOTE_TYPE_UPVOTE);
                                 ((CommentViewHolder) holder).upvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                                 ((CommentViewHolder) holder).scoreTextView.setTextColor(mUpvotedColor);
                             } else {
-                                comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
+                                comment.setVoteType(Comment.VOTE_TYPE_NO_VOTE);
                                 ((CommentViewHolder) holder).upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                                 ((CommentViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
                             }
@@ -312,15 +319,15 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
                     ((CommentViewHolder) holder).upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
-                    if (previousVoteType != CommentData.VOTE_TYPE_DOWNVOTE) {
+                    if (previousVoteType != Comment.VOTE_TYPE_DOWNVOTE) {
                         //Not downvoted before
-                        comment.setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
+                        comment.setVoteType(Comment.VOTE_TYPE_DOWNVOTE);
                         newVoteType = APIUtils.DIR_DOWNVOTE;
                         ((CommentViewHolder) holder).downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         ((CommentViewHolder) holder).scoreTextView.setTextColor(mDownvotedColor);
                     } else {
                         //Downvoted before
-                        comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
+                        comment.setVoteType(Comment.VOTE_TYPE_NO_VOTE);
                         newVoteType = APIUtils.DIR_UNVOTE;
                         ((CommentViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         ((CommentViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
@@ -333,11 +340,11 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         @Override
                         public void onVoteThingSuccess(int position1) {
                             if (newVoteType.equals(APIUtils.DIR_DOWNVOTE)) {
-                                comment.setVoteType(CommentData.VOTE_TYPE_DOWNVOTE);
+                                comment.setVoteType(Comment.VOTE_TYPE_DOWNVOTE);
                                 ((CommentViewHolder) holder).downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                                 ((CommentViewHolder) holder).scoreTextView.setTextColor(mDownvotedColor);
                             } else {
-                                comment.setVoteType(CommentData.VOTE_TYPE_NO_VOTE);
+                                comment.setVoteType(Comment.VOTE_TYPE_NO_VOTE);
                                 ((CommentViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                                 ((CommentViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
                             }
