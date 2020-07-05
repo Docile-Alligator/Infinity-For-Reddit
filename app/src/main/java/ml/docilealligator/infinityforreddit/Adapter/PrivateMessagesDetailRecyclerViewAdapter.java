@@ -26,6 +26,7 @@ import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
@@ -77,6 +78,11 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
                             }
                             viewPrivateMessagesActivity.startActivity(intent);
                         });
+                    }
+
+                    @Override
+                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                        builder.linkColor(customThemeWrapper.getLinkColor());
                     }
                 })
                 .usePlugin(StrikethroughPlugin.create())
