@@ -155,6 +155,14 @@ public class CustomThemeSharedPreferencesUtils {
         editor.putInt(COMMENT_VERTICAL_BAR_COLOR_7, customTheme.commentVerticalBarColor7);
         editor.putInt(FAB_ICON_COLOR, customTheme.fabIconColor);
         editor.putInt(CHIP_TEXT_COLOR, customTheme.chipTextColor);
+        editor.putInt(LINK_COLOR, customTheme.linkColor);
+        editor.putInt(RECEIVED_MESSAGE_TEXT_COLOR, customTheme.receivedMessageTextColor);
+        editor.putInt(SENT_MESSAGE_TEXT_COLOR, customTheme.sentMessageTextColor);
+        editor.putInt(RECEIVED_MESSAGE_BACKROUND_COLOR, customTheme.receivedMessageBackgroundColor);
+        editor.putInt(SENT_MESSAGE_BACKGROUND_COLOR, customTheme.sentMessageBackgroundColor);
+        editor.putInt(SEND_MESSAGE_ICON_COLOR, customTheme.sendMessageIconColor);
+        editor.putInt(FULLY_COLLAPSED_COMMENT_BACKGROUND_COLOR, customTheme.fullyCollapsedCommentBackgroundColor);
+        editor.putInt(AWARDED_COMMENT_BACKGROUND_COLOR, customTheme.awardedCommentBackgroundColor);
         editor.putBoolean(LIGHT_STATUS_BAR, customTheme.isLightStatusBar);
         editor.putBoolean(LIGHT_NAV_BAR, customTheme.isLightNavBar);
         editor.putBoolean(CHANGE_STATUS_BAR_ICON_COLOR_AFTER_TOOLBAR_COLLAPSED_IN_IMMERSIVE_INTERFACE, customTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface);

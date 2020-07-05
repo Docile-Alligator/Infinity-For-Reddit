@@ -816,4 +816,6 @@
 
     <string name="load_video_in_redgifs">Try loading the video on Redgifs</string>
 
+    <string name="top_score">%1$s pts</string>
+
 </resources>

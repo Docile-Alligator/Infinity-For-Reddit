@@ -827,8 +827,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             mCommentMarkwon.setMarkdown(((CommentViewHolder) holder).commentMarkdownView, comment.getCommentMarkdown());
             ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                     comment.getScore() + comment.getVoteType()));
-            ((CommentViewHolder) holder).topScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                    comment.getScore() + comment.getVoteType()) + " pts");
+            ((CommentViewHolder) holder).topScoreTextView.setText(mActivity.getString(R.string.top_score,
+                    Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                    comment.getScore() + comment.getVoteType())));
 
             ((CommentViewHolder) holder).itemView.setPadding(comment.getDepth() * 8, 0, 0, 0);
             if (comment.getDepth() > 0) {
@@ -927,7 +928,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             } else {
                 ((CommentFullyCollapsedViewHolder) holder).commentTimeTextView.setText(Utils.getFormattedTime(mLocale, comment.getCommentTimeMillis(), mTimeFormatPattern));
             }
-            ((CommentFullyCollapsedViewHolder) holder).scoreTextView.setText(Integer.toString(comment.getScore()));
+            ((CommentFullyCollapsedViewHolder) holder).scoreTextView.setText(mActivity.getString(R.string.top_score,
+                    Utils.getNVotes(mShowAbsoluteNumberOfVotes, comment.getScore() + comment.getVoteType())));
 
             ((CommentFullyCollapsedViewHolder) holder).itemView.setPadding(comment.getDepth() * 8, 0, 0, 0);
             if (comment.getDepth() > 0) {
@@ -2896,8 +2898,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
                 scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                         comment.getScore() + comment.getVoteType()));
-                topScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                        comment.getScore() + comment.getVoteType()) + " pts");
+                topScoreTextView.setText(mActivity.getString(R.string.top_score,
+                        Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                        comment.getScore() + comment.getVoteType())));
 
                 VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                     @Override
@@ -2915,8 +2918,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                 comment.getScore() + comment.getVoteType()));
-                        topScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                comment.getScore() + comment.getVoteType()) + " pts");
+                        topScoreTextView.setText(mActivity.getString(R.string.top_score,
+                                Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                comment.getScore() + comment.getVoteType())));
                     }
 
                     @Override
@@ -2958,8 +2962,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
                 scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                         comment.getScore() + comment.getVoteType()));
-                topScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                        comment.getScore() + comment.getVoteType()) + " pts");
+                topScoreTextView.setText(mActivity.getString(R.string.top_score,
+                        Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                        comment.getScore() + comment.getVoteType())));
 
                 VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                     @Override
@@ -2977,8 +2982,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                 comment.getScore() + comment.getVoteType()));
-                        topScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                comment.getScore() + comment.getVoteType()) + " pts");
+                        topScoreTextView.setText(mActivity.getString(R.string.top_score,
+                                Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                comment.getScore() + comment.getVoteType())));
                     }
 
                     @Override
@@ -3129,7 +3135,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             itemView.setBackgroundColor(mFullyCollapsedCommentBackgroundColor);
             usernameTextView.setTextColor(mUsernameColor);
-            scoreTextView.setTextColor(mCommentIconAndInfoColor);
+            scoreTextView.setTextColor(mSecondaryTextColor);
             commentTimeTextView.setTextColor(mSecondaryTextColor);
 
             if (mShowCommentDivider) {
