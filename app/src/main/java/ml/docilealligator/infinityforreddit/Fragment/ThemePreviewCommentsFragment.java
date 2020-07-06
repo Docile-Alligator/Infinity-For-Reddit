@@ -89,8 +89,8 @@ public class ThemePreviewCommentsFragment extends Fragment {
     LinearLayout linearLayoutFullyCollapsed;
     @BindView(R.id.vertical_block_fully_collapsed_theme_preview_comments_fragment)
     View verticalBlockFullyCollapsed;
-    @BindView(R.id.user_name_text_view_fully_collapsed_theme_preview_comments_fragment)
-    TextView usernameTextView;
+    @BindView(R.id.author_text_view_fully_collapsed_theme_preview_comments_fragment)
+    TextView authorTextViewFullyCollapsed;
     @BindView(R.id.score_text_view_fully_collapsed_theme_preview_comments_fragment)
     TextView scoreTextViewFullyCollapsed;
     @BindView(R.id.time_text_view_fully_collapsed_theme_preview_comments_fragment)
@@ -140,8 +140,8 @@ public class ThemePreviewCommentsFragment extends Fragment {
         replyButtonAwardBackground.setColorFilter(customTheme.commentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
         linearLayoutFullyCollapsed.setBackgroundColor(customTheme.fullyCollapsedCommentBackgroundColor);
-        usernameTextView.setTextColor(customTheme.username);
-        scoreTextView.setTextColor(customTheme.secondaryTextColor);
+        authorTextViewFullyCollapsed.setTextColor(customTheme.username);
+        scoreTextViewFullyCollapsed.setTextColor(customTheme.secondaryTextColor);
         timeTextViewFullyCollapsed.setTextColor(customTheme.secondaryTextColor);
         return rootView;
     }

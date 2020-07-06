@@ -440,7 +440,7 @@
                 android:layout_height="match_parent" />
 
             <TextView
-                android:id="@+id/user_name_text_view_fully_collapsed_theme_preview_comments_fragment"
+                android:id="@+id/author_text_view_fully_collapsed_theme_preview_comments_fragment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

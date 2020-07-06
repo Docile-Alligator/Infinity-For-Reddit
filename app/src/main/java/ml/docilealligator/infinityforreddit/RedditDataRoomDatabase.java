@@ -203,9 +203,9 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
             database.execSQL("ALTER TABLE custom_themes"
                     + " ADD COLUMN send_message_icon_color INTEGER DEFAULT " + Color.parseColor("#4185F4") + " NOT NULL");
             database.execSQL("ALTER TABLE custom_themes"
-                    + " ADD COLUMN fully_collapsed_comment_background_color INTEGER DEFAULT " + Color.parseColor("#4185F4") + " NOT NULL");
+                    + " ADD COLUMN fully_collapsed_comment_background_color INTEGER DEFAULT " + Color.parseColor("#8EDFBA") + " NOT NULL");
             database.execSQL("ALTER TABLE custom_themes"
-                    + " ADD COLUMN awarded_comment_background_color INTEGER DEFAULT " + Color.parseColor("#EEAB02") + " NOT NULL");
+                    + " ADD COLUMN awarded_comment_background_color INTEGER DEFAULT " + Color.parseColor("#FFF162") + " NOT NULL");
 
         }
     };
