@@ -33,6 +33,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
 
 import java.util.ArrayList;
 
@@ -115,6 +116,7 @@ public class ThemePreviewActivity extends AppCompatActivity {
     private int subscribedColor;
     private int systemVisibilityToolbarExpanded = 0;
     private int systemVisibilityToolbarCollapsed = 0;
+    private SlidrInterface mSlidrInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,7 +222,7 @@ public class ThemePreviewActivity extends AppCompatActivity {
         applyCustomTheme();
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL, true)) {
-            Slidr.attach(this);
+            mSlidrInterface = Slidr.attach(this);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -307,6 +309,16 @@ public class ThemePreviewActivity extends AppCompatActivity {
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(2);
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    unlockSwipeRightToGoBack();
+                } else {
+                    lockSwipeRightToGoBack();
+                }
+            }
+        });
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -391,6 +403,18 @@ public class ThemePreviewActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    private void lockSwipeRightToGoBack() {
+        if (mSlidrInterface != null) {
+            mSlidrInterface.lock();
+        }
+    }
+
+    private void unlockSwipeRightToGoBack() {
+        if (mSlidrInterface != null) {
+            mSlidrInterface.unlock();
+        }
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {

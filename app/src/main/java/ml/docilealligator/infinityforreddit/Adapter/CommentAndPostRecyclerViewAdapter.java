@@ -3126,7 +3126,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         TextView scoreTextView;
         @BindView(R.id.time_text_view_item_comment_fully_collapsed)
         TextView commentTimeTextView;
-        @BindView(R.id.divider_item_load_comment_fully_collapsed)
+        @BindView(R.id.divider_item_comment_fully_collapsed)
         View commentDivider;
 
         public CommentFullyCollapsedViewHolder(@NonNull View itemView) {

@@ -7,18 +7,18 @@
     tools:context=".Fragment.ThemePreviewCommentsFragment">
 
     <LinearLayout
-        android:id="@+id/linear_layout_theme_preview_comments_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/linear_layout_theme_preview_comments_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <View
                 android:id="@+id/vertical_block_theme_preview_comments_fragment"
-                android:layout_width="4dp"
+                android:layout_width="0dp"
                 android:layout_height="match_parent" />
 
             <LinearLayout
@@ -219,6 +219,271 @@
             android:id="@+id/divider_theme_preview_comments_fragment"
             android:layout_width="match_parent"
             android:layout_height="1dp" />
+
+        <LinearLayout
+            android:id="@+id/linear_layout_award_background_theme_preview_comments_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/vertical_block_award_background_theme_preview_comments_fragment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
+
+                    <ImageView
+                        android:id="@+id/author_type_image_view_award_background_theme_preview_comments_fragment"
+                        android:layout_width="?attr/font_default"
+                        android:layout_height="?attr/font_default"
+                        android:layout_marginEnd="4dp"
+                        android:src="@drawable/ic_mic_14dp"
+                        app:layout_constraintBottom_toTopOf="@id/author_flair_text_view_award_background_theme_preview_comments_fragment"
+                        app:layout_constraintEnd_toStartOf="@id/author_text_view_award_background_theme_preview_comments_fragment"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/author_text_view_award_background_theme_preview_comments_fragment"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:text="@string/username_preview"
+                        android:textSize="?attr/font_default"
+                        android:fontFamily="?attr/font_family"
+                        app:layout_constraintBottom_toTopOf="@id/author_flair_text_view_award_background_theme_preview_comments_fragment"
+                        app:layout_constraintEnd_toStartOf="@+id/comment_time_text_view_award_background_theme_preview_comments_fragment"
+                        app:layout_constraintStart_toEndOf="@id/author_type_image_view_award_background_theme_preview_comments_fragment"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/author_flair_text_view_award_background_theme_preview_comments_fragment"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:text="@string/author_flair_preview"
+                        android:textSize="?attr/font_12"
+                        android:fontFamily="?attr/font_family"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/comment_time_text_view_award_background_theme_preview_comments_fragment"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/author_text_view_award_background_theme_preview_comments_fragment" />
+
+                    <TextView
+                        android:id="@+id/comment_time_text_view_award_background_theme_preview_comments_fragment"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="2 Hours"
+                        android:textSize="?attr/font_default"
+                        android:fontFamily="?attr/font_family"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/comment_markdown_view_award_background_theme_preview_comments_fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/comment_content_preview"
+                    android:textSize="?attr/content_font_default"
+                    android:fontFamily="?attr/content_font_family" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/bottom_constraint_layout_award_background_theme_preview_comments_fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="12dp"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp">
+
+                    <ImageView
+                        android:id="@+id/up_vote_button_award_background_theme_preview_comments_fragment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:background="?actionBarItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/ic_arrow_upward_grey_24dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <TextView
+                        android:id="@+id/score_text_view_award_background_theme_preview_comments_fragment"
+                        android:layout_width="64dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="1234"
+                        android:textSize="?attr/font_12"
+                        android:textStyle="bold"
+                        android:fontFamily="?attr/font_family"
+                        app:layout_constraintStart_toEndOf="@+id/up_vote_button_award_background_theme_preview_comments_fragment"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <ImageView
+                        android:id="@+id/down_vote_button_award_background_theme_preview_comments_fragment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:background="?actionBarItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/ic_arrow_downward_grey_24dp"
+                        android:tint="@android:color/tab_indicator_text"
+                        app:layout_constraintStart_toEndOf="@+id/score_text_view_award_background_theme_preview_comments_fragment"
+                        app:layout_constraintEnd_toStartOf="@id/more_button_award_background_theme_preview_comments_fragment"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintHorizontal_bias="0" />
+
+                    <ImageView
+                        android:id="@+id/more_button_award_background_theme_preview_comments_fragment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:background="?actionBarItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/ic_more_vert_grey_24dp"
+                        app:layout_constraintEnd_toStartOf="@+id/expand_button_award_background_theme_preview_comments_fragment"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <ImageView
+                        android:id="@+id/expand_button_award_background_theme_preview_comments_fragment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:background="?actionBarItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/ic_expand_less_grey_24dp"
+                        android:tint="@android:color/tab_indicator_text"
+                        app:layout_constraintEnd_toStartOf="@+id/save_button_award_background_theme_preview_comments_fragment"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <ImageView
+                        android:id="@+id/save_button_award_background_theme_preview_comments_fragment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:background="?actionBarItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/ic_bookmark_border_grey_24dp"
+                        app:layout_constraintEnd_toStartOf="@+id/reply_button_award_background_theme_preview_comments_fragment"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <ImageView
+                        android:id="@+id/reply_button_award_background_theme_preview_comments_fragment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:background="?actionBarItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/ic_reply_grey_24dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider_award_background_theme_preview_comments_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+
+        <LinearLayout
+            android:id="@+id/linear_layout_fully_collapsed_theme_preview_comments_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/vertical_block_fully_collapsed_theme_preview_comments_fragment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:id="@+id/user_name_text_view_fully_collapsed_theme_preview_comments_fragment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="8dp"
+                android:text="u/Hostilenemy"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
+
+            <TextView
+                android:id="@+id/score_text_view_fully_collapsed_theme_preview_comments_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:text="1234 pts"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
+
+            <TextView
+                android:id="@+id/time_text_view_fully_collapsed_theme_preview_comments_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="16dp"
+                android:text="2 Hours"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider_fully_collapsed_theme_preview_comments_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:visibility="gone" />
 
     </LinearLayout>
 

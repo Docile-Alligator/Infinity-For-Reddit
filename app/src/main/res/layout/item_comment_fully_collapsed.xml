@@ -51,7 +51,7 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/divider_item_load_comment_fully_collapsed"
+        android:id="@+id/divider_item_comment_fully_collapsed"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:visibility="gone" />
