@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.Utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
@@ -11,7 +12,9 @@ import android.util.DisplayMetrics;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -138,5 +141,17 @@ public class Utils {
 
     public static float convertDpToPixel(float dp, Context context){
         return dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+    }
+
+    @Nullable
+    public static Drawable getTintedDrawable(Context context, int drawableId, int color) {
+        Drawable drawable = context.getDrawable(drawableId);
+        if (drawable != null) {
+            Drawable wrappedDrawable = DrawableCompat.wrap(drawable).mutate();
+            DrawableCompat.setTint(wrappedDrawable, color);
+            return wrappedDrawable;
+        }
+
+        return null;
     }
 }

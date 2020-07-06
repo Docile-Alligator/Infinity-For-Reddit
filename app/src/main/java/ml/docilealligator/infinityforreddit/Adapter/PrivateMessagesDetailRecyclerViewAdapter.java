@@ -51,9 +51,11 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
     private Markwon mMarkwon;
     private boolean mShowElapsedTime;
     private String mTimeFormatPattern;
-    private int mMessageBackgroundColor;
     private int mSecondaryTextColor;
-    private int mUnreadMessageBackgroundColor;
+    private int mReceivedMessageTextColor;
+    private int mSentMessageTextColor;
+    private int mReceivedMessageBackgroundColor;
+    private int mSentMessageBackgroundColor;
 
     public PrivateMessagesDetailRecyclerViewAdapter(ViewPrivateMessagesActivity viewPrivateMessagesActivity,
                                                     SharedPreferences sharedPreferences, Locale locale,
@@ -96,9 +98,11 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
                 .build();
         mShowElapsedTime = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
         mTimeFormatPattern = sharedPreferences.getString(SharedPreferencesUtils.TIME_FORMAT_KEY, SharedPreferencesUtils.TIME_FORMAT_DEFAULT_VALUE);
-        mMessageBackgroundColor = customThemeWrapper.getCardViewBackgroundColor();
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
-        mUnreadMessageBackgroundColor = customThemeWrapper.getUnreadMessageBackgroundColor();
+        mReceivedMessageTextColor = customThemeWrapper.getReceivedMessageTextColor();
+        mSentMessageTextColor = customThemeWrapper.getSentMessageTextColor();
+        mReceivedMessageBackgroundColor = customThemeWrapper.getReceivedMessageBackgroundColor();
+        mSentMessageBackgroundColor = customThemeWrapper.getSentMessageBackgroundColor();
     }
 
     @Override
@@ -151,7 +155,8 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
             }
 
             if (holder instanceof SentMessageViewHolder) {
-                ((SentMessageViewHolder) holder).messageTextView.setBackgroundResource(R.drawable.private_message_ballon_sent);
+                ((SentMessageViewHolder) holder).messageTextView.setBackground(Utils.getTintedDrawable(mViewPrivateMessagesActivity,
+                        R.drawable.private_message_ballon, mSentMessageBackgroundColor));
             } else if (holder instanceof ReceivedMessageViewHolder) {
                 mViewPrivateMessagesActivity.fetchUserAvatar(message.getAuthor(), userAvatarUrl -> {
                     if (userAvatarUrl == null || userAvatarUrl.equals("")) {
@@ -172,7 +177,10 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
                     intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, message.getAuthor());
                     mViewPrivateMessagesActivity.startActivity(intent);
                 });
-                ((ReceivedMessageViewHolder) holder).messageTextView.setBackgroundResource(R.drawable.private_message_ballon_received);
+
+                ((ReceivedMessageViewHolder) holder).messageTextView.setBackground(
+                        Utils.getTintedDrawable(mViewPrivateMessagesActivity,
+                                R.drawable.private_message_ballon, mReceivedMessageBackgroundColor));
             }
         }
     }
@@ -244,6 +252,9 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
             super(itemView);
             ButterKnife.bind(this, itemView);
             setBaseView(messageTextView, timeTextView);
+
+            messageTextView.setTextColor(mSentMessageTextColor);
+
         }
     }
 
@@ -259,6 +270,8 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
             super(itemView);
             ButterKnife.bind(this, itemView);
             setBaseView(messageTextView, timeTextView);
+
+            messageTextView.setTextColor(mReceivedMessageTextColor);
         }
     }
 }

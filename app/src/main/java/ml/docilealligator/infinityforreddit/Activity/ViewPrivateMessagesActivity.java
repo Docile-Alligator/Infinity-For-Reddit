@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -40,10 +39,10 @@ import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.RepliedToPrivateMessageEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.Message.Message;
-import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Message.ReadMessage;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Message.ReplyMessage;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
@@ -294,7 +293,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
         mEditText.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
         mEditText.setHintTextColor(mCustomThemeWrapper.getSecondaryTextColor());
         mEditTextLinearLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        mSendImageView.setColorFilter(Color.parseColor("#4185F4"), android.graphics.PorterDuff.Mode.SRC_IN);
+        mSendImageView.setColorFilter(mCustomThemeWrapper.getSendMessageIconColor(), android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
     @Override
