@@ -60,7 +60,7 @@ import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.DeleteThing;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.FetchUserData;
+import ml.docilealligator.infinityforreddit.User.FetchUserData;
 import ml.docilealligator.infinityforreddit.Fragment.CommentsListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostLayoutBottomSheetFragment;
@@ -78,7 +78,7 @@ import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUse
 import ml.docilealligator.infinityforreddit.User.UserDao;
 import ml.docilealligator.infinityforreddit.User.UserData;
 import ml.docilealligator.infinityforreddit.User.UserViewModel;
-import ml.docilealligator.infinityforreddit.UserFollowing;
+import ml.docilealligator.infinityforreddit.User.UserFollowing;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 import pl.droidsonroids.gif.GifImageView;

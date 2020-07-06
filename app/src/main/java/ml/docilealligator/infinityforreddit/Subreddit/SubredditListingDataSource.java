@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Subreddit;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -6,7 +6,8 @@ import androidx.paging.PageKeyedDataSource;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
+import ml.docilealligator.infinityforreddit.NetworkState;
+import ml.docilealligator.infinityforreddit.SortType;
 import retrofit2.Retrofit;
 
 public class SubredditListingDataSource extends PageKeyedDataSource<String, SubredditData> {

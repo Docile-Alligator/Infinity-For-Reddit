@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.SubredditDatabase;
+package ml.docilealligator.infinityforreddit.Subreddit;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.User;
 
 import android.os.AsyncTask;
 
@@ -8,7 +8,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.User.UserData;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
 
 public class ParseUserData {

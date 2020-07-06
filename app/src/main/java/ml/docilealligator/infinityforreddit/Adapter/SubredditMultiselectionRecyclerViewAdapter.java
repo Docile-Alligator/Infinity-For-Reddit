@@ -23,8 +23,8 @@ import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.SubredditWithSelection;
-import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
+import ml.docilealligator.infinityforreddit.Subreddit.SubredditWithSelection;
+import ml.docilealligator.infinityforreddit.SubscribedSubreddit.SubscribedSubredditData;
 import pl.droidsonroids.gif.GifImageView;
 
 public class SubredditMultiselectionRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

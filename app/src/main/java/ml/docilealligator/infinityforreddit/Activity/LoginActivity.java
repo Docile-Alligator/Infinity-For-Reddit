@@ -31,13 +31,12 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.AsyncTask.ParseAndInsertNewAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FetchMyInfo;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.ParseAndSaveAccountInfo;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
@@ -144,12 +143,10 @@ public class LoginActivity extends BaseActivity {
                                         String accessToken = responseJSON.getString(APIUtils.ACCESS_TOKEN_KEY);
                                         String refreshToken = responseJSON.getString(APIUtils.REFRESH_TOKEN_KEY);
 
-                                        FetchMyInfo.fetchAccountInfo(mOauthRetrofit, accessToken, new FetchMyInfo.FetchUserMyListener() {
-                                            @Override
-                                            public void onFetchMyInfoSuccess(String response) {
-                                                ParseAndSaveAccountInfo.parseAndSaveAccountInfo(response, mRedditDataRoomDatabase, new ParseAndSaveAccountInfo.ParseAndSaveAccountInfoListener() {
+                                        FetchMyInfo.fetchAccountInfo(mOauthRetrofit, mRedditDataRoomDatabase,
+                                                accessToken, new FetchMyInfo.FetchMyInfoListener() {
                                                     @Override
-                                                    public void onParseMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
+                                                    public void onFetchMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
                                                         new ParseAndInsertNewAccountAsyncTask(name, accessToken, refreshToken, profileImageUrl, bannerImageUrl,
                                                                 karma, authCode, mRedditDataRoomDatabase.accountDao(),
                                                                 () -> {
@@ -160,18 +157,15 @@ public class LoginActivity extends BaseActivity {
                                                     }
 
                                                     @Override
-                                                    public void onParseMyInfoFail() {
-                                                        Toast.makeText(LoginActivity.this, R.string.parse_user_info_error, Toast.LENGTH_SHORT).show();
+                                                    public void onFetchMyInfoFailed(boolean parseFailed) {
+                                                        if (parseFailed) {
+                                                            Toast.makeText(LoginActivity.this, R.string.parse_user_info_error, Toast.LENGTH_SHORT).show();
+                                                        } else {
+                                                            Toast.makeText(LoginActivity.this, R.string.cannot_fetch_user_info, Toast.LENGTH_SHORT).show();
+                                                        }
+
                                                         finish();
                                                     }
-                                                });
-                                            }
-
-                                            @Override
-                                            public void onFetchMyInfoFail() {
-                                                Toast.makeText(LoginActivity.this, R.string.cannot_fetch_user_info, Toast.LENGTH_SHORT).show();
-                                                finish();
-                                            }
                                         });
                                     } catch (JSONException e) {
                                         e.printStackTrace();

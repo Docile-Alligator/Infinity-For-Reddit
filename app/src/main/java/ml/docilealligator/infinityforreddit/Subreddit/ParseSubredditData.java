@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Subreddit;
 
 import android.os.AsyncTask;
 
@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
+import ml.docilealligator.infinityforreddit.Subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 

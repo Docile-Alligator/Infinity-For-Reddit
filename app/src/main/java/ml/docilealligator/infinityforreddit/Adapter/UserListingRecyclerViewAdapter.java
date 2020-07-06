@@ -33,7 +33,7 @@ import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserDao;
 import ml.docilealligator.infinityforreddit.User.UserData;
-import ml.docilealligator.infinityforreddit.UserFollowing;
+import ml.docilealligator.infinityforreddit.User.UserFollowing;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 

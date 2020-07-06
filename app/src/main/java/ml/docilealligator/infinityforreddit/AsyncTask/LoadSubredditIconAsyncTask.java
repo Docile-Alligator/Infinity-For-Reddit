@@ -4,10 +4,10 @@ import android.os.AsyncTask;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.FetchSubredditData;
+import ml.docilealligator.infinityforreddit.Subreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditDao;
-import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
+import ml.docilealligator.infinityforreddit.Subreddit.SubredditDao;
+import ml.docilealligator.infinityforreddit.Subreddit.SubredditData;
 import retrofit2.Retrofit;
 
 public class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {

@@ -1,11 +1,10 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.User;
 
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
 import ml.docilealligator.infinityforreddit.API.RedditAPI;
-import ml.docilealligator.infinityforreddit.User.UserData;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;

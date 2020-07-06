@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.User;
 
 import android.os.AsyncTask;
 
@@ -10,7 +10,6 @@ import java.util.Map;
 import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserDao;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
-import ml.docilealligator.infinityforreddit.User.UserData;
 import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;

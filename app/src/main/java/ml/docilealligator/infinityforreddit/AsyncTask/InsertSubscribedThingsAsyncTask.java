@@ -9,10 +9,10 @@ import java.util.Collections;
 import java.util.List;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditDao;
-import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
-import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditDao;
-import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
+import ml.docilealligator.infinityforreddit.Subreddit.SubredditDao;
+import ml.docilealligator.infinityforreddit.Subreddit.SubredditData;
+import ml.docilealligator.infinityforreddit.SubscribedSubreddit.SubscribedSubredditDao;
+import ml.docilealligator.infinityforreddit.SubscribedSubreddit.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserDao;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
 

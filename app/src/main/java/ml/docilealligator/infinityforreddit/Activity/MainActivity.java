@@ -78,17 +78,16 @@ import ml.docilealligator.infinityforreddit.FetchMyInfo;
 import ml.docilealligator.infinityforreddit.FetchSubscribedThing;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.ParseAndSaveAccountInfo;
+import ml.docilealligator.infinityforreddit.Message.ReadMessage;
 import ml.docilealligator.infinityforreddit.Post.PostDataSource;
 import ml.docilealligator.infinityforreddit.PullNotificationWorker;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.Message.ReadMessage;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
-import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
-import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
-import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditViewModel;
+import ml.docilealligator.infinityforreddit.Subreddit.SubredditData;
+import ml.docilealligator.infinityforreddit.SubscribedSubreddit.SubscribedSubredditData;
+import ml.docilealligator.infinityforreddit.SubscribedSubreddit.SubscribedSubredditViewModel;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
 import ml.docilealligator.infinityforreddit.Utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
@@ -673,12 +672,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     private void loadUserData() {
         if (!mFetchUserInfoSuccess) {
-            FetchMyInfo.fetchAccountInfo(mOauthRetrofit, mAccessToken, new FetchMyInfo.FetchUserMyListener() {
-                @Override
-                public void onFetchMyInfoSuccess(String response) {
-                    ParseAndSaveAccountInfo.parseAndSaveAccountInfo(response, mRedditDataRoomDatabase, new ParseAndSaveAccountInfo.ParseAndSaveAccountInfoListener() {
+            FetchMyInfo.fetchAccountInfo(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
+                    new FetchMyInfo.FetchMyInfoListener() {
                         @Override
-                        public void onParseMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
+                        public void onFetchMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
                             mAccountName = name;
                             mProfileImageUrl = profileImageUrl;
                             mBannerImageUrl = bannerImageUrl;
@@ -687,16 +684,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         }
 
                         @Override
-                        public void onParseMyInfoFail() {
+                        public void onFetchMyInfoFailed(boolean parseFailed) {
                             mFetchUserInfoSuccess = false;
                         }
-                    });
-                }
-
-                @Override
-                public void onFetchMyInfoFail() {
-                    mFetchUserInfoSuccess = false;
-                }
             });
         }
     }

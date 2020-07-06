@@ -8,8 +8,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
-import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
+import ml.docilealligator.infinityforreddit.Subreddit.SubredditData;
+import ml.docilealligator.infinityforreddit.SubscribedSubreddit.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
 

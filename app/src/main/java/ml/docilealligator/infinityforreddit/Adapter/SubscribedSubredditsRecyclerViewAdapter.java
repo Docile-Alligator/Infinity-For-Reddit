@@ -27,7 +27,7 @@ import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FavoriteThing;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.SubscribedSubredditDatabase.SubscribedSubredditData;
+import ml.docilealligator.infinityforreddit.SubscribedSubreddit.SubscribedSubredditData;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 

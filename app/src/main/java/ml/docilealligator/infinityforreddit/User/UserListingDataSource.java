@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.User;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -6,7 +6,8 @@ import androidx.paging.PageKeyedDataSource;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.User.UserData;
+import ml.docilealligator.infinityforreddit.NetworkState;
+import ml.docilealligator.infinityforreddit.SortType;
 import retrofit2.Retrofit;
 
 public class UserListingDataSource extends PageKeyedDataSource<String, UserData> {

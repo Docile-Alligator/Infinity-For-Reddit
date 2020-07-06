@@ -30,8 +30,8 @@ import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
-import ml.docilealligator.infinityforreddit.SubredditSubscription;
+import ml.docilealligator.infinityforreddit.Subreddit.SubredditData;
+import ml.docilealligator.infinityforreddit.Subreddit.SubredditSubscription;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 

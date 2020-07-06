@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Post;
 
 import android.net.Uri;
 import android.os.AsyncTask;

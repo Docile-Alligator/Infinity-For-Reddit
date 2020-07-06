@@ -73,8 +73,8 @@ import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToDetailActivit
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Comment.FetchComment;
-import ml.docilealligator.infinityforreddit.FetchRemovedComment;
-import ml.docilealligator.infinityforreddit.FetchRemovedPost;
+import ml.docilealligator.infinityforreddit.Comment.FetchRemovedComment;
+import ml.docilealligator.infinityforreddit.Post.FetchRemovedPost;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.Comment.ParseComment;

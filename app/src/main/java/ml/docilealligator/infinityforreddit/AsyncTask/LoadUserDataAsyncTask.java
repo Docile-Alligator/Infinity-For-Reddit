@@ -2,7 +2,7 @@ package ml.docilealligator.infinityforreddit.AsyncTask;
 
 import android.os.AsyncTask;
 
-import ml.docilealligator.infinityforreddit.FetchUserData;
+import ml.docilealligator.infinityforreddit.User.FetchUserData;
 import ml.docilealligator.infinityforreddit.User.UserDao;
 import ml.docilealligator.infinityforreddit.User.UserData;
 import retrofit2.Retrofit;

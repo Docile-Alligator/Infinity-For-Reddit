@@ -3,8 +3,8 @@ package ml.docilealligator.infinityforreddit.AsyncTask;
 import android.os.AsyncTask;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditDao;
-import ml.docilealligator.infinityforreddit.SubredditDatabase.SubredditData;
+import ml.docilealligator.infinityforreddit.Subreddit.SubredditDao;
+import ml.docilealligator.infinityforreddit.Subreddit.SubredditData;
 
 public class InsertSubredditDataAsyncTask extends AsyncTask<Void, Void, Void> {
     private SubredditDao mSubredditDao;
