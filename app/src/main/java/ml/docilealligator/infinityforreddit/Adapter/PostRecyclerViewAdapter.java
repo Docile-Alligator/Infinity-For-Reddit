@@ -522,6 +522,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                 if (holder instanceof PostVideoAutoplayViewHolder) {
                     ((PostVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio((float) post.getPreviewWidth() / post.getPreviewHeight());
+                    ((PostVideoAutoplayViewHolder) holder).previewImageView.setVisibility(View.VISIBLE);
+                    mGlide.load(post.getPreviewUrl()).apply(RequestOptions.noTransformation()).into(((PostVideoAutoplayViewHolder) holder).previewImageView);
                     ((PostVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
                 } else if (holder instanceof PostVideoAndGifPreviewViewHolder) {
                     if (post.getPostType() == Post.VIDEO_TYPE) {
@@ -1351,6 +1353,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             if (holder instanceof PostVideoAutoplayViewHolder) {
                 ((PostVideoAutoplayViewHolder) holder).muteButton.setVisibility(View.GONE);
                 ((PostVideoAutoplayViewHolder) holder).resetVolume();
+                mGlide.clear(((PostVideoAutoplayViewHolder) holder).previewImageView);
+                ((PostVideoAutoplayViewHolder) holder).previewImageView.setVisibility(View.GONE);
             } else if (holder instanceof PostImageAndGifAutoplayViewHolder) {
                 mGlide.clear(((PostImageAndGifAutoplayViewHolder) holder).imageView);
                 ((PostImageAndGifAutoplayViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.FIT_START);
@@ -1884,6 +1888,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         CustomTextView awardsTextView;
         @BindView(R.id.aspect_ratio_frame_layout_item_post_video_type_autoplay)
         AspectRatioFrameLayout aspectRatioFrameLayout;
+        @BindView(R.id.preview_image_view_item_post_video_type_autoplay)
+        ImageView previewImageView;
         @BindView(R.id.player_view_item_post_video_type_autoplay)
         PlayerView videoPlayer;
         @BindView(R.id.mute_exo_playback_control_view)
@@ -2024,6 +2030,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     public void onCues(List<Cue> cues) {
 
                     }
+
+                    @Override
+                    public void onRenderedFirstFrame() {
+                        mGlide.clear(previewImageView);
+                        previewImageView.setVisibility(View.GONE);
+                    }
                 });
             }
             helper.initialize(container, playbackInfo);
@@ -2054,7 +2066,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
         @Override
         public boolean wantsToPlay() {
-            return ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= 0.85;
+            return ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= 0.75;
         }
 
         @Override
