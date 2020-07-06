@@ -53,6 +53,7 @@ public class NotificationPreferenceFragment extends PreferenceFragmentCompat {
 
         enableNotification = sharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_NOTIFICATION_KEY, true);
         notificationInterval = Long.parseLong(sharedPreferences.getString(SharedPreferencesUtils.NOTIFICATION_INTERVAL_KEY, "1"));
+        TimeUnit timeUnit = (notificationInterval == 15 || notificationInterval == 30) ? TimeUnit.MINUTES : TimeUnit.HOURS;
 
         if (enableNotification) {
             if (notificationIntervalListPreference != null) {
@@ -74,15 +75,15 @@ public class NotificationPreferenceFragment extends PreferenceFragmentCompat {
 
                     PeriodicWorkRequest pullNotificationRequest =
                             new PeriodicWorkRequest.Builder(PullNotificationWorker.class,
-                                    notificationInterval, TimeUnit.HOURS)
+                                    notificationInterval, timeUnit)
                                     .setConstraints(constraints)
-                                    .setInitialDelay(notificationInterval, TimeUnit.HOURS)
+                                    .setInitialDelay(notificationInterval, timeUnit)
                                     .build();
 
-                    workManager.enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
+                    workManager.enqueueUniquePeriodicWork(PullNotificationWorker.UNIQUE_WORKER_NAME,
                             ExistingPeriodicWorkPolicy.REPLACE, pullNotificationRequest);
                 } else {
-                    workManager.cancelUniqueWork(PullNotificationWorker.WORKER_TAG);
+                    workManager.cancelUniqueWork(PullNotificationWorker.UNIQUE_WORKER_NAME);
                 }
                 return true;
             });
@@ -99,15 +100,15 @@ public class NotificationPreferenceFragment extends PreferenceFragmentCompat {
 
                     PeriodicWorkRequest pullNotificationRequest =
                             new PeriodicWorkRequest.Builder(PullNotificationWorker.class,
-                                    notificationInterval, TimeUnit.HOURS)
+                                    notificationInterval, timeUnit)
                                     .setConstraints(constraints)
-                                    .setInitialDelay(notificationInterval, TimeUnit.HOURS)
+                                    .setInitialDelay(notificationInterval, timeUnit)
                                     .build();
 
-                    workManager.enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
+                    workManager.enqueueUniquePeriodicWork(PullNotificationWorker.UNIQUE_WORKER_NAME,
                             ExistingPeriodicWorkPolicy.REPLACE, pullNotificationRequest);
                 } else {
-                    workManager.cancelUniqueWork(PullNotificationWorker.WORKER_TAG);
+                    workManager.cancelUniqueWork(PullNotificationWorker.UNIQUE_WORKER_NAME);
                 }
 
                 return true;

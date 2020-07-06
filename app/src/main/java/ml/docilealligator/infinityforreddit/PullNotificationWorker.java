@@ -42,7 +42,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class PullNotificationWorker extends Worker {
-    public static final String WORKER_TAG = "PNWT";
+    public static final String UNIQUE_WORKER_NAME = "PNWT";
     @Inject
     @Named("oauth_without_authenticator")
     Retrofit mOauthWithoutAuthenticatorRetrofit;

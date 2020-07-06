@@ -322,7 +322,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
             boolean enableNotification = mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_NOTIFICATION_KEY, true);
             long notificationInterval = Long.parseLong(mSharedPreferences.getString(SharedPreferencesUtils.NOTIFICATION_INTERVAL_KEY, "1"));
-            TimeUnit timeUnit = notificationInterval == 15 || notificationInterval == 30 ? TimeUnit.MINUTES : TimeUnit.HOURS;
+            TimeUnit timeUnit = (notificationInterval == 15 || notificationInterval == 30) ? TimeUnit.MINUTES : TimeUnit.HOURS;
 
             WorkManager workManager = WorkManager.getInstance(this);
 
@@ -354,10 +354,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                                             .setConstraints(constraints)
                                             .build();
 
-                            workManager.enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
+                            workManager.enqueueUniquePeriodicWork(PullNotificationWorker.UNIQUE_WORKER_NAME,
                                     ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
                         } else {
-                            workManager.cancelUniqueWork(PullNotificationWorker.WORKER_TAG);
+                            workManager.cancelUniqueWork(PullNotificationWorker.UNIQUE_WORKER_NAME);
                         }
 
                         bindView();
@@ -380,10 +380,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                                         .setConstraints(constraints)
                                         .build();
 
-                        workManager.enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
+                        workManager.enqueueUniquePeriodicWork(PullNotificationWorker.UNIQUE_WORKER_NAME,
                                 ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
                     } else {
-                        workManager.cancelUniqueWork(PullNotificationWorker.WORKER_TAG);
+                        workManager.cancelUniqueWork(PullNotificationWorker.UNIQUE_WORKER_NAME);
                     }
 
                     bindView();
@@ -410,10 +410,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                                     .setConstraints(constraints)
                                     .build();
 
-                    workManager.enqueueUniquePeriodicWork(PullNotificationWorker.WORKER_TAG,
+                    workManager.enqueueUniquePeriodicWork(PullNotificationWorker.UNIQUE_WORKER_NAME,
                             ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
                 } else {
-                    workManager.cancelUniqueWork(PullNotificationWorker.WORKER_TAG);
+                    workManager.cancelUniqueWork(PullNotificationWorker.UNIQUE_WORKER_NAME);
                 }
 
                 bindView();
