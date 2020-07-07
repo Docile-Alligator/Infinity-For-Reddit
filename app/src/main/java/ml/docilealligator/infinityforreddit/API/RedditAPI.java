@@ -308,4 +308,8 @@ public interface RedditAPI {
     @FormUrlEncoded
     @POST("/api/report")
     Call<String> report(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("/api/compose")
+    Call<String> composePrivateMessage(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }

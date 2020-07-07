@@ -19,17 +19,14 @@ public class SendComment {
     public static void sendComment(String commentMarkdown, String thingFullname, int parentDepth,
                                    Locale locale, Retrofit oauthRetrofit, String accessToken,
                                    SendCommentListener sendCommentListener) {
-        RedditAPI api = oauthRetrofit.create(RedditAPI.class);
         Map<String, String> headers = APIUtils.getOAuthHeader(accessToken);
         Map<String, String> params = new HashMap<>();
         params.put(APIUtils.API_TYPE_KEY, "json");
         params.put(APIUtils.RETURN_RTJSON_KEY, "true");
         params.put(APIUtils.TEXT_KEY, commentMarkdown);
         params.put(APIUtils.THING_ID_KEY, thingFullname);
-        api.sendCommentOrReplyToMessage(headers, params);
 
-        Call<String> sendCommentCall = api.sendCommentOrReplyToMessage(headers, params);
-        sendCommentCall.enqueue(new Callback<String>() {
+        oauthRetrofit.create(RedditAPI.class).sendCommentOrReplyToMessage(headers, params).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {

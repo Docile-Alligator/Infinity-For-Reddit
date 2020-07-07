@@ -27,6 +27,7 @@ import ml.docilealligator.infinityforreddit.Activity.SearchActivity;
 import ml.docilealligator.infinityforreddit.Activity.SearchResultActivity;
 import ml.docilealligator.infinityforreddit.Activity.SearchSubredditsResultActivity;
 import ml.docilealligator.infinityforreddit.Activity.SelectedSubredditsActivity;
+import ml.docilealligator.infinityforreddit.Activity.SendPrivateMessageActivity;
 import ml.docilealligator.infinityforreddit.Activity.SettingsActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubredditMultiselectionActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubredditSelectionActivity;
@@ -179,4 +180,6 @@ public interface AppComponent {
     void inject(InboxFragment inboxFragment);
 
     void inject(ViewPrivateMessagesActivity viewPrivateMessagesActivity);
+
+    void inject(SendPrivateMessageActivity sendPrivateMessageActivity);
 }

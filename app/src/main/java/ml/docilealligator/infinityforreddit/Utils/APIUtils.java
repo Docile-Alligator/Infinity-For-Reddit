@@ -92,6 +92,9 @@ public class APIUtils {
 
     public static final String REASON_KEY = "reason";
 
+    public static final String SUBJECT_KEY = "subject";
+    public static final String TO_KEY = "to";
+
     public static Map<String, String> getHttpBasicAuthHeader() {
         Map<String, String> params = new HashMap<>();
         String credentials = String.format("%s:%s", APIUtils.CLIENT_ID, "");

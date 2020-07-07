@@ -652,6 +652,11 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                     Toast.makeText(this, R.string.no_app, Toast.LENGTH_SHORT).show();
                 }
                 return true;
+            case R.id.action_send_private_message_view_user_detail_activity:
+                Intent pmIntent = new Intent(this, SendPrivateMessageActivity.class);
+                pmIntent.putExtra(SendPrivateMessageActivity.EXTRA_RECIPIENT_USERNAME, username);
+                startActivity(pmIntent);
+                return true;
         }
         return false;
     }

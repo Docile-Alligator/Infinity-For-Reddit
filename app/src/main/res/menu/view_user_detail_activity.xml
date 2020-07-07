@@ -37,4 +37,10 @@
         android:orderInCategory="6"
         android:title="@string/action_share"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_send_private_message_view_user_detail_activity"
+        android:orderInCategory="6"
+        android:title="@string/action_send_private_message"
+        app:showAsAction="never" />
 </menu>

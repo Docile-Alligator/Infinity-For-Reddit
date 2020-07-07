@@ -23,13 +23,19 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
+        <activity android:name=".Activity.SendPrivateMessageActivity"
+            android:label="@string/send_private_message_activity_label"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
 
         <service
             android:name=".Service.DownloadRedditVideoService"
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".Activity.ViewPrivateMessagesActivity"
+        <activity
+            android:name=".Activity.ViewPrivateMessagesActivity"
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/AppTheme.Slidable"
             android:windowSoftInputMode="adjustResize" />

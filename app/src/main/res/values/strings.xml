@@ -28,6 +28,7 @@
     <string name="report_activity_label">Report</string>
     <string name="view_imgur_media_activity_image_label">Image %1$d/%2$d</string>
     <string name="view_imgur_media_activity_video_label">Video %1$d/%2$d</string>
+    <string name="send_private_message_activity_label">Send PM</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -63,6 +64,7 @@
     <string name="action_report">Report</string>
     <string name="action_see_removed">See Removed</string>
     <string name="action_set_wallpaper">Set as Wallpaper</string>
+    <string name="action_send_private_message">Send Private Message</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -152,6 +154,9 @@
     <string name="send_comment_failed">Could not send this comment</string>
     <string name="parse_sent_comment_failed">The comment is sent but unable to get the sent comment</string>
 
+    <string name="send_message_username_hint">User</string>
+    <string name="send_message_subject_hint">Subject</string>
+    <string name="send_message_content_hint">Message</string>
     <string name="reply_message_failed">Could not reply to this message</string>
     <string name="error_getting_message">Error getting this message</string>
 
