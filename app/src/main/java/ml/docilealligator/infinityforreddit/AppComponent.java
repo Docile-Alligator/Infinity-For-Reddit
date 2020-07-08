@@ -61,6 +61,7 @@ import ml.docilealligator.infinityforreddit.Settings.GesturesAndButtonsPreferenc
 import ml.docilealligator.infinityforreddit.Settings.MainPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.NotificationPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.ThemePreferenceFragment;
+import ml.docilealligator.infinityforreddit.Settings.VideoPreferenceFragment;
 
 @Singleton
 @Component(modules = AppModule.class)
@@ -182,4 +183,6 @@ public interface AppComponent {
     void inject(ViewPrivateMessagesActivity viewPrivateMessagesActivity);
 
     void inject(SendPrivateMessageActivity sendPrivateMessageActivity);
+
+    void inject(VideoPreferenceFragment videoPreferenceFragment);
 }

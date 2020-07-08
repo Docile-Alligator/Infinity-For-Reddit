@@ -3,6 +3,8 @@ package ml.docilealligator.infinityforreddit.Adapter;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -169,6 +171,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean mAutoplayNsfwVideos;
     private boolean mMuteAutoplayingVideos;
     private boolean mShowThumbnailOnTheRightInCompactLayout;
+    private double mStartAutoplayVisibleAreaOffset;
     private Drawable mCommentIcon;
     private NetworkState networkState;
     private ExoCreator mExoCreator;
@@ -206,6 +209,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mMuteAutoplayingVideos = sharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_AUTOPLAYING_VIDEOS, true);
             mShowThumbnailOnTheRightInCompactLayout = sharedPreferences.getBoolean(
                     SharedPreferencesUtils.SHOW_THUMBNAIL_ON_THE_RIGHT_IN_COMPACT_LAYOUT, false);
+
+            Resources resources = activity.getResources();
+            mStartAutoplayVisibleAreaOffset = resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ?
+                    sharedPreferences.getInt(SharedPreferencesUtils.START_AUTOPLAY_VISIBLE_AREA_OFFSET_PORTRAIT, 75) / 100.0 :
+                    sharedPreferences.getInt(SharedPreferencesUtils.START_AUTOPLAY_VISIBLE_AREA_OFFSET_LANDSCAPE, 50) / 100.0;
+
             mPostLayout = postLayout;
 
             mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
@@ -243,7 +252,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             if (mCommentIcon != null) {
                 DrawableCompat.setTint(mCommentIcon, mPostIconAndInfoColor);
             }
-            mScale = activity.getResources().getDisplayMetrics().density;
+
+            mScale = resources.getDisplayMetrics().density;
             mGlide = Glide.with(mActivity);
             mRedditDataRoomDatabase = redditDataRoomDatabase;
             mLocale = locale;
@@ -1346,6 +1356,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         mShowThumbnailOnTheRightInCompactLayout = showThumbnailOnTheRightInCompactLayout;
     }
 
+    public void setStartAutoplayVisibleAreaOffset(double startAutoplayVisibleAreaOffset) {
+        this.mStartAutoplayVisibleAreaOffset = startAutoplayVisibleAreaOffset / 100.0;
+    }
+
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
@@ -2066,7 +2080,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
         @Override
         public boolean wantsToPlay() {
-            return ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= 0.75;
+            return ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
         }
 
         @Override

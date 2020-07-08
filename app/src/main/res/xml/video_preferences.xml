@@ -35,4 +35,18 @@
         app:key="autoplay_nsfw_videos"
         app:title="@string/settings_autoplay_nsfw_videos_title" />
 
+    <SeekBarPreference
+        app:defaultValue="75"
+        android:max="100"
+        app:key="start_autoplay_visible_area_offset_portrait"
+        app:title="@string/settings_start_autoplay_visible_area_offset_portrait_title"
+        app:singleLineTitle="false" />
+
+    <SeekBarPreference
+        app:defaultValue="50"
+        android:max="100"
+        app:key="start_autoplay_visible_area_offset_landscape"
+        app:title="@string/settings_start_autoplay_visible_area_offset_landscape_title"
+        app:singleLineTitle="false" />
+
 </PreferenceScreen>

@@ -3,6 +3,8 @@ package ml.docilealligator.infinityforreddit.Adapter;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -159,6 +161,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private boolean mAutoplayNsfwVideos;
     private boolean mMuteAutoplayingVideos;
     private boolean mFullyCollapseComment;
+    private double mStartAutoplayVisibleAreaOffset;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
     private boolean isInitiallyLoadingFailed;
@@ -340,12 +343,17 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mMuteAutoplayingVideos = sharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_AUTOPLAYING_VIDEOS, true);
         mFullyCollapseComment = sharedPreferences.getBoolean(SharedPreferencesUtils.FULLY_COLLAPSE_COMMENT, false);
 
+        Resources resources = activity.getResources();
+        mStartAutoplayVisibleAreaOffset = resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ?
+                sharedPreferences.getInt(SharedPreferencesUtils.START_AUTOPLAY_VISIBLE_AREA_OFFSET_PORTRAIT, 75) / 100.0 :
+                sharedPreferences.getInt(SharedPreferencesUtils.START_AUTOPLAY_VISIBLE_AREA_OFFSET_LANDSCAPE, 50) / 100.0;
+
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
         isInitiallyLoadingFailed = false;
         mHasMoreComments = false;
         loadMoreCommentsFailed = false;
-        mScale = activity.getResources().getDisplayMetrics().density;
+        mScale = resources.getDisplayMetrics().density;
 
         mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
         mColorAccent = customThemeWrapper.getColorAccent();
@@ -2259,7 +2267,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
         @Override
         public boolean wantsToPlay() {
-            return ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= 0.85;
+            return ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
         }
 
         @Override

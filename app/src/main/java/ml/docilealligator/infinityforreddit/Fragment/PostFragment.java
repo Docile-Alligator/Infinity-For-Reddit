@@ -67,6 +67,7 @@ import ml.docilealligator.infinityforreddit.Event.ChangePostLayoutEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeShowAbsoluteNumberOfVotesEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeShowElapsedTimeEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeStartAutoplayVisibleAreaOffsetEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeTimeFormatEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVideoAutoplayEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVoteButtonsPositionEvent;
@@ -931,6 +932,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void onShowThumbnailOnTheRightInCompactLayoutEvent(ShowThumbnailOnTheRightInCompactLayoutEvent showThumbnailOnTheRightInCompactLayoutEvent) {
         if (mAdapter != null) {
             mAdapter.setShowThumbnailOnTheRightInCompactLayout(showThumbnailOnTheRightInCompactLayoutEvent.showThumbnailOnTheRightInCompactLayout);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeStartAutoplayVisibleAreaOffsetEvent(ChangeStartAutoplayVisibleAreaOffsetEvent changeStartAutoplayVisibleAreaOffsetEvent) {
+        if (mAdapter != null) {
+            mAdapter.setStartAutoplayVisibleAreaOffset(changeStartAutoplayVisibleAreaOffsetEvent.startAutoplayVisibleAreaOffset);
             refreshAdapter();
         }
     }
