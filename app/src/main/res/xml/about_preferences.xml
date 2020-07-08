@@ -46,6 +46,11 @@
         app:summary="@string/settings_share_summary" />
 
     <Preference
+        app:title="@string/settings_crash_reports_title"
+        app:summary="@string/settings_crash_reports_summary"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.CrashReportsFragment" />
+
+    <Preference
         android:key="version"
         app:title="@string/settings_version_title"
         app:summary="@string/settings_version_summary" />

@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit.Message;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import java.util.HashMap;
@@ -41,7 +39,6 @@ public class ComposeMessage {
                             composeMessageListener.composeMessageFailed(errorMessage);
                         }
                     });
-                    Log.i("asfsdaf", "s " + response.body());
                 } else {
                     composeMessageListener.composeMessageFailed(response.message());
                 }

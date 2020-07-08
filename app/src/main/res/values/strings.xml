@@ -425,6 +425,8 @@
     <string name="settings_share_title">Share</string>
     <string name="settings_share_summary">Share this app to other people if you enjoy it</string>
     <string name="settings_version_title">Infinity For Reddit</string>
+    <string name="settings_crash_reports_title">Crash Reports</string>
+    <string name="settings_crash_reports_summary">See the error logs and send them to me when you report bugs</string>
     <string name="settings_version_summary">Version %s</string>
     <string name="settings_category_customization_title">Customization</string>
     <string name="settings_customize_light_theme_title">Light Theme</string>
@@ -828,5 +830,7 @@
     <string name="load_video_in_redgifs">Try loading the video on Redgifs</string>
 
     <string name="top_score">%1$s pts</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

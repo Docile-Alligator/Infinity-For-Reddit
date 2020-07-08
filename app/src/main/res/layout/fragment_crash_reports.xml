@@ -2,5 +2,5 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/recycler_view_acknowledgement_fragment"
-    tools:context="ml.docilealligator.infinityforreddit.Settings.AcknowledgementFragment" />
+    android:id="@+id/recycler_view_crash_reports_fragment"
+    tools:context="ml.docilealligator.infinityforreddit.Settings.CrashReportsFragment" />
