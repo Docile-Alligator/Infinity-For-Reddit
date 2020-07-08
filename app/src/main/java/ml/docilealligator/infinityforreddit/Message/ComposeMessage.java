@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit.Message;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import java.util.HashMap;
@@ -19,6 +21,7 @@ public class ComposeMessage {
         Map<String, String> headers = APIUtils.getOAuthHeader(accessToken);
         Map<String, String> params = new HashMap<>();
         params.put(APIUtils.API_TYPE_KEY, "json");
+        params.put(APIUtils.RETURN_RTJSON_KEY, "true");
         params.put(APIUtils.SUBJECT_KEY, subject);
         params.put(APIUtils.TEXT_KEY, message);
         params.put(APIUtils.TO_KEY, username);
@@ -27,18 +30,18 @@ public class ComposeMessage {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParseMessage.parseRepliedMessage(response.body(), locale,
-                            new ParseMessage.ParseSentMessageAsyncTaskListener() {
-                                @Override
-                                public void parseSuccess(Message message) {
-                                    composeMessageListener.composeMessageSuccess(message);
-                                }
+                    ParseMessage.parseComposedMessageError(response.body(), new ParseMessage.ParseComposedMessageErrorListener() {
+                        @Override
+                        public void noError() {
+                            composeMessageListener.composeMessageSuccess();
+                        }
 
-                                @Override
-                                public void parseFailed(String errorMessage) {
-                                    composeMessageListener.composeMessageFailed(errorMessage);
-                                }
-                            });
+                        @Override
+                        public void error(String errorMessage) {
+                            composeMessageListener.composeMessageFailed(errorMessage);
+                        }
+                    });
+                    Log.i("asfsdaf", "s " + response.body());
                 } else {
                     composeMessageListener.composeMessageFailed(response.message());
                 }
@@ -52,7 +55,7 @@ public class ComposeMessage {
     }
 
     public interface ComposeMessageListener {
-        void composeMessageSuccess(Message message);
+        void composeMessageSuccess();
         void composeMessageFailed(String errorMessage);
     }
 }

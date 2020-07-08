@@ -155,10 +155,16 @@
     <string name="parse_sent_comment_failed">The comment is sent but unable to get the sent comment</string>
 
     <string name="send_message_username_hint">User</string>
-    <string name="send_message_subject_hint">Subject</string>
+    <string name="send_message_subject_hint">Subject (100 characters max)</string>
     <string name="send_message_content_hint">Message</string>
     <string name="reply_message_failed">Could not reply to this message</string>
     <string name="error_getting_message">Error getting this message</string>
+    <string name="message_username_required">Hey, to whom to you want to send this message?</string>
+    <string name="message_subject_required">Your message should have a subject</string>
+    <string name="message_content_required">You need to tell the recipient something</string>
+    <string name="sending_message">Sending</string>
+    <string name="send_message_success">Message sent</string>
+    <string name="send_message_failed">Could not send this message</string>
 
     <string name="select_a_subreddit">Please select a subreddit first</string>
     <string name="title_required">The post need a good title</string>

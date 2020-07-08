@@ -68,6 +68,7 @@
                 android:paddingBottom="16dp"
                 android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/content_font_18"
+                android:maxLength="100"
                 android:fontFamily="?attr/content_font_family" />
 
             <View

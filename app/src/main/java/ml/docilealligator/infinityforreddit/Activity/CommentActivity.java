@@ -316,6 +316,7 @@ public class CommentActivity extends BaseActivity {
                 if (!isSubmitting) {
                     isSubmitting = true;
                     if (commentEditText.getText() == null || commentEditText.getText().toString().equals("")) {
+                        isSubmitting = false;
                         Snackbar.make(coordinatorLayout, R.string.comment_content_required, Snackbar.LENGTH_SHORT).show();
                         return true;
                     }
@@ -352,7 +353,7 @@ public class CommentActivity extends BaseActivity {
                                     item.setEnabled(true);
                                     item.getIcon().setAlpha(255);
 
-                                    if (errorMessage == null) {
+                                    if (errorMessage == null || !errorMessage.equals("")) {
                                         Snackbar.make(coordinatorLayout, R.string.send_comment_failed, Snackbar.LENGTH_SHORT).show();
                                     } else {
                                         Snackbar.make(coordinatorLayout, errorMessage, Snackbar.LENGTH_SHORT).show();

@@ -7,26 +7,32 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.snackbar.Snackbar;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.Message.ComposeMessage;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import retrofit2.Retrofit;
 
 public class SendPrivateMessageActivity extends BaseActivity {
     public static final String EXTRA_RECIPIENT_USERNAME = "ERU";
+    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
+    private static final String ACCESS_TOKEN_STATE = "ATS";
     @BindView(R.id.coordinator_layout_send_private_message_activity)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_send_private_message_activity)
@@ -53,6 +59,9 @@ public class SendPrivateMessageActivity extends BaseActivity {
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    private boolean mNullAccessToken = false;
+    private String mAccessToken;
+    private boolean isSubmitting = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,12 +77,32 @@ public class SendPrivateMessageActivity extends BaseActivity {
             addOnOffsetChangedListener(appBarLayout);
         }
 
+        if (savedInstanceState == null) {
+            getCurrentAccount();
+        } else {
+            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
+            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
+            if (!mNullAccessToken && mAccessToken == null) {
+                getCurrentAccount();
+            }
+        }
+
         setSupportActionBar(toolbar);
 
         String username = getIntent().getStringExtra(EXTRA_RECIPIENT_USERNAME);
         if (username != null) {
             usernameEditText.setText(username);
         }
+    }
+
+    private void getCurrentAccount() {
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if (account == null) {
+                mNullAccessToken = true;
+            } else {
+                mAccessToken = account.getAccessToken();
+            }
+        }).execute();
     }
 
     @Override
@@ -89,9 +118,67 @@ public class SendPrivateMessageActivity extends BaseActivity {
             finish();
             return true;
         } else if (item.getItemId() == R.id.action_send_send_private_message_activity) {
+            if (!isSubmitting) {
+                isSubmitting = true;
+                if (usernameEditText.getText() == null || usernameEditText.getText().toString().equals("")) {
+                    isSubmitting = false;
+                    Snackbar.make(coordinatorLayout, R.string.message_username_required, Snackbar.LENGTH_LONG).show();
+                    return true;
+                }
 
+                if (subjectEditText.getText() == null || subjectEditText.getText().toString().equals("")) {
+                    isSubmitting = false;
+                    Snackbar.make(coordinatorLayout, R.string.message_subject_required, Snackbar.LENGTH_LONG).show();
+                    return true;
+                }
+
+                if (messageEditText.getText() == null || messageEditText.getText().toString().equals("")) {
+                    isSubmitting = false;
+                    Snackbar.make(coordinatorLayout, R.string.message_content_required, Snackbar.LENGTH_LONG).show();
+                    return true;
+                }
+
+                item.setEnabled(false);
+                item.getIcon().setAlpha(130);
+                Snackbar sendingSnackbar = Snackbar.make(coordinatorLayout, R.string.sending_message, Snackbar.LENGTH_INDEFINITE);
+                sendingSnackbar.show();
+
+                ComposeMessage.composeMessage(mOauthRetrofit, mAccessToken, getResources().getConfiguration().locale,
+                        usernameEditText.getText().toString(), subjectEditText.getText().toString(),
+                        messageEditText.getText().toString(), new ComposeMessage.ComposeMessageListener() {
+                            @Override
+                            public void composeMessageSuccess() {
+                                isSubmitting = false;
+                                item.setEnabled(true);
+                                item.getIcon().setAlpha(255);
+                                Toast.makeText(SendPrivateMessageActivity.this, R.string.send_message_success, Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+
+                            @Override
+                            public void composeMessageFailed(String errorMessage) {
+                                isSubmitting = false;
+                                sendingSnackbar.dismiss();
+                                item.setEnabled(true);
+                                item.getIcon().setAlpha(255);
+
+                                if (errorMessage == null || errorMessage.equals("")) {
+                                    Snackbar.make(coordinatorLayout, R.string.send_message_failed, Snackbar.LENGTH_LONG).show();
+                                } else {
+                                    Snackbar.make(coordinatorLayout, errorMessage, Snackbar.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+            }
         }
         return false;
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
+        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
     }
 
     @Override

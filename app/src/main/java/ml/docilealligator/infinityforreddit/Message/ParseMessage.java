@@ -41,6 +41,10 @@ public class ParseMessage {
         new ParseSentMessageAsnycTask(response, locale, parseSentMessageAsyncTaskListener).execute();
     }
 
+    public static void parseComposedMessageError(String response, ParseComposedMessageErrorListener parseComposedMessageErrorListener) {
+        new ParseComposedMessageErrorAsncTask(response, parseComposedMessageErrorListener).execute();
+    }
+
     @Nullable
     private static Message parseSingleMessage(JSONObject messageJSON, Locale locale, int messageType) throws JSONException {
         String kind = messageJSON.getString(JSONUtils.KIND_KEY);
@@ -165,6 +169,33 @@ public class ParseMessage {
         }
     }
 
+    private static class ParseComposedMessageErrorAsncTask extends AsyncTask<Void, Void, Void> {
+        private String response;
+        private ParseComposedMessageErrorListener parseComposedMessageErrorListener;
+        private String errorMessage;
+
+        ParseComposedMessageErrorAsncTask(String response, ParseComposedMessageErrorListener parseComposedMessageErrorListener) {
+            this.response = response;
+            this.parseComposedMessageErrorListener = parseComposedMessageErrorListener;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            errorMessage = parseRepliedMessageErrorMessage(response);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (errorMessage == null) {
+                parseComposedMessageErrorListener.noError();
+            } else {
+                parseComposedMessageErrorListener.error(errorMessage);
+            }
+        }
+    }
+
     @Nullable
     private static String parseRepliedMessageErrorMessage(String response) {
         try {
@@ -201,5 +232,10 @@ public class ParseMessage {
     public interface ParseSentMessageAsyncTaskListener {
         void parseSuccess(Message message);
         void parseFailed(String errorMessage);
+    }
+
+    public interface ParseComposedMessageErrorListener {
+        void noError();
+        void error(String errorMessage);
     }
 }
