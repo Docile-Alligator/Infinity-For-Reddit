@@ -789,18 +789,16 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 ((CommentViewHolder) holder).itemView.setBackgroundColor(mAwardedCommentBackgroundColor);
             }
 
-            String authorPrefixed = "u/" + "asdasdfasfadfafasfasfsafasdfasdfasfjk as df adsf asf a sfas f";
+            String authorPrefixed = "u/" + comment.getAuthor();
             ((CommentViewHolder) holder).authorTextView.setText(authorPrefixed);
-            ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.VISIBLE);
-            ((CommentViewHolder) holder).authorFlairTextView.setText("asfafaf");
 
-            /*if (comment.getAuthorFlairHTML() != null && !comment.getAuthorFlairHTML().equals("")) {
+            if (comment.getAuthorFlairHTML() != null && !comment.getAuthorFlairHTML().equals("")) {
                 ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.VISIBLE);
                 Utils.setHTMLWithImageToTextView(((CommentViewHolder) holder).authorFlairTextView, comment.getAuthorFlairHTML());
             } else if (comment.getAuthorFlair() != null && !comment.getAuthorFlair().equals("")) {
                 ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.VISIBLE);
                 ((CommentViewHolder) holder).authorFlairTextView.setText(comment.getAuthorFlair());
-            }*/
+            }
 
             if (comment.isSubmitter()) {
                 ((CommentViewHolder) holder).authorTextView.setTextColor(mSubmitterColor);
