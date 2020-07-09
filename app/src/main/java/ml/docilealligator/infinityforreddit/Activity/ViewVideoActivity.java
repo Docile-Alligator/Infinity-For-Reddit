@@ -75,6 +75,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     public static final String EXTRA_PROGRESS_SECONDS = "EPS";
     public static final String EXTRA_VIDEO_TYPE = "EVT";
     public static final String EXTRA_GFYCAT_ID = "EGI";
+    public static final String EXTRA_IS_NSFW = "EIN";
     public static final int VIDEO_TYPE_DIRECT = 3;
     public static final int VIDEO_TYPE_REDGIFS = 2;
     public static final int VIDEO_TYPE_GFYCAT = 1;
@@ -107,6 +108,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     private boolean isDownloading = false;
     private boolean isMute = false;
     private String postTitle;
+    private boolean isNSFW;
     private long resumePosition = -1;
     private int videoType;
 
@@ -174,9 +176,11 @@ public class ViewVideoActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mVideoUri = intent.getData();
         postTitle = intent.getStringExtra(EXTRA_POST_TITLE);
+        isNSFW = intent.getBooleanExtra(EXTRA_IS_NSFW, false);
         if (savedInstanceState == null) {
             resumePosition = intent.getLongExtra(EXTRA_PROGRESS_SECONDS, -1);
         }
+
 
         if (postTitle != null) {
             setTitle(Html.fromHtml(String.format("<small>%s</small>", postTitle)));
@@ -264,7 +268,8 @@ public class ViewVideoActivity extends AppCompatActivity {
         player.setPlayWhenReady(true);
         wasPlaying = true;
 
-        boolean muteVideo = mSharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_VIDEO, false);
+        boolean muteVideo = mSharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_VIDEO, false) ||
+                (mSharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_NSFW_VIDEO, false) && isNSFW);
 
         if (savedInstanceState != null) {
             isMute = savedInstanceState.getBoolean(IS_MUTE_STATE);

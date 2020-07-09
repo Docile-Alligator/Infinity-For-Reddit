@@ -109,6 +109,7 @@ import ml.docilealligator.infinityforreddit.Utils.GlideImageGetter;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 import ml.docilealligator.infinityforreddit.VoteThing;
+import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
 import static ml.docilealligator.infinityforreddit.Activity.CommentActivity.WRITE_COMMENT_REQUEST_CODE;
@@ -162,6 +163,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private boolean mMuteAutoplayingVideos;
     private boolean mFullyCollapseComment;
     private double mStartAutoplayVisibleAreaOffset;
+    private boolean mMuteNSFWVideo;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
     private boolean isInitiallyLoadingFailed;
@@ -258,6 +260,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             } else {
                                 intent.setData(uri);
                             }
+                            intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, mPost.isNSFW());
                             mActivity.startActivity(intent);
                         }).urlProcessor(new UrlProcessorRelativeToAbsolute("https://www.reddit.com"));
                     }
@@ -289,6 +292,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             } else {
                                 intent.setData(uri);
                             }
+                            intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, mPost.isNSFW());
                             mActivity.startActivity(intent);
                         }).urlProcessor(new UrlProcessorRelativeToAbsolute("https://www.reddit.com"));
                     }
@@ -347,6 +351,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mStartAutoplayVisibleAreaOffset = resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ?
                 sharedPreferences.getInt(SharedPreferencesUtils.START_AUTOPLAY_VISIBLE_AREA_OFFSET_PORTRAIT, 75) / 100.0 :
                 sharedPreferences.getInt(SharedPreferencesUtils.START_AUTOPLAY_VISIBLE_AREA_OFFSET_LANDSCAPE, 50) / 100.0;
+
+        mMuteNSFWVideo = sharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_NSFW_VIDEO, false);
 
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
@@ -696,6 +702,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if (holder instanceof PostDetailVideoAutoplayViewHolder) {
                 ((PostDetailVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio((float) mPost.getPreviewWidth() / mPost.getPreviewHeight());
+                ((PostDetailVideoAutoplayViewHolder) holder).previewImageView.setVisibility(View.VISIBLE);
+                mGlide.load(mPost.getPreviewUrl()).apply(RequestOptions.noTransformation()).into(((PostDetailVideoAutoplayViewHolder) holder).previewImageView);
+                ((PostDetailVideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (mPost.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
                 ((PostDetailVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(mPost.getVideoUrl()));
             } else if (holder instanceof PostDetailVideoAndGifPreviewHolder) {
                 if (mPost.getPostType() == Post.GIF_TYPE) {
@@ -1604,6 +1613,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             if (holder instanceof PostDetailVideoAutoplayViewHolder) {
                 ((PostDetailVideoAutoplayViewHolder) holder).muteButton.setVisibility(View.GONE);
                 ((PostDetailVideoAutoplayViewHolder) holder).resetVolume();
+                mGlide.clear(((PostDetailVideoAutoplayViewHolder) holder).previewImageView);
+                ((PostDetailVideoAutoplayViewHolder) holder).previewImageView.setVisibility(View.GONE);
             } else if (holder instanceof PostDetailVideoAndGifPreviewHolder) {
                 mGlide.clear(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
             } else if (holder instanceof PostDetailImageAndGifAutoplayViewHolder) {
@@ -2103,6 +2114,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         AspectRatioFrameLayout aspectRatioFrameLayout;
         @BindView(R.id.player_view_item_post_detail_video_autoplay)
         PlayerView playerView;
+        @BindView(R.id.preview_image_view_item_post_detail_video_autoplay)
+        GifImageView previewImageView;
         @BindView(R.id.mute_exo_playback_control_view)
         ImageView muteButton;
         @BindView(R.id.fullscreen_exo_playback_control_view)
@@ -2154,8 +2167,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             aspectRatioFrameLayout.setOnClickListener(null);
 
-            volume = mMuteAutoplayingVideos ? 0f : 1f;
-
             muteButton.setOnClickListener(view -> {
                 if (helper != null) {
                     if (helper.getVolume() != 0) {
@@ -2178,12 +2189,17 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 intent.putExtra(ViewVideoActivity.EXTRA_ID, mPost.getId());
                 intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, mPost.getTitle());
                 intent.putExtra(ViewVideoActivity.EXTRA_PROGRESS_SECONDS, helper.getLatestPlaybackInfo().getResumePosition());
+                intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, mPost.isNSFW());
                 mActivity.startActivity(intent);
             });
         }
 
         void bindVideoUri(Uri videoUri) {
             mediaUri = videoUri;
+        }
+
+        void setVolume(float volume) {
+            this.volume = volume;
         }
 
         void resetVolume() {
@@ -2236,6 +2252,12 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     @Override
                     public void onCues(List<Cue> cues) {
 
+                    }
+
+                    @Override
+                    public void onRenderedFirstFrame() {
+                        mGlide.clear(previewImageView);
+                        previewImageView.setVisibility(View.GONE);
                     }
                 });
             }
@@ -2364,6 +2386,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, mPost.getSubredditName());
                     intent.putExtra(ViewVideoActivity.EXTRA_ID, mPost.getId());
                     intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, mPost.getTitle());
+                    intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, mPost.isNSFW());
                     mActivity.startActivity(intent);
                 } else if (mPost.getPostType() == Post.GIF_TYPE) {
                     Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
@@ -2572,6 +2595,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 } else {
                     intent.setData(uri);
                 }
+                intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, mPost.isNSFW());
                 mActivity.startActivity(intent);
             });
         }
@@ -2663,6 +2687,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 } else {
                     intent.setData(uri);
                 }
+                intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, mPost.isNSFW());
                 mActivity.startActivity(intent);
             });
         }

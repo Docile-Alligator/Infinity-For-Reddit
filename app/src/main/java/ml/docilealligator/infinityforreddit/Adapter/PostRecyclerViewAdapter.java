@@ -90,6 +90,7 @@ import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 import ml.docilealligator.infinityforreddit.VoteThing;
+import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
 /**
@@ -172,6 +173,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean mMuteAutoplayingVideos;
     private boolean mShowThumbnailOnTheRightInCompactLayout;
     private double mStartAutoplayVisibleAreaOffset;
+    private boolean mMuteNSFWVideo;
     private Drawable mCommentIcon;
     private NetworkState networkState;
     private ExoCreator mExoCreator;
@@ -214,6 +216,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mStartAutoplayVisibleAreaOffset = resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ?
                     sharedPreferences.getInt(SharedPreferencesUtils.START_AUTOPLAY_VISIBLE_AREA_OFFSET_PORTRAIT, 75) / 100.0 :
                     sharedPreferences.getInt(SharedPreferencesUtils.START_AUTOPLAY_VISIBLE_AREA_OFFSET_LANDSCAPE, 50) / 100.0;
+
+            mMuteNSFWVideo = sharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_NSFW_VIDEO, false);
 
             mPostLayout = postLayout;
 
@@ -534,6 +538,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     ((PostVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio((float) post.getPreviewWidth() / post.getPreviewHeight());
                     ((PostVideoAutoplayViewHolder) holder).previewImageView.setVisibility(View.VISIBLE);
                     mGlide.load(post.getPreviewUrl()).apply(RequestOptions.noTransformation()).into(((PostVideoAutoplayViewHolder) holder).previewImageView);
+                    ((PostVideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
                     ((PostVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
                 } else if (holder instanceof PostVideoAndGifPreviewViewHolder) {
                     if (post.getPostType() == Post.VIDEO_TYPE) {
@@ -875,6 +880,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             } else {
                                 intent.setData(uri);
                             }
+                            intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, post.isNSFW());
                             mActivity.startActivity(intent);
                         });
                         break;
@@ -903,6 +909,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
                             intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, subredditName);
                             intent.putExtra(ViewVideoActivity.EXTRA_ID, id);
+                            intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, post.isNSFW());
                             mActivity.startActivity(intent);
                         });
 
@@ -924,6 +931,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             } else {
                                 intent.setData(uri);
                             }
+                            intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, post.isNSFW());
                             mActivity.startActivity(intent);
                         });
                         break;
@@ -1358,6 +1366,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
     public void setStartAutoplayVisibleAreaOffset(double startAutoplayVisibleAreaOffset) {
         this.mStartAutoplayVisibleAreaOffset = startAutoplayVisibleAreaOffset / 100.0;
+    }
+
+    public void setMuteNSFWVideo(boolean muteNSFWVideo) {
+        this.mMuteNSFWVideo = muteNSFWVideo;
     }
 
     @Override
@@ -1903,7 +1915,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         @BindView(R.id.aspect_ratio_frame_layout_item_post_video_type_autoplay)
         AspectRatioFrameLayout aspectRatioFrameLayout;
         @BindView(R.id.preview_image_view_item_post_video_type_autoplay)
-        ImageView previewImageView;
+        GifImageView previewImageView;
         @BindView(R.id.player_view_item_post_video_type_autoplay)
         PlayerView videoPlayer;
         @BindView(R.id.mute_exo_playback_control_view)
@@ -1958,8 +1970,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             aspectRatioFrameLayout.setOnClickListener(null);
 
-            volume = mMuteAutoplayingVideos ? 0f : 1f;
-
             muteButton.setOnClickListener(view -> {
                 if (helper != null) {
                     if (helper.getVolume() != 0) {
@@ -1984,6 +1994,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     intent.putExtra(ViewVideoActivity.EXTRA_ID, post.getId());
                     intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, post.getTitle());
                     intent.putExtra(ViewVideoActivity.EXTRA_PROGRESS_SECONDS, helper.getLatestPlaybackInfo().getResumePosition());
+                    intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, post.isNSFW());
                     mActivity.startActivity(intent);
                 }
             });
@@ -1991,6 +2002,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
         void bindVideoUri(Uri videoUri) {
             mediaUri = videoUri;
+        }
+
+        void setVolume(float volume) {
+            this.volume = volume;
         }
 
         void resetVolume() {
@@ -2182,6 +2197,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, post.getSubredditName());
                         intent.putExtra(ViewVideoActivity.EXTRA_ID, post.getId());
                         intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, post.getTitle());
+                        intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, post.isNSFW());
                         mActivity.startActivity(intent);
                     } else if (post.getPostType() == Post.GIF_TYPE) {
                         Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
@@ -2398,6 +2414,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     } else {
                         intent.setData(uri);
                     }
+                    intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, post.isNSFW());
                     mActivity.startActivity(intent);
                 }
             });
@@ -2493,6 +2510,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     } else {
                         intent.setData(uri);
                     }
+                    intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, post.isNSFW());
                     mActivity.startActivity(intent);
                 }
             });

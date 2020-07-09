@@ -9,6 +9,12 @@
         app:title="@string/settings_mute_video_title" />
 
     <SwitchPreference
+        app:defaultValue="false"
+        app:key="mute_nsfw_video"
+        app:icon="@drawable/ic_mute_preferences_24dp"
+        app:title="@string/settings_mute_nsfw_video_title" />
+
+    <SwitchPreference
         app:defaultValue="true"
         app:key="automatically_try_redgifs"
         app:title="@string/settings_automatically_try_redgifs_title" />

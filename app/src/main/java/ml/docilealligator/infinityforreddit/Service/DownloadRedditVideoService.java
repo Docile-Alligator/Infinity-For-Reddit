@@ -20,7 +20,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -356,7 +355,6 @@ public class DownloadRedditVideoService extends Service {
                         outputStream.write(fileReader, 0, read);
 
                         fileSizeDownloaded += read;
-                        Log.i("asdfsadf", "file download: " + fileSizeDownloaded + " of " + fileSize);
                     }
 
                     outputStream.flush();

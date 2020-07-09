@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +29,7 @@ public class LinkResolverActivity extends AppCompatActivity {
 
     public static final String EXTRA_MESSAGE_FULLNAME = "ENF";
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
+    public static final String EXTRA_IS_NSFW = "EIN";
 
     private static final String POST_PATTERN = "/r/\\w+/comments/\\w+/?\\w+/?";
     private static final String COMMENT_PATTERN = "/(r|u|U|user)/\\w+/comments/\\w+/?\\w+/\\w+/?";
@@ -97,6 +97,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                 } else if (path.endsWith("mp4")) {
                     Intent intent = new Intent(this, ViewVideoActivity.class);
                     intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_DIRECT);
+                    intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, getIntent().getBooleanExtra(EXTRA_IS_NSFW, false));
                     intent.setData(uri);
                     startActivity(intent);
                 } else {
@@ -186,6 +187,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 Intent intent = new Intent(this, ViewVideoActivity.class);
                                 intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, path.substring(1));
                                 intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
+                                intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, getIntent().getBooleanExtra(EXTRA_IS_NSFW, false));
                                 startActivity(intent);
                             } else {
                                 deepLinkError(uri);
@@ -195,6 +197,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 Intent intent = new Intent(this, ViewVideoActivity.class);
                                 intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, path.substring(7));
                                 intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_REDGIFS);
+                                intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, true);
                                 startActivity(intent);
                             } else {
                                 deepLinkError(uri);
@@ -220,6 +223,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 url = url.substring(0, url.length() - 5) + ".mp4";
                                 Intent intent = new Intent(this, ViewVideoActivity.class);
                                 intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_DIRECT);
+                                intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, getIntent().getBooleanExtra(EXTRA_IS_NSFW, false));
                                 intent.setData(Uri.parse(url));
                                 startActivity(intent);
                             } else {

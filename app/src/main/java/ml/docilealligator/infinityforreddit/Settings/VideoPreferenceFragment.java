@@ -21,6 +21,7 @@ import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.Event.ChangeAutoplayNsfwVideosEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeMuteAutoplayingVideosEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeMuteNSFWVideoEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeStartAutoplayVisibleAreaOffsetEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVideoAutoplayEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -42,6 +43,7 @@ public class VideoPreferenceFragment extends PreferenceFragmentCompat {
 
         ListPreference videoAutoplayListPreference = findPreference(SharedPreferencesUtils.VIDEO_AUTOPLAY);
         SwitchPreference muteAutoplayingVideosSwitchPreference = findPreference(SharedPreferencesUtils.MUTE_AUTOPLAYING_VIDEOS);
+        SwitchPreference muteNSFWVideosSwitchPreference = findPreference(SharedPreferencesUtils.MUTE_NSFW_VIDEO);
         SwitchPreference autoplayNsfwVideosSwitchPreference = findPreference(SharedPreferencesUtils.AUTOPLAY_NSFW_VIDEOS);
         SeekBarPreference startAutoplayVisibleAreaOffsetPortrait = findPreference(SharedPreferencesUtils.START_AUTOPLAY_VISIBLE_AREA_OFFSET_PORTRAIT);
         SeekBarPreference startAutoplayVisibleAreaOffsetLandscape = findPreference(SharedPreferencesUtils.START_AUTOPLAY_VISIBLE_AREA_OFFSET_LANDSCAPE);
@@ -54,6 +56,13 @@ public class VideoPreferenceFragment extends PreferenceFragmentCompat {
 
             autoplayNsfwVideosSwitchPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new ChangeAutoplayNsfwVideosEvent((Boolean) newValue));
+                return true;
+            });
+        }
+
+        if (muteNSFWVideosSwitchPreference != null) {
+            muteNSFWVideosSwitchPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                EventBus.getDefault().post(new ChangeMuteNSFWVideoEvent((Boolean) newValue));
                 return true;
             });
         }
