@@ -20,6 +20,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        minifiedRelease {
+            initWith buildTypes.release
+            zipAlignEnabled true
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -90,7 +97,7 @@ dependencies {
     // androidX startup for auto-init
     implementation "androidx.startup:startup-runtime:1.0.0-alpha01"
     //crashy
-    implementation 'com.github.CraZyLegenD:Crashy:1.0.4'
+    implementation 'com.github.CraZyLegenD:Crashy:1.0.5'
 
     def toroVersion = '3.7.0.2010003'
     implementation "im.ene.toro3:toro:$toroVersion"
