@@ -789,29 +789,29 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 ((CommentViewHolder) holder).itemView.setBackgroundColor(mAwardedCommentBackgroundColor);
             }
 
-            String authorPrefixed = "u/" + comment.getAuthor();
+            String authorPrefixed = "u/" + "asdasdfasfadfafasfasfsafasdfasdfasfjk as df adsf asf a sfas f";
             ((CommentViewHolder) holder).authorTextView.setText(authorPrefixed);
+            ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.VISIBLE);
+            ((CommentViewHolder) holder).authorFlairTextView.setText("asfafaf");
 
-            if (comment.getAuthorFlairHTML() != null && !comment.getAuthorFlairHTML().equals("")) {
+            /*if (comment.getAuthorFlairHTML() != null && !comment.getAuthorFlairHTML().equals("")) {
                 ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.VISIBLE);
                 Utils.setHTMLWithImageToTextView(((CommentViewHolder) holder).authorFlairTextView, comment.getAuthorFlairHTML());
             } else if (comment.getAuthorFlair() != null && !comment.getAuthorFlair().equals("")) {
                 ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.VISIBLE);
                 ((CommentViewHolder) holder).authorFlairTextView.setText(comment.getAuthorFlair());
-            }
+            }*/
 
             if (comment.isSubmitter()) {
                 ((CommentViewHolder) holder).authorTextView.setTextColor(mSubmitterColor);
-                ((CommentViewHolder) holder).authorTypeImageView.setVisibility(View.VISIBLE);
-                ((CommentViewHolder) holder).authorTypeImageView.
-                        setColorFilter(mSubmitterColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                ((CommentViewHolder) holder).authorTypeImageView.setImageResource(R.drawable.ic_mic_14dp);
+                Drawable submitterDrawable = Utils.getTintedDrawable(mActivity, R.drawable.ic_mic_14dp, mSubmitterColor);
+                ((CommentViewHolder) holder).authorTextView.setCompoundDrawablesWithIntrinsicBounds(
+                        submitterDrawable, null, null, null);
             } else if (comment.isModerator()) {
                 ((CommentViewHolder) holder).authorTextView.setTextColor(mModeratorColor);
-                ((CommentViewHolder) holder).authorTypeImageView.setVisibility(View.VISIBLE);
-                ((CommentViewHolder) holder).authorTypeImageView.
-                        setColorFilter(mModeratorColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                ((CommentViewHolder) holder).authorTypeImageView.setImageResource(R.drawable.ic_verified_user_14dp);
+                Drawable moderatorDrawable = Utils.getTintedDrawable(mActivity, R.drawable.ic_verified_user_14dp, mModeratorColor);
+                ((CommentViewHolder) holder).authorTextView.setCompoundDrawablesWithIntrinsicBounds(
+                        moderatorDrawable, null, null, null);
             }
 
             if (mShowElapsedTime) {
@@ -1582,9 +1582,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof CommentViewHolder) {
             ((CommentViewHolder) holder).authorTextView.setTextColor(mUsernameColor);
-            mGlide.clear(((CommentViewHolder) holder).authorTypeImageView);
             ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.GONE);
-            ((CommentViewHolder) holder).authorTypeImageView.setVisibility(View.GONE);
+            ((CommentViewHolder) holder).authorTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             ((CommentViewHolder) holder).awardsTextView.setText("");
             ((CommentViewHolder) holder).awardsTextView.setVisibility(View.GONE);
             ((CommentViewHolder) holder).expandButton.setVisibility(View.GONE);
@@ -2773,8 +2772,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         TextView authorTextView;
         @BindView(R.id.author_flair_text_view_item_post_comment)
         TextView authorFlairTextView;
-        @BindView(R.id.author_type_image_view_item_comment)
-        ImageView authorTypeImageView;
         @BindView(R.id.comment_time_text_view_item_post_comment)
         TextView commentTimeTextView;
         @BindView(R.id.top_score_text_view_item_post_comment)

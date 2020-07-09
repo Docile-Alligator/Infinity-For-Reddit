@@ -253,8 +253,6 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 ((CommentViewHolder) holder).commentMarkdownView.setOnClickListener(view ->
                         ((CommentViewHolder) holder).linearLayout.callOnClick());
 
-                ((CommentViewHolder) holder).replyButton.setVisibility(View.GONE);
-
                 ((CommentViewHolder) holder).upvoteButton.setOnClickListener(view -> {
                     if (mAccessToken == null) {
                         Toast.makeText(mContext, R.string.login_first, Toast.LENGTH_SHORT).show();
@@ -504,6 +502,8 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             super(itemView);
             ButterKnife.bind(this, itemView);
 
+            replyButton.setVisibility(View.GONE);
+
             if (mVoteButtonsOnTheRight) {
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone(bottomConstraintLayout);
@@ -515,7 +515,8 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 constraintSet.connect(upvoteButton.getId(), ConstraintSet.END, scoreTextView.getId(), ConstraintSet.START);
                 constraintSet.connect(scoreTextView.getId(), ConstraintSet.END, downvoteButton.getId(), ConstraintSet.START);
                 constraintSet.connect(downvoteButton.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
-                constraintSet.connect(moreButton.getId(), ConstraintSet.START, expandButton.getId(), ConstraintSet.END);
+                constraintSet.connect(saveButton.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+                constraintSet.connect(moreButton.getId(), ConstraintSet.START, saveButton.getId(), ConstraintSet.END);
                 constraintSet.connect(moreButton.getId(), ConstraintSet.END, upvoteButton.getId(), ConstraintSet.END);
                 constraintSet.connect(expandButton.getId(), ConstraintSet.START, replyButton.getId(), ConstraintSet.END);
                 constraintSet.connect(replyButton.getId(), ConstraintSet.START, replyButton.getId(), ConstraintSet.END);

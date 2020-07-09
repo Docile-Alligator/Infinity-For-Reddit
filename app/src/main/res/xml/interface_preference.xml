@@ -46,8 +46,8 @@
 
     <SwitchPreference
         app:defaultValue="false"
-        app:key="show_thumbnail_on_the_right_in_compact_layout"
-        app:title="@string/settings_show_thumbnail_on_the_right_in_compact_layout" />
+        app:key="show_thumbnail_on_the_left_in_compact_layout"
+        app:title="@string/settings_show_thumbnail_on_the_left_in_compact_layout" />
 
     <SwitchPreference
         app:defaultValue="false"
