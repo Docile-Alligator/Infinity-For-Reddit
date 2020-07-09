@@ -328,6 +328,16 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="com.crazylegend.crashyreporter.initializer.CrashyInitializer"
+                android:value="androidx.startup" />
+        </provider>
+
         <service
             android:name=".Service.SubmitPostService"
             android:enabled="true"
