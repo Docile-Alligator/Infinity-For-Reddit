@@ -139,6 +139,7 @@ public class SettingsActivity extends BaseActivity implements
         fragment.setTargetFragment(caller, 0);
 
         getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right)
                 .replace(R.id.frame_layout_settings_activity, fragment)
                 .addToBackStack(null)
                 .commit();
