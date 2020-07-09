@@ -1,9 +1,7 @@
 package ml.docilealligator.infinityforreddit.Fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,7 +21,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -33,7 +29,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
 import ml.docilealligator.infinityforreddit.Activity.BaseActivity;
-import ml.docilealligator.infinityforreddit.Activity.CreateMultiRedditActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubscribedThingListingActivity;
 import ml.docilealligator.infinityforreddit.Adapter.MultiRedditListingRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
@@ -60,8 +55,6 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
     ImageView mErrorImageView;
     @BindView(R.id.fetch_multi_reddit_listing_info_text_view_multi_reddit_listing_fragment)
     TextView mErrorTextView;
-    @BindView(R.id.fab_multi_reddit_listing_fragment)
-    FloatingActionButton fab;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -74,7 +67,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
     CustomThemeWrapper mCustomThemeWrapper;
 
     public MultiRedditViewModel mMultiRedditViewModel;
-    private AppCompatActivity mActivity;
+    private SubscribedThingListingActivity mActivity;
     private RequestManager mGlide;
     private LinearLayoutManager mLinearLayoutManager;
 
@@ -109,11 +102,6 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
 
         mGlide = Glide.with(this);
 
-        fab.setOnClickListener(view -> {
-            Intent intent = new Intent(mActivity, CreateMultiRedditActivity.class);
-            startActivity(intent);
-        });
-
         mLinearLayoutManager = new LinearLayoutManager(mActivity);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         MultiRedditListingRecyclerViewAdapter adapter = new MultiRedditListingRecyclerViewAdapter(mActivity,
@@ -124,9 +112,9 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0) {
-                    fab.hide();
+                    mActivity.fab.hide();
                 } else {
-                    fab.show();
+                    mActivity.fab.show();
                 }
             }
         });
@@ -136,7 +124,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
                 new MultiRedditViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, accountName))
                 .get(MultiRedditViewModel.class);
 
-        mMultiRedditViewModel.getAllMultiReddits().observe(this, subscribedUserData -> {
+        mMultiRedditViewModel.getAllMultiReddits().observe(getViewLifecycleOwner(), subscribedUserData -> {
             if (subscribedUserData == null || subscribedUserData.size() == 0) {
                 mRecyclerView.setVisibility(View.GONE);
                 mErrorLinearLayout.setVisibility(View.VISIBLE);
@@ -149,7 +137,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
             adapter.setMultiReddits(subscribedUserData);
         });
 
-        mMultiRedditViewModel.getAllFavoriteMultiReddits().observe(this, favoriteSubscribedUserData -> {
+        mMultiRedditViewModel.getAllFavoriteMultiReddits().observe(getViewLifecycleOwner(), favoriteSubscribedUserData -> {
             if (favoriteSubscribedUserData != null && favoriteSubscribedUserData.size() > 0) {
                 mErrorLinearLayout.setVisibility(View.GONE);
                 mRecyclerView.setVisibility(View.VISIBLE);
@@ -170,7 +158,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mActivity = (AppCompatActivity) context;
+        mActivity = (SubscribedThingListingActivity) context;
     }
 
     @Override
@@ -184,8 +172,6 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
         }
 
         mErrorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
-        fab.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimaryLightTheme()));
-        fab.setImageTintList(ColorStateList.valueOf(mCustomThemeWrapper.getFABIconColor()));
     }
 
     @Override

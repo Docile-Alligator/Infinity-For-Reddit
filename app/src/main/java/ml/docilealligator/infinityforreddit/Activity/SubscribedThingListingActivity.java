@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.Activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrInterface;
@@ -77,6 +79,8 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     TabLayout tabLayout;
     @BindView(R.id.view_pager_subscribed_thing_listing_activity)
     ViewPager viewPager;
+    @BindView(R.id.fab_subscribed_thing_listing_activity)
+    public FloatingActionButton fab;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -124,6 +128,13 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
             if (isImmersiveInterface()) {
                 window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 adjustToolbar(toolbar);
+
+                int navBarHeight = getNavBarHeight();
+                if (navBarHeight > 0) {
+                    CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+                    params.bottomMargin = navBarHeight;
+                    fab.setLayoutParams(params);
+                }
             }
         }
 
@@ -163,6 +174,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         applyTabLayoutTheme(tabLayout);
+        applyFABTheme(fab);
     }
 
     private void getCurrentAccountAndInitializeViewPager() {
@@ -178,6 +190,10 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     }
 
     private void initializeViewPagerAndLoadSubscriptions() {
+        fab.setOnClickListener(view -> {
+            Intent intent = new Intent(this, CreateMultiRedditActivity.class);
+            startActivity(intent);
+        });
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(3);
@@ -186,8 +202,14 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
             public void onPageSelected(int position) {
                 if (position == 0) {
                     unlockSwipeRightToGoBack();
+                    fab.hide();
                 } else {
                     lockSwipeRightToGoBack();
+                    if (position == 1) {
+                        fab.hide();
+                    } else {
+                        fab.show();
+                    }
                 }
             }
         });
