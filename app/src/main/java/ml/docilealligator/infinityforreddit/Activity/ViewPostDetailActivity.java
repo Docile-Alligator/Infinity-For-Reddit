@@ -31,6 +31,8 @@ import androidx.transition.TransitionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.evernote.android.state.State;
+import com.github.piasy.biv.BigImageViewer;
+import com.github.piasy.biv.loader.glide.GlideImageLoader;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -63,6 +65,9 @@ import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostCommentSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Comment.Comment;
+import ml.docilealligator.infinityforreddit.Comment.FetchComment;
+import ml.docilealligator.infinityforreddit.Comment.FetchRemovedComment;
+import ml.docilealligator.infinityforreddit.Comment.ParseComment;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.CustomView.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.DeleteThing;
@@ -72,18 +77,15 @@ import ml.docilealligator.infinityforreddit.Event.ChangeWifiStatusEvent;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToDetailActivity;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.Comment.FetchComment;
-import ml.docilealligator.infinityforreddit.Comment.FetchRemovedComment;
-import ml.docilealligator.infinityforreddit.Post.FetchRemovedPost;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.Comment.ParseComment;
+import ml.docilealligator.infinityforreddit.Message.ReadMessage;
 import ml.docilealligator.infinityforreddit.Post.FetchPost;
+import ml.docilealligator.infinityforreddit.Post.FetchRemovedPost;
 import ml.docilealligator.infinityforreddit.Post.HidePost;
 import ml.docilealligator.infinityforreddit.Post.ParsePost;
 import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.Message.ReadMessage;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.SortType;
@@ -207,6 +209,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
         super.onCreate(savedInstanceState);
+
+        BigImageViewer.initialize(GlideImageLoader.with(this));
 
         setContentView(R.layout.activity_view_post_detail);
 

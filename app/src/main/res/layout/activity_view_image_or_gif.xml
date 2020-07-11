@@ -23,19 +23,13 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true" />
 
-            <com.alexvasilkov.gestures.views.GestureFrameLayout
-                android:id="@+id/gesture_layout_view_image_or_gif_activity"
+            <com.github.piasy.biv.view.BigImageView
+                android:id="@+id/image_view_view_image_or_gif_activity"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <pl.droidsonroids.gif.GifImageView
-                    android:id="@+id/image_view_view_image_or_gif_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
-                    app:gest_fillViewport="true" />
-            </com.alexvasilkov.gestures.views.GestureFrameLayout>
+                android:layout_height="match_parent"
+                app:initScaleType="fitCenter"
+                app:optimizeDisplay="true"
+                app:tapToRetry="false" />
 
             <LinearLayout
                 android:id="@+id/load_image_error_linear_layout_view_image_or_gif_activity"

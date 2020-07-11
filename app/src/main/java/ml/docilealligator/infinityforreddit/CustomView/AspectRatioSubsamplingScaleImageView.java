@@ -4,20 +4,20 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 
-import pl.droidsonroids.gif.GifImageView;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
-public class AspectRatioGifImageView extends GifImageView {
+public class AspectRatioSubsamplingScaleImageView extends SubsamplingScaleImageView {
     private float ratio;
 
-    public AspectRatioGifImageView(Context context) {
+    public AspectRatioSubsamplingScaleImageView(Context context) {
         super(context);
-        this.ratio = 1.0F;
+        ratio = 1.0F;
     }
 
-    public AspectRatioGifImageView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public AspectRatioSubsamplingScaleImageView(Context context, AttributeSet attr) {
+        super(context, attr);
         this.ratio = 1.0F;
-        this.init(context, attrs);
+        this.init(context, attr);
     }
 
     public final float getRatio() {

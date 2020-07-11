@@ -210,12 +210,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.santalu.aspectratioimageview.AspectRatioImageView
+        <ml.docilealligator.infinityforreddit.CustomView.AspectRatioSubsamplingScaleImageView
             android:id="@+id/image_view_item_post_detail_link"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:scaleType="fitStart"/>
+            android:scaleType="fitStart"
+            app:zoomEnabled="false"
+            app:panEnabled="false" />
 
         <RelativeLayout
             android:id="@+id/load_wrapper_item_post_detail_link"

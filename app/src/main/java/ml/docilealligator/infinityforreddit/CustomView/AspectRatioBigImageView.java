@@ -4,18 +4,24 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 
-import pl.droidsonroids.gif.GifImageView;
+import com.github.piasy.biv.view.BigImageView;
 
-public class AspectRatioGifImageView extends GifImageView {
+public class AspectRatioBigImageView extends BigImageView {
     private float ratio;
 
-    public AspectRatioGifImageView(Context context) {
+    public AspectRatioBigImageView(Context context) {
         super(context);
-        this.ratio = 1.0F;
+        ratio = 1.0F;
     }
 
-    public AspectRatioGifImageView(Context context, AttributeSet attrs) {
+    public AspectRatioBigImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.ratio = 1.0F;
+        this.init(context, attrs);
+    }
+
+    public AspectRatioBigImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
         this.ratio = 1.0F;
         this.init(context, attrs);
     }

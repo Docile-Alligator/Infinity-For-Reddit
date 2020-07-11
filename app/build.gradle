@@ -98,6 +98,7 @@ dependencies {
     implementation "androidx.startup:startup-runtime:1.0.0-alpha01"
     //crashy
     implementation 'com.github.CraZyLegenD:Crashy:1.0.5'
+    implementation 'com.github.Piasy:BigImageViewer:1.6.5'
 
     def toroVersion = '3.7.0.2010003'
     implementation "im.ene.toro3:toro:$toroVersion"

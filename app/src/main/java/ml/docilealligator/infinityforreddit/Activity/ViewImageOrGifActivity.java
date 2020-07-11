@@ -26,7 +26,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
-import com.alexvasilkov.gestures.views.GestureFrameLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
@@ -36,6 +35,11 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
+import com.github.piasy.biv.BigImageViewer;
+import com.github.piasy.biv.loader.ImageLoader;
+import com.github.piasy.biv.loader.glide.GlideImageLoader;
+import com.github.piasy.biv.view.BigImageView;
+import com.github.piasy.biv.view.GlideImageViewFactory;
 import com.thefuntasty.hauler.DragDirection;
 import com.thefuntasty.hauler.HaulerView;
 
@@ -63,7 +67,6 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.WallpaperSetter;
-import pl.droidsonroids.gif.GifImageView;
 
 public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWallpaperCallback {
 
@@ -77,9 +80,13 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     @BindView(R.id.progress_bar_view_image_or_gif_activity)
     ProgressBar mProgressBar;
     @BindView(R.id.image_view_view_image_or_gif_activity)
-    GifImageView mImageView;
+    BigImageView mImageView;
+    /*@BindView(R.id.image_view_view_image_or_gif_activity)
+    SubsamplingScaleImageView mImageView;
     @BindView(R.id.gesture_layout_view_image_or_gif_activity)
     GestureFrameLayout gestureLayout;
+    @BindView(R.id.gif_view_view_image_or_gif_activity)
+    GifImageView mGifView;*/
     @BindView(R.id.load_image_error_linear_layout_view_image_or_gif_activity)
     LinearLayout mLoadErrorLinearLayout;
     @Inject
@@ -118,6 +125,8 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
         getTheme().applyStyle(ContentFontFamily.valueOf(mSharedPreferences
                 .getString(SharedPreferencesUtils.CONTENT_FONT_FAMILY_KEY, ContentFontFamily.Default.name())).getResId(), true);
+
+        BigImageViewer.initialize(GlideImageLoader.with(this));
 
         setContentView(R.layout.activity_view_image_or_gif);
 
@@ -161,10 +170,6 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
             loadImage();
         });
 
-        loadImage();
-
-        gestureLayout.getController().getSettings().setMaxZoom(10f).setDoubleTapZoom(2f).setPanEnabled(true);
-
         mImageView.setOnClickListener(view -> {
             if (isActionBarHidden) {
                 getWindow().getDecorView().setSystemUiVisibility(
@@ -183,23 +188,102 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
                 isActionBarHidden = true;
             }
         });
+
+        mImageView.setImageViewFactory(new GlideImageViewFactory());
+
+        mImageView.setImageLoaderCallback(new ImageLoader.Callback() {
+            @Override
+            public void onCacheHit(int imageType, File image) {
+
+            }
+
+            @Override
+            public void onCacheMiss(int imageType, File image) {
+
+            }
+
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onProgress(int progress) {
+
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+
+            @Override
+            public void onSuccess(File image) {
+                mProgressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFail(Exception error) {
+                mProgressBar.setVisibility(View.GONE);
+                mLoadErrorLinearLayout.setVisibility(View.VISIBLE);
+            }
+        });
+
+        /*if (isGif) {
+            gestureLayout.setVisibility(View.VISIBLE);
+            gestureLayout.getController().getSettings().setMaxZoom(10f).setDoubleTapZoom(2f).setPanEnabled(true);
+            mGifView.setOnClickListener(imageViewOnClickListener);
+        } else {
+            mImageView.setVisibility(View.VISIBLE);
+            mImageView.setOnClickListener(imageViewOnClickListener);
+        }*/
+
+        loadImage();
     }
 
     private void loadImage() {
-        glide.load(mImageUrl).listener(new RequestListener<Drawable>() {
-            @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                mProgressBar.setVisibility(View.GONE);
-                mLoadErrorLinearLayout.setVisibility(View.VISIBLE);
-                return false;
-            }
+        mImageView.showImage(Uri.parse(mImageUrl));
+        /*if (isGif) {
+            glide.load(mImageUrl).listener(new RequestListener<Drawable>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mLoadErrorLinearLayout.setVisibility(View.VISIBLE);
+                    return false;
+                }
 
-            @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                mProgressBar.setVisibility(View.GONE);
-                return false;
-            }
-        }).override(Target.SIZE_ORIGINAL).into(mImageView);
+                @Override
+                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    mProgressBar.setVisibility(View.GONE);
+                    return false;
+                }
+            }).override(Target.SIZE_ORIGINAL).into(mGifView);
+        } else {
+            glide.asBitmap().load(mImageUrl).listener(new RequestListener<Bitmap>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mLoadErrorLinearLayout.setVisibility(View.VISIBLE);
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                    mProgressBar.setVisibility(View.GONE);
+                    return false;
+                }
+            }).override(Target.SIZE_ORIGINAL).into(new CustomTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                    mImageView.setImage(ImageSource.bitmap(resource));
+                }
+
+                @Override
+                public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                }
+            });
+        }*/
     }
 
     @Override
