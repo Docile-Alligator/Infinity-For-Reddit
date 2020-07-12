@@ -208,14 +208,12 @@
             android:layout_height="match_parent"
             app:controller_layout_id="@layout/exo_autoplay_playback_control_view"/>
 
-        <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+        <pl.droidsonroids.gif.GifImageView
             android:id="@+id/preview_image_view_item_post_detail_video_autoplay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitStart"
-            android:visibility="gone"
-            app:zoomEnabled="false"
-            app:panEnabled="false" />
+            android:visibility="gone" />
 
     </com.google.android.exoplayer2.ui.AspectRatioFrameLayout>
 

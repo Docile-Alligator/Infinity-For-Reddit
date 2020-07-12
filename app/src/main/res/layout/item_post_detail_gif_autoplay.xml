@@ -200,16 +200,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ml.docilealligator.infinityforreddit.CustomView.AspectRatioBigImageView
+        <ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView
             android:id="@+id/image_view_item_post_detail_gif_autoplay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:scaleType="fitStart"
-            app:optimizeDisplay="true"
-            app:tapToRetry="false"
-            app:zoomEnabled="false"
-            app:panEnabled="false" />
+            android:scaleType="fitStart" />
 
         <RelativeLayout
             android:id="@+id/load_wrapper_item_post_detail_gif_autoplay"
