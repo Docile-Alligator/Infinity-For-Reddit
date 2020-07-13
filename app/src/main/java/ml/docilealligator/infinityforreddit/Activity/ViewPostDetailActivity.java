@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -196,6 +197,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     private boolean mLockFab;
     private boolean mSwipeUpToHideFab;
     private boolean mExpandChildren;
+    private int mWindowWidth;
     private LinearLayoutManager mLinearLayoutManager;
     private CommentAndPostRecyclerViewAdapter mAdapter;
     private RecyclerView.SmoothScroller mSmoothScroller;
@@ -250,6 +252,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 }
             }
         }
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        mWindowWidth = displayMetrics.widthPixels;
 
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
@@ -462,8 +468,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this,
                     mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mGlide,
-                    mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId, isSingleCommentThreadMode,
-                    mSharedPreferences, mExoCreator,
+                    mWindowWidth, mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId,
+                    isSingleCommentThreadMode, mSharedPreferences, mExoCreator,
                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                         @Override
                         public void updatePost(Post post) {
@@ -626,8 +632,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
                             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this,
                                     mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mGlide,
-                                    mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId, isSingleCommentThreadMode,
-                                    mSharedPreferences, mExoCreator,
+                                    mWindowWidth, mAccessToken, mAccountName, mPost, mLocale,
+                                    mSingleCommentId, isSingleCommentThreadMode, mSharedPreferences, mExoCreator,
                                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                                         @Override
                                         public void updatePost(Post post) {
