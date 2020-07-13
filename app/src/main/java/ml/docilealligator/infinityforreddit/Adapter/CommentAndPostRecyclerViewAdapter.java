@@ -1268,7 +1268,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             CustomTarget<Bitmap> customTarget = new CustomTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                    ((PostDetailImageViewHolder) holder).mImageView.setImage(ImageSource.bitmap(resource));
+                    ((PostDetailImageViewHolder) holder).mImageView.setImage(ImageSource.cachedBitmap(resource));
                 }
 
                 @Override
@@ -1907,6 +1907,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 mGlide.clear(((PostDetailGifAutoplayViewHolder) holder).mImageView);
             } else if (holder instanceof PostDetailImageViewHolder) {
                 mGlide.clear(((PostDetailImageViewHolder) holder).mImageView);
+                ((PostDetailImageViewHolder) holder).mImageView.recycle();
             } else if (holder instanceof PostDetailLinkViewHolder) {
                 mGlide.clear(((PostDetailLinkViewHolder) holder).mImageView);
             }

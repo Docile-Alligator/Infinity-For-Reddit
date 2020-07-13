@@ -81,12 +81,6 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     ProgressBar mProgressBar;
     @BindView(R.id.image_view_view_image_or_gif_activity)
     BigImageView mImageView;
-    /*@BindView(R.id.image_view_view_image_or_gif_activity)
-    SubsamplingScaleImageView mImageView;
-    @BindView(R.id.gesture_layout_view_image_or_gif_activity)
-    GestureFrameLayout gestureLayout;
-    @BindView(R.id.gif_view_view_image_or_gif_activity)
-    GifImageView mGifView;*/
     @BindView(R.id.load_image_error_linear_layout_view_image_or_gif_activity)
     LinearLayout mLoadErrorLinearLayout;
     @Inject

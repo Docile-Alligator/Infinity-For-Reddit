@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -242,6 +243,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
         }
 
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int windowWidth = displayMetrics.widthPixels;
+
         if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && !resources.getBoolean(R.bool.isTablet)) {
             mLinearLayoutManager = new LinearLayoutManager(activity);
             mPostRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -251,6 +256,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             StaggeredGridLayoutManagerItemOffsetDecoration itemDecoration =
                     new StaggeredGridLayoutManagerItemOffsetDecoration(activity, R.dimen.staggeredLayoutManagerItemOffset);
             mPostRecyclerView.addItemDecoration(itemDecoration);
+            windowWidth /= 2;
         }
 
         mGlide = Glide.with(activity);
@@ -361,7 +367,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    customThemeWrapper, locale, accessToken, postType, postLayout, true,
+                    customThemeWrapper, locale, windowWidth, accessToken, postType, postLayout, true,
                     mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
@@ -423,7 +429,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    customThemeWrapper, locale, accessToken, postType, postLayout, displaySubredditName,
+                    customThemeWrapper, locale, windowWidth, accessToken, postType, postLayout, displaySubredditName,
                     mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
@@ -470,7 +476,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    customThemeWrapper, locale, accessToken, postType, postLayout, true,
+                    customThemeWrapper, locale, windowWidth, accessToken, postType, postLayout, true,
                     mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
@@ -515,7 +521,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    customThemeWrapper, locale, accessToken, postType, postLayout, true,
+                    customThemeWrapper, locale, windowWidth, accessToken, postType, postLayout, true,
                     mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
@@ -553,7 +559,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    customThemeWrapper, locale, accessToken, postType, postLayout, true,
+                    customThemeWrapper, locale, windowWidth, accessToken, postType, postLayout, true,
                     mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                         @Override
                         public void retryLoadingMore() {
