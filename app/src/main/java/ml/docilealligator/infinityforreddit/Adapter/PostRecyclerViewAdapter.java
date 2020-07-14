@@ -100,13 +100,13 @@ import retrofit2.Retrofit;
 public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView.ViewHolder> implements CacheManager {
     private static final int VIEW_TYPE_POST_CARD_VIDEO_AUTOPLAY_TYPE = 1;
     private static final int VIEW_TYPE_POST_CARD_VIDEO_AND_GIF_PREVIEW_TYPE = 2;
-    private static final int VIEW_TYPE_POST_CARD_IMAGE_AND_GIF_AUTOPLAY_TYPE = 4;
-    private static final int VIEW_TYPE_POST_CARD_LINK_TYPE = 5;
-    private static final int VIEW_TYPE_POST_CARD_NO_PREVIEW_LINK_TYPE = 6;
-    private static final int VIEW_TYPE_POST_CARD_TEXT_TYPE = 7;
-    private static final int VIEW_TYPE_POST_COMPACT = 8;
-    private static final int VIEW_TYPE_ERROR = 9;
-    private static final int VIEW_TYPE_LOADING = 10;
+    private static final int VIEW_TYPE_POST_CARD_IMAGE_AND_GIF_AUTOPLAY_TYPE = 3;
+    private static final int VIEW_TYPE_POST_CARD_LINK_TYPE = 4;
+    private static final int VIEW_TYPE_POST_CARD_NO_PREVIEW_LINK_TYPE = 5;
+    private static final int VIEW_TYPE_POST_CARD_TEXT_TYPE = 6;
+    private static final int VIEW_TYPE_POST_COMPACT = 7;
+    private static final int VIEW_TYPE_ERROR = 8;
+    private static final int VIEW_TYPE_LOADING = 9;
     private static final DiffUtil.ItemCallback<Post> DIFF_CALLBACK = new DiffUtil.ItemCallback<Post>() {
         @Override
         public boolean areItemsTheSame(@NonNull Post post, @NonNull Post t1) {
@@ -542,7 +542,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 if (holder instanceof PostVideoAutoplayViewHolder) {
                     ((PostVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio((float) post.getPreviewWidth() / post.getPreviewHeight());
                     ((PostVideoAutoplayViewHolder) holder).previewImageView.setVisibility(View.VISIBLE);
-                    mGlide.load(post.getPreviewUrl()).apply(RequestOptions.noTransformation()).into(((PostVideoAutoplayViewHolder) holder).previewImageView);
+                    if (mImageViewWidth > post.getPreviewWidth()) {
+                        mGlide.load(post.getPreviewUrl()).override(Target.SIZE_ORIGINAL).into(((PostVideoAutoplayViewHolder) holder).previewImageView);
+                    } else {
+                        mGlide.load(post.getPreviewUrl()).into(((PostVideoAutoplayViewHolder) holder).previewImageView);
+                    }
                     ((PostVideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
                     ((PostVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
                 } else if (holder instanceof PostVideoAndGifPreviewViewHolder) {
@@ -867,7 +871,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
             });
 
-            if ((post.isNSFW() && mNeedBlurNSFW) || post.isSpoiler() && mNeedBlurSpoiler) {
+            if ((post.isNSFW() && mNeedBlurNSFW && !(post.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || post.isSpoiler() && mNeedBlurSpoiler) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                         .into(((PostImageAndGifAutoplayViewHolder) holder).imageView);
             } else {
@@ -903,7 +907,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                         .into(((PostVideoAndGifPreviewViewHolder) holder).imageView);
             } else {
-                imageRequestBuilder.apply(RequestOptions.noTransformation()).into(((PostVideoAndGifPreviewViewHolder) holder).imageView);
+                if (mImageViewWidth > post.getPreviewWidth()) {
+                    imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostVideoAndGifPreviewViewHolder) holder).imageView);
+                } else {
+                    imageRequestBuilder.into(((PostVideoAndGifPreviewViewHolder) holder).imageView);
+                }
             }
         } else if (holder instanceof PostLinkTypeViewHolder) {
             RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(post.getPreviewUrl()).listener(new RequestListener<Drawable>() {
@@ -931,7 +939,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                         .into(((PostLinkTypeViewHolder) holder).imageView);
             } else {
-                imageRequestBuilder.apply(RequestOptions.noTransformation()).into(((PostLinkTypeViewHolder) holder).imageView);
+                if (mImageViewWidth > post.getPreviewWidth()) {
+                    imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostLinkTypeViewHolder) holder).imageView);
+                } else {
+                    imageRequestBuilder.into(((PostLinkTypeViewHolder) holder).imageView);
+                }
             }
         } else if (holder instanceof PostCompactBaseViewHolder) {
             String previewUrl = post.getThumbnailPreviewUrl().equals("") ? post.getPreviewUrl() : post.getThumbnailPreviewUrl();

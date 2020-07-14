@@ -705,7 +705,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             if (holder instanceof PostDetailVideoAutoplayViewHolder) {
                 ((PostDetailVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio((float) mPost.getPreviewWidth() / mPost.getPreviewHeight());
                 ((PostDetailVideoAutoplayViewHolder) holder).previewImageView.setVisibility(View.VISIBLE);
-                mGlide.load(mPost.getPreviewUrl()).into(((PostDetailVideoAutoplayViewHolder) holder).previewImageView);
+                if (mImageViewWidth > mPost.getPreviewWidth()) {
+                    mGlide.load(mPost.getPreviewUrl()).override(Target.SIZE_ORIGINAL).into(((PostDetailVideoAutoplayViewHolder) holder).previewImageView);
+                } else {
+                    mGlide.load(mPost.getPreviewUrl()).into(((PostDetailVideoAutoplayViewHolder) holder).previewImageView);
+                }
                 ((PostDetailVideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (mPost.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
                 ((PostDetailVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(mPost.getVideoUrl()));
             } else if (holder instanceof PostDetailVideoAndGifPreviewHolder) {
@@ -1241,7 +1245,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         }
                     });
 
-            if ((mPost.isNSFW() && mNeedBlurNsfw) || (mPost.isSpoiler() && mNeedBlurSpoiler)) {
+            if ((mPost.isNSFW() && mNeedBlurNsfw  && !(mPost.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || (mPost.isSpoiler() && mNeedBlurSpoiler)) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10))).into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
             } else {
                 if (mImageViewWidth > mPost.getPreviewWidth()) {
@@ -1276,7 +1280,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                         .into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
             } else {
-                imageRequestBuilder.apply(RequestOptions.noTransformation()).into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
+                if (mImageViewWidth > mPost.getPreviewWidth()) {
+                    imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
+                } else {
+                    imageRequestBuilder.into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
+                }
             }
         } else if (holder instanceof PostDetailLinkViewHolder) {
             RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(mPost.getPreviewUrl())
@@ -1304,7 +1312,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                         .into(((PostDetailLinkViewHolder) holder).mImageView);
             } else {
-                imageRequestBuilder.into(((PostDetailLinkViewHolder) holder).mImageView);
+                if (mImageViewWidth > mPost.getPreviewWidth()) {
+                    imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostDetailLinkViewHolder) holder).mImageView);
+                } else {
+                    imageRequestBuilder.into(((PostDetailLinkViewHolder) holder).mImageView);
+                }
             }
         }
     }
