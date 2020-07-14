@@ -43,7 +43,7 @@
             android:name=".Activity.ViewImgurMediaActivity"
             android:configChanges="orientation|screenSize|layoutDirection"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.Draggable" />
+            android:theme="@style/AppTheme.SlidableWithActionBar" />
         <activity
             android:name=".Activity.ReportActivity"
             android:label="@string/report_activity_label"
@@ -294,12 +294,12 @@
         <activity
             android:name=".Activity.ViewImageOrGifActivity"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.Draggable" />
+            android:theme="@style/AppTheme.SlidableWithActionBar" />
         <activity
             android:name=".Activity.ViewVideoActivity"
             android:configChanges="orientation|screenSize|layoutDirection"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.Draggable" />
+            android:theme="@style/AppTheme.SlidableWithActionBar" />
         <activity
             android:name=".Activity.ViewPostDetailActivity"
             android:parentActivityName=".Activity.MainActivity"

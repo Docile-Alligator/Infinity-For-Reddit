@@ -46,8 +46,9 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.material.snackbar.Snackbar;
-import com.thefuntasty.hauler.DragDirection;
-import com.thefuntasty.hauler.HaulerView;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrConfig;
+import com.r0adkll.slidr.model.SlidrPosition;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -84,8 +85,6 @@ public class ViewVideoActivity extends AppCompatActivity {
     private static final String IS_MUTE_STATE = "IMS";
     private static final String VIDEO_DOWNLOAD_URL_STATE = "VDUS";
     private static final String VIDEO_URI_STATE = "VUS";
-    @BindView(R.id.hauler_view_view_video_activity)
-    HaulerView haulerView;
     @BindView(R.id.coordinator_layout_view_video_activity)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.progress_bar_view_video_activity)
@@ -165,11 +164,7 @@ public class ViewVideoActivity extends AppCompatActivity {
             params.rightMargin = getResources().getDimensionPixelSize(resourceId);
         }
 
-        haulerView.setOnDragDismissedListener(dragDirection -> {
-            int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
-            finish();
-            overridePendingTransition(0, slide);
-        });
+        Slidr.attach(this, new SlidrConfig.Builder().position(SlidrPosition.VERTICAL).build());
 
         mediaDownloader = new MediaDownloaderImpl();
 

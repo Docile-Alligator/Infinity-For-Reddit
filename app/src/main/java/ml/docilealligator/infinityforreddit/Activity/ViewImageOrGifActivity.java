@@ -42,8 +42,9 @@ import com.github.piasy.biv.loader.ImageLoader;
 import com.github.piasy.biv.loader.glide.GlideImageLoader;
 import com.github.piasy.biv.view.BigImageView;
 import com.github.piasy.biv.view.GlideImageViewFactory;
-import com.thefuntasty.hauler.DragDirection;
-import com.thefuntasty.hauler.HaulerView;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrConfig;
+import com.r0adkll.slidr.model.SlidrPosition;
 
 import java.io.File;
 
@@ -77,8 +78,8 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     public static final String FILE_NAME_KEY = "FNK";
     public static final String POST_TITLE_KEY = "PTK";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
-    @BindView(R.id.hauler_view_view_image_or_gif_activity)
-    HaulerView mHaulerView;
+    /*@BindView(R.id.hauler_view_view_image_or_gif_activity)
+    HaulerView mHaulerView;*/
     @BindView(R.id.progress_bar_view_image_or_gif_activity)
     ProgressBar mProgressBar;
     @BindView(R.id.image_view_view_image_or_gif_activity)
@@ -133,7 +134,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         actionBar.setHomeAsUpIndicator(upArrow);
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
 
-        mHaulerView.setOnDragDismissedListener(dragDirection -> finish());
+        Slidr.attach(this, new SlidrConfig.Builder().position(SlidrPosition.VERTICAL).build());
 
         mediaDownloader = new MediaDownloaderImpl();
 
@@ -158,11 +159,11 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int windowHeight = displayMetrics.heightPixels;
 
-        mHaulerView.setOnDragDismissedListener(dragDirection -> {
+        /*mHaulerView.setOnDragDismissedListener(dragDirection -> {
             int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
             finish();
             overridePendingTransition(0, slide);
-        });
+        });*/
 
         mLoadErrorLinearLayout.setOnClickListener(view -> {
             mProgressBar.setVisibility(View.VISIBLE);

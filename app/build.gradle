@@ -93,7 +93,6 @@ dependencies {
     implementation 'com.atlassian.commonmark:commonmark:0.13.1'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'me.zhanghai.android.fastscroll:library:1.1.2'
-    implementation "com.thefuntasty.hauler:core:3.1.0"
     // androidX startup for auto-init
     implementation "androidx.startup:startup-runtime:1.0.0-alpha01"
     //crashy
