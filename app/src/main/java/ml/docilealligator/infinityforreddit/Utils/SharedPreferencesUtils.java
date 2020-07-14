@@ -79,7 +79,7 @@ public class SharedPreferencesUtils {
     public static final String DEFAULT_POST_LAYOUT_KEY = "default_post_layout";
     public static final String SHOW_DIVIDER_IN_COMPACT_LAYOUT = "show_divider_in_compact_layout";
     public static final String SHOW_THUMBNAIL_ON_THE_LEFT_IN_COMPACT_LAYOUT = "show_thumbnail_on_the_left_in_compact_layout";
-    public static final String SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL = "swipe_to_go_back_from_post_detail";
+    public static final String SWIPE_RIGHT_TO_GO_BACK = "swipe_to_go_back_from_post_detail";
     public static final String VOLUME_KEYS_NAVIGATE_COMMENTS = "volume_keys_navigate_comments";
     public static final String VOLUME_KEYS_NAVIGATE_POSTS = "volume_keys_navigate_posts";
     public static final String MUTE_VIDEO = "mute_video";

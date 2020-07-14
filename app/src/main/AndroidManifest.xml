@@ -37,7 +37,7 @@
         <activity
             android:name=".Activity.ViewPrivateMessagesActivity"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.Slidable"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".Activity.ViewImgurMediaActivity"
@@ -235,19 +235,19 @@
             android:name=".Activity.PostVideoActivity"
             android:label="@string/post_video_activity_label"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.Slidable"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".Activity.PostImageActivity"
             android:label="@string/post_image_activity_label"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.Slidable"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".Activity.PostLinkActivity"
             android:label="@string/post_link_activity_label"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.Slidable"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".Activity.SubscribedThingListingActivity"
@@ -263,7 +263,7 @@
             android:name=".Activity.PostTextActivity"
             android:label="@string/post_text_activity_label"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.Slidable"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".Activity.CommentActivity"

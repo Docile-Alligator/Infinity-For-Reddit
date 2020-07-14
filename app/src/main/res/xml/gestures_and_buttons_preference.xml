@@ -4,7 +4,8 @@
     <SwitchPreference
         app:defaultValue="true"
         app:key="swipe_to_go_back_from_post_detail"
-        app:title="@string/settings_swipe_to_go_back_from_post_detail_title" />
+        app:title="@string/settings_swipe_to_go_back_title"
+        app:summary="@string/settings_swipe_to_go_back_summary" />
 
     <SwitchPreference
         app:defaultValue="false"

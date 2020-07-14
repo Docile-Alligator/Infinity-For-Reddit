@@ -190,7 +190,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
         applyCustomTheme();
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK_FROM_POST_DETAIL, true)) {
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
             mSlidrInterface = Slidr.attach(this);
         }
 
