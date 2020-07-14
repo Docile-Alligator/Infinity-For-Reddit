@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +36,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.github.piasy.biv.BigImageViewer;
 import com.github.piasy.biv.loader.ImageLoader;
 import com.github.piasy.biv.loader.glide.GlideImageLoader;
@@ -152,6 +154,10 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
             setTitle("");
         }
 
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int windowHeight = displayMetrics.heightPixels;
+
         mHaulerView.setOnDragDismissedListener(dragDirection -> {
             int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
             finish();
@@ -214,6 +220,46 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
             @Override
             public void onSuccess(File image) {
                 mProgressBar.setVisibility(View.GONE);
+
+                final SubsamplingScaleImageView view = mImageView.getSSIV();
+
+                if (view != null) {
+                    view.setMinimumDpi(80);
+
+                    view.setOnImageEventListener(new SubsamplingScaleImageView.OnImageEventListener() {
+                        @Override
+                        public void onReady() {
+
+                        }
+
+                        @Override
+                        public void onImageLoaded() {
+                            view.setDoubleTapZoomDpi(70);
+                            view.setDoubleTapZoomStyle(SubsamplingScaleImageView.ZOOM_FOCUS_FIXED);
+                            view.setQuickScaleEnabled(false);
+                        }
+
+                        @Override
+                        public void onPreviewLoadError(Exception e) {
+
+                        }
+
+                        @Override
+                        public void onImageLoadError(Exception e) {
+
+                        }
+
+                        @Override
+                        public void onTileLoadError(Exception e) {
+
+                        }
+
+                        @Override
+                        public void onPreviewReleased() {
+
+                        }
+                    });
+                }
             }
 
             @Override

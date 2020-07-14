@@ -479,7 +479,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
                         break;
                     case R.string.multi_reddit:
-                        intent = new Intent(MainActivity.this, MultiRedditListingActivity.class);
+                        intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
+                        intent.putExtra(SubscribedThingListingActivity.EXTRA_SHOW_MULTIREDDITS, true);
                         break;
                     case R.string.inbox:
                         intent = new Intent(MainActivity.this, InboxActivity.class);

@@ -16,7 +16,6 @@ import ml.docilealligator.infinityforreddit.Activity.FilteredThingActivity;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.Activity.LoginActivity;
 import ml.docilealligator.infinityforreddit.Activity.MainActivity;
-import ml.docilealligator.infinityforreddit.Activity.MultiRedditListingActivity;
 import ml.docilealligator.infinityforreddit.Activity.PostImageActivity;
 import ml.docilealligator.infinityforreddit.Activity.PostLinkActivity;
 import ml.docilealligator.infinityforreddit.Activity.PostTextActivity;
@@ -137,8 +136,6 @@ public interface AppComponent {
     void inject(AccountSavedThingActivity accountSavedThingActivity);
 
     void inject(ViewImageOrGifActivity viewGIFActivity);
-
-    void inject(MultiRedditListingActivity multiRedditListingActivity);
 
     void inject(ViewMultiRedditDetailActivity viewMultiRedditDetailActivity);
 

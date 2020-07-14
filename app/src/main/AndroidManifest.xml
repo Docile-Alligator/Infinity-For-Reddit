@@ -90,11 +90,6 @@
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".Activity.MultiRedditListingActivity"
-            android:label="@string/multi_reddit_listing_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.Slidable" />
-        <activity
             android:name=".Activity.AccountSavedThingActivity"
             android:label="@string/account_saved_thing_activity_label"
             android:parentActivityName=".Activity.MainActivity"
