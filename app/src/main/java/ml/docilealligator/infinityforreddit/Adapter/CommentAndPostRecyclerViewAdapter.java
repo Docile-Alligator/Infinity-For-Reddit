@@ -1248,7 +1248,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             if ((mPost.isNSFW() && mNeedBlurNsfw  && !(mPost.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || (mPost.isSpoiler() && mNeedBlurSpoiler)) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10))).into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
             } else {
-                if (mImageViewWidth > mPost.getPreviewWidth()) {
+                if (mImageViewWidth > mPost.getPreviewWidth() && mPost.getPostType() == Post.IMAGE_TYPE) {
                     imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
                 } else {
                     imageRequestBuilder.into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);

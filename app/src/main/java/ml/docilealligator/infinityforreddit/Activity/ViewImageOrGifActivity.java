@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -154,16 +153,6 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         } else {
             setTitle("");
         }
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int windowHeight = displayMetrics.heightPixels;
-
-        /*mHaulerView.setOnDragDismissedListener(dragDirection -> {
-            int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
-            finish();
-            overridePendingTransition(0, slide);
-        });*/
 
         mLoadErrorLinearLayout.setOnClickListener(view -> {
             mProgressBar.setVisibility(View.VISIBLE);

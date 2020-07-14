@@ -13,13 +13,11 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
 
-    <com.alexvasilkov.gestures.views.GestureImageView
+    <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
         android:id="@+id/image_view_view_imgur_image_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
-        app:gest_fillViewport="true" />
+        app:quickScaleEnabled="false" />
 
     <LinearLayout
         android:id="@+id/load_image_error_linear_layout_view_imgur_image_fragment"

@@ -26,7 +26,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
-import com.alexvasilkov.gestures.views.GestureImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
@@ -35,6 +34,8 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 import java.io.File;
 
@@ -58,7 +59,7 @@ public class ViewImgurImageFragment extends Fragment {
     @BindView(R.id.progress_bar_view_imgur_image_fragment)
     ProgressBar progressBar;
     @BindView(R.id.image_view_view_imgur_image_fragment)
-    GestureImageView imageView;
+    SubsamplingScaleImageView imageView;
     @BindView(R.id.load_image_error_linear_layout_view_imgur_image_fragment)
     LinearLayout errorLinearLayout;
 
@@ -110,20 +111,30 @@ public class ViewImgurImageFragment extends Fragment {
     }
 
     private void loadImage() {
-        glide.load(imgurMedia.getLink()).listener(new RequestListener<Drawable>() {
+        glide.asBitmap().load(imgurMedia.getLink()).listener(new RequestListener<Bitmap>() {
             @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                 progressBar.setVisibility(View.GONE);
                 errorLinearLayout.setVisibility(View.VISIBLE);
                 return false;
             }
 
             @Override
-            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
                 progressBar.setVisibility(View.GONE);
                 return false;
             }
-        }).override(Target.SIZE_ORIGINAL).into(imageView);
+        }).into(new CustomTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                imageView.setImage(ImageSource.bitmap(resource));
+            }
+
+            @Override
+            public void onLoadCleared(@Nullable Drawable placeholder) {
+
+            }
+        });
     }
 
     @Override
