@@ -1,39 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.thefuntasty.hauler.HaulerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/hauler_view_view_imgur_media_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:dragUpEnabled="true"
     tools:context=".Activity.ViewImgurMediaActivity">
 
-    <ProgressBar
-        android:id="@+id/progress_bar_view_imgur_media_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
-
-    <androidx.viewpager.widget.ViewPager
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/view_pager_view_imgur_media_activity" />
+        android:fillViewport="true">
 
-    <LinearLayout
-        android:id="@+id/load_image_error_linear_layout_view_imgur_media_activity"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableTop="@drawable/ic_error_outline_white_24dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:text="@string/error_loading_image_tap_to_retry"
-            android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family" />
+            android:layout_height="match_parent">
 
-    </LinearLayout>
+            <ProgressBar
+                android:id="@+id/progress_bar_view_imgur_media_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
 
-</RelativeLayout>
+            <androidx.viewpager.widget.ViewPager
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/view_pager_view_imgur_media_activity" />
+
+            <LinearLayout
+                android:id="@+id/load_image_error_linear_layout_view_imgur_media_activity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableTop="@drawable/ic_error_outline_white_24dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textColor="@android:color/white"
+                    android:text="@string/error_loading_image_tap_to_retry"
+                    android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</com.thefuntasty.hauler.HaulerView>

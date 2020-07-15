@@ -20,9 +20,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrConfig;
-import com.r0adkll.slidr.model.SlidrPosition;
+import com.thefuntasty.hauler.DragDirection;
+import com.thefuntasty.hauler.HaulerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,6 +65,8 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
     public static final int IMGUR_TYPE_IMAGE = 2;
     private static final String IMGUR_IMAGES_STATE = "IIS";
 
+    @BindView(R.id.hauler_view_view_imgur_media_activity)
+    HaulerView haulerView;
     @BindView(R.id.progress_bar_view_imgur_media_activity)
     ProgressBar progressBar;
     @BindView(R.id.view_pager_view_imgur_media_activity)
@@ -128,7 +129,11 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
             images = savedInstanceState.getParcelableArrayList(IMGUR_IMAGES_STATE);
         }
 
-        Slidr.attach(this, new SlidrConfig.Builder().position(SlidrPosition.VERTICAL).build());
+        haulerView.setOnDragDismissedListener(dragDirection -> {
+            int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
+            finish();
+            overridePendingTransition(0, slide);
+        });
 
         if (images == null) {
             fetchImgurMedia(imgurId);

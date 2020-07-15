@@ -1,25 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<com.thefuntasty.hauler.HaulerView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/hauler_view_view_video_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keepScreenOn="true"
-    android:id="@+id/coordinator_layout_view_video_activity"
+    app:dragUpEnabled="true"
     tools:application="ml.docilealligator.infinityforreddit.Activity.ViewVideoActivity">
 
-    <com.google.android.exoplayer2.ui.PlayerView
-        android:id="@+id/player_view_view_video_activity"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:controller_layout_id="@layout/exo_playback_control_view"/>
+        android:fillViewport="true">
 
-    <ProgressBar
-        android:id="@+id/progress_bar_view_video_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinator_layout_view_video_activity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <com.google.android.exoplayer2.ui.PlayerView
+                android:id="@+id/player_view_view_video_activity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:controller_layout_id="@layout/exo_playback_control_view"/>
+
+            <ProgressBar
+                android:id="@+id/progress_bar_view_video_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</com.thefuntasty.hauler.HaulerView>

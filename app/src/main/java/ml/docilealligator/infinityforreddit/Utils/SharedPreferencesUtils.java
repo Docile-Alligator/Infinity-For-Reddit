@@ -131,4 +131,5 @@ public class SharedPreferencesUtils {
     public static final String START_AUTOPLAY_VISIBLE_AREA_OFFSET_PORTRAIT = "start_autoplay_visible_area_offset_portrait";
     public static final String START_AUTOPLAY_VISIBLE_AREA_OFFSET_LANDSCAPE = "start_autoplay_visible_area_offset_landscape";
     public static final String MUTE_NSFW_VIDEO = "mute_nsfw_video";
+    public static final String VIDEO_PLAYER_IGNORE_NAV_BAR = "video_player_ignore_nav_bar";
 }

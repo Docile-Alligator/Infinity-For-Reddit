@@ -97,18 +97,20 @@ public class ViewImgurVideoFragment extends Fragment {
 
         imgurMedia = getArguments().getParcelable(EXTRA_IMGUR_VIDEO);
 
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || getResources().getBoolean(R.bool.isTablet)) {
-            //Set player controller bottom margin in order to display it above the navbar
-            int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-            LinearLayout controllerLinearLayout = rootView.findViewById(R.id.linear_layout_exo_playback_control_view);
-            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
-            params.bottomMargin = getResources().getDimensionPixelSize(resourceId);
-        } else {
-            //Set player controller right margin in order to display it above the navbar
-            int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-            LinearLayout controllerLinearLayout = rootView.findViewById(R.id.linear_layout_exo_playback_control_view);
-            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
-            params.rightMargin = getResources().getDimensionPixelSize(resourceId);
+        if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.VIDEO_PLAYER_IGNORE_NAV_BAR, false)) {
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || getResources().getBoolean(R.bool.isTablet)) {
+                //Set player controller bottom margin in order to display it above the navbar
+                int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+                LinearLayout controllerLinearLayout = rootView.findViewById(R.id.linear_layout_exo_playback_control_view);
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
+                params.bottomMargin = getResources().getDimensionPixelSize(resourceId);
+            } else {
+                //Set player controller right margin in order to display it above the navbar
+                int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+                LinearLayout controllerLinearLayout = rootView.findViewById(R.id.linear_layout_exo_playback_control_view);
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
+                params.rightMargin = getResources().getDimensionPixelSize(resourceId);
+            }
         }
 
         videoPlayerView.setControllerVisibilityListener(visibility -> {

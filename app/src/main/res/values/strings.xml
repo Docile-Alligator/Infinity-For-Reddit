@@ -365,6 +365,8 @@
     <string name="settings_mute_video_title">Mute Videos</string>
     <string name="settings_mute_nsfw_video_title">Mute NSFW Videos</string>
     <string name="settings_automatically_try_redgifs_title">Automatically Try Accessing Redgifs if Videos on Gfycat are Removed.</string>
+    <string name="settings_video_player_ignore_nav_bar_title">Ignore Navigation Bar in Video Player</string>
+    <string name="settings_video_player_ignore_nav_bar_summary">Prevent the Video Controller Having Extra Margin</string>
     <string name="settings_confirm_to_exit">Confirm to Exit</string>
     <string name="settings_show_top_level_comments_first_title">Show Top-level Comments First</string>
     <string name="settings_show_comment_divider_title">Show Comment Divider</string>

@@ -19,6 +19,12 @@
         app:key="automatically_try_redgifs"
         app:title="@string/settings_automatically_try_redgifs_title" />
 
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="video_player_ignore_nav_bar"
+        app:title="@string/settings_video_player_ignore_nav_bar_title"
+        app:summary="@string/settings_video_player_ignore_nav_bar_summary" />
+
     <PreferenceCategory
         app:title="@string/settings_video_autoplay_title" />
 
