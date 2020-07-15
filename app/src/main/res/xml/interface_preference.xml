@@ -8,8 +8,10 @@
         app:fragment="ml.docilealligator.infinityforreddit.Settings.FontPreferenceFragment" />
 
     <Preference
+        app:key="immersive_interface_entry"
         app:title="@string/settings_immersive_interface_title"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.ImmersiveInterfacePreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.ImmersiveInterfacePreferenceFragment"
+        app:isPreferenceVisible="false" />
 
     <Preference
         app:title="@string/settings_customize_tabs_in_main_page_title"

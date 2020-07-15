@@ -875,7 +875,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                         .into(((PostImageAndGifAutoplayViewHolder) holder).imageView);
             } else {
-                if (mImageViewWidth > post.getPreviewWidth() && post.getPostType() == Post.IMAGE_TYPE) {
+                if (mImageViewWidth > post.getPreviewWidth()) {
                     imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostImageAndGifAutoplayViewHolder) holder).imageView);
                 } else {
                     imageRequestBuilder.into(((PostImageAndGifAutoplayViewHolder) holder).imageView);

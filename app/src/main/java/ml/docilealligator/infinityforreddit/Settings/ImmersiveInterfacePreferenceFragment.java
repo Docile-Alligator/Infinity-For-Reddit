@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.Settings;
 
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.preference.PreferenceFragmentCompat;
@@ -22,32 +21,26 @@ public class ImmersiveInterfacePreferenceFragment extends PreferenceFragmentComp
         SwitchPreference immersiveInterfaceIgnoreNavBarSwitch = findPreference(SharedPreferencesUtils.IMMERSIVE_INTERFACE_IGNORE_NAV_BAR_KEY);
 
         if (immersiveInterfaceSwitch != null && immersiveInterfaceIgnoreNavBarSwitch != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                immersiveInterfaceSwitch.setVisible(true);
-                immersiveInterfaceSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
-                    if ((Boolean) newValue) {
-                        immersiveInterfaceIgnoreNavBarSwitch.setVisible(true);
-                    } else {
-                        immersiveInterfaceIgnoreNavBarSwitch.setVisible(false);
-                    }
-                    EventBus.getDefault().post(new RecreateActivityEvent());
-                    return true;
-                });
-
-                if (immersiveInterfaceSwitch.isChecked()) {
+            immersiveInterfaceSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                if ((Boolean) newValue) {
                     immersiveInterfaceIgnoreNavBarSwitch.setVisible(true);
                 } else {
                     immersiveInterfaceIgnoreNavBarSwitch.setVisible(false);
                 }
+                EventBus.getDefault().post(new RecreateActivityEvent());
+                return true;
+            });
 
-                immersiveInterfaceIgnoreNavBarSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
-                    EventBus.getDefault().post(new RecreateActivityEvent());
-                    return true;
-                });
+            if (immersiveInterfaceSwitch.isChecked()) {
+                immersiveInterfaceIgnoreNavBarSwitch.setVisible(true);
             } else {
-                immersiveInterfaceSwitch.setVisible(false);
                 immersiveInterfaceIgnoreNavBarSwitch.setVisible(false);
             }
+
+            immersiveInterfaceIgnoreNavBarSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                EventBus.getDefault().post(new RecreateActivityEvent());
+                return true;
+            });
         }
     }
 }

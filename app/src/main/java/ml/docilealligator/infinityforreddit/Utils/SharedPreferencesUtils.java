@@ -35,6 +35,7 @@ public class SharedPreferencesUtils {
     public static final String TITLE_FONT_FAMILY_KEY = "title_font_family";
     public static final String CONTENT_FONT_FAMILY_KEY = "content_font_family";
     public static final String AMOLED_DARK_KEY = "amoled_dark";
+    public static final String IMMERSIVE_INTERFACE_ENTRY_KEY = "immersive_interface_entry";
     public static final String IMMERSIVE_INTERFACE_KEY = "immersive_interface";
     public static final String IMMERSIVE_INTERFACE_IGNORE_NAV_BAR_KEY = "immersive_interface_ignore_nav_bar";
     public static final String BOTTOM_APP_BAR_KEY = "bottom_app_bar";

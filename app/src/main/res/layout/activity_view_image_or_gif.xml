@@ -19,8 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:optimizeDisplay="true"
-        app:tapToRetry="false"
-        app:initScaleType="centerInside" />
+        app:tapToRetry="false"/>
 
     <LinearLayout
         android:id="@+id/load_image_error_linear_layout_view_image_or_gif_activity"

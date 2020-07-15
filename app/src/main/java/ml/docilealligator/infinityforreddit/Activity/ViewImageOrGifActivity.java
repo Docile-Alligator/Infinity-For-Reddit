@@ -77,8 +77,6 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     public static final String FILE_NAME_KEY = "FNK";
     public static final String POST_TITLE_KEY = "PTK";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
-    /*@BindView(R.id.hauler_view_view_image_or_gif_activity)
-    HaulerView mHaulerView;*/
     @BindView(R.id.progress_bar_view_image_or_gif_activity)
     ProgressBar mProgressBar;
     @BindView(R.id.image_view_view_image_or_gif_activity)
@@ -259,61 +257,11 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
             }
         });
 
-        /*if (isGif) {
-            gestureLayout.setVisibility(View.VISIBLE);
-            gestureLayout.getController().getSettings().setMaxZoom(10f).setDoubleTapZoom(2f).setPanEnabled(true);
-            mGifView.setOnClickListener(imageViewOnClickListener);
-        } else {
-            mImageView.setVisibility(View.VISIBLE);
-            mImageView.setOnClickListener(imageViewOnClickListener);
-        }*/
-
         loadImage();
     }
 
     private void loadImage() {
         mImageView.showImage(Uri.parse(mImageUrl));
-        /*if (isGif) {
-            glide.load(mImageUrl).listener(new RequestListener<Drawable>() {
-                @Override
-                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                    mProgressBar.setVisibility(View.GONE);
-                    mLoadErrorLinearLayout.setVisibility(View.VISIBLE);
-                    return false;
-                }
-
-                @Override
-                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                    mProgressBar.setVisibility(View.GONE);
-                    return false;
-                }
-            }).override(Target.SIZE_ORIGINAL).into(mGifView);
-        } else {
-            glide.asBitmap().load(mImageUrl).listener(new RequestListener<Bitmap>() {
-                @Override
-                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                    mProgressBar.setVisibility(View.GONE);
-                    mLoadErrorLinearLayout.setVisibility(View.VISIBLE);
-                    return false;
-                }
-
-                @Override
-                public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                    mProgressBar.setVisibility(View.GONE);
-                    return false;
-                }
-            }).override(Target.SIZE_ORIGINAL).into(new CustomTarget<Bitmap>() {
-                @Override
-                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                    mImageView.setImage(ImageSource.bitmap(resource));
-                }
-
-                @Override
-                public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                }
-            });
-        }*/
     }
 
     @Override

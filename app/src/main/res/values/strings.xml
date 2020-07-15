@@ -352,6 +352,7 @@
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">Autoplay Videos Visible Area Offset (Landscape)</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">Start autoplaying videos when %1$d%% of them are visible</string>
     <string name="settings_immersive_interface_title">Immersive Interface</string>
+    <string name="settings_immersive_interface_summary">Does Not Apply to All Pages</string>
     <string name="settings_immersive_interface_ignore_nav_bar_title">Ignore Navigation Bar in Immersive Interface</string>
     <string name="settings_immersive_interface_ignore_nav_bar_summary">Prevent the Bottom Navigation Bar Having Extra Padding</string>
     <string name="settings_customize_tabs_in_main_page_title">Customize Tabs in Main Page</string>
@@ -378,7 +379,7 @@
     <string name="settings_show_thumbnail_on_the_left_in_compact_layout">Show Thumbnail on the Left in Compact Layout</string>
     <string name="settings_swap_tap_and_long_title">Swap Tap and Long Press in Comments</string>
     <string name="settings_swipe_to_go_back_title">Swipe Right to Go Back</string>
-    <string name="settings_swipe_to_go_back_summary">Does not apply to all pages</string>
+    <string name="settings_swipe_to_go_back_summary">Does Not Apply to All Pages</string>
     <string name="settings_lock_jump_to_next_top_level_comment_button_title">Lock Jump to Next Top-level Comment Button</string>
     <string name="settings_lock_bottom_app_bar_title">Lock Bottom Navigation Bar</string>
     <string name="settings_swipe_up_to_hide_jump_to_next_top_level_comment_button_title">Swipe Up to Hide Jump to Next Top-level Comment Button</string>

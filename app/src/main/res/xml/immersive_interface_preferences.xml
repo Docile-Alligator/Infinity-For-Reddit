@@ -5,13 +5,12 @@
         app:defaultValue="true"
         app:key="immersive_interface"
         app:title="@string/settings_immersive_interface_title"
-        app:isPreferenceVisible="false" />
+        app:summary="@string/settings_immersive_interface_summary" />
 
     <SwitchPreference
         app:defaultValue="false"
         app:key="immersive_interface_ignore_nav_bar"
         app:title="@string/settings_immersive_interface_ignore_nav_bar_title"
-        app:summary="@string/settings_immersive_interface_ignore_nav_bar_summary"
-        app:isPreferenceVisible="false" />
+        app:summary="@string/settings_immersive_interface_ignore_nav_bar_summary" />
 
 </PreferenceScreen>
