@@ -130,24 +130,34 @@
     <string-array name="settings_font_family">
         <item>Default</item>
         <item>Balsamiq Sans</item>
+        <item>Balsamiq Sans Bold</item>
         <item>Noto Sans</item>
-        <item>Roboto Condensed</item>
+        <item>Noto Sans Bold</item>
         <item>Harmonia Sans</item>
-        <item>Inter</item>
-        <item>Manrope</item>
-        <item>Bad Script</item>
+        <item>Harmonia Sans Bold (No Italic)</item>
+        <item>Roboto Condensed</item>
+        <item>Roboto Condensed Bold</item>
+        <item>Inter (No Italic)</item>
+        <item>Inter Bold (No Italic)</item>
+        <item>Manrope (No Italic)</item>
+        <item>Manrope Bold (No Italic)</item>
         <item>Sriracha</item>
     </string-array>
 
     <string-array name="settings_font_family_values">
         <item>Default</item>
         <item>BalsamiqSans</item>
+        <item>BalsamiqSansBold</item>
         <item>NotoSans</item>
-        <item>RobotoCondensed</item>
+        <item>NotoSansBold</item>
         <item>HarmoniaSans</item>
+        <item>HarmoniaSansBold</item>
+        <item>RobotoCondensed</item>
+        <item>RobotoCondensedBold</item>
         <item>Inter</item>
+        <item>InterBold</item>
         <item>Manrope</item>
-        <item>BadScript</item>
+        <item>ManropeBold</item>
         <item>Sriracha</item>
     </string-array>
     

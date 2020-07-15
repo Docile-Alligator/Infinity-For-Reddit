@@ -112,6 +112,15 @@ public class AcknowledgementFragment extends Fragment {
         acknowledgements.add(new Acknowledgement("AndroidFastScroll",
                 "Fast scroll for Android RecyclerView and more.",
                 Uri.parse("https://github.com/zhanghai/AndroidFastScroll")));
+        acknowledgements.add(new Acknowledgement("Subsampling Scale Image View",
+                "A custom image view for Android, designed for photo galleries and displaying " +
+                        "huge images (e.g. maps and building plans) without OutOfMemoryErrors.",
+                Uri.parse("https://github.com/davemorrissey/subsampling-scale-image-view")));
+        acknowledgements.add(new Acknowledgement("BigImageViewer",
+                "Big image viewer supporting pan and zoom, with very little memory " +
+                        "usage and full featured image loading choices. Powered by Subsampling Scale " +
+                        "Image View, Fresco, Glide, and Picasso. Even with gif and webp support!",
+                Uri.parse("https://github.com/Piasy/BigImageViewer")));
 
         AcknowledgementRecyclerViewAdapter adapter = new AcknowledgementRecyclerViewAdapter(activity, acknowledgements);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));

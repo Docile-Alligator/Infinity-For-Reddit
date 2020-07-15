@@ -36,6 +36,18 @@
         android:paddingBottom="16dp"
         android:paddingStart="72dp"
         android:paddingEnd="16dp"
+        android:text="Balsamiq Sans Bold"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="?attr/font_default"
+        android:fontFamily="@font/balsamiq_sans_bold_version" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:paddingStart="72dp"
+        android:paddingEnd="16dp"
         android:text="Noto Sans"
         android:textColor="?attr/primaryTextColor"
         android:textSize="?attr/font_default"
@@ -48,10 +60,10 @@
         android:paddingBottom="16dp"
         android:paddingStart="72dp"
         android:paddingEnd="16dp"
-        android:text="Roboto Condensed"
+        android:text="Noto Sans Bold"
         android:textColor="?attr/primaryTextColor"
         android:textSize="?attr/font_default"
-        android:fontFamily="@font/roboto_condensed" />
+        android:fontFamily="@font/noto_sans_bold_version" />
 
     <TextView
         android:layout_width="match_parent"
@@ -72,10 +84,58 @@
         android:paddingBottom="16dp"
         android:paddingStart="72dp"
         android:paddingEnd="16dp"
+        android:text="Harmonia Sans Bold"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="?attr/font_default"
+        android:fontFamily="@font/harmonia_sans_bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:paddingStart="72dp"
+        android:paddingEnd="16dp"
+        android:text="Roboto Condensed"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="?attr/font_default"
+        android:fontFamily="@font/roboto_condensed" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:paddingStart="72dp"
+        android:paddingEnd="16dp"
+        android:text="Roboto Condensed Bold"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="?attr/font_default"
+        android:fontFamily="@font/roboto_condensed_bold_version" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:paddingStart="72dp"
+        android:paddingEnd="16dp"
         android:text="Inter"
         android:textColor="?attr/primaryTextColor"
         android:textSize="?attr/font_default"
         android:fontFamily="@font/inter" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:paddingStart="72dp"
+        android:paddingEnd="16dp"
+        android:text="Inter Bold"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="?attr/font_default"
+        android:fontFamily="@font/inter_bold" />
 
     <TextView
         android:layout_width="match_parent"
@@ -96,10 +156,10 @@
         android:paddingBottom="16dp"
         android:paddingStart="72dp"
         android:paddingEnd="16dp"
-        android:text="Bad Script"
+        android:text="Manrope Bold"
         android:textColor="?attr/primaryTextColor"
         android:textSize="?attr/font_default"
-        android:fontFamily="@font/bad_script_regular" />
+        android:fontFamily="@font/manrope_bold" />
 
     <TextView
         android:layout_width="match_parent"

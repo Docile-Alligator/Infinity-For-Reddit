@@ -4,13 +4,18 @@ import ml.docilealligator.infinityforreddit.R;
 
 public enum ContentFontFamily {
     Default(R.style.ContentFontFamily, "Default"),
-    BalsamiqSans(R.style.ContentFontFamily_BalsamiqSans, "BalsamiqSans"),
+    BalsamiqSans(R.style.ContentFontFamily_BalsamiqSans, "BalsamiqSansBold"),
+    BalsamiqSansBold(R.style.ContentFontFamily_BalsamiqSansBold, "BalsamiqSansBold"),
     NotoSans(R.style.ContentFontFamily_NotoSans, "NotoSans"),
+    NotoSansBold(R.style.ContentFontFamily_NotoSansBold, "NotoSansBold"),
     RobotoCondensed(R.style.ContentFontFamily_RobotoCondensed, "RobotoCondensed"),
+    RobotoCondensedBold(R.style.ContentFontFamily_RobotoCondensedBold, "RobotoCondensedBold"),
     HarmoniaSans(R.style.ContentFontFamily_HarmoniaSans, "HarmoniaSans"),
+    HarmoniaSansBold(R.style.ContentFontFamily_HarmoniaSansBold, "HarmoniaSansBold"),
     Inter(R.style.ContentFontFamily_Inter, "Inter"),
+    InterBold(R.style.ContentFontFamily_InterBold, "InterBold"),
     Manrope(R.style.ContentFontFamily_Manrope, "Manrope"),
-    BadScript(R.style.ContentFontFamily_BadScript, "BadScript"),
+    ManropeBold(R.style.ContentFontFamily_ManropeBold, "ManropeBold"),
     Sriracha(R.style.ContentFontFamily_Sriracha, "Sriracha");
 
     private int resId;
