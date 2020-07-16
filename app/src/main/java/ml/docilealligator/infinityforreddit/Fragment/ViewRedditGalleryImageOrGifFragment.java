@@ -35,8 +35,12 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
-import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+import com.github.piasy.biv.BigImageViewer;
+import com.github.piasy.biv.loader.ImageLoader;
+import com.github.piasy.biv.loader.glide.GlideImageLoader;
+import com.github.piasy.biv.view.BigImageView;
+import com.github.piasy.biv.view.GlideImageViewFactory;
 
 import java.io.File;
 
@@ -61,7 +65,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     @BindView(R.id.progress_bar_view_reddit_gallery_image_or_gif_fragment)
     ProgressBar progressBar;
     @BindView(R.id.image_view_view_reddit_gallery_image_or_gif_fragment)
-    SubsamplingScaleImageView imageView;
+    BigImageView imageView;
     @BindView(R.id.load_image_error_linear_layout_view_reddit_gallery_image_or_gif_fragment)
     LinearLayout errorLinearLayout;
 
@@ -79,6 +83,8 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        BigImageViewer.initialize(GlideImageLoader.with(activity));
+
         View rootView = inflater.inflate(R.layout.fragment_view_reddit_gallery_image_or_gif, container, false);
 
         ButterKnife.bind(this, rootView);
@@ -88,6 +94,87 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         media = getArguments().getParcelable(EXTRA_REDDIT_GALLERY_MEDIA);
         glide = Glide.with(activity);
         mediaDownloader = new MediaDownloaderImpl();
+
+        imageView.setImageViewFactory(new GlideImageViewFactory());
+
+        imageView.setImageLoaderCallback(new ImageLoader.Callback() {
+            @Override
+            public void onCacheHit(int imageType, File image) {
+
+            }
+
+            @Override
+            public void onCacheMiss(int imageType, File image) {
+
+            }
+
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onProgress(int progress) {
+
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+
+            @Override
+            public void onSuccess(File image) {
+                progressBar.setVisibility(View.GONE);
+
+                final SubsamplingScaleImageView view = imageView.getSSIV();
+
+                if (view != null) {
+                    view.setMinimumDpi(80);
+
+                    view.setOnImageEventListener(new SubsamplingScaleImageView.OnImageEventListener() {
+                        @Override
+                        public void onReady() {
+
+                        }
+
+                        @Override
+                        public void onImageLoaded() {
+                            view.setDoubleTapZoomDpi(70);
+                            view.setDoubleTapZoomStyle(SubsamplingScaleImageView.ZOOM_FOCUS_FIXED);
+                            view.setQuickScaleEnabled(false);
+                        }
+
+                        @Override
+                        public void onPreviewLoadError(Exception e) {
+
+                        }
+
+                        @Override
+                        public void onImageLoadError(Exception e) {
+
+                        }
+
+                        @Override
+                        public void onTileLoadError(Exception e) {
+
+                        }
+
+                        @Override
+                        public void onPreviewReleased() {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFail(Exception error) {
+                progressBar.setVisibility(View.GONE);
+                errorLinearLayout.setVisibility(View.VISIBLE);
+            }
+        });
+
         loadImage();
 
         imageView.setOnClickListener(view -> {
@@ -109,34 +196,17 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
             }
         });
 
+        errorLinearLayout.setOnClickListener(view -> {
+            progressBar.setVisibility(View.VISIBLE);
+            errorLinearLayout.setVisibility(View.GONE);
+            loadImage();
+        });
+
         return rootView;
     }
 
     private void loadImage() {
-        glide.asBitmap().load(media.url).listener(new RequestListener<Bitmap>() {
-            @Override
-            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                progressBar.setVisibility(View.GONE);
-                errorLinearLayout.setVisibility(View.VISIBLE);
-                return false;
-            }
-
-            @Override
-            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                progressBar.setVisibility(View.GONE);
-                return false;
-            }
-        }).into(new CustomTarget<Bitmap>() {
-            @Override
-            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                imageView.setImage(ImageSource.bitmap(resource));
-            }
-
-            @Override
-            public void onLoadCleared(@Nullable Drawable placeholder) {
-
-            }
-        });
+        imageView.showImage(Uri.parse(media.url));
     }
 
     @Override

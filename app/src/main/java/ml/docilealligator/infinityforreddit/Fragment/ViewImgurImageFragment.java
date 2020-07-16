@@ -107,6 +107,12 @@ public class ViewImgurImageFragment extends Fragment {
             }
         });
 
+        errorLinearLayout.setOnClickListener(view -> {
+            progressBar.setVisibility(View.VISIBLE);
+            errorLinearLayout.setVisibility(View.GONE);
+            loadImage();
+        });
+
         return rootView;
     }
 

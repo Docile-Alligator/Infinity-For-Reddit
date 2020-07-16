@@ -280,6 +280,9 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
                 break;
             case Post.GIF_TYPE:
                 toolbar.setSubtitle(R.string.gif);
+                break;
+            case Post.GALLERY_TYPE:
+                toolbar.setSubtitle(R.string.gallery);
         }
 
         if (initializeFragment) {
