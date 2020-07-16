@@ -14,6 +14,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashMap;
@@ -22,8 +23,8 @@ import java.util.Map;
 
 import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.Flair;
-import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.Utils.APIUtils;
+import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -63,7 +64,7 @@ public class SubmitPost {
 
     public static void submitVideoPost(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
                                        Retrofit uploadVideoRetrofit, String accessToken,
-                                       Locale locale, String subredditName, String title, byte[] buffer, String mimeType,
+                                       Locale locale, String subredditName, String title, File buffer, String mimeType,
                                        Bitmap posterBitmap, Flair flair, boolean isSpoiler, boolean isNSFW,
                                        SubmitPostListener submitPostListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
@@ -82,7 +83,7 @@ public class SubmitPost {
                     new ParseJSONResponseFromAWSAsyncTask(response.body(), new ParseJSONResponseFromAWSAsyncTask.ParseJSONResponseFromAWSListener() {
                         @Override
                         public void parseSuccessful(Map<String, RequestBody> nameValuePairsMap) {
-                            RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), buffer);
+                            RequestBody fileBody = RequestBody.create(buffer, MediaType.parse("application/octet-stream"));
                             MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", "post_video." + fileType, fileBody);
 
                             RedditAPI uploadVideoToAWSApi;

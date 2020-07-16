@@ -209,6 +209,7 @@
 
     <string name="video_is_processing">Video is processing. Please wait.</string>
     <string name="image_is_processing">Image is processing. Please wait.</string>
+    <string name="gif_is_processing">Gif is processing. Please wait.</string>
 
     <string name="flair">Flair</string>
     <string name="spoiler">Spoiler</string>

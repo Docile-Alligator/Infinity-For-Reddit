@@ -8,9 +8,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
-import android.os.ParcelFileDescriptor;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,8 +24,11 @@ import com.bumptech.glide.request.transition.Transition;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.FileInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -33,7 +36,7 @@ import javax.inject.Named;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SubmitImagePostEvent;
 import ml.docilealligator.infinityforreddit.Event.SubmitTextOrLinkPostEvent;
-import ml.docilealligator.infinityforreddit.Event.SubmitVideoPostEvent;
+import ml.docilealligator.infinityforreddit.Event.SubmitVideoOrGifPostEvent;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NotificationUtils;
@@ -196,65 +199,125 @@ public class SubmitPostService extends Service {
     }
 
     private void submitVideoPost() {
-        try (ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(mediaUri, "r")) {
-            if (pfd != null) {
-                FileInputStream in = new FileInputStream(pfd.getFileDescriptor());
-                byte[] buffer;
-                buffer = new byte[in.available()];
-                while (in.read(buffer) != -1) ;
-
-                Glide.with(this)
-                        .asBitmap()
-                        .load(mediaUri)
-                        .into(new CustomTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                String type = getContentResolver().getType(mediaUri);
-                                if (type != null) {
-                                    SubmitPost.submitVideoPost(mOauthRetrofit, mUploadMediaRetrofit, mUploadVideoRetrofit,
-                                            mAccessToken, getResources().getConfiguration().locale, subredditName, title,
-                                            buffer, type, resource, flair, isSpoiler, isNSFW,
-                                            new SubmitPost.SubmitPostListener() {
-                                                @Override
-                                                public void submitSuccessful(Post post) {
-                                                    EventBus.getDefault().post(new SubmitVideoPostEvent(true, false, null));
-                                                    Toast.makeText(SubmitPostService.this, R.string.video_is_processing, Toast.LENGTH_SHORT).show();
-
-                                                    stopService();
-                                                }
-
-                                                @Override
-                                                public void submitFailed(@Nullable String errorMessage) {
-                                                    EventBus.getDefault().post(new SubmitVideoPostEvent(false, false, errorMessage));
-
-                                                    stopService();
-                                                }
-                                            });
-                                } else {
-                                    EventBus.getDefault().post(new SubmitVideoPostEvent(false, true, null));
-                                }
-                            }
-
-                            @Override
-                            public void onLoadFailed(@Nullable Drawable errorDrawable) {
-                                EventBus.getDefault().post(new SubmitVideoPostEvent(false, true, null));
-
-                                stopService();
-                            }
-
-                            @Override
-                            public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                            }
-                        });
+        try {
+            InputStream in = getContentResolver().openInputStream(mediaUri);
+            String type = getContentResolver().getType(mediaUri);
+            String cacheFilePath;
+            if (type != null && type.contains("gif")) {
+                cacheFilePath = getExternalCacheDir() + "/" + mediaUri.getLastPathSegment() + ".gif";
             } else {
-                EventBus.getDefault().post(new SubmitVideoPostEvent(false, true, null));
+                cacheFilePath = getExternalCacheDir() + "/" + mediaUri.getLastPathSegment() + ".mp4";
             }
+
+            new CopyFileToCacheAsyncTask(in, cacheFilePath,
+                    new CopyFileToCacheAsyncTask.CopyFileToCacheAsyncTaskListener() {
+                        @Override
+                        public void success() {
+                            Glide.with(SubmitPostService.this)
+                                    .asBitmap()
+                                    .load(mediaUri)
+                                    .into(new CustomTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                            if (type != null) {
+                                                SubmitPost.submitVideoPost(mOauthRetrofit, mUploadMediaRetrofit, mUploadVideoRetrofit,
+                                                        mAccessToken, getResources().getConfiguration().locale, subredditName, title,
+                                                        new File(cacheFilePath), type, resource, flair, isSpoiler, isNSFW,
+                                                        new SubmitPost.SubmitPostListener() {
+                                                            @Override
+                                                            public void submitSuccessful(Post post) {
+                                                                EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(true, false, null));
+                                                                if (type.contains("gif")) {
+                                                                    Toast.makeText(SubmitPostService.this, R.string.gif_is_processing, Toast.LENGTH_SHORT).show();
+                                                                } else {
+                                                                    Toast.makeText(SubmitPostService.this, R.string.video_is_processing, Toast.LENGTH_SHORT).show();
+                                                                }
+
+                                                                stopService();
+                                                            }
+
+                                                            @Override
+                                                            public void submitFailed(@Nullable String errorMessage) {
+                                                                EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(false, false, errorMessage));
+
+                                                                stopService();
+                                                            }
+                                                        });
+                                            } else {
+                                                EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(false, true, null));
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                                            EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(false, true, null));
+
+                                            stopService();
+                                        }
+
+                                        @Override
+                                        public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                                        }
+                                    });
+                        }
+
+                        @Override
+                        public void failed() {
+                            EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(false, true, null));
+
+                            stopService();
+                        }
+                    }).execute();
         } catch (IOException e) {
             e.printStackTrace();
-            EventBus.getDefault().post(new SubmitVideoPostEvent(false, true, null));
+            EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(false, true, null));
 
             stopService();
+        }
+    }
+
+    private static class CopyFileToCacheAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private InputStream fileInputStream;
+        private String destinationFilePath;
+        private CopyFileToCacheAsyncTaskListener copyFileToCacheAsyncTaskListener;
+        private boolean parseFailed = false;
+
+        interface CopyFileToCacheAsyncTaskListener {
+            void success();
+            void failed();
+        }
+
+        public CopyFileToCacheAsyncTask(InputStream fileInputStream, String destinationFilePath, CopyFileToCacheAsyncTaskListener copyFileToCacheAsyncTaskListener) {
+            this.fileInputStream = fileInputStream;
+            this.destinationFilePath = destinationFilePath;
+            this.copyFileToCacheAsyncTaskListener = copyFileToCacheAsyncTaskListener;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try (OutputStream out = new FileOutputStream(destinationFilePath)) {
+                byte[] buf = new byte[2048];
+                int len;
+                while ((len = fileInputStream.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                parseFailed = true;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (parseFailed) {
+                copyFileToCacheAsyncTaskListener.failed();
+            } else {
+                copyFileToCacheAsyncTaskListener.success();
+            }
         }
     }
 

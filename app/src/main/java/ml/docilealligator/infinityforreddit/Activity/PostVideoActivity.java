@@ -51,7 +51,7 @@ import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask
 import ml.docilealligator.infinityforreddit.AsyncTask.LoadSubredditIconAsyncTask;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.Event.SubmitVideoPostEvent;
+import ml.docilealligator.infinityforreddit.Event.SubmitVideoOrGifPostEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -652,26 +652,26 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     }
 
     @Subscribe
-    public void onSubmitVideoPostEvent(SubmitVideoPostEvent submitVideoPostEvent) {
+    public void onSubmitVideoPostEvent(SubmitVideoOrGifPostEvent submitVideoOrGifPostEvent) {
         isPosting = false;
         mPostingSnackbar.dismiss();
         mMemu.findItem(R.id.action_send_post_video_activity).setEnabled(true);
         mMemu.findItem(R.id.action_send_post_video_activity).getIcon().setAlpha(255);
 
-        if (submitVideoPostEvent.postSuccess) {
+        if (submitVideoOrGifPostEvent.postSuccess) {
             Intent intent = new Intent(this, ViewUserDetailActivity.class);
             intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
                     mAccountName);
             startActivity(intent);
             finish();
-        } else if (submitVideoPostEvent.errorProcessingVideo) {
+        } else if (submitVideoOrGifPostEvent.errorProcessingVideoOrGif) {
             Snackbar.make(coordinatorLayout, R.string.error_processing_video, Snackbar.LENGTH_SHORT).show();
         } else {
-            if (submitVideoPostEvent.errorMessage == null || submitVideoPostEvent.errorMessage.equals("")) {
+            if (submitVideoOrGifPostEvent.errorMessage == null || submitVideoOrGifPostEvent.errorMessage.equals("")) {
                 Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
             } else {
-                Snackbar.make(coordinatorLayout, submitVideoPostEvent.errorMessage.substring(0, 1).toUpperCase()
-                        + submitVideoPostEvent.errorMessage.substring(1), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(coordinatorLayout, submitVideoOrGifPostEvent.errorMessage.substring(0, 1).toUpperCase()
+                        + submitVideoOrGifPostEvent.errorMessage.substring(1), Snackbar.LENGTH_SHORT).show();
             }
         }
     }
