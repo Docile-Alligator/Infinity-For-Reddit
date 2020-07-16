@@ -38,6 +38,7 @@ import ml.docilealligator.infinityforreddit.Activity.InboxActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewMultiRedditDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewPrivateMessagesActivity;
+import ml.docilealligator.infinityforreddit.Activity.ViewRedditGalleryActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewVideoActivity;
@@ -52,6 +53,7 @@ import ml.docilealligator.infinityforreddit.Fragment.SubredditListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SubscribedSubredditsListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.UserListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.ViewImgurVideoFragment;
+import ml.docilealligator.infinityforreddit.Fragment.ViewRedditGalleryVideoFragment;
 import ml.docilealligator.infinityforreddit.Service.DownloadRedditVideoService;
 import ml.docilealligator.infinityforreddit.Service.SubmitPostService;
 import ml.docilealligator.infinityforreddit.Settings.AdvancedPreferenceFragment;
@@ -182,4 +184,8 @@ public interface AppComponent {
     void inject(SendPrivateMessageActivity sendPrivateMessageActivity);
 
     void inject(VideoPreferenceFragment videoPreferenceFragment);
+
+    void inject(ViewRedditGalleryActivity viewRedditGalleryActivity);
+
+    void inject(ViewRedditGalleryVideoFragment viewRedditGalleryVideoFragment);
 }

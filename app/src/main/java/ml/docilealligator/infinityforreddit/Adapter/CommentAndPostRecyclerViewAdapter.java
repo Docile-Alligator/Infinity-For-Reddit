@@ -85,6 +85,7 @@ import ml.docilealligator.infinityforreddit.Activity.FilteredThingActivity;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewImageOrGifActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewPostDetailActivity;
+import ml.docilealligator.infinityforreddit.Activity.ViewRedditGalleryActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewVideoActivity;
@@ -119,16 +120,17 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private static final int VIEW_TYPE_POST_DETAIL_IMAGE_AND_GIF_AUTOPLAY = 3;
     private static final int VIEW_TYPE_POST_DETAIL_LINK = 4;
     private static final int VIEW_TYPE_POST_DETAIL_NO_PREVIEW_LINK = 5;
-    private static final int VIEW_TYPE_POST_DETAIL_TEXT_TYPE = 6;
-    private static final int VIEW_TYPE_FIRST_LOADING = 7;
-    private static final int VIEW_TYPE_FIRST_LOADING_FAILED = 8;
-    private static final int VIEW_TYPE_NO_COMMENT_PLACEHOLDER = 9;
-    private static final int VIEW_TYPE_COMMENT = 10;
-    private static final int VIEW_TYPE_COMMENT_FULLY_COLLAPSED = 11;
-    private static final int VIEW_TYPE_LOAD_MORE_CHILD_COMMENTS = 12;
-    private static final int VIEW_TYPE_IS_LOADING_MORE_COMMENTS = 13;
-    private static final int VIEW_TYPE_LOAD_MORE_COMMENTS_FAILED = 14;
-    private static final int VIEW_TYPE_VIEW_ALL_COMMENTS = 15;
+    private static final int VIEW_TYPE_POST_DETAIL_GALLERY = 6;
+    private static final int VIEW_TYPE_POST_DETAIL_TEXT_TYPE = 7;
+    private static final int VIEW_TYPE_FIRST_LOADING = 8;
+    private static final int VIEW_TYPE_FIRST_LOADING_FAILED = 9;
+    private static final int VIEW_TYPE_NO_COMMENT_PLACEHOLDER = 10;
+    private static final int VIEW_TYPE_COMMENT = 11;
+    private static final int VIEW_TYPE_COMMENT_FULLY_COLLAPSED = 12;
+    private static final int VIEW_TYPE_LOAD_MORE_CHILD_COMMENTS = 13;
+    private static final int VIEW_TYPE_IS_LOADING_MORE_COMMENTS = 14;
+    private static final int VIEW_TYPE_LOAD_MORE_COMMENTS_FAILED = 15;
+    private static final int VIEW_TYPE_VIEW_ALL_COMMENTS = 16;
 
     private AppCompatActivity mActivity;
     private Retrofit mRetrofit;
@@ -444,6 +446,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     return VIEW_TYPE_POST_DETAIL_LINK;
                 case Post.NO_PREVIEW_LINK_TYPE:
                     return VIEW_TYPE_POST_DETAIL_NO_PREVIEW_LINK;
+                case Post.GALLERY_TYPE:
+                    return VIEW_TYPE_POST_DETAIL_GALLERY;
                 default:
                     return VIEW_TYPE_POST_DETAIL_TEXT_TYPE;
 
@@ -519,6 +523,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 return new PostDetailLinkViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_link, parent, false));
             case VIEW_TYPE_POST_DETAIL_NO_PREVIEW_LINK:
                 return new PostDetailNoPreviewLinkViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_no_preview_link, parent, false));
+            case VIEW_TYPE_POST_DETAIL_GALLERY:
+                return new PostDetailGalleryViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_gallery, parent, false));
             case VIEW_TYPE_POST_DETAIL_TEXT_TYPE:
                 return new PostDetailTextViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_text, parent, false));
             case VIEW_TYPE_FIRST_LOADING:
@@ -760,6 +766,16 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     ((PostDetailNoPreviewLinkViewHolder) holder).mContentMarkdownView.setAdapter(mMarkwonAdapter);
                     mMarkwonAdapter.setMarkdown(mPostDetailMarkwon, mPost.getSelfText());
                     mMarkwonAdapter.notifyDataSetChanged();
+                }
+            } else if (holder instanceof PostDetailGalleryViewHolder) {
+                if (mPost.getPreviewUrl() != null && !mPost.getPreviewUrl().equals("")) {
+                    ((PostDetailGalleryViewHolder) holder).mRelativeLayout.setVisibility(View.VISIBLE);
+                    ((PostDetailGalleryViewHolder) holder).mImageView
+                            .setRatio((float) mPost.getPreviewHeight() / mPost.getPreviewWidth());
+
+                    loadImage((PostDetailGalleryViewHolder) holder);
+                } else {
+                    ((PostDetailGalleryViewHolder) holder).mNoPreviewLinkImageView.setVisibility(View.VISIBLE);
                 }
             } else if (holder instanceof PostDetailTextViewHolder) {
                 if (mPost.getSelfText() != null && !mPost.getSelfText().equals("")) {
@@ -1224,7 +1240,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
     private void loadImage(PostDetailBaseViewHolder holder) {
         if (holder instanceof PostDetailImageAndGifAutoplayViewHolder) {
-            RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(mPost.getPreviewUrl())
+            String url = mPost.getPostType() == Post.IMAGE_TYPE ? mPost.getPreviewUrl() : mPost.getUrl();
+            RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(url)
                     .listener(new RequestListener<Drawable>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -1316,6 +1333,37 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostDetailLinkViewHolder) holder).mImageView);
                 } else {
                     imageRequestBuilder.into(((PostDetailLinkViewHolder) holder).mImageView);
+                }
+            }
+        } else if (holder instanceof PostDetailGalleryViewHolder) {
+            RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(mPost.getPreviewUrl())
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            ((PostDetailGalleryViewHolder) holder).mLoadImageProgressBar.setVisibility(View.GONE);
+                            ((PostDetailGalleryViewHolder) holder).mLoadImageErrorTextView.setVisibility(View.VISIBLE);
+                            ((PostDetailGalleryViewHolder) holder).mLoadImageErrorTextView.setOnClickListener(view -> {
+                                ((PostDetailGalleryViewHolder) holder).mLoadImageProgressBar.setVisibility(View.VISIBLE);
+                                ((PostDetailGalleryViewHolder) holder).mLoadImageErrorTextView.setVisibility(View.GONE);
+                                loadImage(holder);
+                            });
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            ((PostDetailGalleryViewHolder) holder).mLoadWrapper.setVisibility(View.GONE);
+                            return false;
+                        }
+                    });
+
+            if ((mPost.isNSFW() && mNeedBlurNsfw  && !(mPost.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || (mPost.isSpoiler() && mNeedBlurSpoiler)) {
+                imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10))).into(((PostDetailGalleryViewHolder) holder).mImageView);
+            } else {
+                if (mImageViewWidth > mPost.getPreviewWidth()) {
+                    imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostDetailGalleryViewHolder) holder).mImageView);
+                } else {
+                    imageRequestBuilder.into(((PostDetailGalleryViewHolder) holder).mImageView);
                 }
             }
         }
@@ -2702,6 +2750,103 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 }
                 intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, mPost.isNSFW());
                 mActivity.startActivity(intent);
+            });
+        }
+    }
+
+    class PostDetailGalleryViewHolder extends PostDetailBaseViewHolder {
+        @BindView(R.id.icon_gif_image_view_item_post_detail_gallery)
+        AspectRatioGifImageView mIconGifImageView;
+        @BindView(R.id.subreddit_text_view_item_post_detail_gallery)
+        TextView mSubredditTextView;
+        @BindView(R.id.user_text_view_item_post_detail_gallery)
+        TextView mUserTextView;
+        @BindView(R.id.author_flair_text_view_item_post_detail_gallery)
+        TextView mAuthorFlairTextView;
+        @BindView(R.id.post_time_text_view_item_post_detail_gallery)
+        TextView mPostTimeTextView;
+        @BindView(R.id.title_text_view_item_post_detail_gallery)
+        TextView mTitleTextView;
+        @BindView(R.id.type_text_view_item_post_detail_gallery)
+        CustomTextView mTypeTextView;
+        @BindView(R.id.crosspost_image_view_item_post_detail_gallery)
+        ImageView mCrosspostImageView;
+        @BindView(R.id.archived_image_view_item_post_detail_gallery)
+        ImageView mArchivedImageView;
+        @BindView(R.id.locked_image_view_item_post_detail_gallery)
+        ImageView mLockedImageView;
+        @BindView(R.id.nsfw_text_view_item_post_detail_gallery)
+        CustomTextView mNSFWTextView;
+        @BindView(R.id.spoiler_custom_text_view_item_post_detail_gallery)
+        CustomTextView mSpoilerTextView;
+        @BindView(R.id.flair_custom_text_view_item_post_detail_gallery)
+        CustomTextView mFlairTextView;
+        @BindView(R.id.awards_text_view_item_post_detail_gallery)
+        TextView mAwardsTextView;
+        @BindView(R.id.image_view_wrapper_item_post_detail_gallery)
+        RelativeLayout mRelativeLayout;
+        @BindView(R.id.load_wrapper_item_post_detail_gallery)
+        RelativeLayout mLoadWrapper;
+        @BindView(R.id.progress_bar_item_post_detail_gallery)
+        ProgressBar mLoadImageProgressBar;
+        @BindView(R.id.load_image_error_text_view_item_post_detail_gallery)
+        TextView mLoadImageErrorTextView;
+        @BindView(R.id.image_view_item_post_detail_gallery)
+        AspectRatioGifImageView mImageView;
+        @BindView(R.id.image_view_no_preview_link_item_post_detail_gallery)
+        ImageView mNoPreviewLinkImageView;
+        @BindView(R.id.bottom_constraint_layout_item_post_detail_gallery)
+        ConstraintLayout mBottomConstraintLayout;
+        @BindView(R.id.plus_button_item_post_detail_gallery)
+        ImageView mUpvoteButton;
+        @BindView(R.id.score_text_view_item_post_detail_gallery)
+        TextView mScoreTextView;
+        @BindView(R.id.minus_button_item_post_detail_gallery)
+        ImageView mDownvoteButton;
+        @BindView(R.id.comments_count_item_post_detail_gallery)
+        TextView commentsCountTextView;
+        @BindView(R.id.save_button_item_post_detail_gallery)
+        ImageView mSaveButton;
+        @BindView(R.id.share_button_item_post_detail_gallery)
+        ImageView mShareButton;
+
+        PostDetailGalleryViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            setBaseView(mIconGifImageView,
+                    mSubredditTextView,
+                    mUserTextView,
+                    mAuthorFlairTextView,
+                    mPostTimeTextView,
+                    mTitleTextView,
+                    mTypeTextView,
+                    mCrosspostImageView,
+                    mArchivedImageView,
+                    mLockedImageView,
+                    mNSFWTextView,
+                    mSpoilerTextView,
+                    mFlairTextView,
+                    mAwardsTextView,
+                    mBottomConstraintLayout,
+                    mUpvoteButton,
+                    mScoreTextView,
+                    mDownvoteButton,
+                    commentsCountTextView,
+                    mSaveButton,
+                    mShareButton);
+
+            mLoadImageProgressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
+            mLoadImageErrorTextView.setTextColor(mPrimaryTextColor);
+            mNoPreviewLinkImageView.setBackgroundColor(mNoPreviewLinkBackgroundColor);
+
+            mImageView.setOnClickListener(view -> {
+                Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
+                intent.putParcelableArrayListExtra(ViewRedditGalleryActivity.EXTRA_REDDIT_GALLERY, mPost.getGallery());
+                mActivity.startActivity(intent);
+            });
+
+            mNoPreviewLinkImageView.setOnClickListener(view -> {
+                mImageView.performClick();
             });
         }
     }

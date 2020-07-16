@@ -30,6 +30,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
@@ -41,49 +42,50 @@ import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.Activity.ViewImgurMediaActivity;
+import ml.docilealligator.infinityforreddit.Activity.ViewRedditGalleryActivity;
+import ml.docilealligator.infinityforreddit.AsyncTask.SaveGIFToFileAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SaveImageToFileAsyncTask;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.SetAsWallpaperBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BuildConfig;
-import ml.docilealligator.infinityforreddit.ImgurMedia;
 import ml.docilealligator.infinityforreddit.MediaDownloader;
 import ml.docilealligator.infinityforreddit.MediaDownloaderImpl;
+import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 
-public class ViewImgurImageFragment extends Fragment {
+public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
-    public static final String EXTRA_IMGUR_IMAGES = "EII";
+    public static final String EXTRA_REDDIT_GALLERY_MEDIA = "ERGM";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
 
-    @BindView(R.id.progress_bar_view_imgur_image_fragment)
+    @BindView(R.id.progress_bar_view_reddit_gallery_image_or_gif_fragment)
     ProgressBar progressBar;
-    @BindView(R.id.image_view_view_imgur_image_fragment)
+    @BindView(R.id.image_view_view_reddit_gallery_image_or_gif_fragment)
     SubsamplingScaleImageView imageView;
-    @BindView(R.id.load_image_error_linear_layout_view_imgur_image_fragment)
+    @BindView(R.id.load_image_error_linear_layout_view_reddit_gallery_image_or_gif_fragment)
     LinearLayout errorLinearLayout;
 
-    private ViewImgurMediaActivity activity;
+    private ViewRedditGalleryActivity activity;
     private RequestManager glide;
     private MediaDownloader mediaDownloader;
-    private ImgurMedia imgurMedia;
+    private Post.Gallery media;
     private boolean isDownloading = false;
     private boolean isActionBarHidden = false;
 
-    public ViewImgurImageFragment() {
+    public ViewRedditGalleryImageOrGifFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_view_imgur_images, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_view_reddit_gallery_image_or_gif, container, false);
 
         ButterKnife.bind(this, rootView);
 
         setHasOptionsMenu(true);
 
-        imgurMedia = getArguments().getParcelable(EXTRA_IMGUR_IMAGES);
+        media = getArguments().getParcelable(EXTRA_REDDIT_GALLERY_MEDIA);
         glide = Glide.with(activity);
         mediaDownloader = new MediaDownloaderImpl();
         loadImage();
@@ -111,7 +113,7 @@ public class ViewImgurImageFragment extends Fragment {
     }
 
     private void loadImage() {
-        glide.asBitmap().load(imgurMedia.getLink()).listener(new RequestListener<Bitmap>() {
+        glide.asBitmap().load(media.url).listener(new RequestListener<Bitmap>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                 progressBar.setVisibility(View.GONE);
@@ -139,14 +141,14 @@ public class ViewImgurImageFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.view_imgur_image_fragment, menu);
+        inflater.inflate(R.menu.view_reddit_gallery_image_or_gif_fragment, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_download_view_imgur_image_fragment:
+            case R.id.action_download_view_reddit_gallery_image_or_gif_fragment:
                 if (isDownloading) {
                     return false;
                 }
@@ -165,54 +167,21 @@ public class ViewImgurImageFragment extends Fragment {
                                 PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
                     } else {
                         // Permission has already been granted
-                        mediaDownloader.download(imgurMedia.getLink(), imgurMedia.getFileName(), getContext());
+                        mediaDownloader.download(media.url, media.fileName, getContext());
                     }
                 } else {
-                    mediaDownloader.download(imgurMedia.getLink(), imgurMedia.getFileName(), getContext());
+                    mediaDownloader.download(media.url, media.fileName, getContext());
                 }
 
                 return true;
-            case R.id.action_share_view_imgur_image_fragment:
-                glide.asBitmap().load(imgurMedia.getLink()).into(new CustomTarget<Bitmap>() {
-
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        if (activity.getExternalCacheDir() != null) {
-                            Toast.makeText(activity, R.string.save_image_first, Toast.LENGTH_SHORT).show();
-                            new SaveImageToFileAsyncTask(resource, activity.getExternalCacheDir().getPath(),
-                                    imgurMedia.getFileName(),
-                                    new SaveImageToFileAsyncTask.SaveImageToFileAsyncTaskListener() {
-                                        @Override
-                                        public void saveSuccess(File imageFile) {
-                                            Uri uri = FileProvider.getUriForFile(activity,
-                                                    BuildConfig.APPLICATION_ID + ".provider", imageFile);
-                                            Intent shareIntent = new Intent();
-                                            shareIntent.setAction(Intent.ACTION_SEND);
-                                            shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                                            shareIntent.setType("image/*");
-                                            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                            startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
-                                        }
-
-                                        @Override
-                                        public void saveFailed() {
-                                            Toast.makeText(activity,
-                                                    R.string.cannot_save_image, Toast.LENGTH_SHORT).show();
-                                        }
-                                    }).execute();
-                        } else {
-                            Toast.makeText(activity,
-                                    R.string.cannot_get_storage, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                    }
-                });
+            case R.id.action_share_view_reddit_gallery_image_or_gif_fragment:
+                if (media.mediaType == Post.Gallery.TYPE_GIF) {
+                    shareGif();
+                } else {
+                    shareImage();
+                }
                 return true;
-            case R.id.action_set_wallpaper_view_imgur_image_fragment:
+            case R.id.action_set_wallpaper_view_reddit_gallery_image_or_gif_fragment:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     SetAsWallpaperBottomSheetFragment setAsWallpaperBottomSheetFragment = new SetAsWallpaperBottomSheetFragment();
                     Bundle bundle = new Bundle();
@@ -228,13 +197,93 @@ public class ViewImgurImageFragment extends Fragment {
         return false;
     }
 
+    private void shareImage() {
+        glide.asBitmap().load(media.url).into(new CustomTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                if (activity.getExternalCacheDir() != null) {
+                    Toast.makeText(activity, R.string.save_image_first, Toast.LENGTH_SHORT).show();
+                    new SaveImageToFileAsyncTask(resource, activity.getExternalCacheDir().getPath(),
+                            media.fileName,
+                            new SaveImageToFileAsyncTask.SaveImageToFileAsyncTaskListener() {
+                                @Override
+                                public void saveSuccess(File imageFile) {
+                                    Uri uri = FileProvider.getUriForFile(activity,
+                                            BuildConfig.APPLICATION_ID + ".provider", imageFile);
+                                    Intent shareIntent = new Intent();
+                                    shareIntent.setAction(Intent.ACTION_SEND);
+                                    shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                                    shareIntent.setType("image/*");
+                                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                    startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
+                                }
+
+                                @Override
+                                public void saveFailed() {
+                                    Toast.makeText(activity,
+                                            R.string.cannot_save_image, Toast.LENGTH_SHORT).show();
+                                }
+                            }).execute();
+                } else {
+                    Toast.makeText(activity,
+                            R.string.cannot_get_storage, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onLoadCleared(@Nullable Drawable placeholder) {
+
+            }
+        });
+    }
+
+    private void shareGif() {
+        Toast.makeText(activity, R.string.save_gif_first, Toast.LENGTH_SHORT).show();
+        glide.asGif().load(media.url).listener(new RequestListener<GifDrawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
+                if (activity.getExternalCacheDir() != null) {
+                    new SaveGIFToFileAsyncTask(resource, activity.getExternalCacheDir().getPath(), media.fileName,
+                            new SaveGIFToFileAsyncTask.SaveGIFToFileAsyncTaskListener() {
+                                @Override
+                                public void saveSuccess(File imageFile) {
+                                    Uri uri = FileProvider.getUriForFile(activity,
+                                            BuildConfig.APPLICATION_ID + ".provider", imageFile);
+                                    Intent shareIntent = new Intent();
+                                    shareIntent.setAction(Intent.ACTION_SEND);
+                                    shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                                    shareIntent.setType("image/*");
+                                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                    startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
+                                }
+
+                                @Override
+                                public void saveFailed() {
+                                    Toast.makeText(activity,
+                                            R.string.cannot_save_gif, Toast.LENGTH_SHORT).show();
+                                }
+                            }).execute();
+                } else {
+                    Toast.makeText(activity,
+                            R.string.cannot_get_storage, Toast.LENGTH_SHORT).show();
+                }
+                return false;
+            }
+        }).submit();
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE && grantResults.length > 0) {
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 Toast.makeText(activity, R.string.no_storage_permission, Toast.LENGTH_SHORT).show();
             } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED && isDownloading) {
-                mediaDownloader.download(imgurMedia.getLink(), imgurMedia.getFileName(), getContext());
+                mediaDownloader.download(media.url, media.fileName, getContext());
             }
             isDownloading = false;
         }
@@ -243,6 +292,6 @@ public class ViewImgurImageFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (ViewImgurMediaActivity) context;
+        activity = (ViewRedditGalleryActivity) context;
     }
 }

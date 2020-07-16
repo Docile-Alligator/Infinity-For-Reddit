@@ -113,4 +113,12 @@ public class JSONUtils {
     public static final String TYPE_KEY = "type";
     public static final String MP4_KEY = "mp4";
     public static final String THINGS_KEY = "things";
+    public static final String MEDIA_METADATA_KEY = "media_metadata";
+    public static final String GALLERY_DATA_KEY = "gallery_data";
+    public static final String ITEMS_KEY = "items";
+    public static final String M_KEY = "m";
+    public static final String MEDIA_ID_KEY = "media_id";
+    public static final String S_KEY = "s";
+    public static final String X_KEY = "x";
+    public static final String Y_KEY = "y";
 }

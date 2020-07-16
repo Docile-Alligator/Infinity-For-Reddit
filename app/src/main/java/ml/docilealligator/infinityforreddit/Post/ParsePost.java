@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 
@@ -388,6 +389,30 @@ public class ParsePost {
                     post.setUrl(url);
                 }
             } catch (IllegalArgumentException ignore) { }
+        } else if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
+            if (data.has(JSONUtils.GALLERY_DATA_KEY)) {
+                JSONArray galleryIdsArray = data.getJSONObject(JSONUtils.GALLERY_DATA_KEY).getJSONArray(JSONUtils.ITEMS_KEY);
+                JSONObject galleryObject = data.getJSONObject(JSONUtils.MEDIA_METADATA_KEY);
+                ArrayList<Post.Gallery> gallery = new ArrayList<>();
+                for (int i = 0; i < galleryIdsArray.length(); i++) {
+                    String galleryId = galleryIdsArray.getJSONObject(i).getString(JSONUtils.MEDIA_ID_KEY);
+                    JSONObject singleGalleryObject = galleryObject.getJSONObject(galleryId);
+                    String mimeType = singleGalleryObject.getString(JSONUtils.M_KEY);
+                    String galleryItemUrl = singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getString(JSONUtils.U_KEY);
+                    if ((previewUrl.equals("")) && mimeType.contains("jpg") || mimeType.contains("png")) {
+                        previewUrl = galleryItemUrl;
+                        post.setPreviewUrl(previewUrl);
+                        post.setPreviewWidth(singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getInt(JSONUtils.X_KEY));
+                        post.setPreviewHeight(singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getInt(JSONUtils.Y_KEY));
+                    }
+                    gallery.add(new Post.Gallery(mimeType, galleryItemUrl, subredditName + "-" + galleryId + "." + mimeType.substring(mimeType.lastIndexOf("/") + 1)));
+                }
+
+                if (!gallery.isEmpty()) {
+                    post.setPostType(Post.GALLERY_TYPE);
+                    post.setGallery(gallery);
+                }
+            }
         }
 
         return post;

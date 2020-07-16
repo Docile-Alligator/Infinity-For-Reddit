@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_download_view_imgur_video_fragment"
+        android:id="@+id/action_download_view_reddit_gallery_video_fragment"
         android:orderInCategory="1"
         android:title="@string/action_download"
         android:icon="@drawable/ic_file_download_toolbar_white_24dp"

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.thefuntasty.hauler.HaulerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/hauler_view_view_reddit_gallery_activity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:dragUpEnabled="true"
+    tools:context=".Activity.ViewRedditGalleryActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/view_pager_view_reddit_gallery_activity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.core.widget.NestedScrollView>
+
+</com.thefuntasty.hauler.HaulerView>

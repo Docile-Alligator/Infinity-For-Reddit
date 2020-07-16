@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+
 import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 
 /**
@@ -19,6 +21,7 @@ public class Post implements Parcelable {
     public static final int VIDEO_TYPE = 3;
     public static final int GIF_TYPE = 4;
     public static final int NO_PREVIEW_LINK_TYPE = 5;
+    public static final int GALLERY_TYPE = 6;
     public static final Creator<Post> CREATOR = new Creator<Post>() {
         @Override
         public Post createFromParcel(Parcel in) {
@@ -69,6 +72,7 @@ public class Post implements Parcelable {
     private boolean saved;
     private boolean isCrosspost;
     private String crosspostParentId;
+    private ArrayList<Gallery> gallery = new ArrayList<>();
 
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed,
                 String author, String authorFlair, String authorFlairHTML,
@@ -217,6 +221,7 @@ public class Post implements Parcelable {
         saved = in.readByte() != 0;
         isCrosspost = in.readByte() != 0;
         crosspostParentId = in.readString();
+        in.readTypedList(gallery, Gallery.CREATOR);
     }
 
     public String getId() {
@@ -310,6 +315,10 @@ public class Post implements Parcelable {
 
     public String getPreviewUrl() {
         return previewUrl;
+    }
+
+    public void setPreviewUrl(String previewUrl) {
+        this.previewUrl = previewUrl;
     }
 
     public String getThumbnailPreviewUrl() {
@@ -473,6 +482,14 @@ public class Post implements Parcelable {
         this.crosspostParentId = crosspostParentId;
     }
 
+    public ArrayList<Gallery> getGallery() {
+        return gallery;
+    }
+
+    public void setGallery(ArrayList<Gallery> gallery) {
+        this.gallery = gallery;
+    }
+
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(id);
@@ -514,6 +531,7 @@ public class Post implements Parcelable {
         parcel.writeByte((byte) (saved ? 1 : 0));
         parcel.writeByte((byte) (isCrosspost ? 1 : 0));
         parcel.writeString(crosspostParentId);
+        parcel.writeTypedList(gallery);
     }
 
     @Override
@@ -527,5 +545,61 @@ public class Post implements Parcelable {
     @Override
     public int hashCode() {
         return id.hashCode();
+    }
+
+    public static class Gallery implements Parcelable{
+        public static final int TYPE_IMAGE = 0;
+        public static final int TYPE_GIF = 1;
+        public static final int TYPE_VIDEO = 2;
+
+        public String mimeType;
+        public String url;
+        public String fileName;
+        public int mediaType;
+
+        public Gallery(String mimeType, String url, String fileName) {
+            this.mimeType = mimeType;
+            this.url = url;
+            this.fileName = fileName;
+            if (mimeType.contains("gif")) {
+                mediaType = TYPE_GIF;
+            } else if (mimeType.contains("jpg") || mimeType.contains("png")) {
+                mediaType = TYPE_IMAGE;
+            } else {
+                mediaType = TYPE_VIDEO;
+            }
+        }
+
+        protected Gallery(Parcel in) {
+            mimeType = in.readString();
+            url = in.readString();
+            fileName = in.readString();
+            mediaType = in.readInt();
+        }
+
+        public static final Creator<Gallery> CREATOR = new Creator<Gallery>() {
+            @Override
+            public Gallery createFromParcel(Parcel in) {
+                return new Gallery(in);
+            }
+
+            @Override
+            public Gallery[] newArray(int size) {
+                return new Gallery[size];
+            }
+        };
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel parcel, int i) {
+            parcel.writeString(mimeType);
+            parcel.writeString(url);
+            parcel.writeString(fileName);
+            parcel.writeInt(mediaType);
+        }
     }
 }

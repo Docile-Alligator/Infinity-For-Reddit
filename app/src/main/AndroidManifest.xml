@@ -23,7 +23,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
-        <activity android:name=".Activity.SendPrivateMessageActivity"
+        <activity android:name=".Activity.ViewRedditGalleryActivity"
+            android:configChanges="orientation|screenSize|layoutDirection"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppTheme.Draggable" />
+        <activity
+            android:name=".Activity.SendPrivateMessageActivity"
             android:label="@string/send_private_message_activity_label"
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
@@ -322,7 +327,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"

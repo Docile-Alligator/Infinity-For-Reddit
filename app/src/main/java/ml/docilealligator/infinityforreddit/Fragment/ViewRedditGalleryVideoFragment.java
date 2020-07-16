@@ -45,25 +45,25 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.ImgurMedia;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MediaDownloader;
 import ml.docilealligator.infinityforreddit.MediaDownloaderImpl;
+import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
-public class ViewImgurVideoFragment extends Fragment {
+public class ViewRedditGalleryVideoFragment extends Fragment {
 
-    public static final String EXTRA_IMGUR_VIDEO = "EIV";
+    public static final String EXTRA_REDDIT_GALLERY_VIDEO = "EIV";
     private static final String IS_MUTE_STATE = "IMS";
     private static final String POSITION_STATE = "PS";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
-    @BindView(R.id.player_view_view_imgur_video_fragment)
+    @BindView(R.id.player_view_view_reddit_gallery_video_fragment)
     PlayerView videoPlayerView;
     @BindView(R.id.mute_exo_playback_control_view)
     ImageButton muteButton;
     private Activity activity;
-    private ImgurMedia imgurMedia;
+    private Post.Gallery galleryVideo;
     private SimpleExoPlayer player;
     private DataSource.Factory dataSourceFactory;
     private MediaDownloader mediaDownloader;
@@ -74,7 +74,7 @@ public class ViewImgurVideoFragment extends Fragment {
     @Named("default")
     SharedPreferences mSharedPreferences;
 
-    public ViewImgurVideoFragment() {
+    public ViewRedditGalleryVideoFragment() {
         // Required empty public constructor
     }
 
@@ -82,7 +82,7 @@ public class ViewImgurVideoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_view_imgur_video, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_view_reddit_gallery_video, container, false);
 
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
@@ -92,7 +92,7 @@ public class ViewImgurVideoFragment extends Fragment {
 
         activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-        imgurMedia = getArguments().getParcelable(EXTRA_IMGUR_VIDEO);
+        galleryVideo = getArguments().getParcelable(EXTRA_REDDIT_GALLERY_VIDEO);
 
         if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.VIDEO_PLAYER_IGNORE_NAV_BAR, false)) {
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || getResources().getBoolean(R.bool.isTablet)) {
@@ -137,7 +137,7 @@ public class ViewImgurVideoFragment extends Fragment {
         videoPlayerView.setPlayer(player);
         dataSourceFactory = new DefaultDataSourceFactory(activity,
                 Util.getUserAgent(activity, "Infinity"));
-        player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(imgurMedia.getLink())));
+        player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(galleryVideo.url)));
         preparePlayer(savedInstanceState);
 
         return rootView;
@@ -145,13 +145,13 @@ public class ViewImgurVideoFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.view_imgur_video_fragment, menu);
+        inflater.inflate(R.menu.view_reddit_gallery_video_fragment, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_download_view_imgur_video_fragment) {
+        if (item.getItemId() == R.id.action_download_view_reddit_gallery_video_fragment) {
             isDownloading = true;
             if (Build.VERSION.SDK_INT >= 23) {
                 if (ContextCompat.checkSelfPermission(activity,
@@ -190,7 +190,7 @@ public class ViewImgurVideoFragment extends Fragment {
     private void download() {
         isDownloading = false;
 
-        mediaDownloader.download(imgurMedia.getLink(), imgurMedia.getFileName(), getContext());
+        mediaDownloader.download(galleryVideo.url, galleryVideo.fileName, getContext());
     }
 
     private void preparePlayer(Bundle savedInstanceState) {

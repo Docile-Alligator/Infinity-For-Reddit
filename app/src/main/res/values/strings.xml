@@ -29,6 +29,9 @@
     <string name="view_imgur_media_activity_image_label">Image %1$d/%2$d</string>
     <string name="view_imgur_media_activity_video_label">Video %1$d/%2$d</string>
     <string name="send_private_message_activity_label">Send PM</string>
+    <string name="view_reddit_gallery_activity_image_label">Image %1$d/%2$d</string>
+    <string name="view_reddit_gallery_activity_gif_label">Gif %1$d/%2$d</string>
+    <string name="view_reddit_gallery_activity_video_label">Video %1$d/%2$d</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -263,6 +266,7 @@
     <string name="image">IMAGE</string>
     <string name="video">VIDEO</string>
     <string name="gif">GIF</string>
+    <string name="gallery">GALLERY</string>
     <string name="best">Best</string>
     <string name="search">Search</string>
 
