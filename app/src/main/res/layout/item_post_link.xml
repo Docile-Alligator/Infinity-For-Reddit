@@ -203,8 +203,7 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:textSize="?attr/font_12"
-            android:fontFamily="?attr/font_family"
-            android:visibility="gone" />
+            android:fontFamily="?attr/font_family" />
 
         <RelativeLayout
             android:layout_width="match_parent"
