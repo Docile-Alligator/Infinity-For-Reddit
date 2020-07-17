@@ -1354,7 +1354,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             cardView.setOnClickListener(view -> {
                 int position = getAdapterPosition();
-                if (position > 0 && canStartActivity) {
+                if (position >= 0 && canStartActivity) {
                     canStartActivity = false;
 
                     Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
