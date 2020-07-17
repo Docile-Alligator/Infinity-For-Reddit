@@ -92,6 +92,9 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     private String mUserAvatar;
     private ArrayList<ProvideUserAvatarCallback> mProvideUserAvatarCallbacks;
     private LoadUserDataAsyncTask mLoadUserDataAsyncTask;
+    private boolean isSendingMessage = false;
+    private int mSecondaryTextColor;
+    private int mSendMessageIconColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,9 +117,6 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
         Intent intent = getIntent();
         privateMessage = intent.getParcelableExtra(EXTRA_PRIVATE_MESSAGE);
 
-        if (privateMessage != null) {
-            mToolbar.setTitle(privateMessage.getSubject());
-        }
         setSupportActionBar(mToolbar);
         setToolbarGoToTop(mToolbar);
 
@@ -151,6 +151,23 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     }
 
     private void bindView() {
+        if (privateMessage != null) {
+            if (privateMessage.getAuthor().equals(mAccountName)) {
+                mToolbar.setTitle(privateMessage.getDestination());
+                mToolbar.setOnClickListener(view -> {
+                    Intent intent = new Intent(this, ViewUserDetailActivity.class);
+                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, privateMessage.getDestination());
+                    startActivity(intent);
+                });
+            } else {
+                mToolbar.setTitle(privateMessage.getAuthor());
+                mToolbar.setOnClickListener(view -> {
+                    Intent intent = new Intent(this, ViewUserDetailActivity.class);
+                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, privateMessage.getAuthor());
+                    startActivity(intent);
+                });
+            }
+        }
         mAdapter = new PrivateMessagesDetailRecyclerViewAdapter(this, mSharedPreferences,
                 getResources().getConfiguration().locale, privateMessage, mAccountName, mCustomThemeWrapper);
         mLinearLayoutManager = new LinearLayoutManager(this);
@@ -159,63 +176,72 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
         mRecyclerView.setAdapter(mAdapter);
         goToBottom();
         mSendImageView.setOnClickListener(view -> {
-            if (!mEditText.getText().toString().equals("")) {
-                //Send Message
-                if (privateMessage != null) {
-                    Message replyTo;
-                    ArrayList<Message> replies = privateMessage.getReplies();
-                    if (replies != null && !replies.isEmpty()) {
-                        replyTo = replies.get(replies.size() - 1);
-                    } else {
-                        replyTo = privateMessage;
-                    }
-                    if (replyTo != null) {
-                        ReplyMessage.replyMessage(mEditText.getText().toString(), replyTo.getFullname(),
-                                getResources().getConfiguration().locale, mOauthRetrofit, mAccessToken,
-                                new ReplyMessage.ReplyMessageListener() {
-                                    @Override
-                                    public void replyMessageSuccess(Message message) {
-                                        if (mAdapter != null) {
-                                            mAdapter.addReply(message);
-                                        }
-                                        goToBottom();
-                                        mEditText.setText("");
-                                        EventBus.getDefault().post(new RepliedToPrivateMessageEvent(message, getIntent().getIntExtra(EXTRA_MESSAGE_POSITION, -1)));
-                                    }
-
-                                    @Override
-                                    public void replyMessageFailed(String errorMessage) {
-                                        if (errorMessage != null && !errorMessage.equals("")) {
-                                            Snackbar.make(mCoordinatorLayout, errorMessage, Snackbar.LENGTH_LONG).show();
-                                        } else {
-                                            Snackbar.make(mCoordinatorLayout, R.string.reply_message_failed, Snackbar.LENGTH_LONG).show();
-                                        }
-                                    }
-                                });
-                        StringBuilder fullnames = new StringBuilder();
-                        if (privateMessage.isNew()) {
-                            fullnames.append(privateMessage.getFullname()).append(",");
-                        }
+            if (!isSendingMessage) {
+                if (!mEditText.getText().toString().equals("")) {
+                    //Send Message
+                    if (privateMessage != null) {
+                        Message replyTo;
+                        ArrayList<Message> replies = privateMessage.getReplies();
                         if (replies != null && !replies.isEmpty()) {
-                            for (Message m : replies) {
-                                if (m.isNew()) {
-                                    fullnames.append(m).append(",");
+                            replyTo = replies.get(replies.size() - 1);
+                        } else {
+                            replyTo = privateMessage;
+                        }
+                        if (replyTo != null) {
+                            isSendingMessage = true;
+                            mSendImageView.setColorFilter(mSecondaryTextColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                            ReplyMessage.replyMessage(mEditText.getText().toString(), replyTo.getFullname(),
+                                    getResources().getConfiguration().locale, mOauthRetrofit, mAccessToken,
+                                    new ReplyMessage.ReplyMessageListener() {
+                                        @Override
+                                        public void replyMessageSuccess(Message message) {
+                                            if (mAdapter != null) {
+                                                mAdapter.addReply(message);
+                                            }
+                                            goToBottom();
+                                            mEditText.setText("");
+                                            mSendImageView.setColorFilter(mSendMessageIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                            isSendingMessage = false;
+                                            EventBus.getDefault().post(new RepliedToPrivateMessageEvent(message, getIntent().getIntExtra(EXTRA_MESSAGE_POSITION, -1)));
+                                        }
+
+                                        @Override
+                                        public void replyMessageFailed(String errorMessage) {
+                                            if (errorMessage != null && !errorMessage.equals("")) {
+                                                Snackbar.make(mCoordinatorLayout, errorMessage, Snackbar.LENGTH_LONG).show();
+                                            } else {
+                                                Snackbar.make(mCoordinatorLayout, R.string.reply_message_failed, Snackbar.LENGTH_LONG).show();
+                                            }
+                                            mSendImageView.setColorFilter(mSendMessageIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                            isSendingMessage = false;
+                                        }
+                                    });
+                            StringBuilder fullnames = new StringBuilder();
+                            if (privateMessage.isNew()) {
+                                fullnames.append(privateMessage.getFullname()).append(",");
+                            }
+                            if (replies != null && !replies.isEmpty()) {
+                                for (Message m : replies) {
+                                    if (m.isNew()) {
+                                        fullnames.append(m).append(",");
+                                    }
                                 }
                             }
-                        }
-                        if (fullnames.length() > 0) {
-                            fullnames.deleteCharAt(fullnames.length() - 1);
-                            ReadMessage.readMessage(mOauthRetrofit, mAccessToken, fullnames.toString(),
-                                    new ReadMessage.ReadMessageListener() {
-                                        @Override
-                                        public void readSuccess() {}
+                            if (fullnames.length() > 0) {
+                                fullnames.deleteCharAt(fullnames.length() - 1);
+                                ReadMessage.readMessage(mOauthRetrofit, mAccessToken, fullnames.toString(),
+                                        new ReadMessage.ReadMessageListener() {
+                                            @Override
+                                            public void readSuccess() {}
 
-                                        @Override
-                                        public void readFailed() {}
-                                    });
+                                            @Override
+                                            public void readFailed() {}
+                                        });
+                            }
+                        } else {
+                            isSendingMessage = false;
+                            Snackbar.make(mCoordinatorLayout, R.string.error_getting_message, Snackbar.LENGTH_LONG).show();
                         }
-                    } else {
-                        Snackbar.make(mCoordinatorLayout, R.string.error_getting_message, Snackbar.LENGTH_LONG).show();
                     }
                 }
             }
@@ -285,9 +311,11 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
         applyAppBarLayoutAndToolbarTheme(mAppBarLayout, mToolbar);
         mDivider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
         mEditText.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
-        mEditText.setHintTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+        mSecondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
+        mEditText.setHintTextColor(mSecondaryTextColor);
         mEditTextLinearLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        mSendImageView.setColorFilter(mCustomThemeWrapper.getSendMessageIconColor(), android.graphics.PorterDuff.Mode.SRC_IN);
+        mSendMessageIconColor = mCustomThemeWrapper.getSendMessageIconColor();
+        mSendImageView.setColorFilter(mSendMessageIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
     @Override

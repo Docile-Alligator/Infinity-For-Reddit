@@ -20,6 +20,7 @@ public class Message implements Parcelable {
     private String fullname;
     private String subject;
     private String author;
+    private String destination;
     private String parentFullName;
     private String title;
     private String body;
@@ -34,9 +35,9 @@ public class Message implements Parcelable {
     private ArrayList<Message> replies;
 
     Message(String kind, String subredditName, String subredditNamePrefixed, String id, String fullname,
-            String subject, String author, String parentFullName, String title, String body, String context,
-            String distinguished, String formattedTime, boolean wasComment, boolean isNew, int score,
-            int nComments, long timeUTC) {
+            String subject, String author, String destination, String parentFullName, String title, String body,
+            String context, String distinguished, String formattedTime, boolean wasComment, boolean isNew,
+            int score, int nComments, long timeUTC) {
         this.kind = kind;
         this.subredditName = subredditName;
         this.subredditNamePrefixed = subredditNamePrefixed;
@@ -44,6 +45,7 @@ public class Message implements Parcelable {
         this.fullname = fullname;
         this.subject = subject;
         this.author = author;
+        this.destination = destination;
         this.parentFullName = parentFullName;
         this.title = title;
         this.body = body;
@@ -66,6 +68,7 @@ public class Message implements Parcelable {
         fullname = in.readString();
         subject = in.readString();
         author = in.readString();
+        destination = in.readString();
         parentFullName = in.readString();
         title = in.readString();
         body = in.readString();
@@ -118,6 +121,10 @@ public class Message implements Parcelable {
 
     public String getAuthor() {
         return author;
+    }
+
+    public String getDestination() {
+        return destination;
     }
 
     public String getParentFullName() {
@@ -197,6 +204,7 @@ public class Message implements Parcelable {
         parcel.writeString(fullname);
         parcel.writeString(subject);
         parcel.writeString(author);
+        parcel.writeString(destination);
         parcel.writeString(parentFullName);
         parcel.writeString(title);
         parcel.writeString(body);

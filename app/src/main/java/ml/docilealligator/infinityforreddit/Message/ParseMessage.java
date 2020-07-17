@@ -60,6 +60,7 @@ public class ParseMessage {
         String fullname = rawMessageJSON.getString(JSONUtils.NAME_KEY);
         String subject = rawMessageJSON.getString(JSONUtils.SUBJECT_KEY);
         String author = rawMessageJSON.getString(JSONUtils.AUTHOR_KEY);
+        String destination = rawMessageJSON.getString(JSONUtils.DEST_KEY);
         String parentFullname = rawMessageJSON.getString(JSONUtils.PARENT_ID_KEY);
         String title = rawMessageJSON.has(JSONUtils.LINK_TITLE_KEY) ? rawMessageJSON.getString(JSONUtils.LINK_TITLE_KEY) : null;
         String body = Utils.modifyMarkdown(rawMessageJSON.getString(JSONUtils.BODY_KEY));
@@ -84,7 +85,7 @@ public class ParseMessage {
         }
 
         Message message = new Message(kind, subredditName, subredditNamePrefixed, id, fullname, subject,
-                author, parentFullname, title, body, context, distinguished, formattedTime,
+                author, destination, parentFullname, title, body, context, distinguished, formattedTime,
                 wasComment, isNew, score, nComments, timeUTC);
         if (replies != null) {
             message.setReplies(replies);

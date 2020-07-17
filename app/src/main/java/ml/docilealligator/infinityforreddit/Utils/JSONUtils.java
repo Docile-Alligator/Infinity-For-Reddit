@@ -121,4 +121,5 @@ public class JSONUtils {
     public static final String S_KEY = "s";
     public static final String X_KEY = "x";
     public static final String Y_KEY = "y";
+    public static final String DEST_KEY = "dest";
 }
