@@ -1353,11 +1353,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             shareButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
             cardView.setOnClickListener(view -> {
-                if (canStartActivity) {
+                int position = getAdapterPosition();
+                if (position > 0 && canStartActivity) {
                     canStartActivity = false;
 
                     Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
-                    intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, getItem(getAdapterPosition()));
+                    intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, getItem(position));
                     intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, getAdapterPosition());
                     mActivity.startActivity(intent);
                 }
@@ -1365,7 +1366,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             userTextView.setOnClickListener(view -> {
                 if (canStartActivity) {
-                    Post post = getItem(getAdapterPosition());
+                    int position = getAdapterPosition();
+                    if (position < 0) {
+                        return;
+                    }
+                    Post post = getItem(position);
                     if (post != null) {
                         canStartActivity = false;
                         Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
@@ -1377,7 +1382,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             if (mDisplaySubredditName) {
                 subredditTextView.setOnClickListener(view -> {
-                    Post post = getItem(getAdapterPosition());
+                    int position = getAdapterPosition();
+                    if (position < 0) {
+                        return;
+                    }
+                    Post post = getItem(position);
                     if (post != null) {
                         if (canStartActivity) {
                             canStartActivity = false;
@@ -1399,7 +1408,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 iconGifImageView.setOnClickListener(view -> subredditTextView.performClick());
             } else {
                 subredditTextView.setOnClickListener(view -> {
-                    Post post = getItem(getAdapterPosition());
+                    int position = getAdapterPosition();
+                    if (position < 0) {
+                        return;
+                    }
+                    Post post = getItem(position);
                     if (post != null) {
                         if (canStartActivity) {
                             canStartActivity = false;
@@ -1422,7 +1435,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             if (!(mActivity instanceof FilteredThingActivity)) {
                 nsfwTextView.setOnClickListener(view -> {
-                    Post post = getItem(getAdapterPosition());
+                    int position = getAdapterPosition();
+                    if (position < 0) {
+                        return;
+                    }
+                    Post post = getItem(position);
                     if (post != null) {
                         Intent intent = new Intent(mActivity, FilteredThingActivity.class);
                         intent.putExtra(FilteredThingActivity.EXTRA_NAME, post.getSubredditNamePrefixed().substring(2));
@@ -1432,7 +1449,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     }
                 });
                 typeTextView.setOnClickListener(view -> {
-                    Post post = getItem(getAdapterPosition());
+                    int position = getAdapterPosition();
+                    if (position < 0) {
+                        return;
+                    }
+                    Post post = getItem(position);
                     if (post != null) {
                         mCallback.typeChipClicked(post.getPostType());
                     }
@@ -1440,7 +1461,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             }
 
             upvoteButton.setOnClickListener(view -> {
-                Post post = getItem(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
                 if (post != null) {
                     if (mAccessToken == null) {
                         Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
@@ -1514,7 +1539,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
 
             downvoteButton.setOnClickListener(view -> {
-                Post post = getItem(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
                 if (post != null) {
                     if (mAccessToken == null) {
                         Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
@@ -1588,7 +1617,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
 
             saveButton.setOnClickListener(view -> {
-                Post post = getItem(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
                 if (post != null) {
                     if (mAccessToken == null) {
                         Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
@@ -1640,7 +1673,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
 
             shareButton.setOnClickListener(view -> {
-                Post post = getItem(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
                 if (post != null) {
                     shareLink(post);
                 }
@@ -1752,7 +1789,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
 
             fullscreenButton.setOnClickListener(view -> {
-                Post post = getItem(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
                 if (post != null) {
                     Intent intent = new Intent(mActivity, ViewVideoActivity.class);
                     intent.setData(Uri.parse(post.getVideoUrl()));
@@ -1955,7 +1996,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             errorTextView.setTextColor(mPrimaryTextColor);
 
             imageView.setOnClickListener(view -> {
-                Post post = getItem(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
                 if (post != null) {
                     if (post.getPostType() == Post.VIDEO_TYPE) {
                         Intent intent = new Intent(mActivity, ViewVideoActivity.class);
@@ -2063,7 +2108,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             errorTextView.setTextColor(mPrimaryTextColor);
 
             imageView.setOnClickListener(view -> {
-                Post post = getItem(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
                 if (post != null) {
                     if (post.getPostType() == Post.IMAGE_TYPE) {
                         Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
@@ -2172,7 +2221,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             errorTextView.setTextColor(mPrimaryTextColor);
 
             imageView.setOnClickListener(view -> {
-                Post post = getItem(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
                 if (post != null) {
                     Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                     Uri uri = Uri.parse(post.getUrl());
@@ -2268,7 +2321,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             noPreviewLinkImageView.setBackgroundColor(mNoPreviewLinkBackgroundColor);
 
             noPreviewLinkImageView.setOnClickListener(view -> {
-                Post post = getItem(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
                 if (post != null) {
                     Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                     Uri uri = Uri.parse(post.getUrl());
@@ -2373,7 +2430,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             errorTextView.setTextColor(mPrimaryTextColor);
 
             imageView.setOnClickListener(view -> {
-                Post post = getItem(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
                 if (post != null) {
                     Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
                     intent.putParcelableArrayListExtra(ViewRedditGalleryActivity.EXTRA_REDDIT_GALLERY, post.getGallery());
@@ -2607,7 +2668,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             noPreviewLinkImageFrameLayout.setClipToOutline(true);
 
             itemView.setOnClickListener(view -> {
-                Post post = getItem(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
                 if (post != null && canStartActivity) {
                     canStartActivity = false;
 
@@ -2619,7 +2684,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
 
             nameTextView.setOnClickListener(view -> {
-                Post post = getItem(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
                 if (post != null && canStartActivity) {
                     canStartActivity = false;
                     if (mDisplaySubredditName) {
@@ -2645,7 +2714,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             iconGifImageView.setOnClickListener(view -> nameTextView.performClick());
 
             nsfwTextView.setOnClickListener(view -> {
-                Post post = getItem(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
                 if (post != null && !(mActivity instanceof FilteredThingActivity)) {
                     Intent intent = new Intent(mActivity, FilteredThingActivity.class);
                     intent.putExtra(FilteredThingActivity.EXTRA_NAME, post.getSubredditNamePrefixed().substring(2));
@@ -2656,14 +2729,22 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
 
             typeTextView.setOnClickListener(view -> {
-                Post post = getItem(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
                 if (post != null && !(mActivity instanceof FilteredThingActivity)) {
                     mCallback.typeChipClicked(post.getPostType());
                 }
             });
 
             imageView.setOnClickListener(view -> {
-                Post post = getItem(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
                 if (post != null) {
                     switch (post.getPostType()) {
                         case Post.IMAGE_TYPE: {
@@ -2709,7 +2790,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
 
             noPreviewLinkImageFrameLayout.setOnClickListener(view -> {
-                Post post = getItem(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
                 if (post != null) {
                     Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                     Uri uri = Uri.parse(post.getUrl());
@@ -2729,7 +2814,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     return;
                 }
 
-                Post post = getItem(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
                 if (post != null) {
                     if (post.isArchived()) {
                         Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
@@ -2803,7 +2892,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     return;
                 }
 
-                Post post = getItem(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
                 if (post != null) {
                     if (post.isArchived()) {
                         Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
@@ -2877,7 +2970,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     return;
                 }
 
-                Post post = getItem(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
                 if (post != null) {
                     if (post.isSaved()) {
                         saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
@@ -2924,7 +3021,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
 
             shareButton.setOnClickListener(view -> {
-                Post post = getItem(getAdapterPosition());
+                int position = getAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
                 if (post != null) {
                     shareLink(post);
                 }
