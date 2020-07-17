@@ -398,7 +398,17 @@ public class ParsePost {
                     String galleryId = galleryIdsArray.getJSONObject(i).getString(JSONUtils.MEDIA_ID_KEY);
                     JSONObject singleGalleryObject = galleryObject.getJSONObject(galleryId);
                     String mimeType = singleGalleryObject.getString(JSONUtils.M_KEY);
-                    String galleryItemUrl = singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getString(JSONUtils.U_KEY);
+                    String galleryItemUrl;
+                    if (mimeType.contains("jpg") || mimeType.contains("png")) {
+                        galleryItemUrl = singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getString(JSONUtils.U_KEY);
+                    } else {
+                        JSONObject sourceObject = singleGalleryObject.getJSONObject(JSONUtils.S_KEY);
+                        if (mimeType.contains("gif")) {
+                            galleryItemUrl = sourceObject.getString(JSONUtils.GIF_KEY);
+                        } else {
+                            galleryItemUrl = sourceObject.getString(JSONUtils.MP4_KEY);
+                        }
+                    }
                     if ((previewUrl.equals("")) && mimeType.contains("jpg") || mimeType.contains("png")) {
                         previewUrl = galleryItemUrl;
                         post.setPreviewUrl(previewUrl);
