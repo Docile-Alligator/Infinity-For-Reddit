@@ -795,7 +795,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     if (post.getPostType() != Post.GIF_TYPE && post.getPostType() != Post.VIDEO_TYPE) {
                         ((PostCompactBaseViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
                     }
-                    ((PostCompactBaseViewHolder) holder).imageView.setVisibility(View.VISIBLE);
+                    if (post.getPostType() == Post.GALLERY_TYPE && post.getPreviewUrl() == null || post.getPreviewUrl().equals("")) {
+                        ((PostCompactBaseViewHolder) holder).noPreviewLinkImageFrameLayout.setVisibility(View.VISIBLE);
+                    } else {
+                        ((PostCompactBaseViewHolder) holder).imageView.setVisibility(View.VISIBLE);
+                    }
                     loadImage(holder, post);
                 }
 
@@ -844,6 +848,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         String noPreviewLinkDomain = Uri.parse(noPreviewLinkUrl).getHost();
                         ((PostCompactBaseViewHolder) holder).linkTextView.setText(noPreviewLinkDomain);
                         ((PostCompactBaseViewHolder) holder).noPreviewLinkImageFrameLayout.setVisibility(View.VISIBLE);
+                        break;
+                    case Post.GALLERY_TYPE:
+                        ((PostCompactBaseViewHolder) holder).typeTextView.setText(R.string.gallery);
                         break;
                     case Post.TEXT_TYPE:
                         ((PostCompactBaseViewHolder) holder).typeTextView.setText(R.string.text);
@@ -2547,7 +2554,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         ImageView imageView;
         ImageView playButtonImageView;
         FrameLayout noPreviewLinkImageFrameLayout;
-        ImageView noPreviewLinkImageView;
         Barrier imageBarrier;
         ConstraintLayout bottomConstraintLayout;
         ImageView upvoteButton;
@@ -2598,7 +2604,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             this.imageView = imageView;
             this.playButtonImageView = playButtonImageView;
             this.noPreviewLinkImageFrameLayout = noPreviewLinkImageFrameLayout;
-            this.noPreviewLinkImageView = noPreviewLinkImageView;
             this.imageBarrier = imageBarrier;
             this.bottomConstraintLayout = bottomConstraintLayout;
             this.upvoteButton = upvoteButton;
@@ -2784,6 +2789,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             intent.putExtra(ViewVideoActivity.EXTRA_ID, post.getId());
                             intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, post.isNSFW());
                             mActivity.startActivity(intent);
+                            break;
+                        }
+                        case Post.GALLERY_TYPE: {
+                            Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
+                            intent.putExtra(ViewRedditGalleryActivity.EXTRA_REDDIT_GALLERY, post.getGallery());
+                            mActivity.startActivity(intent);
                         }
                     }
                 }
@@ -2796,15 +2807,21 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
                 Post post = getItem(position);
                 if (post != null) {
-                    Intent intent = new Intent(mActivity, LinkResolverActivity.class);
-                    Uri uri = Uri.parse(post.getUrl());
-                    if (uri.getScheme() == null && uri.getHost() == null) {
-                        intent.setData(LinkResolverActivity.getRedditUriByPath(post.getUrl()));
+                    if (post.getPostType() == Post.GALLERY_TYPE) {
+                        Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
+                        intent.putExtra(ViewRedditGalleryActivity.EXTRA_REDDIT_GALLERY, post.getGallery());
+                        mActivity.startActivity(intent);
                     } else {
-                        intent.setData(uri);
+                        Intent intent = new Intent(mActivity, LinkResolverActivity.class);
+                        Uri uri = Uri.parse(post.getUrl());
+                        if (uri.getScheme() == null && uri.getHost() == null) {
+                            intent.setData(LinkResolverActivity.getRedditUriByPath(post.getUrl()));
+                        } else {
+                            intent.setData(uri);
+                        }
+                        intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, post.isNSFW());
+                        mActivity.startActivity(intent);
                     }
-                    intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, post.isNSFW());
-                    mActivity.startActivity(intent);
                 }
             });
 

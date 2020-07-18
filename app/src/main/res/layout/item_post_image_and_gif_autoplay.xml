@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
     android:id="@+id/card_view_item_post_image_and_gif_autoplay"
@@ -31,7 +32,7 @@
 
             <TextView
                 android:id="@+id/subreddit_name_text_view_item_post_image_and_gif_autoplay"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="16dp"
@@ -41,23 +42,24 @@
                 app:layout_constraintBottom_toTopOf="@id/user_text_view_item_post_image_and_gif_autoplay"
                 app:layout_constraintStart_toEndOf="@id/icon_gif_image_view_item_post_image_and_gif_autoplay"
                 app:layout_constraintEnd_toStartOf="@id/stickied_post_image_view_item_post_image_and_gif_autoplay"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintHorizontal_bias="0" />
 
             <TextView
                 android:id="@+id/user_text_view_item_post_image_and_gif_autoplay"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="8dp"
                 android:textSize="?attr/font_default"
                 android:fontFamily="?attr/font_family"
-                android:maxLines="2"
-                android:ellipsize="end"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/icon_gif_image_view_item_post_image_and_gif_autoplay"
                 app:layout_constraintEnd_toStartOf="@id/stickied_post_image_view_item_post_image_and_gif_autoplay"
                 app:layout_constraintTop_toBottomOf="@+id/subreddit_name_text_view_item_post_image_and_gif_autoplay"
-                app:layout_constraintHorizontal_bias="0" />
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constrainedWidth="true" />
 
             <ImageView
                 android:id="@+id/stickied_post_image_view_item_post_image_and_gif_autoplay"
@@ -66,9 +68,9 @@
                 android:layout_marginEnd="8dp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/subreddit_name_text_view_item_post_image_and_gif_autoplay"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/post_time_text_view_item_post_image_and_gif_autoplay"

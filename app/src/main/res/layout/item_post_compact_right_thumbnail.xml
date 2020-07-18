@@ -24,7 +24,7 @@
 
         <TextView
             android:id="@+id/name_text_view_item_post_compact_right_thumbnail"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="16dp"
@@ -35,7 +35,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/stickied_post_image_view_item_post_compact_right_thumbnail"
             app:layout_constraintStart_toEndOf="@id/icon_gif_image_view_item_post_compact_right_thumbnail"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintHorizontal_bias="0" />
 
         <ImageView
             android:id="@+id/stickied_post_image_view_item_post_compact_right_thumbnail"
@@ -45,7 +47,6 @@
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintStart_toEndOf="@id/name_text_view_item_post_compact_right_thumbnail"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView

@@ -20,6 +20,7 @@ bin/
 gen/
 out/
 /app/release
+/app/minifiedRelease
 
 # Gradle files
 .gradle/

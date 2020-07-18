@@ -32,7 +32,7 @@
 
                 <TextView
                     android:id="@+id/author_text_view_item_post_comment"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:drawablePadding="4dp"
@@ -42,12 +42,12 @@
                     app:layout_constraintEnd_toStartOf="@+id/barrier"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintWidth_default="wrap"
+                    app:layout_constrainedWidth="true"
                     app:layout_constraintHorizontal_bias="0" />
 
                 <TextView
                     android:id="@+id/author_flair_text_view_item_post_comment"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:fontFamily="?attr/font_family"
@@ -58,7 +58,7 @@
                     app:layout_constraintHorizontal_bias="0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/author_text_view_item_post_comment"
-                    app:layout_constraintWidth_default="wrap"
+                    app:layout_constrainedWidth="true"
                     tools:visibility="visible" />
 
                 <TextView
