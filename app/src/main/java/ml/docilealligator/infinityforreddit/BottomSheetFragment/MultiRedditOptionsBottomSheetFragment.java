@@ -48,9 +48,11 @@ public class MultiRedditOptionsBottomSheetFragment extends RoundedBottomSheetDia
         MultiReddit multiReddit = getArguments().getParcelable(EXTRA_MULTI_REDDIT);
 
         editMultiRedditTextView.setOnClickListener(view -> {
-            Intent editIntent = new Intent(subscribedThingListingActivity, EditMultiRedditActivity.class);
-            editIntent.putExtra(EditMultiRedditActivity.EXTRA_MULTI_REDDIT, multiReddit);
-            startActivity(editIntent);
+            if (multiReddit != null) {
+                Intent editIntent = new Intent(subscribedThingListingActivity, EditMultiRedditActivity.class);
+                editIntent.putExtra(EditMultiRedditActivity.EXTRA_MULTI_PATH, multiReddit.getPath());
+                startActivity(editIntent);
+            }
             dismiss();
         });
 

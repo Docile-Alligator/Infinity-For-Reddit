@@ -39,7 +39,7 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String MULTIREDDIT_PATTERN = "/user/\\w+/m/\\w+/?";
     private static final String MULTIREDDIT_PATTERN_2 = "/[rR]/(\\w+\\+?)+/?";
     private static final String REDD_IT_POST_PATTERN = "/\\w+/?";
-    private static final String GFYCAT_PATTERN = "/[\\w-]+$";
+    private static final String GFYCAT_PATTERN = "(/ifr)?/[\\w-]+$";
     private static final String REDGIFS_PATTERN = "/watch/[\\w-]+$";
     private static final String IMGUR_GALLERY_PATTERN = "/gallery/\\w+/?";
     private static final String IMGUR_ALBUM_PATTERN = "/(album|a)/\\w+/?";
@@ -185,7 +185,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                         } else if (authority.contains("gfycat.com")) {
                             if (path.matches(GFYCAT_PATTERN)) {
                                 Intent intent = new Intent(this, ViewVideoActivity.class);
-                                intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, path.substring(1));
+                                intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, path.substring(path.lastIndexOf("/") + 1));
                                 intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
                                 intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, getIntent().getBooleanExtra(EXTRA_IS_NSFW, false));
                                 startActivity(intent);

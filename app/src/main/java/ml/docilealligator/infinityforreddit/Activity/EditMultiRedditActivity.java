@@ -42,7 +42,6 @@ import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 public class EditMultiRedditActivity extends BaseActivity {
-    public static final String EXTRA_MULTI_REDDIT = "EMR";
     public static final String EXTRA_MULTI_PATH = "EMP";
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 1;
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
@@ -126,7 +125,6 @@ public class EditMultiRedditActivity extends BaseActivity {
                 bindView();
             }
         } else {
-            multiReddit = getIntent().getParcelableExtra(EXTRA_MULTI_REDDIT);
             multipath = getIntent().getStringExtra(EXTRA_MULTI_PATH);
             getCurrentAccountAndBindView();
         }
