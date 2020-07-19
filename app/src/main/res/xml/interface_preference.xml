@@ -24,12 +24,12 @@
         app:title="@string/settings_enable_bottom_app_bar_title"
         app:summary="@string/settings_enable_bottom_app_bar_summary" />
 
-    <PreferenceCategory
-        app:title="@string/settings_category_post_and_comment_title" />
-
     <Preference
         app:title="@string/settings_time_format_title"
         app:fragment="ml.docilealligator.infinityforreddit.Settings.TimeFormatPreferenceFragment" />
+
+    <PreferenceCategory
+        app:title="@string/settings_category_post_and_comment_title" />
 
     <SwitchPreference
         app:defaultValue="false"

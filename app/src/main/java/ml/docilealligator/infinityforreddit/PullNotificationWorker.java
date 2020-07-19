@@ -70,13 +70,6 @@ public class PullNotificationWorker extends Worker {
         try {
             List<Account> accounts = mRedditDataRoomDatabase.accountDao().getAllAccounts();
             int color = mCustomThemeWrapper.getColorPrimaryLightTheme();
-            NotificationManagerCompat testManager = NotificationUtils.getNotificationManager(context);
-            NotificationCompat.Builder test = NotificationUtils.buildNotification(testManager,
-                    context, "Test", "Test body", "Test summary",
-                    NotificationUtils.CHANNEL_ID_NEW_MESSAGES,
-                    NotificationUtils.CHANNEL_NEW_MESSAGES,
-                    NotificationUtils.getAccountGroupName("Test"), color);
-            testManager.notify(9765, test.build());
             for (int accountIndex = 0; accountIndex < accounts.size(); accountIndex++) {
                 Account account = accounts.get(accountIndex);
 
