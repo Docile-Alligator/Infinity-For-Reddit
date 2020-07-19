@@ -9,6 +9,8 @@
 ## Preferences reflection
 -keep class * extends androidx.preference.PreferenceFragmentCompat
 
+-keep class ml.docilealligator.infinityforreddit.Settings.FontPreviewFragment { *; }
+
 ## EventBus Rules
 -keepattributes *Annotation*
 -keepclassmembers class * {
