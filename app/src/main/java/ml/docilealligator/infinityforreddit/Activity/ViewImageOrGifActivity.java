@@ -131,7 +131,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         actionBar.setHomeAsUpIndicator(upArrow);
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
 
-        Slidr.attach(this, new SlidrConfig.Builder().position(SlidrPosition.VERTICAL).build());
+        Slidr.attach(this, new SlidrConfig.Builder().position(SlidrPosition.VERTICAL).distanceThreshold(0.125f).build());
 
         mediaDownloader = new MediaDownloaderImpl();
 
