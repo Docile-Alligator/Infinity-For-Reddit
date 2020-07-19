@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,10 +13,12 @@ import android.view.MenuItem;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.r0adkll.slidr.Slidr;
@@ -40,6 +43,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -47,10 +51,14 @@ import retrofit2.Retrofit;
 
 public class LoginActivity extends BaseActivity {
 
+    @BindView(R.id.coordinator_layout_login_activity)
+    CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_login_activity)
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_login_activity)
     Toolbar toolbar;
+    @BindView(R.id.two_fa_infO_text_view_login_activity)
+    TextView twoFAInfoTextView;
     @BindView(R.id.webview_login_activity)
     WebView webView;
     @Inject
@@ -95,7 +103,6 @@ public class LoginActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setDomStorageEnabled(true);
 
         Uri baseUri = Uri.parse(APIUtils.OAUTH_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
@@ -223,7 +230,11 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        twoFAInfoTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+        Drawable infoDrawable = Utils.getTintedDrawable(this, R.drawable.ic_info_preference_24dp, mCustomThemeWrapper.getPrimaryIconColor());
+        twoFAInfoTextView.setCompoundDrawablesWithIntrinsicBounds(infoDrawable, null, null, null);
     }
 
     @Override

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/coordinator_layout_login_activity"
     tools:application="ml.docilealligator.infinityforreddit.Activity.LoginActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -22,10 +23,28 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ml.docilealligator.infinityforreddit.CustomView.LollipopBugFixedWebView
-        android:id="@+id/webview_login_activity"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:id="@+id/two_fa_infO_text_view_login_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:drawablePadding="32dp"
+            android:text="@string/login_activity_2fa_prompt"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
+
+        <ml.docilealligator.infinityforreddit.CustomView.LollipopBugFixedWebView
+            android:id="@+id/webview_login_activity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

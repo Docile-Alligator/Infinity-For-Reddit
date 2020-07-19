@@ -847,7 +847,7 @@
     <string name="load_video_in_redgifs">Try loading the video on Redgifs</string>
 
     <string name="top_score">%1$s pts</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="login_activity_2fa_prompt">If you have 2-factor authentication enabled, kindly type your password like the following: &lt;password&gt;:&lt;2FA code&gt;.\nExample: yourpass:123456</string>
 
 </resources>

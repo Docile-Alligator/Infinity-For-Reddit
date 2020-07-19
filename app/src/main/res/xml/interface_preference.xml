@@ -30,7 +30,7 @@
     <Preference
         app:title="@string/settings_time_format_title"
         app:fragment="ml.docilealligator.infinityforreddit.Settings.TimeFormatPreferenceFragment" />
-    
+
     <SwitchPreference
         app:defaultValue="false"
         app:key="vote_buttons_on_the_right"
