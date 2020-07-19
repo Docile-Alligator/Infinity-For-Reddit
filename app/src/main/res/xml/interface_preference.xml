@@ -24,14 +24,25 @@
         app:title="@string/settings_enable_bottom_app_bar_title"
         app:summary="@string/settings_enable_bottom_app_bar_summary" />
 
+    <PreferenceCategory
+        app:title="@string/settings_category_post_and_comment_title" />
+
+    <Preference
+        app:title="@string/settings_time_format_title"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.TimeFormatPreferenceFragment" />
+    
     <SwitchPreference
         app:defaultValue="false"
         app:key="vote_buttons_on_the_right"
         app:title="@string/settings_vote_buttons_on_the_right_title" />
 
-    <Preference
-        app:title="@string/settings_time_format_title"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.TimeFormatPreferenceFragment" />
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="show_absolute_number_of_votes"
+        app:title="@string/settings_show_absolute_number_of_votes_title" />
+
+    <PreferenceCategory
+        app:title="@string/settings_category_post_title" />
 
     <ListPreference
         app:defaultValue="0"
@@ -50,6 +61,9 @@
         app:defaultValue="false"
         app:key="show_thumbnail_on_the_left_in_compact_layout"
         app:title="@string/settings_show_thumbnail_on_the_left_in_compact_layout" />
+
+    <PreferenceCategory
+        app:title="@string/settings_category_comment_title" />
 
     <SwitchPreference
         app:defaultValue="false"
@@ -75,10 +89,5 @@
         app:defaultValue="false"
         app:key="fully_collapse_comment"
         android:title="@string/settings_fully_collapse_comment_title" />
-
-    <SwitchPreference
-        app:defaultValue="true"
-        app:key="show_absolute_number_of_votes"
-        app:title="@string/settings_show_absolute_number_of_votes_title" />
 
 </PreferenceScreen>
