@@ -35,13 +35,13 @@ public class APIUtils {
     public static final String DURATION_KEY = "duration";
     public static final String DURATION = "permanent";
     public static final String SCOPE_KEY = "scope";
-    public static final String SCOPE = "identity edit flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread";
+    public static final String SCOPE = "identity edit flair history modconfig modflair modlog modposts modwiki mysubreddits privatemessages read report save submit subscribe vote wikiedit wikiread creddits modcontributors modmail modothers livemanage account modself";
     public static final String ACCESS_TOKEN_KEY = "access_token";
 
     public static final String AUTHORIZATION_KEY = "Authorization";
     public static final String AUTHORIZATION_BASE = "bearer ";
     public static final String USER_AGENT_KEY = "User-Agent";
-    public static final String USER_AGENT = "android:ml.docilealligator.infinityforreddit:v3.2.0 (by /u/Hostilenemy)";
+    public static final String USER_AGENT = "android:ml.docilealligator.infinityforreddit:v4.0.1 (by /u/Hostilenemy)";
 
     public static final String GRANT_TYPE_KEY = "grant_type";
     public static final String GRANT_TYPE_REFRESH_TOKEN = "refresh_token";
@@ -94,6 +94,8 @@ public class APIUtils {
 
     public static final String SUBJECT_KEY = "subject";
     public static final String TO_KEY = "to";
+
+    public static final String NAME_KEY = "name";
 
     public static Map<String, String> getHttpBasicAuthHeader() {
         Map<String, String> params = new HashMap<>();

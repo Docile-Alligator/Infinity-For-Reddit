@@ -131,6 +131,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
                 if (view != null) {
                     view.setMinimumDpi(80);
+                    view.setQuickScaleEnabled(true);
 
                     view.setOnImageEventListener(new SubsamplingScaleImageView.OnImageEventListener() {
                         @Override

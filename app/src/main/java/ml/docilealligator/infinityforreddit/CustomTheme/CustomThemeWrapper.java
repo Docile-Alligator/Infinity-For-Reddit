@@ -409,7 +409,7 @@ public class CustomThemeWrapper {
 
     public int getAwardedCommentBackgroundColor() {
         return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.AWARDED_COMMENT_BACKGROUND_COLOR,
-                getDefaultColor("#FFF162", "#FF6400", "#FF6400"));
+                getDefaultColor("#FFFFFF", "#242424", "#000000"));
     }
 
     public int getNavBarColor() {
@@ -550,7 +550,7 @@ public class CustomThemeWrapper {
         customTheme.sentMessageBackgroundColor = Color.parseColor("#31BF7D");
         customTheme.sendMessageIconColor = Color.parseColor("#4185F4");
         customTheme.fullyCollapsedCommentBackgroundColor = Color.parseColor("#8EDFBA");
-        customTheme.awardedCommentBackgroundColor = Color.parseColor("#FFF162");
+        customTheme.awardedCommentBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.navBarColor = Color.parseColor("#FFFFFF");
         customTheme.isLightStatusBar = false;
         customTheme.isLightNavBar = true;
@@ -635,7 +635,7 @@ public class CustomThemeWrapper {
         customTheme.sentMessageBackgroundColor = Color.parseColor("#31BF7D");
         customTheme.sendMessageIconColor = Color.parseColor("#4185F4");
         customTheme.fullyCollapsedCommentBackgroundColor = Color.parseColor("#21C561");
-        customTheme.awardedCommentBackgroundColor = Color.parseColor("#FF6400");
+        customTheme.awardedCommentBackgroundColor = Color.parseColor("#242424");
         customTheme.navBarColor = Color.parseColor("#121212");
         customTheme.isLightStatusBar = false;
         customTheme.isLightNavBar = false;
@@ -720,7 +720,7 @@ public class CustomThemeWrapper {
         customTheme.sentMessageBackgroundColor = Color.parseColor("#31BF7D");
         customTheme.sendMessageIconColor = Color.parseColor("#4185F4");
         customTheme.fullyCollapsedCommentBackgroundColor = Color.parseColor("#21C561");
-        customTheme.awardedCommentBackgroundColor = Color.parseColor("#FF6400");
+        customTheme.awardedCommentBackgroundColor = Color.parseColor("#000000");
         customTheme.navBarColor = Color.parseColor("#000000");
         customTheme.isLightStatusBar = false;
         customTheme.isLightNavBar = false;
@@ -805,7 +805,7 @@ public class CustomThemeWrapper {
         customTheme.sentMessageBackgroundColor = Color.parseColor("#31BF7D");
         customTheme.sendMessageIconColor = Color.parseColor("#4185F4");
         customTheme.fullyCollapsedCommentBackgroundColor = Color.parseColor("#8EDFBA");
-        customTheme.awardedCommentBackgroundColor = Color.parseColor("#FFF162");
+        customTheme.awardedCommentBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.navBarColor = Color.parseColor("#FFFFFF");
         customTheme.isLightStatusBar = true;
         customTheme.isLightNavBar = true;
@@ -890,7 +890,7 @@ public class CustomThemeWrapper {
         customTheme.sentMessageBackgroundColor = Color.parseColor("#31BF7D");
         customTheme.sendMessageIconColor = Color.parseColor("#4185F4");
         customTheme.fullyCollapsedCommentBackgroundColor = Color.parseColor("#21C561");
-        customTheme.awardedCommentBackgroundColor = Color.parseColor("#FF6400");
+        customTheme.awardedCommentBackgroundColor = Color.parseColor("#242424");
         customTheme.navBarColor = Color.parseColor("#121212");
         customTheme.isLightStatusBar = false;
         customTheme.isLightNavBar = false;
@@ -975,7 +975,7 @@ public class CustomThemeWrapper {
         customTheme.sentMessageBackgroundColor = Color.parseColor("#31BF7D");
         customTheme.sendMessageIconColor = Color.parseColor("#4185F4");
         customTheme.fullyCollapsedCommentBackgroundColor = Color.parseColor("#21C561");
-        customTheme.awardedCommentBackgroundColor = Color.parseColor("#FF6400");
+        customTheme.awardedCommentBackgroundColor = Color.parseColor("#000000");
         customTheme.navBarColor = Color.parseColor("#000000");
         customTheme.isLightStatusBar = false;
         customTheme.isLightNavBar = false;
@@ -1060,7 +1060,7 @@ public class CustomThemeWrapper {
         customTheme.sentMessageBackgroundColor = Color.parseColor("#31BF7D");
         customTheme.sendMessageIconColor = Color.parseColor("#4185F4");
         customTheme.fullyCollapsedCommentBackgroundColor = Color.parseColor("#8EDFBA");
-        customTheme.awardedCommentBackgroundColor = Color.parseColor("#FFF162");
+        customTheme.awardedCommentBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.navBarColor = Color.parseColor("#FFFFFF");
         customTheme.isLightStatusBar = false;
         customTheme.isLightNavBar = true;
@@ -1145,7 +1145,7 @@ public class CustomThemeWrapper {
         customTheme.sentMessageBackgroundColor = Color.parseColor("#31BF7D");
         customTheme.sendMessageIconColor = Color.parseColor("#4185F4");
         customTheme.fullyCollapsedCommentBackgroundColor = Color.parseColor("#21C561");
-        customTheme.awardedCommentBackgroundColor = Color.parseColor("#FF6400");
+        customTheme.awardedCommentBackgroundColor = Color.parseColor("#242424");
         customTheme.navBarColor = Color.parseColor("#121212");
         customTheme.isLightStatusBar = false;
         customTheme.isLightNavBar = false;
@@ -1230,7 +1230,7 @@ public class CustomThemeWrapper {
         customTheme.sentMessageBackgroundColor = Color.parseColor("#31BF7D");
         customTheme.sendMessageIconColor = Color.parseColor("#4185F4");
         customTheme.fullyCollapsedCommentBackgroundColor = Color.parseColor("#21C561");
-        customTheme.awardedCommentBackgroundColor = Color.parseColor("#FF6400");
+        customTheme.awardedCommentBackgroundColor = Color.parseColor("#000000");
         customTheme.navBarColor = Color.parseColor("#000000");
         customTheme.isLightStatusBar = false;
         customTheme.isLightNavBar = false;
@@ -1315,7 +1315,7 @@ public class CustomThemeWrapper {
         customTheme.sentMessageBackgroundColor = Color.parseColor("#31BF7D");
         customTheme.sendMessageIconColor = Color.parseColor("#4185F4");
         customTheme.fullyCollapsedCommentBackgroundColor = Color.parseColor("#21C561");
-        customTheme.awardedCommentBackgroundColor = Color.parseColor("#FF6400");
+        customTheme.awardedCommentBackgroundColor = Color.parseColor("#393A59");
         customTheme.navBarColor = Color.parseColor("#393A59");
         customTheme.isLightStatusBar = false;
         customTheme.isLightNavBar = false;
@@ -1400,7 +1400,7 @@ public class CustomThemeWrapper {
         customTheme.sentMessageBackgroundColor = Color.parseColor("#31BF7D");
         customTheme.sendMessageIconColor = Color.parseColor("#4185F4");
         customTheme.fullyCollapsedCommentBackgroundColor = Color.parseColor("#8EDFBA");
-        customTheme.awardedCommentBackgroundColor = Color.parseColor("#FFF162");
+        customTheme.awardedCommentBackgroundColor = Color.parseColor("#C0F0F4");
         customTheme.navBarColor = Color.parseColor("#D48AE0");
         customTheme.isLightStatusBar = true;
         customTheme.isLightNavBar = true;

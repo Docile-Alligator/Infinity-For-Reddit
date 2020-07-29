@@ -6,8 +6,8 @@ android {
         applicationId "ml.docilealligator.infinityforreddit"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 36
-        versionName "4.0.0"
+        versionCode 37
+        versionName "4.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -94,10 +94,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'me.zhanghai.android.fastscroll:library:1.1.2'
     implementation "com.thefuntasty.hauler:core:3.1.0"
-    // androidX startup for auto-init
-    implementation "androidx.startup:startup-runtime:1.0.0-alpha01"
-    //crashy
-    implementation 'com.github.CraZyLegenD:Crashy:1.0.5'
     implementation 'com.github.Piasy:BigImageViewer:1.6.5'
 
     def toroVersion = '3.7.0.2010003'

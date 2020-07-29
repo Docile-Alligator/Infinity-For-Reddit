@@ -542,8 +542,6 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                     hideItem.setVisible(true);
                     hideItem.setTitle(R.string.action_hide_post);
                 }
-
-                mMenu.findItem(R.id.action_report_view_post_detail_activity).setVisible(true);
             } else {
                 saveItem.setVisible(false);
                 hideItem.setVisible(false);
@@ -1440,6 +1438,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 flairBottomSheetFragment.show(getSupportFragmentManager(), flairBottomSheetFragment.getTag());
                 return true;
             case R.id.action_report_view_post_detail_activity:
+                if (mAccessToken == null) {
+                    Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
                 Intent intent = new Intent(this, ReportActivity.class);
                 intent.putExtra(ReportActivity.EXTRA_SUBREDDIT_NAME, mPost.getSubredditName());
                 intent.putExtra(ReportActivity.EXTRA_THING_FULLNAME, mPost.getFullName());

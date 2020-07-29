@@ -312,4 +312,9 @@ public interface RedditAPI {
     @FormUrlEncoded
     @POST("/api/compose")
     Call<String> composePrivateMessage(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+
+    @FormUrlEncoded
+    @POST("api/block_user")
+    Call<String> blockUser(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }

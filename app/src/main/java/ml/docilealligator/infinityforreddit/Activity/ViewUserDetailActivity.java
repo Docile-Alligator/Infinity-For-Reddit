@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -56,29 +57,30 @@ import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.AsyncTask.CheckIsFollowingUserAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostLayoutBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.SortTimeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.UserThingSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.DeleteThing;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.User.FetchUserData;
 import ml.docilealligator.infinityforreddit.Fragment.CommentsListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
-import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostLayoutBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.BottomSheetFragment.SortTimeBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.BottomSheetFragment.UserThingSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.Message.ReadMessage;
 import ml.docilealligator.infinityforreddit.Post.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.Message.ReadMessage;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserDao;
+import ml.docilealligator.infinityforreddit.User.BlockUser;
+import ml.docilealligator.infinityforreddit.User.FetchUserData;
 import ml.docilealligator.infinityforreddit.User.UserDao;
 import ml.docilealligator.infinityforreddit.User.UserData;
-import ml.docilealligator.infinityforreddit.User.UserViewModel;
 import ml.docilealligator.infinityforreddit.User.UserFollowing;
+import ml.docilealligator.infinityforreddit.User.UserViewModel;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 import pl.droidsonroids.gif.GifImageView;
@@ -653,9 +655,43 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 }
                 return true;
             case R.id.action_send_private_message_view_user_detail_activity:
+                if (mAccessToken == null) {
+                    Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+
                 Intent pmIntent = new Intent(this, SendPrivateMessageActivity.class);
                 pmIntent.putExtra(SendPrivateMessageActivity.EXTRA_RECIPIENT_USERNAME, username);
                 startActivity(pmIntent);
+                return true;
+            case R.id.action_report_view_user_detail_activity:
+                Intent reportIntent = new Intent(this, LinkResolverActivity.class);
+                reportIntent.setData(Uri.parse("https://www.reddithelp.com/en/categories/rules-reporting/account-and-community-restrictions/what-should-i-do-if-i-see-something-i"));
+                startActivity(reportIntent);
+                return true;
+            case R.id.action_block_user_view_user_detail_activity:
+                if (mAccessToken == null) {
+                    Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+
+                new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                        .setTitle(R.string.block_user)
+                        .setMessage(R.string.are_you_sure)
+                        .setPositiveButton(R.string.yes, (dialogInterface, i)
+                                -> BlockUser.blockUser(mOauthRetrofit, mAccessToken, username, new BlockUser.BlockUserListener() {
+                            @Override
+                            public void success() {
+                                Toast.makeText(ViewUserDetailActivity.this, R.string.block_user_success, Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void failed() {
+                                Toast.makeText(ViewUserDetailActivity.this, R.string.block_user_failed, Toast.LENGTH_SHORT).show();
+                            }
+                        }))
+                        .setNegativeButton(R.string.no, null)
+                        .show();
                 return true;
         }
         return false;

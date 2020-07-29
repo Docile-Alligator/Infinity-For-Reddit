@@ -79,8 +79,7 @@
         android:id="@+id/action_report_view_post_detail_activity"
         android:orderInCategory="12"
         android:title="@string/action_report"
-        app:showAsAction="never"
-        android:visible="false"/>
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_see_removed_view_post_detail_activity"

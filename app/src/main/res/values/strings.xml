@@ -68,6 +68,7 @@
     <string name="action_see_removed">See Removed</string>
     <string name="action_set_wallpaper">Set as Wallpaper</string>
     <string name="action_send_private_message">Send Private Message</string>
+    <string name="action_block_user">Block User</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -441,8 +442,6 @@
     <string name="settings_subreddit_summary">r/Infinity_For_Reddit</string>
     <string name="settings_share_title">Share</string>
     <string name="settings_share_summary">Share this app to other people if you enjoy it</string>
-    <string name="settings_crash_reports_title">Crash Reports</string>
-    <string name="settings_crash_reports_summary">See the error logs and send them to me when you report bugs</string>
     <string name="settings_version_title">Infinity For Reddit</string>
     <string name="settings_version_summary">Version %s</string>
     <string name="settings_category_customization_title">Customization</string>
@@ -849,5 +848,9 @@
     <string name="top_score">%1$s pts</string>
 
     <string name="login_activity_2fa_prompt">If you have 2-factor authentication enabled, kindly type your password like the following: &lt;password&gt;:&lt;2FA code&gt;.\nExample: yourpass:123456</string>
+
+    <string name="block_user">Block User</string>
+    <string name="block_user_success">Blocked</string>
+    <string name="block_user_failed">Failed to block user</string>
 
 </resources>

@@ -213,6 +213,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
                 if (view != null) {
                     view.setMinimumDpi(80);
+                    view.setQuickScaleEnabled(true);
 
                     view.setOnImageEventListener(new SubsamplingScaleImageView.OnImageEventListener() {
                         @Override
