@@ -152,7 +152,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
         mSubredditListingRecyclerView.setAdapter(mAdapter);
 
-        SubredditListingViewModel.Factory factory = new SubredditListingViewModel.Factory(mRetrofit, query, sortType);
+        SubredditListingViewModel.Factory factory = new SubredditListingViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, query, sortType, accessToken);
         mSubredditListingViewModel = new ViewModelProvider(this, factory).get(SubredditListingViewModel.class);
         mSubredditListingViewModel.getSubreddits().observe(this, subredditData -> mAdapter.submitList(subredditData));
 

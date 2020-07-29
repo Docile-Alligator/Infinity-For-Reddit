@@ -2,9 +2,13 @@ package ml.docilealligator.infinityforreddit.Subreddit;
 
 import androidx.annotation.NonNull;
 
+import com.facebook.common.internal.ImmutableMap;
+
 import java.util.ArrayList;
+import java.util.Map;
 
 import ml.docilealligator.infinityforreddit.API.RedditAPI;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,11 +46,12 @@ public class FetchSubredditData {
         });
     }
 
-    static void fetchSubredditListingData(Retrofit retrofit, String query, String after, String sortType,
+    static void fetchSubredditListingData(Retrofit retrofit, String query, String after, String sortType, String accessToken,
                                           final FetchSubredditListingDataListener fetchSubredditListingDataListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
-        Call<String> subredditDataCall = api.searchSubreddits(query, after, sortType);
+        Map<String, String> headers = accessToken != null ?  APIUtils.getOAuthHeader(accessToken) : ImmutableMap.of();
+        Call<String> subredditDataCall = api.searchSubreddits(query, after, sortType, headers);
         subredditDataCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
