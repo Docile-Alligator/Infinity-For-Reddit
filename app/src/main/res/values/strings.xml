@@ -348,6 +348,8 @@
     <string name="settings_amoled_dark_title">Amoled Dark</string>
     <string name="settings_interface_title">Interface</string>
     <string name="settings_gestures_and_buttons_title">Gestures &amp; Buttons</string>
+    <string name="settings_save_post_feed_scrolled_position_title">Save Scrolled Position in Post Feed</string>
+    <string name="settings_save_post_feed_scrolled_position_summary">Browse new posts after refreshing</string>
     <string name="settings_open_link_in_app_title">Open Link In App</string>
     <string name="settigns_video_title">Video</string>
     <string name="settings_video_autoplay_title">Video Autoplay</string>

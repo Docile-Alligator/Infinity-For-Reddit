@@ -37,6 +37,12 @@
         app:useSimpleSummaryProvider="true" />
 
     <SwitchPreference
+        app:defaultValue="true"
+        app:key="save_post_feed_scrolled_position"
+        app:title="@string/settings_save_post_feed_scrolled_position_title"
+        app:summary="@string/settings_save_post_feed_scrolled_position_summary" />
+
+    <SwitchPreference
         app:defaultValue="false"
         app:icon="@drawable/ic_link"
         app:key="open_link_in_app"

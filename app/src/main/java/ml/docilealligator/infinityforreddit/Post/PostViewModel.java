@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit.Post;
 
+import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 import androidx.lifecycle.LiveData;
@@ -10,8 +12,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
-
-import com.fewlaps.quitnowcache.QNCache;
 
 import java.util.Locale;
 
@@ -29,10 +29,43 @@ public class PostViewModel extends ViewModel {
     private MutableLiveData<SortType> sortTypeLiveData;
     private NSFWAndSortTypeLiveData nsfwAndSortTypeLiveData;
 
-    public PostViewModel(Retrofit retrofit, String accessToken, String accountName, Locale locale, QNCache<String> cache,
+    public PostViewModel(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+                         SharedPreferences sharedPreferences, SharedPreferences cache, int postType,
+                         SortType sortType, int filter, boolean nsfw) {
+        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, accountName, locale,
+                sharedPreferences, cache, postType, sortType, filter, nsfw);
+
+        initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
+                PostDataSource::getInitialLoadStateLiveData);
+        paginationNetworkState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
+                PostDataSource::getPaginationNetworkStateLiveData);
+        hasPostLiveData = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
+                PostDataSource::hasPostLiveData);
+
+        nsfwLiveData = new MutableLiveData<>();
+        nsfwLiveData.postValue(nsfw);
+        sortTypeLiveData = new MutableLiveData<>();
+        sortTypeLiveData.postValue(sortType);
+
+        nsfwAndSortTypeLiveData = new NSFWAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
+
+        PagedList.Config pagedListConfig =
+                (new PagedList.Config.Builder())
+                        .setEnablePlaceholders(false)
+                        .setPageSize(25)
+                        .build();
+
+        posts = Transformations.switchMap(nsfwAndSortTypeLiveData, nsfwAndSort -> {
+            postDataSourceFactory.changeNSFWAndSortType(nsfwLiveData.getValue(), sortTypeLiveData.getValue());
+            return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
+        });
+    }
+
+    public PostViewModel(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+                         SharedPreferences sharedPreferences, SharedPreferences cache, String subredditName,
                          int postType, SortType sortType, int filter, boolean nsfw) {
-        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, accountName, locale, cache,
-                postType, sortType, filter, nsfw);
+        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, accountName, locale,
+                sharedPreferences, cache, subredditName, postType, sortType, filter, nsfw);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 PostDataSource::getInitialLoadStateLiveData);
@@ -60,42 +93,12 @@ public class PostViewModel extends ViewModel {
         });
     }
 
-    public PostViewModel(Retrofit retrofit, String accessToken, String accountName, Locale locale, QNCache<String> cache,
-                         String subredditName, int postType, SortType sortType, int filter, boolean nsfw) {
-        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, accountName, locale, cache,
-                subredditName, postType, sortType, filter, nsfw);
-
-        initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
-                PostDataSource::getInitialLoadStateLiveData);
-        paginationNetworkState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
-                PostDataSource::getPaginationNetworkStateLiveData);
-        hasPostLiveData = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
-                PostDataSource::hasPostLiveData);
-
-        nsfwLiveData = new MutableLiveData<>();
-        nsfwLiveData.postValue(nsfw);
-        sortTypeLiveData = new MutableLiveData<>();
-        sortTypeLiveData.postValue(sortType);
-
-        nsfwAndSortTypeLiveData = new NSFWAndSortTypeLiveData(nsfwLiveData, sortTypeLiveData);
-
-        PagedList.Config pagedListConfig =
-                (new PagedList.Config.Builder())
-                        .setEnablePlaceholders(false)
-                        .setPageSize(25)
-                        .build();
-
-        posts = Transformations.switchMap(nsfwAndSortTypeLiveData, nsfwAndSort -> {
-            postDataSourceFactory.changeNSFWAndSortType(nsfwLiveData.getValue(), sortTypeLiveData.getValue());
-            return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
-        });
-    }
-
-    public PostViewModel(Retrofit retrofit, String accessToken, String accountName, Locale locale, QNCache<String> cache,
-                         String subredditName, int postType, SortType sortType, String where, int filter,
+    public PostViewModel(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+                         SharedPreferences sharedPreferences, SharedPreferences cache, String subredditName,
+                         int postType, SortType sortType, String where, int filter,
                          boolean nsfw) {
-        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, accountName, locale, cache,
-                subredditName, postType, sortType, where, filter, nsfw);
+        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, accountName, locale,
+                sharedPreferences, cache, subredditName, postType, sortType, where, filter, nsfw);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 PostDataSource::getInitialLoadStateLiveData);
@@ -123,11 +126,12 @@ public class PostViewModel extends ViewModel {
         });
     }
 
-    public PostViewModel(Retrofit retrofit, String accessToken, String accountName, Locale locale, QNCache<String> cache,
-                         String subredditName, String query, int postType, SortType sortType, int filter,
+    public PostViewModel(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+                         SharedPreferences sharedPreferences, SharedPreferences cache, String subredditName,
+                         String query, int postType, SortType sortType, int filter,
                          boolean nsfw) {
-        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, accountName, locale, cache,
-                subredditName, query, postType, sortType, filter, nsfw);
+        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, accountName, locale,
+                sharedPreferences, cache, subredditName, query, postType, sortType, filter, nsfw);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 PostDataSource::getInitialLoadStateLiveData);
@@ -192,7 +196,8 @@ public class PostViewModel extends ViewModel {
         private String accessToken;
         private String accountName;
         private Locale locale;
-        private QNCache<String> cache;
+        private SharedPreferences sharedPreferences;
+        private SharedPreferences postFeedScrolledPositionSharedPreferences;
         private String subredditName;
         private String query;
         private int postType;
@@ -201,26 +206,30 @@ public class PostViewModel extends ViewModel {
         private int filter;
         private boolean nsfw;
 
-        public Factory(Retrofit retrofit, String accessToken, String accountName, Locale locale, QNCache<String> cache,
+        public Factory(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+                       SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                        int postType, SortType sortType, int filter, boolean nsfw) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.accountName = accountName;
             this.locale = locale;
-            this.cache = cache;
+            this.sharedPreferences = sharedPreferences;
+            this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
             this.postType = postType;
             this.sortType = sortType;
             this.filter = filter;
             this.nsfw = nsfw;
         }
 
-        public Factory(Retrofit retrofit, String accessToken, String accountName, Locale locale, QNCache<String> cache,
-                       String subredditName, int postType, SortType sortType, int filter, boolean nsfw) {
+        public Factory(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+                       SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences, String subredditName,
+                       int postType, SortType sortType, int filter, boolean nsfw) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.accountName = accountName;
             this.locale = locale;
-            this.cache = cache;
+            this.sharedPreferences = sharedPreferences;
+            this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
             this.subredditName = subredditName;
             this.postType = postType;
             this.sortType = sortType;
@@ -229,14 +238,16 @@ public class PostViewModel extends ViewModel {
         }
 
         //User posts
-        public Factory(Retrofit retrofit, String accessToken, String accountName, Locale locale, QNCache<String> cache,
-                       String subredditName, int postType, SortType sortType, String where, int filter,
+        public Factory(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+                       SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences, String subredditName,
+                       int postType, SortType sortType, String where, int filter,
                        boolean nsfw) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.accountName = accountName;
             this.locale = locale;
-            this.cache = cache;
+            this.sharedPreferences = sharedPreferences;
+            this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
             this.subredditName = subredditName;
             this.postType = postType;
             this.sortType = sortType;
@@ -245,14 +256,15 @@ public class PostViewModel extends ViewModel {
             this.nsfw = nsfw;
         }
 
-        public Factory(Retrofit retrofit, String accessToken, String accountName, Locale locale, QNCache<String> cache,
-                       String subredditName, String query, int postType, SortType sortType, int filter,
-                       boolean nsfw) {
+        public Factory(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+                       SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences, String subredditName,
+                       String query, int postType, SortType sortType, int filter, boolean nsfw) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.accountName = accountName;
             this.locale = locale;
-            this.cache = cache;
+            this.sharedPreferences = sharedPreferences;
+            this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
             this.subredditName = subredditName;
             this.query = query;
             this.postType = postType;
@@ -265,17 +277,17 @@ public class PostViewModel extends ViewModel {
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             if (postType == PostDataSource.TYPE_FRONT_PAGE) {
-                return (T) new PostViewModel(retrofit, accessToken, accountName, locale, cache, postType,
-                        sortType, filter, nsfw);
+                return (T) new PostViewModel(retrofit, accessToken, accountName, locale, sharedPreferences,
+                        postFeedScrolledPositionSharedPreferences, postType, sortType, filter, nsfw);
             } else if (postType == PostDataSource.TYPE_SEARCH) {
-                return (T) new PostViewModel(retrofit, accessToken, accountName, locale, cache, subredditName,
-                        query, postType, sortType, filter, nsfw);
+                return (T) new PostViewModel(retrofit, accessToken, accountName, locale, sharedPreferences,
+                        postFeedScrolledPositionSharedPreferences, subredditName, query, postType, sortType, filter, nsfw);
             } else if (postType == PostDataSource.TYPE_SUBREDDIT || postType == PostDataSource.TYPE_MULTI_REDDIT) {
-                return (T) new PostViewModel(retrofit, accessToken, accountName, locale, cache, subredditName,
-                        postType, sortType, filter, nsfw);
+                return (T) new PostViewModel(retrofit, accessToken, accountName, locale, sharedPreferences,
+                        postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType, filter, nsfw);
             } else {
-                return (T) new PostViewModel(retrofit, accessToken, accountName, locale, cache, subredditName,
-                        postType, sortType, userWhere, filter, nsfw);
+                return (T) new PostViewModel(retrofit, accessToken, accountName, locale, sharedPreferences,
+                        postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType, userWhere, filter, nsfw);
             }
         }
     }

@@ -73,6 +73,13 @@ public class SharedPreferencesUtils {
     public static final int POST_LAYOUT_CARD = 0;
     public static final int POST_LAYOUT_COMPACT = 1;
 
+    public static final String POST_FEED_SCROLLED_POSITION_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.post_feed_scrolled_position";
+    public static final String POST_FEED_SCROLLED_POSITION_FRONT_PAGE_BASE = "_front_page";
+    public static final String POST_FEED_SCROLLED_POSITION_SUBREDDIT_BASE = "_subreddit_";
+    public static final String POST_FEED_SCROLLED_POSITION_USER_BASE = "_user_";
+    public static final String POST_FEED_SCROLLED_POSITION_MULTI_REDDIT_BASE = "_multireddit_";
+    public static final String POST_FEED_SCROLLED_POSITION_ANONYMOUS = ".anonymous";
+
     public static final String PULL_NOTIFICATION_TIME = "pull_notification_time";
     public static final String SHOW_ELAPSED_TIME_KEY = "show_elapsed_time";
     public static final String TIME_FORMAT_KEY = "time_format";
@@ -132,4 +139,5 @@ public class SharedPreferencesUtils {
     public static final String START_AUTOPLAY_VISIBLE_AREA_OFFSET_LANDSCAPE = "start_autoplay_visible_area_offset_landscape";
     public static final String MUTE_NSFW_VIDEO = "mute_nsfw_video";
     public static final String VIDEO_PLAYER_IGNORE_NAV_BAR = "video_player_ignore_nav_bar";
+    public static final String SAVE_POST_FEED_SCROLLED_POSITION = "save_post_feed_scrolled_position";
 }

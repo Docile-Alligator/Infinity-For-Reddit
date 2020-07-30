@@ -1,10 +1,10 @@
 package ml.docilealligator.infinityforreddit.Post;
 
+import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
-
-import com.fewlaps.quitnowcache.QNCache;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -15,7 +15,7 @@ import ml.docilealligator.infinityforreddit.API.RedditAPI;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.Utils.APIUtils;
-import ml.docilealligator.infinityforreddit.Utils.CacheUtils;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -39,7 +39,8 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     private String accessToken;
     private String accountName;
     private Locale locale;
-    private QNCache<String> cache;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences postFeedScrolledPositionSharedPreferences;
     private String subredditOrUserName;
     private String query;
     private int postType;
@@ -57,13 +58,15 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     private LoadParams<String> params;
     private LoadCallback<String, Post> callback;
 
-    PostDataSource(Retrofit retrofit, String accessToken, String accountName, Locale locale, QNCache<String> cache,
-                   int postType, SortType sortType, int filter, boolean nsfw) {
+    PostDataSource(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+                   SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences, int postType,
+                   SortType sortType, int filter, boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
         this.locale = locale;
-        this.cache = cache;
+        this.sharedPreferences = sharedPreferences;
+        this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
         paginationNetworkStateLiveData = new MutableLiveData<>();
         initialLoadStateLiveData = new MutableLiveData<>();
         hasPostLiveData = new MutableLiveData<>();
@@ -74,13 +77,15 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
-    PostDataSource(Retrofit retrofit, String accessToken, String accountName, Locale locale, QNCache<String> cache,
-                   String path, int postType, SortType sortType, int filter, boolean nsfw) {
+    PostDataSource(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+                   SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences, String path, int postType,
+                   SortType sortType, int filter, boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
         this.locale = locale;
-        this.cache = cache;
+        this.sharedPreferences = sharedPreferences;
+        this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
         if (postType == TYPE_SUBREDDIT) {
             this.subredditOrUserName = path;
         } else {
@@ -112,14 +117,15 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
-    PostDataSource(Retrofit retrofit, String accessToken, String accountName, Locale locale, QNCache<String> cache,
-                   String subredditOrUserName, int postType, SortType sortType, String where, int filter,
-                   boolean nsfw) {
+    PostDataSource(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+                   SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences, String subredditOrUserName,
+                   int postType, SortType sortType, String where, int filter, boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
         this.locale = locale;
-        this.cache = cache;
+        this.sharedPreferences = sharedPreferences;
+        this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
         this.subredditOrUserName = subredditOrUserName;
         paginationNetworkStateLiveData = new MutableLiveData<>();
         initialLoadStateLiveData = new MutableLiveData<>();
@@ -132,14 +138,15 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
-    PostDataSource(Retrofit retrofit, String accessToken, String accountName, Locale locale, QNCache<String> cache,
-                   String subredditOrUserName, String query, int postType, SortType sortType, int filter,
-                   boolean nsfw) {
+    PostDataSource(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+                   SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences, String subredditOrUserName,
+                   String query, int postType, SortType sortType, int filter, boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
         this.locale = locale;
-        this.cache = cache;
+        this.sharedPreferences = sharedPreferences;
+        this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
         this.subredditOrUserName = subredditOrUserName;
         this.query = query;
         paginationNetworkStateLiveData = new MutableLiveData<>();
@@ -168,22 +175,39 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull final LoadInitialCallback<String, Post> callback) {
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
-        String accountNameForCache = accountName == null ? CacheUtils.ANONYMOUS : accountName;
+        boolean savePostFeedScrolledPosition = sharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_POST_FEED_SCROLLED_POSITION, true);
+        String accountNameForCache = accountName == null ? SharedPreferencesUtils.POST_FEED_SCROLLED_POSITION_ANONYMOUS : accountName;
         switch (postType) {
             case TYPE_FRONT_PAGE:
-                loadBestPostsInitial(callback, cache.get(accountNameForCache + CacheUtils.FRONT_PAGE_BASE));
+                if (savePostFeedScrolledPosition) {
+                    loadBestPostsInitial(callback, postFeedScrolledPositionSharedPreferences.getString(accountNameForCache + SharedPreferencesUtils.POST_FEED_SCROLLED_POSITION_FRONT_PAGE_BASE, null));
+                } else {
+                    loadBestPostsInitial(callback, null);
+                }
                 break;
             case TYPE_SUBREDDIT:
-                loadSubredditPostsInitial(callback, cache.get(accountNameForCache + CacheUtils.SUBREDDIT_BASE + subredditOrUserName));
+                if (savePostFeedScrolledPosition) {
+                    loadSubredditPostsInitial(callback, postFeedScrolledPositionSharedPreferences.getString(accountNameForCache + SharedPreferencesUtils.POST_FEED_SCROLLED_POSITION_SUBREDDIT_BASE + subredditOrUserName, null));
+                } else {
+                    loadSubredditPostsInitial(callback, null);
+                }
                 break;
             case TYPE_USER:
-                loadUserPostsInitial(callback, cache.get(accountNameForCache + CacheUtils.USER_BASE + subredditOrUserName));
+                if (savePostFeedScrolledPosition) {
+                    loadUserPostsInitial(callback, postFeedScrolledPositionSharedPreferences.getString(accountNameForCache + SharedPreferencesUtils.POST_FEED_SCROLLED_POSITION_USER_BASE + subredditOrUserName, null));
+                } else {
+                    loadUserPostsInitial(callback, null);
+                }
                 break;
             case TYPE_SEARCH:
                 loadSearchPostsInitial(callback, null);
                 break;
             case TYPE_MULTI_REDDIT:
-                loadMultiRedditPostsInitial(callback, cache.get(accountNameForCache + CacheUtils.MULTI_REDDIT_BASE + multiRedditPath));
+                if (savePostFeedScrolledPosition) {
+                    loadMultiRedditPostsInitial(callback, postFeedScrolledPositionSharedPreferences.getString(accountNameForCache + SharedPreferencesUtils.POST_FEED_SCROLLED_POSITION_MULTI_REDDIT_BASE + multiRedditPath, null));
+                } else {
+                    loadMultiRedditPostsInitial(callback, null);
+                }
                 break;
         }
     }

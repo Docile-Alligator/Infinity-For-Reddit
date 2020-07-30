@@ -95,7 +95,6 @@ dependencies {
     implementation 'me.zhanghai.android.fastscroll:library:1.1.2'
     implementation "com.thefuntasty.hauler:core:3.1.0"
     implementation 'com.github.Piasy:BigImageViewer:1.6.5'
-    implementation 'com.fewlaps.quitnowcache:quitnow-cache:3.4.0'
 
     def toroVersion = '3.7.0.2010003'
     implementation "im.ene.toro3:toro:$toroVersion"

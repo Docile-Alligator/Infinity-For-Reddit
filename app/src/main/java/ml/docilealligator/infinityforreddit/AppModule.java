@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
-import com.fewlaps.quitnowcache.QNCache;
 import com.google.android.exoplayer2.database.ExoDatabaseProvider;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
@@ -24,8 +23,8 @@ import im.ene.toro.exoplayer.ExoCreator;
 import im.ene.toro.exoplayer.MediaSourceBuilder;
 import im.ene.toro.exoplayer.ToroExo;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.Utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.APIUtils;
+import ml.docilealligator.infinityforreddit.Utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
@@ -201,6 +200,12 @@ class AppModule {
     }
 
     @Provides
+    @Named("post_feed_scrolled_position_cache")
+    SharedPreferences providePostFeedScrolledPositionSharedPreferences() {
+        return mApplication.getSharedPreferences(SharedPreferencesUtils.POST_LAYOUT_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+    }
+
+    @Provides
     @Singleton
     CustomThemeWrapper provideCustomThemeWrapper(@Named("light_theme") SharedPreferences lightThemeSharedPreferences,
                                                  @Named("dark_theme") SharedPreferences darkThemeSharedPreferences,
@@ -216,11 +221,5 @@ class AppModule {
         Config config = new Config.Builder(mApplication).setMediaSourceBuilder(MediaSourceBuilder.LOOPING).setCache(cache)
                 .build();
         return ToroExo.with(mApplication).getCreator(config);
-    }
-
-    @Provides
-    @Singleton
-    QNCache<String> provideQNCache() {
-        return new QNCache.Builder().build();
     }
 }
