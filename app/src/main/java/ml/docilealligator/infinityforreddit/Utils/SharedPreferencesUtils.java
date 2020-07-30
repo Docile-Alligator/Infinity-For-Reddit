@@ -119,6 +119,7 @@ public class SharedPreferencesUtils {
     public static final String DELETE_ALL_SORT_TYPE_DATA_IN_DATABASE = "delete_all_sort_type_data_in_database";
     public static final String DELETE_ALL_POST_LAYOUT_DATA_IN_DATABASE = "delete_all_post_layout_data_in_database";
     public static final String DELETE_ALL_THEMES_IN_DATABASE = "delete_all_themes_in_database";
+    public static final String DELETE_POST_FEED_SCROLLED_POSITIONS_IN_DATABASE = "delete_post_feed_scrolled_positions_in_database";
     public static final String RESET_ALL_SETTINGS = "reset_all_settings";
     public static final String MAIN_PAGE_TAB_1_TITLE = "main_page_tab_1_title";
     public static final String MAIN_PAGE_TAB_2_TITLE = "main_page_tab_2_title";

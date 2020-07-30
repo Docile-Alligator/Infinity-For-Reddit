@@ -53,6 +53,9 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
     @Named("dark_theme")
     SharedPreferences darkThemeSharedPreferences;
     @Inject
+    @Named("post_feed_scrolled_position_cache")
+    SharedPreferences postFeedScrolledPositionSharedPreferences;
+    @Inject
     @Named("amoled_theme")
     SharedPreferences amoledThemeSharedPreferences;
     private Activity activity;
@@ -68,6 +71,7 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
         Preference deleteSortTypePreference = findPreference(SharedPreferencesUtils.DELETE_ALL_SORT_TYPE_DATA_IN_DATABASE);
         Preference deletePostLaoutPreference = findPreference(SharedPreferencesUtils.DELETE_ALL_POST_LAYOUT_DATA_IN_DATABASE);
         Preference deleteAllThemesPreference = findPreference(SharedPreferencesUtils.DELETE_ALL_THEMES_IN_DATABASE);
+        Preference deletePostFeedScrolledPositionsPreference = findPreference(SharedPreferencesUtils.DELETE_POST_FEED_SCROLLED_POSITIONS_IN_DATABASE);
         Preference resetAllSettingsPreference = findPreference(SharedPreferencesUtils.RESET_ALL_SETTINGS);
 
         if (deleteSubredditsPreference != null) {
@@ -136,6 +140,21 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
                                     Toast.makeText(activity, R.string.delete_all_themes_success, Toast.LENGTH_SHORT).show();
                                     EventBus.getDefault().post(new RecreateActivityEvent());
                                 }).execute())
+                        .setNegativeButton(R.string.no, null)
+                        .show();
+                return true;
+            });
+        }
+
+        if (deletePostFeedScrolledPositionsPreference != null) {
+            deletePostFeedScrolledPositionsPreference.setOnPreferenceClickListener(preference -> {
+                new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+                        .setTitle(R.string.are_you_sure)
+                        .setPositiveButton(R.string.yes, (dialogInterface, i)
+                                -> {
+                            postFeedScrolledPositionSharedPreferences.edit().clear().apply();
+                            Toast.makeText(activity, R.string.delete_all_post_feed_scrolled_positions_success, Toast.LENGTH_SHORT).show();
+                        })
                         .setNegativeButton(R.string.no, null)
                         .show();
                 return true;
