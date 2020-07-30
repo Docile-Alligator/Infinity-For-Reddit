@@ -58,6 +58,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
+    private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String FRAGMENT_OUT_STATE = "FOS";
 
     @BindView(R.id.coordinator_layout_filtered_thing_activity)
@@ -81,6 +82,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
     private boolean isInLazyMode = false;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
+    private String mAccountName;
     private String name;
     private String userWhere;
     private int postType;
@@ -148,6 +150,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
+            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
 
             mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_filtered_posts_activity, mFragment).commit();
@@ -195,6 +198,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
+                mAccountName = account.getUsername();
             }
             bindView(filter, true);
         }).execute();
@@ -291,6 +295,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
             bundle.putInt(PostFragment.EXTRA_POST_TYPE, postType);
             bundle.putInt(PostFragment.EXTRA_FILTER, filter);
             bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+            bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
             if (postType == PostDataSource.TYPE_USER) {
                 bundle.putString(PostFragment.EXTRA_USER_NAME, name);
                 bundle.putString(PostFragment.EXTRA_USER_WHERE, userWhere);
@@ -393,6 +398,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
         getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE, mFragment);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
+        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
     }
 

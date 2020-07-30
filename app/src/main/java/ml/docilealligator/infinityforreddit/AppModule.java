@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
+import com.fewlaps.quitnowcache.QNCache;
 import com.google.android.exoplayer2.database.ExoDatabaseProvider;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
@@ -215,5 +216,11 @@ class AppModule {
         Config config = new Config.Builder(mApplication).setMediaSourceBuilder(MediaSourceBuilder.LOOPING).setCache(cache)
                 .build();
         return ToroExo.with(mApplication).getCreator(config);
+    }
+
+    @Provides
+    @Singleton
+    QNCache<String> provideQNCache() {
+        return new QNCache.Builder().build();
     }
 }

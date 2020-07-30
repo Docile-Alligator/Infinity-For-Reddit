@@ -945,6 +945,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     bundle.putString(PostFragment.EXTRA_NAME, "popular");
                     bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                     bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                    bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                     fragment.setArguments(bundle);
                     return fragment;
                 } else {
@@ -954,6 +955,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     bundle.putString(PostFragment.EXTRA_NAME, "all");
                     bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                     bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                    bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                     fragment.setArguments(bundle);
                     return fragment;
                 }
@@ -981,6 +983,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_FRONT_PAGE);
                 bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                 fragment.setArguments(bundle);
                 return fragment;
             } else if (postType.equals(SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_ALL)) {
@@ -990,6 +993,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 bundle.putString(PostFragment.EXTRA_NAME, "all");
                 bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                 fragment.setArguments(bundle);
                 return fragment;
             } else if (postType.equals(SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_SUBREDDIT)) {
@@ -999,6 +1003,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 bundle.putString(PostFragment.EXTRA_NAME, name);
                 bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                 fragment.setArguments(bundle);
                 return fragment;
             } else if (postType.equals(SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_MULTIREDDIT)) {
@@ -1008,6 +1013,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_MULTI_REDDIT);
                 bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                 fragment.setArguments(bundle);
                 return fragment;
             } else if (postType.equals(SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_USER)) {
@@ -1018,6 +1024,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 bundle.putString(PostFragment.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_SUBMITTED);
                 bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                 fragment.setArguments(bundle);
                 return fragment;
             } else {
@@ -1027,6 +1034,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 bundle.putString(PostFragment.EXTRA_NAME, "popular");
                 bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                 fragment.setArguments(bundle);
                 return fragment;
             }

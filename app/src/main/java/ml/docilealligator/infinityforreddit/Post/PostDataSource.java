@@ -4,15 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
 
+import com.fewlaps.quitnowcache.QNCache;
+
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 
-import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.API.RedditAPI;
+import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.Utils.APIUtils;
+import ml.docilealligator.infinityforreddit.Utils.CacheUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -34,7 +37,9 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
 
     private Retrofit retrofit;
     private String accessToken;
+    private String accountName;
     private Locale locale;
+    private QNCache<String> cache;
     private String subredditOrUserName;
     private String query;
     private int postType;
@@ -52,11 +57,13 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     private LoadParams<String> params;
     private LoadCallback<String, Post> callback;
 
-    PostDataSource(Retrofit retrofit, String accessToken, Locale locale, int postType, SortType sortType,
-                   int filter, boolean nsfw) {
+    PostDataSource(Retrofit retrofit, String accessToken, String accountName, Locale locale, QNCache<String> cache,
+                   int postType, SortType sortType, int filter, boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
+        this.accountName = accountName;
         this.locale = locale;
+        this.cache = cache;
         paginationNetworkStateLiveData = new MutableLiveData<>();
         initialLoadStateLiveData = new MutableLiveData<>();
         hasPostLiveData = new MutableLiveData<>();
@@ -67,11 +74,13 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
-    PostDataSource(Retrofit retrofit, String accessToken, Locale locale, String path, int postType,
-                   SortType sortType, int filter, boolean nsfw) {
+    PostDataSource(Retrofit retrofit, String accessToken, String accountName, Locale locale, QNCache<String> cache,
+                   String path, int postType, SortType sortType, int filter, boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
+        this.accountName = accountName;
         this.locale = locale;
+        this.cache = cache;
         if (postType == TYPE_SUBREDDIT) {
             this.subredditOrUserName = path;
         } else {
@@ -103,11 +112,14 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
-    PostDataSource(Retrofit retrofit, String accessToken, Locale locale, String subredditOrUserName, int postType,
-                   SortType sortType, String where, int filter, boolean nsfw) {
+    PostDataSource(Retrofit retrofit, String accessToken, String accountName, Locale locale, QNCache<String> cache,
+                   String subredditOrUserName, int postType, SortType sortType, String where, int filter,
+                   boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
+        this.accountName = accountName;
         this.locale = locale;
+        this.cache = cache;
         this.subredditOrUserName = subredditOrUserName;
         paginationNetworkStateLiveData = new MutableLiveData<>();
         initialLoadStateLiveData = new MutableLiveData<>();
@@ -120,11 +132,14 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
-    PostDataSource(Retrofit retrofit, String accessToken, Locale locale, String subredditOrUserName, String query,
-                   int postType, SortType sortType, int filter, boolean nsfw) {
+    PostDataSource(Retrofit retrofit, String accessToken, String accountName, Locale locale, QNCache<String> cache,
+                   String subredditOrUserName, String query, int postType, SortType sortType, int filter,
+                   boolean nsfw) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
+        this.accountName = accountName;
         this.locale = locale;
+        this.cache = cache;
         this.subredditOrUserName = subredditOrUserName;
         this.query = query;
         paginationNetworkStateLiveData = new MutableLiveData<>();
@@ -153,21 +168,22 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull final LoadInitialCallback<String, Post> callback) {
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
+        String accountNameForCache = accountName == null ? CacheUtils.ANONYMOUS : accountName;
         switch (postType) {
             case TYPE_FRONT_PAGE:
-                loadBestPostsInitial(callback, null);
+                loadBestPostsInitial(callback, cache.get(accountNameForCache + CacheUtils.FRONT_PAGE_BASE));
                 break;
             case TYPE_SUBREDDIT:
-                loadSubredditPostsInitial(callback, null);
+                loadSubredditPostsInitial(callback, cache.get(accountNameForCache + CacheUtils.SUBREDDIT_BASE + subredditOrUserName));
                 break;
             case TYPE_USER:
-                loadUserPostsInitial(callback, null);
+                loadUserPostsInitial(callback, cache.get(accountNameForCache + CacheUtils.USER_BASE + subredditOrUserName));
                 break;
             case TYPE_SEARCH:
                 loadSearchPostsInitial(callback, null);
                 break;
             case TYPE_MULTI_REDDIT:
-                loadMultiRedditPostsInitial(callback, null);
+                loadMultiRedditPostsInitial(callback, cache.get(accountNameForCache + CacheUtils.MULTI_REDDIT_BASE + multiRedditPath));
                 break;
         }
     }

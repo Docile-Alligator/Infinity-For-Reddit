@@ -191,6 +191,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
         bundle.putString(PostFragment.EXTRA_USER_WHERE, mUserWhere);
         bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
         bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+        bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
         mFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_account_posts_activity, mFragment).commit();
     }

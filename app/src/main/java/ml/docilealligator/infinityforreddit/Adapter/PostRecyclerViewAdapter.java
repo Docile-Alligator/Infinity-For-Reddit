@@ -612,6 +612,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         ((PostTextTypeViewHolder) holder).contentTextView.setText(post.getSelfTextPlainTrimmed());
                     }
                 }
+                mCallback.currentlyBindItem(holder.getAdapterPosition());
             }
         } else if (holder instanceof PostCompactBaseViewHolder) {
             Post post = getItem(position);
@@ -864,6 +865,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 } else {
                     ((PostCompactBaseViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                 }
+
+                mCallback.currentlyBindItem(holder.getAdapterPosition());
             }
         }
     }
@@ -1052,6 +1055,15 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         return super.getItemCount();
     }
 
+    @Nullable
+    public Post getItemByPosition(int position) {
+        if (position >= 0 && super.getItemCount() > position) {
+            return super.getItem(position);
+        }
+
+        return null;
+    }
+
     public void setVoteButtonsPosition(boolean voteButtonsOnTheRight) {
         mVoteButtonsOnTheRight = voteButtonsOnTheRight;
     }
@@ -1231,6 +1243,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         void retryLoadingMore();
 
         void typeChipClicked(int filter);
+
+        void currentlyBindItem(int position);
     }
 
     class PostBaseViewHolder extends RecyclerView.ViewHolder {
