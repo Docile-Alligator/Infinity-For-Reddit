@@ -174,11 +174,10 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     @Override
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull final LoadInitialCallback<String, Post> callback) {
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
-
-        boolean savePostFeedScrolledPosition = sharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION, true);
-        String accountNameForCache = accountName == null ? SharedPreferencesUtils.FRONT_PAGE_SCROLLED_POSITION_ANONYMOUS : accountName;
         switch (postType) {
             case TYPE_FRONT_PAGE:
+                boolean savePostFeedScrolledPosition = sharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION, true);
+                String accountNameForCache = accountName == null ? SharedPreferencesUtils.FRONT_PAGE_SCROLLED_POSITION_ANONYMOUS : accountName;
                 if (savePostFeedScrolledPosition) {
                     loadBestPostsInitial(callback, postFeedScrolledPositionSharedPreferences.getString(accountNameForCache + SharedPreferencesUtils.FRONT_PAGE_SCROLLED_POSITION_FRONT_PAGE_BASE, null));
                 } else {

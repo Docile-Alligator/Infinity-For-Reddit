@@ -779,7 +779,7 @@
     <string name="delete_all_sort_types_success">Delete all sort types successful</string>
     <string name="delete_all_post_layouts_success">Delete all post layouts successful</string>
     <string name="delete_all_themes_success">Delete all themes successful</string>
-    <string name="delete_all_post_feed_scrolled_positions_success">Delete all post feed scrolled positions successful</string>
+    <string name="delete_all_front_page_scrolled_positions_success">Delete all scrolled positions in front page successful</string>
     <string name="reset_all_settings_success">Reset all settings successful</string>
 
     <string name="theme_preview">Theme Preview</string>

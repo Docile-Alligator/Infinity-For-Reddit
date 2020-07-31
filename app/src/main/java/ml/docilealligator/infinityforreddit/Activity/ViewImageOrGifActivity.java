@@ -213,7 +213,6 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
                 if (view != null) {
                     view.setMinimumDpi(80);
-                    view.setQuickScaleEnabled(true);
 
                     view.setOnImageEventListener(new SubsamplingScaleImageView.OnImageEventListener() {
                         @Override
@@ -225,7 +224,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
                         public void onImageLoaded() {
                             view.setDoubleTapZoomDpi(70);
                             view.setDoubleTapZoomStyle(SubsamplingScaleImageView.ZOOM_FOCUS_FIXED);
-                            view.setQuickScaleEnabled(false);
+                            view.setQuickScaleEnabled(true);
                         }
 
                         @Override

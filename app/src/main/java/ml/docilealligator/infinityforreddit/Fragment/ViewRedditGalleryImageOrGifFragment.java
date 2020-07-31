@@ -131,7 +131,6 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
                 if (view != null) {
                     view.setMinimumDpi(80);
-                    view.setQuickScaleEnabled(true);
 
                     view.setOnImageEventListener(new SubsamplingScaleImageView.OnImageEventListener() {
                         @Override
@@ -143,7 +142,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                         public void onImageLoaded() {
                             view.setDoubleTapZoomDpi(70);
                             view.setDoubleTapZoomStyle(SubsamplingScaleImageView.ZOOM_FOCUS_FIXED);
-                            view.setQuickScaleEnabled(false);
+                            view.setQuickScaleEnabled(true);
                         }
 
                         @Override

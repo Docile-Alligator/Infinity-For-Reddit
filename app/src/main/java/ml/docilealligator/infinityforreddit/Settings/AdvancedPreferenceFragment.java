@@ -153,7 +153,7 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
                         .setPositiveButton(R.string.yes, (dialogInterface, i)
                                 -> {
                             postFeedScrolledPositionSharedPreferences.edit().clear().apply();
-                            Toast.makeText(activity, R.string.delete_all_post_feed_scrolled_positions_success, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, R.string.delete_all_front_page_scrolled_positions_success, Toast.LENGTH_SHORT).show();
                         })
                         .setNegativeButton(R.string.no, null)
                         .show();
