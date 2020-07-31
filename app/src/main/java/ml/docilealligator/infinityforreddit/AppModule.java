@@ -202,7 +202,7 @@ class AppModule {
     @Provides
     @Named("post_feed_scrolled_position_cache")
     SharedPreferences providePostFeedScrolledPositionSharedPreferences() {
-        return mApplication.getSharedPreferences(SharedPreferencesUtils.POST_LAYOUT_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+        return mApplication.getSharedPreferences(SharedPreferencesUtils.FRONT_PAGE_SCROLLED_POSITION_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
     }
 
     @Provides

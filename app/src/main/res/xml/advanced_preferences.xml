@@ -23,8 +23,8 @@
         app:title="@string/settings_delete_all_themes_in_database_title" />
 
     <Preference
-        app:key="delete_post_feed_scrolled_positions_in_database"
-        app:title="@string/settings_delete_post_feed_scrolled_positions_in_database_title" />
+        app:key="delete_front_page_scrolled_positions_in_database"
+        app:title="@string/settings_delete_front_page_scrolled_positions_in_database_title" />
 
     <Preference
         app:key="reset_all_settings"

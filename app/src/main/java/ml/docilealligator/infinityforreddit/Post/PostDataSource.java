@@ -175,39 +175,27 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull final LoadInitialCallback<String, Post> callback) {
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
-        boolean savePostFeedScrolledPosition = sharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_POST_FEED_SCROLLED_POSITION, true);
-        String accountNameForCache = accountName == null ? SharedPreferencesUtils.POST_FEED_SCROLLED_POSITION_ANONYMOUS : accountName;
+        boolean savePostFeedScrolledPosition = sharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION, true);
+        String accountNameForCache = accountName == null ? SharedPreferencesUtils.FRONT_PAGE_SCROLLED_POSITION_ANONYMOUS : accountName;
         switch (postType) {
             case TYPE_FRONT_PAGE:
                 if (savePostFeedScrolledPosition) {
-                    loadBestPostsInitial(callback, postFeedScrolledPositionSharedPreferences.getString(accountNameForCache + SharedPreferencesUtils.POST_FEED_SCROLLED_POSITION_FRONT_PAGE_BASE, null));
+                    loadBestPostsInitial(callback, postFeedScrolledPositionSharedPreferences.getString(accountNameForCache + SharedPreferencesUtils.FRONT_PAGE_SCROLLED_POSITION_FRONT_PAGE_BASE, null));
                 } else {
                     loadBestPostsInitial(callback, null);
                 }
                 break;
             case TYPE_SUBREDDIT:
-                if (savePostFeedScrolledPosition) {
-                    loadSubredditPostsInitial(callback, postFeedScrolledPositionSharedPreferences.getString(accountNameForCache + SharedPreferencesUtils.POST_FEED_SCROLLED_POSITION_SUBREDDIT_BASE + subredditOrUserName, null));
-                } else {
-                    loadSubredditPostsInitial(callback, null);
-                }
+                loadSubredditPostsInitial(callback, null);
                 break;
             case TYPE_USER:
-                if (savePostFeedScrolledPosition) {
-                    loadUserPostsInitial(callback, postFeedScrolledPositionSharedPreferences.getString(accountNameForCache + SharedPreferencesUtils.POST_FEED_SCROLLED_POSITION_USER_BASE + subredditOrUserName, null));
-                } else {
-                    loadUserPostsInitial(callback, null);
-                }
+                loadUserPostsInitial(callback, null);
                 break;
             case TYPE_SEARCH:
                 loadSearchPostsInitial(callback, null);
                 break;
             case TYPE_MULTI_REDDIT:
-                if (savePostFeedScrolledPosition) {
-                    loadMultiRedditPostsInitial(callback, postFeedScrolledPositionSharedPreferences.getString(accountNameForCache + SharedPreferencesUtils.POST_FEED_SCROLLED_POSITION_MULTI_REDDIT_BASE + multiRedditPath, null));
-                } else {
-                    loadMultiRedditPostsInitial(callback, null);
-                }
+                loadMultiRedditPostsInitial(callback, null);
                 break;
         }
     }

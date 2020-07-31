@@ -348,8 +348,8 @@
     <string name="settings_amoled_dark_title">Amoled Dark</string>
     <string name="settings_interface_title">Interface</string>
     <string name="settings_gestures_and_buttons_title">Gestures &amp; Buttons</string>
-    <string name="settings_save_post_feed_scrolled_position_title">Save Scrolled Position in Post Feed</string>
-    <string name="settings_save_post_feed_scrolled_position_summary">Browse new posts after refreshing</string>
+    <string name="settings_save_front_page_scrolled_position_title">Save Scrolled Position in HOME</string>
+    <string name="settings_save_front_page_scrolled_position_summary">Browse new posts after refreshing in HOME (Front Page)</string>
     <string name="settings_open_link_in_app_title">Open Link In App</string>
     <string name="settigns_video_title">Video</string>
     <string name="settings_video_autoplay_title">Video Autoplay</string>
@@ -458,7 +458,7 @@
     <string name="settings_delete_all_sort_type_data_in_database_title">Delete All Sort Types in Database</string>
     <string name="settings_delete_all_post_layout_data_in_database_title">Delete All Post Layouts in Database</string>
     <string name="settings_delete_all_themes_in_database_title">Delete All Themes in Database</string>
-    <string name="settings_delete_post_feed_scrolled_positions_in_database_title">Delete All Post Feed Scrolled Positions in Database</string>
+    <string name="settings_delete_front_page_scrolled_positions_in_database_title">Delete All Front Page Scrolled Positions in Database</string>
     <string name="settings_reset_all_settings_title">Reset All Settings</string>
     <string name="settings_advanced_settings_summary">Clean the database and shared preferences</string>
     <string name="settings_tab_info">Restart the app to see the changes</string>

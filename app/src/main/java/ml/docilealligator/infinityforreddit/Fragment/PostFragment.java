@@ -369,7 +369,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
         boolean nsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_KEY, false);
         int defaultPostLayout = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY, "0"));
-        savePostFeedScrolledPosition = mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_POST_FEED_SCROLLED_POSITION, true);
+        savePostFeedScrolledPosition = mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION, true);
         Locale locale = getResources().getConfiguration().locale;
 
         if (postType == PostDataSource.TYPE_SEARCH) {
@@ -717,28 +717,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     }
 
     private void saveCache() {
-        if (savePostFeedScrolledPosition && isShown && mAdapter != null) {
-            String key;
+        if (savePostFeedScrolledPosition && postType == PostDataSource.TYPE_FRONT_PAGE && mAdapter != null) {
             Post currentPost = mAdapter.getItemByPosition(maxPosition);
             if (currentPost != null) {
-                String accountNameForCache = accountName == null ? SharedPreferencesUtils.POST_FEED_SCROLLED_POSITION_ANONYMOUS : accountName;
+                String accountNameForCache = accountName == null ? SharedPreferencesUtils.FRONT_PAGE_SCROLLED_POSITION_ANONYMOUS : accountName;
+                String key = accountNameForCache + SharedPreferencesUtils.FRONT_PAGE_SCROLLED_POSITION_FRONT_PAGE_BASE;
                 String value = currentPost.getFullName();
-                switch (postType) {
-                    case PostDataSource.TYPE_FRONT_PAGE:
-                        key = accountNameForCache + SharedPreferencesUtils.POST_FEED_SCROLLED_POSITION_FRONT_PAGE_BASE;
-                        break;
-                    case PostDataSource.TYPE_SUBREDDIT:
-                        key = accountNameForCache + SharedPreferencesUtils.POST_FEED_SCROLLED_POSITION_SUBREDDIT_BASE + subredditName;
-                        break;
-                    case PostDataSource.TYPE_USER:
-                        key = accountNameForCache + SharedPreferencesUtils.POST_FEED_SCROLLED_POSITION_USER_BASE + username;
-                        break;
-                    case PostDataSource.TYPE_MULTI_REDDIT:
-                        key = accountNameForCache + SharedPreferencesUtils.POST_FEED_SCROLLED_POSITION_MULTI_REDDIT_BASE + multiRedditPath;
-                        break;
-                    default:
-                        return;
-                }
                 postFeedScrolledPositionSharedPreferences.edit().putString(key, value).apply();
             }
         }

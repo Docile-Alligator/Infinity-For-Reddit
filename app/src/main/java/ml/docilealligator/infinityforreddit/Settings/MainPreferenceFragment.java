@@ -39,7 +39,7 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.main_preferences, rootKey);
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
-        SwitchPreference savePostFeedScrolledPositionSwitch = findPreference(SharedPreferencesUtils.SAVE_POST_FEED_SCROLLED_POSITION);
+        SwitchPreference savePostFeedScrolledPositionSwitch = findPreference(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION);
         SwitchPreference confirmToExitSwitch = findPreference(SharedPreferencesUtils.CONFIRM_TO_EXIT);
         SwitchPreference nsfwSwitch = findPreference(SharedPreferencesUtils.NSFW_KEY);
         SwitchPreference blurNSFWSwitch = findPreference(SharedPreferencesUtils.BLUR_NSFW_KEY);
