@@ -37,7 +37,7 @@
         app:useSimpleSummaryProvider="true" />
 
     <SwitchPreference
-        app:defaultValue="true"
+        app:defaultValue="false"
         app:key="save_front_page_scrolled_position"
         app:title="@string/settings_save_front_page_scrolled_position_title"
         app:summary="@string/settings_save_front_page_scrolled_position_summary" />

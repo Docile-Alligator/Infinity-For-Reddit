@@ -41,6 +41,7 @@ import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.recycler.MarkwonAdapter;
@@ -49,14 +50,14 @@ import io.noties.markwon.recycler.table.TableEntryPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Comment.Comment;
+import ml.docilealligator.infinityforreddit.Comment.SendComment;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.BottomSheetFragment.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.Comment.SendComment;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
@@ -146,6 +147,8 @@ public class CommentActivity extends BaseActivity {
         String parentTextMarkdown = intent.getStringExtra(EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY);
         String parentText = intent.getStringExtra(EXTRA_COMMENT_PARENT_TEXT_KEY);
         CopyTextBottomSheetFragment copyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
+
+        int linkColor = mCustomThemeWrapper.getLinkColor();
         Markwon markwon = Markwon.builder(this)
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
@@ -160,6 +163,11 @@ public class CommentActivity extends BaseActivity {
                             }
                             startActivity(intent);
                         });
+                    }
+
+                    @Override
+                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                        builder.linkColor(linkColor);
                     }
                 })
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
@@ -219,6 +227,11 @@ public class CommentActivity extends BaseActivity {
                                 }
                                 startActivity(intent);
                             }).urlProcessor(new UrlProcessorRelativeToAbsolute("https://www.reddit.com"));
+                        }
+
+                        @Override
+                        public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                            builder.linkColor(linkColor);
                         }
                     })
                     .usePlugin(StrikethroughPlugin.create())

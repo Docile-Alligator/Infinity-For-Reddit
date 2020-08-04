@@ -369,7 +369,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
         boolean nsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_KEY, false);
         int defaultPostLayout = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY, "0"));
-        savePostFeedScrolledPosition = mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION, true);
+        savePostFeedScrolledPosition = mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION, false);
         Locale locale = getResources().getConfiguration().locale;
 
         if (postType == PostDataSource.TYPE_SEARCH) {
@@ -717,7 +717,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     }
 
     private void saveCache() {
-        if (savePostFeedScrolledPosition && postType == PostDataSource.TYPE_FRONT_PAGE && mAdapter != null) {
+        if (savePostFeedScrolledPosition && postType == PostDataSource.TYPE_FRONT_PAGE && sortType != null && sortType.getType() == SortType.Type.BEST && mAdapter != null) {
             Post currentPost = mAdapter.getItemByPosition(maxPosition);
             if (currentPost != null) {
                 String accountNameForCache = accountName == null ? SharedPreferencesUtils.FRONT_PAGE_SCROLLED_POSITION_ANONYMOUS : accountName;
