@@ -1,19 +1,17 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.app.DownloadManager;
 import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Build;
-import android.os.Environment;
 import android.widget.Toast;
 
-import java.io.File;
+import ml.docilealligator.infinityforreddit.Service.DownloadVideoService;
 
 public class MediaDownloaderImpl implements MediaDownloader {
 
     @Override
     public void download(String url, String fileName, Context ctx) {
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        /*DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setTitle(fileName);
 
         request.allowScanningByMediaScanner();
@@ -53,6 +51,19 @@ public class MediaDownloaderImpl implements MediaDownloader {
         }
 
         manager.enqueue(request);
+        Toast.makeText(ctx, R.string.download_started, Toast.LENGTH_SHORT).show();*/
+
+
+        Intent intent = new Intent(ctx, DownloadVideoService.class);
+        intent.putExtra(DownloadVideoService.EXTRA_VIDEO_URL, url);
+        intent.putExtra(DownloadVideoService.EXTRA_FILE_NAME, fileName);
+        intent.putExtra(DownloadVideoService.EXTRA_IS_REDDIT_VIDEO, false);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ctx.startForegroundService(intent);
+        } else {
+            ctx.startService(intent);
+        }
         Toast.makeText(ctx, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 }

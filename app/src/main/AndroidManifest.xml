@@ -35,7 +35,7 @@
             android:windowSoftInputMode="adjustResize" />
 
         <service
-            android:name=".Service.DownloadRedditVideoService"
+            android:name=".Service.DownloadVideoService"
             android:enabled="true"
             android:exported="false" />
 

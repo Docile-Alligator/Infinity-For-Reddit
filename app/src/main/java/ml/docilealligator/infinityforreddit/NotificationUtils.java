@@ -13,8 +13,11 @@ public class NotificationUtils {
     static final String CHANNEL_NEW_MESSAGES = "New Messages";
     public static final String CHANNEL_ID_DOWNLOAD_REDDIT_VIDEO = "download_reddit_video";
     public static final String CHANNEL_DOWNLOAD_REDDIT_VIDEO = "Download Reddit Video";
+    public static final String CHANNEL_ID_DOWNLOAD_VIDEO = "download_video";
+    public static final String CHANNEL_DOWNLOAD_VIDEO = "Download Video";
     public static final int SUBMIT_POST_SERVICE_NOTIFICATION_ID = 10000;
     public static final int DOWNLOAD_REDDIT_VIDEO_NOTIFICATION_ID = 20000;
+    public static final int DOWNLOAD_VIDEO_NOTIFICATION_ID = 30000;
 
     private static final int SUMMARY_BASE_ID_UNREAD_MESSAGE = 0;
     private static final int NOTIFICATION_BASE_ID_UNREAD_MESSAGE = 1;

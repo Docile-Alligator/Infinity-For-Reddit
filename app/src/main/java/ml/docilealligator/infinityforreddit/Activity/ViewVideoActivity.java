@@ -62,7 +62,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MediaDownloader;
 import ml.docilealligator.infinityforreddit.MediaDownloaderImpl;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.Service.DownloadRedditVideoService;
+import ml.docilealligator.infinityforreddit.Service.DownloadVideoService;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
@@ -436,10 +436,11 @@ public class ViewVideoActivity extends AppCompatActivity {
         if (videoType != VIDEO_TYPE_NORMAL) {
             mediaDownloader.download(videoDownloadUrl, videoFileName, this);
         } else {
-            Intent intent = new Intent(this, DownloadRedditVideoService.class);
-            intent.putExtra(DownloadRedditVideoService.EXTRA_VIDEO_URL, videoDownloadUrl);
-            intent.putExtra(DownloadRedditVideoService.EXTRA_POST_ID, id);
-            intent.putExtra(DownloadRedditVideoService.EXTRA_SUBREDDIT, subredditName);
+            Intent intent = new Intent(this, DownloadVideoService.class);
+            intent.putExtra(DownloadVideoService.EXTRA_VIDEO_URL, videoDownloadUrl);
+            intent.putExtra(DownloadVideoService.EXTRA_POST_ID, id);
+            intent.putExtra(DownloadVideoService.EXTRA_SUBREDDIT, subredditName);
+            intent.putExtra(DownloadVideoService.EXTRA_IS_REDDIT_VIDEO, true);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(intent);

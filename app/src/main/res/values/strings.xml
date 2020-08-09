@@ -1,5 +1,5 @@
 <resources>
-    <string name="application_name">Infinity</string>
+    <string name="application_name" translatable="false">Infinity</string>
     <string name="login_activity_label">Login</string>
     <string name="search_activity_label">Search</string>
     <string name="comment_activity_label">Send Comment</string>
@@ -124,9 +124,6 @@
     <string name="cannot_fetch_user_info">Cannot fetch user info</string>
     <string name="cannot_fetch_sidebar">Cannot fetch sidebar</string>
     <string name="cannot_fetch_multireddit">Cannot fetch multireddit info</string>
-
-    <string name="gilded_count">x%1$d</string>
-    <string name="title_activity_view_user_detail">ViewUserDetailActivity</string>
 
     <string name="subscribe">Subscribe</string>
     <string name="unsubscribe">Unsubscribe</string>
@@ -765,7 +762,7 @@
     <string name="parse_theme_failed">Parse Theme Failed</string>
     <string name="share_theme_to_subreddit_dialog_title">Share it to r/Infinity_For_Reddit?</string>
     <string name="share_theme_to_subreddit_dialog_message">The theme configuration is copied!
-        Do you want to share it to r/Infinity so that other people can use it?</string>
+        Do you want to share it to r/Infinity_For_Reddit so that other people can use it?</string>
     <string name="duplicate_theme_name_dialog_title">Duplicate Theme Found</string>
     <string name="duplicate_theme_name_dialog_message">A theme in the database is also called %1$s. Do you want to change the name of this imported theme?</string>
     <string name="rename">Rename</string>
@@ -837,6 +834,7 @@
     <string name="downloading_reddit_video_failed_cannot_save_audio">Download failed: cannot save audio to cache directory</string>
     <string name="downloading_reddit_video_failed_cannot_mux">Download failed: cannot mux video and audio</string>
     <string name="downloading_reddit_video_failed_cannot_save_mux_video">Download failed: cannot save the video to public directory</string>
+    <string name="downloading_video">Downloading Video</string>
 
     <string name="wallpaper_set">Wallpaper set</string>
     <string name="error_set_wallpaper">Cannot set wallpaper</string>
