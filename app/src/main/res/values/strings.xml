@@ -685,7 +685,7 @@
     <string name="theme_item_subscribed_color">Subscribed</string>
     <string name="theme_item_subscribed_color_detail">Applied to: Unsubscribe button</string>
     <string name="theme_item_unsubscribed_color">Unsubscribed</string>
-    <string name="theme_item_unsubscribed_color_detail">Applied to: Sbscribe button</string>
+    <string name="theme_item_unsubscribed_color_detail">Applied to: Subscribe button</string>
     <string name="theme_item_username_color">Username Color</string>
     <string name="theme_item_username_color_detail">Applied to: Username</string>
     <string name="theme_item_subreddit_color">Subreddit Color</string>
