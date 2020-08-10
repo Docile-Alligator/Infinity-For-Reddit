@@ -247,7 +247,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                     CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
                     params.bottomMargin = navBarHeight;
                     fab.setLayoutParams(params);
-                    mRecyclerView.setPadding(0, 0, 0, navBarHeight);
+                    mRecyclerView.setPadding(0, 0, 0, navBarHeight + mRecyclerView.getPaddingBottom());
                     showToast = true;
                 }
             }
