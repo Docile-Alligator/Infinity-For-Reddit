@@ -92,7 +92,7 @@ public class DownloadVideoService extends Service {
 
         isRedditVideo = intent.getBooleanExtra(EXTRA_IS_REDDIT_VIDEO, false);
         String videoUrl = intent.getStringExtra(EXTRA_VIDEO_URL);
-        String audioUrl = isRedditVideo ? videoUrl.substring(0, videoUrl.lastIndexOf('/')) + "/audio" : "";
+        String audioUrl = isRedditVideo ? videoUrl.substring(0, videoUrl.lastIndexOf('/')) + "/DASH_audio.mp4" : "";
         String fileName;
         if (isRedditVideo) {
             fileName = intent.getStringExtra(EXTRA_SUBREDDIT) + "-" + intent.getStringExtra(EXTRA_POST_ID);
