@@ -19,6 +19,8 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SortType;
@@ -32,8 +34,40 @@ public class Utils {
     private static final long YEAR_MILLIS = 12 * MONTH_MILLIS;
 
     public static String modifyMarkdown(String markdown) {
-        return markdown.replaceAll("((?<=[\\s])|^)/{0,1}[rRuU]/\\w+/{0,1}", "[$0]($0)")
-                .replaceAll("\\^\\w+", "$0^");
+        StringBuilder regexed = new StringBuilder(markdown.replaceAll("((?<=[\\s])|^)/{0,1}[rRuU]/[\\w-]+/{0,1}", "[$0]($0)"));
+
+        int startIndex = 0;
+
+        Pattern pattern = Pattern.compile("\\^.+");
+        Matcher matcher = pattern.matcher(regexed);
+        // Check all occurrences
+        while (matcher.find(startIndex)) {
+            int count = 0;
+            Pattern pattern2 = Pattern.compile("(\\^\\([^)]+\\))");
+            Matcher matcher2 = pattern2.matcher(matcher.group());
+            if (matcher2.find()) {
+                regexed.setCharAt(matcher2.end() + matcher.start() - 1, '^');
+                regexed.deleteCharAt(matcher2.start() + matcher.start() + 1);
+
+                startIndex = matcher.start() + matcher2.end();
+                String substring = regexed.substring(matcher.start() + matcher2.start() + 1, matcher.start() + matcher2.end() - 2);
+                String trimmedSubstring = substring.trim();
+                regexed.replace(matcher.start() + matcher2.start() + 1, matcher.start() + matcher2.end() - 2, trimmedSubstring);
+                startIndex -= (substring.length() - trimmedSubstring.length());
+                continue;
+            }
+
+            regexed.insert(matcher.end(), '^');
+
+            for (int i = matcher.end() - 1; i >= matcher.start() + 1; i--) {
+                if (regexed.charAt(i) == '^') {
+                    regexed.deleteCharAt(i);
+                    count++;
+                }
+            }
+            startIndex = matcher.end() - count;
+        }
+        return regexed.toString();
     }
 
     public static CharSequence trimTrailingWhitespace(CharSequence source) {
