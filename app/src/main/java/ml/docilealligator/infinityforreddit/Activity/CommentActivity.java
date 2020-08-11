@@ -48,7 +48,6 @@ import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
-import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Comment.Comment;
@@ -226,7 +225,7 @@ public class CommentActivity extends BaseActivity {
                                     intent.setData(uri);
                                 }
                                 startActivity(intent);
-                            }).urlProcessor(new UrlProcessorRelativeToAbsolute("https://www.reddit.com"));
+                            });
                         }
 
                         @Override

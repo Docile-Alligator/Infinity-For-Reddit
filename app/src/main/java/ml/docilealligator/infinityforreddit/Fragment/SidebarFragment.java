@@ -38,15 +38,14 @@ import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
-import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubredditDataAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.Subreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.Subreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.Subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.Subreddit.SubredditViewModel;
 import retrofit2.Retrofit;
@@ -118,8 +117,7 @@ public class SidebarFragment extends Fragment {
                                 intent.setData(uri);
                             }
                             startActivity(intent);
-                        }).urlProcessor(new UrlProcessorRelativeToAbsolute("https://www.reddit.com"));
-
+                        });
                     }
                 })
                 .usePlugin(StrikethroughPlugin.create())

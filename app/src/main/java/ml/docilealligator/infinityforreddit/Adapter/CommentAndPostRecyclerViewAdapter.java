@@ -77,7 +77,6 @@ import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
-import io.noties.markwon.urlprocessor.UrlProcessorRelativeToAbsolute;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Activity.CommentActivity;
@@ -265,7 +264,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             }
                             intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, mPost.isNSFW());
                             mActivity.startActivity(intent);
-                        }).urlProcessor(new UrlProcessorRelativeToAbsolute("https://www.reddit.com"));
+                        });
                     }
 
                     @Override
@@ -297,7 +296,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             }
                             intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, mPost.isNSFW());
                             mActivity.startActivity(intent);
-                        }).urlProcessor(new UrlProcessorRelativeToAbsolute("https://www.reddit.com"));
+                        });
                     }
 
                     @Override
