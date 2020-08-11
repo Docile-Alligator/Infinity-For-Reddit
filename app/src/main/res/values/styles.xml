@@ -35,7 +35,7 @@
     <style name="AppTheme.SlidableWithActionBar">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:windowBackground">#00000000</item>
         <item name="android:fontFamily">?attr/font_family</item>
     </style>
 
