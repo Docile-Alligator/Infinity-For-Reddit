@@ -42,7 +42,7 @@
             android:id="@+id/recycler_view_view_post_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="48dp"
+            android:paddingBottom="144dp"
             android:clipToPadding="false" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

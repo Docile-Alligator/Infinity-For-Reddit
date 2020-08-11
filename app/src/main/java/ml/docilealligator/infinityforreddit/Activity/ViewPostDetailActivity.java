@@ -387,6 +387,22 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (mAdapter != null && mRecyclerView != null) {
+            mRecyclerView.onWindowVisibilityChanged(View.VISIBLE);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mAdapter != null && mRecyclerView != null) {
+            mRecyclerView.onWindowVisibilityChanged(View.GONE);
+        }
+    }
+
+    @Override
     public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
