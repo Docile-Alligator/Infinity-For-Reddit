@@ -408,7 +408,6 @@
     <string name="settings_enable_nsfw_title">Enable NSFW</string>
     <string name="settings_blur_nsfw_title">Blur NSFW Images</string>
     <string name="settings_blur_spoiler_title">Blur Spoiler Images</string>
-    <string name="settings_layout_no_limits_title">Display Under Navigation bar and Status Bar</string>
     <string name="settings_about_master_title">About</string>
     <string name="settings_acknowledgement_master_title">Acknowledgement</string>
     <string name="settings_credits_master_title">Credits</string>

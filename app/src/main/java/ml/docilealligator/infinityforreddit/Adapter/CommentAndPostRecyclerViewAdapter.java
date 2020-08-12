@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -12,7 +13,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.ClickableSpan;
 import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
@@ -56,6 +61,8 @@ import org.commonmark.ext.gfm.tables.TableBlock;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -239,6 +246,53 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         int linkColor = customThemeWrapper.getLinkColor();
         mPostDetailMarkwon = Markwon.builder(mActivity)
                 .usePlugin(new AbstractMarkwonPlugin() {
+                    @NonNull
+                    @Override
+                    public String processMarkdown(@NonNull String markdown) {
+                        StringBuilder markdownStringBuilder = new StringBuilder(markdown);
+                        Pattern spoilerPattern = Pattern.compile(">!.+!<");
+                        Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
+                        while (matcher.find()) {
+                            markdownStringBuilder.setCharAt(matcher.start(), '<');
+                        }
+                        return super.processMarkdown(markdownStringBuilder.toString());
+                    }
+
+                    @Override
+                    public void afterSetText(@NonNull TextView textView) {
+                        textView.setHighlightColor(Color.TRANSPARENT);
+                        StringBuilder markdownStringBuilder = new StringBuilder(textView.getText().toString());
+                        Pattern spoilerPattern = Pattern.compile("<!.+!<");
+                        Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
+                        Spannable spannable = new SpannableString(markdownStringBuilder);
+                        int start = 0;
+                        while (matcher.find(start)) {
+                            markdownStringBuilder.delete(matcher.end() - 2, matcher.end());
+                            markdownStringBuilder.delete(matcher.start(), matcher.start() + 2);
+
+                            Spannable spannableCopy = new SpannableString(markdownStringBuilder);
+                            BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(Color.BLACK);
+                            ClickableSpan clickableSpan = new ClickableSpan() {
+                                @Override
+                                public void updateDrawState(@NonNull TextPaint ds) {
+                                    ds.setUnderlineText(false);
+                                }
+
+                                @Override
+                                public void onClick(@NonNull View view) {
+                                    spannableCopy.removeSpan(backgroundColorSpan);
+                                    spannableCopy.removeSpan(this);
+                                }
+                            };
+                            spannableCopy.setSpan(clickableSpan, matcher.start(), matcher.end() - 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            spannableCopy.setSpan(backgroundColorSpan, matcher.start(), matcher.end() - 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                            spannable = spannableCopy;
+                            start = matcher.end() - 4;
+                        }
+                        textView.setText(spannable);
+                    }
+
                     @Override
                     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
                         textView.setTextColor(markdownColor);
@@ -275,15 +329,62 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 .usePlugin(StrikethroughPlugin.create())
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .usePlugin(SimpleExtPlugin.create(plugin ->
-                                plugin.addExtension(1, '^', (configuration, props) -> {
-                                    return new SuperscriptSpan();
-                                })
+                            plugin.addExtension(1, '^', (configuration, props) -> {
+                                return new SuperscriptSpan();
+                            })
                         )
                 )
                 .usePlugin(TableEntryPlugin.create(mActivity))
                 .build();
         mCommentMarkwon = Markwon.builder(mActivity)
                 .usePlugin(new AbstractMarkwonPlugin() {
+                    @NonNull
+                    @Override
+                    public String processMarkdown(@NonNull String markdown) {
+                        StringBuilder markdownStringBuilder = new StringBuilder(markdown);
+                        Pattern spoilerPattern = Pattern.compile(">!.+!<");
+                        Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
+                        while (matcher.find()) {
+                            markdownStringBuilder.setCharAt(matcher.start(), '<');
+                        }
+                        return super.processMarkdown(markdownStringBuilder.toString());
+                    }
+
+                    @Override
+                    public void afterSetText(@NonNull TextView textView) {
+                        textView.setHighlightColor(Color.TRANSPARENT);
+                        StringBuilder markdownStringBuilder = new StringBuilder(textView.getText().toString());
+                        Pattern spoilerPattern = Pattern.compile("<!.+!<");
+                        Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
+                        Spannable spannable = new SpannableString(markdownStringBuilder);
+                        int start = 0;
+                        while (matcher.find(start)) {
+                            markdownStringBuilder.delete(matcher.end() - 2, matcher.end());
+                            markdownStringBuilder.delete(matcher.start(), matcher.start() + 2);
+
+                            Spannable spannableCopy = new SpannableString(markdownStringBuilder);
+                            BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(Color.BLACK);
+                            ClickableSpan clickableSpan = new ClickableSpan() {
+                                @Override
+                                public void updateDrawState(@NonNull TextPaint ds) {
+                                    ds.setUnderlineText(false);
+                                }
+
+                                @Override
+                                public void onClick(@NonNull View view) {
+                                    spannableCopy.removeSpan(backgroundColorSpan);
+                                    spannableCopy.removeSpan(this);
+                                }
+                            };
+                            spannableCopy.setSpan(clickableSpan, matcher.start(), matcher.end() - 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            spannableCopy.setSpan(backgroundColorSpan, matcher.start(), matcher.end() - 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                            spannable = spannableCopy;
+                            start = matcher.end() - 4;
+                        }
+                        textView.setText(spannable);
+                    }
+
                     @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                         builder.linkResolver((view, link) -> {
