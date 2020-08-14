@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -251,7 +250,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     @Override
                     public String processMarkdown(@NonNull String markdown) {
                         StringBuilder markdownStringBuilder = new StringBuilder(markdown);
-                        Pattern spoilerPattern = Pattern.compile(">!.+!<");
+                        Pattern spoilerPattern = Pattern.compile(">![\\S\\s]*?!<");
                         Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
                         while (matcher.find()) {
                             markdownStringBuilder.replace(matcher.start(), matcher.start() + 1, "&gt;");
@@ -262,18 +261,15 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     @Override
                     public void afterSetText(@NonNull TextView textView) {
                         textView.setHighlightColor(Color.TRANSPARENT);
-                        StringBuilder markdownStringBuilder = new StringBuilder(textView.getText().toString());
-                        Pattern spoilerPattern = Pattern.compile(">!.+!<");
+                        SpannableStringBuilder markdownStringBuilder = new SpannableStringBuilder(textView.getText().toString());
+                        Pattern spoilerPattern = Pattern.compile(">![\\S\\s]*?!<");
                         Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
-                        Spannable spannable = new SpannableString(markdownStringBuilder);
                         int start = 0;
                         boolean find = false;
                         while (matcher.find(start)) {
                             find = true;
                             markdownStringBuilder.delete(matcher.end() - 2, matcher.end());
                             markdownStringBuilder.delete(matcher.start(), matcher.start() + 2);
-
-                            Spannable spannableCopy = new SpannableString(markdownStringBuilder);
                             ClickableSpan clickableSpan = new ClickableSpan() {
                                 private boolean isShowing = false;
                                 @Override
@@ -294,13 +290,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                     view.invalidate();
                                 }
                             };
-                            spannableCopy.setSpan(clickableSpan, matcher.start(), matcher.end() - 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                            spannable = spannableCopy;
+                            markdownStringBuilder.setSpan(clickableSpan, matcher.start(), matcher.end() - 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                             start = matcher.end() - 4;
                         }
                         if (find) {
-                            textView.setText(spannable);
+                            textView.setText(markdownStringBuilder);
                         }
                     }
 
@@ -353,7 +347,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     @Override
                     public String processMarkdown(@NonNull String markdown) {
                         StringBuilder markdownStringBuilder = new StringBuilder(markdown);
-                        Pattern spoilerPattern = Pattern.compile(">!.+!<");
+                        Pattern spoilerPattern = Pattern.compile(">![\\S\\s]*?!<");
                         Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
                         while (matcher.find()) {
                             markdownStringBuilder.replace(matcher.start(), matcher.start() + 1, "&gt;");
@@ -364,27 +358,24 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     @Override
                     public void afterSetText(@NonNull TextView textView) {
                         SpannableStringBuilder markdownStringBuilder = new SpannableStringBuilder(textView.getText().toString());
-                        Pattern spoilerPattern = Pattern.compile(">!.+!<");
+                        Pattern spoilerPattern = Pattern.compile(">![\\S\\s]*?!<");
                         Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
-                        Spannable spannable = new SpannableString(markdownStringBuilder);
                         int start = 0;
                         boolean find = false;
                         while (matcher.find(start)) {
                             find = true;
                             markdownStringBuilder.delete(matcher.end() - 2, matcher.end());
                             markdownStringBuilder.delete(matcher.start(), matcher.start() + 2);
-
-                            Spannable spannableCopy = new SpannableString(markdownStringBuilder);
                             ClickableSpan clickableSpan = new ClickableSpan() {
                                 private boolean isShowing = false;
                                 @Override
                                 public void updateDrawState(@NonNull TextPaint ds) {
                                     if (isShowing) {
                                         super.updateDrawState(ds);
-                                        ds.setColor(mCommentTextColor);
+                                        ds.setColor(markdownColor);
                                     } else {
                                         ds.bgColor = Color.BLACK;
-                                        ds.setColor(mCommentTextColor);
+                                        ds.setColor(markdownColor);
                                     }
                                     ds.setUnderlineText(false);
                                 }
@@ -395,13 +386,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                     view.invalidate();
                                 }
                             };
-                            spannableCopy.setSpan(clickableSpan, matcher.start(), matcher.end() - 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                            spannable = spannableCopy;
+                            markdownStringBuilder.setSpan(clickableSpan, matcher.start(), matcher.end() - 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                             start = matcher.end() - 4;
                         }
                         if (find) {
-                            textView.setText(spannable);
+                            textView.setText(markdownStringBuilder);
                         }
                     }
 

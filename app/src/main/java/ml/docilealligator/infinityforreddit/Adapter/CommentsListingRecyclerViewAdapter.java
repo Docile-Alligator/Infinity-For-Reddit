@@ -4,9 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.style.ClickableSpan;
 import android.text.style.SuperscriptSpan;
+import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +33,8 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -102,8 +110,65 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         super(DIFF_CALLBACK);
         mContext = context;
         mOauthRetrofit = oauthRetrofit;
+        mCommentColor = customThemeWrapper.getCommentColor();
         mMarkwon = Markwon.builder(mContext)
                 .usePlugin(new AbstractMarkwonPlugin() {
+                    @NonNull
+                    @Override
+                    public String processMarkdown(@NonNull String markdown) {
+                        StringBuilder markdownStringBuilder = new StringBuilder(markdown);
+                        Pattern spoilerPattern = Pattern.compile(">![\\S\\s]*?!<");
+                        Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
+                        while (matcher.find()) {
+                            markdownStringBuilder.replace(matcher.start(), matcher.start() + 1, "&gt;");
+                        }
+                        return super.processMarkdown(markdownStringBuilder.toString());
+                    }
+
+                    @Override
+                    public void afterSetText(@NonNull TextView textView) {
+                        textView.setHighlightColor(Color.TRANSPARENT);
+                        SpannableStringBuilder markdownStringBuilder = new SpannableStringBuilder(textView.getText().toString());
+                        Pattern spoilerPattern = Pattern.compile(">![\\S\\s]*?!<");
+                        Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
+                        int start = 0;
+                        boolean find = false;
+                        while (matcher.find(start)) {
+                            find = true;
+                            markdownStringBuilder.delete(matcher.end() - 2, matcher.end());
+                            markdownStringBuilder.delete(matcher.start(), matcher.start() + 2);
+                            int matcherStart = matcher.start();
+                            int matcherEnd = matcher.end();
+                            ClickableSpan clickableSpan = new ClickableSpan() {
+                                private boolean isShowing = false;
+                                @Override
+                                public void updateDrawState(@NonNull TextPaint ds) {
+                                    if (isShowing) {
+                                        super.updateDrawState(ds);
+                                        ds.setColor(mCommentColor);
+                                    } else {
+                                        ds.bgColor = Color.BLACK;
+                                        ds.setColor(mCommentColor);
+                                    }
+                                    ds.setUnderlineText(false);
+                                }
+
+                                @Override
+                                public void onClick(@NonNull View view) {
+                                    if (!(isShowing && markdownStringBuilder.getSpans(matcherStart, matcherEnd - 4, URLSpan.class).length > 0)) {
+                                        isShowing = !isShowing;
+                                        view.invalidate();
+                                    }
+                                }
+                            };
+                            markdownStringBuilder.setSpan(clickableSpan, matcherStart, matcherEnd - 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            start = matcherEnd - 4;
+                        }
+                        if (find) {
+                            textView.setText(markdownStringBuilder);
+                        }
+                    }
+
                     @Override
                     public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
                         builder.linkColor(customThemeWrapper.getLinkColor());
