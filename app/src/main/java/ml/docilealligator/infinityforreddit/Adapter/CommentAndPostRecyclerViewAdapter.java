@@ -18,7 +18,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
@@ -275,21 +274,27 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             markdownStringBuilder.delete(matcher.start(), matcher.start() + 2);
 
                             Spannable spannableCopy = new SpannableString(markdownStringBuilder);
-                            BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(Color.BLACK);
                             ClickableSpan clickableSpan = new ClickableSpan() {
+                                private boolean isShowing = false;
                                 @Override
                                 public void updateDrawState(@NonNull TextPaint ds) {
+                                    if (isShowing) {
+                                        super.updateDrawState(ds);
+                                        ds.setColor(markdownColor);
+                                    } else {
+                                        ds.bgColor = Color.BLACK;
+                                        ds.setColor(markdownColor);
+                                    }
                                     ds.setUnderlineText(false);
                                 }
 
                                 @Override
                                 public void onClick(@NonNull View view) {
-                                    spannableCopy.removeSpan(backgroundColorSpan);
-                                    spannableCopy.removeSpan(this);
+                                    isShowing = !isShowing;
+                                    view.invalidate();
                                 }
                             };
                             spannableCopy.setSpan(clickableSpan, matcher.start(), matcher.end() - 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                            spannableCopy.setSpan(backgroundColorSpan, matcher.start(), matcher.end() - 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                             spannable = spannableCopy;
                             start = matcher.end() - 4;
