@@ -14,8 +14,10 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.SuperscriptSpan;
@@ -253,7 +255,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         Pattern spoilerPattern = Pattern.compile(">!.+!<");
                         Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
                         while (matcher.find()) {
-                            markdownStringBuilder.setCharAt(matcher.start(), '<');
+                            markdownStringBuilder.replace(matcher.start(), matcher.start() + 1, "&gt;");
                         }
                         return super.processMarkdown(markdownStringBuilder.toString());
                     }
@@ -262,11 +264,13 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     public void afterSetText(@NonNull TextView textView) {
                         textView.setHighlightColor(Color.TRANSPARENT);
                         StringBuilder markdownStringBuilder = new StringBuilder(textView.getText().toString());
-                        Pattern spoilerPattern = Pattern.compile("<!.+!<");
+                        Pattern spoilerPattern = Pattern.compile(">!.+!<");
                         Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
                         Spannable spannable = new SpannableString(markdownStringBuilder);
                         int start = 0;
+                        boolean find = false;
                         while (matcher.find(start)) {
+                            find = true;
                             markdownStringBuilder.delete(matcher.end() - 2, matcher.end());
                             markdownStringBuilder.delete(matcher.start(), matcher.start() + 2);
 
@@ -290,7 +294,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             spannable = spannableCopy;
                             start = matcher.end() - 4;
                         }
-                        textView.setText(spannable);
+                        if (find) {
+                            textView.setText(spannable);
+                        }
                     }
 
                     @Override
@@ -345,44 +351,53 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         Pattern spoilerPattern = Pattern.compile(">!.+!<");
                         Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
                         while (matcher.find()) {
-                            markdownStringBuilder.setCharAt(matcher.start(), '<');
+                            markdownStringBuilder.replace(matcher.start(), matcher.start() + 1, "&gt;");
                         }
                         return super.processMarkdown(markdownStringBuilder.toString());
                     }
 
                     @Override
                     public void afterSetText(@NonNull TextView textView) {
-                        textView.setHighlightColor(Color.TRANSPARENT);
-                        StringBuilder markdownStringBuilder = new StringBuilder(textView.getText().toString());
-                        Pattern spoilerPattern = Pattern.compile("<!.+!<");
+                        SpannableStringBuilder markdownStringBuilder = new SpannableStringBuilder(textView.getText().toString());
+                        Pattern spoilerPattern = Pattern.compile(">!.+!<");
                         Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
                         Spannable spannable = new SpannableString(markdownStringBuilder);
                         int start = 0;
+                        boolean find = false;
                         while (matcher.find(start)) {
+                            find = true;
                             markdownStringBuilder.delete(matcher.end() - 2, matcher.end());
                             markdownStringBuilder.delete(matcher.start(), matcher.start() + 2);
 
                             Spannable spannableCopy = new SpannableString(markdownStringBuilder);
-                            BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(Color.BLACK);
                             ClickableSpan clickableSpan = new ClickableSpan() {
+                                private boolean isShowing = false;
                                 @Override
                                 public void updateDrawState(@NonNull TextPaint ds) {
+                                    if (isShowing) {
+                                        super.updateDrawState(ds);
+                                        ds.setColor(mCommentTextColor);
+                                    } else {
+                                        ds.bgColor = Color.BLACK;
+                                        ds.setColor(mCommentTextColor);
+                                    }
                                     ds.setUnderlineText(false);
                                 }
 
                                 @Override
                                 public void onClick(@NonNull View view) {
-                                    spannableCopy.removeSpan(backgroundColorSpan);
-                                    spannableCopy.removeSpan(this);
+                                    isShowing = !isShowing;
+                                    view.invalidate();
                                 }
                             };
                             spannableCopy.setSpan(clickableSpan, matcher.start(), matcher.end() - 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                            spannableCopy.setSpan(backgroundColorSpan, matcher.start(), matcher.end() - 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                             spannable = spannableCopy;
                             start = matcher.end() - 4;
                         }
-                        textView.setText(spannable);
+                        if (find) {
+                            textView.setText(spannable);
+                        }
                     }
 
                     @Override
@@ -3353,6 +3368,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 }
             });
 
+            commentMarkdownView.setMovementMethod(LinkMovementMethod.getInstance());
+
             if (mSwapTapAndLong) {
                 if (mCommentToolbarHideOnClick) {
                     View.OnLongClickListener hideToolbarOnLongClickListener = view -> hideToolbar();
@@ -3360,20 +3377,29 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     commentMarkdownView.setOnLongClickListener(hideToolbarOnLongClickListener);
                     commentTimeTextView.setOnLongClickListener(hideToolbarOnLongClickListener);
                 }
-                View.OnClickListener expandCommentsOnClickListener = view -> expandComments();
-                commentMarkdownView.setOnClickListener(expandCommentsOnClickListener);
-                itemView.setOnClickListener(expandCommentsOnClickListener);
+                commentMarkdownView.setOnClickListener(view -> {
+                    if (commentMarkdownView.getSelectionStart() == -1 && commentMarkdownView.getSelectionEnd() == -1) {
+                        expandComments();
+                    }
+                });
+                itemView.setOnClickListener(view -> expandComments());
             } else {
                 if (mCommentToolbarHideOnClick) {
+                    commentMarkdownView.setOnClickListener(view -> {
+                        if (commentMarkdownView.getSelectionStart() == -1 && commentMarkdownView.getSelectionEnd() == -1) {
+                            hideToolbar();
+                        }
+                    });
                     View.OnClickListener hideToolbarOnClickListener = view -> hideToolbar();
                     linearLayout.setOnClickListener(hideToolbarOnClickListener);
-                    commentMarkdownView.setOnClickListener(hideToolbarOnClickListener);
                     commentTimeTextView.setOnClickListener(hideToolbarOnClickListener);
                 }
                 View.OnLongClickListener expandsCommentsOnLongClickListener = view -> expandComments();
                 commentMarkdownView.setOnLongClickListener(expandsCommentsOnLongClickListener);
                 itemView.setOnLongClickListener(expandsCommentsOnLongClickListener);
             }
+            commentMarkdownView.setMovementMethod(LinkMovementMethod.getInstance());
+            commentMarkdownView.setHighlightColor(Color.TRANSPARENT);
         }
 
         private boolean expandComments() {
