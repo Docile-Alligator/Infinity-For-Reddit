@@ -607,7 +607,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         ((PostGalleryTypeViewHolder) holder).noPreviewLinkImageView.setVisibility(View.VISIBLE);
                     }
                 } else if (holder instanceof PostTextTypeViewHolder) {
-                    if (post.getSelfTextPlainTrimmed() != null && !post.getSelfTextPlainTrimmed().equals("")) {
+                    if (!post.isSpoiler() && post.getSelfTextPlainTrimmed() != null && !post.getSelfTextPlainTrimmed().equals("")) {
                         ((PostTextTypeViewHolder) holder).contentTextView.setVisibility(View.VISIBLE);
                         ((PostTextTypeViewHolder) holder).contentTextView.setText(post.getSelfTextPlainTrimmed());
                     }
@@ -1178,6 +1178,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 ((PostGalleryTypeViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
                 ((PostGalleryTypeViewHolder) holder).noPreviewLinkImageView.setVisibility(View.GONE);
             } else if (holder instanceof PostTextTypeViewHolder) {
+                ((PostTextTypeViewHolder) holder).contentTextView.setText("");
                 ((PostTextTypeViewHolder) holder).contentTextView.setVisibility(View.GONE);
             }
 
