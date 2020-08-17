@@ -242,6 +242,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mGlide = glide;
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
+        mCommentTextColor = customThemeWrapper.getCommentColor();
         int markdownColor = customThemeWrapper.getPostContentColor();
         int linkColor = customThemeWrapper.getLinkColor();
         mPostDetailMarkwon = Markwon.builder(mActivity)
@@ -372,10 +373,10 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                 public void updateDrawState(@NonNull TextPaint ds) {
                                     if (isShowing) {
                                         super.updateDrawState(ds);
-                                        ds.setColor(markdownColor);
+                                        ds.setColor(mCommentTextColor);
                                     } else {
                                         ds.bgColor = Color.BLACK;
-                                        ds.setColor(markdownColor);
+                                        ds.setColor(mCommentTextColor);
                                     }
                                     ds.setUnderlineText(false);
                                 }
@@ -480,7 +481,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mCardViewColor = customThemeWrapper.getCardViewBackgroundColor();
         mPostTitleColor = customThemeWrapper.getPostTitleColor();
         mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
-        mCommentTextColor = customThemeWrapper.getCommentColor();
         mDividerColor = customThemeWrapper.getDividerColor();
         mCommentBackgroundColor = customThemeWrapper.getCommentBackgroundColor();
         mPostTypeBackgroundColor = customThemeWrapper.getPostTypeBackgroundColor();

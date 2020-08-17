@@ -10,9 +10,9 @@ import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.SuperscriptSpan;
-import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -155,10 +155,8 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
                                 @Override
                                 public void onClick(@NonNull View view) {
-                                    if (!(isShowing && markdownStringBuilder.getSpans(matcherStart, matcherEnd - 4, URLSpan.class).length > 0)) {
-                                        isShowing = !isShowing;
-                                        view.invalidate();
-                                    }
+                                    isShowing = !isShowing;
+                                    view.invalidate();
                                 }
                             };
                             markdownStringBuilder.setSpan(clickableSpan, matcherStart, matcherEnd - 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -315,8 +313,11 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
                 ((CommentViewHolder) holder).verticalBlock.setVisibility(View.GONE);
 
-                ((CommentViewHolder) holder).commentMarkdownView.setOnClickListener(view ->
-                        ((CommentViewHolder) holder).linearLayout.callOnClick());
+                ((CommentViewHolder) holder).commentMarkdownView.setOnClickListener(view -> {
+                    if (((CommentViewHolder) holder).commentMarkdownView.getSelectionStart() == -1 && ((CommentViewHolder) holder).commentMarkdownView.getSelectionEnd() == -1) {
+                        ((CommentViewHolder) holder).linearLayout.callOnClick();
+                    }
+                });
 
                 ((CommentViewHolder) holder).upvoteButton.setOnClickListener(view -> {
                     if (mAccessToken == null) {
@@ -607,6 +608,8 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             saveButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             replyButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             commentDivider.setBackgroundColor(mDividerColor);
+
+            commentMarkdownView.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 
