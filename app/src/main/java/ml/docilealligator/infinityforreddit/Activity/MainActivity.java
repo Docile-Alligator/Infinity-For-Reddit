@@ -173,8 +173,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private SectionsPagerAdapter sectionsPagerAdapter;
     private AppBarLayout.LayoutParams params;
     private PostTypeBottomSheetFragment postTypeBottomSheetFragment;
-    private SortTypeBottomSheetFragment bestSortTypeBottomSheetFragment;
-    private SortTypeBottomSheetFragment popularAndAllSortTypeBottomSheetFragment;
+    private SortTypeBottomSheetFragment sortTypeBottomSheetFragment;
     private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
     private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
     private NavigationDrawerRecyclerViewAdapter adapter;
@@ -234,17 +233,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         }
 
         postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
-
-        bestSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-        Bundle bestBundle = new Bundle();
-        bestBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, false);
-        bestSortTypeBottomSheetFragment.setArguments(bestBundle);
-
-        popularAndAllSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-        Bundle popularBundle = new Bundle();
-        popularBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-        popularAndAllSortTypeBottomSheetFragment.setArguments(popularBundle);
-
+        sortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
         sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
         postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
 
@@ -727,11 +716,16 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_sort_main_activity:
-                if (viewPager.getCurrentItem() == 1 || viewPager.getCurrentItem() == 2) {
-                    popularAndAllSortTypeBottomSheetFragment.show(getSupportFragmentManager(), popularAndAllSortTypeBottomSheetFragment.getTag());
+                int currentPostType = sectionsPagerAdapter.getCurrentPostType();
+                Bundle bundle = new Bundle();
+                if (currentPostType != PostDataSource.TYPE_FRONT_PAGE) {
+                    bundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
                 } else {
-                    bestSortTypeBottomSheetFragment.show(getSupportFragmentManager(), bestSortTypeBottomSheetFragment.getTag());
+                    bundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, false);
                 }
+                bundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_RANDOM_TYPE, true);
+                sortTypeBottomSheetFragment.setArguments(bundle);
+                sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
                 return true;
             case R.id.action_search_main_activity:
                 Intent intent = new Intent(this, SearchActivity.class);
@@ -1240,6 +1234,25 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             }
         }
 
+        int getCurrentPostType() {
+            if (mAccessToken == null) {
+                if (viewPager.getCurrentItem() == 0) {
+                    return tab2.getPostType();
+                } else {
+                    return tab3.getPostType();
+                }
+            } else {
+                switch (viewPager.getCurrentItem()) {
+                    case 1:
+                        return tab2.getPostType();
+                    case 2:
+                        return tab3.getPostType();
+                    default:
+                        return tab1.getPostType();
+                }
+            }
+        }
+
         void changeSortType(SortType sortType) {
             if (mAccessToken == null) {
                 if (viewPager.getCurrentItem() == 0) {
@@ -1250,27 +1263,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             } else {
                 switch (viewPager.getCurrentItem()) {
                     case 0:
-                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_BEST_POST, sortType.getType().name()).apply();
-                        if (sortType.getTime() != null) {
-                            mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_BEST_POST, sortType.getTime().name()).apply();
-                        }
-
                         tab1.changeSortType(sortType);
                         break;
                     case 1:
-                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POPULAR_POST, sortType.getType().name()).apply();
-                        if (sortType.getTime() != null) {
-                            mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_POPULAR_POST, sortType.getTime().name()).apply();
-                        }
-
                         tab2.changeSortType(sortType);
                         break;
                     case 2:
-                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_ALL_POST, sortType.getType().name()).apply();
-                        if (sortType.getTime() != null) {
-                            mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_ALL_POST, sortType.getTime().name()).apply();
-                        }
-
                         tab3.changeSortType(sortType);
                 }
             }
@@ -1373,6 +1371,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 tab3.goBackToTop();
             }
         }
+
         void displaySortTypeInToolbar() {
             switch (viewPager.getCurrentItem()) {
                 case 0:

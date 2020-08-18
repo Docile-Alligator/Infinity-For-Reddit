@@ -419,11 +419,6 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         }
 
         void changeSortType(SortType sortType) {
-            mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SEARCH_POST, sortType.getType().name()).apply();
-            if(sortType.getTime() != null) {
-                mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SEARCH_POST, sortType.getTime().name()).apply();
-            }
-
             postFragment.changeSortType(sortType);
             displaySortTypeInToolbar();
         }

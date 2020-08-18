@@ -455,6 +455,7 @@
     <string name="settings_delete_all_post_layout_data_in_database_title">Delete All Post Layouts in Database</string>
     <string name="settings_delete_all_themes_in_database_title">Delete All Themes in Database</string>
     <string name="settings_delete_front_page_scrolled_positions_in_database_title">Delete All Front Page Scrolled Positions in Database</string>
+    <string name="settings_delete_all_legacy_settings_title">Delete All Legacy Settings</string>
     <string name="settings_reset_all_settings_title">Reset All Settings</string>
     <string name="settings_advanced_settings_summary">Clean the database and shared preferences</string>
     <string name="settings_tab_info">Restart the app to see the changes</string>
@@ -776,6 +777,7 @@
     <string name="delete_all_post_layouts_success">Delete all post layouts successful</string>
     <string name="delete_all_themes_success">Delete all themes successful</string>
     <string name="delete_all_front_page_scrolled_positions_success">Delete all scrolled positions in front page successful</string>
+    <string name="delete_all_legacy_settings_success">Delete all legacy settings successful</string>
     <string name="reset_all_settings_success">Reset all settings successful</string>
 
     <string name="theme_preview">Theme Preview</string>

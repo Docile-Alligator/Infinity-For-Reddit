@@ -989,11 +989,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
         public void changeSortType(SortType sortType) {
             if (postFragment != null) {
-                mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST_BASE + subredditName, sortType.getType().name()).apply();
-                if (sortType.getTime() != null) {
-                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST_BASE + subredditName, sortType.getTime().name()).apply();
-                }
-
                 postFragment.changeSortType(sortType);
                 displaySortTypeInToolbar();
             }

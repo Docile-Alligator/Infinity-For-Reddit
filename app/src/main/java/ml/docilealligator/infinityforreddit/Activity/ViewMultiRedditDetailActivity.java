@@ -305,13 +305,6 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
 
     @Override
     public void sortTypeSelected(SortType sortType) {
-        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiPath,
-                sortType.getType().name()).apply();
-        if (sortType.getTime() != null) {
-            mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_MULTI_REDDIT_POST_BASE + multiPath,
-                    sortType.getTime().name()).apply();
-        }
-
         ((PostFragment) mFragment).changeSortType(sortType);
         displaySortType();
     }
