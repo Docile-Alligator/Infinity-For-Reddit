@@ -723,7 +723,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 } else {
                     bundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, false);
                 }
-                bundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_RANDOM_TYPE, true);
                 sortTypeBottomSheetFragment.setArguments(bundle);
                 sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
                 return true;

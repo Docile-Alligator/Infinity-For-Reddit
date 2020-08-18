@@ -247,56 +247,38 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    if (sortType.getType().value.equals(SortType.Type.RANDOM.value)) {
-                        ParsePost.parsePost(response.body(), locale, new ParsePost.ParsePostListener() {
-                            @Override
-                            public void onParsePostSuccess(Post post) {
-                                ArrayList<Post> singlePostList = new ArrayList<>();
-                                singlePostList.add(post);
-                                callback.onResult(singlePostList, null, null);
-                                hasPostLiveData.postValue(true);
-                                initialLoadStateLiveData.postValue(NetworkState.LOADED);
-                            }
-
-                            @Override
-                            public void onParsePostFail() {
-                                initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
-                            }
-                        });
-                    } else {
-                        ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
-                                new ParsePost.ParsePostsListingListener() {
-                                    @Override
-                                    public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
-                                        String nextPageKey;
-                                        if (lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
-                                            nextPageKey = null;
-                                        } else {
-                                            nextPageKey = lastItem;
-                                        }
-
-                                        if (newPosts.size() != 0) {
-                                            postLinkedHashSet.addAll(newPosts);
-                                            callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);
-                                            hasPostLiveData.postValue(true);
-                                        } else if (nextPageKey != null) {
-                                            loadBestPostsInitial(callback, nextPageKey);
-                                            return;
-                                        } else {
-                                            postLinkedHashSet.addAll(newPosts);
-                                            callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);
-                                            hasPostLiveData.postValue(false);
-                                        }
-
-                                        initialLoadStateLiveData.postValue(NetworkState.LOADED);
+                    ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
+                            new ParsePost.ParsePostsListingListener() {
+                                @Override
+                                public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
+                                    String nextPageKey;
+                                    if (lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
+                                        nextPageKey = null;
+                                    } else {
+                                        nextPageKey = lastItem;
                                     }
 
-                                    @Override
-                                    public void onParsePostsListingFail() {
-                                        initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing posts"));
+                                    if (newPosts.size() != 0) {
+                                        postLinkedHashSet.addAll(newPosts);
+                                        callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);
+                                        hasPostLiveData.postValue(true);
+                                    } else if (nextPageKey != null) {
+                                        loadBestPostsInitial(callback, nextPageKey);
+                                        return;
+                                    } else {
+                                        postLinkedHashSet.addAll(newPosts);
+                                        callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);
+                                        hasPostLiveData.postValue(false);
                                     }
-                                });
-                    }
+
+                                    initialLoadStateLiveData.postValue(NetworkState.LOADED);
+                                }
+
+                                @Override
+                                public void onParsePostsListingFail() {
+                                    initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing posts"));
+                                }
+                            });
                 } else {
                     initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED,
                             "code: " + response.code() + " message: " + response.message()));
@@ -388,56 +370,38 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    if (sortType.getType().value.equals(SortType.Type.RANDOM.value)) {
-                        ParsePost.parsePost(response.body(), locale, new ParsePost.ParsePostListener() {
-                            @Override
-                            public void onParsePostSuccess(Post post) {
-                                ArrayList<Post> singlePostList = new ArrayList<>();
-                                singlePostList.add(post);
-                                callback.onResult(singlePostList, null, null);
-                                hasPostLiveData.postValue(true);
-                                initialLoadStateLiveData.postValue(NetworkState.LOADED);
-                            }
-
-                            @Override
-                            public void onParsePostFail() {
-                                initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
-                            }
-                        });
-                    } else {
-                        ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
-                                new ParsePost.ParsePostsListingListener() {
-                                    @Override
-                                    public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
-                                        String nextPageKey;
-                                        if (lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
-                                            nextPageKey = null;
-                                        } else {
-                                            nextPageKey = lastItem;
-                                        }
-
-                                        if (newPosts.size() != 0) {
-                                            postLinkedHashSet.addAll(newPosts);
-                                            callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);
-                                            hasPostLiveData.postValue(true);
-                                        } else if (nextPageKey != null) {
-                                            loadSubredditPostsInitial(callback, nextPageKey);
-                                            return;
-                                        } else {
-                                            postLinkedHashSet.addAll(newPosts);
-                                            callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);
-                                            hasPostLiveData.postValue(false);
-                                        }
-
-                                        initialLoadStateLiveData.postValue(NetworkState.LOADED);
+                    ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
+                            new ParsePost.ParsePostsListingListener() {
+                                @Override
+                                public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
+                                    String nextPageKey;
+                                    if (lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
+                                        nextPageKey = null;
+                                    } else {
+                                        nextPageKey = lastItem;
                                     }
 
-                                    @Override
-                                    public void onParsePostsListingFail() {
-                                        initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing posts"));
+                                    if (newPosts.size() != 0) {
+                                        postLinkedHashSet.addAll(newPosts);
+                                        callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);
+                                        hasPostLiveData.postValue(true);
+                                    } else if (nextPageKey != null) {
+                                        loadSubredditPostsInitial(callback, nextPageKey);
+                                        return;
+                                    } else {
+                                        postLinkedHashSet.addAll(newPosts);
+                                        callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);
+                                        hasPostLiveData.postValue(false);
                                     }
-                                });
-                    }
+
+                                    initialLoadStateLiveData.postValue(NetworkState.LOADED);
+                                }
+
+                                @Override
+                                public void onParsePostsListingFail() {
+                                    initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing posts"));
+                                }
+                            });
                 } else {
                     initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED,
                             "code: " + response + " message: " + response.message()));

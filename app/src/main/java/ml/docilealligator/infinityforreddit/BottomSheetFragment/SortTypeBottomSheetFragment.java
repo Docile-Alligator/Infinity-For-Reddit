@@ -29,15 +29,12 @@ import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 public class SortTypeBottomSheetFragment extends RoundedBottomSheetDialogFragment {
 
     public static final String EXTRA_NO_BEST_TYPE = "ENBT";
-    public static final String EXTRA_NO_RANDOM_TYPE = "ENRT";
     @BindView(R.id.best_type_text_view_sort_type_bottom_sheet_fragment)
     TextView bestTypeTextView;
     @BindView(R.id.hot_type_text_view_sort_type_bottom_sheet_fragment)
     TextView hotTypeTextView;
     @BindView(R.id.new_type_text_view_sort_type_bottom_sheet_fragment)
     TextView newTypeTextView;
-    @BindView(R.id.random_type_text_view_sort_type_bottom_sheet_fragment)
-    TextView randomTypeTextView;
     @BindView(R.id.rising_type_text_view_sort_type_bottom_sheet_fragment)
     TextView risingTypeTextView;
     @BindView(R.id.top_type_text_view_sort_type_bottom_sheet_fragment)
@@ -78,15 +75,6 @@ public class SortTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
             ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.NEW));
             dismiss();
         });
-
-        if (getArguments() == null || (getArguments().containsKey(EXTRA_NO_RANDOM_TYPE) && getArguments().getBoolean(EXTRA_NO_RANDOM_TYPE))) {
-            randomTypeTextView.setVisibility(View.GONE);
-        } else {
-            randomTypeTextView.setOnClickListener(view -> {
-                ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.RANDOM));
-                dismiss();
-            });
-        }
 
         risingTypeTextView.setOnClickListener(view -> {
             ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.RISING));

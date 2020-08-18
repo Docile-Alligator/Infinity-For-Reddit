@@ -252,7 +252,6 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
                 multiRedditSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
                 Bundle multiRedditBundle = new Bundle();
                 multiRedditBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-                multiRedditBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_RANDOM_TYPE, true);
                 multiRedditSortTypeBottomSheetFragment.setArguments(multiRedditBundle);
                 break;
             case PostDataSource.TYPE_USER:

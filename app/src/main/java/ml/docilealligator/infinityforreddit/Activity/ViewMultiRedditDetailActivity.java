@@ -164,7 +164,6 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         sortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
         Bundle bottomSheetBundle = new Bundle();
         bottomSheetBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-        bottomSheetBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_RANDOM_TYPE, true);
         sortTypeBottomSheetFragment.setArguments(bottomSheetBundle);
 
         sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
