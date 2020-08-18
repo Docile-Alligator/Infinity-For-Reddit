@@ -140,7 +140,7 @@
             android:name=".Activity.EditCommentActivity"
             android:label="@string/edit_comment_activity_label"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.Slidable"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".Activity.EditPostActivity"
@@ -274,7 +274,7 @@
             android:name=".Activity.CommentActivity"
             android:label="@string/comment_activity_label"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.Slidable"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".Activity.SearchResultActivity"
