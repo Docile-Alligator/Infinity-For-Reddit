@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Settings.CustomizeMainPageTabsTestFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/info_text_view_customize_main_page_tabs_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:drawablePadding="32dp"
+            android:text="@string/settings_tab_info"
+            android:textColor="@color/settingsSubtitleColor"
+            android:gravity="center_vertical"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family"
+            app:drawableStartCompat="@drawable/ic_info_preference_24dp" />
+
+        <View
+            android:id="@+id/divider_1_customize_main_page_tabs_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dividerColor" />
+
+        <TextView
+            android:id="@+id/tab_1_group_summary_customize_main_page_tabs_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:text="@string/settings_tab_1_summary"
+            android:textColor="@color/colorAccent"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
+
+        <LinearLayout
+            android:id="@+id/tab_1_title_linear_layout_customize_main_page_tabs_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_tab_title"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="?attr/font_18"
+                android:fontFamily="?attr/font_family" />
+
+            <TextView
+                android:id="@+id/tab_1_title_summary_text_view_customize_main_page_tabs_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/secondaryTextColor"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tab_1_type_linear_layout_customize_main_page_tabs_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_tab_post_type"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="?attr/font_18"
+                android:fontFamily="?attr/font_family" />
+
+            <TextView
+                android:id="@+id/tab_1_type_summary_text_view_customize_main_page_tabs_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/secondaryTextColor"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tab_1_name_linear_layout_customize_main_page_tabs_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tab_1_name_title_text_view_customize_main_page_tabs_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="?attr/font_18"
+                android:fontFamily="?attr/font_family" />
+
+            <TextView
+                android:id="@+id/tab_1_name_summary_text_view_customize_main_page_tabs_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/secondaryTextColor"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider_2_customize_main_page_tabs_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dividerColor" />
+
+        <TextView
+            android:id="@+id/tab_2_group_summary_customize_main_page_tabs_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:text="@string/settings_tab_2_summary"
+            android:textColor="@color/colorAccent"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
+
+        <LinearLayout
+            android:id="@+id/tab_2_title_linear_layout_customize_main_page_tabs_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_tab_title"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="?attr/font_18"
+                android:fontFamily="?attr/font_family" />
+
+            <TextView
+                android:id="@+id/tab_2_title_summary_text_view_customize_main_page_tabs_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/secondaryTextColor"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tab_2_type_linear_layout_customize_main_page_tabs_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_tab_post_type"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="?attr/font_18"
+                android:fontFamily="?attr/font_family" />
+
+            <TextView
+                android:id="@+id/tab_2_type_summary_text_view_customize_main_page_tabs_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/secondaryTextColor"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tab_2_name_linear_layout_customize_main_page_tabs_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tab_2_name_title_text_view_customize_main_page_tabs_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="?attr/font_18"
+                android:fontFamily="?attr/font_family" />
+
+            <TextView
+                android:id="@+id/tab_2_name_summary_text_view_customize_main_page_tabs_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/secondaryTextColor"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider_3_customize_main_page_tabs_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dividerColor" />
+
+        <TextView
+            android:id="@+id/tab_3_group_summary_customize_main_page_tabs_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:text="@string/settings_tab_3_summary"
+            android:textColor="@color/colorAccent"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
+
+        <LinearLayout
+            android:id="@+id/tab_3_title_linear_layout_customize_main_page_tabs_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_tab_title"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="?attr/font_18"
+                android:fontFamily="?attr/font_family" />
+
+            <TextView
+                android:id="@+id/tab_3_title_summary_text_view_customize_main_page_tabs_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/secondaryTextColor"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tab_3_type_linear_layout_customize_main_page_tabs_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_tab_post_type"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="?attr/font_18"
+                android:fontFamily="?attr/font_family" />
+
+            <TextView
+                android:id="@+id/tab_3_type_summary_text_view_customize_main_page_tabs_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/secondaryTextColor"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/tab_3_name_linear_layout_customize_main_page_tabs_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tab_3_name_title_text_view_customize_main_page_tabs_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="?attr/font_18"
+                android:fontFamily="?attr/font_family" />
+
+            <TextView
+                android:id="@+id/tab_3_name_summary_text_view_customize_main_page_tabs_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/secondaryTextColor"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

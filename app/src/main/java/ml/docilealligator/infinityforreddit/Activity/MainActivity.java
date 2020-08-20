@@ -169,6 +169,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Named("post_layout")
     SharedPreferences mPostLayoutSharedPreferences;
     @Inject
+    @Named("main_activity_tabs")
+    SharedPreferences mMainActivityTabsSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private AppBarLayout.LayoutParams params;
@@ -955,22 +958,23 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             }
 
             if (position == 0) {
-                String postType = mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_1_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HOME);
-                String name = mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, "");
+                int postType = mMainActivityTabsSharedPreferences.getInt((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HOME);
+                String name = mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, "");
                 return generatePostFragment(postType, name);
             } else if (position == 1) {
-                String postType = mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_2_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_POPULAR);
-                String name = mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, "");
+                int postType = mMainActivityTabsSharedPreferences.getInt((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_POPULAR);
+                String name = mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, "");
                 return generatePostFragment(postType, name);
             } else {
-                String postType = mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_3_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_ALL);
-                String name = mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, "");
+                int postType = mMainActivityTabsSharedPreferences.getInt((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_ALL);
+                String name = mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, "");
                 return generatePostFragment(postType, name);
             }
         }
 
-        private Fragment generatePostFragment(String postType, String name) {
-            if (postType.equals(SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HOME)) {
+        private Fragment generatePostFragment(int postType, String name) {
+
+            if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HOME) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_FRONT_PAGE);
@@ -979,7 +983,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                 fragment.setArguments(bundle);
                 return fragment;
-            } else if (postType.equals(SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_ALL)) {
+            } else if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_ALL) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
@@ -989,7 +993,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                 fragment.setArguments(bundle);
                 return fragment;
-            } else if (postType.equals(SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_SUBREDDIT)) {
+            } else if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_SUBREDDIT) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
@@ -999,7 +1003,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                 fragment.setArguments(bundle);
                 return fragment;
-            } else if (postType.equals(SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_MULTIREDDIT)) {
+            } else if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_MULTIREDDIT) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(PostFragment.EXTRA_NAME, name);
@@ -1009,7 +1013,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                 fragment.setArguments(bundle);
                 return fragment;
-            } else if (postType.equals(SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_USER)) {
+            } else if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_USER) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_USER);
@@ -1053,11 +1057,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             } else {
                 switch (position) {
                     case 0:
-                        return mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_1_TITLE, getString(R.string.home));
+                        return mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_TITLE, getString(R.string.home));
                     case 1:
-                        return mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_2_TITLE, getString(R.string.popular));
+                        return mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_TITLE, getString(R.string.popular));
                     case 2:
-                        return mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_TAB_3_TITLE, getString(R.string.all));
+                        return mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_TITLE, getString(R.string.all));
                 }
             }
             return null;

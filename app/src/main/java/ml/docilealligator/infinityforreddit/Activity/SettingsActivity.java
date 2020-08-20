@@ -21,11 +21,14 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Settings.AboutPreferenceFragment;
+import ml.docilealligator.infinityforreddit.Settings.CustomizeMainPageTabsTestFragment;
 import ml.docilealligator.infinityforreddit.Settings.FontPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.InterfacePreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.MainPreferenceFragment;
@@ -39,10 +42,14 @@ public class SettingsActivity extends BaseActivity implements
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_settings_activity)
     Toolbar toolbar;
+    private boolean mNullAccountName;
+    private String mAccountName;
 
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
 
@@ -68,14 +75,7 @@ public class SettingsActivity extends BaseActivity implements
 
         setSupportActionBar(toolbar);
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.frame_layout_settings_activity, new MainPreferenceFragment())
-                    .commit();
-        } else {
-            setTitle(savedInstanceState.getCharSequence(TITLE_STATE));
-        }
+        getCurrentAccountAndBindView(savedInstanceState);
 
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
@@ -88,6 +88,25 @@ public class SettingsActivity extends BaseActivity implements
                 setTitle(R.string.settings_font_title);
             }
         });
+    }
+
+    private void getCurrentAccountAndBindView(Bundle savedInstanceState) {
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if (account == null) {
+                mNullAccountName = true;
+            } else {
+                mAccountName = account.getUsername();
+            }
+
+            if (savedInstanceState == null) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.frame_layout_settings_activity, new MainPreferenceFragment())
+                        .commit();
+            } else {
+                setTitle(savedInstanceState.getCharSequence(TITLE_STATE));
+            }
+        }).execute();
     }
 
     @Override
@@ -135,6 +154,9 @@ public class SettingsActivity extends BaseActivity implements
         final Fragment fragment = getSupportFragmentManager().getFragmentFactory().instantiate(
                 getClassLoader(),
                 pref.getFragment());
+        if (fragment instanceof CustomizeMainPageTabsTestFragment) {
+            args.putString(CustomizeMainPageTabsTestFragment.EXTRA_ACCOUNT_NAME, mAccountName);
+        }
         fragment.setArguments(args);
         fragment.setTargetFragment(caller, 0);
 

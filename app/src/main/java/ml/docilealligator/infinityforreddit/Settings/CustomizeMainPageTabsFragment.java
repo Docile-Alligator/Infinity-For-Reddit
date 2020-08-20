@@ -6,8 +6,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.preference.EditTextPreference;
-import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import javax.inject.Inject;
@@ -15,9 +13,6 @@ import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.Activity.SettingsActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,7 +28,7 @@ public class CustomizeMainPageTabsFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.customize_main_page_tabs_preferences, rootKey);
+        /*setPreferencesFromResource(R.xml.customize_main_page_tabs_preferences, rootKey);
 
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
@@ -156,7 +151,7 @@ public class CustomizeMainPageTabsFragment extends PreferenceFragmentCompat {
                 }
                 return true;
             });
-        }
+        }*/
     }
 
     @Override

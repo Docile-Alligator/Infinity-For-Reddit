@@ -206,6 +206,12 @@ class AppModule {
     }
 
     @Provides
+    @Named("main_activity_tabs")
+    SharedPreferences provideMainActivityTabsSharedPreferences() {
+        return mApplication.getSharedPreferences(SharedPreferencesUtils.MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+    }
+
+    @Provides
     @Singleton
     CustomThemeWrapper provideCustomThemeWrapper(@Named("light_theme") SharedPreferences lightThemeSharedPreferences,
                                                  @Named("dark_theme") SharedPreferences darkThemeSharedPreferences,

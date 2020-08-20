@@ -9,4 +9,6 @@
     <color name="playButtonBackgroundColor">#FFFFFF</color>
     <color name="roundedBottomSheetPrimaryBackground">#242424</color>
     <color name="primaryTextColor">#FFFFFF</color>
+    <color name="settingsSubtitleColor">#4DFFFFFF</color>
+    <color name="dividerColor">#69666c</color>
 </resources>
