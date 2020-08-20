@@ -28,7 +28,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Settings.AboutPreferenceFragment;
-import ml.docilealligator.infinityforreddit.Settings.CustomizeMainPageTabsTestFragment;
+import ml.docilealligator.infinityforreddit.Settings.CustomizeMainPageTabsFragment;
 import ml.docilealligator.infinityforreddit.Settings.FontPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.InterfacePreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.MainPreferenceFragment;
@@ -154,8 +154,8 @@ public class SettingsActivity extends BaseActivity implements
         final Fragment fragment = getSupportFragmentManager().getFragmentFactory().instantiate(
                 getClassLoader(),
                 pref.getFragment());
-        if (fragment instanceof CustomizeMainPageTabsTestFragment) {
-            args.putString(CustomizeMainPageTabsTestFragment.EXTRA_ACCOUNT_NAME, mAccountName);
+        if (fragment instanceof CustomizeMainPageTabsFragment) {
+            args.putString(CustomizeMainPageTabsFragment.EXTRA_ACCOUNT_NAME, mAccountName);
         }
         fragment.setArguments(args);
         fragment.setTargetFragment(caller, 0);
