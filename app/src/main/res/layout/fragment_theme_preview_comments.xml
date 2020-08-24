@@ -145,7 +145,6 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:src="@drawable/ic_arrow_downward_grey_24dp"
-                        android:tint="@android:color/tab_indicator_text"
                         app:layout_constraintStart_toEndOf="@+id/score_text_view_theme_preview_comments_fragment"
                         app:layout_constraintEnd_toStartOf="@id/more_button_theme_preview_comments_fragment"
                         app:layout_constraintTop_toTopOf="parent"
@@ -176,7 +175,6 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:src="@drawable/ic_expand_less_grey_24dp"
-                        android:tint="@android:color/tab_indicator_text"
                         app:layout_constraintEnd_toStartOf="@+id/save_button_theme_preview_comments_fragment"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -354,7 +352,6 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:src="@drawable/ic_arrow_downward_grey_24dp"
-                        android:tint="@android:color/tab_indicator_text"
                         app:layout_constraintStart_toEndOf="@+id/score_text_view_award_background_theme_preview_comments_fragment"
                         app:layout_constraintEnd_toStartOf="@id/more_button_award_background_theme_preview_comments_fragment"
                         app:layout_constraintTop_toTopOf="parent"
@@ -385,7 +382,6 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:src="@drawable/ic_expand_less_grey_24dp"
-                        android:tint="@android:color/tab_indicator_text"
                         app:layout_constraintEnd_toStartOf="@+id/save_button_award_background_theme_preview_comments_fragment"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"/>

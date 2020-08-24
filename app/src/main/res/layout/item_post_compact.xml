@@ -266,7 +266,7 @@
                 android:layout_height="72dp"
                 android:scaleType="center"
                 android:src="@drawable/ic_link"
-                android:tint="@android:color/tab_indicator_text" />
+                app:tint="@android:color/tab_indicator_text" />
 
         </FrameLayout>
 

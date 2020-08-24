@@ -262,7 +262,17 @@ public class LinkResolverActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(uri);
 
-        List<ResolveInfo> activities = pm.queryIntentActivities(intent, 0);
+        try {
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            if (handleError) {
+                openInCustomTabs(uri, pm, false);
+            } else {
+                Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        /*List<ResolveInfo> activities = pm.queryIntentActivities(intent, 0);
         ArrayList<String> packageNames = new ArrayList<>();
 
         String currentPackageName = getApplicationContext().getPackageName();
@@ -289,9 +299,8 @@ public class LinkResolverActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show();
             }
-        }
+        }*/
     }
-
 
     private ArrayList<ResolveInfo> getCustomTabsPackages(PackageManager pm) {
         // Get default VIEW intent handler.

@@ -218,7 +218,8 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:scaleType="center"
-        android:src="@drawable/ic_link" />
+        android:src="@drawable/ic_link"
+        app:tint="@android:color/tab_indicator_text" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -231,7 +232,6 @@
             android:layout_height="wrap_content"
             android:padding="12dp"
             android:src="@drawable/ic_arrow_upward_grey_24dp"
-            android:tint="@android:color/tab_indicator_text"
             android:background="?actionBarItemBackground"
             android:clickable="true"
             android:focusable="true"
@@ -257,7 +257,6 @@
             android:layout_height="wrap_content"
             android:padding="12dp"
             android:src="@drawable/ic_arrow_downward_grey_24dp"
-            android:tint="@android:color/tab_indicator_text"
             android:background="?actionBarItemBackground"
             android:clickable="true"
             android:focusable="true"
@@ -285,7 +284,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="12dp"
-            android:tint="@android:color/tab_indicator_text"
             android:background="?actionBarItemBackground"
             android:clickable="true"
             android:focusable="true"

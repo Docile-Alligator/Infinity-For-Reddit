@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
     android:focusable="true"
     android:background="?attr/selectableItemBackground">
@@ -23,7 +24,7 @@
         android:layout_marginStart="32dp"
         android:src="@drawable/ic_outline_edit_24px"
         android:visibility="gone"
-        android:tint="?attr/primaryTextColor"
+        app:tint="?attr/primaryTextColor"
         android:background="?actionBarItemBackground"
         android:clickable="true"
         android:focusable="true" />
