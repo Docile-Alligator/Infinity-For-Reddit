@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 29
     defaultConfig {
         applicationId "ml.docilealligator.infinityforreddit"
         minSdkVersion 21
-        targetSdkVersion 30
-        versionCode 39
-        versionName "4.0.3"
+        targetSdkVersion 29
+        versionCode 40
+        versionName "4.0.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
