@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Preference
+        android:icon="@drawable/ic_info_preference_24dp"
+        app:summary="@string/settings_tab_info"
+        app:enabled="false" />
+
+    <ListPreference
+        app:defaultValue="1"
+        app:entries="@array/settings_number_of_columns_in_post_feed"
+        app:entryValues="@array/settings_number_of_columns_in_post_feed"
+        app:key="number_of_columns_in_post_feed_portrait"
+        app:title="@string/settings_number_of_columns_in_post_feed_portrait_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        app:defaultValue="2"
+        app:entries="@array/settings_number_of_columns_in_post_feed"
+        app:entryValues="@array/settings_number_of_columns_in_post_feed"
+        app:key="number_of_columns_in_post_feed_landscape"
+        app:title="@string/settings_number_of_columns_in_post_feed_landscape_title"
+        app:useSimpleSummaryProvider="true" />
+</PreferenceScreen>

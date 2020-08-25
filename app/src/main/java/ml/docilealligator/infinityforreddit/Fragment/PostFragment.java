@@ -260,7 +260,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int windowWidth = displayMetrics.widthPixels;
 
-        if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && !resources.getBoolean(R.bool.isTablet)) {
+        int nColumns;
+        if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            nColumns = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT, "1"));
+        } else {
+            nColumns = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE, "1"));
+        }
+
+        if (nColumns == 1) {
             mLinearLayoutManager = new LinearLayoutManager(activity);
             mPostRecyclerView.setLayoutManager(mLinearLayoutManager);
         } else {

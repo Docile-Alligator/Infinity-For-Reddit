@@ -62,6 +62,10 @@
         app:key="show_thumbnail_on_the_left_in_compact_layout"
         app:title="@string/settings_show_thumbnail_on_the_left_in_compact_layout" />
 
+    <Preference
+        app:title="@string/settings_number_of_columns_in_post_feed_title"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.NumberOfColumnsInPostFeedPreferenceFragment" />
+
     <PreferenceCategory
         app:title="@string/settings_category_comment_title" />
 
