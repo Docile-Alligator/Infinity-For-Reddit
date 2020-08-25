@@ -383,8 +383,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             subredditName = getArguments().getString(EXTRA_NAME);
             String query = getArguments().getString(EXTRA_QUERY);
 
-            String sort = mSortTypeSharedPreferences.getString((accountName == null ? "" : accountName) + SharedPreferencesUtils.SORT_TYPE_SEARCH_POST, SortType.Type.RELEVANCE.name());
-            String sortTime = mSortTypeSharedPreferences.getString((accountName == null ? "" : accountName) + SharedPreferencesUtils.SORT_TIME_SEARCH_POST, SortType.Time.ALL.name());
+            String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SEARCH_POST, SortType.Type.RELEVANCE.name());
+            String sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_SEARCH_POST, SortType.Time.ALL.name());
             sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, defaultPostLayout);
 
@@ -422,9 +422,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             String sort;
             String sortTime = null;
 
-            sort = mSortTypeSharedPreferences.getString((accountName == null ? "" : accountName) + SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST_BASE + subredditName, SortType.Type.HOT.name());
+            sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST_BASE + subredditName, SortType.Type.HOT.name());
             if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
-                sortTime = mSortTypeSharedPreferences.getString((accountName == null ? "" : accountName) + SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST_BASE + subredditName, SortType.Time.ALL.name());
+                sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST_BASE + subredditName, SortType.Time.ALL.name());
             }
             boolean displaySubredditName = subredditName != null && (subredditName.equals("popular") || subredditName.equals("all"));
             if(displaySubredditName) {
@@ -476,10 +476,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             String sort;
             String sortTime = null;
 
-            sort = mSortTypeSharedPreferences.getString((accountName == null ? "" : accountName) + SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiRedditPath,
+            sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiRedditPath,
                     SortType.Type.HOT.name());
             if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
-                sortTime = mSortTypeSharedPreferences.getString((accountName == null ? "" : accountName) + SharedPreferencesUtils.SORT_TIME_MULTI_REDDIT_POST_BASE + multiRedditPath,
+                sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_MULTI_REDDIT_POST_BASE + multiRedditPath,
                         SortType.Time.ALL.name());
             }
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + multiRedditPath,
@@ -567,9 +567,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     accountName, getResources().getConfiguration().locale, mSharedPreferences,
                     postFeedScrolledPositionSharedPreferences, username, postType, sortType, where, filter, nsfw)).get(PostViewModel.class);
         } else {
-            String sort = mSortTypeSharedPreferences.getString(accountName + SharedPreferencesUtils.SORT_TYPE_BEST_POST, SortType.Type.BEST.name());
+            String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_BEST_POST, SortType.Type.BEST.name());
             if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
-                String sortTime = mSortTypeSharedPreferences.getString(accountName + SharedPreferencesUtils.SORT_TIME_BEST_POST, SortType.Time.ALL.name());
+                String sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_BEST_POST, SortType.Time.ALL.name());
                 sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
             } else {
                 sortType = new SortType(SortType.Type.valueOf(sort));
@@ -655,34 +655,34 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void changeSortType(SortType sortType) {
         switch (postType) {
             case PostDataSource.TYPE_FRONT_PAGE:
-                mSortTypeSharedPreferences.edit().putString(accountName + SharedPreferencesUtils.SORT_TYPE_BEST_POST, sortType.getType().name()).apply();
+                mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_BEST_POST, sortType.getType().name()).apply();
                 if (sortType.getTime() != null) {
-                    mSortTypeSharedPreferences.edit().putString(accountName + SharedPreferencesUtils.SORT_TIME_BEST_POST, sortType.getTime().name()).apply();
+                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_BEST_POST, sortType.getTime().name()).apply();
                 }
                 break;
             case PostDataSource.TYPE_SUBREDDIT:
-                mSortTypeSharedPreferences.edit().putString((accountName == null ? "" : accountName) + SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST_BASE + subredditName, sortType.getType().name()).apply();
+                mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST_BASE + subredditName, sortType.getType().name()).apply();
                 if (sortType.getTime() != null) {
-                    mSortTypeSharedPreferences.edit().putString((accountName == null ? "" : accountName) + SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST_BASE + subredditName, sortType.getTime().name()).apply();
+                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST_BASE + subredditName, sortType.getTime().name()).apply();
                 }
                 break;
             case PostDataSource.TYPE_USER:
-                mSortTypeSharedPreferences.edit().putString((accountName == null ? "" : accountName) + SharedPreferencesUtils.SORT_TYPE_USER_POST_BASE + username, sortType.getType().name()).apply();
+                mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_USER_POST_BASE + username, sortType.getType().name()).apply();
                 if(sortType.getTime() != null) {
-                    mSortTypeSharedPreferences.edit().putString((accountName == null ? "" : accountName) + SharedPreferencesUtils.SORT_TIME_USER_POST_BASE + username, sortType.getTime().name()).apply();
+                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_USER_POST_BASE + username, sortType.getTime().name()).apply();
                 }
                 break;
             case PostDataSource.TYPE_SEARCH:
-                mSortTypeSharedPreferences.edit().putString((accountName == null ? "" : accountName) + SharedPreferencesUtils.SORT_TYPE_SEARCH_POST, sortType.getType().name()).apply();
+                mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SEARCH_POST, sortType.getType().name()).apply();
                 if(sortType.getTime() != null) {
-                    mSortTypeSharedPreferences.edit().putString((accountName == null ? "" : accountName) + SharedPreferencesUtils.SORT_TIME_SEARCH_POST, sortType.getTime().name()).apply();
+                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SEARCH_POST, sortType.getTime().name()).apply();
                 }
                 break;
             case PostDataSource.TYPE_MULTI_REDDIT:
-                mSortTypeSharedPreferences.edit().putString((accountName == null ? "" : accountName) + SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiRedditPath,
+                mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiRedditPath,
                         sortType.getType().name()).apply();
                 if (sortType.getTime() != null) {
-                    mSortTypeSharedPreferences.edit().putString((accountName == null ? "" : accountName) + SharedPreferencesUtils.SORT_TIME_MULTI_REDDIT_POST_BASE + multiRedditPath,
+                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_MULTI_REDDIT_POST_BASE + multiRedditPath,
                             sortType.getTime().name()).apply();
                 }
                 break;

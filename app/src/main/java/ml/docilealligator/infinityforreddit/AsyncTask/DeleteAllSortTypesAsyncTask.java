@@ -32,8 +32,8 @@ public class DeleteAllSortTypesAsyncTask extends AsyncTask<Void, Void, Void> {
         for(Map.Entry<String,?> entry : keys.entrySet()){
             String key = entry.getKey();
             if (key.contains(SharedPreferencesUtils.SORT_TYPE_BEST_POST) || key.contains(SharedPreferencesUtils.SORT_TIME_BEST_POST)
-                    || key.contains(SharedPreferencesUtils.SORT_TYPE_ALL_POST) || key.contains(SharedPreferencesUtils.SORT_TIME_ALL_POST)
-                    || key.contains(SharedPreferencesUtils.SORT_TYPE_POPULAR_POST) || key.contains(SharedPreferencesUtils.SORT_TIME_POPULAR_POST)
+                    || key.contains(SharedPreferencesUtils.SORT_TYPE_ALL_POST_LEGACY) || key.contains(SharedPreferencesUtils.SORT_TIME_ALL_POST_LEGACY)
+                    || key.contains(SharedPreferencesUtils.SORT_TYPE_POPULAR_POST_LEGACY) || key.contains(SharedPreferencesUtils.SORT_TIME_POPULAR_POST_LEGACY)
                     || key.contains(SharedPreferencesUtils.SORT_TYPE_SEARCH_POST) || key.contains(SharedPreferencesUtils.SORT_TIME_SEARCH_POST)
                     || key.contains(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST_BASE) || key.contains(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST_BASE)
                     || key.contains(SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE) || key.contains(SharedPreferencesUtils.SORT_TIME_MULTI_REDDIT_POST_BASE)

@@ -42,16 +42,16 @@ public class SharedPreferencesUtils {
     public static final String VOTE_BUTTONS_ON_THE_RIGHT_KEY = "vote_buttons_on_the_right";
 
     public static final String SORT_TYPE_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.sort_type";
-    public static final String SORT_TYPE_BEST_POST = "_sort_type_best_post";
-    public static final String SORT_TIME_BEST_POST = "_sort_time_best_post";
-    public static final String SORT_TYPE_SEARCH_POST = "_sort_type_search_post";
-    public static final String SORT_TIME_SEARCH_POST = "_sort_time_search_post";
-    public static final String SORT_TYPE_SUBREDDIT_POST_BASE = "_sort_type_subreddit_post_";
-    public static final String SORT_TIME_SUBREDDIT_POST_BASE = "_sort_time_subreddit_post_";
-    public static final String SORT_TYPE_MULTI_REDDIT_POST_BASE = "_sort_type_multi_reddit_post_";
-    public static final String SORT_TIME_MULTI_REDDIT_POST_BASE = "_sort_time_multi_reddit_post_";
-    public static final String SORT_TYPE_USER_POST_BASE = "_sort_type_user_post_";
-    public static final String SORT_TIME_USER_POST_BASE = "_sort_time_user_post_";
+    public static final String SORT_TYPE_BEST_POST = "sort_type_best_post";
+    public static final String SORT_TIME_BEST_POST = "sort_time_best_post";
+    public static final String SORT_TYPE_SEARCH_POST = "sort_type_search_post";
+    public static final String SORT_TIME_SEARCH_POST = "sort_time_search_post";
+    public static final String SORT_TYPE_SUBREDDIT_POST_BASE = "sort_type_subreddit_post_";
+    public static final String SORT_TIME_SUBREDDIT_POST_BASE = "sort_time_subreddit_post_";
+    public static final String SORT_TYPE_MULTI_REDDIT_POST_BASE = "sort_type_multi_reddit_post_";
+    public static final String SORT_TIME_MULTI_REDDIT_POST_BASE = "sort_time_multi_reddit_post_";
+    public static final String SORT_TYPE_USER_POST_BASE = "sort_type_user_post_";
+    public static final String SORT_TIME_USER_POST_BASE = "sort_time_user_post_";
     public static final String SORT_TYPE_USER_COMMENT = "sort_type_user_comment";
     public static final String SORT_TIME_USER_COMMENT = "sort_time_user_comment";
     public static final String SORT_TYPE_SEARCH_SUBREDDIT = "sort_type_search_subreddit";
@@ -152,8 +152,8 @@ public class SharedPreferencesUtils {
     public static final String MAIN_PAGE_TAB_2_NAME_LEGACY = "main_page_tab_2_name";
     public static final String MAIN_PAGE_TAB_3_NAME_LEGACY = "main_page_tab_3_name";
 
-    public static final String SORT_TYPE_ALL_POST = "sort_type_all_post";
-    public static final String SORT_TIME_ALL_POST = "sort_time_all_post";
-    public static final String SORT_TYPE_POPULAR_POST = "sort_type_popular_post";
-    public static final String SORT_TIME_POPULAR_POST = "sort_time_popular_post";
+    public static final String SORT_TYPE_ALL_POST_LEGACY = "sort_type_all_post";
+    public static final String SORT_TIME_ALL_POST_LEGACY = "sort_time_all_post";
+    public static final String SORT_TYPE_POPULAR_POST_LEGACY = "sort_type_popular_post";
+    public static final String SORT_TIME_POPULAR_POST_LEGACY = "sort_time_popular_post";
 }
