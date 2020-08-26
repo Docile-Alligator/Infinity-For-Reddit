@@ -19,8 +19,6 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SortType;
@@ -36,7 +34,7 @@ public class Utils {
     public static String modifyMarkdown(String markdown) {
         StringBuilder regexed = new StringBuilder(markdown.replaceAll("((?<=[\\s])|^)/[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com$0)").replaceAll("((?<=[\\s])|^)[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com/$0)"));
 
-        int startIndex = 0;
+        /*int startIndex = 0;
 
         Pattern pattern = Pattern.compile("\\^.+");
         Matcher matcher = pattern.matcher(regexed);
@@ -66,7 +64,7 @@ public class Utils {
                 }
             }
             startIndex = matcher.end() - count;
-        }
+        }*/
         return regexed.toString();
     }
 
