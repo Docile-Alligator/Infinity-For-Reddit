@@ -301,18 +301,18 @@
     <string name="show_removed_post_failed">Could not find the removed post</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
-    <string name="edit_success">Edit successful</string>
+    <string name="edit_success">Edit successfully</string>
     <string name="delete_post_success">Delete successfully</string>
     <string name="delete_post_failed">Delete failed</string>
-    <string name="mark_nsfw_success">Mark NSFW successful</string>
+    <string name="mark_nsfw_success">Mark NSFW successfully</string>
     <string name="mark_nsfw_failed">Mark NSFW failed</string>
-    <string name="unmark_nsfw_success">Unmark NSFW successful</string>
+    <string name="unmark_nsfw_success">Unmark NSFW successfully</string>
     <string name="unmark_nsfw_failed">Unmark NSFW failed</string>
-    <string name="mark_spoiler_success">Mark spoiler successful</string>
+    <string name="mark_spoiler_success">Mark spoiler successfully</string>
     <string name="mark_spoiler_failed">Mark spoiler failed</string>
-    <string name="unmark_spoiler_success">Unmark spoiler successful</string>
+    <string name="unmark_spoiler_success">Unmark spoiler successfully</string>
     <string name="unmark_spoiler_failed">Unmark spoiler failed</string>
-    <string name="update_flair_success">Update flair successful</string>
+    <string name="update_flair_success">Update flair successfully</string>
     <string name="update_flair_failed">Update flair failed</string>
 
     <string name="edit_flair">Edit Flair</string>
@@ -761,7 +761,7 @@
     <string name="cannot_find_theme">Cannot find this theme</string>
     <string name="import_theme">Import Theme</string>
     <string name="no_data_in_clipboard">Cannot find data in clipboard</string>
-    <string name="import_theme_success">Import theme successful</string>
+    <string name="import_theme_success">Import theme successfully</string>
     <string name="parse_theme_failed">Parse Theme Failed</string>
     <string name="share_theme_to_subreddit_dialog_title">Share it to r/Infinity_For_Reddit?</string>
     <string name="share_theme_to_subreddit_dialog_message">The theme configuration is copied!
@@ -774,14 +774,14 @@
     <string name="color_picker">Color Picker</string>
     <string name="invalid_color">Invalid Color</string>
 
-    <string name="delete_all_subreddits_success">Delete all subreddits successful</string>
-    <string name="delete_all_users_success">Delete all users successful</string>
-    <string name="delete_all_sort_types_success">Delete all sort types successful</string>
-    <string name="delete_all_post_layouts_success">Delete all post layouts successful</string>
-    <string name="delete_all_themes_success">Delete all themes successful</string>
-    <string name="delete_all_front_page_scrolled_positions_success">Delete all scrolled positions in front page successful</string>
-    <string name="delete_all_legacy_settings_success">Delete all legacy settings successful</string>
-    <string name="reset_all_settings_success">Reset all settings successful</string>
+    <string name="delete_all_subreddits_success">Delete all subreddits successfully</string>
+    <string name="delete_all_users_success">Delete all users successfully</string>
+    <string name="delete_all_sort_types_success">Delete all sort types successfully</string>
+    <string name="delete_all_post_layouts_success">Delete all post layouts successfully</string>
+    <string name="delete_all_themes_success">Delete all themes successfully</string>
+    <string name="delete_all_front_page_scrolled_positions_success">Delete all scrolled positions in front page successfully</string>
+    <string name="delete_all_legacy_settings_success">Delete all legacy settings successfully</string>
+    <string name="reset_all_settings_success">Reset all settings successfully</string>
 
     <string name="theme_preview">Theme Preview</string>
     <string name="username_preview">u/Hostilenemy</string>
