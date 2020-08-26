@@ -21,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -160,8 +159,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
 
                     // Permission is not granted
                     // No explanation needed; request the permission
-                    ActivityCompat.requestPermissions(activity,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
                 } else {
                     // Permission has already been granted
@@ -180,10 +178,10 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
         if (requestCode == PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE && grantResults.length > 0) {
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 Toast.makeText(activity, R.string.no_storage_permission, Toast.LENGTH_SHORT).show();
+                isDownloading = false;
             } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED && isDownloading) {
                 download();
             }
-            isDownloading = false;
         }
     }
 
