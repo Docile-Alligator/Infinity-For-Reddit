@@ -34,7 +34,7 @@ public class Utils {
     private static final long YEAR_MILLIS = 12 * MONTH_MILLIS;
 
     public static String modifyMarkdown(String markdown) {
-        StringBuilder regexed = new StringBuilder(markdown.replaceAll("((?<=[\\s])|^)/{0,1}[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com/$0)"));
+        StringBuilder regexed = new StringBuilder(markdown.replaceAll("((?<=[\\s])|^)/[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com$0)").replaceAll("((?<=[\\s])|^)[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com/$0)"));
 
         int startIndex = 0;
 
