@@ -226,7 +226,7 @@ public class EditMultiRedditActivity extends BaseActivity {
         if (requestCode == SUBREDDIT_SELECTION_REQUEST_CODE && resultCode == RESULT_OK) {
             if (data != null) {
                 multiReddit.setSubreddits(data.getStringArrayListExtra(
-                        SubredditMultiselectionActivity.EXTRA_RETURN_SELECTED_SUBREDDITS));
+                        SelectedSubredditsActivity.EXTRA_RETURN_SELECTED_SUBREDDITS));
             }
         }
     }
