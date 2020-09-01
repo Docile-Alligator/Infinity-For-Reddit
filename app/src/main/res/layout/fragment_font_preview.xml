@@ -1,176 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".Settings.FontPreviewFragment">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="72dp"
-        android:paddingEnd="16dp"
-        android:text="@string/default_font_font_preview"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="?attr/font_default" />
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="72dp"
-        android:paddingEnd="16dp"
-        android:text="Balsamiq Sans"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:fontFamily="@font/balsamiq_sans" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:text="@string/default_font_font_preview"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="72dp"
-        android:paddingEnd="16dp"
-        android:text="Balsamiq Sans Bold"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:fontFamily="@font/balsamiq_sans_bold_version" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:text="Balsamiq Sans"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="@font/balsamiq_sans" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="72dp"
-        android:paddingEnd="16dp"
-        android:text="Noto Sans"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:fontFamily="@font/noto_sans" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:text="Balsamiq Sans Bold"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="@font/balsamiq_sans_bold_version" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="72dp"
-        android:paddingEnd="16dp"
-        android:text="Noto Sans Bold"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:fontFamily="@font/noto_sans_bold_version" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:text="Noto Sans"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="@font/noto_sans" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="72dp"
-        android:paddingEnd="16dp"
-        android:text="Harmonia Sans"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:fontFamily="@font/harmonia_sans" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:text="Noto Sans Bold"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="@font/noto_sans_bold_version" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="72dp"
-        android:paddingEnd="16dp"
-        android:text="Harmonia Sans Bold"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:fontFamily="@font/harmonia_sans_bold" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:text="Harmonia Sans"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="@font/harmonia_sans" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="72dp"
-        android:paddingEnd="16dp"
-        android:text="Roboto Condensed"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:fontFamily="@font/roboto_condensed" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:text="Harmonia Sans Bold"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="@font/harmonia_sans_bold" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="72dp"
-        android:paddingEnd="16dp"
-        android:text="Roboto Condensed Bold"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:fontFamily="@font/roboto_condensed_bold_version" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:text="Roboto Condensed"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="@font/roboto_condensed" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="72dp"
-        android:paddingEnd="16dp"
-        android:text="Inter"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:fontFamily="@font/inter" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:text="Roboto Condensed Bold"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="@font/roboto_condensed_bold_version" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="72dp"
-        android:paddingEnd="16dp"
-        android:text="Inter Bold"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:fontFamily="@font/inter_bold" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:text="Inter"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="@font/inter" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="72dp"
-        android:paddingEnd="16dp"
-        android:text="Manrope"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:fontFamily="@font/manrope" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:text="Inter Bold"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="@font/inter_bold" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="72dp"
-        android:paddingEnd="16dp"
-        android:text="Manrope Bold"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:fontFamily="@font/manrope_bold" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:text="Manrope"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="@font/manrope" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="72dp"
-        android:paddingEnd="16dp"
-        android:text="Sriracha"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:fontFamily="@font/sriracha_regular" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:text="Manrope Bold"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="@font/manrope_bold" />
 
-</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:text="Sriracha"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="@font/sriracha_regular" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
