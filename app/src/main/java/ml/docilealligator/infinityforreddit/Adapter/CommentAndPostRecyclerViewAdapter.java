@@ -279,7 +279,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                         super.updateDrawState(ds);
                                         ds.setColor(markdownColor);
                                     } else {
-                                        ds.bgColor = Color.BLACK;
+                                        ds.bgColor = markdownColor;
                                         ds.setColor(markdownColor);
                                     }
                                     ds.setUnderlineText(false);
@@ -375,7 +375,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                         super.updateDrawState(ds);
                                         ds.setColor(mCommentTextColor);
                                     } else {
-                                        ds.bgColor = Color.BLACK;
+                                        ds.bgColor = mCommentTextColor;
                                         ds.setColor(mCommentTextColor);
                                     }
                                     ds.setUnderlineText(false);

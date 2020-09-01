@@ -147,7 +147,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                                         super.updateDrawState(ds);
                                         ds.setColor(mCommentColor);
                                     } else {
-                                        ds.bgColor = Color.BLACK;
+                                        ds.bgColor = mCommentColor;
                                         ds.setColor(mCommentColor);
                                     }
                                     ds.setUnderlineText(false);
