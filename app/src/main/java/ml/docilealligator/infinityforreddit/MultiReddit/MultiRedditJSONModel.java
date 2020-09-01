@@ -35,14 +35,4 @@ public class MultiRedditJSONModel {
         Gson gson = new Gson();
         return gson.toJson(this);
     }
-
-    class SubredditInMultiReddit {
-        String name;
-
-        SubredditInMultiReddit() {}
-
-        SubredditInMultiReddit(String subredditName) {
-            name = subredditName;
-        }
-    }
 }

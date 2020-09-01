@@ -63,6 +63,8 @@
 
 # Application classes that will be serialized/deserialized over Gson
 -keep class ml.docilealligator.infinityforreddit.CustomTheme.CustomTheme { <fields>; }
+-keep class ml.docilealligator.infinityforreddit.MultiReddit.MultiRedditJSONModel { <fields>; }
+-keep class ml.docilealligator.infinityforreddit.MultiReddit.SubredditInMultiReddit { <fields>; }
 
 # Prevent proguard from stripping interface information from TypeAdapter, TypeAdapterFactory,
 # JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
