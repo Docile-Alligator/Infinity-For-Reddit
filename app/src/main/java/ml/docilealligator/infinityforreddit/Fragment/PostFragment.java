@@ -14,6 +14,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -621,11 +623,15 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             ((ActivityToolbarInterface) activity).displaySortType();
         }
 
+        Vibrator v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
+        // Vibrate for 500 milliseconds
         backgroundLeft = new ColorDrawable(customThemeWrapper.getDownvoted());
         backgroundRight = new ColorDrawable(customThemeWrapper.getUpvoted());
         drawableLeft = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_downward_black_24dp, null);
         drawableRight = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_upward_black_24dp, null);
         touchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            boolean exceedThreshold = false;
+
             @Override
             public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
                 int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
@@ -660,18 +666,42 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 View itemView = viewHolder.itemView;
                 int horizontalOffset = (int) Utils.convertDpToPixel(16, activity);
                 if (dX > 0) {
-                    if (dX > (itemView.getRight() - itemView.getLeft()) * 0.3) {
+                    if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
+                        if (!exceedThreshold) {
+                            exceedThreshold = true;
+                            if (v != null) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    v.vibrate(VibrationEffect.createOneShot(10, 175));
+                                } else {
+                                    //deprecated in API 26
+                                    v.vibrate(50);
+                                }
+                            }
+                        }
                         backgroundLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
                     } else {
+                        exceedThreshold = false;
                         backgroundLeft.setBounds(0, 0, 0, 0);
                     }
                     drawableLeft.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableLeft.getIntrinsicWidth(), (itemView.getBottom() - itemView.getTop() - drawableLeft.getIntrinsicHeight()) / 2, itemView.getLeft() + ((int) dX) - horizontalOffset, (itemView.getBottom() - itemView.getTop() + drawableLeft.getIntrinsicHeight()) / 2);
                     backgroundLeft.draw(c);
                     drawableLeft.draw(c);
                 } else if (dX < 0) {
-                    if (-dX > (itemView.getRight() - itemView.getLeft()) * 0.3) {
+                    if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
+                        if (!exceedThreshold) {
+                            exceedThreshold = true;
+                            if (v != null) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    v.vibrate(VibrationEffect.createOneShot(10, 175));
+                                } else {
+                                    //deprecated in API 26
+                                    v.vibrate(50);
+                                }
+                            }
+                        }
                         backgroundRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
                     } else {
+                        exceedThreshold = false;
                         backgroundRight.setBounds(0, 0, 0, 0);
                     }
                     drawableRight.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset, (itemView.getBottom() - itemView.getTop() - drawableRight.getIntrinsicHeight()) / 2, itemView.getRight() + ((int) dX) + horizontalOffset + drawableRight.getIntrinsicWidth(), (itemView.getBottom() - itemView.getTop() + drawableRight.getIntrinsicHeight()) / 2);
