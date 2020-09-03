@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -509,10 +511,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 switch (post.getVoteType()) {
                     case 1:
                         //Upvoted
+                        Log.i("asdasdf", "upvoted");
                         ((PostBaseViewHolder) holder).upvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         ((PostBaseViewHolder) holder).scoreTextView.setTextColor(mUpvotedColor);
                         break;
                     case -1:
+                        Log.i("asdasdf", "downvoted");
                         //Downvoted
                         ((PostBaseViewHolder) holder).downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         ((PostBaseViewHolder) holder).scoreTextView.setTextColor(mDownvotedColor);
@@ -1240,6 +1244,19 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         return null;
     }
 
+    public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int direction) {
+        if (viewHolder instanceof PostBaseViewHolder) {
+            Post post = getItem(viewHolder.getAdapterPosition());
+            if (post != null) {
+                if (direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.START) {
+                    ((PostBaseViewHolder) viewHolder).upvoteButton.performClick();
+                } else {
+                    ((PostBaseViewHolder) viewHolder).downvoteButton.performClick();
+                }
+            }
+        }
+    }
+
     public interface Callback {
         void retryLoadingMore();
 
@@ -1510,12 +1527,14 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                     if (previousVoteType != 1) {
                         //Not upvoted before
+                        Log.i("asdasdf", "not 1 before");
                         post.setVoteType(1);
                         newVoteType = APIUtils.DIR_UPVOTE;
                         upvoteButton
                                 .setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         scoreTextView.setTextColor(mUpvotedColor);
                     } else {
+                        Log.i("asdasdf", "1 before");
                         //Upvoted before
                         post.setVoteType(0);
                         newVoteType = APIUtils.DIR_UNVOTE;
@@ -1529,11 +1548,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         @Override
                         public void onVoteThingSuccess(int position1) {
                             if (newVoteType.equals(APIUtils.DIR_UPVOTE)) {
+                                Log.i("asdasdf", "1");
                                 post.setVoteType(1);
                                 upvoteButton
                                         .setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
                                 scoreTextView.setTextColor(mUpvotedColor);
                             } else {
+                                Log.i("asdasdf", "0");
                                 post.setVoteType(0);
                                 upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
                                 scoreTextView.setTextColor(mPostIconAndInfoColor);

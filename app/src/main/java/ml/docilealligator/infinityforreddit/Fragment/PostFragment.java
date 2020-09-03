@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -27,9 +30,11 @@ import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.PagedList;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
@@ -172,6 +177,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private int maxPosition = -1;
     private int postLayout;
     private SortType sortType;
+    private ColorDrawable backgroundLeft;
+    private ColorDrawable backgroundRight;
+    private Drawable drawableLeft;
+    private Drawable drawableRight;
+    private float swipeActionThreshold = 0.3f;
+    private ItemTouchHelper touchHelper;
 
     public PostFragment() {
         // Required empty public constructor
@@ -610,6 +621,72 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             ((ActivityToolbarInterface) activity).displaySortType();
         }
 
+        backgroundLeft = new ColorDrawable(customThemeWrapper.getDownvoted());
+        backgroundRight = new ColorDrawable(customThemeWrapper.getUpvoted());
+        drawableLeft = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_downward_black_24dp, null);
+        drawableRight = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_upward_black_24dp, null);
+        touchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+                int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+                return makeMovementFlags(0, swipeFlags);
+            }
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public boolean isItemViewSwipeEnabled() {
+                return true;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                if (touchHelper != null) {
+                    touchHelper.attachToRecyclerView(null);
+                    touchHelper.attachToRecyclerView(mPostRecyclerView);
+                    if (mAdapter != null) {
+                        mAdapter.onItemSwipe(viewHolder, direction);
+                    }
+                }
+            }
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+                View itemView = viewHolder.itemView;
+                int horizontalOffset = (int) Utils.convertDpToPixel(16, activity);
+                if (dX > 0) {
+                    if (dX > (itemView.getRight() - itemView.getLeft()) * 0.3) {
+                        backgroundLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                    } else {
+                        backgroundLeft.setBounds(0, 0, 0, 0);
+                    }
+                    drawableLeft.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableLeft.getIntrinsicWidth(), (itemView.getBottom() - itemView.getTop() - drawableLeft.getIntrinsicHeight()) / 2, itemView.getLeft() + ((int) dX) - horizontalOffset, (itemView.getBottom() - itemView.getTop() + drawableLeft.getIntrinsicHeight()) / 2);
+                    backgroundLeft.draw(c);
+                    drawableLeft.draw(c);
+                } else if (dX < 0) {
+                    if (-dX > (itemView.getRight() - itemView.getLeft()) * 0.3) {
+                        backgroundRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                    } else {
+                        backgroundRight.setBounds(0, 0, 0, 0);
+                    }
+                    drawableRight.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset, (itemView.getBottom() - itemView.getTop() - drawableRight.getIntrinsicHeight()) / 2, itemView.getRight() + ((int) dX) + horizontalOffset + drawableRight.getIntrinsicWidth(), (itemView.getBottom() - itemView.getTop() + drawableRight.getIntrinsicHeight()) / 2);
+                    backgroundRight.draw(c);
+                    drawableRight.draw(c);
+                }
+            }
+
+            @Override
+            public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
+                return swipeActionThreshold;
+            }
+        });
+
+        touchHelper.attachToRecyclerView(mPostRecyclerView);
         mPostRecyclerView.setAdapter(mAdapter);
         mPostRecyclerView.setCacheManager(mAdapter);
         mPostRecyclerView.setPlayerInitializer(order -> {
