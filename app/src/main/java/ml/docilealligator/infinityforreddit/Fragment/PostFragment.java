@@ -629,6 +629,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         backgroundRight = new ColorDrawable(customThemeWrapper.getUpvoted());
         drawableLeft = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_downward_black_24dp, null);
         drawableRight = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_upward_black_24dp, null);
+        int screenBottom = window.getDecorView().getHeight();
         touchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
             boolean exceedThreshold = false;
 
@@ -674,7 +675,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                                     v.vibrate(VibrationEffect.createOneShot(10, 175));
                                 } else {
                                     //deprecated in API 26
-                                    v.vibrate(50);
+                                    v.vibrate(10);
                                 }
                             }
                         }
@@ -683,7 +684,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                         exceedThreshold = false;
                         backgroundLeft.setBounds(0, 0, 0, 0);
                     }
-                    drawableLeft.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableLeft.getIntrinsicWidth(), (itemView.getBottom() - itemView.getTop() - drawableLeft.getIntrinsicHeight()) / 2, itemView.getLeft() + ((int) dX) - horizontalOffset, (itemView.getBottom() - itemView.getTop() + drawableLeft.getIntrinsicHeight()) / 2);
+
+                    drawableLeft.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableLeft.getIntrinsicWidth(),
+                            (itemView.getBottom() + itemView.getTop() - drawableLeft.getIntrinsicHeight()) / 2,
+                            itemView.getLeft() + ((int) dX) - horizontalOffset,
+                            (itemView.getBottom() + itemView.getTop() + drawableLeft.getIntrinsicHeight()) / 2);
                     backgroundLeft.draw(c);
                     drawableLeft.draw(c);
                 } else if (dX < 0) {
@@ -695,7 +700,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                                     v.vibrate(VibrationEffect.createOneShot(10, 175));
                                 } else {
                                     //deprecated in API 26
-                                    v.vibrate(50);
+                                    v.vibrate(10);
                                 }
                             }
                         }
@@ -704,7 +709,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                         exceedThreshold = false;
                         backgroundRight.setBounds(0, 0, 0, 0);
                     }
-                    drawableRight.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset, (itemView.getBottom() - itemView.getTop() - drawableRight.getIntrinsicHeight()) / 2, itemView.getRight() + ((int) dX) + horizontalOffset + drawableRight.getIntrinsicWidth(), (itemView.getBottom() - itemView.getTop() + drawableRight.getIntrinsicHeight()) / 2);
+                    drawableRight.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
+                            (itemView.getBottom() + itemView.getTop() - drawableRight.getIntrinsicHeight()) / 2,
+                            itemView.getRight() + ((int) dX) + horizontalOffset + drawableRight.getIntrinsicWidth(),
+                            (itemView.getBottom() + itemView.getTop() + drawableRight.getIntrinsicHeight()) / 2);
                     backgroundRight.draw(c);
                     drawableRight.draw(c);
                 }
