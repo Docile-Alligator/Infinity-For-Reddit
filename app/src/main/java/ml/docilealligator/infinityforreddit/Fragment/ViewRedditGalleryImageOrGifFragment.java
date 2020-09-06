@@ -46,14 +46,15 @@ import java.io.File;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Activity.ViewRedditGalleryActivity;
-import ml.docilealligator.infinityforreddit.AsyncTask.SaveGIFToFileAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SaveBitmapImageToFileAsyncTask;
+import ml.docilealligator.infinityforreddit.AsyncTask.SaveGIFToFileAsyncTask;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.SetAsWallpaperBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.MediaDownloader;
 import ml.docilealligator.infinityforreddit.MediaDownloaderImpl;
 import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.Service.DownloadImageService;
 import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 
 public class ViewRedditGalleryImageOrGifFragment extends Fragment {
@@ -268,7 +269,16 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     private void download() {
         isDownloading = false;
 
-        mediaDownloader.download(media.url, media.fileName, getContext());
+        Intent intent = new Intent(activity, DownloadImageService.class);
+        intent.putExtra(DownloadImageService.EXTRA_URL, media.url);
+        intent.putExtra(DownloadImageService.EXTRA_IS_GIF, media.mediaType == Post.Gallery.TYPE_GIF);
+        intent.putExtra(DownloadImageService.EXTRA_FILE_NAME, media.fileName);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            activity.startForegroundService(intent);
+        } else {
+            activity.startService(intent);
+        }
+        Toast.makeText(activity, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 
     private void shareImage() {

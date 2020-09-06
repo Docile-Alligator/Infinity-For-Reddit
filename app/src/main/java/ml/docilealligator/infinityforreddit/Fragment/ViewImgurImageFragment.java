@@ -48,6 +48,7 @@ import ml.docilealligator.infinityforreddit.ImgurMedia;
 import ml.docilealligator.infinityforreddit.MediaDownloader;
 import ml.docilealligator.infinityforreddit.MediaDownloaderImpl;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.Service.DownloadImageService;
 import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 
 public class ViewImgurImageFragment extends Fragment {
@@ -235,7 +236,16 @@ public class ViewImgurImageFragment extends Fragment {
     private void download() {
         isDownloading = false;
 
-        mediaDownloader.download(imgurMedia.getLink(), imgurMedia.getFileName(), getContext());
+        Intent intent = new Intent(activity, DownloadImageService.class);
+        intent.putExtra(DownloadImageService.EXTRA_URL, imgurMedia.getLink());
+        intent.putExtra(DownloadImageService.EXTRA_IS_GIF, false);
+        intent.putExtra(DownloadImageService.EXTRA_FILE_NAME, imgurMedia.getFileName());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            activity.startForegroundService(intent);
+        } else {
+            activity.startService(intent);
+        }
+        Toast.makeText(activity, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 
     @Override

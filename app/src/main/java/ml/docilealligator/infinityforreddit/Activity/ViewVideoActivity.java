@@ -374,6 +374,10 @@ public class ViewVideoActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.action_download_view_video_activity:
+                if (isDownloading) {
+                    return false;
+                }
+
                 if (videoDownloadUrl == null) {
                     Toast.makeText(this, R.string.fetching_video_info_please_wait, Toast.LENGTH_SHORT).show();
                     return true;
