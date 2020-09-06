@@ -36,6 +36,11 @@
         app:title="@string/settings_lazy_mode_interval_title"
         app:useSimpleSummaryProvider="true" />
 
+    <Preference
+        app:title="@string/settings_download_location_title"
+        android:icon="@drawable/ic_download_24dp"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.DownloadLocationPreferenceFragment" />
+
     <SwitchPreference
         app:defaultValue="false"
         app:key="save_front_page_scrolled_position"

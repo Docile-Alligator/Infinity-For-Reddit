@@ -8,23 +8,23 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class SaveImageToFileAsyncTask extends AsyncTask<Void, Void, Void> {
+public class SaveBitmapImageToFileAsyncTask extends AsyncTask<Void, Void, Void> {
     private Bitmap resource;
     private String cacheDirPath;
     private String fileName;
-    private SaveImageToFileAsyncTaskListener saveImageToFileAsyncTaskListener;
+    private SaveBitmapImageToFileAsyncTaskListener saveBitmapImageToFileAsyncTaskListener;
     private boolean saveSuccess = true;
     private File imageFile;
 
-    public SaveImageToFileAsyncTask(Bitmap resource, String cacheDirPath, String fileName,
-                                    SaveImageToFileAsyncTaskListener saveImageToFileAsyncTaskListener) {
+    public SaveBitmapImageToFileAsyncTask(Bitmap resource, String cacheDirPath, String fileName,
+                                          SaveBitmapImageToFileAsyncTaskListener saveBitmapImageToFileAsyncTaskListener) {
         this.resource = resource;
         this.cacheDirPath = cacheDirPath;
         this.fileName = fileName;
-        this.saveImageToFileAsyncTaskListener = saveImageToFileAsyncTaskListener;
+        this.saveBitmapImageToFileAsyncTaskListener = saveBitmapImageToFileAsyncTaskListener;
     }
 
-    public interface SaveImageToFileAsyncTaskListener {
+    public interface SaveBitmapImageToFileAsyncTaskListener {
         void saveSuccess(File imageFile);
         void saveFailed();
     }
@@ -47,9 +47,9 @@ public class SaveImageToFileAsyncTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         if (saveSuccess) {
-            saveImageToFileAsyncTaskListener.saveSuccess(imageFile);
+            saveBitmapImageToFileAsyncTaskListener.saveSuccess(imageFile);
         } else {
-            saveImageToFileAsyncTaskListener.saveFailed();
+            saveBitmapImageToFileAsyncTaskListener.saveFailed();
         }
     }
 }

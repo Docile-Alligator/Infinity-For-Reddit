@@ -471,6 +471,10 @@
     <string name="settings_tab_multi_reddit_name">MultiReddit Name (/user/yourusername/m/yourmultiredditname)</string>
     <string name="settings_tab_username">Username (Without u/ prefix)</string>
     <string name="no_developer_easter_egg">There\'s no developer options here</string>
+    <string name="settings_download_location_title">Download Location</string>
+    <string name="settings_image_download_location_title">Image Download Location</string>
+    <string name="settings_gif_download_location_title">Gif Download Location</string>
+    <string name="settings_video_download_location_title">Video Download Location</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -840,6 +844,18 @@
     <string name="downloading_reddit_video_failed_cannot_save_mux_video">Download failed: cannot save the video to public directory</string>
     <string name="downloading_video">Downloading Video</string>
 
+    <string name="downloading_image">Downloading Image</string>
+    <string name="downloading_gif">Downloading Gif</string>
+    <string name="downloading_image_save_image">Saving Image</string>
+    <string name="downloading_gif_save_gif">Saving Gif</string>
+    <string name="downloading_image_finished">Downloaded</string>
+    <string name="downloading_gif_finished">Downloaded</string>
+    <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">Download failed: cannot access destination directory</string>
+    <string name="downloading_image_failed_cannot_download_image">Download image failed</string>
+    <string name="downloading_image_failed_cannot_save_image">Download failed: cannot save image to destination directory</string>
+    <string name="downloading_gif_failed_cannot_download_gif">Download gif failed</string>
+    <string name="downloading_gif_failed_cannot_save_gif">Download failed: cannot save gif to destination directory</string>
+
     <string name="wallpaper_set">Wallpaper set</string>
     <string name="error_set_wallpaper">Cannot set wallpaper</string>
 
@@ -858,5 +874,19 @@
     <string name="block_user">Block User</string>
     <string name="block_user_success">Blocked</string>
     <string name="block_user_failed">Failed to block user</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
 </resources>

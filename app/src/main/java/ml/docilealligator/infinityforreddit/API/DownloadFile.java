@@ -6,7 +6,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
-public interface DownloadVideo {
+public interface DownloadFile {
     @Streaming
     @GET()
     Call<ResponseBody> downloadFile(@Url String fileUrl);

@@ -7,6 +7,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.widget.Toast;
 
+import androidx.documentfile.provider.DocumentFile;
+
 import java.io.File;
 
 public class MediaDownloaderImpl implements MediaDownloader {
@@ -21,7 +23,10 @@ public class MediaDownloaderImpl implements MediaDownloader {
 
         //Android Q support
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, fileName);
+            //ctx.getContentResolver().takePersistableUriPermission(Uri.parse("content://com.android.providers.downloads.documents/tree/downloads"), Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            request.setDestinationInExternalPublicDir(DocumentFile.fromTreeUri(ctx, Uri.parse("content://com.android.providers.downloads.documents/tree/downloads")).toString(), fileName);
+            //request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, fileName);
+            //request.setDestinationUri(Uri.parse(Paths.get("content://com.android.providers.downloads.documents/tree/downloads", fileName).toString()));
         } else {
             String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
             File directory = new File(path + "/Infinity/");

@@ -160,7 +160,7 @@
         <item>ManropeBold</item>
         <item>Sriracha</item>
     </string-array>
-    
+
     <string-array name="settings_tab_post_type">
         <item>Home</item>
         <item>Popular</item>
@@ -228,9 +228,19 @@
         <item>yyyy.M.d HH:mm</item>
         <item>yyyy.M.d hh:mm a</item>
     </string-array>
-    
+
     <string-array name="settings_number_of_columns_in_post_feed">
         <item>1</item>
         <item>2</item>
+    </string-array>
+    <!-- Reply Preference -->
+    <string-array name="reply_entries">
+        <item>Reply</item>
+        <item>Reply to all</item>
+    </string-array>
+
+    <string-array name="reply_values">
+        <item>reply</item>
+        <item>reply_all</item>
     </string-array>
 </resources>

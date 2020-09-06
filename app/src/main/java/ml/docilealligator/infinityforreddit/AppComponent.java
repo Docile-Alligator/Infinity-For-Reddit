@@ -13,6 +13,7 @@ import ml.docilealligator.infinityforreddit.Activity.EditCommentActivity;
 import ml.docilealligator.infinityforreddit.Activity.EditMultiRedditActivity;
 import ml.docilealligator.infinityforreddit.Activity.EditPostActivity;
 import ml.docilealligator.infinityforreddit.Activity.FilteredThingActivity;
+import ml.docilealligator.infinityforreddit.Activity.InboxActivity;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.Activity.LoginActivity;
 import ml.docilealligator.infinityforreddit.Activity.MainActivity;
@@ -34,7 +35,6 @@ import ml.docilealligator.infinityforreddit.Activity.SubscribedThingListingActiv
 import ml.docilealligator.infinityforreddit.Activity.ThemePreviewActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewImageOrGifActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewImgurMediaActivity;
-import ml.docilealligator.infinityforreddit.Activity.InboxActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewMultiRedditDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewPrivateMessagesActivity;
@@ -42,8 +42,8 @@ import ml.docilealligator.infinityforreddit.Activity.ViewRedditGalleryActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewVideoActivity;
-import ml.docilealligator.infinityforreddit.Fragment.CommentsListingFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.FlairBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.Fragment.CommentsListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.FollowedUsersListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.InboxFragment;
 import ml.docilealligator.infinityforreddit.Fragment.MultiRedditListingFragment;
@@ -54,10 +54,12 @@ import ml.docilealligator.infinityforreddit.Fragment.SubscribedSubredditsListing
 import ml.docilealligator.infinityforreddit.Fragment.UserListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.ViewImgurVideoFragment;
 import ml.docilealligator.infinityforreddit.Fragment.ViewRedditGalleryVideoFragment;
+import ml.docilealligator.infinityforreddit.Service.DownloadImageService;
 import ml.docilealligator.infinityforreddit.Service.DownloadVideoService;
 import ml.docilealligator.infinityforreddit.Service.SubmitPostService;
 import ml.docilealligator.infinityforreddit.Settings.AdvancedPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.CustomizeMainPageTabsFragment;
+import ml.docilealligator.infinityforreddit.Settings.DownloadLocationPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.GesturesAndButtonsPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.MainPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.NotificationPreferenceFragment;
@@ -188,4 +190,8 @@ public interface AppComponent {
     void inject(ViewRedditGalleryVideoFragment viewRedditGalleryVideoFragment);
 
     void inject(CustomizeMainPageTabsFragment customizeMainPageTabsFragment);
+
+    void inject(DownloadImageService downloadImageService);
+
+    void inject(DownloadLocationPreferenceFragment downloadLocationPreferenceFragment);
 }

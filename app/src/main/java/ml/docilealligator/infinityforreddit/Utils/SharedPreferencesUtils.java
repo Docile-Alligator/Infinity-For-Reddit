@@ -117,6 +117,9 @@ public class SharedPreferencesUtils {
     public static final String DELETE_FRONT_PAGE_SCROLLED_POSITIONS_IN_DATABASE = "delete_front_page_scrolled_positions_in_database";
     public static final String DELETE_ALL_LEGACY_SETTINGS = "delete_all_legacy_settings";
     public static final String RESET_ALL_SETTINGS = "reset_all_settings";
+    public static final String IMAGE_DOWNLOAD_LOCATION = "image_download_location";
+    public static final String GIF_DOWNLOAD_LOCATION = "gif_download_location";
+    public static final String VIDEO_DOWNLOAD_LOCATION = "video_download_location";
 
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";
     public static final String MAIN_PAGE_TAB_1_TITLE = "_main_page_tab_1_title";

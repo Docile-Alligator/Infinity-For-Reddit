@@ -91,7 +91,7 @@ class AppModule {
     }
 
     @Provides
-    @Named("download_reddit_video")
+    @Named("download_media")
     @Singleton
     Retrofit provideDownloadRedditVideoRetrofit() {
         return new Retrofit.Builder()

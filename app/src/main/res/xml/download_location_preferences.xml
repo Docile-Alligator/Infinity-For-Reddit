@@ -1,0 +1,13 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Preference
+        app:key="image_download_location"
+        app:title="@string/settings_image_download_location_title" />
+
+    <Preference
+        app:key="gif_download_location"
+        app:title="@string/settings_gif_download_location_title" />
+
+    <Preference
+        app:key="video_download_location"
+        app:title="@string/settings_video_download_location_title" />
+</PreferenceScreen>

@@ -39,7 +39,7 @@ import java.nio.ByteBuffer;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.API.DownloadVideo;
+import ml.docilealligator.infinityforreddit.API.DownloadFile;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.DownloadRedditVideoEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -72,7 +72,7 @@ public class DownloadVideoService extends Service {
     private boolean isRedditVideo;
 
     @Inject
-    @Named("download_reddit_video")
+    @Named("download_media")
     Retrofit retrofit;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
@@ -132,19 +132,19 @@ public class DownloadVideoService extends Service {
             );
         }
 
-        DownloadVideo downloadVideo = retrofit.create(DownloadVideo.class);
+        DownloadFile downloadFile = retrofit.create(DownloadFile.class);
 
         File directory = getExternalCacheDir();
         String destinationFileName = fileName + ".mp4";
         if (directory != null) {
             String directoryPath = directory.getAbsolutePath() + "/";
-            downloadVideo.downloadFile(videoUrl).enqueue(new Callback<ResponseBody>() {
+            downloadFile.downloadFile(videoUrl).enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> videoResponse) {
                     if (videoResponse.isSuccessful() && videoResponse.body() != null) {
                         if (isRedditVideo) {
                             updateNotification(R.string.downloading_reddit_video_audio_track, destinationFileName, null);
-                            downloadVideo.downloadFile(audioUrl).enqueue(new Callback<ResponseBody>() {
+                            downloadFile.downloadFile(audioUrl).enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> audioResponse) {
                                     if (audioResponse.isSuccessful() && audioResponse.body() != null) {
@@ -521,10 +521,12 @@ public class DownloadVideoService extends Service {
 
         @RequiresApi(api = Build.VERSION_CODES.Q)
         private void copyFileQ(File src, String outputFileName) throws IOException {
+
             String relativeLocation = Environment.DIRECTORY_MOVIES + "/Infinity/";
 
             ContentValues contentValues = new ContentValues();
             contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, outputFileName);
+            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "video/*");
             contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, relativeLocation);
             contentValues.put(MediaStore.Video.Media.IS_PENDING, 1);
 

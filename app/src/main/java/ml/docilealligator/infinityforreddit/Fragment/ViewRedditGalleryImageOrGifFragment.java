@@ -47,7 +47,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Activity.ViewRedditGalleryActivity;
 import ml.docilealligator.infinityforreddit.AsyncTask.SaveGIFToFileAsyncTask;
-import ml.docilealligator.infinityforreddit.AsyncTask.SaveImageToFileAsyncTask;
+import ml.docilealligator.infinityforreddit.AsyncTask.SaveBitmapImageToFileAsyncTask;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.SetAsWallpaperBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.MediaDownloader;
@@ -277,9 +277,9 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                 if (activity.getExternalCacheDir() != null) {
                     Toast.makeText(activity, R.string.save_image_first, Toast.LENGTH_SHORT).show();
-                    new SaveImageToFileAsyncTask(resource, activity.getExternalCacheDir().getPath(),
+                    new SaveBitmapImageToFileAsyncTask(resource, activity.getExternalCacheDir().getPath(),
                             media.fileName,
-                            new SaveImageToFileAsyncTask.SaveImageToFileAsyncTaskListener() {
+                            new SaveBitmapImageToFileAsyncTask.SaveBitmapImageToFileAsyncTaskListener() {
                                 @Override
                                 public void saveSuccess(File imageFile) {
                                     Uri uri = FileProvider.getUriForFile(activity,

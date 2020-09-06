@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.Activity;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -22,8 +21,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
@@ -52,8 +49,8 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.AsyncTask.SaveBitmapImageToFileAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SaveGIFToFileAsyncTask;
-import ml.docilealligator.infinityforreddit.AsyncTask.SaveImageToFileAsyncTask;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.SetAsWallpaperBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.Font.ContentFontFamily;
@@ -66,6 +63,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MediaDownloader;
 import ml.docilealligator.infinityforreddit.MediaDownloaderImpl;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.Service.DownloadImageService;
 import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.WallpaperSetter;
@@ -279,29 +277,16 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
                 finish();
                 return true;
             case R.id.action_download_view_image_or_gif_activity:
-                if (isDownloading) {
-                    return false;
-                }
-
-                isDownloading = true;
-
-                if (Build.VERSION.SDK_INT >= 23) {
-                    if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED) {
-
-                        // Permission is not granted
-                        // No explanation needed; request the permission
-                        ActivityCompat.requestPermissions(this,
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
-                    } else {
-                        // Permission has already been granted
-                        mediaDownloader.download(mImageUrl, mImageFileName, this);
-                    }
+                Intent intent = new Intent(this, DownloadImageService.class);
+                intent.putExtra(DownloadImageService.EXTRA_URL, mImageUrl);
+                intent.putExtra(DownloadImageService.EXTRA_IS_GIF, isGif);
+                intent.putExtra(DownloadImageService.EXTRA_FILE_NAME, mImageFileName);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    startForegroundService(intent);
                 } else {
-                    mediaDownloader.download(mImageUrl, mImageFileName, this);
+                    startService(intent);
                 }
+                Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
 
                 return true;
             case R.id.action_share_view_image_or_gif_activity:
@@ -343,8 +328,8 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                 if (getExternalCacheDir() != null) {
                     Toast.makeText(ViewImageOrGifActivity.this, R.string.save_image_first, Toast.LENGTH_SHORT).show();
-                    new SaveImageToFileAsyncTask(resource, getExternalCacheDir().getPath(), mImageFileName,
-                            new SaveImageToFileAsyncTask.SaveImageToFileAsyncTaskListener() {
+                    new SaveBitmapImageToFileAsyncTask(resource, getExternalCacheDir().getPath(), mImageFileName,
+                            new SaveBitmapImageToFileAsyncTask.SaveBitmapImageToFileAsyncTaskListener() {
                                 @Override
                                 public void saveSuccess(File imageFile) {
                                     Uri uri = FileProvider.getUriForFile(ViewImageOrGifActivity.this,
