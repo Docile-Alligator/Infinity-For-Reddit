@@ -45,10 +45,8 @@ import ml.docilealligator.infinityforreddit.AsyncTask.SaveBitmapImageToFileAsync
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.SetAsWallpaperBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.ImgurMedia;
-import ml.docilealligator.infinityforreddit.MediaDownloader;
-import ml.docilealligator.infinityforreddit.MediaDownloaderImpl;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.Service.DownloadImageService;
+import ml.docilealligator.infinityforreddit.Service.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 
 public class ViewImgurImageFragment extends Fragment {
@@ -65,7 +63,6 @@ public class ViewImgurImageFragment extends Fragment {
 
     private ViewImgurMediaActivity activity;
     private RequestManager glide;
-    private MediaDownloader mediaDownloader;
     private ImgurMedia imgurMedia;
     private boolean isDownloading = false;
     private boolean isActionBarHidden = false;
@@ -85,7 +82,6 @@ public class ViewImgurImageFragment extends Fragment {
 
         imgurMedia = getArguments().getParcelable(EXTRA_IMGUR_IMAGES);
         glide = Glide.with(activity);
-        mediaDownloader = new MediaDownloaderImpl();
         loadImage();
 
         imageView.setOnClickListener(view -> {
@@ -236,10 +232,10 @@ public class ViewImgurImageFragment extends Fragment {
     private void download() {
         isDownloading = false;
 
-        Intent intent = new Intent(activity, DownloadImageService.class);
-        intent.putExtra(DownloadImageService.EXTRA_URL, imgurMedia.getLink());
-        intent.putExtra(DownloadImageService.EXTRA_IS_GIF, false);
-        intent.putExtra(DownloadImageService.EXTRA_FILE_NAME, imgurMedia.getFileName());
+        Intent intent = new Intent(activity, DownloadMediaService.class);
+        intent.putExtra(DownloadMediaService.EXTRA_URL, imgurMedia.getLink());
+        intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
+        intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, imgurMedia.getFileName());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             activity.startForegroundService(intent);
         } else {

@@ -54,8 +54,8 @@ import ml.docilealligator.infinityforreddit.Fragment.SubscribedSubredditsListing
 import ml.docilealligator.infinityforreddit.Fragment.UserListingFragment;
 import ml.docilealligator.infinityforreddit.Fragment.ViewImgurVideoFragment;
 import ml.docilealligator.infinityforreddit.Fragment.ViewRedditGalleryVideoFragment;
-import ml.docilealligator.infinityforreddit.Service.DownloadImageService;
-import ml.docilealligator.infinityforreddit.Service.DownloadVideoService;
+import ml.docilealligator.infinityforreddit.Service.DownloadMediaService;
+import ml.docilealligator.infinityforreddit.Service.DownloadRedditVideoService;
 import ml.docilealligator.infinityforreddit.Service.SubmitPostService;
 import ml.docilealligator.infinityforreddit.Settings.AdvancedPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.CustomizeMainPageTabsFragment;
@@ -173,7 +173,7 @@ public interface AppComponent {
 
     void inject(ViewImgurVideoFragment viewImgurVideoFragment);
 
-    void inject(DownloadVideoService downloadVideoService);
+    void inject(DownloadRedditVideoService downloadRedditVideoService);
 
     void inject(MultiRedditListingFragment multiRedditListingFragment);
 
@@ -191,7 +191,7 @@ public interface AppComponent {
 
     void inject(CustomizeMainPageTabsFragment customizeMainPageTabsFragment);
 
-    void inject(DownloadImageService downloadImageService);
+    void inject(DownloadMediaService downloadMediaService);
 
     void inject(DownloadLocationPreferenceFragment downloadLocationPreferenceFragment);
 }

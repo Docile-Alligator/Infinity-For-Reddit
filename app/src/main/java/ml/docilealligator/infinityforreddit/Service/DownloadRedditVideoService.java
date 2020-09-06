@@ -53,7 +53,7 @@ import retrofit2.Retrofit;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
-public class DownloadVideoService extends Service {
+public class DownloadRedditVideoService extends Service {
 
     public static final String EXTRA_VIDEO_URL = "EVU";
     public static final String EXTRA_SUBREDDIT = "ES";
@@ -78,7 +78,7 @@ public class DownloadVideoService extends Service {
     CustomThemeWrapper mCustomThemeWrapper;
     String resultFile;
 
-    public DownloadVideoService() {
+    public DownloadRedditVideoService() {
     }
 
     @Override

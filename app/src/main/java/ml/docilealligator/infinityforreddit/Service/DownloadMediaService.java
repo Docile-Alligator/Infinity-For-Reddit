@@ -36,7 +36,7 @@ import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.API.DownloadFile;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.Event.DownloadImageOrGifEvent;
+import ml.docilealligator.infinityforreddit.Event.DownloadMediaEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NotificationUtils;
 import ml.docilealligator.infinityforreddit.R;
@@ -49,10 +49,13 @@ import retrofit2.Retrofit;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
-public class DownloadImageService extends Service {
+public class DownloadMediaService extends Service {
     public static final String EXTRA_URL = "EU";
     public static final String EXTRA_FILE_NAME = "EFN";
-    public static final String EXTRA_IS_GIF = "EIG";
+    public static final String EXTRA_MEDIA_TYPE = "EIG";
+    public static final int EXTRA_MEDIA_TYPE_IMAGE = 0;
+    public static final int EXTRA_MEDIA_TYPE_GIF = 1;
+    public static final int EXTRA_MEDIA_TYPE_VIDEO = 2;
 
     private static final int NO_ERROR = -1;
     private static final int ERROR_CANNOT_GET_DESTINATION_DIRECTORY = 0;
@@ -66,14 +69,58 @@ public class DownloadImageService extends Service {
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
-    private boolean isGif;
+    private int mediaType;
 
-    public DownloadImageService() {
+    public DownloadMediaService() {
     }
 
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    private String getNotificationChannelId() {
+        switch (mediaType) {
+            case EXTRA_MEDIA_TYPE_GIF:
+                return NotificationUtils.CHANNEL_ID_DOWNLOAD_GIF;
+            case EXTRA_MEDIA_TYPE_VIDEO:
+                return NotificationUtils.CHANNEL_ID_DOWNLOAD_VIDEO;
+            default:
+                return NotificationUtils.CHANNEL_ID_DOWNLOAD_IMAGE;
+        }
+    }
+
+    private String getNotificationChannel() {
+        switch (mediaType) {
+            case EXTRA_MEDIA_TYPE_GIF:
+                return NotificationUtils.CHANNEL_DOWNLOAD_GIF;
+            case EXTRA_MEDIA_TYPE_VIDEO:
+                return NotificationUtils.CHANNEL_DOWNLOAD_VIDEO;
+            default:
+                return NotificationUtils.CHANNEL_DOWNLOAD_IMAGE;
+        }
+    }
+
+    private int getNotificationId() {
+        switch (mediaType) {
+            case EXTRA_MEDIA_TYPE_GIF:
+                return NotificationUtils.DOWNLOAD_GIF_NOTIFICATION_ID;
+            case EXTRA_MEDIA_TYPE_VIDEO:
+                return NotificationUtils.DOWNLOAD_VIDEO_NOTIFICATION_ID;
+            default:
+                return NotificationUtils.DOWNLOAD_IMAGE_NOTIFICATION_ID;
+        }
+    }
+
+    private String getDownloadLocation() {
+        switch (mediaType) {
+            case EXTRA_MEDIA_TYPE_GIF:
+                return mSharedPreferences.getString(SharedPreferencesUtils.GIF_DOWNLOAD_LOCATION, "");
+            case EXTRA_MEDIA_TYPE_VIDEO:
+                return mSharedPreferences.getString(SharedPreferencesUtils.VIDEO_DOWNLOAD_LOCATION, "");
+            default:
+                return mSharedPreferences.getString(SharedPreferencesUtils.IMAGE_DOWNLOAD_LOCATION, "");
+        }
     }
 
     @Override
@@ -83,13 +130,13 @@ public class DownloadImageService extends Service {
         String fileUrl = intent.getStringExtra(EXTRA_URL);
         String fileName;
         fileName = intent.getStringExtra(EXTRA_FILE_NAME);
-        isGif = intent.getBooleanExtra(EXTRA_IS_GIF, false);
+        mediaType = intent.getIntExtra(EXTRA_MEDIA_TYPE, EXTRA_MEDIA_TYPE_IMAGE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel;
             serviceChannel = new NotificationChannel(
-                    isGif ? NotificationUtils.CHANNEL_ID_DOWNLOAD_GIF : NotificationUtils.CHANNEL_ID_DOWNLOAD_IMAGE,
-                    isGif ? NotificationUtils.CHANNEL_DOWNLOAD_GIF : NotificationUtils.CHANNEL_DOWNLOAD_IMAGE,
+                    getNotificationChannelId(),
+                    getNotificationChannel(),
                     NotificationManager.IMPORTANCE_LOW
             );
 
@@ -97,17 +144,31 @@ public class DownloadImageService extends Service {
             manager.createNotificationChannel(serviceChannel);
         }
 
-        startForeground(
-                isGif ? NotificationUtils.DOWNLOAD_GIF_NOTIFICATION_ID : NotificationUtils.DOWNLOAD_IMAGE_NOTIFICATION_ID,
-                createNotification(isGif ? R.string.downloading_gif : R.string.downloading_image, fileName, null)
-        );
+        switch (mediaType) {
+            case EXTRA_MEDIA_TYPE_GIF:
+                startForeground(
+                        NotificationUtils.DOWNLOAD_GIF_NOTIFICATION_ID,
+                        createNotification(R.string.downloading_gif, fileName, null)
+                );
+                break;
+            case EXTRA_MEDIA_TYPE_VIDEO:
+                startForeground(
+                        NotificationUtils.DOWNLOAD_VIDEO_NOTIFICATION_ID,
+                        createNotification(R.string.downloading_video, fileName, null)
+                );
+                break;
+            default:
+                startForeground(
+                        NotificationUtils.DOWNLOAD_IMAGE_NOTIFICATION_ID,
+                        createNotification(R.string.downloading_image, fileName, null)
+                );
+        }
 
         retrofit.create(DownloadFile.class).downloadFile(fileUrl).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    String destinationFileDirectory = isGif ? mSharedPreferences.getString(SharedPreferencesUtils.GIF_DOWNLOAD_LOCATION, "") :
-                            mSharedPreferences.getString(SharedPreferencesUtils.IMAGE_DOWNLOAD_LOCATION, "");
+                    String destinationFileDirectory = getDownloadLocation();
                     String destinationFileUriString;
                     boolean isDefaultDestination;
                     if (destinationFileDirectory.equals("")) {
@@ -131,7 +192,7 @@ public class DownloadImageService extends Service {
                         isDefaultDestination = true;
                     } else {
                         isDefaultDestination = false;
-                        DocumentFile picFile = DocumentFile.fromTreeUri(DownloadImageService.this, Uri.parse(destinationFileDirectory)).createFile("image/*", fileName);
+                        DocumentFile picFile = DocumentFile.fromTreeUri(DownloadMediaService.this, Uri.parse(destinationFileDirectory)).createFile("image/*", fileName);
                         if (picFile == null) {
                             downloadFinished(null, fileName, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
                             return;
@@ -139,7 +200,7 @@ public class DownloadImageService extends Service {
                         destinationFileUriString = picFile.getUri().toString();
                     }
 
-                    new SaveImageOrGifAndCopyToExternalStorageAsyncTask(response.body(), isGif,
+                    new SaveImageOrGifAndCopyToExternalStorageAsyncTask(response.body(), mediaType,
                             isDefaultDestination, fileName, destinationFileUriString, getContentResolver(),
                             new SaveImageOrGifAndCopyToExternalStorageAsyncTask.SaveImageOrGifAndCopyToExternalStorageAsyncTaskListener() {
                                 @Override
@@ -165,7 +226,7 @@ public class DownloadImageService extends Service {
 
     private Notification createNotification(int stringResId, String fileName, PendingIntent pendingIntent) {
         NotificationCompat.Builder builder;
-        builder = new NotificationCompat.Builder(this, isGif ? NotificationUtils.CHANNEL_ID_DOWNLOAD_GIF : NotificationUtils.CHANNEL_ID_DOWNLOAD_IMAGE);
+        builder = new NotificationCompat.Builder(this, getNotificationChannelId());
         builder.setContentTitle(fileName).setContentText(getString(stringResId));
         if (pendingIntent != null) {
             builder.setContentIntent(pendingIntent);
@@ -178,8 +239,7 @@ public class DownloadImageService extends Service {
     private void updateNotification(int stringResId, String fileName, PendingIntent pendingIntent) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null) {
-            notificationManager.notify(isGif ? NotificationUtils.DOWNLOAD_GIF_NOTIFICATION_ID : NotificationUtils.DOWNLOAD_IMAGE_NOTIFICATION_ID,
-                    createNotification(stringResId, fileName, pendingIntent));
+            notificationManager.notify(getNotificationId(), createNotification(stringResId, fileName, pendingIntent));
         }
     }
 
@@ -190,13 +250,13 @@ public class DownloadImageService extends Service {
                     updateNotification(R.string.downloading_image_or_gif_failed_cannot_get_destination_directory, fileName, null);
                     break;
                 case ERROR_FILE_CANNOT_DOWNLOAD:
-                    updateNotification(isGif ? R.string.downloading_gif_failed_cannot_download_gif : R.string.downloading_image_failed_cannot_download_image, fileName, null);
+                    updateNotification(R.string.downloading_media_failed_cannot_download_media, fileName, null);
                     break;
                 case ERROR_FILE_CANNOT_SAVE:
-                    updateNotification(isGif ? R.string.downloading_gif_failed_cannot_save_gif : R.string.downloading_image_failed_cannot_save_image, fileName, null);
+                    updateNotification(R.string.downloading_media_failed_cannot_save_to_destination_directory, fileName, null);
                     break;
             }
-            EventBus.getDefault().post(new DownloadImageOrGifEvent(false));
+            EventBus.getDefault().post(new DownloadMediaEvent(false));
         } else {
             MediaScannerConnection.scanFile(
                     this, new String[]{destinationFileUri.toString()}, null,
@@ -205,8 +265,8 @@ public class DownloadImageService extends Service {
                         intent.setAction(android.content.Intent.ACTION_VIEW);
                         intent.setDataAndType(destinationFileUri, "image/*");
                         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-                        updateNotification(isGif ? R.string.downloading_gif_finished : R.string.downloading_image_finished, fileName, pendingIntent);
-                        EventBus.getDefault().post(new DownloadImageOrGifEvent(true));
+                        updateNotification(R.string.downloading_media_finished, fileName, pendingIntent);
+                        EventBus.getDefault().post(new DownloadMediaEvent(true));
                     }
             );
         }
@@ -216,7 +276,7 @@ public class DownloadImageService extends Service {
     private static class SaveImageOrGifAndCopyToExternalStorageAsyncTask extends AsyncTask<Void, Integer, Void> {
 
         private ResponseBody response;
-        private boolean isGif;
+        private int mediaType;
         private boolean isDefaultDestination;
         private String destinationFileName;
         @NonNull
@@ -230,14 +290,14 @@ public class DownloadImageService extends Service {
             void updateProgressNotification(int stringResId);
         }
 
-        public SaveImageOrGifAndCopyToExternalStorageAsyncTask(ResponseBody response, boolean isGif,
+        public SaveImageOrGifAndCopyToExternalStorageAsyncTask(ResponseBody response, int mediaType,
                                                                boolean isDefaultDestination,
                                                                String destinationFileName,
                                                                @NonNull String destinationFileUriString,
                                                                ContentResolver contentResolver,
                                                                SaveImageOrGifAndCopyToExternalStorageAsyncTaskListener saveImageOrGifAndCopyToExternalStorageAsyncTaskListener) {
             this.response = response;
-            this.isGif = isGif;
+            this.mediaType = mediaType;
             this.isDefaultDestination = isDefaultDestination;
             this.destinationFileName = destinationFileName;
             this.destinationFileUriString = destinationFileUriString;
@@ -253,7 +313,17 @@ public class DownloadImageService extends Service {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            publishProgress(isGif ? R.string.downloading_gif_save_gif : R.string.downloading_image_save_image);
+            switch (mediaType) {
+                case EXTRA_MEDIA_TYPE_IMAGE:
+                    publishProgress(R.string.downloading_image_save_image);
+                    break;
+                case EXTRA_MEDIA_TYPE_GIF:
+                    publishProgress(R.string.downloading_gif_save_gif);
+                    break;
+                case EXTRA_MEDIA_TYPE_VIDEO:
+                    publishProgress(R.string.downloading_video_save_video);
+            }
+
             try {
                 writeResponseBodyToDisk(response);
             } catch (IOException e) {

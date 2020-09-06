@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.Fragment;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -46,9 +47,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ImgurMedia;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.MediaDownloader;
-import ml.docilealligator.infinityforreddit.MediaDownloaderImpl;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.Service.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
 public class ViewImgurVideoFragment extends Fragment {
@@ -65,7 +65,6 @@ public class ViewImgurVideoFragment extends Fragment {
     private ImgurMedia imgurMedia;
     private SimpleExoPlayer player;
     private DataSource.Factory dataSourceFactory;
-    private MediaDownloader mediaDownloader;
     private boolean wasPlaying = false;
     private boolean isMute = false;
     private boolean isDownloading = false;
@@ -128,8 +127,6 @@ public class ViewImgurVideoFragment extends Fragment {
             }
         });
 
-        mediaDownloader = new MediaDownloaderImpl();
-
         TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory();
         TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
         player = ExoPlayerFactory.newSimpleInstance(activity, trackSelector);
@@ -188,7 +185,16 @@ public class ViewImgurVideoFragment extends Fragment {
     private void download() {
         isDownloading = false;
 
-        mediaDownloader.download(imgurMedia.getLink(), imgurMedia.getFileName(), getContext());
+        Intent intent = new Intent(activity, DownloadMediaService.class);
+        intent.putExtra(DownloadMediaService.EXTRA_URL, imgurMedia.getLink());
+        intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
+        intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, imgurMedia.getFileName());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            activity.startForegroundService(intent);
+        } else {
+            activity.startService(intent);
+        }
+        Toast.makeText(activity, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 
     private void preparePlayer(Bundle savedInstanceState) {

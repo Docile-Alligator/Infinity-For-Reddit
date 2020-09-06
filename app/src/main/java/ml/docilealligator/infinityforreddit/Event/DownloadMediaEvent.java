@@ -1,9 +1,9 @@
 package ml.docilealligator.infinityforreddit.Event;
 
-public class DownloadImageOrGifEvent {
+public class DownloadMediaEvent {
     public boolean isSuccessful;
 
-    public DownloadImageOrGifEvent(boolean isSuccessful) {
+    public DownloadMediaEvent(boolean isSuccessful) {
         this.isSuccessful = isSuccessful;
     }
 }

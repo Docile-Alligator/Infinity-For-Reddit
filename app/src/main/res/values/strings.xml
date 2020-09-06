@@ -843,18 +843,16 @@
     <string name="downloading_reddit_video_failed_cannot_mux">Download failed: cannot mux video and audio</string>
     <string name="downloading_reddit_video_failed_cannot_save_mux_video">Download failed: cannot save the video to public directory</string>
     <string name="downloading_video">Downloading Video</string>
+    <string name="downloading_video_save_video">Saving Video</string>
 
     <string name="downloading_image">Downloading Image</string>
     <string name="downloading_gif">Downloading Gif</string>
     <string name="downloading_image_save_image">Saving Image</string>
     <string name="downloading_gif_save_gif">Saving Gif</string>
-    <string name="downloading_image_finished">Downloaded</string>
-    <string name="downloading_gif_finished">Downloaded</string>
+    <string name="downloading_media_finished">Downloaded</string>
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">Download failed: cannot access destination directory</string>
-    <string name="downloading_image_failed_cannot_download_image">Download image failed</string>
-    <string name="downloading_image_failed_cannot_save_image">Download failed: cannot save image to destination directory</string>
-    <string name="downloading_gif_failed_cannot_download_gif">Download gif failed</string>
-    <string name="downloading_gif_failed_cannot_save_gif">Download failed: cannot save gif to destination directory</string>
+    <string name="downloading_media_failed_cannot_download_media">Download failed</string>
+    <string name="downloading_media_failed_cannot_save_to_destination_directory">Download failed: cannot save the file to destination directory</string>
 
     <string name="wallpaper_set">Wallpaper set</string>
     <string name="error_set_wallpaper">Cannot set wallpaper</string>

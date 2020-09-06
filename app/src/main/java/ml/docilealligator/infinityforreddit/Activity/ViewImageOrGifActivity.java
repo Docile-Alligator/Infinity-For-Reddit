@@ -63,10 +63,8 @@ import ml.docilealligator.infinityforreddit.Font.FontStyle;
 import ml.docilealligator.infinityforreddit.Font.TitleFontFamily;
 import ml.docilealligator.infinityforreddit.Font.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.MediaDownloader;
-import ml.docilealligator.infinityforreddit.MediaDownloaderImpl;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.Service.DownloadImageService;
+import ml.docilealligator.infinityforreddit.Service.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.WallpaperSetter;
@@ -87,7 +85,6 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
-    private MediaDownloader mediaDownloader;
     private boolean isActionBarHidden = false;
     private boolean isDownloading = false;
     private RequestManager glide;
@@ -133,8 +130,6 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
 
         Slidr.attach(this, new SlidrConfig.Builder().position(SlidrPosition.VERTICAL).distanceThreshold(0.125f).build());
-
-        mediaDownloader = new MediaDownloaderImpl();
 
         glide = Glide.with(this);
 
@@ -339,10 +334,10 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     private void download() {
         isDownloading = false;
 
-        Intent intent = new Intent(this, DownloadImageService.class);
-        intent.putExtra(DownloadImageService.EXTRA_URL, mImageUrl);
-        intent.putExtra(DownloadImageService.EXTRA_IS_GIF, isGif);
-        intent.putExtra(DownloadImageService.EXTRA_FILE_NAME, mImageFileName);
+        Intent intent = new Intent(this, DownloadMediaService.class);
+        intent.putExtra(DownloadMediaService.EXTRA_URL, mImageUrl);
+        intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, isGif ? DownloadMediaService.EXTRA_MEDIA_TYPE_GIF : DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
+        intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, mImageFileName);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(intent);
         } else {
@@ -437,7 +432,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 Toast.makeText(this, R.string.no_storage_permission, Toast.LENGTH_SHORT).show();
             } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED && isDownloading) {
-                mediaDownloader.download(mImageUrl, mImageFileName, this);
+                download();
             }
             isDownloading = false;
         }

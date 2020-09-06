@@ -25,7 +25,7 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
         <service
-            android:name=".Service.DownloadImageService"
+            android:name=".Service.DownloadMediaService"
             android:enabled="true"
             android:exported="false"></service>
 
@@ -42,7 +42,7 @@
             android:windowSoftInputMode="adjustResize" />
 
         <service
-            android:name=".Service.DownloadVideoService"
+            android:name=".Service.DownloadRedditVideoService"
             android:enabled="true"
             android:exported="false" />
 
