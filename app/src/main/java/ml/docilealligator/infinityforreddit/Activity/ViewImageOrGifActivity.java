@@ -431,10 +431,10 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         if (requestCode == PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE && grantResults.length > 0) {
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 Toast.makeText(this, R.string.no_storage_permission, Toast.LENGTH_SHORT).show();
+                isDownloading = false;
             } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED && isDownloading) {
                 download();
             }
-            isDownloading = false;
         }
     }
 

@@ -59,9 +59,8 @@ import ml.docilealligator.infinityforreddit.Font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.Font.FontFamily;
 import ml.docilealligator.infinityforreddit.Font.TitleFontFamily;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.MediaDownloader;
-import ml.docilealligator.infinityforreddit.MediaDownloaderImpl;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.Service.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.Service.DownloadRedditVideoService;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
@@ -98,7 +97,6 @@ public class ViewVideoActivity extends AppCompatActivity {
     private Uri mVideoUri;
     private SimpleExoPlayer player;
     private DataSource.Factory dataSourceFactory;
-    private MediaDownloader mediaDownloader;
 
     private String videoDownloadUrl;
     private String videoFileName;
@@ -172,8 +170,6 @@ public class ViewVideoActivity extends AppCompatActivity {
             finish();
             overridePendingTransition(0, slide);
         });
-
-        mediaDownloader = new MediaDownloaderImpl();
 
         Intent intent = getIntent();
         mVideoUri = intent.getData();
@@ -438,21 +434,28 @@ public class ViewVideoActivity extends AppCompatActivity {
         isDownloading = false;
 
         if (videoType != VIDEO_TYPE_NORMAL) {
-            mediaDownloader.download(videoDownloadUrl, videoFileName, this);
+            Intent intent = new Intent(this, DownloadMediaService.class);
+            intent.putExtra(DownloadMediaService.EXTRA_URL, videoDownloadUrl);
+            intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
+            intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, videoFileName);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(intent);
+            } else {
+                startService(intent);
+            }
         } else {
             Intent intent = new Intent(this, DownloadRedditVideoService.class);
             intent.putExtra(DownloadRedditVideoService.EXTRA_VIDEO_URL, videoDownloadUrl);
             intent.putExtra(DownloadRedditVideoService.EXTRA_POST_ID, id);
             intent.putExtra(DownloadRedditVideoService.EXTRA_SUBREDDIT, subredditName);
-            intent.putExtra(DownloadRedditVideoService.EXTRA_IS_REDDIT_VIDEO, true);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(intent);
             } else {
                 startService(intent);
             }
-            Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
         }
+        Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 
     @Override

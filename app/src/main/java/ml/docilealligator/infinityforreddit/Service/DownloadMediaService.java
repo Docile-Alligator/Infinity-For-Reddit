@@ -407,7 +407,6 @@ public class DownloadMediaService extends Service {
                     while ((len = in.read(buf)) > 0) {
                         stream.write(buf, 0, len);
                     }
-                    destinationFileUriString = destinationFileUriString.replaceAll("%3A", ":").replaceAll("%2F", "/");
                 }
             }
         }
