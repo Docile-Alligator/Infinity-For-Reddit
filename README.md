@@ -5,6 +5,9 @@ This is a Reddit client on Android written in Java. It does not have any ads and
 <img src="https://cdn.rawgit.com/steverichey/google-play-badge-svg/master/img/en_get.svg" width="50%">
 </a>
 
+## Translation
+POEditor: https://poeditor.com/join/project?hash=b2IRyfaJv6
+
 ## Highlighted feature
 - Lazy mode: Automatic scrolling of posts enables you to enjoy amazing posts without moving your thumb.
 
