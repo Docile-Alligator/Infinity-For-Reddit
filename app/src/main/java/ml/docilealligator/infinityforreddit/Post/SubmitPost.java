@@ -157,6 +157,14 @@ public class SubmitPost {
         });
     }
 
+    public static void submitCrosspost(Retrofit oauthRetrofit, String accessToken,
+                                            Locale locale, String subredditName, String title, String crosspostFullname,
+                                            Flair flair, boolean isSpoiler, boolean isNSFW, String kind,
+                                            SubmitPostListener submitPostListener) {
+        submitPost(oauthRetrofit, accessToken, locale, subredditName, title, crosspostFullname,
+                flair, isSpoiler, isNSFW, kind, null, submitPostListener);
+    }
+
     private static void submitPost(Retrofit oauthRetrofit, String accessToken,
                                    Locale locale, String subredditName, String title, String content,
                                    Flair flair, boolean isSpoiler, boolean isNSFW, String kind,
@@ -184,6 +192,9 @@ public class SubmitPost {
             case APIUtils.KIND_VIDEO:
                 params.put(APIUtils.URL_KEY, content);
                 params.put(APIUtils.VIDEO_POSTER_URL_KEY, posterUrl);
+                break;
+            case APIUtils.KIND_CROSSPOST:
+                params.put(APIUtils.CROSSPOST_FULLNAME_KEY, content);
                 break;
         }
 

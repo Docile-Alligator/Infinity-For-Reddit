@@ -34,6 +34,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.Event.SubmitCrosspostEvent;
 import ml.docilealligator.infinityforreddit.Event.SubmitImagePostEvent;
 import ml.docilealligator.infinityforreddit.Event.SubmitTextOrLinkPostEvent;
 import ml.docilealligator.infinityforreddit.Event.SubmitVideoOrGifPostEvent;
@@ -43,6 +44,7 @@ import ml.docilealligator.infinityforreddit.NotificationUtils;
 import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.Post.SubmitPost;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import retrofit2.Retrofit;
 
 public class SubmitPostService extends Service {
@@ -58,6 +60,7 @@ public class SubmitPostService extends Service {
     public static final int EXTRA_POST_TEXT_OR_LINK = 0;
     public static final int EXTRA_POST_TYPE_IMAGE = 1;
     public static final int EXTRA_POST_TYPE_VIDEO = 2;
+    public static final int EXTRA_POST_TYPE_CROSSPOST = 3;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -115,6 +118,10 @@ public class SubmitPostService extends Service {
             kind = intent.getStringExtra(EXTRA_KIND);
             startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID, createNotification(R.string.posting));
             submitTextOrLinkPost();
+        } else if (postType == EXTRA_POST_TYPE_CROSSPOST) {
+            content = intent.getStringExtra(EXTRA_CONTENT);
+            startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID, createNotification(R.string.posting));
+            submitCrosspost();
         } else if (postType == EXTRA_POST_TYPE_IMAGE) {
             mediaUri = intent.getData();
             startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID, createNotification(R.string.posting_image));
@@ -150,6 +157,25 @@ public class SubmitPostService extends Service {
                     @Override
                     public void submitFailed(@Nullable String errorMessage) {
                         EventBus.getDefault().post(new SubmitTextOrLinkPostEvent(false, null, errorMessage));
+
+                        stopService();
+                    }
+                });
+    }
+
+    private void submitCrosspost() {
+        SubmitPost.submitCrosspost(mOauthRetrofit, mAccessToken, getResources().getConfiguration().locale,
+                subredditName, title, content, flair, isSpoiler, isNSFW, APIUtils.KIND_CROSSPOST, new SubmitPost.SubmitPostListener() {
+                    @Override
+                    public void submitSuccessful(Post post) {
+                        EventBus.getDefault().post(new SubmitCrosspostEvent(true, post, null));
+
+                        stopService();
+                    }
+
+                    @Override
+                    public void submitFailed(@Nullable String errorMessage) {
+                        EventBus.getDefault().post(new SubmitCrosspostEvent(false, null, errorMessage));
 
                         stopService();
                     }

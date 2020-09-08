@@ -1466,6 +1466,11 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             case R.id.action_see_removed_view_post_detail_activity:
                 showRemovedPost();
                 return true;
+            case R.id.action_crosspost_view_post_detail_activity:
+                Intent submitCrosspostIntent = new Intent(this, SubmitCrosspostActivity.class);
+                submitCrosspostIntent.putExtra(SubmitCrosspostActivity.EXTRA_POST, mPost);
+                startActivity(submitCrosspostIntent);
+                return true;
             case android.R.id.home:
                 onBackPressed();
                 return true;

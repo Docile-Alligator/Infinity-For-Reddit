@@ -32,6 +32,7 @@
     <string name="view_reddit_gallery_activity_image_label">Image %1$d/%2$d</string>
     <string name="view_reddit_gallery_activity_gif_label">Gif %1$d/%2$d</string>
     <string name="view_reddit_gallery_activity_video_label">Video %1$d/%2$d</string>
+    <string name="submit_crosspost_activity_label">Crosspost</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -66,6 +67,7 @@
     <string name="action_preview">Preview</string>
     <string name="action_report">Report</string>
     <string name="action_see_removed">See Removed</string>
+    <string name="action_crosspost">Crosspost</string>
     <string name="action_set_wallpaper">Set as Wallpaper</string>
     <string name="action_send_private_message">Send Private Message</string>
     <string name="action_block_user">Block User</string>
