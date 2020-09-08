@@ -125,7 +125,8 @@ public interface RedditAPI {
 
     @GET("subreddits/search.json?include_over_18=1&raw_json=1")
     Call<String> searchSubreddits(@Query("q") String subredditName, @Query("after") String after,
-                                  @Query("sort") String sort);
+                                  @Query("sort") String sort,
+                                  @HeaderMap Map<String, String> headers);
 
     @GET("search.json?include_over_18=1&raw_json=1&type=user")
     Call<String> searchUsers(@Query("q") String profileName, @Query("after") String after,

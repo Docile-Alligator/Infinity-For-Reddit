@@ -21,8 +21,8 @@ public class SubredditListingViewModel extends ViewModel {
     private LiveData<PagedList<SubredditData>> subreddits;
     private MutableLiveData<SortType> sortTypeLiveData;
 
-    public SubredditListingViewModel(Retrofit retrofit, String query, SortType sortType) {
-        subredditListingDataSourceFactory = new SubredditListingDataSourceFactory(retrofit, query, sortType);
+    public SubredditListingViewModel(Retrofit retrofit, String query, SortType sortType, String accessToken) {
+        subredditListingDataSourceFactory = new SubredditListingDataSourceFactory(retrofit, query, sortType, accessToken);
 
         initialLoadingState = Transformations.switchMap(subredditListingDataSourceFactory.getSubredditListingDataSourceMutableLiveData(),
                 SubredditListingDataSource::getInitialLoadStateLiveData);
@@ -78,17 +78,19 @@ public class SubredditListingViewModel extends ViewModel {
         private Retrofit retrofit;
         private String query;
         private SortType sortType;
+        private String accessToken;
 
-        public Factory(Retrofit retrofit, String query, SortType sortType) {
+        public Factory(Retrofit retrofit, String query, SortType sortType, String accessToken) {
             this.retrofit = retrofit;
             this.query = query;
             this.sortType = sortType;
+            this.accessToken = accessToken;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new SubredditListingViewModel(retrofit, query, sortType);
+            return (T) new SubredditListingViewModel(retrofit, query, sortType, accessToken);
         }
     }
 }
