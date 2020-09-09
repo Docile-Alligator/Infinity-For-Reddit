@@ -40,7 +40,7 @@ import ml.docilealligator.infinityforreddit.Event.SubmitTextOrLinkPostEvent;
 import ml.docilealligator.infinityforreddit.Event.SubmitVideoOrGifPostEvent;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.NotificationUtils;
+import ml.docilealligator.infinityforreddit.Utils.NotificationUtils;
 import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.Post.SubmitPost;
 import ml.docilealligator.infinityforreddit.R;

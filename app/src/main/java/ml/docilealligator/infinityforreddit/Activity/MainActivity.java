@@ -335,6 +335,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         }
 
                         if (enableNotification) {
+                            //PullNotificationAlarmReceiver.setNotificationAlarm(this, notificationInterval);
                             Constraints constraints = new Constraints.Builder()
                                     .setRequiredNetworkType(NetworkType.CONNECTED)
                                     .build();
@@ -348,6 +349,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                             workManager.enqueueUniquePeriodicWork(PullNotificationWorker.UNIQUE_WORKER_NAME,
                                     ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
                         } else {
+                            //PullNotificationAlarmReceiver.cancelAlarm(this);
                             workManager.cancelUniqueWork(PullNotificationWorker.UNIQUE_WORKER_NAME);
                         }
 
@@ -361,6 +363,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     mKarma = account.getKarma();
 
                     if (enableNotification) {
+                        //PullNotificationAlarmReceiver.setNotificationAlarm(this, notificationInterval);
                         Constraints constraints = new Constraints.Builder()
                                 .setRequiredNetworkType(NetworkType.CONNECTED)
                                 .build();
@@ -374,6 +377,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         workManager.enqueueUniquePeriodicWork(PullNotificationWorker.UNIQUE_WORKER_NAME,
                                 ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
                     } else {
+                        //PullNotificationAlarmReceiver.cancelAlarm(this);
                         workManager.cancelUniqueWork(PullNotificationWorker.UNIQUE_WORKER_NAME);
                     }
 
@@ -391,6 +395,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 }
 
                 if (enableNotification) {
+                    //PullNotificationAlarmReceiver.setNotificationAlarm(this, notificationInterval);
                     Constraints constraints = new Constraints.Builder()
                             .setRequiredNetworkType(NetworkType.CONNECTED)
                             .build();
@@ -404,6 +409,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     workManager.enqueueUniquePeriodicWork(PullNotificationWorker.UNIQUE_WORKER_NAME,
                             ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
                 } else {
+                    //PullNotificationAlarmReceiver.cancelAlarm(this);
                     workManager.cancelUniqueWork(PullNotificationWorker.UNIQUE_WORKER_NAME);
                 }
 

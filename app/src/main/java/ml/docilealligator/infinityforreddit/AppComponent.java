@@ -197,4 +197,6 @@ public interface AppComponent {
     void inject(DownloadLocationPreferenceFragment downloadLocationPreferenceFragment);
 
     void inject(SubmitCrosspostActivity submitCrosspostActivity);
+
+    void inject(PullNotificationAlarmReceiver pullNotificationAlarmReceiver);
 }

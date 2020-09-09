@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit.Utils;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -7,10 +7,12 @@ import android.content.Context;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import ml.docilealligator.infinityforreddit.R;
+
 public class NotificationUtils {
     public static final String CHANNEL_SUBMIT_POST = "Submit Post";
-    static final String CHANNEL_ID_NEW_MESSAGES = "new_messages";
-    static final String CHANNEL_NEW_MESSAGES = "New Messages";
+    public static final String CHANNEL_ID_NEW_MESSAGES = "new_messages";
+    public static final String CHANNEL_NEW_MESSAGES = "New Messages";
     public static final String CHANNEL_ID_DOWNLOAD_REDDIT_VIDEO = "download_reddit_video";
     public static final String CHANNEL_DOWNLOAD_REDDIT_VIDEO = "Download Reddit Video";
     public static final String CHANNEL_ID_DOWNLOAD_VIDEO = "download_video";
@@ -24,16 +26,17 @@ public class NotificationUtils {
     public static final int DOWNLOAD_VIDEO_NOTIFICATION_ID = 30000;
     public static final int DOWNLOAD_IMAGE_NOTIFICATION_ID = 40000;
     public static final int DOWNLOAD_GIF_NOTIFICATION_ID = 50000;
+    public static final int PULL_NOTIFICATION_ALARM_RECEIVER_REQUEST_CODE = 12;
 
     private static final int SUMMARY_BASE_ID_UNREAD_MESSAGE = 0;
     private static final int NOTIFICATION_BASE_ID_UNREAD_MESSAGE = 1;
 
     private static final String GROUP_USER_BASE = "ml.docilealligator.infinityforreddit.";
 
-    static NotificationCompat.Builder buildNotification(NotificationManagerCompat notificationManager,
-                                                        Context context, String title, String content,
-                                                        String summary, String channelId, String channelName,
-                                                        String group, int color) {
+    public static NotificationCompat.Builder buildNotification(NotificationManagerCompat notificationManager,
+                                                               Context context, String title, String content,
+                                                               String summary, String channelId, String channelName,
+                                                               String group, int color) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
@@ -51,9 +54,9 @@ public class NotificationUtils {
                 .setAutoCancel(true);
     }
 
-    static NotificationCompat.Builder buildSummaryNotification(Context context, NotificationManagerCompat notificationManager,
-                                                               String title, String content, String channelId,
-                                                               String channelName, String group, int color) {
+    public static NotificationCompat.Builder buildSummaryNotification(Context context, NotificationManagerCompat notificationManager,
+                                                                      String title, String content, String channelId,
+                                                                      String channelName, String group, int color) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
@@ -70,19 +73,19 @@ public class NotificationUtils {
                 .setAutoCancel(true);
     }
 
-    static NotificationManagerCompat getNotificationManager(Context context) {
+    public static NotificationManagerCompat getNotificationManager(Context context) {
         return NotificationManagerCompat.from(context);
     }
 
-    static String getAccountGroupName(String accountName) {
+    public static String getAccountGroupName(String accountName) {
         return GROUP_USER_BASE + accountName;
     }
 
-    static int getSummaryIdUnreadMessage(int accountIndex) {
+    public static int getSummaryIdUnreadMessage(int accountIndex) {
         return SUMMARY_BASE_ID_UNREAD_MESSAGE + accountIndex * 1000;
     }
 
-    static int getNotificationIdUnreadMessage(int accountIndex, int messageIndex) {
+    public static int getNotificationIdUnreadMessage(int accountIndex, int messageIndex) {
         return NOTIFICATION_BASE_ID_UNREAD_MESSAGE + accountIndex * 1000 + messageIndex;
     }
 }

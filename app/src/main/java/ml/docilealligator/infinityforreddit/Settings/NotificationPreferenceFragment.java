@@ -53,7 +53,6 @@ public class NotificationPreferenceFragment extends PreferenceFragmentCompat {
 
         enableNotification = sharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_NOTIFICATION_KEY, true);
         notificationInterval = Long.parseLong(sharedPreferences.getString(SharedPreferencesUtils.NOTIFICATION_INTERVAL_KEY, "1"));
-        TimeUnit timeUnit = (notificationInterval == 15 || notificationInterval == 30) ? TimeUnit.MINUTES : TimeUnit.HOURS;
 
         if (enableNotification) {
             if (notificationIntervalListPreference != null) {
@@ -69,6 +68,8 @@ public class NotificationPreferenceFragment extends PreferenceFragmentCompat {
                 }
 
                 if (enableNotification) {
+                    TimeUnit timeUnit = (notificationInterval == 15 || notificationInterval == 30) ? TimeUnit.MINUTES : TimeUnit.HOURS;
+
                     Constraints constraints = new Constraints.Builder()
                             .setRequiredNetworkType(NetworkType.CONNECTED)
                             .build();
@@ -94,6 +95,8 @@ public class NotificationPreferenceFragment extends PreferenceFragmentCompat {
                 notificationInterval = Long.parseLong((String) newValue);
 
                 if (enableNotification) {
+                    TimeUnit timeUnit = (notificationInterval == 15 || notificationInterval == 30) ? TimeUnit.MINUTES : TimeUnit.HOURS;
+
                     Constraints constraints = new Constraints.Builder()
                             .setRequiredNetworkType(NetworkType.CONNECTED)
                             .build();

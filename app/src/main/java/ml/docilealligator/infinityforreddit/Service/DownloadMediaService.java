@@ -38,7 +38,7 @@ import ml.docilealligator.infinityforreddit.API.DownloadFile;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.DownloadMediaEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.NotificationUtils;
+import ml.docilealligator.infinityforreddit.Utils.NotificationUtils;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import okhttp3.ResponseBody;

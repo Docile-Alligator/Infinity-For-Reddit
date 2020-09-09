@@ -4,7 +4,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -22,6 +24,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -36,6 +39,7 @@ import ml.docilealligator.infinityforreddit.Message.Message;
 import ml.docilealligator.infinityforreddit.Message.ParseMessage;
 import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
+import ml.docilealligator.infinityforreddit.Utils.NotificationUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -67,6 +71,17 @@ public class PullNotificationWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        Log.i("asasdfsdaf", "time: " + System.currentTimeMillis());
+
+        NotificationManagerCompat testNotificationManager = NotificationUtils.getNotificationManager(context);
+
+        NotificationCompat.Builder testSummaryBuilder = NotificationUtils.buildSummaryNotification(context,
+                testNotificationManager, "test",
+                context.getString(R.string.notification_new_messages, 12),
+                NotificationUtils.CHANNEL_ID_NEW_MESSAGES, NotificationUtils.CHANNEL_NEW_MESSAGES,
+                NotificationUtils.getAccountGroupName("test"), Color.BLACK);
+        testNotificationManager.notify(new Random().nextInt(10000), testSummaryBuilder.build());
+
         try {
             List<Account> accounts = mRedditDataRoomDatabase.accountDao().getAllAccounts();
             int color = mCustomThemeWrapper.getColorPrimaryLightTheme();
@@ -202,7 +217,7 @@ public class PullNotificationWorker extends Worker {
             return Result.retry();
         } catch (JSONException e) {
             e.printStackTrace();
-            return Result.failure();
+            return Result.retry();
         }
         return Result.success();
     }
