@@ -2560,10 +2560,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     mActivity.startActivity(intent);
                 } else if (mPost.getPostType() == Post.GIF_TYPE) {
                     Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
-                    intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, mPost.getSubredditName()
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mPost.getSubredditName()
                             + "-" + mPost.getId() + ".gif");
-                    intent.putExtra(ViewImageOrGifActivity.GIF_URL_KEY, mPost.getVideoUrl());
-                    intent.putExtra(ViewImageOrGifActivity.POST_TITLE_KEY, mPost.getTitle());
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, mPost.getVideoUrl());
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, mPost.getTitle());
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, mPost.getSubredditName());
                     mActivity.startActivity(intent);
                 }
             });
@@ -2655,17 +2656,19 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             mImageView.setOnClickListener(view -> {
                 if (mPost.getPostType() == Post.IMAGE_TYPE) {
                     Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
-                    intent.putExtra(ViewImageOrGifActivity.IMAGE_URL_KEY, mPost.getUrl());
-                    intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, mPost.getSubredditNamePrefixed().substring(2)
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, mPost.getUrl());
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mPost.getSubredditNamePrefixed().substring(2)
                             + "-" + mPost.getId().substring(3) + ".jpg");
-                    intent.putExtra(ViewImageOrGifActivity.POST_TITLE_KEY, mPost.getTitle());
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, mPost.getTitle());
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, mPost.getSubredditName());
                     mActivity.startActivity(intent);
                 } else if (mPost.getPostType() == Post.GIF_TYPE) {
                     Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
-                    intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, mPost.getSubredditName()
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mPost.getSubredditName()
                             + "-" + mPost.getId() + ".gif");
-                    intent.putExtra(ViewImageOrGifActivity.GIF_URL_KEY, mPost.getVideoUrl());
-                    intent.putExtra(ViewImageOrGifActivity.POST_TITLE_KEY, mPost.getTitle());
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, mPost.getVideoUrl());
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, mPost.getTitle());
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, mPost.getSubredditName());
                     mActivity.startActivity(intent);
                 }
             });
@@ -2951,6 +2954,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             mImageView.setOnClickListener(view -> {
                 Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
                 intent.putParcelableArrayListExtra(ViewRedditGalleryActivity.EXTRA_REDDIT_GALLERY, mPost.getGallery());
+                intent.putExtra(ViewRedditGalleryActivity.EXTRA_SUBREDDIT_NAME, mPost.getSubredditName());
                 mActivity.startActivity(intent);
             });
 

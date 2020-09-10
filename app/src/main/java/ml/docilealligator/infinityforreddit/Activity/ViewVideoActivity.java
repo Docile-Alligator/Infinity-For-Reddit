@@ -438,6 +438,7 @@ public class ViewVideoActivity extends AppCompatActivity {
             intent.putExtra(DownloadMediaService.EXTRA_URL, videoDownloadUrl);
             intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
             intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, videoFileName);
+            intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 startForegroundService(intent);
             } else {

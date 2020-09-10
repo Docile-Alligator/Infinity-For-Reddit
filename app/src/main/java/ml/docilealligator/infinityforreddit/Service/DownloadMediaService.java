@@ -38,8 +38,8 @@ import ml.docilealligator.infinityforreddit.API.DownloadFile;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.DownloadMediaEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.Utils.NotificationUtils;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.Utils.NotificationUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -52,6 +52,7 @@ import static android.os.Environment.getExternalStoragePublicDirectory;
 public class DownloadMediaService extends Service {
     public static final String EXTRA_URL = "EU";
     public static final String EXTRA_FILE_NAME = "EFN";
+    public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     public static final String EXTRA_MEDIA_TYPE = "EIG";
     public static final int EXTRA_MEDIA_TYPE_IMAGE = 0;
     public static final int EXTRA_MEDIA_TYPE_GIF = 1;
@@ -70,6 +71,7 @@ public class DownloadMediaService extends Service {
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private int mediaType;
+    private String mimeType;
 
     public DownloadMediaService() {
     }
@@ -128,9 +130,10 @@ public class DownloadMediaService extends Service {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
         String fileUrl = intent.getStringExtra(EXTRA_URL);
-        String fileName;
-        fileName = intent.getStringExtra(EXTRA_FILE_NAME);
+        final String[] fileName = {intent.getStringExtra(EXTRA_FILE_NAME)};
+        String subredditName = intent.getStringExtra(EXTRA_SUBREDDIT_NAME);
         mediaType = intent.getIntExtra(EXTRA_MEDIA_TYPE, EXTRA_MEDIA_TYPE_IMAGE);
+        mimeType = mediaType == EXTRA_MEDIA_TYPE_VIDEO ? "video/*" : "image/*";
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel;
@@ -148,21 +151,23 @@ public class DownloadMediaService extends Service {
             case EXTRA_MEDIA_TYPE_GIF:
                 startForeground(
                         NotificationUtils.DOWNLOAD_GIF_NOTIFICATION_ID,
-                        createNotification(R.string.downloading_gif, fileName, null)
+                        createNotification(R.string.downloading_gif, fileName[0], null)
                 );
                 break;
             case EXTRA_MEDIA_TYPE_VIDEO:
                 startForeground(
                         NotificationUtils.DOWNLOAD_VIDEO_NOTIFICATION_ID,
-                        createNotification(R.string.downloading_video, fileName, null)
+                        createNotification(R.string.downloading_video, fileName[0], null)
                 );
                 break;
             default:
                 startForeground(
                         NotificationUtils.DOWNLOAD_IMAGE_NOTIFICATION_ID,
-                        createNotification(R.string.downloading_image, fileName, null)
+                        createNotification(R.string.downloading_image, fileName[0], null)
                 );
         }
+
+        boolean separateDownloadFolder = mSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_FOLDER_FOR_EACH_SUBREDDIT, false);
 
         retrofit.create(DownloadFile.class).downloadFile(fileUrl).enqueue(new Callback<ResponseBody>() {
             @Override
@@ -175,42 +180,75 @@ public class DownloadMediaService extends Service {
                         if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                             File directory = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
                             if (directory != null) {
-                                String directoryPath = directory.getAbsolutePath() + "/Infinity/";
+                                String directoryPath = separateDownloadFolder && subredditName != null && !subredditName.equals("") ? directory.getAbsolutePath() + "/Infinity/" + subredditName + "/" : directory.getAbsolutePath() + "/Infinity/";
                                 File infinityDir = new File(directoryPath);
-                                if (!infinityDir.exists() && !infinityDir.mkdir()) {
-                                    downloadFinished(null, fileName, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
+                                if (!infinityDir.exists() && !infinityDir.mkdirs()) {
+                                    downloadFinished(null, fileName[0], ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
                                     return;
                                 }
-                                destinationFileUriString = directoryPath + fileName;
+                                destinationFileUriString = directoryPath + fileName[0];
                             } else {
-                                downloadFinished(null, fileName, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
+                                downloadFinished(null, fileName[0], ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
                                 return;
                             }
                         } else {
-                            destinationFileUriString = Environment.DIRECTORY_PICTURES + "/Infinity/";
+                            String dir = mediaType == EXTRA_MEDIA_TYPE_VIDEO ? Environment.DIRECTORY_MOVIES : Environment.DIRECTORY_PICTURES;
+                            destinationFileUriString = separateDownloadFolder && subredditName != null && !subredditName.equals("") ? dir + "/Infinity/" + subredditName + "/" : dir + "/Infinity/";
                         }
                         isDefaultDestination = true;
                     } else {
                         isDefaultDestination = false;
-                        DocumentFile picFile = DocumentFile.fromTreeUri(DownloadMediaService.this, Uri.parse(destinationFileDirectory)).createFile("image/*", fileName);
+                        DocumentFile picFile;
+                        DocumentFile dir;
+                        if (separateDownloadFolder && subredditName != null && !subredditName.equals("")) {
+                            dir = DocumentFile.fromTreeUri(DownloadMediaService.this, Uri.parse(destinationFileDirectory));
+                            if (dir == null) {
+                                downloadFinished(null, fileName[0], ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
+                                return;
+                            }
+                            dir = dir.findFile(subredditName);
+                            if (dir == null) {
+                                dir = DocumentFile.fromTreeUri(DownloadMediaService.this, Uri.parse(destinationFileDirectory)).createDirectory(subredditName);
+                                if (dir == null) {
+                                    downloadFinished(null, fileName[0], ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
+                                    return;
+                                }
+                            }
+                        } else {
+                            dir = DocumentFile.fromTreeUri(DownloadMediaService.this, Uri.parse(destinationFileDirectory));
+                            if (dir == null) {
+                                downloadFinished(null, fileName[0], ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
+                                return;
+                            }
+                        }
+                        DocumentFile checkForDuplicates = dir.findFile(fileName[0]);
+                        int extensionPosition = fileName[0].lastIndexOf('.');
+                        String extension = fileName[0].substring(extensionPosition);
+                        int num = 1;
+                        while (checkForDuplicates != null) {
+                            fileName[0] = fileName[0].substring(0, extensionPosition) + " (" + num + ")" + extension;
+                            checkForDuplicates = dir.findFile(fileName[0]);
+                            num++;
+                        }
+                        picFile = dir.createFile(mimeType, fileName[0]);
                         if (picFile == null) {
-                            downloadFinished(null, fileName, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
+                            downloadFinished(null, fileName[0], ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
                             return;
                         }
                         destinationFileUriString = picFile.getUri().toString();
                     }
 
                     new SaveImageOrGifAndCopyToExternalStorageAsyncTask(response.body(), mediaType,
-                            isDefaultDestination, fileName, destinationFileUriString, getContentResolver(),
+                            isDefaultDestination, fileName[0], destinationFileUriString, getContentResolver(),
                             new SaveImageOrGifAndCopyToExternalStorageAsyncTask.SaveImageOrGifAndCopyToExternalStorageAsyncTaskListener() {
                                 @Override
                                 public void finished(Uri destinationFileUri, int errorCode) {
-                                    downloadFinished(destinationFileUri, fileName, errorCode);
+                                    downloadFinished(destinationFileUri, fileName[0], errorCode);
                                 }
 
                                 @Override
                                 public void updateProgressNotification(int stringResId) {
-                                    updateNotification(stringResId, fileName, null);
+                                    updateNotification(stringResId, fileName[0], null);
                                 }
                             }).execute();
                 }
@@ -218,7 +256,7 @@ public class DownloadMediaService extends Service {
 
             @Override
             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                downloadFinished(null, fileName, ERROR_FILE_CANNOT_DOWNLOAD);
+                downloadFinished(null, fileName[0], ERROR_FILE_CANNOT_DOWNLOAD);
             }
         });
         return super.onStartCommand(intent, flags, startId);
@@ -263,7 +301,7 @@ public class DownloadMediaService extends Service {
                     (path, uri) -> {
                         Intent intent = new Intent();
                         intent.setAction(android.content.Intent.ACTION_VIEW);
-                        intent.setDataAndType(destinationFileUri, "image/*");
+                        intent.setDataAndType(destinationFileUri, mimeType);
                         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
                         updateNotification(R.string.downloading_media_finished, fileName, pendingIntent);
                         EventBus.getDefault().post(new DownloadMediaEvent(true));
@@ -362,12 +400,10 @@ public class DownloadMediaService extends Service {
 
                     outputStream.flush();
                 } else {
-                    String relativeLocation = Environment.DIRECTORY_PICTURES + "/Infinity/";
-
                     ContentValues contentValues = new ContentValues();
                     contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, destinationFileName);
-                    contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/*");
-                    contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, relativeLocation);
+                    contentValues.put(MediaStore.MediaColumns.MIME_TYPE, mediaType == EXTRA_MEDIA_TYPE_VIDEO ? "video/*" : "image/*");
+                    contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, destinationFileUriString);
                     contentValues.put(MediaStore.Images.Media.IS_PENDING, 1);
 
                     final Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;

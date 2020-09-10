@@ -44,6 +44,7 @@ import ml.docilealligator.infinityforreddit.WallpaperSetter;
 public class ViewRedditGalleryActivity extends AppCompatActivity implements SetAsWallpaperCallback {
 
     public static final String EXTRA_REDDIT_GALLERY = "ERG";
+    public static final String EXTRA_SUBREDDIT_NAME = "ESN";
 
     @BindView(R.id.hauler_view_view_reddit_gallery_activity)
     HaulerView haulerView;
@@ -51,6 +52,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     ViewPager viewPager;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ArrayList<Post.Gallery> gallery;
+    private String subredditName;
     @Inject
     @Named("default")
     SharedPreferences sharedPreferences;
@@ -97,6 +99,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
             finish();
             return;
         }
+        subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME);
 
         haulerView.setOnDragDismissedListener(dragDirection -> {
             int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
@@ -218,12 +221,14 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
                 ViewRedditGalleryVideoFragment fragment = new ViewRedditGalleryVideoFragment();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(ViewRedditGalleryVideoFragment.EXTRA_REDDIT_GALLERY_VIDEO, media);
+                bundle.putString(ViewRedditGalleryVideoFragment.EXTRA_SUBREDDIT_NAME, subredditName);
                 fragment.setArguments(bundle);
                 return fragment;
             } else {
                 ViewRedditGalleryImageOrGifFragment fragment = new ViewRedditGalleryImageOrGifFragment();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(ViewRedditGalleryImageOrGifFragment.EXTRA_REDDIT_GALLERY_MEDIA, media);
+                bundle.putString(ViewRedditGalleryImageOrGifFragment.EXTRA_SUBREDDIT_NAME, subredditName);
                 fragment.setArguments(bundle);
                 return fragment;
             }

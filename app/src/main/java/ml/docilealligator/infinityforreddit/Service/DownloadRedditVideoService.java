@@ -94,7 +94,8 @@ public class DownloadRedditVideoService extends Service {
 
         String videoUrl = intent.getStringExtra(EXTRA_VIDEO_URL);
         String audioUrl = videoUrl.substring(0, videoUrl.lastIndexOf('/')) + "/DASH_audio.mp4";
-        String fileName = intent.getStringExtra(EXTRA_SUBREDDIT) + "-" + intent.getStringExtra(EXTRA_POST_ID);
+        String subredditName = intent.getStringExtra(EXTRA_SUBREDDIT);
+        final String[] fileNameWithoutExtension = {subredditName + "-" + intent.getStringExtra(EXTRA_POST_ID)};
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel;
@@ -110,13 +111,15 @@ public class DownloadRedditVideoService extends Service {
 
         startForeground(
                 NotificationUtils.DOWNLOAD_REDDIT_VIDEO_NOTIFICATION_ID,
-                createNotification(R.string.downloading_reddit_video, fileName + ".mp4", null)
+                createNotification(R.string.downloading_reddit_video, fileNameWithoutExtension[0] + ".mp4", null)
         );
 
         DownloadFile downloadFile = retrofit.create(DownloadFile.class);
 
+        boolean separateDownloadFolder = sharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_FOLDER_FOR_EACH_SUBREDDIT, false);
+
         File directory = getExternalCacheDir();
-        String destinationFileName = fileName + ".mp4";
+        String destinationFileName = fileNameWithoutExtension[0] + ".mp4";
         if (directory != null) {
             String directoryPath = directory.getAbsolutePath() + "/";
             downloadFile.downloadFile(videoUrl).enqueue(new Callback<ResponseBody>() {
@@ -130,7 +133,7 @@ public class DownloadRedditVideoService extends Service {
                             if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                                 File directory = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
                                 if (directory != null) {
-                                    String directoryPath = directory.getAbsolutePath() + "/Infinity/";
+                                    String directoryPath = separateDownloadFolder ? directory.getAbsolutePath() + "/Infinity/" + subredditName + "/" : directory.getAbsolutePath() + "/Infinity/";
                                     File infinityDir = new File(directoryPath);
                                     if (!infinityDir.exists() && !infinityDir.mkdir()) {
                                         downloadFinished(null, destinationFileName, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
@@ -142,12 +145,42 @@ public class DownloadRedditVideoService extends Service {
                                     return;
                                 }
                             } else {
-                                destinationFileUriString = Environment.DIRECTORY_PICTURES + "/Infinity/";
+                                destinationFileUriString = separateDownloadFolder ? Environment.DIRECTORY_PICTURES + "/Infinity/" + subredditName + "/" : Environment.DIRECTORY_PICTURES + "/Infinity/";
                             }
                             isDefaultDestination = true;
                         } else {
                             isDefaultDestination = false;
-                            DocumentFile picFile = DocumentFile.fromTreeUri(DownloadRedditVideoService.this, Uri.parse(destinationFileDirectory)).createFile("video/*", destinationFileName);
+                            DocumentFile picFile;
+                            DocumentFile dir;
+                            if (separateDownloadFolder) {
+                                dir = DocumentFile.fromTreeUri(DownloadRedditVideoService.this, Uri.parse(destinationFileDirectory));
+                                if (dir == null) {
+                                    downloadFinished(null, destinationFileName, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
+                                    return;
+                                }
+                                dir = dir.findFile(subredditName);
+                                if (dir == null) {
+                                    dir = DocumentFile.fromTreeUri(DownloadRedditVideoService.this, Uri.parse(destinationFileDirectory)).createDirectory(subredditName);
+                                    if (dir == null) {
+                                        downloadFinished(null, destinationFileName, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
+                                        return;
+                                    }
+                                }
+                            } else {
+                                dir = DocumentFile.fromTreeUri(DownloadRedditVideoService.this, Uri.parse(destinationFileDirectory));
+                                if (dir == null) {
+                                    downloadFinished(null, destinationFileName, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
+                                    return;
+                                }
+                            }
+                            DocumentFile checkForDuplicates = dir.findFile(destinationFileName);
+                            int num = 1;
+                            while (checkForDuplicates != null) {
+                                fileNameWithoutExtension[0] = fileNameWithoutExtension[0] + " (" + num + ")";
+                                checkForDuplicates = dir.findFile(fileNameWithoutExtension[0] + ".mp4");
+                                num++;
+                            }
+                            picFile = dir.createFile("video/*", fileNameWithoutExtension[0] + ".mp4");
                             if (picFile == null) {
                                 downloadFinished(null, destinationFileName, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
                                 return;
@@ -160,9 +193,9 @@ public class DownloadRedditVideoService extends Service {
                             @Override
                             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> audioResponse) {
                                 if (audioResponse.isSuccessful() && audioResponse.body() != null) {
-                                    String videoFilePath = directoryPath + fileName + "-cache.mp4";
-                                    String audioFilePath = directoryPath + fileName + "-cache.mp3";
-                                    String outputFilePath = directoryPath + fileName + ".mp4";
+                                    String videoFilePath = directoryPath + fileNameWithoutExtension[0] + "-cache.mp4";
+                                    String audioFilePath = directoryPath + fileNameWithoutExtension[0] + "-cache.mp3";
+                                    String outputFilePath = directoryPath + fileNameWithoutExtension[0] + ".mp4";
                                     new SaveTempMuxAndCopyAsyncTask(videoResponse.body(),
                                             audioResponse.body(), videoFilePath, audioFilePath, outputFilePath,
                                             destinationFileName, destinationFileUriString, isDefaultDestination,
@@ -182,7 +215,7 @@ public class DownloadRedditVideoService extends Service {
                                                 }
                                             }).execute();
                                 } else {
-                                    String videoFilePath = directoryPath + fileName + "-cache.mp4";
+                                    String videoFilePath = directoryPath + fileNameWithoutExtension[0] + "-cache.mp4";
                                     new SaveTempMuxAndCopyAsyncTask(videoResponse.body(),
                                             null, videoFilePath, null, null,
                                             destinationFileName, destinationFileUriString, isDefaultDestination,
@@ -204,7 +237,7 @@ public class DownloadRedditVideoService extends Service {
 
                             @Override
                             public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
-                                String videoFilePath = directoryPath + fileName + "-cache.mp4";
+                                String videoFilePath = directoryPath + fileNameWithoutExtension[0] + "-cache.mp4";
                                 new SaveTempMuxAndCopyAsyncTask(videoResponse.body(),
                                         null, videoFilePath, null, null,
                                         destinationFileName, destinationFileUriString, isDefaultDestination,

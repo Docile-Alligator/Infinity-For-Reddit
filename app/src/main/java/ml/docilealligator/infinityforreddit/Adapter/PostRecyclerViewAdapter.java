@@ -2049,10 +2049,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         mActivity.startActivity(intent);
                     } else if (post.getPostType() == Post.GIF_TYPE) {
                         Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
-                        intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, post.getSubredditName()
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, post.getSubredditName()
                                 + "-" + post.getId() + ".gif");
-                        intent.putExtra(ViewImageOrGifActivity.GIF_URL_KEY, post.getVideoUrl());
-                        intent.putExtra(ViewImageOrGifActivity.POST_TITLE_KEY, post.getTitle());
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, post.getVideoUrl());
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, post.getTitle());
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, post.getSubredditName());
                         mActivity.startActivity(intent);
                     }
                 }
@@ -2152,17 +2153,19 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 if (post != null) {
                     if (post.getPostType() == Post.IMAGE_TYPE) {
                         Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
-                        intent.putExtra(ViewImageOrGifActivity.IMAGE_URL_KEY, post.getUrl());
-                        intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, post.getSubredditName()
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, post.getUrl());
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, post.getSubredditName()
                                 + "-" + post.getId() + ".jpg");
-                        intent.putExtra(ViewImageOrGifActivity.POST_TITLE_KEY, post.getTitle());
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, post.getTitle());
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, post.getSubredditName());
                         mActivity.startActivity(intent);
                     } else {
                         Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
-                        intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, post.getSubredditName()
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, post.getSubredditName()
                                 + "-" + post.getId() + ".gif");
-                        intent.putExtra(ViewImageOrGifActivity.GIF_URL_KEY, post.getVideoUrl());
-                        intent.putExtra(ViewImageOrGifActivity.POST_TITLE_KEY, post.getTitle());
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, post.getVideoUrl());
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, post.getTitle());
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, post.getSubredditName());
                         mActivity.startActivity(intent);
                     }
                 }
@@ -2474,6 +2477,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 if (post != null) {
                     Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
                     intent.putParcelableArrayListExtra(ViewRedditGalleryActivity.EXTRA_REDDIT_GALLERY, post.getGallery());
+                    intent.putExtra(ViewRedditGalleryActivity.EXTRA_SUBREDDIT_NAME, post.getSubredditName());
                     mActivity.startActivity(intent);
                 }
             });
@@ -2783,9 +2787,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     switch (post.getPostType()) {
                         case Post.IMAGE_TYPE: {
                             Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
-                            intent.putExtra(ViewImageOrGifActivity.IMAGE_URL_KEY, post.getUrl());
-                            intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, post.getSubredditName()
+                            intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, post.getUrl());
+                            intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, post.getSubredditName()
                                     + "-" + post.getId() + ".jpg");
+                            intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, post.getSubredditName());
                             mActivity.startActivity(intent);
                             break;
                         }
@@ -2804,9 +2809,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         case Post.GIF_TYPE: {
                             Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
                             intent.setData(Uri.parse(post.getVideoUrl()));
-                            intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, post.getSubredditName()
+                            intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, post.getSubredditName()
                                     + "-" + post.getId() + ".gif");
-                            intent.putExtra(ViewImageOrGifActivity.GIF_URL_KEY, post.getVideoUrl());
+                            intent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, post.getVideoUrl());
+                            intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, post.getSubredditName());
                             mActivity.startActivity(intent);
                             break;
                         }
@@ -2823,6 +2829,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         case Post.GALLERY_TYPE: {
                             Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
                             intent.putExtra(ViewRedditGalleryActivity.EXTRA_REDDIT_GALLERY, post.getGallery());
+                            intent.putExtra(ViewRedditGalleryActivity.EXTRA_SUBREDDIT_NAME, post.getSubredditName());
                             mActivity.startActivity(intent);
                         }
                     }
@@ -2839,6 +2846,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     if (post.getPostType() == Post.GALLERY_TYPE) {
                         Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
                         intent.putExtra(ViewRedditGalleryActivity.EXTRA_REDDIT_GALLERY, post.getGallery());
+                        intent.putExtra(ViewRedditGalleryActivity.EXTRA_SUBREDDIT_NAME, post.getSubredditName());
                         mActivity.startActivity(intent);
                     } else {
                         Intent intent = new Intent(mActivity, LinkResolverActivity.class);

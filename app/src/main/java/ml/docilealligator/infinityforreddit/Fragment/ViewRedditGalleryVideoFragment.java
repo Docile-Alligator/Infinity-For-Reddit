@@ -54,6 +54,7 @@ import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 public class ViewRedditGalleryVideoFragment extends Fragment {
 
     public static final String EXTRA_REDDIT_GALLERY_VIDEO = "EIV";
+    public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     private static final String IS_MUTE_STATE = "IMS";
     private static final String POSITION_STATE = "PS";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
@@ -63,6 +64,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
     ImageButton muteButton;
     private Activity activity;
     private Post.Gallery galleryVideo;
+    private String subredditName;
     private SimpleExoPlayer player;
     private DataSource.Factory dataSourceFactory;
     private boolean wasPlaying = false;
@@ -91,6 +93,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
         activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         galleryVideo = getArguments().getParcelable(EXTRA_REDDIT_GALLERY_VIDEO);
+        subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
 
         if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.VIDEO_PLAYER_IGNORE_NAV_BAR, false)) {
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || getResources().getBoolean(R.bool.isTablet)) {
@@ -189,6 +192,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
         intent.putExtra(DownloadMediaService.EXTRA_URL, galleryVideo.url);
         intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
         intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, galleryVideo.fileName);
+        intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             activity.startForegroundService(intent);
         } else {

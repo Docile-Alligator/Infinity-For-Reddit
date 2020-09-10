@@ -71,10 +71,11 @@ import ml.docilealligator.infinityforreddit.WallpaperSetter;
 
 public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWallpaperCallback {
 
-    public static final String IMAGE_URL_KEY = "IUK";
-    public static final String GIF_URL_KEY = "GUK";
-    public static final String FILE_NAME_KEY = "FNK";
-    public static final String POST_TITLE_KEY = "PTK";
+    public static final String EXTRA_IMAGE_URL_KEY = "EIUK";
+    public static final String EXTRA_GIF_URL_KEY = "EGUK";
+    public static final String EXTRA_FILE_NAME_KEY = "EFNK";
+    public static final String EXTRA_SUBREDDIT_OR_USERNAME_KEY = "ESOUK";
+    public static final String EXTRA_POST_TITLE_KEY = "EPTK";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
     @BindView(R.id.progress_bar_view_image_or_gif_activity)
     ProgressBar mProgressBar;
@@ -90,6 +91,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     private RequestManager glide;
     private String mImageUrl;
     private String mImageFileName;
+    private String mSubredditName;
     private boolean isGif = true;
 
     @Override
@@ -134,13 +136,14 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         glide = Glide.with(this);
 
         Intent intent = getIntent();
-        mImageUrl = intent.getStringExtra(GIF_URL_KEY);
+        mImageUrl = intent.getStringExtra(EXTRA_GIF_URL_KEY);
         if (mImageUrl == null) {
             isGif = false;
-            mImageUrl = intent.getStringExtra(IMAGE_URL_KEY);
+            mImageUrl = intent.getStringExtra(EXTRA_IMAGE_URL_KEY);
         }
-        mImageFileName = intent.getStringExtra(FILE_NAME_KEY);
-        String postTitle = intent.getStringExtra(POST_TITLE_KEY);
+        mImageFileName = intent.getStringExtra(EXTRA_FILE_NAME_KEY);
+        String postTitle = intent.getStringExtra(EXTRA_POST_TITLE_KEY);
+        mSubredditName = intent.getStringExtra(EXTRA_SUBREDDIT_OR_USERNAME_KEY);
 
         if (postTitle != null) {
             setTitle(Html.fromHtml(String.format("<small>%s</small>", postTitle)));
@@ -338,6 +341,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         intent.putExtra(DownloadMediaService.EXTRA_URL, mImageUrl);
         intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, isGif ? DownloadMediaService.EXTRA_MEDIA_TYPE_GIF : DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
         intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, mImageFileName);
+        intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, mSubredditName);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(intent);
         } else {

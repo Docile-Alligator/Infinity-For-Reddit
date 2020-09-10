@@ -58,6 +58,7 @@ import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
     public static final String EXTRA_REDDIT_GALLERY_MEDIA = "ERGM";
+    public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
 
     @BindView(R.id.progress_bar_view_reddit_gallery_image_or_gif_fragment)
@@ -70,6 +71,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     private ViewRedditGalleryActivity activity;
     private RequestManager glide;
     private Post.Gallery media;
+    private String subredditName;
     private boolean isDownloading = false;
     private boolean isActionBarHidden = false;
 
@@ -89,6 +91,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         setHasOptionsMenu(true);
 
         media = getArguments().getParcelable(EXTRA_REDDIT_GALLERY_MEDIA);
+        subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
         glide = Glide.with(activity);
 
         imageView.setImageViewFactory(new GlideImageViewFactory());
@@ -269,6 +272,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         intent.putExtra(DownloadMediaService.EXTRA_URL, media.url);
         intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, media.mediaType == Post.Gallery.TYPE_GIF ? DownloadMediaService.EXTRA_MEDIA_TYPE_GIF: DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
         intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, media.fileName);
+        intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             activity.startForegroundService(intent);
         } else {

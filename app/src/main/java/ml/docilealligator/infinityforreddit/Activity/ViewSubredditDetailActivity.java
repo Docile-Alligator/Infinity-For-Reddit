@@ -357,8 +357,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     glide.load(subredditData.getBannerUrl()).into(bannerImageView);
                     bannerImageView.setOnClickListener(view -> {
                         Intent intent = new Intent(ViewSubredditDetailActivity.this, ViewImageOrGifActivity.class);
-                        intent.putExtra(ViewImageOrGifActivity.IMAGE_URL_KEY, subredditData.getBannerUrl());
-                        intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, subredditName + "-banner.jpg");
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, subredditData.getBannerUrl());
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, subredditName + "-banner.jpg");
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, subredditName);
                         startActivity(intent);
                     });
                 }
@@ -378,8 +379,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                             .into(iconGifImageView);
                     iconGifImageView.setOnClickListener(view -> {
                         Intent intent = new Intent(ViewSubredditDetailActivity.this, ViewImageOrGifActivity.class);
-                        intent.putExtra(ViewImageOrGifActivity.IMAGE_URL_KEY, subredditData.getIconUrl());
-                        intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, subredditName + "-icon.jpg");
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, subredditData.getIconUrl());
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, subredditName + "-icon.jpg");
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, subredditName);
                         startActivity(intent);
                     });
                 }

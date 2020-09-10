@@ -82,17 +82,17 @@ public class LinkResolverActivity extends AppCompatActivity {
                     Intent intent = new Intent(this, ViewImageOrGifActivity.class);
                     String url = uri.toString();
                     String fileName = url.substring(url.lastIndexOf('/') + 1);
-                    intent.putExtra(ViewImageOrGifActivity.IMAGE_URL_KEY, url);
-                    intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, fileName);
-                    intent.putExtra(ViewImageOrGifActivity.POST_TITLE_KEY, fileName);
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, url);
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, fileName);
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, fileName);
                     startActivity(intent);
                 } else if (path.endsWith("gif")) {
                     Intent intent = new Intent(this, ViewImageOrGifActivity.class);
                     String url = uri.toString();
                     String fileName = url.substring(url.lastIndexOf('/') + 1);
-                    intent.putExtra(ViewImageOrGifActivity.GIF_URL_KEY, url);
-                    intent.putExtra(ViewImageOrGifActivity.FILE_NAME_KEY, fileName);
-                    intent.putExtra(ViewImageOrGifActivity.POST_TITLE_KEY, fileName);
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, url);
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, fileName);
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, fileName);
                     startActivity(intent);
                 } else if (path.endsWith("mp4")) {
                     Intent intent = new Intent(this, ViewVideoActivity.class);

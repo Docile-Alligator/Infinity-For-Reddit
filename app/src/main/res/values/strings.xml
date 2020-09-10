@@ -477,6 +477,7 @@
     <string name="settings_image_download_location_title">Image Download Location</string>
     <string name="settings_gif_download_location_title">Gif Download Location</string>
     <string name="settings_video_download_location_title">Video Download Location</string>
+    <string name="settings_separate_folder_for_each_subreddit">Separate Folder for Each Subreddit</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

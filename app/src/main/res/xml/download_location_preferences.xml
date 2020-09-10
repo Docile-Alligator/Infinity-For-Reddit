@@ -10,4 +10,9 @@
     <Preference
         app:key="video_download_location"
         app:title="@string/settings_video_download_location_title" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="separate_folder_for_each_subreddit"
+        app:title="@string/settings_separate_folder_for_each_subreddit" />
 </PreferenceScreen>
