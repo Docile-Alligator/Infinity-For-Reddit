@@ -347,8 +347,6 @@
             android:name=".Service.SubmitPostService"
             android:enabled="true"
             android:exported="false" />
-
-        <receiver android:process=":remote" android:name=".PullNotificationAlarmReceiver" />
     </application>
 
 </manifest>
