@@ -138,6 +138,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
+    @Named("gfycat")
+    Retrofit mGfycatRetrofit;
+    @Inject
+    @Named("redgifs")
+    Retrofit mRedgifsRetrofit;
+    @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
     @Named("default")
@@ -401,8 +407,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, defaultPostLayout);
 
-            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    customThemeWrapper, locale, windowWidth, accessToken, postType, postLayout, true,
+            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
+                    mRedgifsRetrofit, mRedditDataRoomDatabase, customThemeWrapper, locale,
+                    windowWidth, accessToken, postType, postLayout, true,
                     mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
@@ -456,8 +463,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 sortType = new SortType(SortType.Type.valueOf(sort));
             }
 
-            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    customThemeWrapper, locale, windowWidth, accessToken, postType, postLayout, displaySubredditName,
+            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
+                    mRedgifsRetrofit, mRedditDataRoomDatabase, customThemeWrapper, locale,
+                    windowWidth, accessToken, postType, postLayout, displaySubredditName,
                     mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
@@ -504,8 +512,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 sortType = new SortType(SortType.Type.valueOf(sort));
             }
 
-            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    customThemeWrapper, locale, windowWidth, accessToken, postType, postLayout, true,
+            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
+                    mRedgifsRetrofit, mRedditDataRoomDatabase, customThemeWrapper, locale,
+                    windowWidth, accessToken, postType, postLayout, true,
                     mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
@@ -550,8 +559,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, defaultPostLayout);
 
-            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    customThemeWrapper, locale, windowWidth, accessToken, postType, postLayout, true,
+            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
+                    mRedgifsRetrofit, mRedditDataRoomDatabase, customThemeWrapper, locale,
+                    windowWidth, accessToken, postType, postLayout, true,
                     mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
@@ -589,8 +599,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
 
-            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mRedditDataRoomDatabase,
-                    customThemeWrapper, locale, windowWidth, accessToken, postType, postLayout, true,
+            mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
+                    mRedgifsRetrofit, mRedditDataRoomDatabase, customThemeWrapper, locale,
+                    windowWidth, accessToken, postType, postLayout, true,
                     mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {

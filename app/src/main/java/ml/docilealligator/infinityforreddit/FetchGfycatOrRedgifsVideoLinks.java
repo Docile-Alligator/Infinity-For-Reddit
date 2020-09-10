@@ -15,9 +15,18 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FetchGfycatOrRedgifsVideoLinks {
+    private FetchGfycatOrRedgifsVideoLinksListener fetchGfycatOrRedgifsVideoLinksListener;
+    private ParseGfycatVideoLinksAsyncTask parseGfycatVideoLinksAsyncTask;
+    Retrofit gfycatRetrofit;
+    Call<String> gfycatCall;
+
     public interface FetchGfycatOrRedgifsVideoLinksListener {
         void success(String webm, String mp4);
         void failed(int errorCode);
+    }
+
+    public FetchGfycatOrRedgifsVideoLinks(FetchGfycatOrRedgifsVideoLinksListener fetchGfycatOrRedgifsVideoLinksListener) {
+        this.fetchGfycatOrRedgifsVideoLinksListener = fetchGfycatOrRedgifsVideoLinksListener;
     }
 
     public static void fetchGfycatOrRedgifsVideoLinks(Retrofit gfycatRetrofit, String gfycatId,
@@ -37,6 +46,41 @@ public class FetchGfycatOrRedgifsVideoLinks {
                 fetchGfycatOrRedgifsVideoLinksListener.failed(-1);
             }
         });
+    }
+
+    public void fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(Retrofit gfycatRetrofit, Retrofit redgifsRetrofit,
+                                                                    String gfycatId, boolean isGfycatVideo,
+                                                                    boolean automaticallyTryRedgifs) {
+        gfycatCall = (isGfycatVideo ? gfycatRetrofit : redgifsRetrofit).create(GfycatAPI.class).getGfycatData(gfycatId);
+        gfycatCall.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful()) {
+                    parseGfycatVideoLinksAsyncTask = new ParseGfycatVideoLinksAsyncTask(response.body(), fetchGfycatOrRedgifsVideoLinksListener);
+                    parseGfycatVideoLinksAsyncTask.execute();
+                } else {
+                    if (response.code() == 404 && isGfycatVideo && automaticallyTryRedgifs) {
+                        fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(gfycatRetrofit, redgifsRetrofit, gfycatId, false, false);
+                    } else {
+                        fetchGfycatOrRedgifsVideoLinksListener.failed(response.code());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                fetchGfycatOrRedgifsVideoLinksListener.failed(-1);
+            }
+        });
+    }
+
+    public void cancel() {
+        if (gfycatCall != null && !gfycatCall.isCanceled()) {
+            gfycatCall.cancel();
+        }
+        if (parseGfycatVideoLinksAsyncTask != null && !parseGfycatVideoLinksAsyncTask.isCancelled()) {
+            parseGfycatVideoLinksAsyncTask.cancel(true);
+        }
     }
 
     private static class ParseGfycatVideoLinksAsyncTask extends AsyncTask<Void, Void, Void> {

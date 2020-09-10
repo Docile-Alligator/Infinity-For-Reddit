@@ -52,6 +52,10 @@ public class Post implements Parcelable {
     private String url;
     private String videoUrl;
     private String videoDownloadUrl;
+    private String gfycatId;
+    private boolean isGfycat;
+    private boolean isRedgifs;
+    private boolean loadGfyOrRedgifsVideoSuccess;
     private String permalink;
     private String flair;
     private String awards;
@@ -202,6 +206,10 @@ public class Post implements Parcelable {
         url = in.readString();
         videoUrl = in.readString();
         videoDownloadUrl = in.readString();
+        gfycatId = in.readString();
+        isGfycat = in.readByte() != 0;
+        isRedgifs = in.readByte() != 0;
+        loadGfyOrRedgifsVideoSuccess = in.readByte() != 0;
         permalink = in.readString();
         flair = in.readString();
         awards = in.readString();
@@ -351,6 +359,38 @@ public class Post implements Parcelable {
 
     public void setVideoDownloadUrl(String videoDownloadUrl) {
         this.videoDownloadUrl = videoDownloadUrl;
+    }
+
+    public String getGfycatId() {
+        return gfycatId;
+    }
+
+    public void setGfycatId(String gfycatId) {
+        this.gfycatId = gfycatId;
+    }
+
+    public boolean isGfycat() {
+        return isGfycat;
+    }
+
+    public void setIsGfycat(boolean isGfycat) {
+        this.isGfycat = isGfycat;
+    }
+
+    public boolean isRedgifs() {
+        return isRedgifs;
+    }
+
+    public void setIsRedgifs(boolean isRedgifs) {
+        this.isRedgifs = isRedgifs;
+    }
+
+    public boolean isLoadGfyOrRedgifsVideoSuccess() {
+        return loadGfyOrRedgifsVideoSuccess;
+    }
+
+    public void setLoadGfyOrRedgifsVideoSuccess(boolean loadGfyOrRedgifsVideoSuccess) {
+        this.loadGfyOrRedgifsVideoSuccess = loadGfyOrRedgifsVideoSuccess;
     }
 
     public String getPermalink() {
@@ -512,6 +552,10 @@ public class Post implements Parcelable {
         parcel.writeString(url);
         parcel.writeString(videoUrl);
         parcel.writeString(videoDownloadUrl);
+        parcel.writeString(gfycatId);
+        parcel.writeByte((byte) (isGfycat ? 1 : 0));
+        parcel.writeByte((byte) (isRedgifs ? 1 : 0));
+        parcel.writeByte((byte) (loadGfyOrRedgifsVideoSuccess ? 1 : 0));
         parcel.writeString(permalink);
         parcel.writeString(flair);
         parcel.writeString(awards);

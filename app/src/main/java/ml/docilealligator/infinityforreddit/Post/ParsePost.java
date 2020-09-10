@@ -384,9 +384,14 @@ public class ParsePost {
             try {
                 Uri uri = Uri.parse(url);
                 String authority = uri.getAuthority();
-                if (authority != null && (authority.contains("gfycat.com") || authority.contains("redgifs.com"))) {
-                    post.setPostType(Post.LINK_TYPE);
-                    post.setUrl(url);
+                if (authority != null && (authority.contains("gfycat.com"))) {
+                    post.setIsGfycat(true);
+                    post.setVideoUrl(url);
+                    post.setGfycatId(url.substring(url.lastIndexOf("/") + 1));
+                } else if (authority != null && authority.contains("redgifs.com")) {
+                    post.setIsRedgifs(true);
+                    post.setVideoUrl(url);
+                    post.setGfycatId(url.substring(url.lastIndexOf("/") + 1));
                 }
             } catch (IllegalArgumentException ignore) { }
         } else if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
@@ -421,6 +426,20 @@ public class ParsePost {
                 if (!gallery.isEmpty()) {
                     post.setPostType(Post.GALLERY_TYPE);
                     post.setGallery(gallery);
+                }
+            } else if (post.getPostType() == Post.LINK_TYPE) {
+                Uri uri = Uri.parse(url);
+                String authority = uri.getAuthority();
+                if (authority != null && (authority.contains("gfycat.com"))) {
+                    post.setPostType(Post.VIDEO_TYPE);
+                    post.setIsGfycat(true);
+                    post.setVideoUrl(url);
+                    post.setGfycatId(url.substring(url.lastIndexOf("/") + 1));
+                } else if (authority != null && authority.contains("redgifs.com")) {
+                    post.setPostType(Post.VIDEO_TYPE);
+                    post.setIsRedgifs(true);
+                    post.setVideoUrl(url);
+                    post.setGfycatId(url.substring(url.lastIndexOf("/") + 1));
                 }
             }
         }

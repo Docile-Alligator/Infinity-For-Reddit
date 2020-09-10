@@ -81,6 +81,7 @@ import ml.docilealligator.infinityforreddit.BottomSheetFragment.ShareLinkBottomS
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToDetailActivity;
+import ml.docilealligator.infinityforreddit.FetchGfycatOrRedgifsVideoLinks;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.Post.PostDataSource;
@@ -124,6 +125,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private AppCompatActivity mActivity;
     private Retrofit mOauthRetrofit;
     private Retrofit mRetrofit;
+    private Retrofit mGfycatRetrofit;
+    private Retrofit mRedgifsRetrofit;
     private int mImageViewWidth;
     private String mAccessToken;
     private RequestManager mGlide;
@@ -178,6 +181,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean mShowThumbnailOnTheRightInCompactLayout;
     private double mStartAutoplayVisibleAreaOffset;
     private boolean mMuteNSFWVideo;
+    private boolean mAutomaticallyTryRedgifs;
     private Drawable mCommentIcon;
     private NetworkState networkState;
     private ExoCreator mExoCreator;
@@ -185,6 +189,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private ShareLinkBottomSheetFragment mShareLinkBottomSheetFragment;
 
     public PostRecyclerViewAdapter(AppCompatActivity activity, Retrofit oauthRetrofit, Retrofit retrofit,
+                                   Retrofit gfycatRetrofit, Retrofit redgifsRetrofit,
                                    RedditDataRoomDatabase redditDataRoomDatabase,
                                    CustomThemeWrapper customThemeWrapper, Locale locale, int imageViewWidth,
                                    String accessToken, int postType, int postLayout, boolean displaySubredditName,
@@ -194,6 +199,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mActivity = activity;
             mOauthRetrofit = oauthRetrofit;
             mRetrofit = retrofit;
+            mGfycatRetrofit = gfycatRetrofit;
+            mRedgifsRetrofit = redgifsRetrofit;
             mImageViewWidth = imageViewWidth;
             mAccessToken = accessToken;
             mPostType = postType;
@@ -222,6 +229,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     sharedPreferences.getInt(SharedPreferencesUtils.START_AUTOPLAY_VISIBLE_AREA_OFFSET_LANDSCAPE, 50) / 100.0;
 
             mMuteNSFWVideo = sharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_NSFW_VIDEO, false);
+            mAutomaticallyTryRedgifs = sharedPreferences.getBoolean(SharedPreferencesUtils.AUTOMATICALLY_TRY_REDGIFS, true);
 
             mPostLayout = postLayout;
 
@@ -555,7 +563,30 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         mGlide.load(post.getPreviewUrl()).into(((PostVideoAutoplayViewHolder) holder).previewImageView);
                     }
                     ((PostVideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
-                    ((PostVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
+
+                    if (post.isGfycat() || post.isRedgifs() && !post.isLoadGfyOrRedgifsVideoSuccess()) {
+                        ((PostVideoAutoplayViewHolder) holder).typeTextView.setText("GFYCAT");
+                        ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks = new FetchGfycatOrRedgifsVideoLinks(new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
+                            @Override
+                            public void success(String webm, String mp4) {
+                                post.setVideoDownloadUrl(mp4);
+                                post.setVideoUrl(webm);
+                                post.setLoadGfyOrRedgifsVideoSuccess(true);
+                                ((PostVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
+                            }
+
+                            @Override
+                            public void failed(int errorCode) {
+                                Toast.makeText(mActivity, "asdfasdfadf", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks
+                                .fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mGfycatRetrofit, mRedgifsRetrofit,
+                                        post.getGfycatId(), post.isGfycat(), mAutomaticallyTryRedgifs);
+                    } else {
+                        ((PostVideoAutoplayViewHolder) holder).typeTextView.setText("VIDEO");
+                        ((PostVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
+                    }
                 } else if (holder instanceof PostVideoAndGifPreviewViewHolder) {
                     if (post.getPostType() == Post.VIDEO_TYPE) {
                         ((PostVideoAndGifPreviewViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.video));
@@ -1158,6 +1189,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         super.onViewRecycled(holder);
         if (holder instanceof PostBaseViewHolder) {
             if (holder instanceof PostVideoAutoplayViewHolder) {
+                ((PostVideoAutoplayViewHolder) holder).mediaUri = null;
+                if (((PostVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks != null) {
+                    ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks.cancel();
+                }
                 ((PostVideoAutoplayViewHolder) holder).muteButton.setVisibility(View.GONE);
                 ((PostVideoAutoplayViewHolder) holder).resetVolume();
                 mGlide.clear(((PostVideoAutoplayViewHolder) holder).previewImageView);
@@ -1781,6 +1816,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         ExoPlayerViewHelper helper;
         private Uri mediaUri;
         private float volume;
+        public FetchGfycatOrRedgifsVideoLinks fetchGfycatOrRedgifsVideoLinks;
 
         PostVideoAutoplayViewHolder(View itemView) {
             super(itemView);
@@ -1865,11 +1901,14 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         @NonNull
         @Override
         public PlaybackInfo getCurrentPlaybackInfo() {
-            return helper != null ? helper.getLatestPlaybackInfo() : new PlaybackInfo();
+            return helper != null && mediaUri != null ? helper.getLatestPlaybackInfo() : new PlaybackInfo();
         }
 
         @Override
         public void initialize(@NonNull Container container, @NonNull PlaybackInfo playbackInfo) {
+            if (mediaUri == null) {
+                return;
+            }
             if (helper == null) {
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
                 helper.addEventListener(new Playable.EventListener() {
@@ -1916,7 +1955,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
         @Override
         public void play() {
-            if (helper != null) helper.play();
+            if (helper != null && mediaUri != null) {
+                helper.play();
+            }
         }
 
         @Override
@@ -1939,7 +1980,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
         @Override
         public boolean wantsToPlay() {
-            return ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
+            return mediaUri != null && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
         }
 
         @Override
