@@ -1868,10 +1868,26 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 Post post = getItem(position);
                 if (post != null) {
                     Intent intent = new Intent(mActivity, ViewVideoActivity.class);
-                    intent.setData(Uri.parse(post.getVideoUrl()));
-                    intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
-                    intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, post.getSubredditName());
-                    intent.putExtra(ViewVideoActivity.EXTRA_ID, post.getId());
+                    if (post.isGfycat()) {
+                        intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
+                        intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, post.getGfycatId());
+                        if (post.isLoadGfyOrRedgifsVideoSuccess()) {
+                            intent.setData(Uri.parse(post.getVideoUrl()));
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
+                        }
+                    } else if (post.isRedgifs()) {
+                        intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_REDGIFS);
+                        intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, post.getGfycatId());
+                        if (post.isLoadGfyOrRedgifsVideoSuccess()) {
+                            intent.setData(Uri.parse(post.getVideoUrl()));
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
+                        }
+                    } else {
+                        intent.setData(Uri.parse(post.getVideoUrl()));
+                        intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
+                        intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, post.getSubredditName());
+                        intent.putExtra(ViewVideoActivity.EXTRA_ID, post.getId());
+                    }
                     intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, post.getTitle());
                     intent.putExtra(ViewVideoActivity.EXTRA_PROGRESS_SECONDS, helper.getLatestPlaybackInfo().getResumePosition());
                     intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, post.isNSFW());
@@ -2081,10 +2097,18 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 if (post != null) {
                     if (post.getPostType() == Post.VIDEO_TYPE) {
                         Intent intent = new Intent(mActivity, ViewVideoActivity.class);
-                        intent.setData(Uri.parse(post.getVideoUrl()));
-                        intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
-                        intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, post.getSubredditName());
-                        intent.putExtra(ViewVideoActivity.EXTRA_ID, post.getId());
+                        if (post.isGfycat()) {
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
+                            intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, post.getGfycatId());
+                        } else if (post.isRedgifs()) {
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_REDGIFS);
+                            intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, post.getGfycatId());
+                        } else {
+                            intent.setData(Uri.parse(post.getVideoUrl()));
+                            intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, post.getSubredditName());
+                            intent.putExtra(ViewVideoActivity.EXTRA_ID, post.getId());
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
+                        }
                         intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, post.getTitle());
                         intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, post.isNSFW());
                         mActivity.startActivity(intent);

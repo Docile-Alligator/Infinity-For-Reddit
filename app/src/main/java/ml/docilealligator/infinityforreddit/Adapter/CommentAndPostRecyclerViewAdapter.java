@@ -2353,10 +2353,25 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             fullscreenButton.setOnClickListener(view -> {
                 Intent intent = new Intent(mActivity, ViewVideoActivity.class);
-                intent.setData(Uri.parse(mPost.getVideoUrl()));
-                intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
-                intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, mPost.getSubredditName());
-                intent.putExtra(ViewVideoActivity.EXTRA_ID, mPost.getId());
+                if (mPost.isGfycat()) {
+                    intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
+                    intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, mPost.getGfycatId());
+                    if (mPost.isLoadGfyOrRedgifsVideoSuccess()) {
+                        intent.setData(Uri.parse(mPost.getVideoUrl()));
+                        intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
+                    }
+                } else if (mPost.isRedgifs()) {
+                    intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_REDGIFS);
+                    intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, mPost.getGfycatId());
+                    if (mPost.isLoadGfyOrRedgifsVideoSuccess()) {
+                        intent.setData(Uri.parse(mPost.getVideoUrl()));
+                        intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
+                    }
+                } else {
+                    intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
+                    intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, mPost.getSubredditName());
+                    intent.putExtra(ViewVideoActivity.EXTRA_ID, mPost.getId());
+                }
                 intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, mPost.getTitle());
                 intent.putExtra(ViewVideoActivity.EXTRA_PROGRESS_SECONDS, helper.getLatestPlaybackInfo().getResumePosition());
                 intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, mPost.isNSFW());
@@ -2551,10 +2566,18 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             mImageView.setOnClickListener(view -> {
                 if (mPost.getPostType() == Post.VIDEO_TYPE) {
                     Intent intent = new Intent(mActivity, ViewVideoActivity.class);
-                    intent.setData(Uri.parse(mPost.getVideoUrl()));
-                    intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
-                    intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, mPost.getSubredditName());
-                    intent.putExtra(ViewVideoActivity.EXTRA_ID, mPost.getId());
+                    if (mPost.isGfycat()) {
+                        intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
+                        intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, mPost.getGfycatId());
+                    } else if (mPost.isRedgifs()) {
+                        intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_REDGIFS);
+                        intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, mPost.getGfycatId());
+                    } else {
+                        intent.setData(Uri.parse(mPost.getVideoUrl()));
+                        intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, mPost.getSubredditName());
+                        intent.putExtra(ViewVideoActivity.EXTRA_ID, mPost.getId());
+                        intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
+                    }
                     intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, mPost.getTitle());
                     intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, mPost.isNSFW());
                     mActivity.startActivity(intent);

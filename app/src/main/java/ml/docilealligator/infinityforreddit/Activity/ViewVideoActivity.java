@@ -33,7 +33,6 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
@@ -217,6 +216,8 @@ public class ViewVideoActivity extends AppCompatActivity {
                     mVideoUri = Uri.parse(videoUrl);
                     videoDownloadUrl = savedInstanceState.getString(VIDEO_DOWNLOAD_URL_STATE);
                 }
+            } else {
+                mVideoUri = intent.getData();
             }
 
             if (mVideoUri == null) {
@@ -234,7 +235,7 @@ public class ViewVideoActivity extends AppCompatActivity {
             } else {
                 dataSourceFactory = new DefaultDataSourceFactory(ViewVideoActivity.this,
                         Util.getUserAgent(ViewVideoActivity.this, "Infinity"));
-                player.prepare(new DashMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
+                player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
                 preparePlayer(savedInstanceState);
             }
         } else if (videoType == VIDEO_TYPE_DIRECT) {
