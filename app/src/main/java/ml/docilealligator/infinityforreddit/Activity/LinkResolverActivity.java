@@ -195,7 +195,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                         } else if (authority.contains("redgifs.com")) {
                             if (path.matches(REDGIFS_PATTERN)) {
                                 Intent intent = new Intent(this, ViewVideoActivity.class);
-                                intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, path.substring(7));
+                                intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, path.substring(path.lastIndexOf("/") + 1));
                                 intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_REDGIFS);
                                 intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, true);
                                 startActivity(intent);

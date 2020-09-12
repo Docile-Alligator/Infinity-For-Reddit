@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -127,9 +128,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         Window window = getWindow();
         View decorView = window.getDecorView();
-        if (!hasDrawerLayout) {
-            window.setStatusBarColor(customThemeWrapper.getColorPrimaryDark());
-        }
         boolean isLightStatusbar = customThemeWrapper.isLightStatusBar();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             boolean isLightNavBar = customThemeWrapper.isLightNavBar();
@@ -160,7 +158,15 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }
             }
             decorView.setSystemUiVisibility(systemVisibilityToolbarExpanded);
-            window.setNavigationBarColor(customThemeWrapper.getNavBarColor());
+            if (!(immersiveInterface && isImmersiveInterfaceApplicable)) {
+                window.setNavigationBarColor(customThemeWrapper.getNavBarColor());
+                if (!hasDrawerLayout) {
+                    window.setStatusBarColor(customThemeWrapper.getColorPrimaryDark());
+                }
+            } else {
+                window.setNavigationBarColor(Color.TRANSPARENT);
+                window.setStatusBarColor(Color.TRANSPARENT);
+            }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (isLightStatusbar) {
                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
