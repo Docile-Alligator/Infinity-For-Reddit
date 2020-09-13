@@ -2411,10 +2411,15 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     intent.putExtra(ViewVideoActivity.EXTRA_ID, mPost.getId());
                 }
                 intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, mPost.getTitle());
-                intent.putExtra(ViewVideoActivity.EXTRA_PROGRESS_SECONDS, helper.getLatestPlaybackInfo().getResumePosition());
+                if (helper != null) {
+                    intent.putExtra(ViewVideoActivity.EXTRA_PROGRESS_SECONDS, helper.getLatestPlaybackInfo().getResumePosition());
+                }
                 intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, mPost.isNSFW());
                 mActivity.startActivity(intent);
             });
+
+            previewImageView.setOnLongClickListener(view -> fullscreenButton.performClick());
+            playerView.setOnLongClickListener(view -> fullscreenButton.performClick());
         }
 
         void bindVideoUri(Uri videoUri) {

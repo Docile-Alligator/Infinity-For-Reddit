@@ -1892,11 +1892,16 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         intent.putExtra(ViewVideoActivity.EXTRA_ID, post.getId());
                     }
                     intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, post.getTitle());
-                    intent.putExtra(ViewVideoActivity.EXTRA_PROGRESS_SECONDS, helper.getLatestPlaybackInfo().getResumePosition());
+                    if (helper != null) {
+                        intent.putExtra(ViewVideoActivity.EXTRA_PROGRESS_SECONDS, helper.getLatestPlaybackInfo().getResumePosition());
+                    }
                     intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, post.isNSFW());
                     mActivity.startActivity(intent);
                 }
             });
+
+            previewImageView.setOnLongClickListener(view -> fullscreenButton.performClick());
+            videoPlayer.setOnLongClickListener(view -> fullscreenButton.performClick());
         }
 
         void bindVideoUri(Uri videoUri) {
