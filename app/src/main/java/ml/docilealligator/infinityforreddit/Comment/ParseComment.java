@@ -102,6 +102,8 @@ public class ParseComment {
                     c.setExpanded(true);
                 }
                 expandChildren(c.getChildren(), visibleComments, setExpanded);
+            } else {
+                c.setExpanded(true);
             }
             if (c.hasMoreChildrenFullnames() && c.getMoreChildrenFullnames().size() > c.getMoreChildrenStartingIndex()) {
                 //Add a load more placeholder

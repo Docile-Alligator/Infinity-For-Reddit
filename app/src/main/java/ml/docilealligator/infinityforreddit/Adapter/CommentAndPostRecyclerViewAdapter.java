@@ -567,7 +567,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     return VIEW_TYPE_POST_DETAIL_GALLERY;
                 default:
                     return VIEW_TYPE_POST_DETAIL_TEXT_TYPE;
-
             }
         }
 
@@ -598,7 +597,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             Comment comment = mVisibleComments.get(position - 2);
             if (!comment.isPlaceHolder()) {
-                if (mFullyCollapseComment && comment.hasReply() && !comment.isExpanded() && comment.hasExpandedBefore()) {
+                if (mFullyCollapseComment && !comment.isExpanded() && comment.hasExpandedBefore()) {
                     return VIEW_TYPE_COMMENT_FULLY_COLLAPSED;
                 }
                 return VIEW_TYPE_COMMENT;
@@ -616,7 +615,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             Comment comment = mVisibleComments.get(position - 1);
             if (!comment.isPlaceHolder()) {
-                if (mFullyCollapseComment && comment.hasReply() && !comment.isExpanded() && comment.hasExpandedBefore()) {
+                if (mFullyCollapseComment && !comment.isExpanded() && comment.hasExpandedBefore()) {
                     return VIEW_TYPE_COMMENT_FULLY_COLLAPSED;
                 }
                 return VIEW_TYPE_COMMENT;
@@ -1552,7 +1551,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             }
         }
 
-        mVisibleComments.subList(position + 1, position + 1 + allChildrenSize).clear();
+        if (allChildrenSize > 0) {
+            mVisibleComments.subList(position + 1, position + 1 + allChildrenSize).clear();
+        }
         if (mIsSingleCommentThreadMode) {
             if (mFullyCollapseComment) {
                 notifyItemChanged(position + 2);
@@ -3431,6 +3432,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             }
                             expandButton.setImageResource(R.drawable.ic_expand_less_grey_24dp);
                         }
+                    }
+                } else if (mFullyCollapseComment) {
+                    int commentPosition = mIsSingleCommentThreadMode ? getAdapterPosition() - 2 : getAdapterPosition() - 1;
+                    if (commentPosition >= 0 && commentPosition < mVisibleComments.size()) {
+                        collapseChildren(commentPosition);
                     }
                 }
             });
