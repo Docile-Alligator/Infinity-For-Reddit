@@ -105,6 +105,7 @@ import ml.docilealligator.infinityforreddit.Comment.FetchComment;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.CustomView.MarkwonLinearLayoutManager;
+import ml.docilealligator.infinityforreddit.FetchGfycatOrRedgifsVideoLinks;
 import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.Post.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
@@ -141,6 +142,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private AppCompatActivity mActivity;
     private Retrofit mRetrofit;
     private Retrofit mOauthRetrofit;
+    private Retrofit mGfycatRetrofit;
+    private Retrofit mRedgifsRetrofit;
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private RequestManager mGlide;
     private Markwon mPostDetailMarkwon;
@@ -172,6 +175,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private boolean mFullyCollapseComment;
     private double mStartAutoplayVisibleAreaOffset;
     private boolean mMuteNSFWVideo;
+    private boolean mAutomaticallyTryRedgifs;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
     private boolean isInitiallyLoadingFailed;
@@ -229,7 +233,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private ExoCreator mExoCreator;
 
     public CommentAndPostRecyclerViewAdapter(AppCompatActivity activity, CustomThemeWrapper customThemeWrapper,
-                                             Retrofit retrofit, Retrofit oauthRetrofit,
+                                             Retrofit retrofit, Retrofit oauthRetrofit, Retrofit gfycatRetrofit,
+                                             Retrofit redgifsRetrofit,
                                              RedditDataRoomDatabase redditDataRoomDatabase, RequestManager glide,
                                              int imageViewWidth, String accessToken, String accountName,
                                              Post post, Locale locale, String singleCommentId,
@@ -239,6 +244,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mActivity = activity;
         mRetrofit = retrofit;
         mOauthRetrofit = oauthRetrofit;
+        mGfycatRetrofit = gfycatRetrofit;
+        mRedgifsRetrofit = redgifsRetrofit;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mGlide = glide;
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
@@ -467,6 +474,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 sharedPreferences.getInt(SharedPreferencesUtils.START_AUTOPLAY_VISIBLE_AREA_OFFSET_LANDSCAPE, 50) / 100.0;
 
         mMuteNSFWVideo = sharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_NSFW_VIDEO, false);
+        mAutomaticallyTryRedgifs = sharedPreferences.getBoolean(SharedPreferencesUtils.AUTOMATICALLY_TRY_REDGIFS, true);
 
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
@@ -826,7 +834,30 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     mGlide.load(mPost.getPreviewUrl()).into(((PostDetailVideoAutoplayViewHolder) holder).previewImageView);
                 }
                 ((PostDetailVideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (mPost.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
-                ((PostDetailVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(mPost.getVideoUrl()));
+
+                if (mPost.isGfycat() || mPost.isRedgifs() && !mPost.isLoadGfyOrRedgifsVideoSuccess()) {
+                    ((PostDetailVideoAutoplayViewHolder) holder).mTypeTextView.setText("GFYCAT");
+                    ((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks = new FetchGfycatOrRedgifsVideoLinks(new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
+                        @Override
+                        public void success(String webm, String mp4) {
+                            mPost.setVideoDownloadUrl(mp4);
+                            mPost.setVideoUrl(webm);
+                            mPost.setLoadGfyOrRedgifsVideoSuccess(true);
+                            ((PostDetailVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(mPost.getVideoUrl()));
+                        }
+
+                        @Override
+                        public void failed(int errorCode) {
+                            ((PostDetailVideoAutoplayViewHolder) holder).mErrorLoadingGfycatImageView.setVisibility(View.VISIBLE);
+                        }
+                    });
+                    ((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks
+                            .fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mGfycatRetrofit, mRedgifsRetrofit,
+                                    mPost.getGfycatId(), mPost.isGfycat(), mAutomaticallyTryRedgifs);
+                } else {
+                    ((PostDetailVideoAutoplayViewHolder) holder).mTypeTextView.setText("VIDEO");
+                    ((PostDetailVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(mPost.getVideoUrl()));
+                }
             } else if (holder instanceof PostDetailVideoAndGifPreviewHolder) {
                 if (mPost.getPostType() == Post.GIF_TYPE) {
                     ((PostDetailVideoAndGifPreviewHolder) holder).mTypeTextView.setText(mActivity.getString(R.string.gif));
@@ -1781,6 +1812,10 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ((PostDetailBaseViewHolder) holder).mNSFWTextView.setVisibility(View.GONE);
 
             if (holder instanceof PostDetailVideoAutoplayViewHolder) {
+                if (((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks != null) {
+                    ((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks.cancel();
+                }
+                ((PostDetailVideoAutoplayViewHolder) holder).mErrorLoadingGfycatImageView.setVisibility(View.GONE);
                 ((PostDetailVideoAutoplayViewHolder) holder).muteButton.setVisibility(View.GONE);
                 ((PostDetailVideoAutoplayViewHolder) holder).resetVolume();
                 mGlide.clear(((PostDetailVideoAutoplayViewHolder) holder).previewImageView);
@@ -2286,6 +2321,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         PlayerView playerView;
         @BindView(R.id.preview_image_view_item_post_detail_video_autoplay)
         GifImageView previewImageView;
+        @BindView(R.id.error_loading_gfycat_image_view_item_post_detail_video_autoplay)
+        ImageView mErrorLoadingGfycatImageView;
         @BindView(R.id.mute_exo_playback_control_view)
         ImageView muteButton;
         @BindView(R.id.fullscreen_exo_playback_control_view)
@@ -2309,6 +2346,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         ExoPlayerViewHelper helper;
         private Uri mediaUri;
         private float volume;
+        public FetchGfycatOrRedgifsVideoLinks fetchGfycatOrRedgifsVideoLinks;
 
         public PostDetailVideoAutoplayViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -2400,11 +2438,14 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         @NonNull
         @Override
         public PlaybackInfo getCurrentPlaybackInfo() {
-            return helper != null ? helper.getLatestPlaybackInfo() : new PlaybackInfo();
+            return helper != null && mediaUri != null ? helper.getLatestPlaybackInfo() : new PlaybackInfo();
         }
 
         @Override
         public void initialize(@NonNull Container container, @NonNull PlaybackInfo playbackInfo) {
+            if (mediaUri == null) {
+                return;
+            }
             if (helper == null) {
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
                 helper.addEventListener(new Playable.EventListener() {
@@ -2451,7 +2492,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
         @Override
         public void play() {
-            if (helper != null) helper.play();
+            if (helper != null && mediaUri != null) helper.play();
         }
 
         @Override

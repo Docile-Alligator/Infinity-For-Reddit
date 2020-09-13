@@ -172,6 +172,12 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
+    @Named("gfycat")
+    Retrofit mGfycatRetrofit;
+    @Inject
+    @Named("redgifs")
+    Retrofit mRedgifsRetrofit;
+    @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
     @Named("default")
@@ -489,7 +495,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             setupMenu();
 
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this,
-                    mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mGlide,
+                    mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mGfycatRetrofit,
+                    mRedgifsRetrofit, mRedditDataRoomDatabase, mGlide,
                     mWindowWidth, mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId,
                     isSingleCommentThreadMode, mSharedPreferences, mExoCreator,
                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
@@ -651,7 +658,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                             setupMenu();
 
                             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this,
-                                    mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mGlide,
+                                    mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mGfycatRetrofit,
+                                    mRedgifsRetrofit, mRedditDataRoomDatabase, mGlide,
                                     mWindowWidth, mAccessToken, mAccountName, mPost, mLocale,
                                     mSingleCommentId, isSingleCommentThreadMode, mSharedPreferences, mExoCreator,
                                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {

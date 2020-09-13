@@ -577,7 +577,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                             @Override
                             public void failed(int errorCode) {
-                                Toast.makeText(mActivity, "asdfasdfadf", Toast.LENGTH_SHORT).show();
+                                ((PostVideoAutoplayViewHolder) holder).errorLoadingGfycatImageView.setVisibility(View.VISIBLE);
                             }
                         });
                         ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks
@@ -1193,6 +1193,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 if (((PostVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks != null) {
                     ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks.cancel();
                 }
+                ((PostVideoAutoplayViewHolder) holder).errorLoadingGfycatImageView.setVisibility(View.GONE);
                 ((PostVideoAutoplayViewHolder) holder).muteButton.setVisibility(View.GONE);
                 ((PostVideoAutoplayViewHolder) holder).resetVolume();
                 mGlide.clear(((PostVideoAutoplayViewHolder) holder).previewImageView);
@@ -1791,6 +1792,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         AspectRatioFrameLayout aspectRatioFrameLayout;
         @BindView(R.id.preview_image_view_item_post_video_type_autoplay)
         GifImageView previewImageView;
+        @BindView(R.id.error_loading_gfycat_image_view_item_post_video_type_autoplay)
+        ImageView errorLoadingGfycatImageView;
         @BindView(R.id.player_view_item_post_video_type_autoplay)
         PlayerView videoPlayer;
         @BindView(R.id.mute_exo_playback_control_view)
