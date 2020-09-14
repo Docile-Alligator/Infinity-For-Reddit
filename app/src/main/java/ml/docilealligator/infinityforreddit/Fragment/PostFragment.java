@@ -79,6 +79,7 @@ import ml.docilealligator.infinityforreddit.Event.ChangeShowElapsedTimeEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeStartAutoplayVisibleAreaOffsetEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeTimeFormatEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeVibrateWhenActionTriggeredEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVideoAutoplayEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVoteButtonsPositionEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeWifiStatusEvent;
@@ -171,6 +172,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private boolean hasPost = false;
     private boolean isShown = false;
     private boolean savePostFeedScrolledPosition;
+    private boolean vibrateWhenActionTriggered;
     private PostRecyclerViewAdapter mAdapter;
     private RecyclerView.SmoothScroller smoothScroller;
     private Window window;
@@ -396,6 +398,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         boolean nsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_KEY, false);
         int defaultPostLayout = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY, "0"));
         savePostFeedScrolledPosition = mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION, false);
+        vibrateWhenActionTriggered = mSharedPreferences.getBoolean(SharedPreferencesUtils.VIBRATE_WHEN_ACTION_TRIGGERED, true);
         Locale locale = getResources().getConfiguration().locale;
 
         if (postType == PostDataSource.TYPE_SEARCH) {
@@ -640,7 +643,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         backgroundRight = new ColorDrawable(customThemeWrapper.getUpvoted());
         drawableLeft = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_downward_black_24dp, null);
         drawableRight = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_upward_black_24dp, null);
-        int screenBottom = window.getDecorView().getHeight();
         touchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
             boolean exceedThreshold = false;
 
@@ -681,7 +683,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
                         if (!exceedThreshold) {
                             exceedThreshold = true;
-                            if (v != null) {
+                            if (vibrateWhenActionTriggered && v != null) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                     v.vibrate(VibrationEffect.createOneShot(10, 175));
                                 } else {
@@ -706,7 +708,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
                         if (!exceedThreshold) {
                             exceedThreshold = true;
-                            if (v != null) {
+                            if (vibrateWhenActionTriggered && v != null) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                     v.vibrate(VibrationEffect.createOneShot(10, 175));
                                 } else {
@@ -1167,6 +1169,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Subscribe
     public void onChangeSavePostFeedScrolledPositionEvent(ChangeSavePostFeedScrolledPositionEvent changeSavePostFeedScrolledPositionEvent) {
         savePostFeedScrolledPosition = changeSavePostFeedScrolledPositionEvent.savePostFeedScrolledPosition;
+    }
+
+    @Subscribe
+    public void onChangeVibrateWhenActionTriggeredEvent(ChangeVibrateWhenActionTriggeredEvent changeVibrateWhenActionTriggeredEvent) {
+        vibrateWhenActionTriggered = changeVibrateWhenActionTriggeredEvent.vibrateWhenActionTriggered;
     }
 
     private void refreshAdapter() {

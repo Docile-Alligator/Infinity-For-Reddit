@@ -478,6 +478,8 @@
     <string name="settings_gif_download_location_title">Gif Download Location</string>
     <string name="settings_video_download_location_title">Video Download Location</string>
     <string name="settings_separate_folder_for_each_subreddit">Separate Folder for Each Subreddit</string>
+    <string name="settings_swipe_action_title">Swipe Action</string>
+    <string name="settings_vibrate_when_action_triggered_title">Vibrate the phone when the action is triggered</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -877,5 +879,7 @@
     <string name="block_user_failed">Failed to block user</string>
 
     <string name="view_full_comment_markdown">View Full Markdown</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

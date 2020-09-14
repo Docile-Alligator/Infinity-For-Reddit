@@ -39,4 +39,8 @@
         app:key="swap_tap_and_long_in_comments"
         app:title="@string/settings_swap_tap_and_long_title" />
 
+    <Preference
+        app:title="@string/settings_swipe_action_title"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.SwipeActionPreferenceFragment" />
+
 </PreferenceScreen>

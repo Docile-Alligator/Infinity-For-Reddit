@@ -121,6 +121,7 @@ public class SharedPreferencesUtils {
     public static final String GIF_DOWNLOAD_LOCATION = "gif_download_location";
     public static final String VIDEO_DOWNLOAD_LOCATION = "video_download_location";
     public static final String SEPARATE_FOLDER_FOR_EACH_SUBREDDIT = "separate_folder_for_each_subreddit";
+    public static final String VIBRATE_WHEN_ACTION_TRIGGERED = "vibrate_when_action_triggered";
 
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";
     public static final String MAIN_PAGE_TAB_1_TITLE = "_main_page_tab_1_title";

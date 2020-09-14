@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="vibrate_when_action_triggered"
+        app:title="@string/settings_vibrate_when_action_triggered_title" />
+
+</PreferenceScreen>
