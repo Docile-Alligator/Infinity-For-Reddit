@@ -111,6 +111,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         mContext = context;
         mOauthRetrofit = oauthRetrofit;
         mCommentColor = customThemeWrapper.getCommentColor();
+        int commentSpoilerBackgroundColor = mCommentColor | 0xFF000000;
         mMarkwon = Markwon.builder(mContext)
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @NonNull
@@ -147,7 +148,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                                         super.updateDrawState(ds);
                                         ds.setColor(mCommentColor);
                                     } else {
-                                        ds.bgColor = mCommentColor;
+                                        ds.bgColor = commentSpoilerBackgroundColor;
                                         ds.setColor(mCommentColor);
                                     }
                                     ds.setUnderlineText(false);

@@ -250,7 +250,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mGlide = glide;
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
         mCommentTextColor = customThemeWrapper.getCommentColor();
+        int commentSpoilerBackgroundColor = mCommentTextColor | 0xFF000000;
         int markdownColor = customThemeWrapper.getPostContentColor();
+        int postSpoilerBackgroundColor = markdownColor | 0xFF000000;
         int linkColor = customThemeWrapper.getLinkColor();
         mPostDetailMarkwon = Markwon.builder(mActivity)
                 .usePlugin(new AbstractMarkwonPlugin() {
@@ -286,7 +288,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                         super.updateDrawState(ds);
                                         ds.setColor(markdownColor);
                                     } else {
-                                        ds.bgColor = markdownColor;
+                                        ds.bgColor = postSpoilerBackgroundColor;
                                         ds.setColor(markdownColor);
                                     }
                                     ds.setUnderlineText(false);
@@ -382,7 +384,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                         super.updateDrawState(ds);
                                         ds.setColor(mCommentTextColor);
                                     } else {
-                                        ds.bgColor = mCommentTextColor;
+                                        ds.bgColor = commentSpoilerBackgroundColor;
                                         ds.setColor(mCommentTextColor);
                                     }
                                     ds.setUnderlineText(false);
@@ -3657,7 +3659,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     ((ViewPostDetailActivity) mActivity).changeToSingleThreadMode();
                 }
 
-                itemView.setBackgroundColor(mCommentBackgroundColor);
+                itemView.setBackgroundColor(mColorAccent);
                 ((TextView) itemView).setTextColor(mColorAccent);
             });
         }

@@ -3,7 +3,13 @@ package ml.docilealligator.infinityforreddit.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
@@ -19,6 +25,8 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -79,8 +87,73 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
         mContext = context;
         mOauthRetrofit = oauthRetrofit;
         mRetryLoadingMoreCallback = retryLoadingMoreCallback;
+
+        mColorAccent = customThemeWrapper.getColorAccent();
+        mMessageBackgroundColor = customThemeWrapper.getCardViewBackgroundColor();
+        mUsernameColor = customThemeWrapper.getUsername();
+        mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
+        mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
+        int spoilerBackgroundColor = mSecondaryTextColor | 0xFF000000;
+        mUnreadMessageBackgroundColor = customThemeWrapper.getUnreadMessageBackgroundColor();
+        mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
+        mButtonTextColor = customThemeWrapper.getButtonTextColor();
+
         mMarkwon = Markwon.builder(mContext)
                 .usePlugin(new AbstractMarkwonPlugin() {
+                    @NonNull
+                    @Override
+                    public String processMarkdown(@NonNull String markdown) {
+                        StringBuilder markdownStringBuilder = new StringBuilder(markdown);
+                        Pattern spoilerPattern = Pattern.compile(">![\\S\\s]*?!<");
+                        Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
+                        while (matcher.find()) {
+                            markdownStringBuilder.replace(matcher.start(), matcher.start() + 1, "&gt;");
+                        }
+                        return super.processMarkdown(markdownStringBuilder.toString());
+                    }
+
+                    @Override
+                    public void afterSetText(@NonNull TextView textView) {
+                        textView.setHighlightColor(Color.TRANSPARENT);
+                        SpannableStringBuilder markdownStringBuilder = new SpannableStringBuilder(textView.getText().toString());
+                        Pattern spoilerPattern = Pattern.compile(">![\\S\\s]*?!<");
+                        Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
+                        int start = 0;
+                        boolean find = false;
+                        while (matcher.find(start)) {
+                            find = true;
+                            markdownStringBuilder.delete(matcher.end() - 2, matcher.end());
+                            markdownStringBuilder.delete(matcher.start(), matcher.start() + 2);
+                            int matcherStart = matcher.start();
+                            int matcherEnd = matcher.end();
+                            ClickableSpan clickableSpan = new ClickableSpan() {
+                                private boolean isShowing = false;
+                                @Override
+                                public void updateDrawState(@NonNull TextPaint ds) {
+                                    if (isShowing) {
+                                        super.updateDrawState(ds);
+                                        ds.setColor(mSecondaryTextColor);
+                                    } else {
+                                        ds.bgColor = spoilerBackgroundColor;
+                                        ds.setColor(mSecondaryTextColor);
+                                    }
+                                    ds.setUnderlineText(false);
+                                }
+
+                                @Override
+                                public void onClick(@NonNull View view) {
+                                    isShowing = !isShowing;
+                                    view.invalidate();
+                                }
+                            };
+                            markdownStringBuilder.setSpan(clickableSpan, matcherStart, matcherEnd - 4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            start = matcherEnd - 4;
+                        }
+                        if (find) {
+                            textView.setText(markdownStringBuilder);
+                        }
+                    }
+
                     @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                         builder.linkResolver((view, link) -> {
@@ -115,15 +188,6 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
         } else {
             mMessageType = FetchMessage.MESSAGE_TYPE_INBOX;
         }
-
-        mColorAccent = customThemeWrapper.getColorAccent();
-        mMessageBackgroundColor = customThemeWrapper.getCardViewBackgroundColor();
-        mUsernameColor = customThemeWrapper.getUsername();
-        mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
-        mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
-        mUnreadMessageBackgroundColor = customThemeWrapper.getUnreadMessageBackgroundColor();
-        mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
-        mButtonTextColor = customThemeWrapper.getButtonTextColor();
     }
 
     @NonNull
@@ -205,7 +269,11 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                     mContext.startActivity(intent);
                 });
 
-                ((DataViewHolder) holder).contentCustomMarkwonView.setOnClickListener(view -> ((DataViewHolder) holder).itemView.performClick());
+                ((DataViewHolder) holder).contentCustomMarkwonView.setOnClickListener(view -> {
+                    if (((DataViewHolder) holder).contentCustomMarkwonView.getSelectionStart() == -1 && ((DataViewHolder) holder).contentCustomMarkwonView.getSelectionEnd() == -1) {
+                        ((DataViewHolder) holder).itemView.performClick();
+                    }
+                });
             }
         }
     }
@@ -293,6 +361,8 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
             subjectTextView.setTextColor(mPrimaryTextColor);
             titleTextView.setTextColor(mPrimaryTextColor);
             contentCustomMarkwonView.setTextColor(mSecondaryTextColor);
+
+            contentCustomMarkwonView.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 

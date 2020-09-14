@@ -114,6 +114,7 @@ public class CommentFullMarkdownActivity extends BaseActivity {
         String commentMarkdown = getIntent().getStringExtra(EXTRA_COMMENT_MARKDOWN);
         boolean isNsfw = getIntent().getBooleanExtra(EXTRA_IS_NSFW, false);
         int markdownColor = mCustomThemeWrapper.getCommentColor();
+        int spoilerBackgroundColor = markdownColor | 0xFF000000;
         int linkColor = mCustomThemeWrapper.getLinkColor();
         Markwon markwon = Markwon.builder(this)
                 .usePlugin(new AbstractMarkwonPlugin() {
@@ -149,7 +150,7 @@ public class CommentFullMarkdownActivity extends BaseActivity {
                                         super.updateDrawState(ds);
                                         ds.setColor(markdownColor);
                                     } else {
-                                        ds.bgColor = markdownColor;
+                                        ds.bgColor = spoilerBackgroundColor;
                                         ds.setColor(markdownColor);
                                     }
                                     ds.setUnderlineText(false);
