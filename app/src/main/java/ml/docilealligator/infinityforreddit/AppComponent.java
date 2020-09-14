@@ -6,6 +6,7 @@ import dagger.Component;
 import ml.docilealligator.infinityforreddit.Activity.AccountPostsActivity;
 import ml.docilealligator.infinityforreddit.Activity.AccountSavedThingActivity;
 import ml.docilealligator.infinityforreddit.Activity.CommentActivity;
+import ml.docilealligator.infinityforreddit.Activity.CommentFullMarkdownActivity;
 import ml.docilealligator.infinityforreddit.Activity.CreateMultiRedditActivity;
 import ml.docilealligator.infinityforreddit.Activity.CustomThemeListingActivity;
 import ml.docilealligator.infinityforreddit.Activity.CustomizeThemeActivity;
@@ -197,4 +198,6 @@ public interface AppComponent {
     void inject(DownloadLocationPreferenceFragment downloadLocationPreferenceFragment);
 
     void inject(SubmitCrosspostActivity submitCrosspostActivity);
+
+    void inject(CommentFullMarkdownActivity commentFullMarkdownActivity);
 }

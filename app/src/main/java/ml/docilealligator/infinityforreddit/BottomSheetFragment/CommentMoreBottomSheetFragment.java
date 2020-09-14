@@ -21,6 +21,7 @@ import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.Activity.CommentFullMarkdownActivity;
 import ml.docilealligator.infinityforreddit.Activity.EditCommentActivity;
 import ml.docilealligator.infinityforreddit.Activity.ReportActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewPostDetailActivity;
@@ -37,6 +38,8 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
     public static final String EXTRA_COMMENT = "ECF";
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
     public static final String EXTRA_POSITION = "EP";
+    public static final String EXTRA_COMMENT_MARKDOWN = "ECM";
+    public static final String EXTRA_IS_NSFW = "EIN";
     @BindView(R.id.edit_text_view_comment_more_bottom_sheet_fragment)
     TextView editTextView;
     @BindView(R.id.delete_text_view_comment_more_bottom_sheet_fragment)
@@ -45,6 +48,8 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
     TextView shareTextView;
     @BindView(R.id.copy_text_view_comment_more_bottom_sheet_fragment)
     TextView copyTextView;
+    @BindView(R.id.view_full_markdown_text_view_comment_more_bottom_sheet_fragment)
+    TextView viewFullMarkdownTextView;
     @BindView(R.id.report_view_comment_more_bottom_sheet_fragment)
     TextView reportTextView;
     @BindView(R.id.see_removed_view_comment_more_bottom_sheet_fragment)
@@ -67,6 +72,10 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
         }
 
         Bundle bundle = getArguments();
+        if (bundle == null) {
+            dismiss();
+            return rootView;
+        }
         Comment comment = bundle.getParcelable(EXTRA_COMMENT);
         if (comment == null) {
             dismiss();
@@ -123,6 +132,15 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
             copyBundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, comment.getCommentRawText());
             copyTextBottomSheetFragment.setArguments(copyBundle);
             copyTextBottomSheetFragment.show(activity.getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
+        });
+
+        viewFullMarkdownTextView.setOnClickListener(view -> {
+            Intent intent = new Intent(activity, CommentFullMarkdownActivity.class);
+            intent.putExtra(CommentFullMarkdownActivity.EXTRA_IS_NSFW, bundle.getBoolean(EXTRA_IS_NSFW, false));
+            intent.putExtra(CommentFullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, bundle.getString(EXTRA_COMMENT_MARKDOWN, ""));
+            activity.startActivity(intent);
+
+            dismiss();
         });
 
         reportTextView.setOnClickListener(view -> {

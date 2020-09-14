@@ -26,11 +26,15 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
-        <activity android:name=".Activity.SubmitCrosspostActivity"
+        <activity android:name=".Activity.CommentFullMarkdownActivity"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppTheme.Slidable" />
+        <activity
+            android:name=".Activity.SubmitCrosspostActivity"
             android:label="@string/submit_crosspost_activity_label"
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
 
         <service
             android:name=".Service.DownloadMediaService"

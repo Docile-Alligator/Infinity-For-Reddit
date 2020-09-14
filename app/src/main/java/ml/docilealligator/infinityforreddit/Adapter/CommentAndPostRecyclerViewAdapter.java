@@ -3202,6 +3202,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 } else {
                     bundle.putInt(CommentMoreBottomSheetFragment.EXTRA_POSITION, getAdapterPosition() - 1);
                 }
+                bundle.putString(CommentMoreBottomSheetFragment.EXTRA_COMMENT_MARKDOWN, comment.getCommentMarkdown());
+                bundle.putBoolean(CommentMoreBottomSheetFragment.EXTRA_IS_NSFW, mPost.isNSFW());
                 CommentMoreBottomSheetFragment commentMoreBottomSheetFragment = new CommentMoreBottomSheetFragment();
                 commentMoreBottomSheetFragment.setArguments(bundle);
                 commentMoreBottomSheetFragment.show(mActivity.getSupportFragmentManager(), commentMoreBottomSheetFragment.getTag());
