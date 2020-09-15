@@ -34,8 +34,8 @@ public class DeleteAllPostLayoutsAsyncTask extends AsyncTask<Void, Void, Void> {
             String key = entry.getKey();
             if (key.startsWith(SharedPreferencesUtils.POST_LAYOUT_SHARED_PREFERENCES_FILE)
                     || key.startsWith(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST)
-                    || key.startsWith(SharedPreferencesUtils.POST_LAYOUT_POPULAR_POST)
-                    || key.startsWith(SharedPreferencesUtils.POST_LAYOUT_ALL_POST)
+                    || key.startsWith(SharedPreferencesUtils.POST_LAYOUT_POPULAR_POST_LEGACY)
+                    || key.startsWith(SharedPreferencesUtils.POST_LAYOUT_ALL_POST_LEGACY)
                     || key.startsWith(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE)
                     || key.startsWith(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE)
                     || key.startsWith(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE)

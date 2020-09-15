@@ -185,8 +185,13 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
                             sortTypeEditor.remove(SharedPreferencesUtils.SORT_TYPE_POPULAR_POST_LEGACY);
                             sortTypeEditor.remove(SharedPreferencesUtils.SORT_TIME_POPULAR_POST_LEGACY);
 
+                            SharedPreferences.Editor postLayoutEditor = mPostLayoutSharedPreferences.edit();
+                            postLayoutEditor.remove(SharedPreferencesUtils.POST_LAYOUT_ALL_POST_LEGACY);
+                            postLayoutEditor.remove(SharedPreferencesUtils.POST_LAYOUT_POPULAR_POST_LEGACY);
+
                             editor.apply();
                             sortTypeEditor.apply();
+                            postLayoutEditor.apply();
                             Toast.makeText(activity, R.string.delete_all_legacy_settings_success, Toast.LENGTH_SHORT).show();
                         })
                         .setNegativeButton(R.string.no, null)

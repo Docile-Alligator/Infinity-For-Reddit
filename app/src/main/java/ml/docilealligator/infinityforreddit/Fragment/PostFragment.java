@@ -450,15 +450,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST_BASE + subredditName, SortType.Time.ALL.name());
             }
             boolean displaySubredditName = subredditName != null && (subredditName.equals("popular") || subredditName.equals("all"));
-            if(displaySubredditName) {
-                if(subredditName.equals("popular")) {
-                    postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_POPULAR_POST, defaultPostLayout);
-                } else {
-                    postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_ALL_POST, defaultPostLayout);
-                }
-            } else {
-                postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, defaultPostLayout);
-            }
+            postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, defaultPostLayout);
 
             if(sortTime != null) {
                 sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
@@ -974,6 +966,24 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void changePostLayout(int postLayout) {
+        switch (postType) {
+            case PostDataSource.TYPE_FRONT_PAGE:
+                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, postLayout).apply();
+                break;
+            case PostDataSource.TYPE_SUBREDDIT:
+                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, postLayout).apply();
+                break;
+            case PostDataSource.TYPE_USER:
+                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, postLayout).apply();
+                break;
+            case PostDataSource.TYPE_SEARCH:
+                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, postLayout).apply();
+                break;
+            case PostDataSource.TYPE_MULTI_REDDIT:
+                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + multiRedditPath, postLayout).apply();
+                break;
+        }
+
         if (mAdapter != null) {
             mAdapter.setPostLayout(postLayout);
             refreshAdapter();

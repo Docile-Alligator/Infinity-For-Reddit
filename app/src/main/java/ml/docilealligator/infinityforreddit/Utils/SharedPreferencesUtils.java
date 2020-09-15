@@ -60,8 +60,6 @@ public class SharedPreferencesUtils {
 
     public static final String POST_LAYOUT_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.post_layout";
     public static final String POST_LAYOUT_FRONT_PAGE_POST = "post_layout_best_post";
-    public static final String POST_LAYOUT_POPULAR_POST = "post_layout_popular_post";
-    public static final String POST_LAYOUT_ALL_POST = "post_layout_all_post";
     public static final String POST_LAYOUT_SUBREDDIT_POST_BASE = "post_layout_subreddit_post_";
     public static final String POST_LAYOUT_MULTI_REDDIT_POST_BASE = "post_layout_multi_reddit_post_";
     public static final String POST_LAYOUT_USER_POST_BASE = "post_layout_user_post_";
@@ -161,4 +159,7 @@ public class SharedPreferencesUtils {
     public static final String SORT_TIME_ALL_POST_LEGACY = "sort_time_all_post";
     public static final String SORT_TYPE_POPULAR_POST_LEGACY = "sort_type_popular_post";
     public static final String SORT_TIME_POPULAR_POST_LEGACY = "sort_time_popular_post";
+
+    public static final String POST_LAYOUT_POPULAR_POST_LEGACY = "post_layout_popular_post";
+    public static final String POST_LAYOUT_ALL_POST_LEGACY = "post_layout_all_post";
 }
