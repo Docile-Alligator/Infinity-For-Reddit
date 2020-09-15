@@ -174,7 +174,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private boolean isShown = false;
     private boolean savePostFeedScrolledPosition;
     private boolean vibrateWhenActionTriggered;
-    private boolean enableSwipeAction;
     private PostRecyclerViewAdapter mAdapter;
     private RecyclerView.SmoothScroller smoothScroller;
     private Window window;
@@ -345,6 +344,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
         };
 
+        mSwipeRefreshLayout.setEnabled(mSharedPreferences.getBoolean(SharedPreferencesUtils.PULL_TO_REFRESH, true));
         mSwipeRefreshLayout.setOnRefreshListener(this::refresh);
 
         if (savedInstanceState != null) {
@@ -401,7 +401,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         int defaultPostLayout = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY, "0"));
         savePostFeedScrolledPosition = mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION, false);
         vibrateWhenActionTriggered = mSharedPreferences.getBoolean(SharedPreferencesUtils.VIBRATE_WHEN_ACTION_TRIGGERED, true);
-        enableSwipeAction = mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SWIPE_ACTION, false);
+        boolean enableSwipeAction = mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SWIPE_ACTION, false);
         Locale locale = getResources().getConfiguration().locale;
 
         if (postType == PostDataSource.TYPE_SEARCH) {
@@ -1200,6 +1200,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 touchHelper.attachToRecyclerView(null);
             }
         }
+    }
+
+    @Subscribe
+    public void onChangePullToRefreshEvent(ChangePullToRefreshEvent changePullToRefreshEvent) {
+        mSwipeRefreshLayout.setEnabled(changePullToRefreshEvent.pullToRefresh);
     }
 
     private void refreshAdapter() {

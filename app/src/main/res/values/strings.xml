@@ -482,6 +482,7 @@
     <string name="settings_vibrate_when_action_triggered_title">Vibrate the phone when the action is triggered</string>
     <string name="settings_disable_swiping_between_tabs_title">Disable Swiping Between Tabs</string>
     <string name="settings_enable_swipe_action_title">Enable Swipe Action</string>
+    <string name="settings_pull_to_refresh_title">Pull to Refresh</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
@@ -17,6 +18,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.Event.ChangeLockBottomAppBarEvent;
+import ml.docilealligator.infinityforreddit.Fragment.ChangePullToRefreshEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
@@ -41,6 +43,7 @@ public class GesturesAndButtonsPreferenceFragment extends PreferenceFragmentComp
         SwitchPreference lockBottomAppBarSwitch = findPreference(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR);
         SwitchPreference swipeUpToHideJumpToNextTopLevelCommentButtonSwitch =
                 findPreference(SharedPreferencesUtils.SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON);
+        SwitchPreference pullToRefreshSwitch = findPreference(SharedPreferencesUtils.PULL_TO_REFRESH);
 
         if (lockJumpToNextTopLevelCommentButtonSwitch != null && lockBottomAppBarSwitch != null &&
                 swipeUpToHideJumpToNextTopLevelCommentButtonSwitch != null) {
@@ -64,6 +67,16 @@ public class GesturesAndButtonsPreferenceFragment extends PreferenceFragmentComp
             if (!sharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false)) {
                 swipeUpToHideJumpToNextTopLevelCommentButtonSwitch.setVisible(true);
             }
+        }
+
+        if (pullToRefreshSwitch != null) {
+            pullToRefreshSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    EventBus.getDefault().post(new ChangePullToRefreshEvent((Boolean) newValue));
+                    return true;
+                }
+            });
         }
     }
 
