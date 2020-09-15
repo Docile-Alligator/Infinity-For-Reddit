@@ -121,6 +121,7 @@ public class SharedPreferencesUtils {
     public static final String SEPARATE_FOLDER_FOR_EACH_SUBREDDIT = "separate_folder_for_each_subreddit";
     public static final String VIBRATE_WHEN_ACTION_TRIGGERED = "vibrate_when_action_triggered";
     public static final String DISABLE_SWIPING_BETWEEN_TABS = "disable_swiping_between_tabs";
+    public static final String ENABLE_SWIPE_ACTION = "enable_swipe_action";
 
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";
     public static final String MAIN_PAGE_TAB_1_TITLE = "_main_page_tab_1_title";

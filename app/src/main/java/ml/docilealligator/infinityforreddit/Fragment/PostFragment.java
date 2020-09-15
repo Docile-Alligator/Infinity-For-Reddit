@@ -69,6 +69,7 @@ import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.CustomView.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.Event.ChangeAutoplayNsfwVideosEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeDefaultPostLayoutEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeEnableSwipeActionSwitchEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeMuteAutoplayingVideosEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeMuteNSFWVideoEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
@@ -173,6 +174,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private boolean isShown = false;
     private boolean savePostFeedScrolledPosition;
     private boolean vibrateWhenActionTriggered;
+    private boolean enableSwipeAction;
     private PostRecyclerViewAdapter mAdapter;
     private RecyclerView.SmoothScroller smoothScroller;
     private Window window;
@@ -399,6 +401,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         int defaultPostLayout = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY, "0"));
         savePostFeedScrolledPosition = mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION, false);
         vibrateWhenActionTriggered = mSharedPreferences.getBoolean(SharedPreferencesUtils.VIBRATE_WHEN_ACTION_TRIGGERED, true);
+        enableSwipeAction = mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SWIPE_ACTION, false);
         Locale locale = getResources().getConfiguration().locale;
 
         if (postType == PostDataSource.TYPE_SEARCH) {
@@ -729,7 +732,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
         });
 
-        touchHelper.attachToRecyclerView(mPostRecyclerView);
+        if (enableSwipeAction) {
+            touchHelper.attachToRecyclerView(mPostRecyclerView);
+        }
         mPostRecyclerView.setAdapter(mAdapter);
         mPostRecyclerView.setCacheManager(mAdapter);
         mPostRecyclerView.setPlayerInitializer(order -> {
@@ -1184,6 +1189,17 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Subscribe
     public void onChangeVibrateWhenActionTriggeredEvent(ChangeVibrateWhenActionTriggeredEvent changeVibrateWhenActionTriggeredEvent) {
         vibrateWhenActionTriggered = changeVibrateWhenActionTriggeredEvent.vibrateWhenActionTriggered;
+    }
+
+    @Subscribe
+    public void onChangeEnableSwipeActionSwitchEvent(ChangeEnableSwipeActionSwitchEvent changeEnableSwipeActionSwitchEvent) {
+        if (touchHelper != null) {
+            if (changeEnableSwipeActionSwitchEvent.enableSwipeAction) {
+                touchHelper.attachToRecyclerView(mPostRecyclerView);
+            } else {
+                touchHelper.attachToRecyclerView(null);
+            }
+        }
     }
 
     private void refreshAdapter() {

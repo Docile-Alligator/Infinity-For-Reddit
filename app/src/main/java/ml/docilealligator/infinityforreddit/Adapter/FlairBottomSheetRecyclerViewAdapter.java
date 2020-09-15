@@ -26,13 +26,13 @@ import ml.docilealligator.infinityforreddit.R;
 public class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<FlairBottomSheetRecyclerViewAdapter.FlairViewHolder> {
     private Context context;
     private ArrayList<Flair> flairs;
-    private int flairColor;
+    private int flairTextColor;
     private ItemClickListener itemClickListener;
 
     public FlairBottomSheetRecyclerViewAdapter(Context context, CustomThemeWrapper customThemeWrapper,
                                                ItemClickListener itemClickListener) {
         this.context = context;
-        flairColor = customThemeWrapper.getFlairBackgroundColor();
+        flairTextColor = customThemeWrapper.getPrimaryTextColor();
         this.itemClickListener = itemClickListener;
     }
 
@@ -108,7 +108,7 @@ public class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<Fl
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.itemView = itemView;
-            flairTextView.setTextColor(flairColor);
+            flairTextView.setTextColor(flairTextColor);
         }
     }
 }
