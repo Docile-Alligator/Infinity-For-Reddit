@@ -72,6 +72,7 @@ import ml.docilealligator.infinityforreddit.BottomSheetFragment.SortTimeBottomSh
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.ChangeConfirmToExitEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeDisableSwipingBetweenTabsEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeLockBottomAppBarEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
@@ -199,6 +200,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private boolean showBottomAppBar;
     private boolean mConfirmToExit;
     private boolean mLockBottomAppBar;
+    private boolean mDisableSwipingBetweenTabs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -265,6 +267,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false);
         mConfirmToExit = mSharedPreferences.getBoolean(SharedPreferencesUtils.CONFIRM_TO_EXIT, false);
         mLockBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR, false);
+        mDisableSwipingBetweenTabs = mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false);
 
         if (savedInstanceState != null) {
             mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
@@ -585,7 +588,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         sectionsPagerAdapter = new SectionsPagerAdapter(fragmentManager, getLifecycle());
         viewPager2.setAdapter(sectionsPagerAdapter);
         viewPager2.setOffscreenPageLimit(3);
-        viewPager2.requestDisallowInterceptTouchEvent(true);
+        viewPager2.setUserInputEnabled(!mDisableSwipingBetweenTabs);
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
             if (mAccessToken == null) {
                 switch (position) {
@@ -961,6 +964,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Subscribe
     public void onChangeLockBottomAppBar(ChangeLockBottomAppBarEvent changeLockBottomAppBarEvent) {
         mLockBottomAppBar = changeLockBottomAppBarEvent.lockBottomAppBar;
+    }
+
+    @Subscribe
+    public void onChangeDisableSwipingBetweenTabsEvent(ChangeDisableSwipingBetweenTabsEvent changeDisableSwipingBetweenTabsEvent) {
+        mDisableSwipingBetweenTabs = changeDisableSwipingBetweenTabsEvent.disableSwipingBetweenTabs;
+        viewPager2.setUserInputEnabled(!mDisableSwipingBetweenTabs);
     }
 
     @Override

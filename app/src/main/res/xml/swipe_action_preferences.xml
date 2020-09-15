@@ -6,4 +6,9 @@
         app:key="vibrate_when_action_triggered"
         app:title="@string/settings_vibrate_when_action_triggered_title" />
 
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="disable_swiping_between_tabs"
+        app:title="@string/settings_disable_swiping_between_tabs_title" />
+
 </PreferenceScreen>

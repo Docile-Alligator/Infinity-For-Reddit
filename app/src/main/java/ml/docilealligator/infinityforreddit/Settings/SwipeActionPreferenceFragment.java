@@ -7,6 +7,7 @@ import androidx.preference.SwitchPreference;
 
 import org.greenrobot.eventbus.EventBus;
 
+import ml.docilealligator.infinityforreddit.Event.ChangeDisableSwipingBetweenTabsEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVibrateWhenActionTriggeredEvent;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
@@ -18,10 +19,18 @@ public class SwipeActionPreferenceFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.swipe_action_preferences, rootKey);
 
         SwitchPreference vibrateWhenActionTriggeredSwitch = findPreference(SharedPreferencesUtils.VIBRATE_WHEN_ACTION_TRIGGERED);
+        SwitchPreference disableSwipingBetweenTabsSwitch = findPreference(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS);
 
         if (vibrateWhenActionTriggeredSwitch != null) {
             vibrateWhenActionTriggeredSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new ChangeVibrateWhenActionTriggeredEvent((Boolean) newValue));
+                return true;
+            });
+        }
+
+        if (disableSwipingBetweenTabsSwitch != null) {
+            disableSwipingBetweenTabsSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                EventBus.getDefault().post(new ChangeDisableSwipingBetweenTabsEvent((Boolean) newValue));
                 return true;
             });
         }
