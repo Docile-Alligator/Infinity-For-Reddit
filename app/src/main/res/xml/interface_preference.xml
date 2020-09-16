@@ -62,6 +62,16 @@
         app:key="show_thumbnail_on_the_left_in_compact_layout"
         app:title="@string/settings_show_thumbnail_on_the_left_in_compact_layout" />
 
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="long_press_to_hide_toolbar_in_compact_layout"
+        app:title="@string/settings_long_press_to_hide_toolbar_in_compact_layout_title" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="post_compact_layout_toolbar_hidden_by_default"
+        app:title="@string/settings_post_compact_layout_toolbar_hidden_by_default_title" />
+
     <Preference
         app:title="@string/settings_number_of_columns_in_post_feed_title"
         app:fragment="ml.docilealligator.infinityforreddit.Settings.NumberOfColumnsInPostFeedPreferenceFragment" />

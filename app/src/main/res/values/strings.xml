@@ -484,7 +484,9 @@
     <string name="settings_enable_swipe_action_title">Enable Swipe Action</string>
     <string name="settings_pull_to_refresh_title">Pull to Refresh</string>
     <string name="settings_security_title">Security</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer">Require Authentication to Go to Account Section in Navigation Drawer</string>
+    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">Require Authentication to Go to Account Section in Navigation Drawer</string>
+    <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">Long Press to Hide Toolbar in Compact Layout</string>
+    <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">Toolbar in Compact Layout Hidden by Default</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

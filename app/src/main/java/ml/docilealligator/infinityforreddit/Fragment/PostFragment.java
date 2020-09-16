@@ -68,8 +68,10 @@ import ml.docilealligator.infinityforreddit.Adapter.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.CustomView.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.Event.ChangeAutoplayNsfwVideosEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeCompactLayoutToolbarHiddenByDefaultEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeDefaultPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeEnableSwipeActionSwitchEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeLongPressToHideToolbarInCompactLayoutEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeMuteAutoplayingVideosEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeMuteNSFWVideoEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
@@ -1205,6 +1207,22 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Subscribe
     public void onChangePullToRefreshEvent(ChangePullToRefreshEvent changePullToRefreshEvent) {
         mSwipeRefreshLayout.setEnabled(changePullToRefreshEvent.pullToRefresh);
+    }
+
+    @Subscribe
+    public void onChangeLongPressToHideToolbarInCompactLayoutEvent(ChangeLongPressToHideToolbarInCompactLayoutEvent changeLongPressToHideToolbarInCompactLayoutEvent) {
+        if (mAdapter != null) {
+            mAdapter.setLongPressToHideToolbarInCompactLayout(changeLongPressToHideToolbarInCompactLayoutEvent.longPressToHideToolbarInCompactLayout);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeCompactLayoutToolbarHiddenByDefaultEvent(ChangeCompactLayoutToolbarHiddenByDefaultEvent changeCompactLayoutToolbarHiddenByDefaultEvent) {
+        if (mAdapter != null) {
+            mAdapter.setCompactLayoutToolbarHiddenByDefault(changeCompactLayoutToolbarHiddenByDefaultEvent.compactLayoutToolbarHiddenByDefault);
+            refreshAdapter();
+        }
     }
 
     private void refreshAdapter() {

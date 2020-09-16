@@ -182,6 +182,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private double mStartAutoplayVisibleAreaOffset;
     private boolean mMuteNSFWVideo;
     private boolean mAutomaticallyTryRedgifs;
+    private boolean mLongPressToHideToolbarInCompactLayout;
+    private boolean mCompactLayoutToolbarHiddenByDefault;
     private Drawable mCommentIcon;
     private NetworkState networkState;
     private ExoCreator mExoCreator;
@@ -230,6 +232,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             mMuteNSFWVideo = sharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_NSFW_VIDEO, false);
             mAutomaticallyTryRedgifs = sharedPreferences.getBoolean(SharedPreferencesUtils.AUTOMATICALLY_TRY_REDGIFS, true);
+
+            mLongPressToHideToolbarInCompactLayout = sharedPreferences.getBoolean(SharedPreferencesUtils.LONG_PRESS_TO_HIDE_TOOLBAR_IN_COMPACT_LAYOUT, false);
+            mCompactLayoutToolbarHiddenByDefault = sharedPreferences.getBoolean(SharedPreferencesUtils.POST_COMPACT_LAYOUT_TOOLBAR_HIDDEN_BY_DEFAULT, false);
 
             mPostLayout = postLayout;
 
@@ -775,6 +780,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     ((PostCompactBaseViewHolder) holder).postTimeTextView.setText(Utils.getFormattedTime(mLocale, post.getPostTimeMillis(), mTimeFormatPattern));
                 }
 
+                if (mCompactLayoutToolbarHiddenByDefault) {
+                    ((PostCompactBaseViewHolder) holder).bottomConstraintLayout.setVisibility(View.GONE);
+                } else {
+                    ((PostCompactBaseViewHolder) holder).bottomConstraintLayout.setVisibility(View.VISIBLE);
+                }
+
                 if (mShowDividerInCompactLayout) {
                     ((PostCompactBaseViewHolder) holder).divider.setVisibility(View.VISIBLE);
                 } else {
@@ -1182,6 +1193,14 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
     public void setMuteNSFWVideo(boolean muteNSFWVideo) {
         this.mMuteNSFWVideo = muteNSFWVideo;
+    }
+
+    public void setLongPressToHideToolbarInCompactLayout(boolean longPressToHideToolbarInCompactLayout) {
+        mLongPressToHideToolbarInCompactLayout = longPressToHideToolbarInCompactLayout;
+    }
+
+    public void setCompactLayoutToolbarHiddenByDefault(boolean compactLayoutToolbarHiddenByDefault) {
+        mCompactLayoutToolbarHiddenByDefault = compactLayoutToolbarHiddenByDefault;
     }
 
     @Override
@@ -2792,6 +2811,17 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, getAdapterPosition());
                     mActivity.startActivity(intent);
                 }
+            });
+
+            itemView.setOnLongClickListener(view -> {
+                if (mLongPressToHideToolbarInCompactLayout) {
+                    if (bottomConstraintLayout.getVisibility() == View.VISIBLE) {
+                        bottomConstraintLayout.setVisibility(View.GONE);
+                    } else {
+                        bottomConstraintLayout.setVisibility(View.VISIBLE);
+                    }
+                }
+                return true;
             });
 
             nameTextView.setOnClickListener(view -> {
