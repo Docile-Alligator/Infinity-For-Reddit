@@ -23,10 +23,6 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="AppTheme.NoActionBarWithTranslucentWindow" parent="AppTheme.NoActionBarWithTransparentStatusBar">
-        <item name="android:windowTranslucentStatus">true</item>
-    </style>
-
     <style name="AppTheme.Slidable" parent="AppTheme.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -58,13 +54,6 @@
     </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.DayNight" />
-
-    <style name="CustomTabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabIndicatorColor">@android:color/white</item>
-        <item name="tabIndicatorHeight">3dp</item>
-        <item name="tabBackground">?attr/selectableItemBackground</item>
-        <item name="tabSelectedTextColor">@android:color/white</item>
-    </style>
 
     <style name="MaterialAlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="android:textSize">?attr/font_default</item>

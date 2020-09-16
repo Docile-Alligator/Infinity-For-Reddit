@@ -16,7 +16,6 @@
     <string name="view_message_activity_label">Inbox</string>
     <string name="settings_activity_label">Settings</string>
     <string name="account_saved_thing_activity_label">Saved</string>
-    <string name="multi_reddit_listing_activity_label">Multireddit</string>
     <string name="create_multi_reddit_activity_label">Create Multireddit</string>
     <string name="subreddit_multiselection_activity_label">Select Subreddits</string>
     <string name="custom_theme_listing_activity_label">Custom Themes</string>
@@ -37,7 +36,6 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
     <string name="action_download">Download</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_add_comment">Add a comment</string>
@@ -48,7 +46,6 @@
     <string name="action_stop_lazy_mode">Stop Lazy Mode</string>
     <string name="action_send">Send</string>
     <string name="action_sort">Sort</string>
-    <string name="action_subscriptions">Subscriptions</string>
     <string name="action_hide_post">Hide Post</string>
     <string name="action_unhide_post">Unhide Post</string>
     <string name="action_edit_post">Edit Post</string>
@@ -59,7 +56,6 @@
     <string name="action_unmark_spoiler">Unmark Spoiler</string>
     <string name="action_edit_flair">Edit Flair</string>
     <string name="action_change_post_layout">Change Post Layout</string>
-    <string name="action_view_side_bar">View Sidebar</string>
     <string name="action_save">Save</string>
     <string name="action_edit_multi_reddit">Edit MultiReddit</string>
     <string name="action_delete_multi_reddit">Delete Multireddit</string>
@@ -80,7 +76,6 @@
     <string name="no_system_webview_error">Error opening System\'s WebView</string>
 
     <string name="error_loading_image_tap_to_retry">Error loading the image. Tap to retry.</string>
-    <string name="error_loading_gif_tap_to_retry">Error loading the gif. Tap to retry.</string>
     <string name="load_posts_error">Error loading posts.\nTap to retry.</string>
     <string name="load_more_posts_error">Error loading posts.</string>
     <string name="load_post_error">Error loading this post.\nTap to retry.</string>
@@ -95,7 +90,6 @@
 
     <string name="load_comments_failed">Error loading comments.\nTap to retry.</string>
     <string name="retry">Retry</string>
-    <string name="comments">Comments</string>
     <string name="no_comments_yet">No comments yet. Write a comment?</string>
     <string name="vote_failed">Vote failed</string>
     <string name="refresh_post_failed">Error refreshing the post</string>
@@ -110,7 +104,6 @@
     <string name="since">Since:</string>
 
     <string name="profile">Profile</string>
-    <string name="following">Following</string>
     <string name="subscriptions">Subscriptions</string>
     <string name="multi_reddit">Multireddit</string>
     <string name="inbox">Inbox</string>
@@ -155,7 +148,6 @@
     <string name="sending_comment">Sending</string>
     <string name="send_comment_success">Comment sent</string>
     <string name="send_comment_failed">Could not send this comment</string>
-    <string name="parse_sent_comment_failed">The comment is sent but unable to get the sent comment</string>
 
     <string name="send_message_username_hint">User</string>
     <string name="send_message_subject_hint">Subject (100 characters max)</string>
@@ -179,7 +171,6 @@
     <string name="error_processing_video">Error processing video</string>
 
     <string name="download_started">Download Started. Check the notification for progress.</string>
-    <string name="download_failed">Download Failed</string>
 
     <string name="comment_load_more_comments">Load more comments</string>
     <string name="comment_load_more_comments_failed">Load failed. Tap to retry.</string>
@@ -188,7 +179,6 @@
 
     <string name="post_title_hint">Title</string>
     <string name="post_text_content_hint">Content</string>
-    <string name="post_url_hint">URL</string>
     <string name="choose_a_subreddit">Choose a subreddit</string>
     <string name="rules">Rules</string>
     <string name="post_link_hint">URL</string>
@@ -197,7 +187,6 @@
     <string name="users">Users</string>
     <string name="multi_reddits">MultiReddits</string>
 
-    <string name="bottom_sheet_post_type">Post</string>
     <string name="bottom_sheet_post_text">Text</string>
     <string name="bottom_sheet_post_link">Link</string>
     <string name="bottom_sheet_post_image">Image</string>
@@ -227,9 +216,6 @@
     <string name="search_in">Search in</string>
     <string name="all_subreddits">All subreddits</string>
 
-    <string name="error_loading_post">Error loading this post.\nTap to retry.</string>
-
-    <string name="sort">Sort</string>
     <string name="sort_best">Best</string>
     <string name="sort_hot">Hot</string>
     <string name="sort_new">New</string>
@@ -251,7 +237,6 @@
     <string name="sort_time_year">Year</string>
     <string name="sort_time_all_time">All Time</string>
 
-    <string name="open_link_with">Open link with</string>
     <string name="no_browser_found">No browser found</string>
     <string name="no_activity_found_for_share">There is no app that can handle the share action</string>
 
@@ -276,7 +261,6 @@
 
     <string name="add_account">Add account</string>
     <string name="anonymous_account">Anonymous</string>
-    <string name="manage_accounts">Manage accounts</string>
     <string name="log_out">Log out</string>
     <string name="press_here_to_login">Press here to login</string>
     <string name="login_first">Login first</string>
@@ -322,9 +306,7 @@
 
     <string name="view_all_comments">Click here to browse all comments</string>
 
-    <string name="notification_summary_comment">New Comment</string>
     <string name="notification_summary_account">Account</string>
-    <string name="notification_summary_post">New Post Comment</string>
     <string name="notification_summary_message">New Message</string>
     <string name="notification_summary_subreddit">Subreddit</string>
     <string name="notification_summary_award">Award</string>
@@ -336,14 +318,10 @@
 
     <string name="account_switched">Account Switched. So all other pages are gone.</string>
 
-    <string name="settings_account_master_title">Account</string>
     <string name="settings_notification_master_title">Notification</string>
     <string name="settings_notification_enable_notification_title">Enable Notifications</string>
     <string name="settings_notification_interval_title">Check Notifications Interval</string>
     <string name="settings_theme_title">Theme</string>
-    <string name="settings_theme_light_theme_summary">Light Theme</string>
-    <string name="settings_theme_dark_theme_summary">Dark Theme</string>
-    <string name="settings_theme_system_default_summary">Device default</string>
     <string name="settings_amoled_dark_title">Amoled Dark</string>
     <string name="settings_interface_title">Interface</string>
     <string name="settings_gestures_and_buttons_title">Gestures &amp; Buttons</string>
@@ -560,8 +538,6 @@
     <string name="copy_all_markdown">Copy All Markdown</string>
     <string name="copy_all_raw_text">Copy All Raw Text</string>
 
-    <string name="save_comment">Save comment</string>
-    <string name="unsave_comment">Unsave comment</string>
 
     <string name="exit_app">Exit?</string>
 
@@ -577,7 +553,6 @@
     <string name="duplicate_multi_reddit">This multireddit already exists</string>
     <string name="edit_multi_reddit_failed">Cannot edit this multireddit</string>
     <string name="logged_out">You are logged out</string>
-    <string name="subreddit_selected">%1$s selected</string>
     <string name="delete_multi_reddit_success">Delete successfully</string>
     <string name="delete_multi_reddit_failed">Delete failed</string>
     <string name="delete_multi_reddit_dialog_message">Are you sure?</string>
@@ -779,9 +754,6 @@
     <string name="no_data_in_clipboard">Cannot find data in clipboard</string>
     <string name="import_theme_success">Import theme successfully</string>
     <string name="parse_theme_failed">Parse Theme Failed</string>
-    <string name="share_theme_to_subreddit_dialog_title">Share it to r/Infinity_For_Reddit?</string>
-    <string name="share_theme_to_subreddit_dialog_message">The theme configuration is copied!
-        Do you want to share it to r/Infinity_For_Reddit so that other people can use it?</string>
     <string name="duplicate_theme_name_dialog_title">Duplicate Theme Found</string>
     <string name="duplicate_theme_name_dialog_message">A theme in the database is also called %1$s. Do you want to change the name of this imported theme?</string>
     <string name="rename">Rename</string>
@@ -799,7 +771,6 @@
     <string name="delete_all_legacy_settings_success">Delete all legacy settings successfully</string>
     <string name="reset_all_settings_success">Reset all settings successfully</string>
 
-    <string name="theme_preview">Theme Preview</string>
     <string name="username_preview">u/Hostilenemy</string>
     <string name="subreddit_preview">r/Infinity_For_Reddit</string>
     <string name="primary_text_preview">Primary Text</string>
@@ -888,19 +859,5 @@
     <string name="view_full_comment_markdown">View Full Markdown</string>
 
     <string name="unlock_account_section">Unlock Account Section</string>
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
-
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
 </resources>

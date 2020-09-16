@@ -2144,7 +2144,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             commentsCountTextView.setOnClickListener(view -> {
                 if (mPost.isArchived()) {
-                    Toast.makeText(mActivity, R.string.archived_post_reply_unavailable, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivity, R.string.archived_post_comment_unavailable, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
