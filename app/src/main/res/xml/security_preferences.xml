@@ -1,0 +1,8 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="require_auth_to_account_section"
+        app:title="@string/settings_require_authentication_to_go_to_account_section_in_navigation_drawer" />
+
+</PreferenceScreen>

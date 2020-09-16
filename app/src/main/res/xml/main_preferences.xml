@@ -41,6 +41,11 @@
         android:icon="@drawable/ic_download_24dp"
         app:fragment="ml.docilealligator.infinityforreddit.Settings.DownloadLocationPreferenceFragment" />
 
+    <Preference
+        app:title="@string/settings_security_title"
+        android:icon="@drawable/ic_security_24dp"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.SecurityPreferenceFragment" />
+
     <SwitchPreference
         app:defaultValue="false"
         app:key="save_front_page_scrolled_position"

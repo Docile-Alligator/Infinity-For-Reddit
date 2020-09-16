@@ -123,6 +123,7 @@ public class SharedPreferencesUtils {
     public static final String DISABLE_SWIPING_BETWEEN_TABS = "disable_swiping_between_tabs";
     public static final String ENABLE_SWIPE_ACTION = "enable_swipe_action";
     public static final String PULL_TO_REFRESH = "pull_to_refresh";
+    public static final String REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER = "require_auth_to_account_section";
 
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";
     public static final String MAIN_PAGE_TAB_1_TITLE = "_main_page_tab_1_title";

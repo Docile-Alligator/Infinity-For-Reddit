@@ -95,6 +95,7 @@ dependencies {
     implementation 'me.zhanghai.android.fastscroll:library:1.1.2'
     implementation "com.thefuntasty.hauler:core:3.1.0"
     implementation 'com.github.Piasy:BigImageViewer:1.6.5'
+    implementation 'androidx.biometric:biometric:1.1.0-alpha02'
 
     def toroVersion = '3.7.0.2010003'
     implementation "im.ene.toro3:toro:$toroVersion"

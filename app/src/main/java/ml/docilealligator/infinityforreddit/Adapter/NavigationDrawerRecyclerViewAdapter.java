@@ -1,6 +1,6 @@
 package ml.docilealligator.infinityforreddit.Adapter;
 
-import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
@@ -10,6 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -18,6 +22,7 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +31,11 @@ import ml.docilealligator.infinityforreddit.Account.Account;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SubscribedSubreddit.SubscribedSubredditData;
+import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import pl.droidsonroids.gif.GifImageView;
+
+import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 
 public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -44,7 +53,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private static final int VIEW_TYPE_ACCOUNT = 5;
     private static final int CURRENT_MENU_ITEMS = 17;
 
-    private Context context;
+    private AppCompatActivity appCompatActivity;
     private Resources resources;
     private RequestManager glide;
     private String accountName;
@@ -52,6 +61,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private String userBannerUrl;
     private int karma;
     private boolean isNSFWEnabled;
+    private boolean requireAuthToAccountSection;
     private ItemClickListener itemClickListener;
     private boolean isLoggedIn;
     private boolean isInMainPage = true;
@@ -62,18 +72,20 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private int dividerColor;
     private int primaryIconColor;
 
-    public NavigationDrawerRecyclerViewAdapter(Context context, CustomThemeWrapper customThemeWrapper,
+    public NavigationDrawerRecyclerViewAdapter(AppCompatActivity appCompatActivity, SharedPreferences sharedPreferences,
+                                               CustomThemeWrapper customThemeWrapper,
                                                String accountName, String userIconUrl,
-                                               String userBannerUrl, int karma, boolean isNSFWEnabled,
+                                               String userBannerUrl, int karma,
                                                ItemClickListener itemClickListener) {
-        this.context = context;
-        resources = context.getResources();
-        glide = Glide.with(context);
+        this.appCompatActivity = appCompatActivity;
+        resources = appCompatActivity.getResources();
+        glide = Glide.with(appCompatActivity);
         this.accountName = accountName;
         this.userIconUrl = userIconUrl;
         this.userBannerUrl = userBannerUrl;
         this.karma = karma;
-        this.isNSFWEnabled = isNSFWEnabled;
+        isNSFWEnabled = sharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_KEY, false);
+        requireAuthToAccountSection = sharedPreferences.getBoolean(SharedPreferencesUtils.REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER, false);
         isLoggedIn = accountName != null;
         this.itemClickListener = itemClickListener;
         primaryTextColor = customThemeWrapper.getPrimaryTextColor();
@@ -149,7 +161,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof NavHeaderViewHolder) {
             if (isLoggedIn) {
-                ((NavHeaderViewHolder) holder).karmaTextView.setText(context.getString(R.string.karma_info, karma));
+                ((NavHeaderViewHolder) holder).karmaTextView.setText(appCompatActivity.getString(R.string.karma_info, karma));
                 ((NavHeaderViewHolder) holder).accountNameTextView.setText(accountName);
                 if (userIconUrl != null && !userIconUrl.equals("")) {
                     glide.load(userIconUrl)
@@ -182,18 +194,43 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
             ((NavHeaderViewHolder) holder).itemView.setOnClickListener(view -> {
                 if (isInMainPage) {
-                    ((NavHeaderViewHolder) holder).dropIconImageView.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_arrow_drop_up_24px));
-                    notifyItemRangeRemoved(1, getItemCount() - 1);
-                    if (accounts != null) {
-                        notifyItemRangeInserted(1, accounts.size() + 3);
-                    } else {
-                        if (isLoggedIn) {
-                            notifyItemRangeInserted(1, 3);
+                    if (requireAuthToAccountSection) {
+                        BiometricManager biometricManager = BiometricManager.from(appCompatActivity);
+                        if (biometricManager.canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS) {
+                            Executor executor = ContextCompat.getMainExecutor(appCompatActivity);
+                            BiometricPrompt biometricPrompt = new BiometricPrompt(appCompatActivity,
+                                    executor, new BiometricPrompt.AuthenticationCallback() {
+                                @Override
+                                public void onAuthenticationError(int errorCode,
+                                                                  @NonNull CharSequence errString) {
+                                    super.onAuthenticationError(errorCode, errString);
+                                }
+
+                                @Override
+                                public void onAuthenticationSucceeded(
+                                        @NonNull BiometricPrompt.AuthenticationResult result) {
+                                    super.onAuthenticationSucceeded(result);
+                                    openAccountSection(((NavHeaderViewHolder) holder).dropIconImageView);
+                                }
+
+                                @Override
+                                public void onAuthenticationFailed() {
+                                    super.onAuthenticationFailed();
+                                }
+                            });
+
+                            BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                                    .setTitle(appCompatActivity.getString(R.string.unlock_account_section))
+                                    .setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)
+                                    .build();
+
+                            biometricPrompt.authenticate(promptInfo);
                         } else {
-                            notifyItemInserted(1);
+                            openAccountSection(((NavHeaderViewHolder) holder).dropIconImageView);
                         }
+                    } else {
+                        openAccountSection(((NavHeaderViewHolder) holder).dropIconImageView);
                     }
-                    isInMainPage = false;
                 } else {
                     ((NavHeaderViewHolder) holder).dropIconImageView.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_arrow_drop_down_24px));
                     notifyItemRangeRemoved(1, getItemCount() - 1);
@@ -284,12 +321,12 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                                 if (isNSFWEnabled) {
                                     isNSFWEnabled = false;
                                     ((MenuItemViewHolder) holder).menuTextView.setText(R.string.enable_nsfw);
-                                    ((MenuItemViewHolder) holder).imageView.setImageDrawable(context.getDrawable(R.drawable.ic_nsfw_on_24dp));
+                                    ((MenuItemViewHolder) holder).imageView.setImageDrawable(appCompatActivity.getDrawable(R.drawable.ic_nsfw_on_24dp));
                                     itemClickListener.onMenuClick(R.string.disable_nsfw);
                                 } else {
                                     isNSFWEnabled = true;
                                     ((MenuItemViewHolder) holder).menuTextView.setText(R.string.disable_nsfw);
-                                    ((MenuItemViewHolder) holder).imageView.setImageDrawable(context.getDrawable(R.drawable.ic_nsfw_off_24dp));
+                                    ((MenuItemViewHolder) holder).imageView.setImageDrawable(appCompatActivity.getDrawable(R.drawable.ic_nsfw_off_24dp));
                                     itemClickListener.onMenuClick(R.string.enable_nsfw);
                                 }
                             });
@@ -323,12 +360,12 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                                 if (isNSFWEnabled) {
                                     isNSFWEnabled = false;
                                     ((MenuItemViewHolder) holder).menuTextView.setText(R.string.enable_nsfw);
-                                    ((MenuItemViewHolder) holder).imageView.setImageDrawable(context.getDrawable(R.drawable.ic_nsfw_on_24dp));
+                                    ((MenuItemViewHolder) holder).imageView.setImageDrawable(appCompatActivity.getDrawable(R.drawable.ic_nsfw_on_24dp));
                                     itemClickListener.onMenuClick(R.string.disable_nsfw);
                                 } else {
                                     isNSFWEnabled = true;
                                     ((MenuItemViewHolder) holder).menuTextView.setText(R.string.disable_nsfw);
-                                    ((MenuItemViewHolder) holder).imageView.setImageDrawable(context.getDrawable(R.drawable.ic_nsfw_off_24dp));
+                                    ((MenuItemViewHolder) holder).imageView.setImageDrawable(appCompatActivity.getDrawable(R.drawable.ic_nsfw_off_24dp));
                                     itemClickListener.onMenuClick(R.string.enable_nsfw);
                                 }
                             });
@@ -359,7 +396,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
             if (stringId != 0) {
                 ((MenuItemViewHolder) holder).menuTextView.setText(stringId);
-                ((MenuItemViewHolder) holder).imageView.setImageDrawable(context.getDrawable(drawableId));
+                ((MenuItemViewHolder) holder).imageView.setImageDrawable(appCompatActivity.getDrawable(drawableId));
                 if (setOnClickListener) {
                     int finalStringId = stringId;
                     ((MenuItemViewHolder) holder).itemView.setOnClickListener(view -> itemClickListener.onMenuClick(finalStringId));
@@ -394,6 +431,21 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
             ((AccountViewHolder) holder).itemView.setOnClickListener(view ->
                     itemClickListener.onAccountClick(accounts.get(position - 1).getUsername()));
         }
+    }
+
+    private void openAccountSection(ImageView dropIconImageView) {
+        dropIconImageView.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_arrow_drop_up_24px));
+        notifyItemRangeRemoved(1, getItemCount() - 1);
+        if (accounts != null) {
+            notifyItemRangeInserted(1, accounts.size() + 3);
+        } else {
+            if (isLoggedIn) {
+                notifyItemRangeInserted(1, 3);
+            } else {
+                notifyItemInserted(1);
+            }
+        }
+        isInMainPage = false;
     }
 
     @Override
@@ -455,6 +507,10 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                 notifyItemChanged(2);
             }
         }
+    }
+
+    public void setRequireAuthToAccountSection(boolean requireAuthToAccountSection) {
+        this.requireAuthToAccountSection = requireAuthToAccountSection;
     }
 
     class NavHeaderViewHolder extends RecyclerView.ViewHolder {

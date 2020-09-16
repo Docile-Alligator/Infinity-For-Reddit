@@ -75,6 +75,7 @@ import ml.docilealligator.infinityforreddit.Event.ChangeConfirmToExitEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeDisableSwipingBetweenTabsEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeLockBottomAppBarEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeRequireAuthToAccountSectionEvent;
 import ml.docilealligator.infinityforreddit.Event.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchMyInfo;
@@ -468,9 +469,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             fab.setVisibility(View.VISIBLE);
         }
 
-        boolean nsfwEnabled = mSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_KEY, false);
-        adapter = new NavigationDrawerRecyclerViewAdapter(this, mCustomThemeWrapper, mAccountName,
-                mProfileImageUrl, mBannerImageUrl, mKarma, nsfwEnabled,
+        adapter = new NavigationDrawerRecyclerViewAdapter(this, mSharedPreferences,
+                mCustomThemeWrapper, mAccountName,
+                mProfileImageUrl, mBannerImageUrl, mKarma,
                 new NavigationDrawerRecyclerViewAdapter.ItemClickListener() {
             @Override
             public void onMenuClick(int stringId) {
@@ -970,6 +971,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     public void onChangeDisableSwipingBetweenTabsEvent(ChangeDisableSwipingBetweenTabsEvent changeDisableSwipingBetweenTabsEvent) {
         mDisableSwipingBetweenTabs = changeDisableSwipingBetweenTabsEvent.disableSwipingBetweenTabs;
         viewPager2.setUserInputEnabled(!mDisableSwipingBetweenTabs);
+    }
+
+    @Subscribe
+    public void onChangeRequireAuthToAccountSectionEvent(ChangeRequireAuthToAccountSectionEvent changeRequireAuthToAccountSectionEvent) {
+        adapter.setRequireAuthToAccountSection(changeRequireAuthToAccountSectionEvent.requireAuthToAccountSection);
     }
 
     @Override

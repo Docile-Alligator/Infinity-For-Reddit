@@ -483,6 +483,8 @@
     <string name="settings_disable_swiping_between_tabs_title">Disable Swiping Between Tabs</string>
     <string name="settings_enable_swipe_action_title">Enable Swipe Action</string>
     <string name="settings_pull_to_refresh_title">Pull to Refresh</string>
+    <string name="settings_security_title">Security</string>
+    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer">Require Authentication to Go to Account Section in Navigation Drawer</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -882,7 +884,21 @@
     <string name="block_user_failed">Failed to block user</string>
 
     <string name="view_full_comment_markdown">View Full Markdown</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="unlock_account_section">Unlock Account Section</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
 </resources>
