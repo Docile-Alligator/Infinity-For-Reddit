@@ -749,6 +749,15 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             case R.id.action_change_post_layout_view_subreddit_detail_activity:
                 postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
                 return true;
+            case R.id.action_select_user_flair_view_subreddit_detail_activity:
+                if (mAccessToken == null) {
+                    Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                Intent selectUserFlairIntent = new Intent(this, SelectUserFlairActivity.class);
+                selectUserFlairIntent.putExtra(SelectUserFlairActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                startActivity(selectUserFlairIntent);
+                return true;
             case R.id.action_share_view_subreddit_detail_activity:
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");

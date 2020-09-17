@@ -27,6 +27,7 @@ import ml.docilealligator.infinityforreddit.Activity.RulesActivity;
 import ml.docilealligator.infinityforreddit.Activity.SearchActivity;
 import ml.docilealligator.infinityforreddit.Activity.SearchResultActivity;
 import ml.docilealligator.infinityforreddit.Activity.SearchSubredditsResultActivity;
+import ml.docilealligator.infinityforreddit.Activity.SelectUserFlairActivity;
 import ml.docilealligator.infinityforreddit.Activity.SelectedSubredditsActivity;
 import ml.docilealligator.infinityforreddit.Activity.SendPrivateMessageActivity;
 import ml.docilealligator.infinityforreddit.Activity.SettingsActivity;
@@ -200,4 +201,6 @@ public interface AppComponent {
     void inject(SubmitCrosspostActivity submitCrosspostActivity);
 
     void inject(CommentFullMarkdownActivity commentFullMarkdownActivity);
+
+    void inject(SelectUserFlairActivity selectUserFlairActivity);
 }

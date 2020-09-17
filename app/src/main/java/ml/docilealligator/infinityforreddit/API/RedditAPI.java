@@ -318,4 +318,12 @@ public interface RedditAPI {
     @FormUrlEncoded
     @POST("api/block_user")
     Call<String> blockUser(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @GET("r/{subredditName}/api/user_flair_v2.json?raw_json=1")
+    Call<String> getUserFlairs(@HeaderMap Map<String, String> headers, @Path("subredditName") String subredditName);
+
+    @FormUrlEncoded
+    @POST("/r/{subredditName}/api/selectflair?raw_json=1")
+    Call<String> selectUserFlair(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params,
+                                 @Path("subredditName") String subredditName);
 }

@@ -123,4 +123,6 @@ public class JSONUtils {
     public static final String Y_KEY = "y";
     public static final String DEST_KEY = "dest";
     public static final String GIF_KEY = "gif";
+    public static final String MAX_EMOJIS_KEY = "max_emojis";
+    public static final String RICHTEXT_KEY = "richtext";
 }

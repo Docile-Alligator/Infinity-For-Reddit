@@ -26,7 +26,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
-        <activity android:name=".Activity.CommentFullMarkdownActivity"
+        <activity android:name=".Activity.SelectUserFlairActivity"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppTheme.Slidable" />
+        <activity
+            android:name=".Activity.CommentFullMarkdownActivity"
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity

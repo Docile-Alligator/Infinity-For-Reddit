@@ -2,29 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?selectableItemBackground"
     android:clickable="true"
-    android:focusable="true"
-    android:background="?attr/selectableItemBackground">
+    android:focusable="true">
 
     <TextView
-        android:id="@+id/flair_text_view_item_flair"
-        android:layout_width="wrap_content"
+        android:id="@+id/user_flair_html_text_view_item_user_flair"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="16dp"
         android:textColor="?attr/primaryTextColor"
         android:textSize="?attr/font_default"
         android:fontFamily="?attr/font_family" />
 
     <ImageView
-        android:id="@+id/edit_flair_image_view_item_flair"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="center_vertical|end"
+        android:id="@+id/edit_user_flair_image_view_item_user_flair"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_marginStart="32dp"
+        android:padding="16dp"
         android:src="@drawable/ic_edit_24dp"
-        android:visibility="gone"
-        app:tint="?attr/primaryTextColor"
         android:background="?actionBarItemBackground"
         android:clickable="true"
         android:focusable="true" />
