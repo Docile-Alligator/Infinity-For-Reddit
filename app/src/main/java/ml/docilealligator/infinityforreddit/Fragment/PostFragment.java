@@ -645,6 +645,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             @Override
             public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+                if (!(viewHolder instanceof PostRecyclerViewAdapter.PostBaseViewHolder) &&
+                        !(viewHolder instanceof PostRecyclerViewAdapter.PostCompactBaseViewHolder)) {
+                    return makeMovementFlags(0, 0);
+                }
                 int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
                 return makeMovementFlags(0, swipeFlags);
             }

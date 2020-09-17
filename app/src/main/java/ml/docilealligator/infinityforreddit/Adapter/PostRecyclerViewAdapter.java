@@ -1306,6 +1306,15 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     ((PostBaseViewHolder) viewHolder).downvoteButton.performClick();
                 }
             }
+        } else if (viewHolder instanceof PostCompactBaseViewHolder) {
+            Post post = getItem(viewHolder.getAdapterPosition());
+            if (post != null) {
+                if (direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.START) {
+                    ((PostCompactBaseViewHolder) viewHolder).upvoteButton.performClick();
+                } else {
+                    ((PostCompactBaseViewHolder) viewHolder).downvoteButton.performClick();
+                }
+            }
         }
     }
 
@@ -1317,7 +1326,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         void currentlyBindItem(int position);
     }
 
-    class PostBaseViewHolder extends RecyclerView.ViewHolder {
+    public class PostBaseViewHolder extends RecyclerView.ViewHolder {
         MaterialCardView cardView;
         AspectRatioGifImageView iconGifImageView;
         TextView subredditTextView;
@@ -2658,7 +2667,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         }
     }
 
-    class PostCompactBaseViewHolder extends RecyclerView.ViewHolder {
+    public class PostCompactBaseViewHolder extends RecyclerView.ViewHolder {
         AspectRatioGifImageView iconGifImageView;
         TextView nameTextView;
         ImageView stickiedPostImageView;
@@ -2760,7 +2769,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 constraintSet.applyTo(bottomConstraintLayout);
             }
 
-            itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
+            itemView.setBackgroundColor(mCardViewBackgroundColor);
             postTimeTextView.setTextColor(mSecondaryTextColor);
             titleTextView.setTextColor(mPostTitleColor);
             stickiedPostImageView.setColorFilter(mStickiedPostIconTint, PorterDuff.Mode.SRC_IN);
