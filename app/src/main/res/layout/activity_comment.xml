@@ -23,56 +23,71 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/comment_parent_markwon_view_comment_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:textSize="?attr/title_font_16"
-                android:fontFamily="?attr/content_font_family" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/content_markdown_view_comment_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:visibility="gone" />
-
-            <View
-                android:id="@+id/divider_comment_activity"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="16dp" />
-
-            <EditText
-                android:id="@+id/comment_edit_text_comment_activity"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#00000000"
-                android:gravity="top"
-                android:hint="@string/write_comment_hint"
-                android:inputType="textCapSentences|textMultiLine"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="16dp"
-                android:textColor="?attr/primaryTextColor"
-                android:textSize="?attr/content_font_18"
-                android:fontFamily="?attr/content_font_family" />
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/comment_parent_markwon_view_comment_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:textSize="?attr/title_font_16"
+                    android:fontFamily="?attr/content_font_family" />
 
-    </androidx.core.widget.NestedScrollView>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/content_markdown_view_comment_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="gone" />
+
+                <View
+                    android:id="@+id/divider_comment_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="16dp" />
+
+                <EditText
+                    android:id="@+id/comment_edit_text_comment_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#00000000"
+                    android:gravity="top"
+                    android:hint="@string/write_comment_hint"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="16dp"
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="?attr/content_font_18"
+                    android:fontFamily="?attr/content_font_family" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/markdown_bottom_bar_recycler_view_comment_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal"
+            android:layout_gravity="bottom" />
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

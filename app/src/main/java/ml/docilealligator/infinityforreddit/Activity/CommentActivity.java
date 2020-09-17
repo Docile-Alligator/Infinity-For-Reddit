@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.Spanned;
 import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +48,7 @@ import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
+import ml.docilealligator.infinityforreddit.Adapter.MarkdownBottomBarRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.Comment.Comment;
@@ -89,6 +91,8 @@ public class CommentActivity extends BaseActivity {
     RecyclerView contentMarkdownRecyclerView;
     @BindView(R.id.comment_edit_text_comment_activity)
     EditText commentEditText;
+    @BindView(R.id.markdown_bottom_bar_recycler_view_comment_activity)
+    RecyclerView markdownBottomBarRecyclerView;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -258,6 +262,17 @@ public class CommentActivity extends BaseActivity {
         }
 
         setSupportActionBar(toolbar);
+
+        MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(mCustomThemeWrapper, new MarkdownBottomBarRecyclerViewAdapter.ItemClickListener() {
+            @Override
+            public void onClick(int item) {
+                Log.i("asasdf", "s " + item);
+            }
+        });
+
+        markdownBottomBarRecyclerView.setLayoutManager(new LinearLayoutManager(this,
+                LinearLayoutManager.HORIZONTAL, false));
+        markdownBottomBarRecyclerView.setAdapter(adapter);
 
         commentEditText.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
