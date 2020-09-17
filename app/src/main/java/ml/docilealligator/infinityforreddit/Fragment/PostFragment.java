@@ -635,7 +635,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
 
         Vibrator v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
-        // Vibrate for 500 milliseconds
         backgroundLeft = new ColorDrawable(customThemeWrapper.getDownvoted());
         backgroundRight = new ColorDrawable(customThemeWrapper.getUpvoted());
         drawableLeft = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_downward_black_24dp, null);

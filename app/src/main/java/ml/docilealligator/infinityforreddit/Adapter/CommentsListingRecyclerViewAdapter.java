@@ -30,6 +30,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Locale;
@@ -528,11 +529,21 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         }
     }
 
+    public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int direction) {
+        if (viewHolder instanceof CommentViewHolder) {
+            if (direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.START) {
+                ((CommentViewHolder) viewHolder).upvoteButton.performClick();
+            } else {
+                ((CommentViewHolder) viewHolder).downvoteButton.performClick();
+            }
+        }
+    }
+
     public interface RetryLoadingMoreCallback {
         void retryLoadingMore();
     }
 
-    class CommentViewHolder extends RecyclerView.ViewHolder {
+    public class CommentViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.linear_layout_item_comment)
         LinearLayout linearLayout;
         @BindView(R.id.vertical_block_item_post_comment)

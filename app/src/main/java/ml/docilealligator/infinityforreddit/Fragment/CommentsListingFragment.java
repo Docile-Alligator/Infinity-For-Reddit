@@ -5,8 +5,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Canvas;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +21,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -42,6 +49,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
 
 
@@ -97,6 +105,12 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     private LinearLayoutManager mLinearLayoutManager;
     private CommentsListingRecyclerViewAdapter mAdapter;
     private SortType sortType;
+    private ColorDrawable backgroundLeft;
+    private ColorDrawable backgroundRight;
+    private Drawable drawableLeft;
+    private Drawable drawableRight;
+    private float swipeActionThreshold = 0.3f;
+    private ItemTouchHelper touchHelper;
 
     public CommentsListingFragment() {
         // Required empty public constructor
@@ -126,6 +140,114 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
             if (navBarResourceId > 0) {
                 mCommentRecyclerView.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
             }
+        }
+
+        boolean enableSwipeAction = mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SWIPE_ACTION, false);
+        boolean vibrateWhenActionTriggered = mSharedPreferences.getBoolean(SharedPreferencesUtils.VIBRATE_WHEN_ACTION_TRIGGERED, true);
+        Vibrator v = (Vibrator) mActivity.getSystemService(Context.VIBRATOR_SERVICE);
+        backgroundLeft = new ColorDrawable(customThemeWrapper.getDownvoted());
+        backgroundRight = new ColorDrawable(customThemeWrapper.getUpvoted());
+        drawableLeft = ResourcesCompat.getDrawable(resources, R.drawable.ic_arrow_downward_black_24dp, null);
+        drawableRight = ResourcesCompat.getDrawable(resources, R.drawable.ic_arrow_upward_black_24dp, null);
+        touchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+            boolean exceedThreshold = false;
+
+            @Override
+            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+                if (!(viewHolder instanceof CommentsListingRecyclerViewAdapter.CommentViewHolder)) {
+                    return makeMovementFlags(0, 0);
+                }
+                int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+                return makeMovementFlags(0, swipeFlags);
+            }
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public boolean isItemViewSwipeEnabled() {
+                return true;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                if (touchHelper != null) {
+                    touchHelper.attachToRecyclerView(null);
+                    touchHelper.attachToRecyclerView(mCommentRecyclerView);
+                    if (mAdapter != null) {
+                        mAdapter.onItemSwipe(viewHolder, direction);
+                    }
+                }
+            }
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+
+                View itemView = viewHolder.itemView;
+                int horizontalOffset = (int) Utils.convertDpToPixel(16, mActivity);
+                if (dX > 0) {
+                    if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
+                        if (!exceedThreshold) {
+                            exceedThreshold = true;
+                            if (vibrateWhenActionTriggered && v != null) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    v.vibrate(VibrationEffect.createOneShot(10, 175));
+                                } else {
+                                    //deprecated in API 26
+                                    v.vibrate(10);
+                                }
+                            }
+                        }
+                        backgroundLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                    } else {
+                        exceedThreshold = false;
+                        backgroundLeft.setBounds(0, 0, 0, 0);
+                    }
+
+                    drawableLeft.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableLeft.getIntrinsicWidth(),
+                            (itemView.getBottom() + itemView.getTop() - drawableLeft.getIntrinsicHeight()) / 2,
+                            itemView.getLeft() + ((int) dX) - horizontalOffset,
+                            (itemView.getBottom() + itemView.getTop() + drawableLeft.getIntrinsicHeight()) / 2);
+                    backgroundLeft.draw(c);
+                    drawableLeft.draw(c);
+                } else if (dX < 0) {
+                    if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
+                        if (!exceedThreshold) {
+                            exceedThreshold = true;
+                            if (vibrateWhenActionTriggered && v != null) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    v.vibrate(VibrationEffect.createOneShot(10, 175));
+                                } else {
+                                    //deprecated in API 26
+                                    v.vibrate(10);
+                                }
+                            }
+                        }
+                        backgroundRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                    } else {
+                        exceedThreshold = false;
+                        backgroundRight.setBounds(0, 0, 0, 0);
+                    }
+                    drawableRight.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
+                            (itemView.getBottom() + itemView.getTop() - drawableRight.getIntrinsicHeight()) / 2,
+                            itemView.getRight() + ((int) dX) + horizontalOffset + drawableRight.getIntrinsicWidth(),
+                            (itemView.getBottom() + itemView.getTop() + drawableRight.getIntrinsicHeight()) / 2);
+                    backgroundRight.draw(c);
+                    drawableRight.draw(c);
+                }
+            }
+
+            @Override
+            public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
+                return swipeActionThreshold;
+            }
+        });
+
+        if (enableSwipeAction) {
+            touchHelper.attachToRecyclerView(mCommentRecyclerView);
         }
 
         if (savedInstanceState == null) {

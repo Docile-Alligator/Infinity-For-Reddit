@@ -1298,22 +1298,16 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
     public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int direction) {
         if (viewHolder instanceof PostBaseViewHolder) {
-            Post post = getItem(viewHolder.getAdapterPosition());
-            if (post != null) {
-                if (direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.START) {
-                    ((PostBaseViewHolder) viewHolder).upvoteButton.performClick();
-                } else {
-                    ((PostBaseViewHolder) viewHolder).downvoteButton.performClick();
-                }
+            if (direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.START) {
+                ((PostBaseViewHolder) viewHolder).upvoteButton.performClick();
+            } else {
+                ((PostBaseViewHolder) viewHolder).downvoteButton.performClick();
             }
         } else if (viewHolder instanceof PostCompactBaseViewHolder) {
-            Post post = getItem(viewHolder.getAdapterPosition());
-            if (post != null) {
-                if (direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.START) {
-                    ((PostCompactBaseViewHolder) viewHolder).upvoteButton.performClick();
-                } else {
-                    ((PostCompactBaseViewHolder) viewHolder).downvoteButton.performClick();
-                }
+            if (direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.START) {
+                ((PostCompactBaseViewHolder) viewHolder).upvoteButton.performClick();
+            } else {
+                ((PostCompactBaseViewHolder) viewHolder).downvoteButton.performClick();
             }
         }
     }

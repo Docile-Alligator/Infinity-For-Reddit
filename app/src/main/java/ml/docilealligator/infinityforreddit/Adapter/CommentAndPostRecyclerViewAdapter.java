@@ -37,6 +37,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -1783,6 +1784,22 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mAutoplay = autoplay;
     }
 
+    public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int direction) {
+        if (viewHolder instanceof PostDetailBaseViewHolder) {
+            if (direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.START) {
+                ((PostDetailBaseViewHolder) viewHolder).mUpvoteButton.performClick();
+            } else {
+                ((PostDetailBaseViewHolder) viewHolder).mDownvoteButton.performClick();
+            }
+        } else if (viewHolder instanceof CommentViewHolder) {
+            if (direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.START) {
+                ((CommentViewHolder) viewHolder).upvoteButton.performClick();
+            } else {
+                ((CommentViewHolder) viewHolder).downvoteButton.performClick();
+            }
+        }
+    }
+
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof CommentViewHolder) {
@@ -1879,7 +1896,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         void retryFetchingMoreComments();
     }
 
-    class PostDetailBaseViewHolder extends RecyclerView.ViewHolder {
+    public class PostDetailBaseViewHolder extends RecyclerView.ViewHolder {
         AspectRatioGifImageView mIconGifImageView;
         TextView mSubredditTextView;
         TextView mUserTextView;
@@ -3109,7 +3126,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         }
     }
 
-    class CommentViewHolder extends RecyclerView.ViewHolder {
+    public class CommentViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.linear_layout_item_comment)
         LinearLayout linearLayout;
         @BindView(R.id.author_text_view_item_post_comment)
