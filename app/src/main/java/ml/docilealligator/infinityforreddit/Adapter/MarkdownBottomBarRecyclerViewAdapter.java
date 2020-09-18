@@ -169,22 +169,22 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
                             String hashTags;
                             switch (seekBar.getProgress()) {
                                 case 0:
-                                    hashTags = "######";
+                                    hashTags = "###### ";
                                     break;
                                 case 1:
-                                    hashTags = "#####";
+                                    hashTags = "##### ";
                                     break;
                                 case 2:
-                                    hashTags = "####";
+                                    hashTags = "#### ";
                                     break;
                                 case 3:
-                                    hashTags = "###";
+                                    hashTags = "### ";
                                     break;
                                 case 4:
-                                    hashTags = "##";
+                                    hashTags = "## ";
                                     break;
                                 default:
-                                    hashTags = "#";
+                                    hashTags = "# ";
                                     break;
                             }
                             if (end != start) {
