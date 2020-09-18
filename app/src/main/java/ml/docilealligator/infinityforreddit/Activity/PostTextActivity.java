@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -35,6 +37,7 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import ml.docilealligator.infinityforreddit.Adapter.MarkdownBottomBarRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.LoadSubredditIconAsyncTask;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.FlairBottomSheetFragment;
@@ -97,6 +100,8 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
     View divider3;
     @BindView(R.id.post_text_content_edit_text_post_text_activity)
     EditText contentEditText;
+    @BindView(R.id.markdown_bottom_bar_recycler_view_post_text_activity)
+    RecyclerView markdownBottomBarRecyclerView;
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
@@ -305,6 +310,14 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
                 isNSFW = false;
             }
         });
+
+        MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(mCustomThemeWrapper, item -> {
+            MarkdownBottomBarRecyclerViewAdapter.bindEditTextWithItemClickListener(this, contentEditText, item);
+        });
+
+        markdownBottomBarRecyclerView.setLayoutManager(new LinearLayoutManager(this,
+                LinearLayoutManager.HORIZONTAL, false));
+        markdownBottomBarRecyclerView.setAdapter(adapter);
     }
 
     @Override

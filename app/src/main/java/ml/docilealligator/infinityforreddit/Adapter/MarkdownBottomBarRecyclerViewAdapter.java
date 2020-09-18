@@ -1,12 +1,17 @@
 package ml.docilealligator.infinityforreddit.Adapter;
 
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.R;
@@ -78,6 +83,164 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
     @Override
     public int getItemCount() {
         return ITEM_COUNT;
+    }
+
+    public static void bindEditTextWithItemClickListener(Activity activity, EditText commentEditText, int item) {
+        switch (item) {
+            case MarkdownBottomBarRecyclerViewAdapter.BOLD: {
+                int start = Math.max(commentEditText.getSelectionStart(), 0);
+                int end = Math.max(commentEditText.getSelectionEnd(), 0);
+                if (end != start) {
+                    String currentSelection = commentEditText.getText().subSequence(start, end).toString();
+                    commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
+                            "**" + currentSelection + "**", 0, "****".length() + currentSelection.length());
+                } else {
+                    commentEditText.getText().replace(start, end,
+                            "****", 0, "****".length());
+                    commentEditText.setSelection(start + "**".length());
+                }
+                break;
+            }
+            case MarkdownBottomBarRecyclerViewAdapter.ITALIC: {
+                int start = Math.max(commentEditText.getSelectionStart(), 0);
+                int end = Math.max(commentEditText.getSelectionEnd(), 0);
+                if (end != start) {
+                    String currentSelection = commentEditText.getText().subSequence(start, end).toString();
+                    commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
+                            "*" + currentSelection + "*", 0, "**".length() + currentSelection.length());
+                } else {
+                    commentEditText.getText().replace(start, end,
+                            "**", 0, "**".length());
+                    commentEditText.setSelection(start + "*".length());
+                }
+                break;
+            }
+            case MarkdownBottomBarRecyclerViewAdapter.LINK: {
+                View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_insert_link, null);
+                EditText textEditText = dialogView.findViewById(R.id.edit_text_insert_link_dialog);
+                EditText linkEditText = dialogView.findViewById(R.id.edit_link_insert_link_dialog);
+
+                int start = Math.max(commentEditText.getSelectionStart(), 0);
+                int end = Math.max(commentEditText.getSelectionEnd(), 0);
+                if (end != start) {
+                    String currentSelection = commentEditText.getText().subSequence(start, end).toString();
+                    textEditText.setText(currentSelection);
+                }
+
+                new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+                        .setTitle(R.string.insert_link)
+                        .setView(dialogView)
+                        .setPositiveButton(R.string.ok, (editTextDialogInterface, i1)
+                                -> {
+                            String text = textEditText.getText().toString();
+                            String link = linkEditText.getText().toString();
+
+                            commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
+                                    "[" + text + "](" + link + ")", 0, "[]()".length() + text.length() + link.length());
+                        })
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
+                break;
+            }
+            case MarkdownBottomBarRecyclerViewAdapter.STRIKE_THROUGH: {
+                int start = Math.max(commentEditText.getSelectionStart(), 0);
+                int end = Math.max(commentEditText.getSelectionEnd(), 0);
+                if (end != start) {
+                    String currentSelection = commentEditText.getText().subSequence(start, end).toString();
+                    commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
+                            "~~" + currentSelection + "~~", 0, "~~~~".length() + currentSelection.length());
+                } else {
+                    commentEditText.getText().replace(start, end,
+                            "~~~~", 0, "~~~~".length());
+                    commentEditText.setSelection(start + "~~".length());
+                }
+                break;
+            }
+            case MarkdownBottomBarRecyclerViewAdapter.HEADER: {
+                View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_select_header, null);
+                SeekBar seekBar = dialogView.findViewById(R.id.seek_bar_dialog_select_header);
+                new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+                        .setTitle(R.string.select_header_size)
+                        .setView(dialogView)
+                        .setPositiveButton(R.string.ok, (editTextDialogInterface, i1)
+                                -> {
+                            int start = Math.max(commentEditText.getSelectionStart(), 0);
+                            int end = Math.max(commentEditText.getSelectionEnd(), 0);
+                            String hashTags;
+                            switch (seekBar.getProgress()) {
+                                case 0:
+                                    hashTags = "######";
+                                    break;
+                                case 1:
+                                    hashTags = "#####";
+                                    break;
+                                case 2:
+                                    hashTags = "####";
+                                    break;
+                                case 3:
+                                    hashTags = "###";
+                                    break;
+                                case 4:
+                                    hashTags = "##";
+                                    break;
+                                default:
+                                    hashTags = "#";
+                                    break;
+                            }
+                            if (end != start) {
+                                String currentSelection = commentEditText.getText().subSequence(start, end).toString();
+                                commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
+                                        hashTags + currentSelection, 0, hashTags.length() + currentSelection.length());
+                            } else {
+                                commentEditText.getText().replace(start, end,
+                                        hashTags, 0, hashTags.length());
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
+                break;
+            }
+            case MarkdownBottomBarRecyclerViewAdapter.ORDERED_LIST: {
+                int start = Math.max(commentEditText.getSelectionStart(), 0);
+                int end = Math.max(commentEditText.getSelectionEnd(), 0);
+                if (end != start) {
+                    String currentSelection = commentEditText.getText().subSequence(start, end).toString();
+                    commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
+                            "1. " + currentSelection, 0, "1. ".length() + currentSelection.length());
+                } else {
+                    commentEditText.getText().replace(start, end,
+                            "1. ", 0, "1. ".length());
+                }
+                break;
+            }
+            case MarkdownBottomBarRecyclerViewAdapter.UNORDERED_LIST: {
+                int start = Math.max(commentEditText.getSelectionStart(), 0);
+                int end = Math.max(commentEditText.getSelectionEnd(), 0);
+                if (end != start) {
+                    String currentSelection = commentEditText.getText().subSequence(start, end).toString();
+                    commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
+                            "* " + currentSelection, 0, "* ".length() + currentSelection.length());
+                } else {
+                    commentEditText.getText().replace(start, end,
+                            "* ", 0, "* ".length());
+                }
+                break;
+            }
+            case MarkdownBottomBarRecyclerViewAdapter.SPOILER: {
+                int start = Math.max(commentEditText.getSelectionStart(), 0);
+                int end = Math.max(commentEditText.getSelectionEnd(), 0);
+                if (end != start) {
+                    String currentSelection = commentEditText.getText().subSequence(start, end).toString();
+                    commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
+                            ">!" + currentSelection + "!<", 0, ">!!<".length() + currentSelection.length());
+                } else {
+                    commentEditText.getText().replace(start, end,
+                            ">!!<", 0, ">!!<".length());
+                    commentEditText.setSelection(start + ">!".length());
+                }
+                break;
+            }
+        }
     }
 
     class MarkdownBottomBarItemViewHolder extends RecyclerView.ViewHolder {

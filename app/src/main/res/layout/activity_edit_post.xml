@@ -13,65 +13,72 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_edit_post_activity"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:titleEnabled="false"
-            app:toolbarId="@+id/toolbar_edit_post_activity">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar_edit_post_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="?attr/actionBarSize"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:navigationIcon="?attr/homeAsUpIndicator" />
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:navigationIcon="?attr/homeAsUpIndicator" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/post_title_text_view_edit_post_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="top"
-                android:padding="16dp"
-                android:textSize="?attr/title_font_18"
-                android:textColor="?attr/primaryTextColor"
-                android:fontFamily="?attr/title_font_family" />
-
-            <View
-                android:id="@+id/divider_edit_post_activity"
-                android:layout_width="match_parent"
-                android:layout_height="1dp" />
-
-            <EditText
-                android:id="@+id/post_text_content_edit_text_edit_post_activity"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="top"
-                android:padding="16dp"
-                android:hint="@string/post_text_content_hint"
-                android:inputType="textCapSentences|textMultiLine"
-                android:textSize="?attr/content_font_18"
-                android:background="#00000000"
-                android:textColor="?attr/primaryTextColor"
-                android:fontFamily="?attr/content_font_family" />
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/post_title_text_view_edit_post_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:padding="16dp"
+                    android:textSize="?attr/title_font_18"
+                    android:textColor="?attr/primaryTextColor"
+                    android:fontFamily="?attr/title_font_family" />
 
-    </androidx.core.widget.NestedScrollView>
+                <View
+                    android:id="@+id/divider_edit_post_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp" />
+
+                <EditText
+                    android:id="@+id/post_text_content_edit_text_edit_post_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="top"
+                    android:padding="16dp"
+                    android:hint="@string/post_text_content_hint"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:textSize="?attr/content_font_18"
+                    android:background="#00000000"
+                    android:textColor="?attr/primaryTextColor"
+                    android:fontFamily="?attr/content_font_family" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/markdown_bottom_bar_recycler_view_edit_post_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal"
+            android:layout_gravity="bottom" />
+
+    </LinearLayout>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
