@@ -6,12 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.slider.Slider;
 
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.R;
@@ -158,7 +158,7 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
             }
             case MarkdownBottomBarRecyclerViewAdapter.HEADER: {
                 View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_select_header, null);
-                SeekBar seekBar = dialogView.findViewById(R.id.seek_bar_dialog_select_header);
+                Slider seekBar = dialogView.findViewById(R.id.seek_bar_dialog_select_header);
                 new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                         .setTitle(R.string.select_header_size)
                         .setView(dialogView)
@@ -167,7 +167,7 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
                             int start = Math.max(commentEditText.getSelectionStart(), 0);
                             int end = Math.max(commentEditText.getSelectionEnd(), 0);
                             String hashTags;
-                            switch (seekBar.getProgress()) {
+                            switch ((int) seekBar.getValue()) {
                                 case 0:
                                     hashTags = "###### ";
                                     break;

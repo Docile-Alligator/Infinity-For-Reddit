@@ -859,17 +859,18 @@
 
     <string name="view_full_comment_markdown">View Full Markdown</string>
 
-    <string name="unlock_account_section">Unlock Account Section</string>
-
     <string name="select_user_flair_success">User flair selected</string>
     <string name="select_user_flair_failed">Cannot select user flair</string>
     <string name="select_this_user_flair">Select this user flair?</string>
 
     <string name="select_header_size">Select Header Size</string>
-    <string name="header1">H1</string>
-    <string name="header6">H6</string>
+    <string name="large">Large</string>
+    <string name="small">Small</string>
     <string name="insert_link">Insert Link</string>
     <string name="text_hint">Text</string>
     <string name="link_hint">Link</string>
+
+    <string name="unlock_account_section">Unlock Account Section</string>
+    <string name="unlock">Unlock</string>
 
 </resources>

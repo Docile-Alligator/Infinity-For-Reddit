@@ -42,6 +42,7 @@
         app:fragment="ml.docilealligator.infinityforreddit.Settings.DownloadLocationPreferenceFragment" />
 
     <Preference
+        app:key="security"
         app:title="@string/settings_security_title"
         android:icon="@drawable/ic_security_24dp"
         app:fragment="ml.docilealligator.infinityforreddit.Settings.SecurityPreferenceFragment" />

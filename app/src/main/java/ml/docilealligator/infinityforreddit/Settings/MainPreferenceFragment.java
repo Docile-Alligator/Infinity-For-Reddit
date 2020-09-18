@@ -1,12 +1,14 @@
 package ml.docilealligator.infinityforreddit.Settings;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
@@ -24,6 +26,9 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
+import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
+
 public class MainPreferenceFragment extends PreferenceFragmentCompat {
 
     @Inject
@@ -32,13 +37,14 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
     @Inject
     @Named("post_feed_scrolled_position_cache")
     SharedPreferences cache;
-    private Activity activity;
+    private AppCompatActivity activity;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.main_preferences, rootKey);
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
+        Preference securityPreference = findPreference(SharedPreferencesUtils.SECURITY);
         SwitchPreference savePostFeedScrolledPositionSwitch = findPreference(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION);
         SwitchPreference confirmToExitSwitch = findPreference(SharedPreferencesUtils.CONFIRM_TO_EXIT);
         SwitchPreference nsfwSwitch = findPreference(SharedPreferencesUtils.NSFW_KEY);
@@ -93,11 +99,18 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
+
+        BiometricManager biometricManager = BiometricManager.from(activity);
+        if (biometricManager.canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL) != BiometricManager.BIOMETRIC_SUCCESS) {
+            if (securityPreference != null) {
+                securityPreference.setVisible(false);
+            }
+        }
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (Activity) context;
+        activity = (AppCompatActivity) context;
     }
 }
