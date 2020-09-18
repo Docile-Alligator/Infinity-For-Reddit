@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.text.Spanned;
 import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -266,7 +265,94 @@ public class CommentActivity extends BaseActivity {
         MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(mCustomThemeWrapper, new MarkdownBottomBarRecyclerViewAdapter.ItemClickListener() {
             @Override
             public void onClick(int item) {
-                Log.i("asasdf", "s " + item);
+                switch (item) {
+                    case MarkdownBottomBarRecyclerViewAdapter.BOLD: {
+                        int start = Math.max(commentEditText.getSelectionStart(), 0);
+                        int end = Math.max(commentEditText.getSelectionEnd(), 0);
+                        if (end != start) {
+                            String currentSelection = commentEditText.getText().subSequence(start, end).toString();
+                            commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
+                                    "**" + currentSelection + "**", 0, "****".length() + currentSelection.length());
+                        } else {
+                            commentEditText.getText().replace(start, end,
+                                    "****", 0, "****".length());
+                            commentEditText.setSelection(start + "**".length());
+                        }
+                        break;
+                    }
+                    case MarkdownBottomBarRecyclerViewAdapter.ITALIC: {
+                        int start = Math.max(commentEditText.getSelectionStart(), 0);
+                        int end = Math.max(commentEditText.getSelectionEnd(), 0);
+                        if (end != start) {
+                            String currentSelection = commentEditText.getText().subSequence(start, end).toString();
+                            commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
+                                    "*" + currentSelection + "*", 0, "**".length() + currentSelection.length());
+                        } else {
+                            commentEditText.getText().replace(start, end,
+                                    "**", 0, "**".length());
+                            commentEditText.setSelection(start + "*".length());
+                        }
+                        break;
+                    }
+                    case MarkdownBottomBarRecyclerViewAdapter.LINK:
+                        break;
+                    case MarkdownBottomBarRecyclerViewAdapter.STRIKE_THROUGH: {
+                        int start = Math.max(commentEditText.getSelectionStart(), 0);
+                        int end = Math.max(commentEditText.getSelectionEnd(), 0);
+                        if (end != start) {
+                            String currentSelection = commentEditText.getText().subSequence(start, end).toString();
+                            commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
+                                    "~~" + currentSelection + "~~", 0, "~~~~".length() + currentSelection.length());
+                        } else {
+                            commentEditText.getText().replace(start, end,
+                                    "~~~~", 0, "~~~~".length());
+                            commentEditText.setSelection(start + "~~".length());
+                        }
+                        break;
+                    }
+                    case MarkdownBottomBarRecyclerViewAdapter.HEADER:
+                        break;
+                    case MarkdownBottomBarRecyclerViewAdapter.ORDERED_LIST: {
+                        int start = Math.max(commentEditText.getSelectionStart(), 0);
+                        int end = Math.max(commentEditText.getSelectionEnd(), 0);
+                        if (end != start) {
+                            String currentSelection = commentEditText.getText().subSequence(start, end).toString();
+                            commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
+                                    "1. " + currentSelection, 0, "1. ".length() + currentSelection.length());
+                        } else {
+                            commentEditText.getText().replace(start, end,
+                                    "1. ", 0, "1. ".length());
+                        }
+                        break;
+                    }
+                    case MarkdownBottomBarRecyclerViewAdapter.UNORDERED_LIST: {
+                        int start = Math.max(commentEditText.getSelectionStart(), 0);
+                        int end = Math.max(commentEditText.getSelectionEnd(), 0);
+                        if (end != start) {
+                            String currentSelection = commentEditText.getText().subSequence(start, end).toString();
+                            commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
+                                    "* " + currentSelection, 0, "* ".length() + currentSelection.length());
+                        } else {
+                            commentEditText.getText().replace(start, end,
+                                    "* ", 0, "* ".length());
+                        }
+                        break;
+                    }
+                    case MarkdownBottomBarRecyclerViewAdapter.SPOILER: {
+                        int start = Math.max(commentEditText.getSelectionStart(), 0);
+                        int end = Math.max(commentEditText.getSelectionEnd(), 0);
+                        if (end != start) {
+                            String currentSelection = commentEditText.getText().subSequence(start, end).toString();
+                            commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
+                                    ">!" + currentSelection + "!<", 0, ">!!<".length() + currentSelection.length());
+                        } else {
+                            commentEditText.getText().replace(start, end,
+                                    ">!!<", 0, ">!!<".length());
+                            commentEditText.setSelection(start + ">!".length());
+                        }
+                        break;
+                    }
+                }
             }
         });
 
