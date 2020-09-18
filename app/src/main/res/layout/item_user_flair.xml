@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="16dp"
+        android:padding="16dp"
         android:textColor="?attr/primaryTextColor"
         android:textSize="?attr/font_default"
         android:fontFamily="?attr/font_family" />
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="16dp"
         android:padding="16dp"
         android:src="@drawable/ic_edit_24dp"
         android:background="?actionBarItemBackground"
