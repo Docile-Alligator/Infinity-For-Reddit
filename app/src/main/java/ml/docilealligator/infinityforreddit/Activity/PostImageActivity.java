@@ -254,6 +254,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
                 subredditSelected = true;
                 subredditNameTextView.setTextColor(primaryTextColor);
                 subredditNameTextView.setText(subredditName);
+                flairTextView.setVisibility(View.VISIBLE);
                 loadSubredditIcon();
             } else {
                 mGlide.load(R.drawable.subreddit_default_icon)
